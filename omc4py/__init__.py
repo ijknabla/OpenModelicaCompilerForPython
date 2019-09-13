@@ -31,3 +31,17 @@ __license__ = '''
  *
  */
 '''
+
+__all__ = (
+    "Session",
+)
+
+import OMPython
+
+
+class Session(OMPython.OMCSessionZMQ):
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        return False
