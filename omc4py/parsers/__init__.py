@@ -40,11 +40,15 @@ __all__ = (
 
 from arpeggio import (
     NoMatch,
-    EOF, ParserPython,
+    EOF, ParserPython, visit_parse_tree,
 )
 from .syntax import (
     omc_dialect_context,
     omc_value, component_record_array,
+)
+from .visitor import (
+    OMCValueVisitor,
+    ComponentsVisitor,
 )
 
 
@@ -56,9 +60,11 @@ with omc_dialect_context:
     omc_value_parser = ParserPython(omc_value_withEOF)
 
 
-def parseOMCValue(string: str):
-    tree = omc_value_parser.parse(string)
-    return tree
+def parseOMCValue(omc_string: str):
+    tree = omc_value_parser.parse(omc_string)
+    return visit_parse_tree(
+        tree, OMCValueVisitor(),
+    )
 
 
 def component_record_array_withEOF():
@@ -69,6 +75,8 @@ with omc_dialect_context:
     components_perser = ParserPython(component_record_array_withEOF)
 
 
-def parseComponents(string: str):
-    tree = components_perser.parse(string)
-    return tree
+def parseComponents(omc_string: str):
+    tree = components_perser.parse(omc_string)
+    return visit_parse_tree(
+        tree, ComponentsVisitor(omc_string),
+    )
