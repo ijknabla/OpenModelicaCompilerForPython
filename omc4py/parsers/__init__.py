@@ -31,3 +31,44 @@ __license__ = '''
  *
  */
 '''
+
+__all__ = (
+    "NoMatch",
+    "parseOMCValue",
+    "parseComponents",
+)
+
+from arpeggio import (
+    NoMatch,
+    EOF, ParserPython,
+)
+from .syntax import (
+    omc_dialect_context,
+    omc_value, component_record_array,
+)
+
+
+def omc_value_withEOF():
+    return omc_value, EOF
+
+
+with omc_dialect_context:
+    omc_value_parser = ParserPython(omc_value_withEOF)
+
+
+def parseOMCValue(string: str):
+    tree = omc_value_parser.parse(string)
+    return tree
+
+
+def component_record_array_withEOF():
+    return component_record_array, EOF
+
+
+with omc_dialect_context:
+    components_perser = ParserPython(component_record_array_withEOF)
+
+
+def parseComponents(string: str):
+    tree = components_perser.parse(string)
+    return tree
