@@ -35,9 +35,26 @@ __license__ = '''
 __all__ = (
     # basic primitive types
     "Real", "Integer", "Boolean", "String",
+    # language element type in $Code (omc namespace)
+    "VariableName", "VariableNames",
+)
+
+from modelica_language.types import (
+    PrimitiveModelicaObject,
+    PrimitiveString,
 )
 
 from modelica_language.types import PrimitiveReal as Real
 from modelica_language.types import PrimitiveInteger as Integer
 from modelica_language.types import PrimitiveBoolean as Boolean
 from modelica_language.types import PrimitiveString as String
+
+
+class VariableName(
+    PrimitiveString,
+):
+    def __format__(self, format_spec):
+        return f"{str(self):{format_spec}}"
+
+
+VariableNames = VariableName[:]
