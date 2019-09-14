@@ -47,4 +47,7 @@ class Session(OMPython.OMCSessionZMQ):
     def __exit__(self, exc_type, exc_value, traceback):
         return False
 
-    getComponents = funcs.getComponents
+
+for func_name in funcs.__all__:
+    func_obj = funcs.__dict__[func_name]
+    setattr(Session, func_name, func_obj)
