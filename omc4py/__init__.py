@@ -37,6 +37,7 @@ __all__ = (
 )
 
 import OMPython
+from .scripting import funcs
 
 
 class Session(OMPython.OMCSessionZMQ):
@@ -45,3 +46,5 @@ class Session(OMPython.OMCSessionZMQ):
 
     def __exit__(self, exc_type, exc_value, traceback):
         return False
+
+    getComponents = funcs.getComponents

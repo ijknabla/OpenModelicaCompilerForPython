@@ -31,3 +31,9 @@ __license__ = '''
  *
  */
 '''
+
+from ._handmade import __all__ as __all_handmade__
+
+__all__ = __all_handmade__
+
+from ._handmade import *
