@@ -31,3 +31,82 @@ __license__ = '''
  *
  */
 '''
+
+__all__ = (
+    "_ask",
+    "getComponents",
+)
+
+import typing
+import OMPython
+import arpeggio
+from .. import (
+    types, exceptions
+)
+from ... import parsers
+
+
+def _ask(
+    omc: OMPython.OMCSessionBase,
+    command: str,
+    *args,
+    **kwrds,
+) -> str:
+
+    modelica_arguments: typing.List[str] = []
+
+    modelica_arguments.extend(
+        f"{format(arg)}"
+        for arg in args
+    )
+    modelica_arguments.extend(
+        f"{key}={format(value)}"
+        for key, value in kwrds.items()
+    )
+
+    return omc.ask(
+        command, ' '+', '.join(modelica_arguments),
+        parsed=False,
+    )
+
+
+def getComponents(
+    omc: OMPython.OMCSessionBase,
+    name: types.TypeNameLike,
+):
+    '''
+function getComponents
+  input TypeName name;
+  output Component[:] components;
+
+  record Component
+    TypeName className;
+    VariableName name;
+    String comment;
+    String protected;
+    Boolean isFinal;
+    Boolean isFlow;
+    Boolean isStream;
+    Boolean isReplaceable;
+    String variability "'constant', 'parameter', 'discrete', ''";
+    String innerOuter "'inner', 'outer', ''";
+    String inputOutput "'input', 'output', ''";
+    String dimensions[:];
+  end Component;
+end getComponentsTest;
+    '''
+    args = (
+        types.TypeName(name),
+    )
+
+    __answer = _ask(omc, "getComponents", *args)
+    try:
+        __value = parsers.parseComponents(__answer)
+    except arpeggio.NoMatch:
+        if __answer.lstrip().startswith("Error"):
+            raise exceptions.OMCError(__answer)
+        if not __answer or __answer.isspace():
+            return None
+        raise
+
+    return types.Component[:](__value)
