@@ -33,7 +33,9 @@ __license__ = '''
 '''
 
 from ._handmade import __all__ as __all_handmade__
+from ._generated import __all__ as __all_generated__
 
-__all__ = __all_handmade__
+__all__ = __all_handmade__ + __all_generated__
 
 from ._handmade import *
+from ._generated import *
