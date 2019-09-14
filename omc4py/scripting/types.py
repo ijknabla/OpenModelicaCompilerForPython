@@ -31,3 +31,13 @@ __license__ = '''
  *
  */
 '''
+
+__all__ = (
+    # basic primitive types
+    "Real", "Integer", "Boolean", "String",
+)
+
+from modelica_language.types import PrimitiveReal as Real
+from modelica_language.types import PrimitiveInteger as Integer
+from modelica_language.types import PrimitiveBoolean as Boolean
+from modelica_language.types import PrimitiveString as String
