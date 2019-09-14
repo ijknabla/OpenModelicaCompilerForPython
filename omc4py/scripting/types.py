@@ -37,8 +37,11 @@ __all__ = (
     "Real", "Integer", "Boolean", "String",
     # language element type in $Code (omc namespace)
     "VariableName", "VariableNames",
+    "TypeName",
 )
 
+import typing
+import arpeggio
 from modelica_language.types import (
     PrimitiveModelicaObject,
     PrimitiveString,
@@ -58,3 +61,82 @@ class VariableName(
 
 
 VariableNames = VariableName[:]
+
+
+def IDENT():
+    from modelica_language.parsers.regex import (
+        digit, nondigit, q_ident,
+    )
+    return arpeggio.RegExMatch(
+        rf'((\$|{nondigit})({digit}|{nondigit})*)|({q_ident})'
+    )
+
+
+def type_name():
+    return arpeggio.OneOrMore(IDENT, sep='.')
+
+
+type_name_parser = arpeggio.ParserPython(type_name)
+
+
+class TypeNameSplitter(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_IDENT(self, node, *_):
+        return node.value
+
+    def visit_type_name(self, node, children):
+        return children.IDENT
+
+
+def split_type_name(string: str):
+    tree = type_name_parser.parse(string)
+    return arpeggio.visit_parse_tree(
+        tree, TypeNameSplitter()
+    )
+
+
+class TypeName(
+    PrimitiveModelicaObject,
+):
+    def __init__(self, obj=None):
+        self.__parts: typing.List(str) = []
+
+        if obj is None:
+            return
+        elif isinstance(obj, TypeName):
+            typename = obj
+            self.copyin(typename)
+            return
+        elif isinstance(obj, str):
+            ident = obj
+            self.__parts.extend(split_type_name(ident))
+        else:
+            for elem in obj:
+                self /= type(self)(elem)
+
+    @property
+    def parts(self):
+        return tuple(self.__parts)
+
+    def __repr__(self):
+        return f"{type(self).__name__}({str(self)!r})"
+
+    def __str__(self):
+        return ".".join(self.parts)
+
+    def copyin(self, other: 'TypeName'):
+        self.__parts.clear()
+        self /= other
+
+    def __itruediv__(self, other):
+        if not isinstance(other, TypeName):
+            other = TypeName(other)
+        self.__parts.extend(other.parts)
+        return self
+
+    def __truediv__(self, other):
+        new = type(self)()
+        new /= self
+        new /= other
+        return new
