@@ -41,7 +41,11 @@ __all__ = (
     "Component",
 )
 
-import typing
+from typing import (
+    Union,
+    List,
+)
+import numbers
 import arpeggio
 from collections import namedtuple
 from modelica_language.types import (
@@ -102,7 +106,7 @@ class TypeName(
     PrimitiveModelicaObject,
 ):
     def __init__(self, obj=None):
-        self.__parts: typing.List(str) = []
+        self.__parts: List[str] = []
 
         if obj is None:
             return
@@ -161,3 +165,13 @@ Component = namedtuple(
         "dimensions",  # array of subscript
     ]
 )
+
+# Basic type annotation
+IntegerLike = Union[Integer, numbers.Integral]
+RealLike = Union[Real, numbers.Real]
+BooleanLike = Union[Boolean, bool]
+StringLike = Union[String, str]
+
+# Language element type annotation
+VariableNameLike = Union[VariableName, StringLike]
+TypeNameLike = Union[TypeName, VariableNameLike]
