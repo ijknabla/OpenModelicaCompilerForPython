@@ -38,10 +38,12 @@ __all__ = (
     # language element type in $Code (omc namespace)
     "VariableName", "VariableNames",
     "TypeName",
+    "Component",
 )
 
 import typing
 import arpeggio
+from collections import namedtuple
 from modelica_language.types import (
     PrimitiveModelicaObject,
     PrimitiveString,
@@ -140,3 +142,22 @@ class TypeName(
         new /= self
         new /= other
         return new
+
+
+Component = namedtuple(
+    "Component",
+    [
+        "className",  # TypeName
+        "name",  # VariableName
+        "comment",  # String
+        "protected",  # String
+        "isFinal",  # Boolean
+        "isFlow",  # Boolean
+        "isStream",  # Boolean
+        "isReplaceable",  # Boolean
+        "variability",  # String
+        "innerOuter",  # String
+        "inputOutput",  # String
+        "dimensions",  # array of subscript
+    ]
+)

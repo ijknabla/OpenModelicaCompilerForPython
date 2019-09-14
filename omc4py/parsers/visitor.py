@@ -39,25 +39,7 @@ __all__ = (
 
 from typing import Sequence, Tuple
 from arpeggio import PTNodeVisitor
-from collections import namedtuple
-
-Component = namedtuple(
-    "Component",
-    [
-        "className",  # TypeName
-        "name",  # VariableName
-        "comment",  # String
-        "protected",  # String
-        "isFinal",  # Boolean
-        "isFlow",  # Boolean
-        "isStream",  # Boolean
-        "isReplaceable",  # Boolean
-        "variability",  # String
-        "innerOuter",  # String
-        "inputOutput",  # String
-        "dimensions",  # array of subscript
-    ]
-)
+from ..scripting.types import Component
 
 
 def get_first_item(lis: list, default=None):
