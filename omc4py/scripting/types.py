@@ -42,12 +42,11 @@ __all__ = (
 )
 
 from typing import (
-    Union,
-    List,
+    Optional, Union,
+    List, Sequence,
 )
 import numbers
 import arpeggio
-from collections import namedtuple
 from modelica_language.types import (
     PrimitiveModelicaObject,
     PrimitiveString,
@@ -148,23 +147,113 @@ class TypeName(
         return new
 
 
-Component = namedtuple(
-    "Component",
-    [
-        "className",  # TypeName
-        "name",  # VariableName
-        "comment",  # String
-        "protected",  # String
-        "isFinal",  # Boolean
-        "isFlow",  # Boolean
-        "isStream",  # Boolean
-        "isReplaceable",  # Boolean
-        "variability",  # String
-        "innerOuter",  # String
-        "inputOutput",  # String
-        "dimensions",  # array of subscript
-    ]
-)
+class Component(
+    PrimitiveModelicaObject,
+):
+    def __init__(
+        self,
+        *args,
+        className: "Optional[TypeNameLike]" = None,
+        name: "Optional[VariableNameLike]" = None,
+        comment: "Optional[StringLike]" = None,
+        protected: "Optional[StringLike]" = None,
+        isFinal: "Optional[BooleanLike]" = None,
+        isFlow: "Optional[BooleanLike]" = None,
+        isStream: "Optional[BooleanLike]" = None,
+        isReplaceable: "Optional[BooleanLike]" = None,
+        variability: "Optional[StringLike]" = None,
+        innerOuter: "Optional[StringLike]" = None,
+        inputOutput: "Optional[StringLike]" = None,
+        dimensions: "Optional[Sequence[StringLike]]" = None,
+    ):
+        if args:
+            if len(args) == 1:
+                (
+                    className,
+                    name,
+                    comment,
+                    protected,
+                    isFinal,
+                    isFlow,
+                    isStream,
+                    isReplaceable,
+                    variability,
+                    innerOuter,
+                    inputOutput,
+                    dimensions,
+                ) = args[0]
+            else:
+                raise TypeError(
+                    f"__init__() takes only one positional argument "
+                    f"got {len(args)}"
+                )
+
+        if className is None:
+            className = ''
+        if name is None:
+            name = ''
+        if comment is None:
+            comment = ''
+        if protected is None:
+            protected = ''
+
+        if variability is None:
+            variability = ''
+        if innerOuter is None:
+            innerOuter = ''
+        if inputOutput is None:
+            inputOutput = ''
+        if dimensions is None:
+            dimensions = []
+
+        self.className = TypeName(className)
+        self.name = VariableName(name)
+        self.comment = String(comment)
+        self.protected = String(protected)
+        self.isFinal = Boolean(isFinal)
+        self.isFlow = Boolean(isFlow)
+        self.isStream = Boolean(isStream)
+        self.isReplaceable = Boolean(isReplaceable)
+        self.variability = String(variability)
+        self.innerOuter = String(innerOuter)
+        self.inputOutput = String(inputOutput)
+        self.dimensions = String[:](dimensions)
+
+    def __iter__(self):
+        yield self.className
+        yield self.name
+        yield self.comment
+        yield self.protected
+        yield self.isFinal
+        yield self.isFlow
+        yield self.isStream
+        yield self.isReplaceable
+        yield self.variability
+        yield self.innerOuter
+        yield self.inputOutput
+        yield self.dimensions
+
+    def __repr__(self):
+        return (
+            f"{type(self).__name__}("
+            f"className={self.className!r}, "
+            f"name={self.name!r}, "
+            f"comment={self.comment!r}, "
+            f"protected={self.protected!r}, "
+            f"isFinal={self.isFinal!r}, "
+            f"isFlow={self.isFlow!r}, "
+            f"isStream={self.isStream!r}, "
+            f"isReplaceable={self.isReplaceable!r}, "
+            f"variability={self.variability!r}, "
+            f"innerOuter={self.innerOuter!r}, "
+            f"inputOutput={self.inputOutput!r}, "
+            f"dimensions={self.dimensions!r}"
+            f")"
+        )
+
+    def __str__(self):
+        return "{%s}" % ", ".join(f"{elem}" for elem in self)
+
 
 # Basic type annotation
 IntegerLike = Union[Integer, numbers.Integral]
