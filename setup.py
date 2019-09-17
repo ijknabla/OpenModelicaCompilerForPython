@@ -4,7 +4,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="OpenModelicaCompiler",
-    # version=...,
+    version="0.0.0a1",
     description="OpenModelica compiler (omc)  interface for Python3.x based on  OMPython",
     author="ijknabla",
     author_email="ijknabla@gmail.com",
