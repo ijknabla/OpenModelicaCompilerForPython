@@ -16,7 +16,7 @@ class AsyncOMCSessionBase(
 def find_omc_executable() -> Path:
     omc_executable_ = shutil.which("omc")
     if omc_executable_ is not None:
-        return Path(shutil.which("omc"))
+        return Path(omc_executable_)
     else:
         raise RuntimeError(
             "Can't find executable 'omc'"
