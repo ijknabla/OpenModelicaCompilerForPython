@@ -1,4 +1,5 @@
 
+import typing
 import sys
 import uuid
 import shutil
@@ -113,12 +114,31 @@ class AsyncOMCSessionZMQ(
 
         return self
 
+    async def evaluate(
+        self,
+        expression: str,
+        timeout: typing.Optional[float] = None,
+    ) -> typing.List[str]:
+        if not expression.endswith("\n"):
+            expression += "\n"
+        await self.socket.send(expression.encode("utf-8"))
+        msgs = await asyncio.wait_for(
+            self.socket.recv_multipart(),
+            timeout=timeout,
+        )
+        return [
+            msg.decode("utf-8")
+            for msg in msgs
+        ]
+
     async def __aexit__(
         self,
         exception_type,
         exception,
         traceback,
     ):
+        await self.evaluate("quit()")
+        await self.process.wait()
         if self.process.returncode is None:
             # process still running
             self.process.terminate()
