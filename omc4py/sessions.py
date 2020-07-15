@@ -134,7 +134,7 @@ class AsyncOMCSessionZMQ(
         exception,
         traceback,
     ):
-        await self.evaluate("quit()")
+        await self.evaluate("quit()", 1.0)
         await self.process.wait()
         if self.process.returncode is None:
             # process still running
