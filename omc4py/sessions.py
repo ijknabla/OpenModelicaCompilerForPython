@@ -13,3 +13,20 @@ class AsyncOMCSessionZMQ(
     AsyncOMCSessionBase,
 ):
     pass
+
+    @classmethod
+    def create(
+        cls
+    ):
+        return cls()
+
+    async def __aenter__(self):
+        return self
+
+    async def __aexit__(
+        self,
+        exception_type,
+        exception,
+        traceback,
+    ):
+        pass
