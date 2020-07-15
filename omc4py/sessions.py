@@ -62,4 +62,5 @@ class AsyncOMCSessionZMQ(
         if self.process.returncode is None:
             # process still running
             self.process.terminate()
-            _ = await self.process.wait()  # drop returncode
+            returncode = await self.process.wait()  # drop returncode
+            print(f"process terminated {returncode}")
