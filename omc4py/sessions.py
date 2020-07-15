@@ -1,6 +1,8 @@
 
 import shutil
 from pathlib import Path
+import zmq
+import zmq.asyncio
 
 
 class OMCSessionBase:
@@ -39,6 +41,10 @@ class AsyncOMCSessionZMQ(
 
     async def __aenter__(self):
         omc_executable = find_omc_executable()
+        context = zmq.asyncio.Context()
+        socket = context.socket(zmq.REQ)
+        socket.setsockopt(zmq.LINGER, 0)  # Dismisses pending messages if closed
+        print(socket)
         print(omc_executable)
         return self
 
