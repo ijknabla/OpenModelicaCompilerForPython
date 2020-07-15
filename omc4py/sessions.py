@@ -78,6 +78,7 @@ class AsyncOMCSessionZMQ(
     AsyncOMCSessionBase,
 ):
     process: asyncio.subprocess.Process
+    socket: zmq.asyncio.Socket
 
     @classmethod
     def create(
@@ -99,16 +100,16 @@ class AsyncOMCSessionZMQ(
             stderr=asyncio.subprocess.PIPE,
         )
 
-        port = await read_omc_port_file(
+        context = zmq.asyncio.Context()
+        self.socket = context.socket(zmq.REQ)
+        self.socket.setsockopt(zmq.LINGER, 0)  # Dismisses pending messages if closed
+
+        url = await read_omc_port_file(
             Path(tempfile.gettempdir()),
             suffix,
             1.0
         )
-        print(port)
-
-        context = zmq.asyncio.Context()
-        socket = context.socket(zmq.REQ)
-        socket.setsockopt(zmq.LINGER, 0)  # Dismisses pending messages if closed
+        self.socket.bind(url)
 
         return self
 
