@@ -109,7 +109,7 @@ class AsyncOMCSessionZMQ(
             suffix,
             1.0
         )
-        self.socket.bind(url)
+        self.socket.connect(url)
 
         return self
 
