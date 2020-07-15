@@ -20,6 +20,9 @@ class AsyncOMCSessionZMQ(
     ):
         return cls()
 
+    async def hello_world(self):
+        print("hello_world!")
+
     async def __aenter__(self):
         return self
 
