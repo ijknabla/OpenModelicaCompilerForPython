@@ -1,5 +1,9 @@
 
+import sys
+import uuid
 import shutil
+import tempfile
+from getpass import getuser
 from pathlib import Path
 import asyncio
 import zmq
@@ -26,6 +30,50 @@ def find_omc_executable() -> Path:
         )
 
 
+async def find_omc_zmq_port_file(
+    tmp_dir: Path,
+    suffix: str,
+    timeout: float,
+) -> Path:
+    if timeout <= 0.0:
+        raise ValueError(
+            f"timeout must be positive, got {timeout}"
+        )
+
+    name: str
+    if sys.platform == "win32":
+        name = f"openmodelica.port.{suffix}"
+    else:
+        username = getuser()
+        name = f"openmodelica.{username}.port.{suffix}"
+
+    async def task() -> Path:
+        path = (tmp_dir / name).resolve()
+        while True:
+            if path.exists():
+                return path
+
+    return await asyncio.wait_for(
+        task(),
+        timeout
+    )
+
+
+def random_string() -> str:
+    return uuid.uuid4().hex
+
+
+async def read_omc_port_file(
+    tmp_dir: Path,
+    suffix: str,
+    timeout: float
+) -> str:
+    omc_port_file_path = await find_omc_zmq_port_file(
+        tmp_dir, suffix, timeout
+    )
+    return omc_port_file_path.read_text()
+
+
 class AsyncOMCSessionZMQ(
     AsyncOMCSessionBase,
 ):
@@ -42,15 +90,26 @@ class AsyncOMCSessionZMQ(
 
     async def __aenter__(self):
         omc_executable = find_omc_executable()
+        suffix = random_string()
         self.process = await asyncio.create_subprocess_exec(
             str(omc_executable),
             "--interactive=zmq",
+            f"--zeroMQFileSuffix={suffix}",
+            stdout=asyncio.subprocess.PIPE,
+            stderr=asyncio.subprocess.PIPE,
         )
+
+        port = await read_omc_port_file(
+            Path(tempfile.gettempdir()),
+            suffix,
+            1.0
+        )
+        print(port)
+
         context = zmq.asyncio.Context()
         socket = context.socket(zmq.REQ)
         socket.setsockopt(zmq.LINGER, 0)  # Dismisses pending messages if closed
-        print(socket)
-        print(omc_executable)
+
         return self
 
     async def __aexit__(
