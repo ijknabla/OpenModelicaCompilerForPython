@@ -7,8 +7,8 @@ import tempfile
 from getpass import getuser
 from pathlib import Path
 import asyncio
-import zmq
-import zmq.asyncio
+import zmq  # type: ignore
+import zmq.asyncio  # type: ignore
 
 
 class OMCSessionBase:
