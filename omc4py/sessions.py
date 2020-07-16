@@ -100,7 +100,8 @@ class AsyncOMCSessionZMQ(
 
         context = zmq.asyncio.Context()
         self.socket = context.socket(zmq.REQ)
-        self.socket.setsockopt(zmq.LINGER, 0)  # Dismisses pending messages if closed
+        # Dismisses pending messages if closed
+        self.socket.setsockopt(zmq.LINGER, 0)
 
         url = await read_omc_port_file(
             Path(tempfile.gettempdir()),
