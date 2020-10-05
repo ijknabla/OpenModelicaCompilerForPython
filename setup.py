@@ -20,6 +20,7 @@ setup(
     install_requires=[
         "ModelicaLanguage==0.0.0a6",  # fix to current alpha version
         "OMPython",
+        "PyZMQ",
         "Arpeggio",
     ],
     python_requires='>=3.6',
