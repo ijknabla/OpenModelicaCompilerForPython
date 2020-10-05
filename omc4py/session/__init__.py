@@ -1,11 +1,27 @@
 
 from pathlib import Path
 import os
+import shutil
 import subprocess
 import tempfile
 import typing
 import uuid
 import zmq
+
+
+StrOrPathLike = typing.Union[str, os.PathLike]
+
+
+def resolve_command(
+    command: StrOrPathLike,
+) -> Path:
+    executable = shutil.which(command)
+    if executable is None:
+        raise FileNotFoundError(
+            f"Can't find executable of {command}"
+        )
+
+    return Path(executable).resolve()
 
 
 def find_openmodelica_zmq_port_filepath(
@@ -42,13 +58,10 @@ class InteractiveOMC(
     @classmethod
     def open(
         cls,
-        omc_executable: typing.Optional[os.PathLike] = None,
+        omc_command: typing.Optional[StrOrPathLike] = None,
     ) -> "InteractiveOMC":
-        executable: str
-        if omc_executable is None:
-            executable = "omc"
-        else:
-            executable = os.fspath(omc_executable)
+        if omc_command is None:
+            omc_command = "omc"
 
         suffix = str(uuid.uuid4())
 
@@ -58,7 +71,10 @@ class InteractiveOMC(
         )
 
         process = subprocess.Popen(
-            [executable, "--interactive=zmq", f"-z={suffix}"],
+            [
+                resolve_command(omc_command),
+                "--interactive=zmq", f"-z={suffix}"
+            ],
             universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
