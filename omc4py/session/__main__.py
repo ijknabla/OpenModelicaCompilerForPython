@@ -1,4 +1,5 @@
 
+import argparse
 import cmd
 
 from . import InteractiveOMC
@@ -29,7 +30,17 @@ class OMCShell(
 
 
 def main():
-    with InteractiveOMC.open() as omc:
+    parser = argparse.ArgumentParser(
+        prog="OMCSessionDebug"
+    )
+    parser.add_argument(
+        "--omc",
+        help="omc executable",
+        default=None,
+    )
+    args = parser.parse_args()
+
+    with InteractiveOMC.open(omc_command=args.omc) as omc:
         OMCShell(
             omc=omc
         ).cmdloop()
