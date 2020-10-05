@@ -108,3 +108,10 @@ class InteractiveOMC(
     ):
         self.close()
         return False
+
+    def execute(
+        self,
+        expression: str
+    ) -> str:
+        self.socket.send_string(expression)
+        return self.socket.recv_string()
