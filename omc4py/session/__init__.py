@@ -100,6 +100,11 @@ class InteractiveOMC(
         self.socket.close()
         self.process.terminate()
 
+    def __enter__(
+        self
+    ):
+        return self
+
     def __exit__(
         self,
         exc_type,
