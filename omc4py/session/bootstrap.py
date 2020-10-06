@@ -1,13 +1,34 @@
 
 from .. import parsers
 
+import enum
 import functools
+import operator
 import typing
 
 from . import (
     StrOrPathLike,
     InteractiveOMC,
 )
+
+
+class __DefaultFlag(enum.Flag):
+    no_default = enum.auto()
+
+
+def getitem_with_default(
+    sequence: typing.Sequence,
+    index: typing.Any,
+    *,
+    default=__DefaultFlag.no_default,
+):
+    try:
+        return operator.getitem(sequence, index)
+    except IndexError:
+        if default is not __DefaultFlag.no_default:
+            return default
+        else:
+            raise
 
 
 class OMCError(
@@ -54,5 +75,5 @@ def bootstrap(
             ")",
         )
 
-    tree = parsers.omc_value_parser.parse(component_record_decl)
+        tree = parsers.omc_value_parser.parse(component_record_decl)
     print(tree)
