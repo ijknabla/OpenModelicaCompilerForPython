@@ -60,9 +60,9 @@ def boolean():
 
 def omc_record_literal():
     return (
-        syntax.RECORD, syntax.name,
+        syntax.RECORD, syntax.type_specifier,
         omc_record_element_list,
-        syntax.END, syntax.name, ";"
+        syntax.END, syntax.type_specifier, ";"
     )
 
 
