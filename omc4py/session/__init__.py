@@ -106,9 +106,16 @@ class InteractiveOMC(
             process_stdout = self.process.stdout
 
         process_stdout.readline()
-        port = find_openmodelica_zmq_port_filepath(suffix).read_text()
 
-        self.socket.connect(port)
+        port_filepath = find_openmodelica_zmq_port_filepath(suffix)
+
+        try:
+            self.socket.connect(port_filepath.read_text())
+        finally:
+            try:
+                port_filepath.unlink()
+            except FileNotFoundError:
+                pass
 
     def close(
         self
