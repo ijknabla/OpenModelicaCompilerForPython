@@ -72,6 +72,11 @@ def to_omc_literal(
 ) -> str:
     if hasattr(obj, "__to_omc_literal__"):
         return obj.__to_omc_literal__()
+    if isinstance(obj, bool):
+        if obj:
+            return 'true'
+        else:
+            return 'false'
     if isinstance(obj, str):
         return f'"{parsers.visitor.escape_py_string(obj)}"'
     return str(obj)
@@ -309,15 +314,30 @@ def getComponents(
     )
 
 
+@with_errorcheck
+def getClassNames(
+    omc: InteractiveOMC,
+    class_: typing.Optional[typing.Union[str, TypeName]] = None,
+) -> typing.Tuple[TypeName, ...]:
+    kwrds: typing.Dict[str, typing.Any] = {}
+    if class_ is not None:
+        kwrds["class_"] = TypeName(class_)
+    skwrds = ",".join(
+        f"{argument}={to_omc_literal(value)}"
+        for argument, value in kwrds.items()
+    )
+    literal = omc.execute(
+        f"getClassNames({skwrds})"
+    )
+    return tuple(map(TypeName, parse_omc_value(literal)))
+
+
 def bootstrap(
     omc_command: StrOrPathLike
 ):
     with InteractiveOMC.open(omc_command) as omc:
-        for component in getComponents(
-            omc,
-            "OpenModelica.Scripting.getComponentsTest.Component"
-        ):
-            print(component)
+        for typeName in getClassNames(omc, "OpenModelica.Scripting"):
+            print(typeName)
 
 
 if __name__ == "__main__":
