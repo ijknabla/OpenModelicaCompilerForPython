@@ -37,7 +37,7 @@ __all__ = (
     "ComponentsVisitor",
 )
 
-from typing import Sequence, Tuple
+from typing import Iterable, Tuple
 from arpeggio import PTNodeVisitor
 from ..scripting.types import Component
 
@@ -51,12 +51,46 @@ def get_first_item(lis: list, default=None):
 
 def replace_all(
     string: str,
-    pairs: Sequence[Tuple[str, str]]
+    pairs: Iterable[Tuple[str, str]]
 ):
     result = string
     for old, new in pairs:
         result = result.replace(old, new)
     return result
+
+
+modelica_char_escape_map = {
+    "\\": r"\\",
+    "\'": r"\'",
+    '\"': r'\"',
+    "\a": r"\a",
+    "\b": r"\b",
+    "\f": r"\f",
+    "\n": r"\n",
+    "\t": r"\t",
+    "\v": r"\v",
+}
+
+
+def escape_py_string(
+    py_string: str
+) -> str:
+    return replace_all(
+        py_string,
+        modelica_char_escape_map.items()
+    )
+
+
+def unescape_modelica_string(
+    modelica_string: str
+) -> str:
+    return replace_all(
+        modelica_string,
+        [
+            (escaped, orignal)
+            for orignal, escaped in modelica_char_escape_map.items()
+        ]
+    )
 
 
 class NumberVisitor(
