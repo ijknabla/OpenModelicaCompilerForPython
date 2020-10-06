@@ -584,6 +584,29 @@ class ModelicaPackageInfo(
                 f"{self} must be package got {self.name}"
             )
 
+    def walk(
+        self
+    ) -> typing.Iterator[
+        typing.Tuple[
+            "ModelicaPackageInfo",  # package
+            typing.List["ModelicaPackageInfo"],  # sub_packages
+            typing.List[ModelicaClassInfo],  # contents
+        ]
+    ]:
+        sub_packages: typing.List[ModelicaPackageInfo] = []
+        contents: typing.List[ModelicaClassInfo] = []
+
+        for child in self.children.values():
+            if isinstance(child, ModelicaPackageInfo):
+                sub_packages.append(child)
+            else:
+                contents.append(child)
+
+        yield (self, sub_packages, contents)
+
+        for sub_package in sub_packages:
+            yield from sub_package.walk()
+
 
 def bootstrap(
     omc_command: StrOrPathLike
