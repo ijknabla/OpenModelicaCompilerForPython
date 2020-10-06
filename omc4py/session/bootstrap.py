@@ -2,6 +2,7 @@
 from .. import parsers
 
 import arpeggio
+import collections
 import enum
 import functools
 import operator
@@ -238,6 +239,83 @@ class GetComponentsTestVisitor(
         children,
     ):
         return Component(**dict(children.omc_record_element_list[0]))
+
+
+class OMCRecord(
+    collections.UserDict,
+):
+    __typeName: TypeName
+
+    def __init__(
+        self,
+        *args,
+        typeName: TypeName,
+        **kwrds,
+    ):
+        super().__init__(*args, **kwrds)
+        self.__typeName = typeName
+
+    @property
+    def typeName(
+        self
+    ) -> TypeName:
+        return self.__typeName
+
+    def __repr__(
+        self
+    ):
+        return f"{self.typeName}({super().__repr__()})"
+
+
+class OMCValueVisitor(
+    parsers.visitor.NumberVisitor,
+    parsers.visitor.BooleanVisitor,
+    parsers.visitor.StringVisitor,
+    IdentifierVisitor,
+    parsers.visitor.SequenceVisitor,
+):
+    def visit_name(
+        self,
+        node,
+        children,
+    ):
+        return children.IDENT
+
+    def visit_type_specifier(
+        self,
+        node,
+        children
+    ):
+        name = children.name[0]
+        if node[0].value == ".":
+            return TypeName(Identifier(), *name)
+        else:
+            return TypeName(*name)
+
+    def visit_omc_record_literal(
+        self,
+        node,
+        children
+    ):
+        typeName = children.type_specifier[0]
+        elements = children.omc_record_element_list[0]
+        return OMCRecord(elements, typeName=typeName)
+
+    def visit_omc_record_element(
+        self,
+        node,
+        children,
+    ):
+        IDENT = children.IDENT[0]
+        value = children.omc_value[0]
+        return IDENT, value
+
+    def visit_omc_record_element_list(
+        self,
+        node,
+        children
+    ):
+        return children.omc_record_element
 
 
 @with_errorcheck
