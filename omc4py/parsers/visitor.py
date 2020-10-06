@@ -137,20 +137,7 @@ class StringVisitor(
     PTNodeVisitor,
 ):
     def visit_STRING(self, node, *_):
-        return replace_all(
-            node.value[1:-1],
-            [
-                (r"\\", "\\"),
-                (r"\'", "\'"),
-                (r'\"', '\"'),
-                (r"\a", "\a"),
-                (r"\b", "\b"),
-                (r"\f", "\f"),
-                (r"\n", "\n"),
-                (r"\t", "\t"),
-                (r"\v", "\v"),
-            ],
-        )
+        return unescape_modelica_string(node.value[1:-1])
 
 
 class TypeNameVisitor(
