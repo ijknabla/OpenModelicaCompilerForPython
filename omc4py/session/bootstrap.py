@@ -65,6 +65,16 @@ def execute(
     return omc.execute(expression)
 
 
+def to_omc_literal(
+    obj: typing.Any
+) -> str:
+    if hasattr(obj, "__to_omc_literal__"):
+        return obj.__to_omc_literal__()
+    if isinstance(obj, str):
+        return f'"{parsers.visitor.escape_py_string(obj)}"'
+    return str(obj)
+
+
 class IdentifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
