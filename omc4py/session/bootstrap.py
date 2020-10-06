@@ -622,10 +622,21 @@ def bootstrap(
     omc_command: StrOrPathLike
 ):
     with InteractiveOMC.open(omc_command) as omc:
-        ModelicaPackageInfo(
+        OpenModelica_Scripting = ModelicaPackageInfo(
             omc=omc,
             name=TypeName("OpenModelica.Scripting")
         )
+
+    typeNames: typing.Set[TypeName] = set()
+
+    for package, _, contents in OpenModelica_Scripting.walk():
+        for content in contents:
+            if isinstance(content, ModelicaFunctionInfo):
+                for argument in content.inputs + content.outputs:
+                    typeNames.add(argument.className)
+
+    for typeName in sorted(typeNames):
+        print(typeName)
 
 
 if __name__ == "__main__":
