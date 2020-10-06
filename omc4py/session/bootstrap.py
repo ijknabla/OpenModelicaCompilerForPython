@@ -286,6 +286,15 @@ class OMCValueVisitor(
         return children.omc_record_element
 
 
+def parse_omc_value(
+    literal: str
+):
+    return arpeggio.visit_parse_tree(
+        parsers.omc_value_parser.parse(literal),
+        OMCValueVisitor()
+    )
+
+
 @with_errorcheck
 def getComponents(
     omc: InteractiveOMC,
@@ -294,13 +303,9 @@ def getComponents(
     literal = omc.execute(
         f"getComponentsTest({class_})",
     )
-    components = arpeggio.visit_parse_tree(
-        parsers.omc_value_parser.parse(literal),
-        OMCValueVisitor()
-    )
     return tuple(
         Component(**component)
-        for component in components
+        for component in parse_omc_value(literal)
     )
 
 
