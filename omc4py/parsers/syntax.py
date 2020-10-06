@@ -93,7 +93,7 @@ def omc_value():
         boolean,
         syntax.STRING,
         number,
-        syntax.name,
+        syntax.type_specifier,
         omc_record_literal,
         omc_tuple,
         omc_array,
