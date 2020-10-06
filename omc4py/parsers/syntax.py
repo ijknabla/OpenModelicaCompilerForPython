@@ -61,12 +61,19 @@ def boolean():
 def omc_record_literal():
     return (
         syntax.RECORD, syntax.name,
-        ZeroOrMore(
-            syntax.IDENT, "=", omc_value,
-            sep=",",
-        ),
+        omc_record_element_list,
         syntax.END, syntax.name, ";"
     )
+
+
+def omc_record_element_list():
+    return ZeroOrMore(
+        omc_record_element, sep=","
+    )
+
+
+def omc_record_element():
+    return syntax.IDENT, "=", omc_value
 
 
 def omc_value_list():
