@@ -326,11 +326,14 @@ def getComponents(
     literal = omc.execute(
         f"getComponentsTest({class_})",
     )
-    result = arpeggio.visit_parse_tree(
+    components = arpeggio.visit_parse_tree(
         parsers.omc_value_parser.parse(literal),
-        GetComponentsTestVisitor(),
+        OMCValueVisitor()
     )
-    return tuple(result)
+    return tuple(
+        Component(**component)
+        for component in components
+    )
 
 
 def bootstrap(
