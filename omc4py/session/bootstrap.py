@@ -6,6 +6,7 @@ import enum
 import functools
 import operator
 import typing
+import modelica_language.parsers.syntax
 
 from . import (
     StrOrPathLike,
@@ -75,6 +76,18 @@ def to_omc_literal(
     return str(obj)
 
 
+class Identifier(
+    str
+):
+    def __to_omc_literal__(
+        self
+    ) -> str:
+        return str(self)
+
+
+IdentifierTuple = typing.Tuple[Identifier, ...]
+
+
 class IdentifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
@@ -91,6 +104,50 @@ class IdentifierVisitor(
 
     def visit_IDENT(self, node, *_):
         return self.identifierType(node.value)
+
+
+class TypeSpecifierVisitor(
+    IdentifierVisitor,
+):
+    def visit_name(
+        self,
+        node,
+        children
+    ) -> IdentifierTuple:
+        return tuple(children.IDENT)
+
+    def visit_type_specifier(
+        self,
+        node,
+        children,
+    ) -> IdentifierTuple:
+        name = children.name[0]
+        if node[0].value == ".":
+            return (self.identifierType(), *name)
+        else:
+            return name
+
+
+def type_specifier_withEOF():
+    return (
+        modelica_language.parsers.syntax.type_specifier,
+        arpeggio.EOF
+    )
+
+
+with parsers.omc_dialect_context:
+    type_specifier_parser = arpeggio.ParserPython(type_specifier_withEOF)
+
+
+def parse_type_specifier(
+    literal: str
+) -> IdentifierTuple:
+    return tuple(
+        arpeggio.visit_parse_tree(
+            type_specifier_parser.parse(literal),
+            TypeSpecifierVisitor(identifierType=Identifier),
+        )
+    )
 
 
 class Component(
