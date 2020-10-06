@@ -88,6 +88,55 @@ class Identifier(
 IdentifierTuple = typing.Tuple[Identifier, ...]
 
 
+class TypeName(
+):
+    __slots__ = (
+        "__parts",
+    )
+
+    __parts: IdentifierTuple
+
+    @property
+    def parts(self) -> IdentifierTuple:
+        return self.__parts
+
+    @staticmethod
+    def to_identifiers(
+        name: typing.Union[str, Identifier, "TypeName"]
+    ) -> IdentifierTuple:
+        if isinstance(name, str):
+            return parse_type_specifier(name)
+        elif isinstance(name, Identifier):
+            return name,
+        elif isinstance(name, TypeName):
+            return name.parts
+        else:
+            raise TypeError()
+
+    def __new__(cls, *parts):
+        self = object.__new__(cls)
+        self.__parts = sum(
+            map(cls.to_identifiers, parts),
+            (),
+        )
+        return self
+
+    def __str__(
+        self
+    ) -> str:
+        return ".".join(
+            map(to_omc_literal, self.parts)
+        )
+
+    __to_omc_literal__ = __str__
+
+    def __truediv__(
+        self,
+        other: typing.Union[str, Identifier, "TypeName"]
+    ):
+        return type(self)(self, other)
+
+
 class IdentifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
