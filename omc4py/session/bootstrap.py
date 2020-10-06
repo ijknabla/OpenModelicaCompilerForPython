@@ -189,26 +189,6 @@ def parse_type_specifier(
     )
 
 
-class Component(
-    typing.NamedTuple
-):
-    """
-OpenModelica.Scripting.getComponentsTest.Component
-"""
-    className: str
-    name: str
-    comment: str
-    isProtected: bool
-    isFinal: bool
-    isFlow: bool
-    isStream: bool
-    isReplaceable: bool
-    variability: str
-    innerOuter: str
-    inputOutput: str
-    dimensions: typing.Tuple[str]
-
-
 class OMCRecord(
     collections.UserDict,
 ):
@@ -293,6 +273,26 @@ def parse_omc_value(
         parsers.omc_value_parser.parse(literal),
         OMCValueVisitor()
     )
+
+
+class Component(
+    typing.NamedTuple
+):
+    """
+OpenModelica.Scripting.getComponentsTest.Component
+"""
+    className: str
+    name: str
+    comment: str
+    isProtected: bool
+    isFinal: bool
+    isFlow: bool
+    isStream: bool
+    isReplaceable: bool
+    variability: str
+    innerOuter: str
+    inputOutput: str
+    dimensions: typing.Tuple[str]
 
 
 @with_errorcheck
