@@ -297,7 +297,7 @@ OpenModelica.Scripting.getComponentsTest.Component
     variability: str
     innerOuter: str
     inputOutput: str
-    dimensions: typing.Tuple[str]
+    dimensions: typing.List[str]
 
 
 @with_errorcheck
@@ -465,6 +465,11 @@ class ModelicaClassInfo():
     ) -> IdentifierTuple:
         return getClassNames(self.omc, self.name)
 
+    def getComponentsTest(
+        self
+    ) -> typing.Tuple[Component, ...]:
+        return getComponentsTest(self.omc, self.name)
+
 
 class ModelicaTypeInfo(
     ModelicaClassInfo
@@ -496,9 +501,33 @@ class ModelicaRecordInfo(
             )
 
 
+class ArgumentInfo(
+    typing.NamedTuple
+):
+    className: TypeName
+    dimensions: typing.List[str]
+    name: Identifier
+    comment: str
+
+
+class InputArgumentInfo(
+    ArgumentInfo
+):
+    hasDefault: bool
+
+
+class OutputArgumentInfo(
+    ArgumentInfo
+):
+    pass
+
+
 class ModelicaFunctionInfo(
     ModelicaClassInfo
 ):
+    inputs: typing.List[InputArgumentInfo]
+    outputs: typing.List[OutputArgumentInfo]
+
     def __init__(
         self,
         *args,
@@ -509,6 +538,36 @@ class ModelicaFunctionInfo(
             raise ValueError(
                 f"{self} must be function got {self.name}"
             )
+
+        self.inputs = []
+        self.outputs = []
+
+        for component in self.getComponentsTest():
+            if component.isProtected:
+                continue
+            if component.inputOutput == "input":
+                self.inputs.append(
+                    InputArgumentInfo(
+                        className=TypeName(component.className),
+                        dimensions=component.dimensions,
+                        name=Identifier(component.name),
+                        comment=component.comment,
+                    )
+                )
+            elif component.inputOutput == "output":
+                self.outputs.append(
+                    OutputArgumentInfo(
+                        className=TypeName(component.className),
+                        dimensions=component.dimensions,
+                        name=Identifier(component.name),
+                        comment=component.comment,
+                    )
+                )
+            else:
+                raise ValueError(
+                    f"Unexpected Component.inputOutput got "
+                    f"{component.inputOutput!r}"
+                )
 
 
 class ModelicaPackageInfo(
