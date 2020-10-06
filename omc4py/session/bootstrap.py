@@ -209,38 +209,6 @@ OpenModelica.Scripting.getComponentsTest.Component
     dimensions: typing.Tuple[str]
 
 
-class GetComponentsTestVisitor(
-    IdentifierVisitor,
-    parsers.visitor.StringVisitor,
-    parsers.visitor.BooleanVisitor,
-    parsers.visitor.SequenceVisitor,
-):
-    def visit_omc_record_element(
-        self,
-        node,
-        children,
-    ):
-        IDENT = children.IDENT[0]
-        value = children.omc_value[0]
-        if isinstance(value, typing.List):
-            value = tuple(value)
-        return IDENT, value
-
-    def visit_omc_record_element_list(
-        self,
-        node,
-        children,
-    ):
-        return children.omc_record_element
-
-    def visit_omc_record_literal(
-        self,
-        node,
-        children,
-    ):
-        return Component(**dict(children.omc_record_element_list[0]))
-
-
 class OMCRecord(
     collections.UserDict,
 ):
