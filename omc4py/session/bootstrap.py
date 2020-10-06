@@ -301,42 +301,74 @@ OpenModelica.Scripting.getComponentsTest.Component
 
 
 @with_errorcheck
-def getComponents(
+def evaluate(
     omc: InteractiveOMC,
-    class_: str,
-) -> typing.Tuple[Component, ...]:
-    literal = omc.execute(
-        f"getComponentsTest({class_})",
+    expression: str
+):
+    return parse_omc_value(omc.execute(expression))
+
+
+def call(
+    omc: InteractiveOMC,
+    funcName: typing.Union[str, TypeName],
+    *,
+    args: typing.Optional[typing.Sequence] = None,
+    kwrds: typing.Optional[typing.Mapping[str, typing.Any]] = None,
+):
+    arguments: typing.List[str] = []
+
+    if args is not None:
+        arguments.extend(map(to_omc_literal, args))
+    if kwrds is not None:
+        for key, value in kwrds.items():
+            arguments.append(
+                f"{key}={to_omc_literal(value)}"
+            )
+
+    return evaluate(
+        omc,
+        "{0}({1})".format(
+            to_omc_literal(TypeName(funcName)),
+            ",".join(arguments)
+        ),
     )
+
+
+def getComponentsTest(
+    omc: InteractiveOMC,
+    class_: TypeName,
+) -> typing.Tuple[Component, ...]:
     return tuple(
         Component(**component)
-        for component in parse_omc_value(literal)
+        for component in call(
+            omc,
+            "getComponentsTest",
+            kwrds={"class_": class_}
+        )
     )
 
 
-@with_errorcheck
 def getClassNames(
     omc: InteractiveOMC,
-    class_: typing.Optional[typing.Union[str, TypeName]] = None,
-) -> typing.Tuple[TypeName, ...]:
-    kwrds: typing.Dict[str, typing.Any] = {}
-    if class_ is not None:
-        kwrds["class_"] = TypeName(class_)
-    skwrds = ",".join(
-        f"{argument}={to_omc_literal(value)}"
-        for argument, value in kwrds.items()
+    class_: TypeName
+) -> IdentifierTuple:
+    return tuple(
+        map(
+            Identifier,
+            call(
+                omc,
+                "getClassNames",
+                kwrds={"class_": class_}
+            )
+        )
     )
-    literal = omc.execute(
-        f"getClassNames({skwrds})"
-    )
-    return tuple(map(TypeName, parse_omc_value(literal)))
 
 
 def bootstrap(
     omc_command: StrOrPathLike
 ):
     with InteractiveOMC.open(omc_command) as omc:
-        for typeName in getClassNames(omc, "OpenModelica.Scripting"):
+        for typeName in getClassNames(omc, TypeName("OpenModelica.Scripting")):
             print(typeName)
 
 
