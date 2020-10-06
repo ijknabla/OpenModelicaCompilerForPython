@@ -94,6 +94,7 @@ class Identifier(
 IdentifierTuple = typing.Tuple[Identifier, ...]
 
 
+@functools.total_ordering
 class TypeName(
 ):
     __slots__ = (
@@ -126,6 +127,15 @@ class TypeName(
             (),
         )
         return self
+
+    def __hash__(self):
+        return hash(self.parts)
+
+    def __eq__(self, other):
+        return self.parts == type(self)(other).parts
+
+    def __lt__(self, other):
+        return self.parts < type(self)(other).parts
 
     def __str__(
         self
