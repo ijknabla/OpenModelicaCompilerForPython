@@ -510,6 +510,22 @@ class ModelicaRecordInfo(
                 f"{self} must be record got {self.name}"
             )
 
+        for component in self.getComponentsTest():
+            # Record の要素は、下記のものに限定されている。
+            # - className
+            # - name
+            # - comment
+            # - dimensions
+
+            assert(not component.isProtected)
+            assert(not component.isFinal)
+            assert(not component.isFlow)
+            assert(not component.isStream)
+            assert(not component.isReplaceable)
+            assert(not component.variability)
+            assert(not component.innerOuter)
+            assert(not component.inputOutput)
+
 
 class ArgumentInfo(
     typing.NamedTuple
