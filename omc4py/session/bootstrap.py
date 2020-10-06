@@ -343,7 +343,7 @@ def getComponentsTest(
         for component in call(
             omc,
             "getComponentsTest",
-            kwrds={"class_": class_}
+            args=[class_]
         )
     )
 
