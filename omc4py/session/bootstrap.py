@@ -140,19 +140,8 @@ class TypeName(
 class IdentifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
-    identifierType: typing.Type
-
-    def __init__(
-        self,
-        *args,
-        identifierType: typing.Type = str,
-        **kwrds,
-    ):
-        super().__init__(*args, **kwrds)
-        self.identifierType = identifierType
-
     def visit_IDENT(self, node, *_):
-        return self.identifierType(node.value)
+        return Identifier(node.value)
 
 
 class TypeSpecifierVisitor(
@@ -172,7 +161,7 @@ class TypeSpecifierVisitor(
     ) -> IdentifierTuple:
         name = children.name[0]
         if node[0].value == ".":
-            return (self.identifierType(), *name)
+            return (Identifier(), *name)
         else:
             return name
 
@@ -194,7 +183,7 @@ def parse_type_specifier(
     return tuple(
         arpeggio.visit_parse_tree(
             type_specifier_parser.parse(literal),
-            TypeSpecifierVisitor(identifierType=Identifier),
+            TypeSpecifierVisitor(),
         )
     )
 
