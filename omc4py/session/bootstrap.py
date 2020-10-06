@@ -364,12 +364,176 @@ def getClassNames(
     )
 
 
+def isType(
+    omc: InteractiveOMC,
+    cl: TypeName,
+) -> bool:
+    return bool(
+        call(
+            omc,
+            "isType",
+            args=[cl]
+        )
+    )
+
+
+def isRecord(
+    omc: InteractiveOMC,
+    cl: TypeName,
+) -> bool:
+    return bool(
+        call(
+            omc,
+            "isRecord",
+            args=[cl]
+        )
+    )
+
+
+def isFunction(
+    omc: InteractiveOMC,
+    cl: TypeName,
+) -> bool:
+    return bool(
+        call(
+            omc,
+            "isFunction",
+            args=[cl]
+        )
+    )
+
+
+def isPackage(
+    omc: InteractiveOMC,
+    cl: TypeName,
+) -> bool:
+    return bool(
+        call(
+            omc,
+            "isPackage",
+            args=[cl]
+        )
+    )
+
+
+class ModelicaClassInfo():
+    omc: InteractiveOMC
+    name: TypeName
+
+    children: typing.Dict[
+        Identifier,
+        "ModelicaClassInfo"
+    ]
+
+    def __init__(
+        self,
+        omc: InteractiveOMC,
+        name: TypeName,
+    ):
+        self.omc = omc
+        self.name = name
+
+        self.children = {}
+
+        for childName in self.getClassNames():
+            className = self.name / childName
+            info: ModelicaClassInfo
+            if isType(self.omc, className):
+                info = ModelicaTypeInfo(
+                    self.omc, className
+                )
+            elif isRecord(self.omc, className):
+                info = ModelicaRecordInfo(
+                    self.omc, className
+                )
+            elif isFunction(self.omc, className):
+                info = ModelicaFunctionInfo(
+                    self.omc, className
+                )
+            elif isPackage(self.omc, className):
+                info = ModelicaPackageInfo(
+                    self.omc, className
+                )
+            else:
+                print(f"missing {className}")
+                continue
+
+            self.children[childName] = info
+
+    def getClassNames(
+        self
+    ) -> IdentifierTuple:
+        return getClassNames(self.omc, self.name)
+
+
+class ModelicaTypeInfo(
+    ModelicaClassInfo
+):
+    def __init__(
+        self,
+        *args,
+        **kwrds,
+    ):
+        super().__init__(*args, **kwrds)
+        if not isType(self.omc, self.name):
+            raise ValueError(
+                f"{self} must be type got {self.name}"
+            )
+
+
+class ModelicaRecordInfo(
+    ModelicaClassInfo
+):
+    def __init__(
+        self,
+        *args,
+        **kwrds,
+    ):
+        super().__init__(*args, **kwrds)
+        if not isRecord(self.omc, self.name):
+            raise ValueError(
+                f"{self} must be record got {self.name}"
+            )
+
+
+class ModelicaFunctionInfo(
+    ModelicaClassInfo
+):
+    def __init__(
+        self,
+        *args,
+        **kwrds,
+    ):
+        super().__init__(*args, **kwrds)
+        if not isFunction(self.omc, self.name):
+            raise ValueError(
+                f"{self} must be function got {self.name}"
+            )
+
+
+class ModelicaPackageInfo(
+    ModelicaClassInfo
+):
+    def __init__(
+        self,
+        *args,
+        **kwrds,
+    ):
+        super().__init__(*args, **kwrds)
+        if not isPackage(self.omc, self.name):
+            raise ValueError(
+                f"{self} must be package got {self.name}"
+            )
+
+
 def bootstrap(
     omc_command: StrOrPathLike
 ):
     with InteractiveOMC.open(omc_command) as omc:
-        for typeName in getClassNames(omc, TypeName("OpenModelica.Scripting")):
-            print(typeName)
+        ModelicaPackageInfo(
+            omc=omc,
+            name=TypeName("OpenModelica.Scripting")
+        )
 
 
 if __name__ == "__main__":
