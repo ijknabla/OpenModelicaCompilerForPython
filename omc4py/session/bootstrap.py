@@ -7,11 +7,11 @@ import enum
 import functools
 import operator
 import typing
-import modelica_language.parsers.syntax  # type: ignore
 
 from . import (
     StrOrPathLike,
     InteractiveOMC,
+    parser,
 )
 
 
@@ -182,23 +182,12 @@ class TypeSpecifierVisitor(
             return name
 
 
-def type_specifier_withEOF():
-    return (
-        modelica_language.parsers.syntax.type_specifier,
-        arpeggio.EOF
-    )
-
-
-with parsers.omc_dialect_context:
-    type_specifier_parser = arpeggio.ParserPython(type_specifier_withEOF)
-
-
 def parse_type_specifier(
     literal: str
 ) -> IdentifierTuple:
     return tuple(
         arpeggio.visit_parse_tree(
-            type_specifier_parser.parse(literal),
+            parser.type_specifier_parser.parse(literal),
             TypeSpecifierVisitor(),
         )
     )
@@ -290,20 +279,6 @@ def parse_omc_value(
     )
 
 
-def stored_definition_withEOF():
-    return (
-        modelica_language.parsers.syntax.stored_definition,
-        arpeggio.EOF
-    )
-
-
-with parsers.omc_dialect_context:
-    stored_definition_parser = arpeggio.ParserPython(
-        stored_definition_withEOF,
-        modelica_language.parsers.syntax.CPP_STYLE_COMMENT,
-    )
-
-
 def flatten_list(
     lis: list
 ):
@@ -352,7 +327,7 @@ def parse_defaultValueInfoDict(
     interface: str
 ) -> typing.Dict[Identifier, typing.Optional[str]]:
     result = arpeggio.visit_parse_tree(
-        stored_definition_parser.parse(interface),
+        parser.stored_definition_parser.parse(interface),
         DefaultValueInfoVisitor()
     )
     return dict(result)
