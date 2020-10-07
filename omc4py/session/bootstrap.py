@@ -669,6 +669,10 @@ class ModelicaFunctionInfo(
         self.inputs = []
         self.outputs = []
 
+        defaultInfo = parse_defaultValueInfoDict(
+            self.list_(interfaceOnly=True)
+        )
+
         for component in self.getComponentsTest():
             if component.isProtected:
                 continue
@@ -679,7 +683,7 @@ class ModelicaFunctionInfo(
                         dimensions=component.dimensions,
                         name=Identifier(component.name),
                         comment=component.comment,
-                        hasDefault=None,  # Temporary measure
+                        hasDefault=defaultInfo[Identifier(component.name)]
                     )
                 )
             elif component.inputOutput == "output":
