@@ -14,6 +14,8 @@ from . import (
     parser,
 )
 
+from ..session import string
+
 
 class __DefaultFlag(enum.Flag):
     no_default = enum.auto()
@@ -78,7 +80,7 @@ def to_omc_literal(
         else:
             return 'false'
     if isinstance(obj, str):
-        return f'"{parsers.visitor.escape_py_string(obj)}"'
+        return '"' + string.escape_py_string(obj) + '"'
     return str(obj)
 
 
