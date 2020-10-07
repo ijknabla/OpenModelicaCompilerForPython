@@ -6,7 +6,7 @@ import subprocess
 import tempfile
 import typing
 import uuid
-import zmq
+import zmq  # type: ignore
 
 
 StrOrPathLike = typing.Union[str, os.PathLike]
