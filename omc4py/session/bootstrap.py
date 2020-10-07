@@ -1,13 +1,13 @@
 
 from .. import parsers
 
-import arpeggio
+import arpeggio  # type: ignore
 import collections
 import enum
 import functools
 import operator
 import typing
-import modelica_language.parsers.syntax
+import modelica_language.parsers.syntax  # type: ignore
 
 from . import (
     StrOrPathLike,
