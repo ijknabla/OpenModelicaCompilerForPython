@@ -290,6 +290,74 @@ def parse_omc_value(
     )
 
 
+def stored_definition_withEOF():
+    return (
+        modelica_language.parsers.syntax.stored_definition,
+        arpeggio.EOF
+    )
+
+
+with parsers.omc_dialect_context:
+    stored_definition_parser = arpeggio.ParserPython(
+        stored_definition_withEOF,
+        modelica_language.parsers.syntax.CPP_STYLE_COMMENT,
+    )
+
+
+def flatten_list(
+    lis: list
+):
+    for item in lis:
+        if isinstance(item, list):
+            yield from flatten_list(item)
+        else:
+            yield item
+
+
+class DefaultValueInfo(
+    typing.NamedTuple
+):
+    name: Identifier
+    hasDefault: bool
+
+
+class DefaultValueInfoVisitor(
+    IdentifierVisitor
+):
+    def visit__default__(
+        self,
+        node,
+        children,
+    ) -> typing.List[DefaultValueInfo]:
+        return [
+            child
+            for child in flatten_list(children)
+            if isinstance(child, DefaultValueInfo)
+        ]
+
+    def visit_declaration(
+        self,
+        node,
+        children
+    ) -> DefaultValueInfo:
+        name = children.IDENT[0]
+        hasDefault = bool(children.modification)
+        return DefaultValueInfo(
+            name=name,
+            hasDefault=hasDefault,
+        )
+
+
+def parse_defaultValueInfoDict(
+    interface: str
+) -> typing.Dict[Identifier, typing.Optional[str]]:
+    result = arpeggio.visit_parse_tree(
+        stored_definition_parser.parse(interface),
+        DefaultValueInfoVisitor()
+    )
+    return dict(result)
+
+
 class Component(
     typing.NamedTuple
 ):
