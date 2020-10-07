@@ -14,7 +14,7 @@ from . import (
     parser,
 )
 
-from ..session import string
+from ..session.string import to_omc_literal
 
 
 class __DefaultFlag(enum.Flag):
@@ -67,21 +67,6 @@ def execute(
     expression: str,
 ):
     return omc.execute(expression)
-
-
-def to_omc_literal(
-    obj: typing.Any
-) -> str:
-    if hasattr(obj, "__to_omc_literal__"):
-        return obj.__to_omc_literal__()
-    if isinstance(obj, bool):
-        if obj:
-            return 'true'
-        else:
-            return 'false'
-    if isinstance(obj, str):
-        return '"' + string.escape_py_string(obj) + '"'
-    return str(obj)
 
 
 class Identifier(
