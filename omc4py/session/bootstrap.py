@@ -15,6 +15,7 @@ from . import (
 )
 
 from ..session.string import to_omc_literal
+from ..session.types import Identifier, TypeName
 
 
 class __DefaultFlag(enum.Flag):
@@ -69,115 +70,11 @@ def execute(
     return omc.execute(expression)
 
 
-class Identifier(
-    str
-):
-    def __to_omc_literal__(
-        self
-    ) -> str:
-        return str(self)
-
-
-IdentifierTuple = typing.Tuple[Identifier, ...]
-
-
-@functools.total_ordering
-class TypeName(
-):
-    __slots__ = (
-        "__parts",
-    )
-
-    __parts: IdentifierTuple
-
-    @property
-    def parts(self) -> IdentifierTuple:
-        return self.__parts
-
-    @staticmethod
-    def to_identifiers(
-        name: typing.Union[str, Identifier, "TypeName"]
-    ) -> IdentifierTuple:
-        if isinstance(name, str):
-            return parse_type_specifier(name)
-        elif isinstance(name, Identifier):
-            return name,
-        elif isinstance(name, TypeName):
-            return name.parts
-        else:
-            raise TypeError()
-
-    def __new__(cls, *parts):
-        self = object.__new__(cls)
-        self.__parts = sum(
-            map(cls.to_identifiers, parts),
-            (),
-        )
-        return self
-
-    def __hash__(self):
-        return hash(self.parts)
-
-    def __eq__(self, other):
-        return self.parts == type(self)(other).parts
-
-    def __lt__(self, other):
-        return self.parts < type(self)(other).parts
-
-    def __str__(
-        self
-    ) -> str:
-        return ".".join(
-            map(to_omc_literal, self.parts)
-        )
-
-    __to_omc_literal__ = __str__
-
-    def __truediv__(
-        self,
-        other: typing.Union[str, Identifier, "TypeName"]
-    ):
-        return type(self)(self, other)
-
-
 class IdentifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
     def visit_IDENT(self, node, *_):
         return Identifier(node.value)
-
-
-class TypeSpecifierVisitor(
-    IdentifierVisitor,
-):
-    def visit_name(
-        self,
-        node,
-        children
-    ) -> IdentifierTuple:
-        return tuple(children.IDENT)
-
-    def visit_type_specifier(
-        self,
-        node,
-        children,
-    ) -> IdentifierTuple:
-        name = children.name[0]
-        if node[0].value == ".":
-            return (Identifier(), *name)
-        else:
-            return name
-
-
-def parse_type_specifier(
-    literal: str
-) -> IdentifierTuple:
-    return tuple(
-        arpeggio.visit_parse_tree(
-            parser.type_specifier_parser.parse(literal),
-            TypeSpecifierVisitor(),
-        )
-    )
 
 
 class OMCRecord(
@@ -391,7 +288,7 @@ def getComponentsTest(
 def getClassNames(
     omc: InteractiveOMC,
     class_: TypeName
-) -> IdentifierTuple:
+) -> typing.Tuple[Identifier, ...]:
     return tuple(
         map(
             Identifier,
@@ -525,7 +422,7 @@ class ModelicaClassInfo():
 
     def getClassNames(
         self
-    ) -> IdentifierTuple:
+    ) -> typing.Tuple[Identifier, ...]:
         return getClassNames(self.omc, self.name)
 
     def getComponentsTest(
