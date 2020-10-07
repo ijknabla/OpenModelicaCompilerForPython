@@ -494,6 +494,29 @@ def isPackage(
     )
 
 
+def list_(
+    omc: InteractiveOMC,
+    class_: TypeName,
+    interfaceOnly: typing.Optional[bool] = None,
+    shortOnly: typing.Optional[bool] = None,
+) -> str:
+    kwrds: typing.Dict[str, typing.Any] = {
+        "class_": class_
+    }
+    if interfaceOnly is not None:
+        kwrds["interfaceOnly"] = interfaceOnly
+    if shortOnly is not None:
+        kwrds["shortOnly"] = shortOnly
+
+    return str(
+        call(
+            omc,
+            "list",
+            kwrds=kwrds,
+        )
+    )
+
+
 class ModelicaClassInfo():
     omc: InteractiveOMC
     name: TypeName
@@ -547,6 +570,18 @@ class ModelicaClassInfo():
         self
     ) -> typing.Tuple[Component, ...]:
         return getComponentsTest(self.omc, self.name)
+
+    def list_(
+        self,
+        interfaceOnly: typing.Optional[bool] = None,
+        shortOnly: typing.Optional[bool] = None,
+    ) -> str:
+        return list_(
+            self.omc,
+            self.name,
+            interfaceOnly=interfaceOnly,
+            shortOnly=shortOnly,
+        )
 
 
 class ModelicaTypeInfo(
