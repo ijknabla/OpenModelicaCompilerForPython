@@ -527,25 +527,23 @@ class ModelicaRecordInfo(
             assert(not component.inputOutput)
 
 
-class ArgumentInfo(
+class InputArgumentInfo(
     typing.NamedTuple
 ):
     className: TypeName
     dimensions: typing.List[str]
     name: Identifier
     comment: str
-
-
-class InputArgumentInfo(
-    ArgumentInfo
-):
     hasDefault: bool
 
 
 class OutputArgumentInfo(
-    ArgumentInfo
+    typing.NamedTuple
 ):
-    pass
+    className: TypeName
+    dimensions: typing.List[str]
+    name: Identifier
+    comment: str
 
 
 class ModelicaFunctionInfo(
@@ -578,6 +576,7 @@ class ModelicaFunctionInfo(
                         dimensions=component.dimensions,
                         name=Identifier(component.name),
                         comment=component.comment,
+                        hasDefault=None,  # Temporary measure
                     )
                 )
             elif component.inputOutput == "output":
