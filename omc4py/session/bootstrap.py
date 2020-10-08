@@ -25,6 +25,16 @@ def parse_defaultValueInfoDict(
     )
 
 
+def call_optional(
+    func: typing.Callable,
+    obj: typing.Optional[typing.Any],
+):
+    if obj is None:
+        return None
+    else:
+        return func(obj)
+
+
 class OMCError(
     Exception
 ):
