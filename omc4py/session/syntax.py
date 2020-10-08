@@ -102,6 +102,11 @@ def type_specifier_withEOF():
     return std.type_specifier, arpeggio.EOF
 
 
+@change___name__("file")
+def omc_value_withEOF():
+    return omc_value, arpeggio.EOF
+
+
 class OMCDialectContext():
     __enabled = False
 

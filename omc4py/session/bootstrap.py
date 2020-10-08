@@ -11,13 +11,17 @@ from . import (
     parser,
 )
 
-from .string import to_omc_literal
+from .parser import (
+    parse_omc_value,
+)
+from .string import (
+    to_omc_literal,
+)
 from .types import (
     Identifier,
     TypeName,
 )
 from .visitor import (
-    OMCValueVisitor,
     TypeSpecifierVisitor,
 )
 
@@ -53,15 +57,6 @@ def execute(
     expression: str,
 ):
     return omc.execute(expression)
-
-
-def parse_omc_value(
-    literal: str
-):
-    return arpeggio.visit_parse_tree(
-        parsers.omc_value_parser.parse(literal),
-        OMCValueVisitor()
-    )
 
 
 def flatten_list(
