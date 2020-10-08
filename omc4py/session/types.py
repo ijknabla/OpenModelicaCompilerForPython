@@ -157,3 +157,19 @@ class OMCRecord(
             f"{super().__repr__()}, typeName={self.typeName!r}"
             f")"
         )
+
+    def __to_omc_literal__(
+        self,
+    ) -> str:
+        def lines():
+            typeNameLiteral = string.to_omc_literal(self.typeName)
+            yield f"record {typeNameLiteral} "
+            if self:
+                elements = [
+                    f"{identifier}={string.to_omc_literal(value)}"
+                    for identifier, value in self.items()
+                ]
+                yield ", ".join(elements) + " "
+            yield f"end {typeNameLiteral};"
+
+        return "".join(lines())
