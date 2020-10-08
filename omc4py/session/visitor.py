@@ -1,5 +1,6 @@
 
 import arpeggio  # type: ignore
+import typing
 
 from .types import (
     Identifier,
@@ -10,38 +11,42 @@ from .types import (
 from .. import parsers
 
 
-class IdentifierVisitor(
+class TypeSpecifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
-    def visit_IDENT(self, node, *_):
+    def visit_IDENT(
+        self,
+        node,
+        children
+    ) -> Identifier:
         return Identifier(node.value)
 
-
-class OMCValueVisitor(
-    parsers.visitor.NumberVisitor,
-    parsers.visitor.BooleanVisitor,
-    parsers.visitor.StringVisitor,
-    IdentifierVisitor,
-    parsers.visitor.SequenceVisitor,
-):
     def visit_name(
         self,
         node,
         children,
-    ):
-        return children.IDENT
+    ) -> typing.Tuple[Identifier, ...]:
+        return tuple(children.IDENT)
 
     def visit_type_specifier(
         self,
         node,
         children
-    ):
+    ) -> TypeName:
         name = children.name[0]
         if node[0].value == ".":
             return TypeName(Identifier(), *name)
         else:
             return TypeName(*name)
 
+
+class OMCValueVisitor(
+    TypeSpecifierVisitor,
+    parsers.visitor.NumberVisitor,
+    parsers.visitor.BooleanVisitor,
+    parsers.visitor.StringVisitor,
+    parsers.visitor.SequenceVisitor,
+):
     def visit_omc_record_literal(
         self,
         node,

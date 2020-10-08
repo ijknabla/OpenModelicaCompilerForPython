@@ -19,8 +19,8 @@ from .types import (
     TypeName,
 )
 from .visitor import (
-    IdentifierVisitor,
     OMCValueVisitor,
+    TypeSpecifierVisitor,
 )
 
 
@@ -103,7 +103,7 @@ class DefaultValueInfo(
 
 
 class DefaultValueInfoVisitor(
-    IdentifierVisitor
+    TypeSpecifierVisitor,
 ):
     def visit__default__(
         self,
