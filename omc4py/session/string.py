@@ -44,6 +44,26 @@ def unescape_modelica_string(
     )
 
 
+def quote_py_string(
+    py_string: str
+) -> str:
+    return '"' + escape_py_string(py_string) + '"'
+
+
+def unquote_modelica_string(
+    modelica_string: str
+) -> str:
+    if not modelica_string.startswith('"'):
+        raise ValueError(
+            "modelica_string must starts with '\"' got {modelica_string!r}"
+        )
+    if not modelica_string.endswith('"'):
+        raise ValueError(
+            "modelica_string must ends with '\"' got {modelica_string!r}"
+        )
+    return unescape_modelica_string(modelica_string[1:-1])
+
+
 def to_omc_literal(
     obj: typing.Any
 ) -> str:
