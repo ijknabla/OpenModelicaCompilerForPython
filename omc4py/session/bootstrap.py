@@ -230,15 +230,16 @@ def generate_omc_interface_xml(
         root: ET.Element,
         className: types.TypeName,
     ) -> ET.Element:
+        # print(className)
+        class_tag = ET.SubElement(
+            root, session.getClassRestriction(className),
+            {"id": str(className)}
+        )
+
         for ident in session.getClassNames(className):
             subClassName = className / ident
-            print(subClassName)
-            subClass_tag = ET.SubElement(
-                root, session.getClassRestriction(subClassName),
-                {"id": str(subClassName)}
-            )
             generate_recursive(
-                subClass_tag,
+                class_tag,
                 subClassName,
             )
         return root
@@ -258,7 +259,7 @@ def new_bootstrap(
         omc_interface_xml = generate_omc_interface_xml(
             session
         )
-        print(ET.dump(omc_interface_xml))
+    ET.dump(omc_interface_xml)
 
 
 def with_errorcheck(
