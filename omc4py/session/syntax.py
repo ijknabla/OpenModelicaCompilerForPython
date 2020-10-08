@@ -35,6 +35,63 @@ def IDENT():
     return [STANDARD_IDENT, arpeggio.RegExMatch(r"\$\w*")]
 
 
+def sign():
+    return ["+", "-"]
+
+
+def number():
+    return (
+        arpeggio.Optional(sign),
+        std.UNSIGNED_NUMBER
+    )
+
+
+def boolean():
+    return [std.TRUE, std.FALSE]
+
+
+def omc_record_literal():
+    return (
+        std.RECORD, std.type_specifier,
+        omc_record_element_list,
+        std.END, std.type_specifier, ";"
+    )
+
+
+def omc_record_element_list():
+    return arpeggio.ZeroOrMore(
+        omc_record_element, sep=","
+    )
+
+
+def omc_record_element():
+    return std.IDENT, "=", omc_value
+
+
+def omc_value_list():
+    return arpeggio.ZeroOrMore(omc_value, sep=",")
+
+
+def omc_tuple():
+    return "(", omc_value_list, ")",
+
+
+def omc_array():
+    return "{", omc_value_list, "}",
+
+
+def omc_value():
+    return [
+        boolean,
+        std.STRING,
+        number,
+        std.type_specifier,
+        omc_record_literal,
+        omc_tuple,
+        omc_array,
+    ]
+
+
 @change___name__("file")
 def stored_definition_withEOF():
     return std.stored_definition, arpeggio.EOF

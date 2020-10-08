@@ -41,64 +41,11 @@ from arpeggio import (
     RegExMatch, Optional, ZeroOrMore,
 )
 from modelica_language.parsers import syntax
-from omc4py.session.syntax import omc_dialect_context
-
-
-def sign():
-    return ["+", "-"]
-
-
-def number():
-    return (
-        Optional(sign),
-        syntax.UNSIGNED_NUMBER
-    )
-
-
-def boolean():
-    return [syntax.TRUE, syntax.FALSE]
-
-
-def omc_record_literal():
-    return (
-        syntax.RECORD, syntax.type_specifier,
-        omc_record_element_list,
-        syntax.END, syntax.type_specifier, ";"
-    )
-
-
-def omc_record_element_list():
-    return ZeroOrMore(
-        omc_record_element, sep=","
-    )
-
-
-def omc_record_element():
-    return syntax.IDENT, "=", omc_value
-
-
-def omc_value_list():
-    return ZeroOrMore(omc_value, sep=",")
-
-
-def omc_tuple():
-    return "(", omc_value_list, ")",
-
-
-def omc_array():
-    return "{", omc_value_list, "}",
-
-
-def omc_value():
-    return [
-        boolean,
-        syntax.STRING,
-        number,
-        syntax.type_specifier,
-        omc_record_literal,
-        omc_tuple,
-        omc_array,
-    ]
+from omc4py.session.syntax import (
+    boolean,
+    omc_dialect_context,
+    omc_value,
+)
 
 
 def dimensions():
