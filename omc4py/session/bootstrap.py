@@ -1,6 +1,5 @@
 
-from .. import parsers
-
+import arpeggio  # type: ignore
 import functools
 import typing
 
@@ -10,7 +9,6 @@ from . import (
 )
 
 from . import (
-    parse_defaultValueInfoDict,
     parse_omc_value,
 )
 from .string import (
@@ -20,6 +18,21 @@ from .types import (
     Identifier,
     TypeName,
 )
+from . import (
+    parser,
+    visitor,
+)
+
+
+def parse_defaultValueInfoDict(
+    interface: str
+) -> typing.Dict[Identifier, typing.Optional[str]]:
+    return dict(
+        arpeggio.visit_parse_tree(
+            parser.stored_definition_parser.parse(interface),
+            visitor.DefaultValueInfoVisitor(),
+        )
+    )
 
 
 class OMCError(

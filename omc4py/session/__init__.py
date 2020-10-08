@@ -154,14 +154,3 @@ def parse_omc_value(
         parser.omc_value_parser.parse(literal),
         visitor.OMCValueVisitor()
     )
-
-
-def parse_defaultValueInfoDict(
-    interface: str
-) -> typing.Dict[types.Identifier, typing.Optional[str]]:
-    return dict(
-        arpeggio.visit_parse_tree(
-            parser.stored_definition_parser.parse(interface),
-            visitor.DefaultValueInfoVisitor(),
-        )
-    )
