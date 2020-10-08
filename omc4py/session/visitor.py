@@ -2,6 +2,7 @@
 import arpeggio  # type: ignore
 import typing
 
+from . import string
 from .types import (
     Identifier,
     OMCRecord,
@@ -40,6 +41,56 @@ class TypeSpecifierVisitor(
             return TypeName(*name)
 
 
+class NumberVisitor(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_sign(self, node, *_):
+        return node.value
+
+    def visit_UNSIGNED_NUMBER(self, node, *_):
+        try:
+            return int(node.value)
+        except ValueError:
+            return float(node.value)
+
+    def visit_number(self, node, children):
+        sign = getitem_with_default(
+            children.sign, 0,
+            default="+"
+        )
+        unsigned, = children.UNSIGNED_NUMBER
+
+        if sign == "+":
+            return +unsigned
+        elif sign == "-":
+            return -unsigned
+        else:
+            raise ValueError(
+                f"sign must be '+' or '-'"
+                f"got {sign}"
+            )
+
+
+class BooleanVisitor(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_TRUE(self, *_):
+        return True
+
+    def visit_FALSE(self, *_):
+        return False
+
+    def visit_boolean(self, node, children):
+        return children[0]
+
+
+class StringVisitor(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_STRING(self, node, *_):
+        return string.unquote_modelica_string(node.value)
+
+
 class OMCRecordVisitor(
     TypeSpecifierVisitor,
 ):
@@ -70,9 +121,9 @@ class OMCRecordVisitor(
 
 
 class OMCValueVisitor(
-    parsers.visitor.NumberVisitor,
-    parsers.visitor.BooleanVisitor,
-    parsers.visitor.StringVisitor,
+    NumberVisitor,
+    BooleanVisitor,
+    StringVisitor,
     parsers.visitor.SequenceVisitor,
     OMCRecordVisitor,
 ):
