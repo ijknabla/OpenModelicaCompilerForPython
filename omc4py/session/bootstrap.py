@@ -69,7 +69,7 @@ class OMCSession(
         self,
         funcName: str,
         args: typing.List[typing.Any],
-        kwrds: typing.Dict[str, typing.Any],
+        kwrds: typing.Dict[str, typing.Optional[typing.Any]],
         check: bool = True
     ) -> typing.Any:
         argument_literals: typing.List[str] = []
@@ -78,6 +78,8 @@ class OMCSession(
                 string.to_omc_literal(arg)
             )
         for ident, value in kwrds.items():
+            if value is None:
+                continue
             value_literal = string.to_omc_literal(
                 value
             )
