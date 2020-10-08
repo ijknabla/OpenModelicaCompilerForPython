@@ -6,6 +6,7 @@ __all__ = (
 
 
 import arpeggio  # type: ignore
+import collections
 import functools
 import typing
 
@@ -126,3 +127,29 @@ class TypeName(
         other: typing.Union[str, Identifier, "TypeName"]
     ):
         return type(self)(self, other)
+
+
+class OMCRecord(
+    collections.UserDict,
+):
+    __typeName: TypeName
+
+    def __init__(
+        self,
+        *args,
+        typeName: TypeName,
+        **kwrds,
+    ):
+        super().__init__(*args, **kwrds)
+        self.__typeName = typeName
+
+    @property
+    def typeName(
+        self
+    ) -> TypeName:
+        return self.__typeName
+
+    def __repr__(
+        self
+    ):
+        return f"{self.typeName}({super().__repr__()})"
