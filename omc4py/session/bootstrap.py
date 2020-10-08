@@ -134,6 +134,22 @@ class OMCSession(
             },
         )
 
+    def list(
+        self,
+        class_: typing.Optional[types.TypeName] = None,
+        interfaceOnly: typing.Optional[bool] = None,
+        shortOnly: typing.Optional[bool] = None,
+    ) -> str:
+        return self._call(
+            "list",
+            [],
+            {
+                "class_": call_optional(types.TypeName, class_),
+                "interfaceOnly": call_optional(bool, interfaceOnly),
+                "shortOnly": call_optional(bool, shortOnly),
+            },
+        )
+
 
 def with_errorcheck(
     func: typing.Callable
