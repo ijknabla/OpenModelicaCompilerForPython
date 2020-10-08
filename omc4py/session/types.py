@@ -59,10 +59,15 @@ def split_type_specifier(
 class Identifier(
     str
 ):
-    def __to_omc_literal__(
-        self
+    def __repr__(
+        self,
     ) -> str:
-        return str(self)
+        return f"{type(self).__name__}({super().__repr__()})"
+
+    def __to_omc_literal__(
+        self,
+    ) -> str:
+        return super().__str__()
 
 
 IdentifierTuple = typing.Tuple[Identifier, ...]
