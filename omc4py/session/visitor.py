@@ -11,8 +11,6 @@ from .types import (
     TypeName,
 )
 
-from .. import parsers
-
 
 class __DefaultFlag(enum.Flag):
     no_default = enum.auto()
