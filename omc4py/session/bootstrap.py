@@ -115,7 +115,23 @@ class OMCSession(
         cl: typing.Optional[types.TypeName] = None,
     ) -> str:
         return self._call(
-            "getVersion", [], {"cl": cl}
+            "getVersion",
+            [],
+            {
+                "cl": call_optional(types.TypeName, cl),
+            },
+        )
+
+    def getClassRestriction(
+        self,
+        cl: types.TypeName,
+    ) -> str:
+        return self._call(
+            "getClassRestriction",
+            [],
+            {
+                "cl": types.TypeName(cl),
+            },
         )
 
 
