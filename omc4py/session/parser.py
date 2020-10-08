@@ -1,7 +1,8 @@
 
 __all__ = (
-    "type_specifier_withEOF",
+    "omc_value_parser",
     "stored_definition_parser",
+    "type_specifier_parser",
 )
 
 import arpeggio  # type: ignore
