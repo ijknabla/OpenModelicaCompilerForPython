@@ -213,6 +213,13 @@ class OMCSession(
         ]
 
 
+def new_bootstrap(
+    omc_command: StrOrPathLike
+):
+    with open_omc_session(omc_command) as session:
+        print(session)
+
+
 def with_errorcheck(
     func: typing.Callable
 ) -> typing.Callable:
@@ -624,4 +631,5 @@ def bootstrap(
 
 
 if __name__ == "__main__":
-    bootstrap("omc")
+    new_bootstrap("omc")
+    # bootstrap("omc")
