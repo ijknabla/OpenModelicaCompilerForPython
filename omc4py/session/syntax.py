@@ -50,6 +50,18 @@ def boolean():
     return [std.TRUE, std.FALSE]
 
 
+def omc_array():
+    return "{", omc_value_list, "}",
+
+
+def omc_tuple():
+    return "(", omc_value_list, ")",
+
+
+def omc_value_list():
+    return arpeggio.ZeroOrMore(omc_value, sep=",")
+
+
 def omc_record_literal():
     return (
         std.RECORD, std.type_specifier,
@@ -68,27 +80,15 @@ def omc_record_element():
     return std.IDENT, "=", omc_value
 
 
-def omc_value_list():
-    return arpeggio.ZeroOrMore(omc_value, sep=",")
-
-
-def omc_tuple():
-    return "(", omc_value_list, ")",
-
-
-def omc_array():
-    return "{", omc_value_list, "}",
-
-
 def omc_value():
     return [
+        std.type_specifier,
+        number,
         boolean,
         std.STRING,
-        number,
-        std.type_specifier,
-        omc_record_literal,
-        omc_tuple,
         omc_array,
+        omc_tuple,
+        omc_record_literal,
     ]
 
 
