@@ -65,6 +65,39 @@ class OMCSession(
         close_omc_session(self)
         return False
 
+    def _call(
+        self,
+        funcName: str,
+        args: typing.List[typing.Any],
+        kwrds: typing.Dict[str, typing.Any],
+        check: bool = True
+    ) -> typing.Any:
+        argument_literals: typing.List[str] = []
+        for arg in args:
+            argument_literals.append(
+                string.to_omc_literal(arg)
+            )
+        for ident, value in kwrds.items():
+            value_literal = string.to_omc_literal(
+                value
+            )
+            argument_literals.append(
+                f"{ident}={value_literal}"
+            )
+
+        arguments_literal = ", ".join(argument_literals)
+
+        result_literal = self._omc.execute(
+            f"{funcName}({arguments_literal})"
+        )
+        if check:
+            errorString_literal = self._omc.execute("getErrorString()")
+            errorString = parse_omc_value(errorString_literal)
+            if errorString:
+                raise OMCError(errorString_literal)
+
+        return parse_omc_value(result_literal)
+
 
 def with_errorcheck(
     func: typing.Callable
