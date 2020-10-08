@@ -1,17 +1,16 @@
 
 from .. import parsers
 
-import arpeggio  # type: ignore
 import functools
 import typing
 
 from . import (
     StrOrPathLike,
     InteractiveOMC,
-    parser,
 )
 
-from .parser import (
+from . import (
+    parse_defaultValueInfoDict,
     parse_omc_value,
 )
 from .string import (
@@ -20,9 +19,6 @@ from .string import (
 from .types import (
     Identifier,
     TypeName,
-)
-from .visitor import (
-    DefaultValueInfoVisitor,
 )
 
 
@@ -57,16 +53,6 @@ def execute(
     expression: str,
 ):
     return omc.execute(expression)
-
-
-def parse_defaultValueInfoDict(
-    interface: str
-) -> typing.Dict[Identifier, typing.Optional[str]]:
-    result = arpeggio.visit_parse_tree(
-        parser.stored_definition_parser.parse(interface),
-        DefaultValueInfoVisitor()
-    )
-    return dict(result)
 
 
 class Component(

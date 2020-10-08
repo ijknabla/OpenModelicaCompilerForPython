@@ -1,12 +1,14 @@
 
-from pathlib import Path
+import arpeggio  # type: ignore
 import os
+from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import typing
 import uuid
 import zmq  # type: ignore
+from . import parser, visitor, types
 
 
 StrOrPathLike = typing.Union[str, os.PathLike]
@@ -143,3 +145,23 @@ class InteractiveOMC(
     ) -> str:
         self.socket.send_string(expression)
         return self.socket.recv_string()
+
+
+def parse_omc_value(
+    literal: str
+):
+    return arpeggio.visit_parse_tree(
+        parser.omc_value_parser.parse(literal),
+        visitor.OMCValueVisitor()
+    )
+
+
+def parse_defaultValueInfoDict(
+    interface: str
+) -> typing.Dict[types.Identifier, typing.Optional[str]]:
+    return dict(
+        arpeggio.visit_parse_tree(
+            parser.stored_definition_parser.parse(interface),
+            visitor.DefaultValueInfoVisitor(),
+        )
+    )

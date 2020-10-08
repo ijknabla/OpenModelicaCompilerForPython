@@ -6,7 +6,7 @@ __all__ = (
 
 import arpeggio  # type: ignore
 
-from . import syntax, visitor
+from . import syntax
 
 
 with syntax.omc_dialect_context:
@@ -21,13 +21,4 @@ with syntax.omc_dialect_context:
 
     omc_value_parser = arpeggio.ParserPython(
         syntax.omc_value_withEOF,
-    )
-
-
-def parse_omc_value(
-    literal: str
-):
-    return arpeggio.visit_parse_tree(
-        omc_value_parser.parse(literal),
-        visitor.OMCValueVisitor()
     )
