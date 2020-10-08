@@ -16,7 +16,7 @@ from . import (
 )
 
 
-class TypeSpecifierVisitor(
+class TypeSpecifierSplitVisitor(
     arpeggio.PTNodeVisitor,
 ):
     def visit_IDENT(
@@ -52,7 +52,7 @@ def split_type_specifier(
         parser.type_specifier_parser.parse(
             type_specifier,
         ),
-        TypeSpecifierVisitor()
+        TypeSpecifierSplitVisitor()
     )
 
 
