@@ -100,6 +100,14 @@ class OMCSession(
 
         return parse_omc_value(result_literal)
 
+    def getVersion(
+        self,
+        cl: typing.Optional[types.TypeName] = None,
+    ) -> str:
+        return self._call(
+            "getVersion", [], {"cl": cl}
+        )
+
 
 def with_errorcheck(
     func: typing.Callable
