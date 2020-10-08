@@ -1,5 +1,7 @@
 
 import arpeggio  # type: ignore
+import enum
+import operator
 import typing
 
 from . import string
@@ -10,6 +12,25 @@ from .types import (
 )
 
 from .. import parsers
+
+
+class __DefaultFlag(enum.Flag):
+    no_default = enum.auto()
+
+
+def getitem_with_default(
+    sequence: typing.Sequence,
+    index: typing.Any,
+    *,
+    default=__DefaultFlag.no_default,
+):
+    try:
+        return operator.getitem(sequence, index)
+    except IndexError:
+        if default is not __DefaultFlag.no_default:
+            return default
+        else:
+            raise
 
 
 class TypeSpecifierVisitor(
@@ -91,6 +112,29 @@ class StringVisitor(
         return string.unquote_modelica_string(node.value)
 
 
+class SequenceVisitor(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_omc_value_list(self, node, children):
+        return children.omc_value
+
+    def visit_omc_tuple(self, node, children):
+        value_list = getitem_with_default(
+            children.omc_value_list,
+            0,
+            default=[],
+        )
+        return tuple(value_list)
+
+    def visit_omc_array(self, node, children):
+        value_list = getitem_with_default(
+            children.omc_value_list,
+            0,
+            default=[],
+        )
+        return list(value_list)
+
+
 class OMCRecordVisitor(
     TypeSpecifierVisitor,
 ):
@@ -124,7 +168,7 @@ class OMCValueVisitor(
     NumberVisitor,
     BooleanVisitor,
     StringVisitor,
-    parsers.visitor.SequenceVisitor,
+    SequenceVisitor,
     OMCRecordVisitor,
 ):
     pass
