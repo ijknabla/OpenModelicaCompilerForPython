@@ -31,6 +31,39 @@ class OMCError(
     ...
 
 
+class OMCSession(
+):
+    _omc: InteractiveOMC
+
+    @classmethod
+    def open(
+        cls,
+        omc_command: typing.Optional[StrOrPathLike] = None,
+    ) -> "OMCSession":
+        self = object.__new__(cls)
+        self._omc = InteractiveOMC.open(omc_command=omc_command)
+        return self
+
+    def close(
+        self
+    ):
+        self._omc.close()
+
+    def __enter__(
+        self
+    ):
+        return self
+
+    def __exit__(
+        self,
+        exc_type,
+        exc_value,
+        traceback,
+    ):
+        self.close()
+        return False
+
+
 def with_errorcheck(
     func: typing.Callable
 ) -> typing.Callable:
