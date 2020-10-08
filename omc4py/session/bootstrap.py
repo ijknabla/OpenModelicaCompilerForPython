@@ -41,6 +41,26 @@ class OMCError(
     ...
 
 
+class Component(
+    typing.NamedTuple
+):
+    """
+OpenModelica.Scripting.getComponentsTest.Component
+"""
+    className: str
+    name: str
+    comment: str
+    isProtected: bool
+    isFinal: bool
+    isFlow: bool
+    isStream: bool
+    isReplaceable: bool
+    variability: str
+    innerOuter: str
+    inputOutput: str
+    dimensions: typing.List[str]
+
+
 def open_omc_session(
     omc_command: typing.Optional[StrOrPathLike] = None,
 ) -> "OMCSession":
@@ -176,6 +196,22 @@ class OMCSession(
 
         return list(map(types.TypeName, result))
 
+    def getComponentsTest(
+        self,
+        name: types.TypeName,
+    ) -> typing.List[Component]:
+        result = self._call(
+            "getComponentsTest",
+            [
+                types.TypeName(name)
+            ],
+            {},
+        )
+        return [
+            Component(**record_literal)
+            for record_literal in result
+        ]
+
 
 def with_errorcheck(
     func: typing.Callable
@@ -202,26 +238,6 @@ def execute(
     expression: str,
 ):
     return omc.execute(expression)
-
-
-class Component(
-    typing.NamedTuple
-):
-    """
-OpenModelica.Scripting.getComponentsTest.Component
-"""
-    className: str
-    name: str
-    comment: str
-    isProtected: bool
-    isFinal: bool
-    isFlow: bool
-    isStream: bool
-    isReplaceable: bool
-    variability: str
-    innerOuter: str
-    inputOutput: str
-    dimensions: typing.List[str]
 
 
 @with_errorcheck
