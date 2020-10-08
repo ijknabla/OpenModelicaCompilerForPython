@@ -1,8 +1,9 @@
 
 import arpeggio  # type: ignore
 import functools
+from lxml import etree
+import sys
 import typing
-from xml.etree import ElementTree as ET
 
 from . import (
     StrOrPathLike,
@@ -216,24 +217,30 @@ class OMCSession(
 
 def generate_omc_interface_xml(
     session: OMCSession,
-) -> ET.ElementTree:
-    root = ET.Element(
+) -> etree.ElementTree:
+    root = etree.Element(
         "OMCInterface"
     )
-    version_tag = ET.SubElement(
+    version_tag = etree.SubElement(
         root, "version",
     )
     version_string = session.getVersion()
     version_tag.text = version_string
 
     def generate_recursive(
-        root: ET.Element,
+        root: etree.Element,
         className: types.TypeName,
-    ) -> ET.Element:
+    ) -> etree.Element:
         # print(className)
-        class_tag = ET.SubElement(
-            root, session.getClassRestriction(className),
-            {"id": str(className)}
+        restriction = session.getClassRestriction(className).split()
+        restriction_base = restriction[-1]
+        #restriction_prefix = " ".join(restriction[:-1])
+        class_tag = etree.SubElement(
+            root,
+            restriction_base,
+            {
+                "id": str(className),
+            },
         )
 
         for ident in session.getClassNames(className):
@@ -249,7 +256,7 @@ def generate_omc_interface_xml(
         types.TypeName("OpenModelica.Scripting")
     )
 
-    return ET.ElementTree(root)
+    return etree.ElementTree(root)
 
 
 def new_bootstrap(
@@ -259,7 +266,12 @@ def new_bootstrap(
         omc_interface_xml = generate_omc_interface_xml(
             session
         )
-    ET.dump(omc_interface_xml)
+    omc_interface_xml.write(
+        sys.stdout.buffer,
+        pretty_print=True,
+        xml_declaration=True,
+        encoding="utf-8",
+    )
 
 
 def with_errorcheck(

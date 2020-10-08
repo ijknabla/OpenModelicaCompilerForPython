@@ -22,6 +22,7 @@ setup(
         "OMPython",
         "PyZMQ",
         "Arpeggio",
+        "lxml",
     ],
     python_requires='>=3.6',
 )
