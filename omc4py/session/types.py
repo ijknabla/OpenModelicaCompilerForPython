@@ -137,11 +137,11 @@ class OMCRecord(
     def __init__(
         self,
         *args,
-        typeName: TypeName,
+        typeName: typing.Union[str, TypeName],
         **kwrds,
     ):
         super().__init__(*args, **kwrds)
-        self.__typeName = typeName
+        self.__typeName = TypeName(typeName)
 
     @property
     def typeName(
