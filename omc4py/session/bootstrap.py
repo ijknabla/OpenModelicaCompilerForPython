@@ -93,10 +93,10 @@ class OMCSession(
             f"{funcName}({arguments_literal})"
         )
         if check:
-            errorString_literal = self._omc.execute("getErrorString()")
-            errorString = parse_omc_value(errorString_literal)
+            errorString_literal = self._omc.execute("getErrorString()").rstrip()
+            errorString = parse_omc_value(errorString_literal).rstrip()
             if errorString:
-                raise OMCError(errorString_literal)
+                raise OMCError(errorString)
 
         return parse_omc_value(result_literal)
 
