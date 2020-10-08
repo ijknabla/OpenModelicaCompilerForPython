@@ -152,4 +152,8 @@ class OMCRecord(
     def __repr__(
         self
     ):
-        return f"{self.typeName}({super().__repr__()})"
+        return (
+            f"{type(self).__name__}("
+            f"{super().__repr__()}, typeName={self.typeName!r}"
+            f")"
+        )
