@@ -43,15 +43,6 @@ class TypeSpecifierVisitor(
 class OMCRecordVisitor(
     arpeggio.PTNodeVisitor,
 ):
-    def visit_omc_record_literal(
-        self,
-        node,
-        children
-    ):
-        typeName = children.type_specifier[0]
-        elements = children.omc_record_element_list[0]
-        return OMCRecord(elements, typeName=typeName)
-
     def visit_omc_record_element(
         self,
         node,
@@ -67,6 +58,15 @@ class OMCRecordVisitor(
         children
     ):
         return children.omc_record_element
+
+    def visit_omc_record_literal(
+        self,
+        node,
+        children
+    ):
+        typeName = children.type_specifier[0]
+        elements = children.omc_record_element_list[0]
+        return OMCRecord(elements, typeName=typeName)
 
 
 class OMCValueVisitor(
