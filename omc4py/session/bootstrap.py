@@ -2,6 +2,7 @@
 import arpeggio  # type: ignore
 import functools
 import typing
+from xml.etree import ElementTree as ET
 
 from . import (
     StrOrPathLike,
@@ -213,11 +214,51 @@ class OMCSession(
         ]
 
 
+def generate_omc_interface_xml(
+    session: OMCSession,
+) -> ET.ElementTree:
+    root = ET.Element(
+        "OMCInterface"
+    )
+    version_tag = ET.SubElement(
+        root, "version",
+    )
+    version_string = session.getVersion()
+    version_tag.text = version_string
+
+    def generate_recursive(
+        root: ET.Element,
+        className: types.TypeName,
+    ) -> ET.Element:
+        for ident in session.getClassNames(className):
+            subClassName = className / ident
+            print(subClassName)
+            subClass_tag = ET.SubElement(
+                root, session.getClassRestriction(subClassName),
+                {"id": str(subClassName)}
+            )
+            generate_recursive(
+                subClass_tag,
+                subClassName,
+            )
+        return root
+
+    generate_recursive(
+        root,
+        types.TypeName("OpenModelica.Scripting")
+    )
+
+    return ET.ElementTree(root)
+
+
 def new_bootstrap(
     omc_command: StrOrPathLike
 ):
     with open_omc_session(omc_command) as session:
-        print(session)
+        omc_interface_xml = generate_omc_interface_xml(
+            session
+        )
+        print(ET.dump(omc_interface_xml))
 
 
 def with_errorcheck(
