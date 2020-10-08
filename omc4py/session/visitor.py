@@ -41,13 +41,13 @@ class TypeSpecifierVisitor(
 
 
 class OMCRecordVisitor(
-    arpeggio.PTNodeVisitor,
+    TypeSpecifierVisitor,
 ):
     def visit_omc_record_element(
         self,
         node,
         children,
-    ):
+    ) -> typing.Tuple[Identifier, typing.Any]:
         IDENT = children.IDENT[0]
         value = children.omc_value[0]
         return IDENT, value
@@ -56,21 +56,20 @@ class OMCRecordVisitor(
         self,
         node,
         children
-    ):
+    ) -> typing.List[typing.Tuple[Identifier, typing.Any]]:
         return children.omc_record_element
 
     def visit_omc_record_literal(
         self,
         node,
         children
-    ):
+    ) -> OMCRecord:
         typeName = children.type_specifier[0]
         elements = children.omc_record_element_list[0]
         return OMCRecord(elements, typeName=typeName)
 
 
 class OMCValueVisitor(
-    TypeSpecifierVisitor,
     parsers.visitor.NumberVisitor,
     parsers.visitor.BooleanVisitor,
     parsers.visitor.StringVisitor,
