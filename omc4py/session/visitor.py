@@ -40,12 +40,8 @@ class TypeSpecifierVisitor(
             return TypeName(*name)
 
 
-class OMCValueVisitor(
-    TypeSpecifierVisitor,
-    parsers.visitor.NumberVisitor,
-    parsers.visitor.BooleanVisitor,
-    parsers.visitor.StringVisitor,
-    parsers.visitor.SequenceVisitor,
+class OMCRecordVisitor(
+    arpeggio.PTNodeVisitor,
 ):
     def visit_omc_record_literal(
         self,
@@ -71,3 +67,14 @@ class OMCValueVisitor(
         children
     ):
         return children.omc_record_element
+
+
+class OMCValueVisitor(
+    TypeSpecifierVisitor,
+    parsers.visitor.NumberVisitor,
+    parsers.visitor.BooleanVisitor,
+    parsers.visitor.StringVisitor,
+    parsers.visitor.SequenceVisitor,
+    OMCRecordVisitor,
+):
+    pass
