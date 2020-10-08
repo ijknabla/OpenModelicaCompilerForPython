@@ -118,8 +118,13 @@ class TypeName(
     def __lt__(self, other):
         return self.parts < type(self)(other).parts
 
+    def __repr__(
+        self,
+    ) -> str:
+        return f"{type(self).__name__}({str(self)!r})"
+
     def __str__(
-        self
+        self,
     ) -> str:
         return ".".join(
             map(string.to_omc_literal, self.parts)
