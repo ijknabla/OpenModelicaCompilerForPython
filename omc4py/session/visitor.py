@@ -12,6 +12,16 @@ from .types import (
 )
 
 
+def flatten_list(
+    lis: list
+):
+    for item in lis:
+        if isinstance(item, list):
+            yield from flatten_list(item)
+        else:
+            yield item
+
+
 class __DefaultFlag(enum.Flag):
     no_default = enum.auto()
 
@@ -170,3 +180,37 @@ class OMCValueVisitor(
     OMCRecordVisitor,
 ):
     pass
+
+
+class DefaultValueInfo(
+    typing.NamedTuple
+):
+    name: Identifier
+    hasDefault: bool
+
+
+class DefaultValueInfoVisitor(
+    TypeSpecifierVisitor,
+):
+    def visit__default__(
+        self,
+        node,
+        children,
+    ) -> typing.List[DefaultValueInfo]:
+        return [
+            child
+            for child in flatten_list(children)
+            if isinstance(child, DefaultValueInfo)
+        ]
+
+    def visit_declaration(
+        self,
+        node,
+        children
+    ) -> DefaultValueInfo:
+        name = children.IDENT[0]
+        hasDefault = bool(children.modification)
+        return DefaultValueInfo(
+            name=name,
+            hasDefault=hasDefault,
+        )
