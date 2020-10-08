@@ -31,23 +31,25 @@ class OMCError(
     ...
 
 
+def open_omc_session(
+    omc_command: typing.Optional[StrOrPathLike] = None,
+) -> "OMCSession":
+    self = OMCSession()
+    self._omc = InteractiveOMC.open(
+        omc_command=omc_command,
+    )
+    return self
+
+
+def close_omc_session(
+    session: "OMCSession"
+):
+    session._omc.close()
+
+
 class OMCSession(
 ):
     _omc: InteractiveOMC
-
-    @classmethod
-    def open(
-        cls,
-        omc_command: typing.Optional[StrOrPathLike] = None,
-    ) -> "OMCSession":
-        self = object.__new__(cls)
-        self._omc = InteractiveOMC.open(omc_command=omc_command)
-        return self
-
-    def close(
-        self
-    ):
-        self._omc.close()
 
     def __enter__(
         self
@@ -60,7 +62,7 @@ class OMCSession(
         exc_value,
         traceback,
     ):
-        self.close()
+        close_omc_session(self)
         return False
 
 
