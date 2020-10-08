@@ -6,7 +6,7 @@ __all__ = (
 
 import arpeggio  # type: ignore
 
-from .. import syntax
+from . import syntax
 
 
 with syntax.omc_dialect_context:
