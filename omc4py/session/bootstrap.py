@@ -6,27 +6,17 @@ import typing
 from . import (
     StrOrPathLike,
     InteractiveOMC,
-)
-
-from . import (
     parse_omc_value,
-)
-from .string import (
-    to_omc_literal,
-)
-from .types import (
-    Identifier,
-    TypeName,
-)
-from . import (
     parser,
+    string,
+    types,
     visitor,
 )
 
 
 def parse_defaultValueInfoDict(
     interface: str
-) -> typing.Dict[Identifier, typing.Optional[str]]:
+) -> typing.Dict[types.Identifier, typing.Optional[str]]:
     return dict(
         arpeggio.visit_parse_tree(
             parser.stored_definition_parser.parse(interface),
@@ -98,7 +88,7 @@ def evaluate(
 
 def call(
     omc: InteractiveOMC,
-    funcName: typing.Union[str, TypeName],
+    funcName: typing.Union[str, types.TypeName],
     *,
     args: typing.Optional[typing.Sequence] = None,
     kwrds: typing.Optional[typing.Mapping[str, typing.Any]] = None,
@@ -106,17 +96,17 @@ def call(
     arguments: typing.List[str] = []
 
     if args is not None:
-        arguments.extend(map(to_omc_literal, args))
+        arguments.extend(map(string.to_omc_literal, args))
     if kwrds is not None:
         for key, value in kwrds.items():
             arguments.append(
-                f"{key}={to_omc_literal(value)}"
+                f"{key}={string.to_omc_literal(value)}"
             )
 
     return evaluate(
         omc,
         "{0}({1})".format(
-            to_omc_literal(TypeName(funcName)),
+            string.to_omc_literal(types.TypeName(funcName)),
             ",".join(arguments)
         ),
     )
@@ -124,7 +114,7 @@ def call(
 
 def getComponentsTest(
     omc: InteractiveOMC,
-    class_: TypeName,
+    class_: types.TypeName,
 ) -> typing.Tuple[Component, ...]:
     return tuple(
         Component(**component)
@@ -138,11 +128,11 @@ def getComponentsTest(
 
 def getClassNames(
     omc: InteractiveOMC,
-    class_: TypeName
-) -> typing.Tuple[Identifier, ...]:
+    class_: types.TypeName
+) -> typing.Tuple[types.Identifier, ...]:
     return tuple(
         map(
-            Identifier,
+            types.Identifier,
             call(
                 omc,
                 "getClassNames",
@@ -154,7 +144,7 @@ def getClassNames(
 
 def isType(
     omc: InteractiveOMC,
-    cl: TypeName,
+    cl: types.TypeName,
 ) -> bool:
     return bool(
         call(
@@ -167,7 +157,7 @@ def isType(
 
 def isRecord(
     omc: InteractiveOMC,
-    cl: TypeName,
+    cl: types.TypeName,
 ) -> bool:
     return bool(
         call(
@@ -180,7 +170,7 @@ def isRecord(
 
 def isFunction(
     omc: InteractiveOMC,
-    cl: TypeName,
+    cl: types.TypeName,
 ) -> bool:
     return bool(
         call(
@@ -193,7 +183,7 @@ def isFunction(
 
 def isPackage(
     omc: InteractiveOMC,
-    cl: TypeName,
+    cl: types.TypeName,
 ) -> bool:
     return bool(
         call(
@@ -206,7 +196,7 @@ def isPackage(
 
 def list_(
     omc: InteractiveOMC,
-    class_: TypeName,
+    class_: types.TypeName,
     interfaceOnly: typing.Optional[bool] = None,
     shortOnly: typing.Optional[bool] = None,
 ) -> str:
@@ -229,17 +219,17 @@ def list_(
 
 class ModelicaClassInfo():
     omc: InteractiveOMC
-    name: TypeName
+    name: types.TypeName
 
     children: typing.Dict[
-        Identifier,
+        types.Identifier,
         "ModelicaClassInfo"
     ]
 
     def __init__(
         self,
         omc: InteractiveOMC,
-        name: TypeName,
+        name: types.TypeName,
     ):
         self.omc = omc
         self.name = name
@@ -273,7 +263,7 @@ class ModelicaClassInfo():
 
     def getClassNames(
         self
-    ) -> typing.Tuple[Identifier, ...]:
+    ) -> typing.Tuple[types.Identifier, ...]:
         return getClassNames(self.omc, self.name)
 
     def getComponentsTest(
@@ -343,9 +333,9 @@ class ModelicaRecordInfo(
 class InputArgumentInfo(
     typing.NamedTuple
 ):
-    className: TypeName
+    className: types.TypeName
     dimensions: typing.List[str]
-    name: Identifier
+    name: types.Identifier
     comment: str
     hasDefault: bool
 
@@ -353,9 +343,9 @@ class InputArgumentInfo(
 class OutputArgumentInfo(
     typing.NamedTuple
 ):
-    className: TypeName
+    className: types.TypeName
     dimensions: typing.List[str]
-    name: Identifier
+    name: types.Identifier
     comment: str
 
 
@@ -389,19 +379,19 @@ class ModelicaFunctionInfo(
             if component.inputOutput == "input":
                 self.inputs.append(
                     InputArgumentInfo(
-                        className=TypeName(component.className),
+                        className=types.TypeName(component.className),
                         dimensions=component.dimensions,
-                        name=Identifier(component.name),
+                        name=types.Identifier(component.name),
                         comment=component.comment,
-                        hasDefault=defaultInfo[Identifier(component.name)]
+                        hasDefault=defaultInfo[types.Identifier(component.name)]
                     )
                 )
             elif component.inputOutput == "output":
                 self.outputs.append(
                     OutputArgumentInfo(
-                        className=TypeName(component.className),
+                        className=types.TypeName(component.className),
                         dimensions=component.dimensions,
-                        name=Identifier(component.name),
+                        name=types.Identifier(component.name),
                         comment=component.comment,
                     )
                 )
@@ -456,10 +446,10 @@ def bootstrap(
     with InteractiveOMC.open(omc_command) as omc:
         OpenModelica_Scripting = ModelicaPackageInfo(
             omc=omc,
-            name=TypeName("OpenModelica.Scripting")
+            name=types.TypeName("OpenModelica.Scripting")
         )
 
-    typeNames: typing.Set[TypeName] = set()
+    typeNames: typing.Set[types.TypeName] = set()
 
     for package, _, contents in OpenModelica_Scripting.walk():
         for content in contents:
