@@ -150,6 +150,32 @@ class OMCSession(
             },
         )
 
+    def getClassNames(
+        self,
+        class_: typing.Optional[types.TypeName] = None,
+        recursive: typing.Optional[bool] = None,
+        qualified: typing.Optional[bool] = None,
+        sort: typing.Optional[bool] = None,
+        builtin: typing.Optional[bool] = None,
+        showProtected: typing.Optional[bool] = None,
+        includeConstants: typing.Optional[bool] = None,
+    ) -> typing.List[types.TypeName]:
+        result = self._call(
+            "getClassNames",
+            [],
+            {
+                "class_": call_optional(types.TypeName, class_),
+                "recursive": call_optional(bool, recursive),
+                "qualified": call_optional(bool, qualified),
+                "sort": call_optional(bool, sort),
+                "builtin": call_optional(bool, builtin),
+                "showProtected": call_optional(bool, showProtected),
+                "includeConstants": call_optional(bool, includeConstants),
+            },
+        )
+
+        return list(map(types.TypeName, result))
+
 
 def with_errorcheck(
     func: typing.Callable
