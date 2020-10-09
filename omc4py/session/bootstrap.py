@@ -2,7 +2,7 @@
 import arpeggio  # type: ignore
 import enum
 import functools
-from lxml import etree
+from lxml import etree as xml
 import sys
 import typing
 
@@ -240,25 +240,25 @@ class ClassRestriction(
 
 def generate_omc_interface_xml(
     session: OMCSession,
-) -> etree.ElementTree:
-    root = etree.Element(
+) -> xml.ElementTree:
+    root = xml.Element(
         "OMCInterface"
     )
-    version_tag = etree.SubElement(
+    version_tag = xml.SubElement(
         root, "version",
     )
     version_string = session.getVersion()
     version_tag.text = version_string
 
     def generate_recursive(
-        root: etree.Element,
+        root: xml.Element,
         className: types.TypeName,
-    ) -> etree.Element:
+    ) -> xml.Element:
         # print(className)
         restriction = ClassRestriction.from_typeName(
             session, className
         )
-        class_tag = etree.SubElement(
+        class_tag = xml.SubElement(
             root,
             restriction.value,
             {
@@ -279,7 +279,7 @@ def generate_omc_interface_xml(
         types.TypeName("OpenModelica.Scripting")
     )
 
-    return etree.ElementTree(root)
+    return xml.ElementTree(root)
 
 
 def new_bootstrap(
