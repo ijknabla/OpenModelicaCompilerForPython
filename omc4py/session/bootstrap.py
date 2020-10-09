@@ -216,6 +216,14 @@ class OMCSession(
         ]
 
 
+def generate_class_xml(
+    session: OMCSession,
+    parent: xml.Element,
+    className: types.TypeName,
+) -> None:
+    pass
+
+
 class ClassRestriction(
     enum.Enum,
 ):
@@ -274,6 +282,11 @@ def generate_omc_interface_xml(
             )
         return root
 
+    generate_class_xml(
+        session,
+        root,
+        types.TypeName("OpenModelica.Scripting")
+    )
     generate_recursive(
         root,
         types.TypeName("OpenModelica.Scripting")
