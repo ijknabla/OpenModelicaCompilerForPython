@@ -1,5 +1,6 @@
 
 import arpeggio  # type: ignore
+import enum
 import functools
 from lxml import etree
 import sys
@@ -215,6 +216,28 @@ class OMCSession(
         ]
 
 
+class ClassRestriction(
+    enum.Enum,
+):
+    package = "package"
+    type = "type"
+    record = "record"
+    function = "function"
+
+    @classmethod
+    def from_typeName(
+        cls,
+        session: OMCSession,
+        typeName: types.TypeName,
+    ) -> "ClassRestriction":
+        raw_restriction = session.getClassRestriction(
+            typeName
+        )
+        return cls(
+            raw_restriction.split()[-1]
+        )
+
+
 def generate_omc_interface_xml(
     session: OMCSession,
 ) -> etree.ElementTree:
@@ -232,12 +255,12 @@ def generate_omc_interface_xml(
         className: types.TypeName,
     ) -> etree.Element:
         # print(className)
-        restriction = session.getClassRestriction(className).split()
-        restriction_base = restriction[-1]
-        #restriction_prefix = " ".join(restriction[:-1])
+        restriction = ClassRestriction.from_typeName(
+            session, className
+        )
         class_tag = etree.SubElement(
             root,
-            restriction_base,
+            restriction.value,
             {
                 "id": str(className),
             },
