@@ -261,32 +261,23 @@ def generate_class_xml(
         if restriction is ClassRestriction.package:
             return None
 
+        interfaceOnly: bool
         if restriction is ClassRestriction.function:
-            attrs = {
-                "interfaceOnly": True,
-                "shortOnly": False,
-            }
-        elif restriction is ClassRestriction.record:
-            attrs = {
-                "interfaceOnly": False,
-                "shortOnly": False,
-            }
+            interfaceOnly = True
         else:
-            attrs = {
-                "interfaceOnly": False,
-                "shortOnly": False,
-            }
+            interfaceOnly = False
 
         code_tag = xml.SubElement(
             class_tag,
             "code",
             {
-                key: "true" if value else "false"
-                for key, value in attrs.items()
+                "interfaceOnly":
+                    "true" if interfaceOnly else "false"
             },
         )
+        code_tag.text = session.list(className, interfaceOnly=interfaceOnly)
 
-        code_tag.text = session.list(className, **attrs)
+        return code_tag
 
     generate_code_tag()
 

@@ -4,7 +4,7 @@
   <package id="OpenModelica.Scripting">
     <classes>
       <record id="OpenModelica.Scripting.CheckSettingsResult">
-        <code interfaceOnly="false" shortOnly="false">record CheckSettingsResult
+        <code interfaceOnly="false">record CheckSettingsResult
   String OPENMODELICAHOME, OPENMODELICALIBRARY, OMC_PATH, SYSTEM_PATH, OMDEV_PATH;
   Boolean OMC_FOUND;
   String MODELICAUSERCFLAGS, WORKING_DIRECTORY;
@@ -22,27 +22,27 @@ end CheckSettingsResult;</code>
           <package id="OpenModelica.Scripting.Internal.Time">
             <classes>
               <function id="OpenModelica.Scripting.Internal.Time.readableTime">
-                <code interfaceOnly="true" shortOnly="false">function readableTime
+                <code interfaceOnly="true">function readableTime
   input Real sec;
   output String str;
 end readableTime;</code>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerTick">
-                <code interfaceOnly="true" shortOnly="false">function timerTick
+                <code interfaceOnly="true">function timerTick
   input Integer index;
 end timerTick;</code>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerTock">
-                <code interfaceOnly="true" shortOnly="false">function timerTock
+                <code interfaceOnly="true">function timerTock
   input Integer index;
   output Real elapsed;
 end timerTock;</code>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerClear">
-                <code interfaceOnly="true" shortOnly="false">function timerClear
+                <code interfaceOnly="true">function timerClear
   input Integer index;
 end timerClear;</code>
                 <classes/>
@@ -50,11 +50,11 @@ end timerClear;</code>
             </classes>
           </package>
           <type id="OpenModelica.Scripting.Internal.FileType">
-            <code interfaceOnly="false" shortOnly="false">type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);</code>
+            <code interfaceOnly="false">type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);</code>
             <classes/>
           </type>
           <function id="OpenModelica.Scripting.Internal.stat">
-            <code interfaceOnly="true" shortOnly="false">function stat
+            <code interfaceOnly="true">function stat
   input String name;
   output FileType fileType;
 end stat;</code>
@@ -63,13 +63,13 @@ end stat;</code>
         </classes>
       </package>
       <function id="OpenModelica.Scripting.checkSettings">
-        <code interfaceOnly="true" shortOnly="false">function checkSettings
+        <code interfaceOnly="true">function checkSettings
   output CheckSettingsResult result;
 end checkSettings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFile">
-        <code interfaceOnly="true" shortOnly="false">function loadFile
+        <code interfaceOnly="true">function loadFile
   input String fileName;
   input String encoding = "UTF-8";
   input Boolean uses = true;
@@ -78,7 +78,7 @@ end loadFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFiles">
-        <code interfaceOnly="true" shortOnly="false">function loadFiles
+        <code interfaceOnly="true">function loadFiles
   input String[:] fileNames;
   input String encoding = "UTF-8";
   input Integer numThreads = OpenModelica.Scripting.numProcessors();
@@ -87,7 +87,7 @@ end loadFiles;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadEncryptedPackage">
-        <code interfaceOnly="true" shortOnly="false">function loadEncryptedPackage
+        <code interfaceOnly="true">function loadEncryptedPackage
   input String fileName;
   input String workdir = "&lt;default&gt;" "The output directory for imported encrypted files. &lt;default&gt; will put the files to current working directory.";
   output Boolean success;
@@ -95,7 +95,7 @@ end loadEncryptedPackage;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.reloadClass">
-        <code interfaceOnly="true" shortOnly="false">function reloadClass
+        <code interfaceOnly="true">function reloadClass
   input TypeName name;
   input String encoding = "UTF-8";
   output Boolean success;
@@ -103,7 +103,7 @@ end reloadClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadString">
-        <code interfaceOnly="true" shortOnly="false">function loadString
+        <code interfaceOnly="true">function loadString
   input String data;
   input String filename = "&lt;interactive&gt;";
   input String encoding = "UTF-8";
@@ -113,7 +113,7 @@ end loadString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.parseString">
-        <code interfaceOnly="true" shortOnly="false">function parseString
+        <code interfaceOnly="true">function parseString
   input String data;
   input String filename = "&lt;interactive&gt;";
   output TypeName names[:];
@@ -121,7 +121,7 @@ end parseString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.parseFile">
-        <code interfaceOnly="true" shortOnly="false">function parseFile
+        <code interfaceOnly="true">function parseFile
   input String filename;
   input String encoding = "UTF-8";
   output TypeName names[:];
@@ -129,7 +129,7 @@ end parseFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFileInteractiveQualified">
-        <code interfaceOnly="true" shortOnly="false">function loadFileInteractiveQualified
+        <code interfaceOnly="true">function loadFileInteractiveQualified
   input String filename;
   input String encoding = "UTF-8";
   output TypeName names[:];
@@ -137,7 +137,7 @@ end loadFileInteractiveQualified;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFileInteractive">
-        <code interfaceOnly="true" shortOnly="false">function loadFileInteractive
+        <code interfaceOnly="true">function loadFileInteractive
   input String filename;
   input String encoding = "UTF-8";
   output TypeName names[:];
@@ -145,7 +145,7 @@ end loadFileInteractive;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.system">
-        <code interfaceOnly="true" shortOnly="false">impure function system
+        <code interfaceOnly="true">impure function system
   input String callStr "String to call: sh -c $callStr";
   input String outputFile = "" "The output is redirected to this file (unless already done by callStr)";
   output Integer retval "Return value of the system call; usually 0 on success";
@@ -153,7 +153,7 @@ end system;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.system_parallel">
-        <code interfaceOnly="true" shortOnly="false">impure function system_parallel
+        <code interfaceOnly="true">impure function system_parallel
   input String callStr[:] "String to call: sh -c $callStr";
   input Integer numThreads = numProcessors();
   output Integer retval[:] "Return value of the system call; usually 0 on success";
@@ -161,46 +161,46 @@ end system_parallel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveAll">
-        <code interfaceOnly="true" shortOnly="false">function saveAll
+        <code interfaceOnly="true">function saveAll
   input String fileName;
   output Boolean success;
 end saveAll;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.help">
-        <code interfaceOnly="true" shortOnly="false">function help
+        <code interfaceOnly="true">function help
   input String topic = "topics";
   output String helpText;
 end help;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clear">
-        <code interfaceOnly="true" shortOnly="false">function clear
+        <code interfaceOnly="true">function clear
   output Boolean success;
 end clear;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearProgram">
-        <code interfaceOnly="true" shortOnly="false">function clearProgram
+        <code interfaceOnly="true">function clearProgram
   output Boolean success;
 end clearProgram;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearVariables">
-        <code interfaceOnly="true" shortOnly="false">function clearVariables
+        <code interfaceOnly="true">function clearVariables
   output Boolean success;
 end clearVariables;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateHeader">
-        <code interfaceOnly="true" shortOnly="false">function generateHeader
+        <code interfaceOnly="true">function generateHeader
   input String fileName;
   output Boolean success;
 end generateHeader;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCode">
-        <code interfaceOnly="true" shortOnly="false">function generateSeparateCode
+        <code interfaceOnly="true">function generateSeparateCode
   input TypeName className;
   input Boolean cleanCache = false "If true, the cache is reset between each generated package. This conserves memory at the cost of speed.";
   output Boolean success;
@@ -208,14 +208,14 @@ end generateSeparateCode;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCodeDependencies">
-        <code interfaceOnly="true" shortOnly="false">function generateSeparateCodeDependencies
+        <code interfaceOnly="true">function generateSeparateCodeDependencies
   input String stampSuffix = ".c" "Suffix to add to dependencies (often .c.stamp)";
   output String[:] dependencies;
 end generateSeparateCodeDependencies;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile">
-        <code interfaceOnly="true" shortOnly="false">function generateSeparateCodeDependenciesMakefile
+        <code interfaceOnly="true">function generateSeparateCodeDependenciesMakefile
   input String filename "The file to write the makefile to";
   input String directory = "" "The relative path of the generated files";
   input String suffix = ".c" "Often .stamp since we do not update all the files";
@@ -224,131 +224,131 @@ end generateSeparateCodeDependenciesMakefile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLinker">
-        <code interfaceOnly="true" shortOnly="false">function getLinker
+        <code interfaceOnly="true">function getLinker
   output String linker;
 end getLinker;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLinker">
-        <code interfaceOnly="true" shortOnly="false">function setLinker
+        <code interfaceOnly="true">function setLinker
   input String linker;
   output Boolean success;
 end setLinker;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLinkerFlags">
-        <code interfaceOnly="true" shortOnly="false">function getLinkerFlags
+        <code interfaceOnly="true">function getLinkerFlags
   output String linkerFlags;
 end getLinkerFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLinkerFlags">
-        <code interfaceOnly="true" shortOnly="false">function setLinkerFlags
+        <code interfaceOnly="true">function setLinkerFlags
   input String linkerFlags;
   output Boolean success;
 end setLinkerFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCompiler">
-        <code interfaceOnly="true" shortOnly="false">function getCompiler
+        <code interfaceOnly="true">function getCompiler
   output String compiler;
 end getCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompiler">
-        <code interfaceOnly="true" shortOnly="false">function setCompiler
+        <code interfaceOnly="true">function setCompiler
   input String compiler;
   output Boolean success;
 end setCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCFlags">
-        <code interfaceOnly="true" shortOnly="false">function setCFlags
+        <code interfaceOnly="true">function setCFlags
   input String inString;
   output Boolean success;
 end setCFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCFlags">
-        <code interfaceOnly="true" shortOnly="false">function getCFlags
+        <code interfaceOnly="true">function getCFlags
   output String outString;
 end getCFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCXXCompiler">
-        <code interfaceOnly="true" shortOnly="false">function getCXXCompiler
+        <code interfaceOnly="true">function getCXXCompiler
   output String compiler;
 end getCXXCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCXXCompiler">
-        <code interfaceOnly="true" shortOnly="false">function setCXXCompiler
+        <code interfaceOnly="true">function setCXXCompiler
   input String compiler;
   output Boolean success;
 end setCXXCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.verifyCompiler">
-        <code interfaceOnly="true" shortOnly="false">function verifyCompiler
+        <code interfaceOnly="true">function verifyCompiler
   output Boolean compilerWorks;
 end verifyCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompilerPath">
-        <code interfaceOnly="true" shortOnly="false">function setCompilerPath
+        <code interfaceOnly="true">function setCompilerPath
   input String compilerPath;
   output Boolean success;
 end setCompilerPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCompileCommand">
-        <code interfaceOnly="true" shortOnly="false">function getCompileCommand
+        <code interfaceOnly="true">function getCompileCommand
   output String compileCommand;
 end getCompileCommand;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompileCommand">
-        <code interfaceOnly="true" shortOnly="false">function setCompileCommand
+        <code interfaceOnly="true">function setCompileCommand
   input String compileCommand;
   output Boolean success;
 end setCompileCommand;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPlotCommand">
-        <code interfaceOnly="true" shortOnly="false">function setPlotCommand
+        <code interfaceOnly="true">function setPlotCommand
   input String plotCommand;
   output Boolean success;
 end setPlotCommand;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSettings">
-        <code interfaceOnly="true" shortOnly="false">function getSettings
+        <code interfaceOnly="true">function getSettings
   output String settings;
 end getSettings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setTempDirectoryPath">
-        <code interfaceOnly="true" shortOnly="false">function setTempDirectoryPath
+        <code interfaceOnly="true">function setTempDirectoryPath
   input String tempDirectoryPath;
   output Boolean success;
 end setTempDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTempDirectoryPath">
-        <code interfaceOnly="true" shortOnly="false">function getTempDirectoryPath
+        <code interfaceOnly="true">function getTempDirectoryPath
   output String tempDirectoryPath;
 end getTempDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEnvironmentVar">
-        <code interfaceOnly="true" shortOnly="false">function getEnvironmentVar
+        <code interfaceOnly="true">function getEnvironmentVar
   input String var;
   output String value "returns empty string on failure";
 end getEnvironmentVar;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setEnvironmentVar">
-        <code interfaceOnly="true" shortOnly="false">function setEnvironmentVar
+        <code interfaceOnly="true">function setEnvironmentVar
   input String var;
   input String value;
   output Boolean success;
@@ -356,7 +356,7 @@ end setEnvironmentVar;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.appendEnvironmentVar">
-        <code interfaceOnly="true" shortOnly="false">function appendEnvironmentVar
+        <code interfaceOnly="true">function appendEnvironmentVar
   input String var;
   input String value;
   output String result "returns \"error\" if the variable could not be appended";
@@ -364,147 +364,147 @@ end appendEnvironmentVar;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setInstallationDirectoryPath">
-        <code interfaceOnly="true" shortOnly="false">function setInstallationDirectoryPath
+        <code interfaceOnly="true">function setInstallationDirectoryPath
   input String installationDirectoryPath;
   output Boolean success;
 end setInstallationDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInstallationDirectoryPath">
-        <code interfaceOnly="true" shortOnly="false">function getInstallationDirectoryPath
+        <code interfaceOnly="true">function getInstallationDirectoryPath
   output String installationDirectoryPath;
 end getInstallationDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setModelicaPath">
-        <code interfaceOnly="true" shortOnly="false">function setModelicaPath
+        <code interfaceOnly="true">function setModelicaPath
   input String modelicaPath;
   output Boolean success;
 end setModelicaPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getModelicaPath">
-        <code interfaceOnly="true" shortOnly="false">function getModelicaPath
+        <code interfaceOnly="true">function getModelicaPath
   output String modelicaPath;
 end getModelicaPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompilerFlags">
-        <code interfaceOnly="true" shortOnly="false">function setCompilerFlags
+        <code interfaceOnly="true">function setCompilerFlags
   input String compilerFlags;
   output Boolean success;
 end setCompilerFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDebugFlags">
-        <code interfaceOnly="true" shortOnly="false">function setDebugFlags
+        <code interfaceOnly="true">function setDebugFlags
   input String debugFlags;
   output Boolean success;
 end setDebugFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearDebugFlags">
-        <code interfaceOnly="true" shortOnly="false">function clearDebugFlags
+        <code interfaceOnly="true">function clearDebugFlags
   output Boolean success;
 end clearDebugFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPreOptModules">
-        <code interfaceOnly="true" shortOnly="false">function setPreOptModules
+        <code interfaceOnly="true">function setPreOptModules
   input String modules;
   output Boolean success;
 end setPreOptModules;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCheapMatchingAlgorithm">
-        <code interfaceOnly="true" shortOnly="false">function setCheapMatchingAlgorithm
+        <code interfaceOnly="true">function setCheapMatchingAlgorithm
   input Integer matchingAlgorithm;
   output Boolean success;
 end setCheapMatchingAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMatchingAlgorithm">
-        <code interfaceOnly="true" shortOnly="false">function getMatchingAlgorithm
+        <code interfaceOnly="true">function getMatchingAlgorithm
   output String selected;
 end getMatchingAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableMatchingAlgorithms">
-        <code interfaceOnly="true" shortOnly="false">function getAvailableMatchingAlgorithms
+        <code interfaceOnly="true">function getAvailableMatchingAlgorithms
   output String[:] allChoices;
   output String[:] allComments;
 end getAvailableMatchingAlgorithms;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setMatchingAlgorithm">
-        <code interfaceOnly="true" shortOnly="false">function setMatchingAlgorithm
+        <code interfaceOnly="true">function setMatchingAlgorithm
   input String matchingAlgorithm;
   output Boolean success;
 end setMatchingAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getIndexReductionMethod">
-        <code interfaceOnly="true" shortOnly="false">function getIndexReductionMethod
+        <code interfaceOnly="true">function getIndexReductionMethod
   output String selected;
 end getIndexReductionMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableIndexReductionMethods">
-        <code interfaceOnly="true" shortOnly="false">function getAvailableIndexReductionMethods
+        <code interfaceOnly="true">function getAvailableIndexReductionMethods
   output String[:] allChoices;
   output String[:] allComments;
 end getAvailableIndexReductionMethods;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setIndexReductionMethod">
-        <code interfaceOnly="true" shortOnly="false">function setIndexReductionMethod
+        <code interfaceOnly="true">function setIndexReductionMethod
   input String method;
   output Boolean success;
 end setIndexReductionMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPostOptModules">
-        <code interfaceOnly="true" shortOnly="false">function setPostOptModules
+        <code interfaceOnly="true">function setPostOptModules
   input String modules;
   output Boolean success;
 end setPostOptModules;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTearingMethod">
-        <code interfaceOnly="true" shortOnly="false">function getTearingMethod
+        <code interfaceOnly="true">function getTearingMethod
   output String selected;
 end getTearingMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableTearingMethods">
-        <code interfaceOnly="true" shortOnly="false">function getAvailableTearingMethods
+        <code interfaceOnly="true">function getAvailableTearingMethods
   output String[:] allChoices;
   output String[:] allComments;
 end getAvailableTearingMethods;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setTearingMethod">
-        <code interfaceOnly="true" shortOnly="false">function setTearingMethod
+        <code interfaceOnly="true">function setTearingMethod
   input String tearingMethod;
   output Boolean success;
 end setTearingMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCommandLineOptions">
-        <code interfaceOnly="true" shortOnly="false">function setCommandLineOptions
+        <code interfaceOnly="true">function setCommandLineOptions
   input String option;
   output Boolean success;
 end setCommandLineOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCommandLineOptions">
-        <code interfaceOnly="true" shortOnly="false">function getCommandLineOptions
+        <code interfaceOnly="true">function getCommandLineOptions
   output String[:] flags;
 end getCommandLineOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getConfigFlagValidOptions">
-        <code interfaceOnly="true" shortOnly="false">function getConfigFlagValidOptions
+        <code interfaceOnly="true">function getConfigFlagValidOptions
   input String flag;
   output String validOptions[:];
   output String mainDescription;
@@ -513,34 +513,34 @@ end getConfigFlagValidOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearCommandLineOptions">
-        <code interfaceOnly="true" shortOnly="false">function clearCommandLineOptions
+        <code interfaceOnly="true">function clearCommandLineOptions
   output Boolean success;
 end clearCommandLineOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getVersion">
-        <code interfaceOnly="true" shortOnly="false">function getVersion
+        <code interfaceOnly="true">function getVersion
   input TypeName cl = $Code(OpenModelica);
   output String version;
 end getVersion;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regularFileExists">
-        <code interfaceOnly="true" shortOnly="false">function regularFileExists
+        <code interfaceOnly="true">function regularFileExists
   input String fileName;
   output Boolean exists;
 end regularFileExists;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.directoryExists">
-        <code interfaceOnly="true" shortOnly="false">function directoryExists
+        <code interfaceOnly="true">function directoryExists
   input String dirName;
   output Boolean exists;
 end directoryExists;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stat">
-        <code interfaceOnly="true" shortOnly="false">impure function stat
+        <code interfaceOnly="true">impure function stat
   input String fileName;
   output Boolean success;
   output Real fileSize;
@@ -549,14 +549,14 @@ end stat;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readFile">
-        <code interfaceOnly="true" shortOnly="false">impure function readFile
+        <code interfaceOnly="true">impure function readFile
   input String fileName;
   output String contents;
 end readFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.writeFile">
-        <code interfaceOnly="true" shortOnly="false">impure function writeFile
+        <code interfaceOnly="true">impure function writeFile
   input String fileName;
   input String data;
   input Boolean append = false;
@@ -565,7 +565,7 @@ end writeFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareFilesAndMove">
-        <code interfaceOnly="true" shortOnly="false">impure function compareFilesAndMove
+        <code interfaceOnly="true">impure function compareFilesAndMove
   input String newFile;
   input String oldFile;
   output Boolean success;
@@ -573,7 +573,7 @@ end compareFilesAndMove;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareFiles">
-        <code interfaceOnly="true" shortOnly="false">impure function compareFiles
+        <code interfaceOnly="true">impure function compareFiles
   input String file1;
   input String file2;
   output Boolean isEqual;
@@ -581,14 +581,14 @@ end compareFiles;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.alarm">
-        <code interfaceOnly="true" shortOnly="false">impure function alarm
+        <code interfaceOnly="true">impure function alarm
   input Integer seconds;
   output Integer previousSeconds;
 end alarm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regex">
-        <code interfaceOnly="true" shortOnly="false">function regex
+        <code interfaceOnly="true">function regex
   input String str;
   input String re;
   input Integer maxMatches = 1 "The maximum number of matches that will be returned";
@@ -600,7 +600,7 @@ end regex;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regexBool">
-        <code interfaceOnly="true" shortOnly="false">function regexBool
+        <code interfaceOnly="true">function regexBool
   input String str;
   input String re;
   input Boolean extended = true "Use POSIX extended or regular syntax";
@@ -610,34 +610,34 @@ end regexBool;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.testsuiteFriendlyName">
-        <code interfaceOnly="true" shortOnly="false">function testsuiteFriendlyName
+        <code interfaceOnly="true">function testsuiteFriendlyName
   input String path;
   output String fixed;
 end testsuiteFriendlyName;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readFileNoNumeric">
-        <code interfaceOnly="true" shortOnly="false">function readFileNoNumeric
+        <code interfaceOnly="true">function readFileNoNumeric
   input String fileName;
   output String contents;
 end readFileNoNumeric;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getErrorString">
-        <code interfaceOnly="true" shortOnly="false">impure function getErrorString
+        <code interfaceOnly="true">impure function getErrorString
   input Boolean warningsAsErrors = false;
   output String errorString;
 end getErrorString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMessagesString">
-        <code interfaceOnly="true" shortOnly="false">function getMessagesString
+        <code interfaceOnly="true">function getMessagesString
   output String messagesString;
 end getMessagesString;</code>
         <classes/>
       </function>
       <record id="OpenModelica.Scripting.SourceInfo">
-        <code interfaceOnly="false" shortOnly="false">record SourceInfo
+        <code interfaceOnly="false">record SourceInfo
   String fileName;
   Boolean readonly;
   Integer lineStart;
@@ -650,15 +650,15 @@ end SourceInfo;</code>
         <classes/>
       </record>
       <type id="OpenModelica.Scripting.ErrorKind">
-        <code interfaceOnly="false" shortOnly="false">type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");</code>
+        <code interfaceOnly="false">type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");</code>
         <classes/>
       </type>
       <type id="OpenModelica.Scripting.ErrorLevel">
-        <code interfaceOnly="false" shortOnly="false">type ErrorLevel = enumeration(notification, warning, error);</code>
+        <code interfaceOnly="false">type ErrorLevel = enumeration(notification, warning, error);</code>
         <classes/>
       </type>
       <record id="OpenModelica.Scripting.ErrorMessage">
-        <code interfaceOnly="false" shortOnly="false">record ErrorMessage
+        <code interfaceOnly="false">record ErrorMessage
   SourceInfo info;
   String message "After applying the individual arguments";
   ErrorKind kind;
@@ -670,14 +670,14 @@ end ErrorMessage;</code>
         <classes/>
       </record>
       <function id="OpenModelica.Scripting.getMessagesStringInternal">
-        <code interfaceOnly="true" shortOnly="false">function getMessagesStringInternal
+        <code interfaceOnly="true">function getMessagesStringInternal
   input Boolean unique = true;
   output ErrorMessage[:] messagesString;
 end getMessagesStringInternal;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.countMessages">
-        <code interfaceOnly="true" shortOnly="false">function countMessages
+        <code interfaceOnly="true">function countMessages
   output Integer numMessages;
   output Integer numErrors;
   output Integer numWarnings;
@@ -685,145 +685,145 @@ end countMessages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearMessages">
-        <code interfaceOnly="true" shortOnly="false">function clearMessages
+        <code interfaceOnly="true">function clearMessages
   output Boolean success;
 end clearMessages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runScript">
-        <code interfaceOnly="true" shortOnly="false">impure function runScript
+        <code interfaceOnly="true">impure function runScript
   input String fileName "*.mos";
   output String result;
 end runScript;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.echo">
-        <code interfaceOnly="true" shortOnly="false">function echo
+        <code interfaceOnly="true">function echo
   input Boolean setEcho;
   output Boolean newEcho;
 end echo;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassesInModelicaPath">
-        <code interfaceOnly="true" shortOnly="false">function getClassesInModelicaPath
+        <code interfaceOnly="true">function getClassesInModelicaPath
   output String classesInModelicaPath;
 end getClassesInModelicaPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationVersion">
-        <code interfaceOnly="true" shortOnly="false">function getAnnotationVersion
+        <code interfaceOnly="true">function getAnnotationVersion
   output String annotationVersion;
 end getAnnotationVersion;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setAnnotationVersion">
-        <code interfaceOnly="true" shortOnly="false">function setAnnotationVersion
+        <code interfaceOnly="true">function setAnnotationVersion
   input String annotationVersion;
   output Boolean success;
 end setAnnotationVersion;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNoSimplify">
-        <code interfaceOnly="true" shortOnly="false">function getNoSimplify
+        <code interfaceOnly="true">function getNoSimplify
   output Boolean noSimplify;
 end getNoSimplify;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setNoSimplify">
-        <code interfaceOnly="true" shortOnly="false">function setNoSimplify
+        <code interfaceOnly="true">function setNoSimplify
   input Boolean noSimplify;
   output Boolean success;
 end setNoSimplify;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getVectorizationLimit">
-        <code interfaceOnly="true" shortOnly="false">function getVectorizationLimit
+        <code interfaceOnly="true">function getVectorizationLimit
   output Integer vectorizationLimit;
 end getVectorizationLimit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setVectorizationLimit">
-        <code interfaceOnly="true" shortOnly="false">function setVectorizationLimit
+        <code interfaceOnly="true">function setVectorizationLimit
   input Integer vectorizationLimit;
   output Boolean success;
 end setVectorizationLimit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDefaultOpenCLDevice">
-        <code interfaceOnly="true" shortOnly="false">function getDefaultOpenCLDevice
+        <code interfaceOnly="true">function getDefaultOpenCLDevice
   output Integer defdevid;
 end getDefaultOpenCLDevice;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDefaultOpenCLDevice">
-        <code interfaceOnly="true" shortOnly="false">function setDefaultOpenCLDevice
+        <code interfaceOnly="true">function setDefaultOpenCLDevice
   input Integer defdevid;
   output Boolean success;
 end setDefaultOpenCLDevice;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setShowAnnotations">
-        <code interfaceOnly="true" shortOnly="false">function setShowAnnotations
+        <code interfaceOnly="true">function setShowAnnotations
   input Boolean show;
   output Boolean success;
 end setShowAnnotations;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getShowAnnotations">
-        <code interfaceOnly="true" shortOnly="false">function getShowAnnotations
+        <code interfaceOnly="true">function getShowAnnotations
   output Boolean show;
 end getShowAnnotations;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setOrderConnections">
-        <code interfaceOnly="true" shortOnly="false">function setOrderConnections
+        <code interfaceOnly="true">function setOrderConnections
   input Boolean orderConnections;
   output Boolean success;
 end setOrderConnections;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getOrderConnections">
-        <code interfaceOnly="true" shortOnly="false">function getOrderConnections
+        <code interfaceOnly="true">function getOrderConnections
   output Boolean orderConnections;
 end getOrderConnections;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLanguageStandard">
-        <code interfaceOnly="true" shortOnly="false">function setLanguageStandard
+        <code interfaceOnly="true">function setLanguageStandard
   input String inVersion;
   output Boolean success;
 end setLanguageStandard;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLanguageStandard">
-        <code interfaceOnly="true" shortOnly="false">function getLanguageStandard
+        <code interfaceOnly="true">function getLanguageStandard
   output String outVersion;
 end getLanguageStandard;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAstAsCorbaString">
-        <code interfaceOnly="true" shortOnly="false">function getAstAsCorbaString
+        <code interfaceOnly="true">function getAstAsCorbaString
   input String fileName = "&lt;interactive&gt;";
   output String result "returns the string if fileName is interactive; else it returns ok or error depending on if writing the file succeeded";
 end getAstAsCorbaString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.cd">
-        <code interfaceOnly="true" shortOnly="false">function cd
+        <code interfaceOnly="true">function cd
   input String newWorkingDirectory = "";
   output String workingDirectory;
 end cd;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.mkdir">
-        <code interfaceOnly="true" shortOnly="false">function mkdir
+        <code interfaceOnly="true">function mkdir
   input String newDirectory;
   output Boolean success;
 end mkdir;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.copy">
-        <code interfaceOnly="true" shortOnly="false">function copy
+        <code interfaceOnly="true">function copy
   input String source;
   input String destination;
   output Boolean success;
@@ -831,21 +831,21 @@ end copy;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.remove">
-        <code interfaceOnly="true" shortOnly="false">function remove
+        <code interfaceOnly="true">function remove
   input String path;
   output Boolean success "Returns true on success.";
 end remove;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkModel">
-        <code interfaceOnly="true" shortOnly="false">function checkModel
+        <code interfaceOnly="true">function checkModel
   input TypeName className;
   output String result;
 end checkModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkAllModelsRecursive">
-        <code interfaceOnly="true" shortOnly="false">function checkAllModelsRecursive
+        <code interfaceOnly="true">function checkAllModelsRecursive
   input TypeName className;
   input Boolean checkProtected = false "Checks also protected classes if true";
   output String result;
@@ -853,21 +853,21 @@ end checkAllModelsRecursive;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeOf">
-        <code interfaceOnly="true" shortOnly="false">function typeOf
+        <code interfaceOnly="true">function typeOf
   input VariableName variableName;
   output String result;
 end typeOf;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.instantiateModel">
-        <code interfaceOnly="true" shortOnly="false">function instantiateModel
+        <code interfaceOnly="true">function instantiateModel
   input TypeName className;
   output String result;
 end instantiateModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildOpenTURNSInterface">
-        <code interfaceOnly="true" shortOnly="false">function buildOpenTURNSInterface
+        <code interfaceOnly="true">function buildOpenTURNSInterface
   input TypeName className;
   input String pythonTemplateFile;
   input Boolean showFlatModelica = false;
@@ -876,21 +876,21 @@ end buildOpenTURNSInterface;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runOpenTURNSPythonScript">
-        <code interfaceOnly="true" shortOnly="false">function runOpenTURNSPythonScript
+        <code interfaceOnly="true">function runOpenTURNSPythonScript
   input String pythonScriptFile;
   output String logOutputFile;
 end runOpenTURNSPythonScript;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateCode">
-        <code interfaceOnly="true" shortOnly="false">function generateCode
+        <code interfaceOnly="true">function generateCode
   input TypeName className;
   output Boolean success;
 end generateCode;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadModel">
-        <code interfaceOnly="true" shortOnly="false">function loadModel
+        <code interfaceOnly="true">function loadModel
   input TypeName className;
   input String[:] priorityVersion = {"default"};
   input Boolean notify = false "Give a notification of the libraries and versions that were loaded";
@@ -901,14 +901,14 @@ end loadModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteFile">
-        <code interfaceOnly="true" shortOnly="false">function deleteFile
+        <code interfaceOnly="true">function deleteFile
   input String fileName;
   output Boolean success;
 end deleteFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveModel">
-        <code interfaceOnly="true" shortOnly="false">function saveModel
+        <code interfaceOnly="true">function saveModel
   input String fileName;
   input TypeName className;
   output Boolean success;
@@ -916,7 +916,7 @@ end saveModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveTotalModel">
-        <code interfaceOnly="true" shortOnly="false">function saveTotalModel
+        <code interfaceOnly="true">function saveTotalModel
   input String fileName;
   input TypeName className;
   input Boolean stripAnnotations = false;
@@ -926,32 +926,32 @@ end saveTotalModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.save">
-        <code interfaceOnly="true" shortOnly="false">function save
+        <code interfaceOnly="true">function save
   input TypeName className;
   output Boolean success;
 end save;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveTotalSCode">
-        <code interfaceOnly="true" shortOnly="false"></code>
+        <code interfaceOnly="true"></code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.translateGraphics">
-        <code interfaceOnly="true" shortOnly="false">function translateGraphics
+        <code interfaceOnly="true">function translateGraphics
   input TypeName className;
   output String result;
 end translateGraphics;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.codeToString">
-        <code interfaceOnly="true" shortOnly="false">function codeToString
+        <code interfaceOnly="true">function codeToString
   input $Code className;
   output String string;
 end codeToString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.dumpXMLDAE">
-        <code interfaceOnly="true" shortOnly="false">function dumpXMLDAE
+        <code interfaceOnly="true">function dumpXMLDAE
   input TypeName className;
   input String translationLevel = "flat" "flat, optimiser, backEnd, or stateSpace";
   input Boolean addOriginalIncidenceMatrix = false;
@@ -966,7 +966,7 @@ end dumpXMLDAE;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.convertUnits">
-        <code interfaceOnly="true" shortOnly="false">function convertUnits
+        <code interfaceOnly="true">function convertUnits
   input String s1;
   input String s2;
   output Boolean unitsCompatible;
@@ -976,20 +976,20 @@ end convertUnits;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedUnits">
-        <code interfaceOnly="true" shortOnly="false">function getDerivedUnits
+        <code interfaceOnly="true">function getDerivedUnits
   input String baseUnit;
   output String[:] derivedUnits;
 end getDerivedUnits;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.listVariables">
-        <code interfaceOnly="true" shortOnly="false">function listVariables
+        <code interfaceOnly="true">function listVariables
   output TypeName variables[:];
 end listVariables;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.strtok">
-        <code interfaceOnly="true" shortOnly="false">function strtok
+        <code interfaceOnly="true">function strtok
   input String string;
   input String token;
   output String[:] strings;
@@ -997,7 +997,7 @@ end strtok;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringSplit">
-        <code interfaceOnly="true" shortOnly="false">function stringSplit
+        <code interfaceOnly="true">function stringSplit
   input String string;
   input String token "single character only";
   output String[:] strings;
@@ -1005,7 +1005,7 @@ end stringSplit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringReplace">
-        <code interfaceOnly="true" shortOnly="false">function stringReplace
+        <code interfaceOnly="true">function stringReplace
   input String str;
   input String source;
   input String target;
@@ -1014,18 +1014,18 @@ end stringReplace;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.escapeXML">
-        <code interfaceOnly="true" shortOnly="false">function escapeXML
+        <code interfaceOnly="true">function escapeXML
   input String inStr;
   output String outStr;
 end escapeXML;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.ExportKind">
-        <code interfaceOnly="false" shortOnly="false">type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");</code>
+        <code interfaceOnly="false">type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.list">
-        <code interfaceOnly="true" shortOnly="false">function list
+        <code interfaceOnly="true">function list
   input TypeName class_ = $Code(AllLoadedClasses);
   input Boolean interfaceOnly = false;
   input Boolean shortOnly = false "only short class definitions";
@@ -1035,18 +1035,18 @@ end list;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.listFile">
-        <code interfaceOnly="true" shortOnly="false">function listFile
+        <code interfaceOnly="true">function listFile
   input TypeName class_;
   output String contents;
 end listFile;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.DiffFormat">
-        <code interfaceOnly="false" shortOnly="false">type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");</code>
+        <code interfaceOnly="false">type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.diffModelicaFileListings">
-        <code interfaceOnly="true" shortOnly="false">function diffModelicaFileListings
+        <code interfaceOnly="true">function diffModelicaFileListings
   input String before, after;
   input DiffFormat diffFormat = DiffFormat.color;
   output String result;
@@ -1054,7 +1054,7 @@ end diffModelicaFileListings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.exportToFigaro">
-        <code interfaceOnly="true" shortOnly="false">function exportToFigaro
+        <code interfaceOnly="true">function exportToFigaro
   input TypeName path;
   input String directory = cd();
   input String database;
@@ -1066,21 +1066,21 @@ end exportToFigaro;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.inferBindings">
-        <code interfaceOnly="true" shortOnly="false">function inferBindings
+        <code interfaceOnly="true">function inferBindings
   input TypeName path;
   output Boolean success;
 end inferBindings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateVerificationScenarios">
-        <code interfaceOnly="true" shortOnly="false">function generateVerificationScenarios
+        <code interfaceOnly="true">function generateVerificationScenarios
   input TypeName path;
   output Boolean success;
 end generateVerificationScenarios;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.rewriteBlockCall">
-        <code interfaceOnly="true" shortOnly="false">function rewriteBlockCall
+        <code interfaceOnly="true">function rewriteBlockCall
   input TypeName className;
   input TypeName inDefs;
   output Boolean success;
@@ -1088,31 +1088,31 @@ end rewriteBlockCall;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.realpath">
-        <code interfaceOnly="true" shortOnly="false">function realpath
+        <code interfaceOnly="true">function realpath
   input String name "Absolute or relative file or directory name";
   output String fullName "Full path of 'name'";
 end realpath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.uriToFilename">
-        <code interfaceOnly="true" shortOnly="false">function uriToFilename
+        <code interfaceOnly="true">function uriToFilename
   input String uri;
   output String filename = "";
 end uriToFilename;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLoadedLibraries">
-        <code interfaceOnly="true" shortOnly="false">function getLoadedLibraries
+        <code interfaceOnly="true">function getLoadedLibraries
   output String[:, 2] libraries;
 end getLoadedLibraries;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.LinearSystemSolver">
-        <code interfaceOnly="false" shortOnly="false">type LinearSystemSolver = enumeration(dgesv, lpsolve55);</code>
+        <code interfaceOnly="false">type LinearSystemSolver = enumeration(dgesv, lpsolve55);</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.solveLinearSystem">
-        <code interfaceOnly="true" shortOnly="false">function solveLinearSystem
+        <code interfaceOnly="true">function solveLinearSystem
   input Real[size(B, 1), size(B, 1)] A;
   input Real[:] B;
   input LinearSystemSolver solver = LinearSystemSolver.dgesv;
@@ -1123,11 +1123,11 @@ end solveLinearSystem;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.StandardStream">
-        <code interfaceOnly="false" shortOnly="false">type StandardStream = enumeration(stdin, stdout, stderr);</code>
+        <code interfaceOnly="false">type StandardStream = enumeration(stdin, stdout, stderr);</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.reopenStandardStream">
-        <code interfaceOnly="true" shortOnly="false">function reopenStandardStream
+        <code interfaceOnly="true">function reopenStandardStream
   input StandardStream _stream;
   input String filename;
   output Boolean success;
@@ -1135,7 +1135,7 @@ end reopenStandardStream;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.importFMU">
-        <code interfaceOnly="true" shortOnly="false">function importFMU
+        <code interfaceOnly="true">function importFMU
   input String filename "the fmu file name";
   input String workdir = "&lt;default&gt;" "The output directory for imported FMU files. &lt;default&gt; will put the files to current working directory.";
   input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
@@ -1148,7 +1148,7 @@ end importFMU;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.importFMUModelDescription">
-        <code interfaceOnly="true" shortOnly="false">function importFMUModelDescription
+        <code interfaceOnly="true">function importFMUModelDescription
   input String filename "the fmu file name";
   input String workdir = "&lt;default&gt;" "The output directory for imported FMU files. &lt;default&gt; will put the files to current working directory.";
   input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
@@ -1161,7 +1161,7 @@ end importFMUModelDescription;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.translateModelFMU">
-        <code interfaceOnly="true" shortOnly="false">function translateModelFMU
+        <code interfaceOnly="true">function translateModelFMU
   input TypeName className "the class that should translated";
   input String version = "2.0" "FMU version, 1.0 or 2.0.";
   input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
@@ -1172,7 +1172,7 @@ end translateModelFMU;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildModelFMU">
-        <code interfaceOnly="true" shortOnly="false">function buildModelFMU
+        <code interfaceOnly="true">function buildModelFMU
   input TypeName className "the class that should translated";
   input String version = "2.0" "FMU version, 1.0 or 2.0.";
   input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
@@ -1184,7 +1184,7 @@ end buildModelFMU;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildEncryptedPackage">
-        <code interfaceOnly="true" shortOnly="false">function buildEncryptedPackage
+        <code interfaceOnly="true">function buildEncryptedPackage
   input TypeName className "the class that should encrypted";
   output Boolean success;
   output String commandOutput "Output of the packagetool executable";
@@ -1192,7 +1192,7 @@ end buildEncryptedPackage;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.simulate">
-        <code interfaceOnly="true" shortOnly="false">function simulate
+        <code interfaceOnly="true">function simulate
   input TypeName className "the class that should simulated";
   input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
   input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
@@ -1222,7 +1222,7 @@ end buildEncryptedPackage;</code>
 end simulate;</code>
         <classes>
           <record id="OpenModelica.Scripting.simulate.SimulationResult">
-            <code interfaceOnly="false" shortOnly="false">record SimulationResult
+            <code interfaceOnly="false">record SimulationResult
   String resultFile;
   String simulationOptions;
   String messages;
@@ -1239,7 +1239,7 @@ end SimulationResult;</code>
         </classes>
       </function>
       <function id="OpenModelica.Scripting.buildModel">
-        <code interfaceOnly="true" shortOnly="false">function buildModel
+        <code interfaceOnly="true">function buildModel
   input TypeName className "the class that should be built";
   input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
   input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
@@ -1257,7 +1257,7 @@ end buildModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildLabel">
-        <code interfaceOnly="true" shortOnly="false">function buildLabel
+        <code interfaceOnly="true">function buildLabel
   input TypeName className "the class that should be built";
   input Real startTime = 0.0 "the start time of the simulation. &lt;default&gt; = 0.0";
   input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
@@ -1275,7 +1275,7 @@ end buildLabel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.reduceTerms">
-        <code interfaceOnly="true" shortOnly="false">function reduceTerms
+        <code interfaceOnly="true">function reduceTerms
   input TypeName className "the class that should be built";
   input Real startTime = 0.0 "the start time of the simulation. &lt;default&gt; = 0.0";
   input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
@@ -1294,7 +1294,7 @@ end reduceTerms;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClass">
-        <code interfaceOnly="true" shortOnly="false">function moveClass
+        <code interfaceOnly="true">function moveClass
   input TypeName className "the class that should be moved";
   input Integer offset "Offset in the class list.";
   output Boolean result;
@@ -1302,21 +1302,21 @@ end moveClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClassToTop">
-        <code interfaceOnly="true" shortOnly="false">function moveClassToTop
+        <code interfaceOnly="true">function moveClassToTop
   input TypeName className;
   output Boolean result;
 end moveClassToTop;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClassToBottom">
-        <code interfaceOnly="true" shortOnly="false">function moveClassToBottom
+        <code interfaceOnly="true">function moveClassToBottom
   input TypeName className;
   output Boolean result;
 end moveClassToBottom;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.copyClass">
-        <code interfaceOnly="true" shortOnly="false">function copyClass
+        <code interfaceOnly="true">function copyClass
   input TypeName className "the class that should be copied";
   input String newClassName "the name for new class";
   input TypeName withIn = $Code(TopLevel) "the with in path for new class";
@@ -1325,7 +1325,7 @@ end copyClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.linearize">
-        <code interfaceOnly="true" shortOnly="false">function linearize
+        <code interfaceOnly="true">function linearize
   input TypeName className "the class that should simulated";
   input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
   input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
@@ -1346,7 +1346,7 @@ end linearize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.optimize">
-        <code interfaceOnly="true" shortOnly="false">function optimize
+        <code interfaceOnly="true">function optimize
   input TypeName className "the class that should simulated";
   input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
   input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
@@ -1367,14 +1367,14 @@ end optimize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSourceFile">
-        <code interfaceOnly="true" shortOnly="false">function getSourceFile
+        <code interfaceOnly="true">function getSourceFile
   input TypeName class_;
   output String filename "empty on failure";
 end getSourceFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setSourceFile">
-        <code interfaceOnly="true" shortOnly="false">function setSourceFile
+        <code interfaceOnly="true">function setSourceFile
   input TypeName class_;
   input String filename;
   output Boolean success;
@@ -1382,14 +1382,14 @@ end setSourceFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isShortDefinition">
-        <code interfaceOnly="true" shortOnly="false">function isShortDefinition
+        <code interfaceOnly="true">function isShortDefinition
   input TypeName class_;
   output Boolean isShortCls;
 end isShortDefinition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setClassComment">
-        <code interfaceOnly="true" shortOnly="false">function setClassComment
+        <code interfaceOnly="true">function setClassComment
   input TypeName class_;
   input String filename;
   output Boolean success;
@@ -1397,7 +1397,7 @@ end setClassComment;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassNames">
-        <code interfaceOnly="true" shortOnly="false">function getClassNames
+        <code interfaceOnly="true">function getClassNames
   input TypeName class_ = $Code(AllLoadedClasses);
   input Boolean recursive = false;
   input Boolean qualified = false;
@@ -1410,21 +1410,21 @@ end getClassNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getUsedClassNames">
-        <code interfaceOnly="true" shortOnly="false">function getUsedClassNames
+        <code interfaceOnly="true">function getUsedClassNames
   input TypeName className;
   output TypeName classNames[:];
 end getUsedClassNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getPackages">
-        <code interfaceOnly="true" shortOnly="false">function getPackages
+        <code interfaceOnly="true">function getPackages
   input TypeName class_ = $Code(AllLoadedClasses);
   output TypeName classNames[:];
 end getPackages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.basePlotFunction">
-        <code interfaceOnly="true" shortOnly="false">partial function basePlotFunction
+        <code interfaceOnly="true">partial function basePlotFunction
   input String fileName = "&lt;default&gt;" "The filename containing the variables. &lt;default&gt; will read the last simulation result";
   input String interpolation = "linear" "
       Determines if the simulation data should be interpolated to allow drawing of continuous lines in the diagram.
@@ -1445,7 +1445,7 @@ end basePlotFunction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plot">
-        <code interfaceOnly="true" shortOnly="false">function plot
+        <code interfaceOnly="true">function plot
   input VariableNames vars "The variables you want to plot";
   input Boolean externalWindow = false "Opens the plot in a new plot window";
   input String fileName = "&lt;default&gt;" "The filename containing the variables. &lt;default&gt; will read the last simulation result";
@@ -1468,7 +1468,7 @@ end plot;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plotAll">
-        <code interfaceOnly="true" shortOnly="false">function plotAll
+        <code interfaceOnly="true">function plotAll
   input Boolean externalWindow = false "Opens the plot in a new plot window";
   input String fileName = "&lt;default&gt;" "The filename containing the variables. &lt;default&gt; will read the last simulation result";
   input String title = "" "This text will be used as the diagram title.";
@@ -1490,7 +1490,7 @@ end plotAll;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plotParametric">
-        <code interfaceOnly="true" shortOnly="false">function plotParametric
+        <code interfaceOnly="true">function plotParametric
   input VariableName xVariable;
   input VariableName yVariable;
   input Boolean externalWindow = false "Opens the plot in a new plot window";
@@ -1514,7 +1514,7 @@ end plotParametric;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResult">
-        <code interfaceOnly="true" shortOnly="false">function readSimulationResult
+        <code interfaceOnly="true">function readSimulationResult
   input String filename;
   input VariableNames variables;
   input Integer size = 0 "0=read any size... If the size is not the same as the result-file, this function fails";
@@ -1523,14 +1523,14 @@ end readSimulationResult;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResultSize">
-        <code interfaceOnly="true" shortOnly="false">function readSimulationResultSize
+        <code interfaceOnly="true">function readSimulationResultSize
   input String fileName;
   output Integer sz;
 end readSimulationResultSize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResultVars">
-        <code interfaceOnly="true" shortOnly="false">function readSimulationResultVars
+        <code interfaceOnly="true">function readSimulationResultVars
   input String fileName;
   input Boolean readParameters = true;
   input Boolean openmodelicaStyle = false;
@@ -1539,7 +1539,7 @@ end readSimulationResultVars;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.filterSimulationResults">
-        <code interfaceOnly="true" shortOnly="false">function filterSimulationResults
+        <code interfaceOnly="true">function filterSimulationResults
   input String inFile;
   input String outFile;
   input String[:] vars;
@@ -1550,7 +1550,7 @@ end filterSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareSimulationResults">
-        <code interfaceOnly="true" shortOnly="false">function compareSimulationResults
+        <code interfaceOnly="true">function compareSimulationResults
   input String filename;
   input String reffilename;
   input String logfilename;
@@ -1562,7 +1562,7 @@ end compareSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deltaSimulationResults">
-        <code interfaceOnly="true" shortOnly="false">function deltaSimulationResults
+        <code interfaceOnly="true">function deltaSimulationResults
   input String filename;
   input String reffilename;
   input String method "method to compute then error. choose 1norm, 2norm, maxerr";
@@ -1572,7 +1572,7 @@ end deltaSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.diffSimulationResults">
-        <code interfaceOnly="true" shortOnly="false">function diffSimulationResults
+        <code interfaceOnly="true">function diffSimulationResults
   input String actualFile;
   input String expectedFile;
   input String diffPrefix;
@@ -1587,7 +1587,7 @@ end diffSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.diffSimulationResultsHtml">
-        <code interfaceOnly="true" shortOnly="false">function diffSimulationResultsHtml
+        <code interfaceOnly="true">function diffSimulationResultsHtml
   input String var;
   input String actualFile;
   input String expectedFile;
@@ -1599,7 +1599,7 @@ end diffSimulationResultsHtml;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkTaskGraph">
-        <code interfaceOnly="true" shortOnly="false">function checkTaskGraph
+        <code interfaceOnly="true">function checkTaskGraph
   input String filename;
   input String reffilename;
   output String[:] result;
@@ -1607,7 +1607,7 @@ end checkTaskGraph;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkCodeGraph">
-        <code interfaceOnly="true" shortOnly="false">function checkCodeGraph
+        <code interfaceOnly="true">function checkCodeGraph
   input String graphfile;
   input String codefile;
   output String[:] result;
@@ -1615,7 +1615,7 @@ end checkCodeGraph;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.val">
-        <code interfaceOnly="true" shortOnly="false">function val
+        <code interfaceOnly="true">function val
   input VariableName var;
   input Real timePoint = 0.0;
   input String fileName = "&lt;default&gt;" "The contents of the currentSimulationResult variable";
@@ -1624,13 +1624,13 @@ end val;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.closeSimulationResultFile">
-        <code interfaceOnly="true" shortOnly="false">function closeSimulationResultFile
+        <code interfaceOnly="true">function closeSimulationResultFile
   output Boolean success;
 end closeSimulationResultFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addClassAnnotation">
-        <code interfaceOnly="true" shortOnly="false">function addClassAnnotation
+        <code interfaceOnly="true">function addClassAnnotation
   input TypeName class_;
   input ExpressionOrModification annotate;
   output Boolean bool;
@@ -1638,14 +1638,14 @@ end addClassAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getParameterNames">
-        <code interfaceOnly="true" shortOnly="false">function getParameterNames
+        <code interfaceOnly="true">function getParameterNames
   input TypeName class_;
   output String[:] parameters;
 end getParameterNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getParameterValue">
-        <code interfaceOnly="true" shortOnly="false">function getParameterValue
+        <code interfaceOnly="true">function getParameterValue
   input TypeName class_;
   input String parameterName;
   output String parameterValue;
@@ -1653,7 +1653,7 @@ end getParameterValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierNames">
-        <code interfaceOnly="true" shortOnly="false">function getComponentModifierNames
+        <code interfaceOnly="true">function getComponentModifierNames
   input TypeName class_;
   input String componentName;
   output String[:] modifiers;
@@ -1661,7 +1661,7 @@ end getComponentModifierNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierValue">
-        <code interfaceOnly="true" shortOnly="false">function getComponentModifierValue
+        <code interfaceOnly="true">function getComponentModifierValue
   input TypeName class_;
   input TypeName modifier;
   output String value;
@@ -1669,7 +1669,7 @@ end getComponentModifierValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierValues">
-        <code interfaceOnly="true" shortOnly="false">function getComponentModifierValues
+        <code interfaceOnly="true">function getComponentModifierValues
   input TypeName class_;
   input TypeName modifier;
   output String value;
@@ -1677,14 +1677,14 @@ end getComponentModifierValues;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInstantiatedParametersAndValues">
-        <code interfaceOnly="true" shortOnly="false">function getInstantiatedParametersAndValues
+        <code interfaceOnly="true">function getInstantiatedParametersAndValues
   input TypeName cls;
   output String[:] values;
 end getInstantiatedParametersAndValues;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.removeComponentModifiers">
-        <code interfaceOnly="true" shortOnly="false">function removeComponentModifiers
+        <code interfaceOnly="true">function removeComponentModifiers
   input TypeName class_;
   input String componentName;
   input Boolean keepRedeclares = false;
@@ -1693,7 +1693,7 @@ end removeComponentModifiers;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.removeExtendsModifiers">
-        <code interfaceOnly="true" shortOnly="false">function removeExtendsModifiers
+        <code interfaceOnly="true">function removeExtendsModifiers
   input TypeName className;
   input TypeName baseClassName;
   input Boolean keepRedeclares = false;
@@ -1702,14 +1702,14 @@ end removeExtendsModifiers;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getConnectionCount">
-        <code interfaceOnly="true" shortOnly="false">function getConnectionCount
+        <code interfaceOnly="true">function getConnectionCount
   input TypeName className;
   output Integer count;
 end getConnectionCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthConnection">
-        <code interfaceOnly="true" shortOnly="false">function getNthConnection
+        <code interfaceOnly="true">function getNthConnection
   input TypeName className;
   input Integer index;
   output String[:] result;
@@ -1717,14 +1717,14 @@ end getNthConnection;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAlgorithmCount">
-        <code interfaceOnly="true" shortOnly="false">function getAlgorithmCount
+        <code interfaceOnly="true">function getAlgorithmCount
   input TypeName class_;
   output Integer count;
 end getAlgorithmCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAlgorithm">
-        <code interfaceOnly="true" shortOnly="false">function getNthAlgorithm
+        <code interfaceOnly="true">function getNthAlgorithm
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1732,14 +1732,14 @@ end getNthAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialAlgorithmCount">
-        <code interfaceOnly="true" shortOnly="false">function getInitialAlgorithmCount
+        <code interfaceOnly="true">function getInitialAlgorithmCount
   input TypeName class_;
   output Integer count;
 end getInitialAlgorithmCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialAlgorithm">
-        <code interfaceOnly="true" shortOnly="false">function getNthInitialAlgorithm
+        <code interfaceOnly="true">function getNthInitialAlgorithm
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1747,14 +1747,14 @@ end getNthInitialAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAlgorithmItemsCount">
-        <code interfaceOnly="true" shortOnly="false">function getAlgorithmItemsCount
+        <code interfaceOnly="true">function getAlgorithmItemsCount
   input TypeName class_;
   output Integer count;
 end getAlgorithmItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAlgorithmItem">
-        <code interfaceOnly="true" shortOnly="false">function getNthAlgorithmItem
+        <code interfaceOnly="true">function getNthAlgorithmItem
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1762,14 +1762,14 @@ end getNthAlgorithmItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialAlgorithmItemsCount">
-        <code interfaceOnly="true" shortOnly="false">function getInitialAlgorithmItemsCount
+        <code interfaceOnly="true">function getInitialAlgorithmItemsCount
   input TypeName class_;
   output Integer count;
 end getInitialAlgorithmItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialAlgorithmItem">
-        <code interfaceOnly="true" shortOnly="false">function getNthInitialAlgorithmItem
+        <code interfaceOnly="true">function getNthInitialAlgorithmItem
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1777,14 +1777,14 @@ end getNthInitialAlgorithmItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEquationCount">
-        <code interfaceOnly="true" shortOnly="false">function getEquationCount
+        <code interfaceOnly="true">function getEquationCount
   input TypeName class_;
   output Integer count;
 end getEquationCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthEquation">
-        <code interfaceOnly="true" shortOnly="false">function getNthEquation
+        <code interfaceOnly="true">function getNthEquation
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1792,14 +1792,14 @@ end getNthEquation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialEquationCount">
-        <code interfaceOnly="true" shortOnly="false">function getInitialEquationCount
+        <code interfaceOnly="true">function getInitialEquationCount
   input TypeName class_;
   output Integer count;
 end getInitialEquationCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialEquation">
-        <code interfaceOnly="true" shortOnly="false">function getNthInitialEquation
+        <code interfaceOnly="true">function getNthInitialEquation
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1807,14 +1807,14 @@ end getNthInitialEquation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEquationItemsCount">
-        <code interfaceOnly="true" shortOnly="false">function getEquationItemsCount
+        <code interfaceOnly="true">function getEquationItemsCount
   input TypeName class_;
   output Integer count;
 end getEquationItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthEquationItem">
-        <code interfaceOnly="true" shortOnly="false">function getNthEquationItem
+        <code interfaceOnly="true">function getNthEquationItem
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1822,14 +1822,14 @@ end getNthEquationItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialEquationItemsCount">
-        <code interfaceOnly="true" shortOnly="false">function getInitialEquationItemsCount
+        <code interfaceOnly="true">function getInitialEquationItemsCount
   input TypeName class_;
   output Integer count;
 end getInitialEquationItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialEquationItem">
-        <code interfaceOnly="true" shortOnly="false">function getNthInitialEquationItem
+        <code interfaceOnly="true">function getNthInitialEquationItem
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1837,14 +1837,14 @@ end getNthInitialEquationItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationCount">
-        <code interfaceOnly="true" shortOnly="false">function getAnnotationCount
+        <code interfaceOnly="true">function getAnnotationCount
   input TypeName class_;
   output Integer count;
 end getAnnotationCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAnnotationString">
-        <code interfaceOnly="true" shortOnly="false">function getNthAnnotationString
+        <code interfaceOnly="true">function getNthAnnotationString
   input TypeName class_;
   input Integer index;
   output String result;
@@ -1852,14 +1852,14 @@ end getNthAnnotationString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getImportCount">
-        <code interfaceOnly="true" shortOnly="false">function getImportCount
+        <code interfaceOnly="true">function getImportCount
   input TypeName class_;
   output Integer count;
 end getImportCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthImport">
-        <code interfaceOnly="true" shortOnly="false">function getNthImport
+        <code interfaceOnly="true">function getNthImport
   input TypeName class_;
   input Integer index;
   output String out[3] "{\"Path\",\"Id\",\"Kind\"}";
@@ -1867,7 +1867,7 @@ end getNthImport;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.iconv">
-        <code interfaceOnly="true" shortOnly="false">function iconv
+        <code interfaceOnly="true">function iconv
   input String string;
   input String from;
   input String to = "UTF-8";
@@ -1876,14 +1876,14 @@ end iconv;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDocumentationAnnotation">
-        <code interfaceOnly="true" shortOnly="false">function getDocumentationAnnotation
+        <code interfaceOnly="true">function getDocumentationAnnotation
   input TypeName cl;
   output String out[3] "{info,revision,infoHeader} TODO: Should be changed to have 2 outputs instead of an array of 2 Strings...";
 end getDocumentationAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDocumentationAnnotation">
-        <code interfaceOnly="true" shortOnly="false">function setDocumentationAnnotation
+        <code interfaceOnly="true">function setDocumentationAnnotation
   input TypeName class_;
   input String info = "";
   input String revisions = "";
@@ -1892,7 +1892,7 @@ end setDocumentationAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTimeStamp">
-        <code interfaceOnly="true" shortOnly="false">function getTimeStamp
+        <code interfaceOnly="true">function getTimeStamp
   input TypeName cl;
   output Real timeStamp;
   output String timeStampAsString;
@@ -1900,161 +1900,161 @@ end getTimeStamp;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringTypeName">
-        <code interfaceOnly="true" shortOnly="false">function stringTypeName
+        <code interfaceOnly="true">function stringTypeName
   input String str;
   output TypeName cl;
 end stringTypeName;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringVariableName">
-        <code interfaceOnly="true" shortOnly="false">function stringVariableName
+        <code interfaceOnly="true">function stringVariableName
   input String str;
   output VariableName cl;
 end stringVariableName;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeNameString">
-        <code interfaceOnly="true" shortOnly="false">function typeNameString
+        <code interfaceOnly="true">function typeNameString
   input TypeName cl;
   output String out;
 end typeNameString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeNameStrings">
-        <code interfaceOnly="true" shortOnly="false">function typeNameStrings
+        <code interfaceOnly="true">function typeNameStrings
   input TypeName cl;
   output String out[:];
 end typeNameStrings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassComment">
-        <code interfaceOnly="true" shortOnly="false">function getClassComment
+        <code interfaceOnly="true">function getClassComment
   input TypeName cl;
   output String comment;
 end getClassComment;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.dirname">
-        <code interfaceOnly="true" shortOnly="false">function dirname
+        <code interfaceOnly="true">function dirname
   input String path;
   output String dirname;
 end dirname;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.basename">
-        <code interfaceOnly="true" shortOnly="false">function basename
+        <code interfaceOnly="true">function basename
   input String path;
   output String basename;
 end basename;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassRestriction">
-        <code interfaceOnly="true" shortOnly="false">function getClassRestriction
+        <code interfaceOnly="true">function getClassRestriction
   input TypeName cl;
   output String restriction;
 end getClassRestriction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isType">
-        <code interfaceOnly="true" shortOnly="false">function isType
+        <code interfaceOnly="true">function isType
   input TypeName cl;
   output Boolean b;
 end isType;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isPackage">
-        <code interfaceOnly="true" shortOnly="false">function isPackage
+        <code interfaceOnly="true">function isPackage
   input TypeName cl;
   output Boolean b;
 end isPackage;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isClass">
-        <code interfaceOnly="true" shortOnly="false">function isClass
+        <code interfaceOnly="true">function isClass
   input TypeName cl;
   output Boolean b;
 end isClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isRecord">
-        <code interfaceOnly="true" shortOnly="false">function isRecord
+        <code interfaceOnly="true">function isRecord
   input TypeName cl;
   output Boolean b;
 end isRecord;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isBlock">
-        <code interfaceOnly="true" shortOnly="false">function isBlock
+        <code interfaceOnly="true">function isBlock
   input TypeName cl;
   output Boolean b;
 end isBlock;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isFunction">
-        <code interfaceOnly="true" shortOnly="false">function isFunction
+        <code interfaceOnly="true">function isFunction
   input TypeName cl;
   output Boolean b;
 end isFunction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isPartial">
-        <code interfaceOnly="true" shortOnly="false">function isPartial
+        <code interfaceOnly="true">function isPartial
   input TypeName cl;
   output Boolean b;
 end isPartial;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isModel">
-        <code interfaceOnly="true" shortOnly="false">function isModel
+        <code interfaceOnly="true">function isModel
   input TypeName cl;
   output Boolean b;
 end isModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isConnector">
-        <code interfaceOnly="true" shortOnly="false">function isConnector
+        <code interfaceOnly="true">function isConnector
   input TypeName cl;
   output Boolean b;
 end isConnector;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOptimization">
-        <code interfaceOnly="true" shortOnly="false">function isOptimization
+        <code interfaceOnly="true">function isOptimization
   input TypeName cl;
   output Boolean b;
 end isOptimization;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isEnumeration">
-        <code interfaceOnly="true" shortOnly="false">function isEnumeration
+        <code interfaceOnly="true">function isEnumeration
   input TypeName cl;
   output Boolean b;
 end isEnumeration;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperator">
-        <code interfaceOnly="true" shortOnly="false">function isOperator
+        <code interfaceOnly="true">function isOperator
   input TypeName cl;
   output Boolean b;
 end isOperator;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperatorRecord">
-        <code interfaceOnly="true" shortOnly="false">function isOperatorRecord
+        <code interfaceOnly="true">function isOperatorRecord
   input TypeName cl;
   output Boolean b;
 end isOperatorRecord;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperatorFunction">
-        <code interfaceOnly="true" shortOnly="false">function isOperatorFunction
+        <code interfaceOnly="true">function isOperatorFunction
   input TypeName cl;
   output Boolean b;
 end isOperatorFunction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isProtectedClass">
-        <code interfaceOnly="true" shortOnly="false">function isProtectedClass
+        <code interfaceOnly="true">function isProtectedClass
   input TypeName cl;
   input String c2;
   output Boolean b;
@@ -2062,14 +2062,14 @@ end isProtectedClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getBuiltinType">
-        <code interfaceOnly="true" shortOnly="false">function getBuiltinType
+        <code interfaceOnly="true">function getBuiltinType
   input TypeName cl;
   output String name;
 end getBuiltinType;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setInitXmlStartValue">
-        <code interfaceOnly="true" shortOnly="false">function setInitXmlStartValue
+        <code interfaceOnly="true">function setInitXmlStartValue
   input String fileName;
   input String variableName;
   input String startValue;
@@ -2079,21 +2079,21 @@ end setInitXmlStartValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.ngspicetoModelica">
-        <code interfaceOnly="true" shortOnly="false">function ngspicetoModelica
+        <code interfaceOnly="true">function ngspicetoModelica
   input String netlistfileName;
   output Boolean success = false;
 end ngspicetoModelica;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInheritedClasses">
-        <code interfaceOnly="true" shortOnly="false">function getInheritedClasses
+        <code interfaceOnly="true">function getInheritedClasses
   input TypeName name;
   output TypeName inheritedClasses[:];
 end getInheritedClasses;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentsTest">
-        <code interfaceOnly="true" shortOnly="false">function getComponentsTest
+        <code interfaceOnly="true">function getComponentsTest
   input TypeName name;
   output Component[:] components;
 
@@ -2115,7 +2115,7 @@ end getInheritedClasses;</code>
 end getComponentsTest;</code>
         <classes>
           <record id="OpenModelica.Scripting.getComponentsTest.Component">
-            <code interfaceOnly="false" shortOnly="false">record Component
+            <code interfaceOnly="false">record Component
   String className;
   // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
   String name;
@@ -2135,14 +2135,14 @@ end Component;</code>
         </classes>
       </function>
       <function id="OpenModelica.Scripting.isExperiment">
-        <code interfaceOnly="true" shortOnly="false">function isExperiment
+        <code interfaceOnly="true">function isExperiment
   input TypeName name;
   output Boolean res;
 end isExperiment;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSimulationOptions">
-        <code interfaceOnly="true" shortOnly="false">function getSimulationOptions
+        <code interfaceOnly="true">function getSimulationOptions
   input TypeName name;
   input Real defaultStartTime = 0.0;
   input Real defaultStopTime = 1.0;
@@ -2158,7 +2158,7 @@ end getSimulationOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationNamedModifiers">
-        <code interfaceOnly="true" shortOnly="false">function getAnnotationNamedModifiers
+        <code interfaceOnly="true">function getAnnotationNamedModifiers
   input TypeName name;
   input String vendorannotation;
   output String[:] modifiernamelist;
@@ -2166,7 +2166,7 @@ end getAnnotationNamedModifiers;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationModifierValue">
-        <code interfaceOnly="true" shortOnly="false">function getAnnotationModifierValue
+        <code interfaceOnly="true">function getAnnotationModifierValue
   input TypeName name;
   input String vendorannotation;
   input String modifiername;
@@ -2175,7 +2175,7 @@ end getAnnotationModifierValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.classAnnotationExists">
-        <code interfaceOnly="true" shortOnly="false">function classAnnotationExists
+        <code interfaceOnly="true">function classAnnotationExists
   input TypeName className;
   input TypeName annotationName;
   output Boolean exists;
@@ -2183,7 +2183,7 @@ end classAnnotationExists;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getBooleanClassAnnotation">
-        <code interfaceOnly="true" shortOnly="false">function getBooleanClassAnnotation
+        <code interfaceOnly="true">function getBooleanClassAnnotation
   input TypeName className;
   input TypeName annotationName;
   output Boolean value;
@@ -2191,7 +2191,7 @@ end getBooleanClassAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.extendsFrom">
-        <code interfaceOnly="true" shortOnly="false">function extendsFrom
+        <code interfaceOnly="true">function extendsFrom
   input TypeName className;
   input TypeName baseClassName;
   output Boolean res;
@@ -2199,14 +2199,14 @@ end extendsFrom;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadModelica3D">
-        <code interfaceOnly="true" shortOnly="false">function loadModelica3D
+        <code interfaceOnly="true">function loadModelica3D
   input String version = "3.2.1";
   output Boolean status;
 end loadModelica3D;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.searchClassNames">
-        <code interfaceOnly="true" shortOnly="false">function searchClassNames
+        <code interfaceOnly="true">function searchClassNames
   input String searchText;
   input Boolean findInText = false;
   output TypeName classNames[:];
@@ -2214,27 +2214,27 @@ end searchClassNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableLibraries">
-        <code interfaceOnly="true" shortOnly="false">function getAvailableLibraries
+        <code interfaceOnly="true">function getAvailableLibraries
   output String[:] libraries;
 end getAvailableLibraries;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getUses">
-        <code interfaceOnly="true" shortOnly="false">function getUses
+        <code interfaceOnly="true">function getUses
   input TypeName pack;
   output String[:, :] uses;
 end getUses;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedClassModifierNames">
-        <code interfaceOnly="true" shortOnly="false">function getDerivedClassModifierNames
+        <code interfaceOnly="true">function getDerivedClassModifierNames
   input TypeName className;
   output String[:] modifierNames;
 end getDerivedClassModifierNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedClassModifierValue">
-        <code interfaceOnly="true" shortOnly="false">function getDerivedClassModifierValue
+        <code interfaceOnly="true">function getDerivedClassModifierValue
   input TypeName className;
   input TypeName modifierName;
   output String modifierValue;
@@ -2242,7 +2242,7 @@ end getDerivedClassModifierValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateEntryPoint">
-        <code interfaceOnly="true" shortOnly="false">function generateEntryPoint
+        <code interfaceOnly="true">function generateEntryPoint
   input String fileName;
   input TypeName entryPoint;
   input String url = "https://trac.openmodelica.org/OpenModelica/newticket";
@@ -2250,13 +2250,13 @@ end generateEntryPoint;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.numProcessors">
-        <code interfaceOnly="true" shortOnly="false">function numProcessors
+        <code interfaceOnly="true">function numProcessors
   output Integer result;
 end numProcessors;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runScriptParallel">
-        <code interfaceOnly="true" shortOnly="false">function runScriptParallel
+        <code interfaceOnly="true">function runScriptParallel
   input String scripts[:];
   input Integer numThreads = numProcessors();
   input Boolean useThreads = false;
@@ -2265,41 +2265,41 @@ end runScriptParallel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.exit">
-        <code interfaceOnly="true" shortOnly="false">function exit
+        <code interfaceOnly="true">function exit
   input Integer status;
 end exit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.threadWorkFailed">
-        <code interfaceOnly="true" shortOnly="false"></code>
+        <code interfaceOnly="true"></code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMemorySize">
-        <code interfaceOnly="true" shortOnly="false">function getMemorySize
+        <code interfaceOnly="true">function getMemorySize
   output Real memory(unit = "MiB");
 end getMemorySize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_gcollect_and_unmap">
-        <code interfaceOnly="true" shortOnly="false"></code>
+        <code interfaceOnly="true"></code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_expand_hp">
-        <code interfaceOnly="true" shortOnly="false">function GC_expand_hp
+        <code interfaceOnly="true">function GC_expand_hp
   input Integer size;
   output Boolean success;
 end GC_expand_hp;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_set_max_heap_size">
-        <code interfaceOnly="true" shortOnly="false">function GC_set_max_heap_size
+        <code interfaceOnly="true">function GC_set_max_heap_size
   input Integer size;
   output Boolean success;
 end GC_set_max_heap_size;</code>
         <classes/>
       </function>
       <record id="OpenModelica.Scripting.GC_PROFSTATS">
-        <code interfaceOnly="false" shortOnly="false">record GC_PROFSTATS
+        <code interfaceOnly="false">record GC_PROFSTATS
   Integer heapsize_full;
   Integer free_bytes_full;
   Integer unmapped_bytes;
@@ -2314,13 +2314,13 @@ end GC_PROFSTATS;</code>
         <classes/>
       </record>
       <function id="OpenModelica.Scripting.GC_get_prof_stats">
-        <code interfaceOnly="true" shortOnly="false">function GC_get_prof_stats
+        <code interfaceOnly="true">function GC_get_prof_stats
   output GC_PROFSTATS gcStats;
 end GC_get_prof_stats;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkInterfaceOfPackages">
-        <code interfaceOnly="true" shortOnly="false">function checkInterfaceOfPackages
+        <code interfaceOnly="true">function checkInterfaceOfPackages
   input TypeName cl;
   input String dependencyMatrix[:, :];
   output Boolean success;
@@ -2328,14 +2328,14 @@ end checkInterfaceOfPackages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.sortStrings">
-        <code interfaceOnly="true" shortOnly="false">function sortStrings
+        <code interfaceOnly="true">function sortStrings
   input String arr[:];
   output String sorted[:];
 end sortStrings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassInformation">
-        <code interfaceOnly="true" shortOnly="false">function getClassInformation
+        <code interfaceOnly="true">function getClassInformation
   input TypeName cl;
   output String restriction, comment;
   output Boolean partialPrefix, finalPrefix, encapsulatedPrefix;
@@ -2353,14 +2353,14 @@ end getClassInformation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTransitions">
-        <code interfaceOnly="true" shortOnly="false">function getTransitions
+        <code interfaceOnly="true">function getTransitions
   input TypeName cl;
   output String[:, :] transitions;
 end getTransitions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addTransition">
-        <code interfaceOnly="true" shortOnly="false">function addTransition
+        <code interfaceOnly="true">function addTransition
   input TypeName cl;
   input String from;
   input String to;
@@ -2375,7 +2375,7 @@ end addTransition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteTransition">
-        <code interfaceOnly="true" shortOnly="false">function deleteTransition
+        <code interfaceOnly="true">function deleteTransition
   input TypeName cl;
   input String from;
   input String to;
@@ -2389,7 +2389,7 @@ end deleteTransition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.updateTransition">
-        <code interfaceOnly="true" shortOnly="false">function updateTransition
+        <code interfaceOnly="true">function updateTransition
   input TypeName cl;
   input String from;
   input String to;
@@ -2409,14 +2409,14 @@ end updateTransition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialStates">
-        <code interfaceOnly="true" shortOnly="false">function getInitialStates
+        <code interfaceOnly="true">function getInitialStates
   input TypeName cl;
   output String[:, :] initialStates;
 end getInitialStates;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addInitialState">
-        <code interfaceOnly="true" shortOnly="false">function addInitialState
+        <code interfaceOnly="true">function addInitialState
   input TypeName cl;
   input String state;
   input ExpressionOrModification annotate;
@@ -2425,7 +2425,7 @@ end addInitialState;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteInitialState">
-        <code interfaceOnly="true" shortOnly="false">function deleteInitialState
+        <code interfaceOnly="true">function deleteInitialState
   input TypeName cl;
   input String state;
   output Boolean bool;
@@ -2433,7 +2433,7 @@ end deleteInitialState;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.updateInitialState">
-        <code interfaceOnly="true" shortOnly="false">function updateInitialState
+        <code interfaceOnly="true">function updateInitialState
   input TypeName cl;
   input String state;
   input ExpressionOrModification annotate;
@@ -2442,7 +2442,7 @@ end updateInitialState;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateScriptingAPI">
-        <code interfaceOnly="true" shortOnly="false">function generateScriptingAPI
+        <code interfaceOnly="true">function generateScriptingAPI
   input TypeName cl;
   input String name;
   output Boolean success;
@@ -2455,7 +2455,7 @@ end generateScriptingAPI;</code>
       <package id="OpenModelica.Scripting.Experimental">
         <classes>
           <function id="OpenModelica.Scripting.Experimental.relocateFunctions">
-            <code interfaceOnly="true" shortOnly="false">function relocateFunctions
+            <code interfaceOnly="true">function relocateFunctions
   input String fileName;
   input String names[:, 2];
   output Boolean success;
