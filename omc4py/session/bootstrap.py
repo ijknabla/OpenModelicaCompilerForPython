@@ -254,11 +254,16 @@ def generate_class_xml(
         },
     )
 
+    classes_tag = xml.SubElement(
+        class_tag,
+        "classes",
+    )
+
     for ident in session.getClassNames(className):
         subClassName = className / ident
         generate_class_xml(
             session,
-            class_tag,
+            classes_tag,
             subClassName,
         )
     return parent
