@@ -263,7 +263,7 @@ def generate_class_xml(
 
         if restriction is ClassRestriction.function:
             attrs = {
-                "interfaceOnly": False,
+                "interfaceOnly": True,
                 "shortOnly": False,
             }
         elif restriction is ClassRestriction.record:
