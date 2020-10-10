@@ -216,6 +216,28 @@ class OMCSession(
         ]
 
 
+class ClassRestriction(
+    enum.Enum,
+):
+    package = "package"
+    type = "type"
+    record = "record"
+    function = "function"
+
+    @classmethod
+    def from_typeName(
+        cls,
+        session: OMCSession,
+        typeName: types.TypeName,
+    ) -> "ClassRestriction":
+        raw_restriction = session.getClassRestriction(
+            typeName
+        )
+        return cls(
+            raw_restriction.split()[-1]
+        )
+
+
 def generate_class_xml(
     session: OMCSession,
     parent: xml.Element,
@@ -240,28 +262,6 @@ def generate_class_xml(
             subClassName,
         )
     return parent
-
-
-class ClassRestriction(
-    enum.Enum,
-):
-    package = "package"
-    type = "type"
-    record = "record"
-    function = "function"
-
-    @classmethod
-    def from_typeName(
-        cls,
-        session: OMCSession,
-        typeName: types.TypeName,
-    ) -> "ClassRestriction":
-        raw_restriction = session.getClassRestriction(
-            typeName
-        )
-        return cls(
-            raw_restriction.split()[-1]
-        )
 
 
 def generate_omc_interface_xml(
