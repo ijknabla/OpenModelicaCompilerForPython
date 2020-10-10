@@ -221,7 +221,25 @@ def generate_class_xml(
     parent: xml.Element,
     className: types.TypeName,
 ) -> None:
-    pass
+    restriction = ClassRestriction.from_typeName(
+        session, className
+    )
+    class_tag = xml.SubElement(
+        parent,
+        restriction.value,
+        {
+            "id": str(className),
+        },
+    )
+
+    for ident in session.getClassNames(className):
+        subClassName = className / ident
+        generate_class_xml(
+            session,
+            class_tag,
+            subClassName,
+        )
+    return parent
 
 
 class ClassRestriction(
@@ -258,36 +276,8 @@ def generate_omc_interface_xml(
     version_string = session.getVersion()
     version_tag.text = version_string
 
-    def generate_recursive(
-        root: xml.Element,
-        className: types.TypeName,
-    ) -> xml.Element:
-        # print(className)
-        restriction = ClassRestriction.from_typeName(
-            session, className
-        )
-        class_tag = xml.SubElement(
-            root,
-            restriction.value,
-            {
-                "id": str(className),
-            },
-        )
-
-        for ident in session.getClassNames(className):
-            subClassName = className / ident
-            generate_recursive(
-                class_tag,
-                subClassName,
-            )
-        return root
-
     generate_class_xml(
         session,
-        root,
-        types.TypeName("OpenModelica.Scripting")
-    )
-    generate_recursive(
         root,
         types.TypeName("OpenModelica.Scripting")
     )
