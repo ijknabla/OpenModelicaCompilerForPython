@@ -4,6 +4,17 @@
   <package id="OpenModelica.Scripting">
     <classes>
       <record id="OpenModelica.Scripting.CheckSettingsResult">
+        <code interfaceOnly="false" shortOnly="false">record CheckSettingsResult
+  String OPENMODELICAHOME, OPENMODELICALIBRARY, OMC_PATH, SYSTEM_PATH, OMDEV_PATH;
+  Boolean OMC_FOUND;
+  String MODELICAUSERCFLAGS, WORKING_DIRECTORY;
+  Boolean CREATE_FILE_WORKS, REMOVE_FILE_WORKS;
+  String OS, SYSTEM_INFO, SENDDATALIBS, C_COMPILER, C_COMPILER_VERSION;
+  Boolean C_COMPILER_RESPONDING, HAVE_CORBA;
+  String CONFIGURE_CMDLINE;
+  annotation(
+    preferredView = "text");
+end CheckSettingsResult;</code>
         <classes/>
       </record>
       <package id="OpenModelica.Scripting.Internal">
@@ -11,893 +22,4170 @@
           <package id="OpenModelica.Scripting.Internal.Time">
             <classes>
               <function id="OpenModelica.Scripting.Internal.Time.readableTime">
+                <code interfaceOnly="false" shortOnly="false">function readableTime "returns time in format AhBmTs [X.YYYY]"
+  input Real sec;
+  output String str;
+protected
+  Integer tmp, min, hr;
+algorithm
+/*
+  tmp := mod(integer(sec),60);
+  min := div(integer(sec),60);
+  hr := div(min,60);
+  min := mod(min,60);
+  str := (if hr&gt;0 then String(hr) + "h" else "") + (if min&gt;0 then String(min) + "m" else "") + String(tmp) + "s";
+  str := str + " [" + String(sec, significantDigits=4) + "]";
+  */
+  str := String(sec, significantDigits = 4);
+end readableTime;</code>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerTick">
+                <code interfaceOnly="false" shortOnly="false">function timerTick
+  input Integer index;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Starts the internal timer with the given index.
+&lt;/html&gt;"),
+    preferredView = "text");
+end timerTick;</code>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerTock">
+                <code interfaceOnly="false" shortOnly="false">function timerTock
+  input Integer index;
+  output Real elapsed;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Reads the internal timer with the given index.
+&lt;/html&gt;"),
+    preferredView = "text");
+end timerTock;</code>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerClear">
+                <code interfaceOnly="false" shortOnly="false">function timerClear
+  input Integer index;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Clears the internal timer with the given index.
+&lt;/html&gt;"),
+    preferredView = "text");
+end timerClear;</code>
                 <classes/>
               </function>
             </classes>
           </package>
           <type id="OpenModelica.Scripting.Internal.FileType">
+            <code interfaceOnly="false" shortOnly="false">type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);</code>
             <classes/>
           </type>
           <function id="OpenModelica.Scripting.Internal.stat">
+            <code interfaceOnly="false" shortOnly="false">function stat
+  input String name;
+  output FileType fileType;
+
+  external "C" fileType = ModelicaInternal_stat(name);
+  annotation(
+    Library = "ModelicaExternalC");
+end stat;</code>
             <classes/>
           </function>
         </classes>
       </package>
       <function id="OpenModelica.Scripting.checkSettings">
+        <code interfaceOnly="false" shortOnly="false">function checkSettings "Display some diagnostics."
+  output CheckSettingsResult result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end checkSettings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFile">
+        <code interfaceOnly="false" shortOnly="false">function loadFile "load file (*.mo) and merge it with the loaded AST."
+  input String fileName;
+  input String encoding = "UTF-8";
+  input Boolean uses = true;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Loads the given file using the given encoding.&lt;/p&gt;
+&lt;p&gt;
+  Note that if the file basename is package.mo and the parent directory is the top-level class, the library structure is loaded as if loadModel(ClassName) was called.
+  Uses-annotations are respected if uses=true.
+  The main difference from loadModel is that loadFile appends this directory to the MODELICAPATH (for this call only).
+&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end loadFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFiles">
+        <code interfaceOnly="false" shortOnly="false">function loadFiles "load files (*.mo) and merges them with the loaded AST."
+  input String[:] fileNames;
+  input String encoding = "UTF-8";
+  input Integer numThreads = OpenModelica.Scripting.numProcessors();
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end loadFiles;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadEncryptedPackage">
+        <code interfaceOnly="false" shortOnly="false">function loadEncryptedPackage
+  input String fileName;
+  input String workdir = "&lt;default&gt;" "The output directory for imported encrypted files. &lt;default&gt; will put the files to current working directory.";
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Loads the given encrypted package.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end loadEncryptedPackage;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.reloadClass">
+        <code interfaceOnly="false" shortOnly="false">function reloadClass "reloads the file associated with the given (loaded class)"
+  input TypeName name;
+  input String encoding = "UTF-8";
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Given an existing, loaded class in the compiler, compare the time stamp of the loaded class with the time stamp (mtime) of the file it was loaded from. If these differ, parse the file and merge it with the AST.&lt;/p&gt;
+&lt;/html&gt;"));
+end reloadClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadString">
+        <code interfaceOnly="false" shortOnly="false">function loadString "Parses the data and merges the resulting AST with ithe
+  loaded AST.
+  If a filename is given, it is used to provide error-messages as if the string
+was read in binary format from a file with the same name.
+  The file is converted to UTF-8 from the given character set.
+  When merge is true the classes cNew in the file will be merged with the already loaded classes cOld in the following way:
+   1. get all the inner class definitions from cOld that were loaded from a different file than itself
+   2. append all elements from step 1 to class cNew public list
+
+  NOTE: Encoding is deprecated as *ALL* strings are now UTF-8 encoded.
+  "
+  input String data;
+  input String filename = "&lt;interactive&gt;";
+  input String encoding = "UTF-8";
+  input Boolean merge = false "if merge is true the parsed AST is merged with the existing AST, default to false which means that is replaced, not merged";
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end loadString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.parseString">
+        <code interfaceOnly="false" shortOnly="false">function parseString
+  input String data;
+  input String filename = "&lt;interactive&gt;";
+  output TypeName names[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end parseString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.parseFile">
+        <code interfaceOnly="false" shortOnly="false">function parseFile
+  input String filename;
+  input String encoding = "UTF-8";
+  output TypeName names[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end parseFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFileInteractiveQualified">
+        <code interfaceOnly="false" shortOnly="false">function loadFileInteractiveQualified
+  input String filename;
+  input String encoding = "UTF-8";
+  output TypeName names[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end loadFileInteractiveQualified;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFileInteractive">
+        <code interfaceOnly="false" shortOnly="false">function loadFileInteractive
+  input String filename;
+  input String encoding = "UTF-8";
+  output TypeName names[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end loadFileInteractive;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.system">
+        <code interfaceOnly="false" shortOnly="false">impure function system "Similar to system(3). Executes the given command in the system shell."
+  input String callStr "String to call: sh -c $callStr";
+  input String outputFile = "" "The output is redirected to this file (unless already done by callStr)";
+  output Integer retval "Return value of the system call; usually 0 on success";
+
+  external "builtin"  annotation(
+    __OpenModelica_Impure = true);
+  annotation(
+    preferredView = "text");
+end system;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.system_parallel">
+        <code interfaceOnly="false" shortOnly="false">impure function system_parallel "Similar to system(3). Executes the given commands in the system shell, in parallel if omc was compiled using OpenMP."
+  input String callStr[:] "String to call: sh -c $callStr";
+  input Integer numThreads = numProcessors();
+  output Integer retval[:] "Return value of the system call; usually 0 on success";
+
+  external "builtin"  annotation(
+    __OpenModelica_Impure = true);
+  annotation(
+    preferredView = "text");
+end system_parallel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveAll">
+        <code interfaceOnly="false" shortOnly="false">function saveAll "save the entire loaded AST to file."
+  input String fileName;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end saveAll;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.help">
+        <code interfaceOnly="false" shortOnly="false">function help "display the OpenModelica help text."
+  input String topic = "topics";
+  output String helpText;
+
+  external "builtin" ;
+end help;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clear">
+        <code interfaceOnly="false" shortOnly="false">function clear "Clears everything: symboltable and variables."
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end clear;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearProgram">
+        <code interfaceOnly="false" shortOnly="false">function clearProgram "Clears loaded ."
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end clearProgram;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearVariables">
+        <code interfaceOnly="false" shortOnly="false">function clearVariables "Clear all user defined variables."
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end clearVariables;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateHeader">
+        <code interfaceOnly="false" shortOnly="false">function generateHeader
+  input String fileName;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end generateHeader;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCode">
+        <code interfaceOnly="false" shortOnly="false">function generateSeparateCode
+  input TypeName className;
+  input Boolean cleanCache = false "If true, the cache is reset between each generated package. This conserves memory at the cost of speed.";
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;&lt;p&gt;Under construction.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end generateSeparateCode;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCodeDependencies">
+        <code interfaceOnly="false" shortOnly="false">function generateSeparateCodeDependencies
+  input String stampSuffix = ".c" "Suffix to add to dependencies (often .c.stamp)";
+  output String[:] dependencies;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;&lt;p&gt;Under construction.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end generateSeparateCodeDependencies;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile">
+        <code interfaceOnly="false" shortOnly="false">function generateSeparateCodeDependenciesMakefile
+  input String filename "The file to write the makefile to";
+  input String directory = "" "The relative path of the generated files";
+  input String suffix = ".c" "Often .stamp since we do not update all the files";
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;&lt;p&gt;Under construction.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end generateSeparateCodeDependenciesMakefile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLinker">
+        <code interfaceOnly="false" shortOnly="false">function getLinker
+  output String linker;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getLinker;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLinker">
+        <code interfaceOnly="false" shortOnly="false">function setLinker
+  input String linker;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setLinker;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLinkerFlags">
+        <code interfaceOnly="false" shortOnly="false">function getLinkerFlags
+  output String linkerFlags;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getLinkerFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLinkerFlags">
+        <code interfaceOnly="false" shortOnly="false">function setLinkerFlags
+  input String linkerFlags;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setLinkerFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCompiler">
+        <code interfaceOnly="false" shortOnly="false">function getCompiler "CC"
+  output String compiler;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompiler">
+        <code interfaceOnly="false" shortOnly="false">function setCompiler "CC"
+  input String compiler;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCFlags">
+        <code interfaceOnly="false" shortOnly="false">function setCFlags "CFLAGS"
+  input String inString;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Sets the CFLAGS passed to the C-compiler. Remember to add -fPIC if you are on a 64-bit platform. If you want to see the defaults before you modify this variable, check the output of &lt;a href=\"modelica://OpenModelica.Scripting.getCFlags\"&gt;getCFlags()&lt;/a&gt;. ${SIM_OR_DYNLOAD_OPT_LEVEL} can be used to get a default lower optimization level for dynamically loaded functions. And ${MODELICAUSERCFLAGS} is nice to add so you can easily modify the CFLAGS later by using an environment variable.
+&lt;/html&gt;"),
+    preferredView = "text");
+end setCFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCFlags">
+        <code interfaceOnly="false" shortOnly="false">function getCFlags "CFLAGS"
+  output String outString;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+See &lt;a href=\"modelica://OpenModelica.Scripting.setCFlags\"&gt;setCFlags()&lt;/a&gt; for details.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getCFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCXXCompiler">
+        <code interfaceOnly="false" shortOnly="false">function getCXXCompiler "CXX"
+  output String compiler;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getCXXCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCXXCompiler">
+        <code interfaceOnly="false" shortOnly="false">function setCXXCompiler "CXX"
+  input String compiler;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setCXXCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.verifyCompiler">
+        <code interfaceOnly="false" shortOnly="false">function verifyCompiler
+  output Boolean compilerWorks;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end verifyCompiler;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompilerPath">
+        <code interfaceOnly="false" shortOnly="false">function setCompilerPath
+  input String compilerPath;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setCompilerPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCompileCommand">
+        <code interfaceOnly="false" shortOnly="false">function getCompileCommand
+  output String compileCommand;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getCompileCommand;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompileCommand">
+        <code interfaceOnly="false" shortOnly="false">function setCompileCommand
+  input String compileCommand;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setCompileCommand;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPlotCommand">
+        <code interfaceOnly="false" shortOnly="false">function setPlotCommand
+  input String plotCommand;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setPlotCommand;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSettings">
+        <code interfaceOnly="false" shortOnly="false">function getSettings
+  output String settings;
+algorithm
+  settings := "Compile command: " + getCompileCommand() + "
+" + "Temp folder path: " + getTempDirectoryPath() + "
+" + "Installation folder: " + getInstallationDirectoryPath() + "
+" + "Modelica path: " + getModelicaPath() + "
+";
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end getSettings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setTempDirectoryPath">
+        <code interfaceOnly="false" shortOnly="false">function setTempDirectoryPath
+  input String tempDirectoryPath;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setTempDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTempDirectoryPath">
+        <code interfaceOnly="false" shortOnly="false">function getTempDirectoryPath "Returns the current user temporary directory location."
+  output String tempDirectoryPath;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getTempDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEnvironmentVar">
+        <code interfaceOnly="false" shortOnly="false">function getEnvironmentVar "Returns the value of the environment variable."
+  input String var;
+  output String value "returns empty string on failure";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getEnvironmentVar;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setEnvironmentVar">
+        <code interfaceOnly="false" shortOnly="false">function setEnvironmentVar
+  input String var;
+  input String value;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setEnvironmentVar;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.appendEnvironmentVar">
+        <code interfaceOnly="false" shortOnly="false">function appendEnvironmentVar "Appends a variable to the environment variables list."
+  input String var;
+  input String value;
+  output String result "returns \"error\" if the variable could not be appended";
+algorithm
+  result := if setEnvironmentVar(var, getEnvironmentVar(var) + value) then getEnvironmentVar(var) else "error";
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end appendEnvironmentVar;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setInstallationDirectoryPath">
+        <code interfaceOnly="false" shortOnly="false">function setInstallationDirectoryPath "Sets the OPENMODELICAHOME environment variable. Use this method instead of setEnvironmentVar."
+  input String installationDirectoryPath;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setInstallationDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInstallationDirectoryPath">
+        <code interfaceOnly="false" shortOnly="false">function getInstallationDirectoryPath "This returns OPENMODELICAHOME if it is set; on some platforms the default path is returned if it is not set."
+  output String installationDirectoryPath;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getInstallationDirectoryPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setModelicaPath">
+        <code interfaceOnly="false" shortOnly="false">function setModelicaPath "The Modelica Library Path - MODELICAPATH in the language specification; OPENMODELICALIBRARY in OpenModelica."
+  input String modelicaPath;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+See &lt;a href=\"modelica://OpenModelica.Scripting.loadModel\"&gt;loadModel()&lt;/a&gt; for a description of what the MODELICAPATH is used for.
+&lt;/html&gt;"),
+    preferredView = "text");
+end setModelicaPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getModelicaPath">
+        <code interfaceOnly="false" shortOnly="false">function getModelicaPath "Get the Modelica Library Path."
+  output String modelicaPath;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;The MODELICAPATH is list of paths to search when trying to  &lt;a href=\"modelica://OpenModelica.Scripting.loadModel\"&gt;load a library&lt;/a&gt;. It is a string separated by colon (:) on all OSes except Windows, which uses semicolon (;).&lt;/p&gt;
+&lt;p&gt;To override the default path (&lt;a href=\"modelica://OpenModelica.Scripting.getInstallationDirectoryPath\"&gt;OPENMODELICAHOME&lt;/a&gt;/lib/omlibrary/:~/.openmodelica/libraries/), set the environment variable OPENMODELICALIBRARY=...&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end getModelicaPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompilerFlags">
+        <code interfaceOnly="false" shortOnly="false">function setCompilerFlags
+  input String compilerFlags;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setCompilerFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDebugFlags">
+        <code interfaceOnly="false" shortOnly="false">function setDebugFlags "example input: failtrace,-noevalfunc"
+  input String debugFlags;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("-d=" + debugFlags);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setDebugFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearDebugFlags">
+        <code interfaceOnly="false" shortOnly="false">function clearDebugFlags "Resets all debug flags to their default values."
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end clearDebugFlags;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPreOptModules">
+        <code interfaceOnly="false" shortOnly="false">function setPreOptModules "example input: removeFinalParameters,removeSimpleEquations,expandDerOperator"
+  input String modules;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--preOptModules=" + modules);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setPreOptModules;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCheapMatchingAlgorithm">
+        <code interfaceOnly="false" shortOnly="false">function setCheapMatchingAlgorithm "example input: 3"
+  input Integer matchingAlgorithm;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--cheapmatchingAlgorithm=" + String(matchingAlgorithm));
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setCheapMatchingAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMatchingAlgorithm">
+        <code interfaceOnly="false" shortOnly="false">function getMatchingAlgorithm
+  output String selected;
+
+  external "builtin" ;
+end getMatchingAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableMatchingAlgorithms">
+        <code interfaceOnly="false" shortOnly="false">function getAvailableMatchingAlgorithms
+  output String[:] allChoices;
+  output String[:] allComments;
+
+  external "builtin" ;
+end getAvailableMatchingAlgorithms;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setMatchingAlgorithm">
+        <code interfaceOnly="false" shortOnly="false">function setMatchingAlgorithm "example input: omc"
+  input String matchingAlgorithm;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--matchingAlgorithm=" + matchingAlgorithm);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setMatchingAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getIndexReductionMethod">
+        <code interfaceOnly="false" shortOnly="false">function getIndexReductionMethod
+  output String selected;
+
+  external "builtin" ;
+end getIndexReductionMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableIndexReductionMethods">
+        <code interfaceOnly="false" shortOnly="false">function getAvailableIndexReductionMethods
+  output String[:] allChoices;
+  output String[:] allComments;
+
+  external "builtin" ;
+end getAvailableIndexReductionMethods;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setIndexReductionMethod">
+        <code interfaceOnly="false" shortOnly="false">function setIndexReductionMethod "example input: dynamicStateSelection"
+  input String method;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--indexReductionMethod=" + method);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setIndexReductionMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPostOptModules">
+        <code interfaceOnly="false" shortOnly="false">function setPostOptModules "example input: lateInline,inlineArrayEqn,removeSimpleEquations."
+  input String modules;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--postOptModules=" + modules);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setPostOptModules;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTearingMethod">
+        <code interfaceOnly="false" shortOnly="false">function getTearingMethod
+  output String selected;
+
+  external "builtin" ;
+end getTearingMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableTearingMethods">
+        <code interfaceOnly="false" shortOnly="false">function getAvailableTearingMethods
+  output String[:] allChoices;
+  output String[:] allComments;
+
+  external "builtin" ;
+end getAvailableTearingMethods;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setTearingMethod">
+        <code interfaceOnly="false" shortOnly="false">function setTearingMethod "example input: omcTearing"
+  input String tearingMethod;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--tearingMethod=" + tearingMethod);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setTearingMethod;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCommandLineOptions">
+        <code interfaceOnly="false" shortOnly="false">function setCommandLineOptions "The input is a regular command-line flag given to OMC, e.g. -d=failtrace or -g=MetaModelica"
+  input String option;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setCommandLineOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCommandLineOptions">
+        <code interfaceOnly="false" shortOnly="false">function getCommandLineOptions "Returns all command line options who have non-default values as a list of
+   strings. The format of the strings is '--flag=value --flag2=value2'."
+  output String[:] flags;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getCommandLineOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getConfigFlagValidOptions">
+        <code interfaceOnly="false" shortOnly="false">function getConfigFlagValidOptions "Returns the list of valid options for a string config flag, and the description strings for these options if available"
+  input String flag;
+  output String validOptions[:];
+  output String mainDescription;
+  output String descriptions[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getConfigFlagValidOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearCommandLineOptions">
+        <code interfaceOnly="false" shortOnly="false">function clearCommandLineOptions "Resets all command-line flags to their default values."
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end clearCommandLineOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getVersion">
+        <code interfaceOnly="false" shortOnly="false">function getVersion "Returns the version of the Modelica compiler."
+  input TypeName cl = $Code(OpenModelica);
+  output String version;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getVersion;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regularFileExists">
+        <code interfaceOnly="false" shortOnly="false">function regularFileExists
+  input String fileName;
+  output Boolean exists;
+algorithm
+  exists := Internal.stat(fileName) == Internal.FileType.RegularFile;
+end regularFileExists;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.directoryExists">
+        <code interfaceOnly="false" shortOnly="false">function directoryExists
+  input String dirName;
+  output Boolean exists;
+algorithm
+  exists := Internal.stat(dirName) == Internal.FileType.Directory;
+end directoryExists;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stat">
+        <code interfaceOnly="false" shortOnly="false">impure function stat
+  input String fileName;
+  output Boolean success;
+  output Real fileSize;
+  output Real mtime;
+
+  external "builtin"  annotation(
+    __OpenModelica_Impure = true,
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Like &lt;a href=\"http://linux.die.net/man/2/stat\"&gt;stat(2)&lt;/a&gt;, except the output is of type real because of limited precision of Integer.&lt;/p&gt;
+&lt;/html&gt;"));
+end stat;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readFile">
+        <code interfaceOnly="false" shortOnly="false">impure function readFile "The contents of the given file are returned.
+  Note that if the function fails, the error message is returned as a string instead of multiple output or similar."
+  input String fileName;
+  output String contents;
+
+  external "builtin"  annotation(
+    __OpenModelica_Impure = true,
+    preferredView = "text");
+end readFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.writeFile">
+        <code interfaceOnly="false" shortOnly="false">impure function writeFile "Write the data to file. Returns true on success."
+  input String fileName;
+  input String data;
+  input Boolean append = false;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    __OpenModelica_Impure = true,
+    preferredView = "text");
+end writeFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareFilesAndMove">
+        <code interfaceOnly="false" shortOnly="false">impure function compareFilesAndMove
+  input String newFile;
+  input String oldFile;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    __OpenModelica_Impure = true,
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Compares &lt;i&gt;newFile&lt;/i&gt; and &lt;i&gt;oldFile&lt;/i&gt;. If they differ, overwrite &lt;i&gt;oldFile&lt;/i&gt; with &lt;i&gt;newFile&lt;/i&gt;&lt;/p&gt;
+&lt;p&gt;Basically: test -f ../oldFile &amp;&amp; cmp newFile oldFile || mv newFile oldFile&lt;/p&gt;
+&lt;/html&gt;"));
+end compareFilesAndMove;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareFiles">
+        <code interfaceOnly="false" shortOnly="false">impure function compareFiles
+  input String file1;
+  input String file2;
+  output Boolean isEqual;
+
+  external "builtin" ;
+  annotation(
+    __OpenModelica_Impure = true,
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Compares &lt;i&gt;file1&lt;/i&gt; and &lt;i&gt;file2&lt;/i&gt; and returns true if their content is equal, otherwise false.&lt;/p&gt;
+&lt;/html&gt;"));
+end compareFiles;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.alarm">
+        <code interfaceOnly="false" shortOnly="false">impure function alarm
+  input Integer seconds;
+  output Integer previousSeconds;
+
+  external "builtin" ;
+  annotation(
+    __OpenModelica_Impure = true,
+    Library = {"omcruntime"},
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Like &lt;a href=\"http://linux.die.net/man/2/alarm\"&gt;alarm(2)&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;Note that OpenModelica also sends SIGALRM to the process group when the alarm is triggered (in order to kill running simulations).&lt;/p&gt;
+&lt;/html&gt;"));
+end alarm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regex">
+        <code interfaceOnly="false" shortOnly="false">function regex "Sets the error buffer and returns -1 if the regex does not compile.
+
+  The returned result is the same as POSIX regex():
+  The first value is the complete matched string
+  The rest are the substrings that you wanted.
+  For example:
+  regex(lorem,\" \\([A-Za-z]*\\) \\([A-Za-z]*\\) \",maxMatches=3)
+  =&gt; {\" ipsum dolor \",\"ipsum\",\"dolor\"}
+  This means if you have n groups, you want maxMatches=n+1
+"
+  input String str;
+  input String re;
+  input Integer maxMatches = 1 "The maximum number of matches that will be returned";
+  input Boolean extended = true "Use POSIX extended or regular syntax";
+  input Boolean caseInsensitive = false;
+  output Integer numMatches "-1 is an error, 0 means no match, else returns a number 1..maxMatches";
+  output String matchedSubstrings[maxMatches] "unmatched strings are returned as empty";
+
+  external "C" numMatches = OpenModelica_regex(str, re, maxMatches, extended, caseInsensitive, matchedSubstrings);
+  annotation(
+    preferredView = "text");
+end regex;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regexBool">
+        <code interfaceOnly="false" shortOnly="false">function regexBool "Returns true if the string matches the regular expression."
+  input String str;
+  input String re;
+  input Boolean extended = true "Use POSIX extended or regular syntax";
+  input Boolean caseInsensitive = false;
+  output Boolean matches;
+protected
+  Integer numMatches;
+algorithm
+  numMatches := regex(str, re, 0, extended, caseInsensitive);
+  matches := numMatches == 1;
+  annotation(
+    preferredView = "text");
+end regexBool;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.testsuiteFriendlyName">
+        <code interfaceOnly="false" shortOnly="false">function testsuiteFriendlyName
+  input String path;
+  output String fixed;
+protected
+  Integer i;
+  String matches[4];
+algorithm
+  (i, matches) := regex(path, "^(.*/testsuite/)?(.*/build/)?(.*)", 4);
+  fixed := matches[i];
+end testsuiteFriendlyName;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readFileNoNumeric">
+        <code interfaceOnly="false" shortOnly="false">function readFileNoNumeric "Returns the contents of the file, with anything resembling a (real) number stripped out, and at the end adding:
+  Filter count from number domain: n.
+  This should probably be changed to multiple outputs; the filtered string and an integer.
+  Does anyone use this API call?"
+  input String fileName;
+  output String contents;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end readFileNoNumeric;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getErrorString">
+        <code interfaceOnly="false" shortOnly="false">impure function getErrorString "Returns the current error message. [file.mo:n:n-n:n:b] Error: message"
+  input Boolean warningsAsErrors = false;
+  output String errorString;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns a user-friendly string containing the errors stored in the buffer. With warningsAsErrors=true, it reports warnings as if they were errors.&lt;/p&gt;
+&lt;/html&gt;"));
+end getErrorString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMessagesString">
+        <code interfaceOnly="false" shortOnly="false">function getMessagesString "see getErrorString()"
+  output String messagesString;
+
+  external "builtin" messagesString = getErrorString();
+  annotation(
+    preferredView = "text");
+end getMessagesString;</code>
         <classes/>
       </function>
       <record id="OpenModelica.Scripting.SourceInfo">
+        <code interfaceOnly="false" shortOnly="false">record SourceInfo
+  String fileName;
+  Boolean readonly;
+  Integer lineStart;
+  Integer columnStart;
+  Integer lineEnd;
+  Integer columnEnd;
+  annotation(
+    preferredView = "text");
+end SourceInfo;</code>
         <classes/>
       </record>
       <type id="OpenModelica.Scripting.ErrorKind">
+        <code interfaceOnly="false" shortOnly="false">type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");</code>
         <classes/>
       </type>
       <type id="OpenModelica.Scripting.ErrorLevel">
+        <code interfaceOnly="false" shortOnly="false">type ErrorLevel = enumeration(notification, warning, error);</code>
         <classes/>
       </type>
       <record id="OpenModelica.Scripting.ErrorMessage">
+        <code interfaceOnly="false" shortOnly="false">record ErrorMessage
+  SourceInfo info;
+  String message "After applying the individual arguments";
+  ErrorKind kind;
+  ErrorLevel level;
+  Integer id "Internal ID of the error (just ignore this)";
+  annotation(
+    preferredView = "text");
+end ErrorMessage;</code>
         <classes/>
       </record>
       <function id="OpenModelica.Scripting.getMessagesStringInternal">
+        <code interfaceOnly="false" shortOnly="false">function getMessagesStringInternal "{{[file.mo:n:n-n:n:b] Error: message, TRANSLATION, Error, code}}
+  if unique = true (the default) only unique messages will be shown"
+  input Boolean unique = true;
+  output ErrorMessage[:] messagesString;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getMessagesStringInternal;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.countMessages">
+        <code interfaceOnly="false" shortOnly="false">function countMessages
+  output Integer numMessages;
+  output Integer numErrors;
+  output Integer numWarnings;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the total number of messages in the error buffer, as well as the number of errors and warnings.&lt;/p&gt;
+&lt;/html&gt;"));
+end countMessages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearMessages">
+        <code interfaceOnly="false" shortOnly="false">function clearMessages "Clears the error buffer."
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end clearMessages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runScript">
+        <code interfaceOnly="false" shortOnly="false">impure function runScript "Runs the mos-script specified by the filename."
+  input String fileName "*.mos";
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end runScript;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.echo">
+        <code interfaceOnly="false" shortOnly="false">function echo "echo(false) disables Interactive output, echo(true) enables it again."
+  input Boolean setEcho;
+  output Boolean newEcho;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end echo;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassesInModelicaPath">
+        <code interfaceOnly="false" shortOnly="false">function getClassesInModelicaPath "MathCore-specific or not? Who knows!"
+  output String classesInModelicaPath;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getClassesInModelicaPath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationVersion">
+        <code interfaceOnly="false" shortOnly="false">function getAnnotationVersion "Returns the current annotation version."
+  output String annotationVersion;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getAnnotationVersion;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setAnnotationVersion">
+        <code interfaceOnly="false" shortOnly="false">function setAnnotationVersion "Sets the annotation version."
+  input String annotationVersion;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--annotationVersion=" + annotationVersion);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setAnnotationVersion;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNoSimplify">
+        <code interfaceOnly="false" shortOnly="false">function getNoSimplify "Returns true if noSimplify flag is set."
+  output Boolean noSimplify;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNoSimplify;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setNoSimplify">
+        <code interfaceOnly="false" shortOnly="false">function setNoSimplify "Sets the noSimplify flag."
+  input Boolean noSimplify;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setNoSimplify;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getVectorizationLimit">
+        <code interfaceOnly="false" shortOnly="false">function getVectorizationLimit
+  output Integer vectorizationLimit;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getVectorizationLimit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setVectorizationLimit">
+        <code interfaceOnly="false" shortOnly="false">function setVectorizationLimit
+  input Integer vectorizationLimit;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("-v=" + String(vectorizationLimit));
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setVectorizationLimit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDefaultOpenCLDevice">
+        <code interfaceOnly="false" shortOnly="false">function getDefaultOpenCLDevice "Returns the id for the default OpenCL device to be used."
+  output Integer defdevid;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getDefaultOpenCLDevice;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDefaultOpenCLDevice">
+        <code interfaceOnly="false" shortOnly="false">function setDefaultOpenCLDevice "Sets the default OpenCL device to be used."
+  input Integer defdevid;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("-o=" + String(defdevid));
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setDefaultOpenCLDevice;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setShowAnnotations">
+        <code interfaceOnly="false" shortOnly="false">function setShowAnnotations
+  input Boolean show;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setShowAnnotations;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getShowAnnotations">
+        <code interfaceOnly="false" shortOnly="false">function getShowAnnotations
+  output Boolean show;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getShowAnnotations;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setOrderConnections">
+        <code interfaceOnly="false" shortOnly="false">function setOrderConnections "Sets the orderConnection flag."
+  input Boolean orderConnections;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--orderConnections=" + String(orderConnections));
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setOrderConnections;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getOrderConnections">
+        <code interfaceOnly="false" shortOnly="false">function getOrderConnections "Returns true if orderConnections flag is set."
+  output Boolean orderConnections;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getOrderConnections;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLanguageStandard">
+        <code interfaceOnly="false" shortOnly="false">function setLanguageStandard "Sets the Modelica Language Standard."
+  input String inVersion;
+  output Boolean success;
+algorithm
+  success := setCommandLineOptions("--std=" + inVersion);
+  annotation(
+    __OpenModelica_EarlyInline = true,
+    preferredView = "text");
+end setLanguageStandard;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLanguageStandard">
+        <code interfaceOnly="false" shortOnly="false">function getLanguageStandard "Returns the current Modelica Language Standard in use."
+  output String outVersion;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getLanguageStandard;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAstAsCorbaString">
+        <code interfaceOnly="false" shortOnly="false">function getAstAsCorbaString "Print the whole AST on the CORBA format for records, e.g.
+  record Absyn.PROGRAM
+    classes = ...,
+    within_ = ...,
+    globalBuildTimes = ...
+  end Absyn.PROGRAM;"
+  input String fileName = "&lt;interactive&gt;";
+  output String result "returns the string if fileName is interactive; else it returns ok or error depending on if writing the file succeeded";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getAstAsCorbaString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.cd">
+        <code interfaceOnly="false" shortOnly="false">function cd "change directory to the given path (which may be either relative or absolute)
+  returns the new working directory on success or a message on failure
+  if the given path is the empty string, the function simply returns the current working directory."
+  input String newWorkingDirectory = "";
+  output String workingDirectory;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end cd;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.mkdir">
+        <code interfaceOnly="false" shortOnly="false">function mkdir "create directory of given path (which may be either relative or absolute)
+  returns true if directory was created or already exists."
+  input String newDirectory;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end mkdir;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.copy">
+        <code interfaceOnly="false" shortOnly="false">function copy "copies the source file to the destined directory. Returns true if the file has been copied."
+  input String source;
+  input String destination;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end copy;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.remove">
+        <code interfaceOnly="false" shortOnly="false">function remove "removes a file or directory of given path (which may be either relative or absolute)."
+  input String path;
+  output Boolean success "Returns true on success.";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end remove;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkModel">
+        <code interfaceOnly="false" shortOnly="false">function checkModel "Checks a model and returns number of variables and equations."
+  input TypeName className;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end checkModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkAllModelsRecursive">
+        <code interfaceOnly="false" shortOnly="false">function checkAllModelsRecursive "Checks all models recursively and returns number of variables and equations."
+  input TypeName className;
+  input Boolean checkProtected = false "Checks also protected classes if true";
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end checkAllModelsRecursive;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeOf">
+        <code interfaceOnly="false" shortOnly="false">function typeOf
+  input VariableName variableName;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end typeOf;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.instantiateModel">
+        <code interfaceOnly="false" shortOnly="false">function instantiateModel "Instantiates the class and returns the flat Modelica code."
+  input TypeName className;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end instantiateModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildOpenTURNSInterface">
+        <code interfaceOnly="false" shortOnly="false">function buildOpenTURNSInterface "generates wrapper code for OpenTURNS"
+  input TypeName className;
+  input String pythonTemplateFile;
+  input Boolean showFlatModelica = false;
+  output String outPythonScript;
+
+  external "builtin" ;
+end buildOpenTURNSInterface;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runOpenTURNSPythonScript">
+        <code interfaceOnly="false" shortOnly="false">function runOpenTURNSPythonScript "runs OpenTURNS with the given python script returning the log file"
+  input String pythonScriptFile;
+  output String logOutputFile;
+
+  external "builtin" ;
+end runOpenTURNSPythonScript;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateCode">
+        <code interfaceOnly="false" shortOnly="false">function generateCode "The input is a function name for which C-code is generated and compiled into a dll/so"
+  input TypeName className;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end generateCode;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadModel">
+        <code interfaceOnly="false" shortOnly="false">function loadModel "Loads the Modelica Standard Library."
+  input TypeName className;
+  input String[:] priorityVersion = {"default"};
+  input Boolean notify = false "Give a notification of the libraries and versions that were loaded";
+  input String languageStandard = "" "Override the set language standard. Parse with the given setting, but do not change it permanently.";
+  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\"3.2\"), Modelica 3.2.1 will not match it.";
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Loads a Modelica library.
+&lt;h4&gt;Syntax&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;pre&gt;&lt;b&gt;loadModel&lt;/b&gt;(Modelica)&lt;/pre&gt;
+&lt;pre&gt;&lt;b&gt;loadModel&lt;/b&gt;(Modelica,{\"3.2\"})&lt;/pre&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;Description&lt;/h4&gt;
+&lt;p&gt;loadModel() begins by parsing the &lt;a href=\"modelica://OpenModelica.Scripting.getModelicaPath\"&gt;getModelicaPath()&lt;/a&gt;, and looking for candidate packages to load in the given paths (separated by : or ; depending on OS).&lt;/p&gt;
+&lt;p&gt;The candidate is selected by choosing the one with the highest priority, chosen by looking through the &lt;i&gt;priorityVersion&lt;/i&gt; argument to the function.
+If the version searched for is \"default\", the following special priority is used: no version name &gt; highest main release &gt; highest pre-release &gt; lexical sort of others (see table below for examples).
+If none of the searched versions exist, false is returned and an error is added to the buffer.&lt;/p&gt;
+&lt;p&gt;A top-level package may either be defined in a file (\"Modelica 3.2.mo\") or directory (\"Modelica 3.2/package.mo\")&lt;/p&gt;
+&lt;p&gt;The encoding of any Modelica file in the package is assumed to be UTF-8.
+Legacy code may contain files in a different encoding.
+In order to handle this, add a file package.encoding at the top-level of the package, containing a single line with the name of the encoding in it.
+If your package contains files with mixed encodings and your system iconv supports UTF-8//IGNORE, you can ignore the bad characters in some of the files.
+You are recommended to convert your files to UTF-8 without byte-order mark.
+&lt;/p&gt;
+
+&lt;table summary=\"Modelica version numbering\"&gt;
+&lt;tr&gt;&lt;th&gt;Priority&lt;/th&gt;&lt;th&gt;Example&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;No version name&lt;/td&gt;&lt;td&gt;Modelica&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Main release&lt;/td&gt;&lt;td&gt;Modelica 3.3&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Pre-release&lt;/td&gt;&lt;td&gt;Modelica 3.3 Beta 1&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;Non-ordered&lt;/td&gt;&lt;td&gt;Modelica Trunk&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+
+&lt;h4&gt;Bugs&lt;/h4&gt;
+&lt;p&gt;If loadModel(Modelica.XXX) is called, loadModel(Modelica) is executed instead, loading the complete library.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end loadModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteFile">
+        <code interfaceOnly="false" shortOnly="false">function deleteFile "Deletes a file with the given name."
+  input String fileName;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end deleteFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveModel">
+        <code interfaceOnly="false" shortOnly="false">function saveModel
+  input String fileName;
+  input TypeName className;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end saveModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveTotalModel">
+        <code interfaceOnly="false" shortOnly="false">function saveTotalModel
+  input String fileName;
+  input TypeName className;
+  input Boolean stripAnnotations = false;
+  input Boolean stripComments = false;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end saveTotalModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.save">
+        <code interfaceOnly="false" shortOnly="false">function save
+  input TypeName className;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end save;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveTotalSCode">
+        <code interfaceOnly="false" shortOnly="false">function saveTotalSCode = saveTotalModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.translateGraphics">
+        <code interfaceOnly="false" shortOnly="false">function translateGraphics
+  input TypeName className;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end translateGraphics;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.codeToString">
+        <code interfaceOnly="false" shortOnly="false">function codeToString
+  input $Code className;
+  output String string;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end codeToString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.dumpXMLDAE">
+        <code interfaceOnly="false" shortOnly="false">function dumpXMLDAE "Outputs the DAE system corresponding to a specific model."
+  input TypeName className;
+  input String translationLevel = "flat" "flat, optimiser, backEnd, or stateSpace";
+  input Boolean addOriginalIncidenceMatrix = false;
+  input Boolean addSolvingInfo = false;
+  input Boolean addMathMLCode = false;
+  input Boolean dumpResiduals = false;
+  input String fileNamePrefix = "&lt;default&gt;" "this is the className in string form by default";
+  input String rewriteRulesFile = "" "the file from where the rewiteRules are read, default is empty which means no rewrite rules";
+  output Boolean success "if the function succeeded true/false";
+  output String xmlfileName "the Xml file";
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Valid translationLevel strings are: &lt;em&gt;flat&lt;/em&gt;, &lt;em&gt;optimiser&lt;/em&gt; (runs the backend until sorting/matching), &lt;em&gt;backEnd&lt;/em&gt;, or &lt;em&gt;stateSpace&lt;/em&gt;.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end dumpXMLDAE;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.convertUnits">
+        <code interfaceOnly="false" shortOnly="false">function convertUnits
+  input String s1;
+  input String s2;
+  output Boolean unitsCompatible;
+  output Real scaleFactor;
+  output Real offset;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the scale factor and offsets used when converting two units.&lt;/p&gt;
+&lt;p&gt;Returns false if the types are not compatible and should not be converted.&lt;/p&gt;
+&lt;/html&gt;"));
+end convertUnits;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedUnits">
+        <code interfaceOnly="false" shortOnly="false">function getDerivedUnits
+  input String baseUnit;
+  output String[:] derivedUnits;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the list of derived units for the specified base unit.&lt;/p&gt;
+&lt;/html&gt;"));
+end getDerivedUnits;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.listVariables">
+        <code interfaceOnly="false" shortOnly="false">function listVariables "Lists the names of the active variables in the scripting environment."
+  output TypeName variables[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end listVariables;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.strtok">
+        <code interfaceOnly="false" shortOnly="false">function strtok "Splits the strings at the places given by the token, for example:
+  strtok(\"abcbdef\",\"b\") =&gt; {\"a\",\"c\",\"def\"}
+  strtok(\"abcbdef\",\"cd\") =&gt; {\"ab\",\"ef\"}
+"
+  input String string;
+  input String token;
+  output String[:] strings;
+
+  external "builtin" ;
+  annotation(
+    Documentatrion(info = "&lt;html&gt;
+&lt;p&gt;Splits the strings at the places given by the token, for example:
+&lt;ul&gt;
+&lt;li&gt;strtok(\"abcbdef\",\"b\") =&gt; {\"a\",\"c\",\"def\"}&lt;/li&gt;
+&lt;li&gt;strtok(\"abcbdef\",\"cd\") =&gt; {\"ab\",\"ef\"}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;p&gt;Note: strtok does not return empty tokens. To split a read file into every line, use &lt;a href=\"modelica://OpenModelica.Scripting.stringSplit\"&gt;stringSplit&lt;/a&gt; instead (splits only on character).&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end strtok;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringSplit">
+        <code interfaceOnly="false" shortOnly="false">function stringSplit "Splits the string at the places given by the character"
+  input String string;
+  input String token "single character only";
+  output String[:] strings;
+
+  external "builtin" ;
+  annotation(
+    Documentatrion(info = "&lt;html&gt;
+&lt;p&gt;Splits the string at the places given by the character, for example:
+&lt;ul&gt;
+&lt;li&gt;stringSplit(\"abcbdef\",\"b\") =&gt; {\"a\",\"c\",\"def\"}&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end stringSplit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringReplace">
+        <code interfaceOnly="false" shortOnly="false">function stringReplace
+  input String str;
+  input String source;
+  input String target;
+  output String res;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Replaces all occurances of the string &lt;em&gt;source&lt;/em&gt; with &lt;em&gt;target&lt;/em&gt;.
+&lt;/html&gt;"),
+    preferredView = "text");
+end stringReplace;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.escapeXML">
+        <code interfaceOnly="false" shortOnly="false">function escapeXML
+  input String inStr;
+  output String outStr;
+algorithm
+  outStr := stringReplace(inStr, "&amp;", "&amp;amp;");
+  outStr := stringReplace(outStr, "&lt;", "&amp;lt;");
+  outStr := stringReplace(outStr, "&gt;", "&amp;gt;");
+  outStr := stringReplace(outStr, "\"", "&amp;quot;");
+end escapeXML;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.ExportKind">
+        <code interfaceOnly="false" shortOnly="false">type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.list">
+        <code interfaceOnly="false" shortOnly="false">function list "Lists the contents of the given class, or all loaded classes."
+  input TypeName class_ = $Code(AllLoadedClasses);
+  input Boolean interfaceOnly = false;
+  input Boolean shortOnly = false "only short class definitions";
+  input ExportKind exportKind = ExportKind.Absyn;
+  output String contents;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Pretty-prints a class definition.
+&lt;h4&gt;Syntax&lt;/h4&gt;
+&lt;blockquote&gt;
+&lt;pre&gt;&lt;b&gt;list&lt;/b&gt;(Modelica.Math.sin)&lt;/pre&gt;
+&lt;pre&gt;&lt;b&gt;list&lt;/b&gt;(Modelica.Math.sin,interfaceOnly=true)&lt;/pre&gt;
+&lt;/blockquote&gt;
+&lt;h4&gt;Description&lt;/h4&gt;
+&lt;p&gt;list() pretty-prints the whole of the loaded AST while list(className) lists a class and its children.
+It keeps all annotations and comments intact but strips out any comments and normalizes white-space.&lt;/p&gt;
+&lt;p&gt;list(className,interfaceOnly=true) works on functions and pretty-prints only the interface parts
+(annotations and protected sections removed). String-comments on public variables are kept.&lt;/p&gt;
+&lt;p&gt;If the specified class does not exist (or is not a function when interfaceOnly is given), the
+empty string is returned.&lt;/p&gt;
+&lt;/html&gt;", revisions = "&lt;html&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;th&gt;Author&lt;/th&gt;&lt;th&gt;Comment&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;16124&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Added replaced exportAsCode option with exportKind (selecting which kind of unparsing to use)&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;10796&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Added shortOnly option&lt;/td&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;10756&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Added interfaceOnly option&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end list;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.listFile">
+        <code interfaceOnly="false" shortOnly="false">function listFile "Lists the contents of the file given by the class."
+  input TypeName class_;
+  output String contents;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Lists the contents of the file given by the class.
+See also &lt;a href=\"modelica://OpenModelica.Scripting.list\"&gt;list()&lt;/a&gt;.&lt;/p&gt;
+&lt;/html&gt;", revisions = "&lt;html&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;th&gt;Author&lt;/th&gt;&lt;th&gt;Comment&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;1.9.3-dev&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Introduced the API.&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end listFile;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.DiffFormat">
+        <code interfaceOnly="false" shortOnly="false">type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.diffModelicaFileListings">
+        <code interfaceOnly="false" shortOnly="false">function diffModelicaFileListings "Creates diffs of two strings corresponding to Modelica files"
+  input String before, after;
+  input DiffFormat diffFormat = DiffFormat.color;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Creates diffs of two strings (before and after) corresponding to Modelica files.
+The diff is specialized to handle the &lt;a href=\"modelica://OpenModelica.Scripting.list\"&gt;list&lt;/a&gt;
+API moving comments around in the file and introducing or deleting whitespace.&lt;/p&gt;
+&lt;p&gt;The output can be chosen to be a colored diff (for terminals), XML, or
+the final text (deletions removed).&lt;/p&gt;
+&lt;/html&gt;", revisions = "&lt;html&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;th&gt;Author&lt;/th&gt;&lt;th&gt;Comment&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;1.9.3-dev&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Introduced the API.&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end diffModelicaFileListings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.exportToFigaro">
+        <code interfaceOnly="false" shortOnly="false">function exportToFigaro
+  input TypeName path;
+  input String directory = cd();
+  input String database;
+  input String mode;
+  input String options;
+  input String processor;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end exportToFigaro;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.inferBindings">
+        <code interfaceOnly="false" shortOnly="false">function inferBindings
+  input TypeName path;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end inferBindings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateVerificationScenarios">
+        <code interfaceOnly="false" shortOnly="false">function generateVerificationScenarios
+  input TypeName path;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end generateVerificationScenarios;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.rewriteBlockCall">
+        <code interfaceOnly="false" shortOnly="false">function rewriteBlockCall "Function for property modeling, transforms block calls into instantiations for a loaded model"
+  input TypeName className;
+  input TypeName inDefs;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;An extension for modeling requirements in Modelica. Rewrites block calls as block instantiations.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end rewriteBlockCall;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.realpath">
+        <code interfaceOnly="false" shortOnly="false">function realpath "Get full path name of file or directory name"
+  input String name "Absolute or relative file or directory name";
+  output String fullName "Full path of 'name'";
+
+  external "C" fullName = ModelicaInternal_fullPathName(name) annotation(
+    Library = "ModelicaExternalC");
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Return the canonicalized absolute pathname.
+Similar to &lt;a href=\"http://linux.die.net/man/3/realpath\"&gt;realpath(3)&lt;/a&gt;, but with the safety of Modelica strings.
+&lt;/html&gt;"));
+end realpath;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.uriToFilename">
+        <code interfaceOnly="false" shortOnly="false">function uriToFilename
+  input String uri;
+  output String filename = "";
+
+  external "builtin" filename = OpenModelica_uriToFilename(uri);
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Handles modelica:// and file:// URI's. The result is an absolute path on the local system.
+modelica:// URI's are only handled if the class is already loaded.
+Returns the empty string on failure.
+&lt;/html&gt;"));
+end uriToFilename;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLoadedLibraries">
+        <code interfaceOnly="false" shortOnly="false">function getLoadedLibraries
+  output String[:, 2] libraries;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Returns a list of names of libraries and their path on the system, for example:
+&lt;pre&gt;{{\"Modelica\",\"/usr/lib/omlibrary/Modelica 3.2.1\"},{\"ModelicaServices\",\"/usr/lib/omlibrary/ModelicaServices 3.2.1\"}}&lt;/pre&gt;
+&lt;/html&gt;"));
+end getLoadedLibraries;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.LinearSystemSolver">
+        <code interfaceOnly="false" shortOnly="false">type LinearSystemSolver = enumeration(dgesv, lpsolve55);</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.solveLinearSystem">
+        <code interfaceOnly="false" shortOnly="false">function solveLinearSystem "Solve A*X = B, using dgesv or lp_solve (if any variable in X is integer)
+  Returns for solver dgesv: info&gt;0: Singular for element i. info&lt;0: Bad input.
+  For solver lp_solve: ???"
+  input Real[size(B, 1), size(B, 1)] A;
+  input Real[:] B;
+  input LinearSystemSolver solver = LinearSystemSolver.dgesv;
+  input Integer[:] isInt = {-1} "list of indices that are integers";
+  output Real[size(B, 1)] X;
+  output Integer info;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end solveLinearSystem;</code>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.StandardStream">
+        <code interfaceOnly="false" shortOnly="false">type StandardStream = enumeration(stdin, stdout, stderr);</code>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.reopenStandardStream">
+        <code interfaceOnly="false" shortOnly="false">function reopenStandardStream
+  input StandardStream _stream;
+  input String filename;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end reopenStandardStream;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.importFMU">
+        <code interfaceOnly="false" shortOnly="false">function importFMU "Imports the Functional Mockup Unit
+  Example command:
+  importFMU(\"A.fmu\");"
+  input String filename "the fmu file name";
+  input String workdir = "&lt;default&gt;" "The output directory for imported FMU files. &lt;default&gt; will put the files to current working directory.";
+  input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
+  input Boolean fullPath = false "When true the full output path is returned otherwise only the file name.";
+  input Boolean debugLogging = false "When true the FMU's debug output is printed.";
+  input Boolean generateInputConnectors = true "When true creates the input connector pins.";
+  input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
+  output String generatedFileName "Returns the full path of the generated file.";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end importFMU;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.importFMUModelDescription">
+        <code interfaceOnly="false" shortOnly="false">function importFMUModelDescription "Imports modelDescription.xml
+  Example command:
+  importFMUModelDescription(\"A.xml\");"
+  input String filename "the fmu file name";
+  input String workdir = "&lt;default&gt;" "The output directory for imported FMU files. &lt;default&gt; will put the files to current working directory.";
+  input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
+  input Boolean fullPath = false "When true the full output path is returned otherwise only the file name.";
+  input Boolean debugLogging = false "When true the FMU's debug output is printed.";
+  input Boolean generateInputConnectors = true "When true creates the input connector pins.";
+  input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
+  output String generatedFileName "Returns the full path of the generated file.";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end importFMUModelDescription;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.translateModelFMU">
+        <code interfaceOnly="false" shortOnly="false">function translateModelFMU "translates a modelica model into a Functional Mockup Unit.
+The only required argument is the className, while all others have some default values.
+  Example command:
+  translateModelFMU(className, version=\"2.0\");"
+  input TypeName className "the class that should translated";
+  input String version = "2.0" "FMU version, 1.0 or 2.0.";
+  input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
+  input String fileNamePrefix = "&lt;default&gt;" "fileNamePrefix. &lt;default&gt; = \"className\"";
+  input Boolean includeResources = false "include Modelica based resources via loadResource or not";
+  output String generatedFileName "Returns the full path of the generated FMU.";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end translateModelFMU;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildModelFMU">
+        <code interfaceOnly="false" shortOnly="false">function buildModelFMU "translates a modelica model into a Functional Mockup Unit.
+The only required argument is the className, while all others have some default values.
+  Example command:
+  buildModelFMU(className, version=\"2.0\");"
+  input TypeName className "the class that should translated";
+  input String version = "2.0" "FMU version, 1.0 or 2.0.";
+  input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
+  input String fileNamePrefix = "&lt;default&gt;" "fileNamePrefix. &lt;default&gt; = \"className\"";
+  input String platforms[:] = {"static"} "The list of platforms to generate code for. \"dynamic\"=current platform, dynamically link the runtime. \"static\"=current platform, statically link everything. Else, use a host triple, e.g. \"x86_64-linux-gnu\" or \"x86_64-w64-mingw32\"";
+  input Boolean includeResources = false "include Modelica based resources via loadResource or not";
+  output String generatedFileName "Returns the full path of the generated FMU.";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end buildModelFMU;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildEncryptedPackage">
+        <code interfaceOnly="false" shortOnly="false">function buildEncryptedPackage
+  input TypeName className "the class that should encrypted";
+  output Boolean success;
+  output String commandOutput "Output of the packagetool executable";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end buildEncryptedPackage;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.simulate">
+        <code interfaceOnly="false" shortOnly="false">function simulate "simulates a modelica model by generating c code, build it and run the simulation executable.
+ The only required argument is the className, while all others have some default values.
+ simulate(className, [startTime], [stopTime], [numberOfIntervals], [tolerance], [method], [fileNamePrefix], [options], [outputFormat], [variableFilter], [cflags], [simflags])
+ Example command:
+  simulate(A);
+"
+  input TypeName className "the class that should simulated";
+  input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
+  input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
+  input Real numberOfIntervals = 500 "number of intervals in the result file. &lt;default&gt; = 500";
+  input Real tolerance = 1e-6 "tolerance used by the integration method. &lt;default&gt; = 1e-6";
+  input String method = "&lt;default&gt;" "integration method used for simulation. &lt;default&gt; = dassl";
+  input String fileNamePrefix = "&lt;default&gt;" "fileNamePrefix. &lt;default&gt; = \"\"";
+  input String options = "&lt;default&gt;" "options. &lt;default&gt; = \"\"";
+  input String outputFormat = "mat" "Format for the result file. &lt;default&gt; = \"mat\"";
+  input String variableFilter = ".*" "Filter for variables that should store in result file. &lt;default&gt; = \".*\"";
+  input String cflags = "&lt;default&gt;" "cflags. &lt;default&gt; = \"\"";
+  input String simflags = "&lt;default&gt;" "simflags. &lt;default&gt; = \"\"";
+  output SimulationResult simulationResults;
+
+  record SimulationResult
+    String resultFile;
+    String simulationOptions;
+    String messages;
+    Real timeFrontend;
+    Real timeBackend;
+    Real timeSimCode;
+    Real timeTemplates;
+    Real timeCompile;
+    Real timeSimulation;
+    Real timeTotal;
+  end SimulationResult;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end simulate;</code>
         <classes>
           <record id="OpenModelica.Scripting.simulate.SimulationResult">
+            <code interfaceOnly="false" shortOnly="false">record SimulationResult
+  String resultFile;
+  String simulationOptions;
+  String messages;
+  Real timeFrontend;
+  Real timeBackend;
+  Real timeSimCode;
+  Real timeTemplates;
+  Real timeCompile;
+  Real timeSimulation;
+  Real timeTotal;
+end SimulationResult;</code>
             <classes/>
           </record>
         </classes>
       </function>
       <function id="OpenModelica.Scripting.buildModel">
+        <code interfaceOnly="false" shortOnly="false">function buildModel "builds a modelica model by generating c code and build it.
+ It does not run the code!
+ The only required argument is the className, while all others have some default values.
+ simulate(className, [startTime], [stopTime], [numberOfIntervals], [tolerance], [method], [fileNamePrefix], [options], [outputFormat], [variableFilter], [cflags], [simflags])
+ Example command:
+  simulate(A);
+"
+  input TypeName className "the class that should be built";
+  input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
+  input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
+  input Real numberOfIntervals = 500 "number of intervals in the result file. &lt;default&gt; = 500";
+  input Real tolerance = 1e-6 "tolerance used by the integration method. &lt;default&gt; = 1e-6";
+  input String method = "&lt;default&gt;" "integration method used for simulation. &lt;default&gt; = dassl";
+  input String fileNamePrefix = "&lt;default&gt;" "fileNamePrefix. &lt;default&gt; = \"\"";
+  input String options = "&lt;default&gt;" "options. &lt;default&gt; = \"\"";
+  input String outputFormat = "mat" "Format for the result file. &lt;default&gt; = \"mat\"";
+  input String variableFilter = ".*" "Filter for variables that should store in result file. &lt;default&gt; = \".*\"";
+  input String cflags = "&lt;default&gt;" "cflags. &lt;default&gt; = \"\"";
+  input String simflags = "&lt;default&gt;" "simflags. &lt;default&gt; = \"\"";
+  output String[2] buildModelResults;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end buildModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildLabel">
+        <code interfaceOnly="false" shortOnly="false">function buildLabel "builds Lable."
+  input TypeName className "the class that should be built";
+  input Real startTime = 0.0 "the start time of the simulation. &lt;default&gt; = 0.0";
+  input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
+  input Integer numberOfIntervals = 500 "number of intervals in the result file. &lt;default&gt; = 500";
+  input Real tolerance = 1e-6 "tolerance used by the integration method. &lt;default&gt; = 1e-6";
+  input String method = "dassl" "integration method used for simulation. &lt;default&gt; = dassl";
+  input String fileNamePrefix = "" "fileNamePrefix. &lt;default&gt; = \"\"";
+  input String options = "" "options. &lt;default&gt; = \"\"";
+  input String outputFormat = "mat" "Format for the result file. &lt;default&gt; = \"mat\"";
+  input String variableFilter = ".*" "Filter for variables that should store in result file. &lt;default&gt; = \".*\"";
+  input String cflags = "" "cflags. &lt;default&gt; = \"\"";
+  input String simflags = "" "simflags. &lt;default&gt; = \"\"";
+  output String[2] buildModelResults;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end buildLabel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.reduceTerms">
+        <code interfaceOnly="false" shortOnly="false">function reduceTerms "reduce terms."
+  input TypeName className "the class that should be built";
+  input Real startTime = 0.0 "the start time of the simulation. &lt;default&gt; = 0.0";
+  input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
+  input Integer numberOfIntervals = 500 "number of intervals in the result file. &lt;default&gt; = 500";
+  input Real tolerance = 1e-6 "tolerance used by the integration method. &lt;default&gt; = 1e-6";
+  input String method = "dassl" "integration method used for simulation. &lt;default&gt; = dassl";
+  input String fileNamePrefix = "" "fileNamePrefix. &lt;default&gt; = \"\"";
+  input String options = "" "options. &lt;default&gt; = \"\"";
+  input String outputFormat = "mat" "Format for the result file. &lt;default&gt; = \"mat\"";
+  input String variableFilter = ".*" "Filter for variables that should store in result file. &lt;default&gt; = \".*\"";
+  input String cflags = "" "cflags. &lt;default&gt; = \"\"";
+  input String simflags = "" "simflags. &lt;default&gt; = \"\"";
+  input String labelstoCancel = "";
+  output String[2] buildModelResults;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end reduceTerms;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClass">
+        <code interfaceOnly="false" shortOnly="false">function moveClass "Moves a class up or down depending on the given offset, where a positive
+  offset moves the class down and a negative offset up. The offset is truncated
+  if the resulting index is outside the class list. It retains the visibility of
+  the class by adding public/protected sections when needed, and merges sections
+  of the same type if the class is moved from a section it was alone in. Returns
+  true if the move was successful, otherwise false."
+  input TypeName className "the class that should be moved";
+  input Integer offset "Offset in the class list.";
+  output Boolean result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end moveClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClassToTop">
+        <code interfaceOnly="false" shortOnly="false">function moveClassToTop "Moves a class to the top of its enclosing class. Returns true if the move
+   was successful, otherwise false."
+  input TypeName className;
+  output Boolean result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end moveClassToTop;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClassToBottom">
+        <code interfaceOnly="false" shortOnly="false">function moveClassToBottom "Moves a class to the bottom of its enclosing class. Returns true if the move
+   was successful, otherwise false."
+  input TypeName className;
+  output Boolean result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end moveClassToBottom;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.copyClass">
+        <code interfaceOnly="false" shortOnly="false">function copyClass "Copies a class within the same level"
+  input TypeName className "the class that should be copied";
+  input String newClassName "the name for new class";
+  input TypeName withIn = $Code(TopLevel) "the with in path for new class";
+  output Boolean result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end copyClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.linearize">
+        <code interfaceOnly="false" shortOnly="false">function linearize "creates a model with symbolic linearization matrixes"
+  input TypeName className "the class that should simulated";
+  input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
+  input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
+  input Real numberOfIntervals = 500 "number of intervals in the result file. &lt;default&gt; = 500";
+  input Real stepSize = 0.002 "step size that is used for the result file. &lt;default&gt; = 0.002";
+  input Real tolerance = 1e-6 "tolerance used by the integration method. &lt;default&gt; = 1e-6";
+  input String method = "&lt;default&gt;" "integration method used for simulation. &lt;default&gt; = dassl";
+  input String fileNamePrefix = "&lt;default&gt;" "fileNamePrefix. &lt;default&gt; = \"\"";
+  input Boolean storeInTemp = false "storeInTemp. &lt;default&gt; = false";
+  input Boolean noClean = false "noClean. &lt;default&gt; = false";
+  input String options = "&lt;default&gt;" "options. &lt;default&gt; = \"\"";
+  input String outputFormat = "mat" "Format for the result file. &lt;default&gt; = \"mat\"";
+  input String variableFilter = ".*" "Filter for variables that should store in result file. &lt;default&gt; = \".*\"";
+  input String cflags = "&lt;default&gt;" "cflags. &lt;default&gt; = \"\"";
+  input String simflags = "&lt;default&gt;" "simflags. &lt;default&gt; = \"\"";
+  output String linearizationResult;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Creates a model with symbolic linearization matrixes.&lt;/p&gt;
+&lt;p&gt;At stopTime the linearization matrixes are evaluated and a modelica model is created.&lt;/p&gt;
+&lt;p&gt;The only required argument is the className, while all others have some default values.&lt;/p&gt;
+&lt;h2&gt;Usage:&lt;/h2&gt;
+&lt;p&gt;&lt;b&gt;linearize&lt;/b&gt;(&lt;em&gt;A&lt;/em&gt;, stopTime=0.0);&lt;/p&gt;
+&lt;p&gt;Creates the file \"linear_A.mo\" that contains the linearized matrixes at stopTime.&lt;/p&gt;
+&lt;/html&gt;", revisions = "&lt;html&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;th&gt;Author&lt;/th&gt;&lt;th&gt;Comment&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;13421&lt;/td&gt;&lt;td&gt;wbraun&lt;/td&gt;&lt;td&gt;Added to omc&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end linearize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.optimize">
+        <code interfaceOnly="false" shortOnly="false">function optimize "optimize a modelica/optimica model by generating c code, build it and run the optimization executable.
+ The only required argument is the className, while all others have some default values.
+ simulate(className, [startTime], [stopTime], [numberOfIntervals], [stepSize], [tolerance], [fileNamePrefix], [options], [outputFormat], [variableFilter], [cflags], [simflags])
+ Example command:
+  simulate(A);"
+  input TypeName className "the class that should simulated";
+  input Real startTime = "&lt;default&gt;" "the start time of the simulation. &lt;default&gt; = 0.0";
+  input Real stopTime = 1.0 "the stop time of the simulation. &lt;default&gt; = 1.0";
+  input Real numberOfIntervals = 500 "number of intervals in the result file. &lt;default&gt; = 500";
+  input Real stepSize = 0.002 "step size that is used for the result file. &lt;default&gt; = 0.002";
+  input Real tolerance = 1e-6 "tolerance used by the integration method. &lt;default&gt; = 1e-6";
+  input String method = DAE.SCONST("optimization") "optimize a modelica/optimica model.";
+  input String fileNamePrefix = "&lt;default&gt;" "fileNamePrefix. &lt;default&gt; = \"\"";
+  input Boolean storeInTemp = false "storeInTemp. &lt;default&gt; = false";
+  input Boolean noClean = false "noClean. &lt;default&gt; = false";
+  input String options = "&lt;default&gt;" "options. &lt;default&gt; = \"\"";
+  input String outputFormat = "mat" "Format for the result file. &lt;default&gt; = \"mat\"";
+  input String variableFilter = ".*" "Filter for variables that should store in result file. &lt;default&gt; = \".*\"";
+  input String cflags = "&lt;default&gt;" "cflags. &lt;default&gt; = \"\"";
+  input String simflags = "&lt;default&gt;" "simflags. &lt;default&gt; = \"\"";
+  output String optimizationResults;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end optimize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSourceFile">
+        <code interfaceOnly="false" shortOnly="false">function getSourceFile "Returns the filename of the class."
+  input TypeName class_;
+  output String filename "empty on failure";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getSourceFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setSourceFile">
+        <code interfaceOnly="false" shortOnly="false">function setSourceFile
+  input TypeName class_;
+  input String filename;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setSourceFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isShortDefinition">
+        <code interfaceOnly="false" shortOnly="false">function isShortDefinition "returns true if the definition is a short class definition"
+  input TypeName class_;
+  output Boolean isShortCls;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end isShortDefinition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setClassComment">
+        <code interfaceOnly="false" shortOnly="false">function setClassComment "Sets the class comment."
+  input TypeName class_;
+  input String filename;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end setClassComment;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassNames">
+        <code interfaceOnly="false" shortOnly="false">function getClassNames "Returns the list of class names defined in the class."
+  input TypeName class_ = $Code(AllLoadedClasses);
+  input Boolean recursive = false;
+  input Boolean qualified = false;
+  input Boolean sort = false;
+  input Boolean builtin = false "List also builtin classes if true";
+  input Boolean showProtected = false "List also protected classes if true";
+  input Boolean includeConstants = false "List also constants in the class if true";
+  output TypeName classNames[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getClassNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getUsedClassNames">
+        <code interfaceOnly="false" shortOnly="false">function getUsedClassNames "Returns the list of class names used in the total program defined by the class."
+  input TypeName className;
+  output TypeName classNames[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getUsedClassNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getPackages">
+        <code interfaceOnly="false" shortOnly="false">function getPackages "Returns the list of packages defined in the class."
+  input TypeName class_ = $Code(AllLoadedClasses);
+  output TypeName classNames[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getPackages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.basePlotFunction">
+        <code interfaceOnly="false" shortOnly="false">partial function basePlotFunction "Extending this does not seem to work at the moment. A real shame; functions below are copy-paste and all need to be updated if the interface changes."
+  input String fileName = "&lt;default&gt;" "The filename containing the variables. &lt;default&gt; will read the last simulation result";
+  input String interpolation = "linear" "
+      Determines if the simulation data should be interpolated to allow drawing of continuous lines in the diagram.
+      \"linear\" results in linear interpolation between data points, \"constant\" keeps the value of the last known
+      data point until a new one is found and \"none\" results in a diagram where only known data points are plotted.";
+  input String title = "Plot by OpenModelica" "This text will be used as the diagram title.";
+  input Boolean legend = true "Determines whether or not the variable legend is shown.";
+  input Boolean grid = true "Determines whether or not a grid is shown in the diagram.";
+  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+  input Boolean points = false "Determines whether or not the data points should be indicated by a dot in the diagram.";
+  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+  output Boolean success "Returns true on success";
+  annotation(
+    preferredView = "text");
+end basePlotFunction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plot">
+        <code interfaceOnly="false" shortOnly="false">function plot "Launches a plot window using OMPlot."
+  input VariableNames vars "The variables you want to plot";
+  input Boolean externalWindow = false "Opens the plot in a new plot window";
+  input String fileName = "&lt;default&gt;" "The filename containing the variables. &lt;default&gt; will read the last simulation result";
+  input String title = "" "This text will be used as the diagram title.";
+  input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+  input Real curveWidth = 1.0 "Sets the width of the curve.";
+  input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
+  input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
+  input String footer = "" "This text will be used as the diagram footer.";
+  input Boolean autoScale = true "Use auto scale while plotting.";
+  input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
+  output Boolean success "Returns true on success";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Launches a plot window using OMPlot. Returns true on success.&lt;/p&gt;
+
+&lt;p&gt;Example command sequences:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;simulate(A);plot({x,y,z});&lt;/li&gt;
+&lt;li&gt;simulate(A);plot(x, externalWindow=true);&lt;/li&gt;
+&lt;li&gt;simulate(A,fileNamePrefix=\"B\");simulate(C);plot(z,fileName=\"B.mat\",legend=false);&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/html&gt;"));
+end plot;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plotAll">
+        <code interfaceOnly="false" shortOnly="false">function plotAll "Works in the same way as plot(), but does not accept any
+  variable names as input. Instead, all variables are part of the plot window.
+
+  Example command sequences:
+  simulate(A);plotAll();
+  simulate(A);plotAll(externalWindow=true);
+  simulate(A,fileNamePrefix=\"B\");simulate(C);plotAll(x,fileName=\"B.mat\");"
+  input Boolean externalWindow = false "Opens the plot in a new plot window";
+  input String fileName = "&lt;default&gt;" "The filename containing the variables. &lt;default&gt; will read the last simulation result";
+  input String title = "" "This text will be used as the diagram title.";
+  input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+  input Real curveWidth = 1.0 "Sets the width of the curve.";
+  input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
+  input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
+  input String footer = "" "This text will be used as the diagram footer.";
+  input Boolean autoScale = true "Use auto scale while plotting.";
+  input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
+  output Boolean success "Returns true on success";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end plotAll;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plotParametric">
+        <code interfaceOnly="false" shortOnly="false">function plotParametric "Launches a plotParametric window using OMPlot. Returns true on success.
+
+  Example command sequences:
+  simulate(A);plotParametric(x,y);
+  simulate(A);plotParametric(x,y, externalWindow=true);
+  "
+  input VariableName xVariable;
+  input VariableName yVariable;
+  input Boolean externalWindow = false "Opens the plot in a new plot window";
+  input String fileName = "&lt;default&gt;" "The filename containing the variables. &lt;default&gt; will read the last simulation result";
+  input String title = "" "This text will be used as the diagram title.";
+  input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+  input Real curveWidth = 1.0 "Sets the width of the curve.";
+  input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
+  input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
+  input String footer = "" "This text will be used as the diagram footer.";
+  input Boolean autoScale = true "Use auto scale while plotting.";
+  input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
+  output Boolean success "Returns true on success";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end plotParametric;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResult">
+        <code interfaceOnly="false" shortOnly="false">function readSimulationResult "Reads a result file, returning a matrix corresponding to the variables and size given."
+  input String filename;
+  input VariableNames variables;
+  input Integer size = 0 "0=read any size... If the size is not the same as the result-file, this function fails";
+  output Real result[:, :];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end readSimulationResult;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResultSize">
+        <code interfaceOnly="false" shortOnly="false">function readSimulationResultSize "The number of intervals that are present in the output file."
+  input String fileName;
+  output Integer sz;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end readSimulationResultSize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResultVars">
+        <code interfaceOnly="false" shortOnly="false">function readSimulationResultVars "Returns the variables in the simulation file; you can use val() and plot() commands using these names."
+  input String fileName;
+  input Boolean readParameters = true;
+  input Boolean openmodelicaStyle = false;
+  output String[:] vars;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Takes one simulation results file and returns the variables stored in it.&lt;/p&gt;
+&lt;p&gt;If readParameters is true, parameter names are returned.&lt;/p&gt;
+&lt;p&gt;If openmodelicaStyle is true, the stored variable names are converted to the canonical form used by OpenModelica variables (a.der(b) becomes der(a.b), and so on).&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end readSimulationResultVars;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.filterSimulationResults">
+        <code interfaceOnly="false" shortOnly="false">function filterSimulationResults
+  input String inFile;
+  input String outFile;
+  input String[:] vars;
+  input Integer numberOfIntervals = 0 "0=Do not resample";
+  input Boolean removeDescription = false;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Takes one simulation result and filters out the selected variables only, producing the output file.&lt;/p&gt;
+&lt;p&gt;If numberOfIntervals&lt;&gt;0, re-sample to that number of intervals, ignoring event points (might be changed in the future).&lt;/p&gt;
+&lt;p&gt;if removeDescription=true, the description matrix will contain 0-length strings, making the file smaller.&lt;/p&gt;
+&lt;/html&gt;", revisions = "&lt;html&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;th&gt;Author&lt;/th&gt;&lt;th&gt;Comment&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;1.13.0&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Introduced removeDescription.&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end filterSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareSimulationResults">
+        <code interfaceOnly="false" shortOnly="false">function compareSimulationResults "compares simulation results."
+  input String filename;
+  input String reffilename;
+  input String logfilename;
+  input Real relTol = 0.01;
+  input Real absTol = 0.0001;
+  input String[:] vars = fill("", 0);
+  output String[:] result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end compareSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deltaSimulationResults">
+        <code interfaceOnly="false" shortOnly="false">function deltaSimulationResults "calculates the sum of absolute errors."
+  input String filename;
+  input String reffilename;
+  input String method "method to compute then error. choose 1norm, 2norm, maxerr";
+  input String[:] vars = fill("", 0);
+  output Real result;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;For each data point in the reference file, the sum of all absolute error sums of all given variables is calculated.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end deltaSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.diffSimulationResults">
+        <code interfaceOnly="false" shortOnly="false">function diffSimulationResults "compares simulation results."
+  input String actualFile;
+  input String expectedFile;
+  input String diffPrefix;
+  input Real relTol = 1e-3 "y tolerance";
+  input Real relTolDiffMinMax = 1e-4 "y tolerance based on the difference between the maximum and minimum of the signal";
+  input Real rangeDelta = 0.002 "x tolerance";
+  input String[:] vars = fill("", 0);
+  input Boolean keepEqualResults = false;
+  output Boolean success;
+  /* On success, resultFiles is empty. But it might be empty on failure anyway (for example if an input file does not exist) */
+  output String[:] failVars;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Takes two result files and compares them. By default, all selected variables that are not equal in the two files are output to diffPrefix.varName.csv.&lt;/p&gt;
+&lt;p&gt;The output is the names of the variables for which files were generated.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end diffSimulationResults;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.diffSimulationResultsHtml">
+        <code interfaceOnly="false" shortOnly="false">function diffSimulationResultsHtml
+  input String var;
+  input String actualFile;
+  input String expectedFile;
+  input Real relTol = 1e-3 "y tolerance";
+  input Real relTolDiffMinMax = 1e-4 "y tolerance based on the difference between the maximum and minimum of the signal";
+  input Real rangeDelta = 0.002 "x tolerance";
+  output String html;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Takes two result files and compares them. By default, all selected variables that are not equal in the two files are output to diffPrefix.varName.csv.&lt;/p&gt;
+&lt;p&gt;The output is the names of the variables for which files were generated.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end diffSimulationResultsHtml;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkTaskGraph">
+        <code interfaceOnly="false" shortOnly="false">function checkTaskGraph "Checks if the given taskgraph has the same structure as the reference taskgraph and if all attributes are set correctly."
+  input String filename;
+  input String reffilename;
+  output String[:] result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end checkTaskGraph;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkCodeGraph">
+        <code interfaceOnly="false" shortOnly="false">function checkCodeGraph "Checks if the given taskgraph has the same structure as the graph described in the codefile."
+  input String graphfile;
+  input String codefile;
+  output String[:] result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end checkCodeGraph;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.val">
+        <code interfaceOnly="false" shortOnly="false">function val "Return the value of a variable at a given time in the simulation results"
+  input VariableName var;
+  input Real timePoint = 0.0;
+  input String fileName = "&lt;default&gt;" "The contents of the currentSimulationResult variable";
+  output Real valAtTime;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Return the value of a variable at a given time in the simulation results.&lt;/p&gt;
+&lt;p&gt;Works on the filename pointed to by the scripting variable currentSimulationResult or a given filename.&lt;/p&gt;
+&lt;p&gt;For parameters, any time may be given. For variables the startTime&lt;=time&lt;=stopTime needs to hold.&lt;/p&gt;
+&lt;p&gt;On error, nan (Not a Number) is returned and the error buffer contains the message.&lt;/p&gt;
+&lt;/html&gt;"));
+end val;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.closeSimulationResultFile">
+        <code interfaceOnly="false" shortOnly="false">function closeSimulationResultFile "Closes the current simulation result file.
+  Only needed by Windows. Windows cannot handle reading and writing to the same file from different processes.
+  To allow OMEdit to make successful simulation again on the same file we must close the file after reading the Simulation Result Variables.
+  Even OMEdit only use this API for Windows."
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end closeSimulationResultFile;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addClassAnnotation">
+        <code interfaceOnly="false" shortOnly="false">function addClassAnnotation
+  input TypeName class_;
+  input ExpressionOrModification annotate;
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Used to set annotations, like Diagrams and Icons in classes. The function is given the name of the class
+and the annotation to set.&lt;/p&gt;
+&lt;p&gt;Usage: addClassAnnotation(Modelica, annotate = Documentation(info = \"&amp;lt;html&amp;gt;&amp;lt;/html&amp;gt;\"))&lt;/p&gt;
+&lt;/html&gt;"));
+end addClassAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getParameterNames">
+        <code interfaceOnly="false" shortOnly="false">function getParameterNames
+  input TypeName class_;
+  output String[:] parameters;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the list of parameters of the class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getParameterNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getParameterValue">
+        <code interfaceOnly="false" shortOnly="false">function getParameterValue
+  input TypeName class_;
+  input String parameterName;
+  output String parameterValue;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the value of the parameter of the class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getParameterValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierNames">
+        <code interfaceOnly="false" shortOnly="false">function getComponentModifierNames
+  input TypeName class_;
+  input String componentName;
+  output String[:] modifiers;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the list of class component modifiers.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getComponentModifierNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierValue">
+        <code interfaceOnly="false" shortOnly="false">function getComponentModifierValue
+  input TypeName class_;
+  input TypeName modifier;
+  output String value;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  &lt;p&gt;Returns the modifier value (only the binding exculding submodifiers) of component.
+    For instance,
+      model A
+        B b1(a1(p1=5,p2=4));
+      end A;
+      getComponentModifierValue(A,b1.a1.p1) =&gt; 5
+      getComponentModifierValue(A,b1.a1.p2) =&gt; 4
+    See also &lt;a href=\"modelica://OpenModelica.Scripting.getComponentModifierValues\"&gt;getComponentModifierValues()&lt;/a&gt;.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end getComponentModifierValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierValues">
+        <code interfaceOnly="false" shortOnly="false">function getComponentModifierValues
+  input TypeName class_;
+  input TypeName modifier;
+  output String value;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  &lt;p&gt;Returns the modifier value (including the submodfiers) of component.
+    For instance,
+      model A
+        B b1(a1(p1=5,p2=4));
+      end A;
+      getComponentModifierValues(A,b1.a1) =&gt; (p1 = 5, p2 = 4)
+    See also &lt;a href=\"modelica://OpenModelica.Scripting.getComponentModifierValue\"&gt;getComponentModifierValue()&lt;/a&gt;.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end getComponentModifierValues;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInstantiatedParametersAndValues">
+        <code interfaceOnly="false" shortOnly="false">function getInstantiatedParametersAndValues
+  input TypeName cls;
+  output String[:] values;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  &lt;p&gt;Returns the parameter names and values from the DAE.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end getInstantiatedParametersAndValues;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.removeComponentModifiers">
+        <code interfaceOnly="false" shortOnly="false">function removeComponentModifiers
+  input TypeName class_;
+  input String componentName;
+  input Boolean keepRedeclares = false;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Removes the component modifiers.
+&lt;/html&gt;"),
+    preferredView = "text");
+end removeComponentModifiers;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.removeExtendsModifiers">
+        <code interfaceOnly="false" shortOnly="false">function removeExtendsModifiers
+  input TypeName className;
+  input TypeName baseClassName;
+  input Boolean keepRedeclares = false;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Removes the extends modifiers of a class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end removeExtendsModifiers;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getConnectionCount">
+        <code interfaceOnly="false" shortOnly="false">function getConnectionCount "Counts the number of connect equation in a class."
+  input TypeName className;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getConnectionCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthConnection">
+        <code interfaceOnly="false" shortOnly="false">function getNthConnection "Returns the Nth connection.
+  Example command:
+  getNthConnection(A) =&gt; {\"from\", \"to\", \"comment\"}"
+  input TypeName className;
+  input Integer index;
+  output String[:] result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthConnection;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAlgorithmCount">
+        <code interfaceOnly="false" shortOnly="false">function getAlgorithmCount "Counts the number of Algorithm sections in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getAlgorithmCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAlgorithm">
+        <code interfaceOnly="false" shortOnly="false">function getNthAlgorithm "Returns the Nth Algorithm section."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialAlgorithmCount">
+        <code interfaceOnly="false" shortOnly="false">function getInitialAlgorithmCount "Counts the number of Initial Algorithm sections in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getInitialAlgorithmCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialAlgorithm">
+        <code interfaceOnly="false" shortOnly="false">function getNthInitialAlgorithm "Returns the Nth Initial Algorithm section."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthInitialAlgorithm;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAlgorithmItemsCount">
+        <code interfaceOnly="false" shortOnly="false">function getAlgorithmItemsCount "Counts the number of Algorithm items in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getAlgorithmItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAlgorithmItem">
+        <code interfaceOnly="false" shortOnly="false">function getNthAlgorithmItem "Returns the Nth Algorithm Item."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthAlgorithmItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialAlgorithmItemsCount">
+        <code interfaceOnly="false" shortOnly="false">function getInitialAlgorithmItemsCount "Counts the number of Initial Algorithm items in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getInitialAlgorithmItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialAlgorithmItem">
+        <code interfaceOnly="false" shortOnly="false">function getNthInitialAlgorithmItem "Returns the Nth Initial Algorithm Item."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthInitialAlgorithmItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEquationCount">
+        <code interfaceOnly="false" shortOnly="false">function getEquationCount "Counts the number of Equation sections in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getEquationCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthEquation">
+        <code interfaceOnly="false" shortOnly="false">function getNthEquation "Returns the Nth Equation section."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthEquation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialEquationCount">
+        <code interfaceOnly="false" shortOnly="false">function getInitialEquationCount "Counts the number of Initial Equation sections in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getInitialEquationCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialEquation">
+        <code interfaceOnly="false" shortOnly="false">function getNthInitialEquation "Returns the Nth Initial Equation section."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthInitialEquation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEquationItemsCount">
+        <code interfaceOnly="false" shortOnly="false">function getEquationItemsCount "Counts the number of Equation items in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getEquationItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthEquationItem">
+        <code interfaceOnly="false" shortOnly="false">function getNthEquationItem "Returns the Nth Equation Item."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthEquationItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialEquationItemsCount">
+        <code interfaceOnly="false" shortOnly="false">function getInitialEquationItemsCount "Counts the number of Initial Equation items in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getInitialEquationItemsCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialEquationItem">
+        <code interfaceOnly="false" shortOnly="false">function getNthInitialEquationItem "Returns the Nth Initial Equation Item."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthInitialEquationItem;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationCount">
+        <code interfaceOnly="false" shortOnly="false">function getAnnotationCount "Counts the number of Annotation sections in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getAnnotationCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAnnotationString">
+        <code interfaceOnly="false" shortOnly="false">function getNthAnnotationString "Returns the Nth Annotation section as string."
+  input TypeName class_;
+  input Integer index;
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthAnnotationString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getImportCount">
+        <code interfaceOnly="false" shortOnly="false">function getImportCount "Counts the number of Import sections in a class."
+  input TypeName class_;
+  output Integer count;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getImportCount;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthImport">
+        <code interfaceOnly="false" shortOnly="false">function getNthImport "Returns the Nth Import as string."
+  input TypeName class_;
+  input Integer index;
+  output String out[3] "{\"Path\",\"Id\",\"Kind\"}";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getNthImport;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.iconv">
+        <code interfaceOnly="false" shortOnly="false">function iconv "The iconv() function converts one multibyte characters from one character
+  set to another.
+  See man (3) iconv for more information.
+"
+  input String string;
+  input String from;
+  input String to = "UTF-8";
+  output String result;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end iconv;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDocumentationAnnotation">
+        <code interfaceOnly="false" shortOnly="false">function getDocumentationAnnotation "Returns the documentaiton annotation defined in the class."
+  input TypeName cl;
+  output String out[3] "{info,revision,infoHeader} TODO: Should be changed to have 2 outputs instead of an array of 2 Strings...";
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getDocumentationAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDocumentationAnnotation">
+        <code interfaceOnly="false" shortOnly="false">function setDocumentationAnnotation
+  input TypeName class_;
+  input String info = "";
+  input String revisions = "";
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Used to set the Documentation annotation of a class. An empty argument (e.g. for revisions) means no annotation is added.&lt;/p&gt;
+&lt;/html&gt;"));
+end setDocumentationAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTimeStamp">
+        <code interfaceOnly="false" shortOnly="false">function getTimeStamp
+  input TypeName cl;
+  output Real timeStamp;
+  output String timeStampAsString;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;The given class corresponds to a file (or a buffer), with a given last time this file was modified at the time of loading this file. The timestamp along with its String representation is returned.&lt;/p&gt;
+&lt;/html&gt;"));
+end getTimeStamp;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringTypeName">
+        <code interfaceOnly="false" shortOnly="false">function stringTypeName
+  input String str;
+  output TypeName cl;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;stringTypeName is used to make it simpler to create some functionality when scripting. The basic use-case is calling functions like simulate when you do not know the name of the class a priori simulate(stringTypeName(readFile(\"someFile\"))).&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end stringTypeName;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringVariableName">
+        <code interfaceOnly="false" shortOnly="false">function stringVariableName
+  input String str;
+  output VariableName cl;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;stringVariableName is used to make it simpler to create some functionality when scripting. The basic use-case is calling functions like val when you do not know the name of the variable a priori val(stringVariableName(readFile(\"someFile\"))).&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end stringVariableName;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeNameString">
+        <code interfaceOnly="false" shortOnly="false">function typeNameString
+  input TypeName cl;
+  output String out;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end typeNameString;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeNameStrings">
+        <code interfaceOnly="false" shortOnly="false">function typeNameStrings
+  input TypeName cl;
+  output String out[:];
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end typeNameStrings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassComment">
+        <code interfaceOnly="false" shortOnly="false">function getClassComment "Returns the class comment."
+  input TypeName cl;
+  output String comment;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text");
+end getClassComment;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.dirname">
+        <code interfaceOnly="false" shortOnly="false">function dirname
+  input String path;
+  output String dirname;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the directory name of a file path.
+  Similar to &lt;a href=\"http://linux.die.net/man/3/dirname\"&gt;dirname(3)&lt;/a&gt;, but with the safety of Modelica strings.
+&lt;/html&gt;"),
+    preferredView = "text");
+end dirname;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.basename">
+        <code interfaceOnly="false" shortOnly="false">function basename
+  input String path;
+  output String basename;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the base name (file part) of a file path.
+  Similar to &lt;a href=\"http://linux.die.net/man/3/basename\"&gt;basename(3)&lt;/a&gt;, but with the safety of Modelica strings.
+&lt;/html&gt;"),
+    preferredView = "text");
+end basename;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassRestriction">
+        <code interfaceOnly="false" shortOnly="false">function getClassRestriction
+  input TypeName cl;
+  output String restriction;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the restriction of the given class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getClassRestriction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isType">
+        <code interfaceOnly="false" shortOnly="false">function isType
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction type.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isType;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isPackage">
+        <code interfaceOnly="false" shortOnly="false">function isPackage
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class is a package.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isPackage;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isClass">
+        <code interfaceOnly="false" shortOnly="false">function isClass
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isRecord">
+        <code interfaceOnly="false" shortOnly="false">function isRecord
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction record.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isRecord;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isBlock">
+        <code interfaceOnly="false" shortOnly="false">function isBlock
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction block.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isBlock;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isFunction">
+        <code interfaceOnly="false" shortOnly="false">function isFunction
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction function.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isFunction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isPartial">
+        <code interfaceOnly="false" shortOnly="false">function isPartial
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class is partial.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isPartial;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isModel">
+        <code interfaceOnly="false" shortOnly="false">function isModel
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction model.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isModel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isConnector">
+        <code interfaceOnly="false" shortOnly="false">function isConnector
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction connector or expandable connector.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isConnector;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOptimization">
+        <code interfaceOnly="false" shortOnly="false">function isOptimization
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction optimization.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isOptimization;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isEnumeration">
+        <code interfaceOnly="false" shortOnly="false">function isEnumeration
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction enumeration.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isEnumeration;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperator">
+        <code interfaceOnly="false" shortOnly="false">function isOperator
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction operator.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isOperator;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperatorRecord">
+        <code interfaceOnly="false" shortOnly="false">function isOperatorRecord
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction \"operator record\".
+&lt;/html&gt;"),
+    preferredView = "text");
+end isOperatorRecord;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperatorFunction">
+        <code interfaceOnly="false" shortOnly="false">function isOperatorFunction
+  input TypeName cl;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class has restriction \"operator function\".
+&lt;/html&gt;"),
+    preferredView = "text");
+end isOperatorFunction;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isProtectedClass">
+        <code interfaceOnly="false" shortOnly="false">function isProtectedClass
+  input TypeName cl;
+  input String c2;
+  output Boolean b;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns true if the given class c1 has class c2 as one of its protected class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end isProtectedClass;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getBuiltinType">
+        <code interfaceOnly="false" shortOnly="false">function getBuiltinType
+  input TypeName cl;
+  output String name;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the builtin type e.g Real, Integer, Boolean &amp; String of the class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getBuiltinType;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setInitXmlStartValue">
+        <code interfaceOnly="false" shortOnly="false">function setInitXmlStartValue
+  input String fileName;
+  input String variableName;
+  input String startValue;
+  input String outputFile;
+  output Boolean success = false;
+protected
+  String xsltproc;
+  String command;
+  CheckSettingsResult settings;
+algorithm
+  if regularFileExists(fileName) then
+    settings := checkSettings();
+    xsltproc := if settings.OS == "Windows_NT" then getInstallationDirectoryPath() + "/lib/omc/libexec/xsltproc/xsltproc.exe" else "xsltproc";
+    command := xsltproc + " -o " + outputFile + " --stringparam variableName " + variableName + " --stringparam variableStart " + startValue + " " + getInstallationDirectoryPath() + "/share/omc/scripts/replace-startValue.xsl " + fileName;
+    success := 0 == system(command);
+  end if;
+end setInitXmlStartValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.ngspicetoModelica">
+        <code interfaceOnly="false" shortOnly="false">function ngspicetoModelica "Converts ngspice netlist to Modelica code. Modelica file is created in the same directory as netlist file."
+  input String netlistfileName;
+  output Boolean success = false;
+protected
+  String command;
+algorithm
+  command := "python " + getInstallationDirectoryPath() + "/share/omc/scripts/ngspicetoModelica.py " + netlistfileName;
+  success := 0 == system(command);
+  annotation(
+    preferredView = "text");
+end ngspicetoModelica;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInheritedClasses">
+        <code interfaceOnly="false" shortOnly="false">function getInheritedClasses
+  input TypeName name;
+  output TypeName inheritedClasses[:];
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Returns the list of inherited classes.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getInheritedClasses;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentsTest">
+        <code interfaceOnly="false" shortOnly="false">function getComponentsTest
+  input TypeName name;
+  output Component[:] components;
+
+  record Component
+    String className;
+    // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
+    String name;
+    String comment;
+    Boolean isProtected;
+    Boolean isFinal;
+    Boolean isFlow;
+    Boolean isStream;
+    Boolean isReplaceable;
+    String variability "'constant', 'parameter', 'discrete', ''";
+    String innerOuter "'inner', 'outer', ''";
+    String inputOutput "'input', 'output', ''";
+    String dimensions[:];
+  end Component;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the components found in the given class.&lt;/p&gt;
+&lt;/html&gt;"));
+end getComponentsTest;</code>
         <classes>
           <record id="OpenModelica.Scripting.getComponentsTest.Component">
+            <code interfaceOnly="false" shortOnly="false">record Component
+  String className;
+  // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
+  String name;
+  String comment;
+  Boolean isProtected;
+  Boolean isFinal;
+  Boolean isFlow;
+  Boolean isStream;
+  Boolean isReplaceable;
+  String variability "'constant', 'parameter', 'discrete', ''";
+  String innerOuter "'inner', 'outer', ''";
+  String inputOutput "'input', 'output', ''";
+  String dimensions[:];
+end Component;</code>
             <classes/>
           </record>
         </classes>
       </function>
       <function id="OpenModelica.Scripting.isExperiment">
+        <code interfaceOnly="false" shortOnly="false">function isExperiment
+  input TypeName name;
+  output Boolean res;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;An experiment is defined as having annotation experiment(StopTime=...)&lt;/p&gt;
+&lt;/html&gt;"));
+end isExperiment;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSimulationOptions">
+        <code interfaceOnly="false" shortOnly="false">function getSimulationOptions
+  input TypeName name;
+  input Real defaultStartTime = 0.0;
+  input Real defaultStopTime = 1.0;
+  input Real defaultTolerance = 1e-6;
+  input Integer defaultNumberOfIntervals = 500 "May be overridden by defining defaultInterval instead";
+  input Real defaultInterval = 0.0 "If = 0.0, then numberOfIntervals is used to calculate the step size";
+  output Real startTime;
+  output Real stopTime;
+  output Real tolerance;
+  output Integer numberOfIntervals;
+  output Real interval;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the startTime, stopTime, tolerance, and interval based on the experiment annotation.&lt;/p&gt;
+&lt;/html&gt;"));
+end getSimulationOptions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationNamedModifiers">
+        <code interfaceOnly="false" shortOnly="false">function getAnnotationNamedModifiers
+  input TypeName name;
+  input String vendorannotation;
+  output String[:] modifiernamelist;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the Modifiers name in the vendor annotation example annotation(__OpenModelica_simulationFlags(solver=\"dassl\"))
+calling sequence should be getAnnotationNamedModifiers(className,\"__OpenModelica_simulationFlags\") which returns {solver}.&lt;/p&gt;
+&lt;/html&gt;"));
+end getAnnotationNamedModifiers;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationModifierValue">
+        <code interfaceOnly="false" shortOnly="false">function getAnnotationModifierValue
+  input TypeName name;
+  input String vendorannotation;
+  input String modifiername;
+  output String modifiernamevalue;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the Modifiers value in the vendor annotation example annotation(__OpenModelica_simulationFlags(solver=\"dassl\"))
+calling sequence should be getAnnotationNamedModifiersValue(className,\"__OpenModelica_simulationFlags\",\"modifiername\") which returns \"dassl\".&lt;/p&gt;
+&lt;/html&gt;"));
+end getAnnotationModifierValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.classAnnotationExists">
+        <code interfaceOnly="false" shortOnly="false">function classAnnotationExists "Check if annotation exists"
+  input TypeName className;
+  input TypeName annotationName;
+  output Boolean exists;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Returns true if &lt;b&gt;className&lt;/b&gt; has a class annotation called &lt;b&gt;annotationName&lt;/b&gt;.
+&lt;/html&gt;", revisions = "&lt;html&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;th&gt;Author&lt;/th&gt;&lt;th&gt;Comment&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;16311&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Added to omc&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/html&gt;"));
+end classAnnotationExists;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getBooleanClassAnnotation">
+        <code interfaceOnly="false" shortOnly="false">function getBooleanClassAnnotation "Check if annotation exists and returns its value"
+  input TypeName className;
+  input TypeName annotationName;
+  output Boolean value;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Returns the value of the class annotation &lt;b&gt;annotationName&lt;/b&gt; of class &lt;b&gt;className&lt;/b&gt;. If there is no such annotation, or if it is not true or false, this function fails.
+&lt;/html&gt;", revisions = "&lt;html&gt;
+&lt;table&gt;
+&lt;tr&gt;&lt;th&gt;Revision&lt;/th&gt;&lt;th&gt;Author&lt;/th&gt;&lt;th&gt;Comment&lt;/th&gt;&lt;/tr&gt;
+&lt;tr&gt;&lt;td&gt;16311&lt;/td&gt;&lt;td&gt;sjoelund.se&lt;/td&gt;&lt;td&gt;Added to omc&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/html&gt;"));
+end getBooleanClassAnnotation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.extendsFrom">
+        <code interfaceOnly="false" shortOnly="false">function extendsFrom "returns true if the given class extends from the given base class"
+  input TypeName className;
+  input TypeName baseClassName;
+  output Boolean res;
+
+  external "builtin" ;
+end extendsFrom;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadModelica3D">
+        <code interfaceOnly="false" shortOnly="false">function loadModelica3D
+  input String version = "3.2.1";
+  output Boolean status;
+protected
+  String m3d;
+algorithm
+  status := loadModel(Modelica, {version});
+  if version == "3.1" then
+    status := status and loadModel(ModelicaServices, {"1.0 modelica3d"});
+    m3d := getInstallationDirectoryPath() + "/lib/omlibrary-modelica3d/";
+    status := status and min(loadFile({m3d + file for file in {"DoublePendulum.mo", "Engine1b.mo", "Internal.mo", "Pendulum.mo"}}));
+  elseif status then
+    status := loadModel(ModelicaServices, {version + " modelica3d"});
+  end if;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;h2&gt;Usage&lt;/h2&gt;
+&lt;p&gt;Modelica3D requires some changes to the standard ModelicaServices in order to work correctly. These changes will make your MultiBody models unable to simulate because they need an object declared as:&lt;/p&gt;
+&lt;pre&gt;inner ModelicaServices.Modelica3D.Controller m3d_control&lt;/pre&gt;
+&lt;p&gt;Example session:&lt;/p&gt;
+&lt;pre&gt;loadModelica3D();getErrorString();
+loadString(\"model DoublePendulum
+  extends Modelica.Mechanics.MultiBody.Examples.Elementary.DoublePendulum;
+  inner ModelicaServices.Modelica3D.Controller m3d_control;
+end DoublePendulum;\");getErrorString();
+system(\"python \" + getInstallationDirectoryPath() + \"/lib/omlibrary-modelica3d/osg-gtk/dbus-server.py &amp;amp;\");getErrorString();
+simulate(DoublePendulum);getErrorString();&lt;/pre&gt;
+&lt;p&gt;This API call will load the modified ModelicaServices 3.2.1 so Modelica3D runs. You can also simply call loadModel(ModelicaServices,{\"3.2.1 modelica3d\"});&lt;/p&gt;
+&lt;p&gt;You will also need to start an m3d backend to render the results. We hid them in $OPENMODELICAHOME/lib/omlibrary-modelica3d/osg-gtk/dbus-server.py (or blender2.59).&lt;/p&gt;
+&lt;p&gt;For more information and example models, visit the &lt;a href=\"https://mlcontrol.uebb.tu-berlin.de/redmine/projects/modelica3d-public/wiki\"&gt;Modelica3D wiki&lt;/a&gt;.&lt;/p&gt;
+ &lt;/html&gt;"));
+end loadModelica3D;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.searchClassNames">
+        <code interfaceOnly="false" shortOnly="false">function searchClassNames "Searches for the class name in the all the loaded classes.
+  Example command:
+  searchClassNames(\"ground\");
+  searchClassNames(\"ground\", true);"
+  input String searchText;
+  input Boolean findInText = false;
+  output TypeName classNames[:];
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Look for searchText in All Loaded Classes and their code. Returns the list of searched classes.
+&lt;/html&gt;"),
+    preferredView = "text");
+end searchClassNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableLibraries">
+        <code interfaceOnly="false" shortOnly="false">function getAvailableLibraries
+  output String[:] libraries;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Looks for all libraries that are visible from the &lt;a href=\"modelica://OpenModelica.Scripting.getModelicaPath\"&gt;getModelicaPath()&lt;/a&gt;.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getAvailableLibraries;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getUses">
+        <code interfaceOnly="false" shortOnly="false">function getUses
+  input TypeName pack;
+  output String[:, :] uses;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+Returns the libraries used by the package {{\"Library1\",\"Version\"},{\"Library2\",\"Version\"}}.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getUses;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedClassModifierNames">
+        <code interfaceOnly="false" shortOnly="false">function getDerivedClassModifierNames "Returns the derived class modifier names.
+  Example command:
+  type Resistance = Real(final quantity=\"Resistance\",final unit=\"Ohm\");
+  getDerivedClassModifierNames(Resistance) =&gt; {\"quantity\",\"unit\"}"
+  input TypeName className;
+  output String[:] modifierNames;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Finds the modifiers of the derived class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getDerivedClassModifierNames;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedClassModifierValue">
+        <code interfaceOnly="false" shortOnly="false">function getDerivedClassModifierValue "Returns the derived class modifier value.
+  Example command:
+  type Resistance = Real(final quantity=\"Resistance\",final unit=\"Ohm\");
+  getDerivedClassModifierValue(Resistance, unit); =&gt; \" = \"Ohm\"\"
+  getDerivedClassModifierValue(Resistance, quantity); =&gt; \" = \"Resistance\"\""
+  input TypeName className;
+  input TypeName modifierName;
+  output String modifierValue;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+  Finds the modifier value of the derived class.
+&lt;/html&gt;"),
+    preferredView = "text");
+end getDerivedClassModifierValue;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateEntryPoint">
+        <code interfaceOnly="false" shortOnly="false">function generateEntryPoint
+  input String fileName;
+  input TypeName entryPoint;
+  input String url = "https://trac.openmodelica.org/OpenModelica/newticket";
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Generates a main() function that calls the given MetaModelica entrypoint (assumed to have input list&lt;String&gt; and no outputs).&lt;/p&gt;
+&lt;/html&gt;"));
+end generateEntryPoint;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.numProcessors">
+        <code interfaceOnly="false" shortOnly="false">function numProcessors
+  output Integer result;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns the number of processors (if compiled against hwloc) or hardware threads (if using sysconf) available to OpenModelica.&lt;/p&gt;
+&lt;/html&gt;"));
+end numProcessors;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runScriptParallel">
+        <code interfaceOnly="false" shortOnly="false">function runScriptParallel
+  input String scripts[:];
+  input Integer numThreads = numProcessors();
+  input Boolean useThreads = false;
+  output Boolean results[:];
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;As &lt;a href=\"modelica://OpenModelica.Scripting.runScript\"&gt;runScript&lt;/a&gt;, but runs the commands in parallel.&lt;/p&gt;
+&lt;p&gt;If useThreads=false (default), the script will be run in an empty environment (same as running a new omc process) with default config flags.&lt;/p&gt;
+&lt;p&gt;If useThreads=true (experimental), the scripts will run in parallel in the same address space and with the same environment (which will not be updated).&lt;/p&gt;
+&lt;/html&gt;"));
+end runScriptParallel;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.exit">
+        <code interfaceOnly="false" shortOnly="false">function exit
+  input Integer status;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Forces omc to quit with the given exit status.&lt;/p&gt;
+&lt;/html&gt;"));
+end exit;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.threadWorkFailed">
+        <code interfaceOnly="false" shortOnly="false">function threadWorkFailed
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;(Experimental) Exits the current (&lt;a href=\"modelica://OpenModelica.Scripting.runScriptParallel\"&gt;worker thread&lt;/a&gt;) signalling a failure.&lt;/p&gt;
+&lt;/html&gt;"));
+end threadWorkFailed;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMemorySize">
+        <code interfaceOnly="false" shortOnly="false">function getMemorySize
+  output Real memory(unit = "MiB");
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Retrieves the physical memory size available on the system in megabytes.&lt;/p&gt;
+&lt;/html&gt;"));
+end getMemorySize;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_gcollect_and_unmap">
+        <code interfaceOnly="false" shortOnly="false">function GC_gcollect_and_unmap
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Forces GC to collect and unmap memory (we use it before we start and wait for memory-intensive tasks in child processes).&lt;/p&gt;
+&lt;/html&gt;"));
+end GC_gcollect_and_unmap;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_expand_hp">
+        <code interfaceOnly="false" shortOnly="false">function GC_expand_hp
+  input Integer size;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Forces the GC to expand the heap to accomodate more data.&lt;/p&gt;
+&lt;/html&gt;"));
+end GC_expand_hp;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_set_max_heap_size">
+        <code interfaceOnly="false" shortOnly="false">function GC_set_max_heap_size
+  input Integer size;
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Forces the GC to limit the maximum heap size.&lt;/p&gt;
+&lt;/html&gt;"));
+end GC_set_max_heap_size;</code>
         <classes/>
       </function>
       <record id="OpenModelica.Scripting.GC_PROFSTATS">
+        <code interfaceOnly="false" shortOnly="false">record GC_PROFSTATS
+  Integer heapsize_full;
+  Integer free_bytes_full;
+  Integer unmapped_bytes;
+  Integer bytes_allocd_since_gc;
+  Integer allocd_bytes_before_gc;
+  Integer non_gc_bytes;
+  Integer gc_no;
+  Integer markers_m1;
+  Integer bytes_reclaimed_since_gc;
+  Integer reclaimed_bytes_before_gc;
+end GC_PROFSTATS;</code>
         <classes/>
       </record>
       <function id="OpenModelica.Scripting.GC_get_prof_stats">
+        <code interfaceOnly="false" shortOnly="false">function GC_get_prof_stats
+  output GC_PROFSTATS gcStats;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns a record with the GC statistics.&lt;/p&gt;
+&lt;/html&gt;"));
+end GC_get_prof_stats;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkInterfaceOfPackages">
+        <code interfaceOnly="false" shortOnly="false">function checkInterfaceOfPackages
+  input TypeName cl;
+  input String dependencyMatrix[:, :];
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Verifies the __OpenModelica_Interface=str annotation of all loaded packages with respect to the given main class.&lt;/p&gt;
+&lt;p&gt;For each row in the dependencyMatrix, the first element is the name of a dependency type. The rest of the elements are the other accepted dependency types for this one (frontend can call frontend and util, for example). Empty entries are ignored (necessary in order to have a rectangular matrix).&lt;/p&gt;
+&lt;/html&gt;"));
+end checkInterfaceOfPackages;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.sortStrings">
+        <code interfaceOnly="false" shortOnly="false">function sortStrings
+  input String arr[:];
+  output String sorted[:];
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Sorts a string array in ascending order.&lt;/p&gt;
+&lt;/html&gt;"));
+end sortStrings;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassInformation">
+        <code interfaceOnly="false" shortOnly="false">function getClassInformation
+  input TypeName cl;
+  output String restriction, comment;
+  output Boolean partialPrefix, finalPrefix, encapsulatedPrefix;
+  output String fileName;
+  output Boolean fileReadOnly;
+  output Integer lineNumberStart, columnNumberStart, lineNumberEnd, columnNumberEnd;
+  output String dimensions[:];
+  output Boolean isProtectedClass;
+  output Boolean isDocumentationClass;
+  output String version;
+  output String preferredView;
+  output Boolean state;
+  output String access;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns class information for the given class.&lt;/p&gt;
+&lt;p&gt;The dimensions are returned as an array of strings. The string is the textual representation of the dimension (they are not evaluated to Integers).&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end getClassInformation;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTransitions">
+        <code interfaceOnly="false" shortOnly="false">function getTransitions
+  input TypeName cl;
+  output String[:, :] transitions;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns list of transitions for the given class.&lt;/p&gt;
+&lt;p&gt;Each transition item contains 8 values i.e, from, to, condition, immediate, reset, synchronize, priority.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end getTransitions;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addTransition">
+        <code interfaceOnly="false" shortOnly="false">function addTransition
+  input TypeName cl;
+  input String from;
+  input String to;
+  input String condition;
+  input Boolean immediate = true;
+  input Boolean reset = true;
+  input Boolean synchronize = false;
+  input Integer priority = 1;
+  input ExpressionOrModification annotate;
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Adds the transition to the class.&lt;/p&gt;
+&lt;/html&gt;"));
+end addTransition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteTransition">
+        <code interfaceOnly="false" shortOnly="false">function deleteTransition
+  input TypeName cl;
+  input String from;
+  input String to;
+  input String condition;
+  input Boolean immediate;
+  input Boolean reset;
+  input Boolean synchronize;
+  input Integer priority;
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Deletes the transition from the class.&lt;/p&gt;
+&lt;/html&gt;"));
+end deleteTransition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.updateTransition">
+        <code interfaceOnly="false" shortOnly="false">function updateTransition
+  input TypeName cl;
+  input String from;
+  input String to;
+  input String oldCondition;
+  input Boolean oldImmediate;
+  input Boolean oldReset;
+  input Boolean oldSynchronize;
+  input Integer oldPriority;
+  input String newCondition;
+  input Boolean newImmediate;
+  input Boolean newReset;
+  input Boolean newSynchronize;
+  input Integer newPriority;
+  input ExpressionOrModification annotate;
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Updates the transition in the class.&lt;/p&gt;
+&lt;/html&gt;"));
+end updateTransition;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialStates">
+        <code interfaceOnly="false" shortOnly="false">function getInitialStates
+  input TypeName cl;
+  output String[:, :] initialStates;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Returns list of initial states for the given class.&lt;/p&gt;
+&lt;p&gt;Each initial state item contains 2 values i.e, state name and annotation.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end getInitialStates;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addInitialState">
+        <code interfaceOnly="false" shortOnly="false">function addInitialState
+  input TypeName cl;
+  input String state;
+  input ExpressionOrModification annotate;
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Adds the initial state to the class.&lt;/p&gt;
+&lt;/html&gt;"));
+end addInitialState;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteInitialState">
+        <code interfaceOnly="false" shortOnly="false">function deleteInitialState
+  input TypeName cl;
+  input String state;
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Deletes the initial state from the class.&lt;/p&gt;
+&lt;/html&gt;"));
+end deleteInitialState;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.updateInitialState">
+        <code interfaceOnly="false" shortOnly="false">function updateInitialState
+  input TypeName cl;
+  input String state;
+  input ExpressionOrModification annotate;
+  output Boolean bool;
+
+  external "builtin" ;
+  annotation(
+    preferredView = "text",
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;Updates the initial state in the class.&lt;/p&gt;
+&lt;/html&gt;"));
+end updateInitialState;</code>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateScriptingAPI">
+        <code interfaceOnly="false" shortOnly="false">function generateScriptingAPI
+  input TypeName cl;
+  input String name;
+  output Boolean success;
+  output String moFile;
+  output String qtFile;
+  output String qtHeader;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;&lt;b&gt;Work in progress&lt;/b&gt;&lt;/p&gt;
+&lt;p&gt;Returns OpenModelica.Scripting API entry points for the classes that we can automatically generate entry points for.&lt;/p&gt;
+&lt;p&gt;The entry points are MetaModelica code calling CevalScript directly, and Qt/C++ code that calls the MetaModelica code.&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end generateScriptingAPI;</code>
         <classes/>
       </function>
       <package id="OpenModelica.Scripting.Experimental">
         <classes>
           <function id="OpenModelica.Scripting.Experimental.relocateFunctions">
+            <code interfaceOnly="false" shortOnly="false">function relocateFunctions
+  input String fileName;
+  input String names[:, 2];
+  output Boolean success;
+
+  external "builtin" ;
+  annotation(
+    Documentation(info = "&lt;html&gt;
+&lt;p&gt;&lt;strong&gt;Highly experimental, requires OMC be compiled with special flags to use&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;Update symbols in the running program to ones defined in the given shared object.&lt;/p&gt;
+&lt;p&gt;This will hot-swap the functions at run-time, enabling a smart build system to do some incremental compilation
+(as long as the function interfaces are the same).&lt;/p&gt;
+&lt;/html&gt;"),
+    preferredView = "text");
+end relocateFunctions;</code>
             <classes/>
           </function>
         </classes>

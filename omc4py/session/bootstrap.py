@@ -247,6 +247,7 @@ def generate_class_xml(
     restriction = ClassRestriction.from_typeName(
         session, className
     )
+
     class_tag = xml.SubElement(
         parent,
         restriction.value,
@@ -254,6 +255,40 @@ def generate_class_xml(
             "id": str(className),
         },
     )
+
+    def generate_code_tag(
+    ) -> typing.Optional[xml.Element]:
+        if restriction is ClassRestriction.package:
+            return None
+
+        if restriction is ClassRestriction.function:
+            attrs = {
+                "interfaceOnly": False,
+                "shortOnly": False,
+            }
+        elif restriction is ClassRestriction.record:
+            attrs = {
+                "interfaceOnly": False,
+                "shortOnly": False,
+            }
+        else:
+            attrs = {
+                "interfaceOnly": False,
+                "shortOnly": False,
+            }
+
+        code_tag = xml.SubElement(
+            class_tag,
+            "code",
+            {
+                key: "true" if value else "false"
+                for key, value in attrs.items()
+            },
+        )
+
+        code_tag.text = session.list(className, **attrs)
+
+    generate_code_tag()
 
     classes_tag = xml.SubElement(
         class_tag,
