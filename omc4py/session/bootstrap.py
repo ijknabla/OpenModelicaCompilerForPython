@@ -1,4 +1,5 @@
 
+import argparse
 import arpeggio  # type: ignore
 import enum
 import functools
@@ -715,6 +716,19 @@ def bootstrap(
         print(typeName)
 
 
+def main():
+    parser = argparse.ArgumentParser(
+        prog="omc4py.session.bootstrap debug script",
+    )
+    parser.add_argument(
+        "--omc",
+        help="omc executable",
+        default=None,
+    )
+    args = parser.parse_args()
+    new_bootstrap(args.omc)
+    # bootstrap(args.omc)
+
+
 if __name__ == "__main__":
-    new_bootstrap("omc")
-    # bootstrap("omc")
+    main()
