@@ -1,0 +1,907 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<OMCInterface>
+  <version>OMCompiler v1.13.2</version>
+  <package id="OpenModelica.Scripting">
+    <classes>
+      <record id="OpenModelica.Scripting.CheckSettingsResult">
+        <classes/>
+      </record>
+      <package id="OpenModelica.Scripting.Internal">
+        <classes>
+          <package id="OpenModelica.Scripting.Internal.Time">
+            <classes>
+              <function id="OpenModelica.Scripting.Internal.Time.readableTime">
+                <classes/>
+              </function>
+              <function id="OpenModelica.Scripting.Internal.Time.timerTick">
+                <classes/>
+              </function>
+              <function id="OpenModelica.Scripting.Internal.Time.timerTock">
+                <classes/>
+              </function>
+              <function id="OpenModelica.Scripting.Internal.Time.timerClear">
+                <classes/>
+              </function>
+            </classes>
+          </package>
+          <type id="OpenModelica.Scripting.Internal.FileType">
+            <classes/>
+          </type>
+          <function id="OpenModelica.Scripting.Internal.stat">
+            <classes/>
+          </function>
+        </classes>
+      </package>
+      <function id="OpenModelica.Scripting.checkSettings">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadFiles">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadEncryptedPackage">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.reloadClass">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadString">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.parseString">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.parseFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadFileInteractiveQualified">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadFileInteractive">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.system">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.system_parallel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.saveAll">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.help">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.clear">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.clearProgram">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.clearVariables">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateHeader">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateSeparateCode">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateSeparateCodeDependencies">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getLinker">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setLinker">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getLinkerFlags">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setLinkerFlags">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getCompiler">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCompiler">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCFlags">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getCFlags">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getCXXCompiler">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCXXCompiler">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.verifyCompiler">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCompilerPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getCompileCommand">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCompileCommand">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setPlotCommand">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getSettings">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setTempDirectoryPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getTempDirectoryPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getEnvironmentVar">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setEnvironmentVar">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.appendEnvironmentVar">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setInstallationDirectoryPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInstallationDirectoryPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setModelicaPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getModelicaPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCompilerFlags">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setDebugFlags">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.clearDebugFlags">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setPreOptModules">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCheapMatchingAlgorithm">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getMatchingAlgorithm">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAvailableMatchingAlgorithms">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setMatchingAlgorithm">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getIndexReductionMethod">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAvailableIndexReductionMethods">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setIndexReductionMethod">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setPostOptModules">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getTearingMethod">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAvailableTearingMethods">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setTearingMethod">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setCommandLineOptions">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getCommandLineOptions">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getConfigFlagValidOptions">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.clearCommandLineOptions">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getVersion">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.regularFileExists">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.directoryExists">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.stat">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.readFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.writeFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.compareFilesAndMove">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.compareFiles">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.alarm">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.regex">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.regexBool">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.testsuiteFriendlyName">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.readFileNoNumeric">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getErrorString">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getMessagesString">
+        <classes/>
+      </function>
+      <record id="OpenModelica.Scripting.SourceInfo">
+        <classes/>
+      </record>
+      <type id="OpenModelica.Scripting.ErrorKind">
+        <classes/>
+      </type>
+      <type id="OpenModelica.Scripting.ErrorLevel">
+        <classes/>
+      </type>
+      <record id="OpenModelica.Scripting.ErrorMessage">
+        <classes/>
+      </record>
+      <function id="OpenModelica.Scripting.getMessagesStringInternal">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.countMessages">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.clearMessages">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.runScript">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.echo">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getClassesInModelicaPath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAnnotationVersion">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setAnnotationVersion">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNoSimplify">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setNoSimplify">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getVectorizationLimit">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setVectorizationLimit">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getDefaultOpenCLDevice">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setDefaultOpenCLDevice">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setShowAnnotations">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getShowAnnotations">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setOrderConnections">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getOrderConnections">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setLanguageStandard">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getLanguageStandard">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAstAsCorbaString">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.cd">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.mkdir">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.copy">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.remove">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.checkModel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.checkAllModelsRecursive">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.typeOf">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.instantiateModel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.buildOpenTURNSInterface">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.runOpenTURNSPythonScript">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateCode">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadModel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.deleteFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.saveModel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.saveTotalModel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.save">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.saveTotalSCode">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.translateGraphics">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.codeToString">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.dumpXMLDAE">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.convertUnits">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getDerivedUnits">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.listVariables">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.strtok">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.stringSplit">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.stringReplace">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.escapeXML">
+        <classes/>
+      </function>
+      <type id="OpenModelica.Scripting.ExportKind">
+        <classes/>
+      </type>
+      <function id="OpenModelica.Scripting.list">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.listFile">
+        <classes/>
+      </function>
+      <type id="OpenModelica.Scripting.DiffFormat">
+        <classes/>
+      </type>
+      <function id="OpenModelica.Scripting.diffModelicaFileListings">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.exportToFigaro">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.inferBindings">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateVerificationScenarios">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.rewriteBlockCall">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.realpath">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.uriToFilename">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getLoadedLibraries">
+        <classes/>
+      </function>
+      <type id="OpenModelica.Scripting.LinearSystemSolver">
+        <classes/>
+      </type>
+      <function id="OpenModelica.Scripting.solveLinearSystem">
+        <classes/>
+      </function>
+      <type id="OpenModelica.Scripting.StandardStream">
+        <classes/>
+      </type>
+      <function id="OpenModelica.Scripting.reopenStandardStream">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.importFMU">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.importFMUModelDescription">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.translateModelFMU">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.buildModelFMU">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.buildEncryptedPackage">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.simulate">
+        <classes>
+          <record id="OpenModelica.Scripting.simulate.SimulationResult">
+            <classes/>
+          </record>
+        </classes>
+      </function>
+      <function id="OpenModelica.Scripting.buildModel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.buildLabel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.reduceTerms">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.moveClass">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.moveClassToTop">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.moveClassToBottom">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.copyClass">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.linearize">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.optimize">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getSourceFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setSourceFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isShortDefinition">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setClassComment">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getClassNames">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getUsedClassNames">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getPackages">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.basePlotFunction">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.plot">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.plotAll">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.plotParametric">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.readSimulationResult">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.readSimulationResultSize">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.readSimulationResultVars">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.filterSimulationResults">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.compareSimulationResults">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.deltaSimulationResults">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.diffSimulationResults">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.diffSimulationResultsHtml">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.checkTaskGraph">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.checkCodeGraph">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.val">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.closeSimulationResultFile">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.addClassAnnotation">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getParameterNames">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getParameterValue">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getComponentModifierNames">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getComponentModifierValue">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getComponentModifierValues">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInstantiatedParametersAndValues">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.removeComponentModifiers">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.removeExtendsModifiers">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getConnectionCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthConnection">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAlgorithmCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthAlgorithm">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInitialAlgorithmCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthInitialAlgorithm">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAlgorithmItemsCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthAlgorithmItem">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInitialAlgorithmItemsCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthInitialAlgorithmItem">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getEquationCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthEquation">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInitialEquationCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthInitialEquation">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getEquationItemsCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthEquationItem">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInitialEquationItemsCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthInitialEquationItem">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAnnotationCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthAnnotationString">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getImportCount">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getNthImport">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.iconv">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getDocumentationAnnotation">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setDocumentationAnnotation">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getTimeStamp">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.stringTypeName">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.stringVariableName">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.typeNameString">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.typeNameStrings">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getClassComment">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.dirname">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.basename">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getClassRestriction">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isType">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isPackage">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isClass">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isRecord">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isBlock">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isFunction">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isPartial">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isModel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isConnector">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isOptimization">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isEnumeration">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isOperator">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isOperatorRecord">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isOperatorFunction">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.isProtectedClass">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getBuiltinType">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.setInitXmlStartValue">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.ngspicetoModelica">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInheritedClasses">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getComponentsTest">
+        <classes>
+          <record id="OpenModelica.Scripting.getComponentsTest.Component">
+            <classes/>
+          </record>
+        </classes>
+      </function>
+      <function id="OpenModelica.Scripting.isExperiment">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getSimulationOptions">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAnnotationNamedModifiers">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAnnotationModifierValue">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.classAnnotationExists">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getBooleanClassAnnotation">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.extendsFrom">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.loadModelica3D">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.searchClassNames">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getAvailableLibraries">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getUses">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getDerivedClassModifierNames">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getDerivedClassModifierValue">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateEntryPoint">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.numProcessors">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.runScriptParallel">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.exit">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.threadWorkFailed">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getMemorySize">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.GC_gcollect_and_unmap">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.GC_expand_hp">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.GC_set_max_heap_size">
+        <classes/>
+      </function>
+      <record id="OpenModelica.Scripting.GC_PROFSTATS">
+        <classes/>
+      </record>
+      <function id="OpenModelica.Scripting.GC_get_prof_stats">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.checkInterfaceOfPackages">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.sortStrings">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getClassInformation">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getTransitions">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.addTransition">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.deleteTransition">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.updateTransition">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.getInitialStates">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.addInitialState">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.deleteInitialState">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.updateInitialState">
+        <classes/>
+      </function>
+      <function id="OpenModelica.Scripting.generateScriptingAPI">
+        <classes/>
+      </function>
+      <package id="OpenModelica.Scripting.Experimental">
+        <classes>
+          <function id="OpenModelica.Scripting.Experimental.relocateFunctions">
+            <classes/>
+          </function>
+        </classes>
+      </package>
+    </classes>
+  </package>
+</OMCInterface>
