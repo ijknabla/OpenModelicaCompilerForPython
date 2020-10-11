@@ -216,7 +216,37 @@ class DefaultValueInfoVisitor(
         )
 
 
+class EnumeratorInfo(
+    typing.NamedTuple,
+):
+    name: Identifier
+    comment: str
+
+
 class EnumeratorVisitor(
     TypeSpecifierVisitor,
+    StringVisitor,
 ):
-    pass
+    def visit_enumeration_literal(
+        self,
+        node,
+        children,
+    ) -> EnumeratorInfo:
+        name = children.IDENT[0]
+        comment = getitem_with_default(
+            children.comment, 0,
+            default=""
+        )
+        return EnumeratorInfo(
+            name=name,
+            comment=comment,
+        )
+
+    def visit_enum_list(
+        self,
+        node,
+        children
+    ) -> typing.List[EnumeratorInfo]:
+        return list(
+            children.enumeration_literal
+        )
