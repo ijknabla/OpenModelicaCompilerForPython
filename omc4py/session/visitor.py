@@ -214,3 +214,9 @@ class DefaultValueInfoVisitor(
             name=name,
             hasDefault=hasDefault,
         )
+
+
+class EnumeratorVisitor(
+    TypeSpecifierVisitor,
+):
+    pass

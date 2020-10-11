@@ -29,6 +29,15 @@ def parse_defaultValueInfoDict(
     )
 
 
+def parse_enumerator(
+    code: str
+) -> typing.Tuple[types.Identifier]:
+    return arpeggio.visit_parse_tree(
+        parser.stored_definition_parser.parse(code),
+        visitor.EnumeratorVisitor(),
+    )
+
+
 def call_optional(
     func: typing.Callable,
     obj: typing.Optional[typing.Any],
@@ -285,6 +294,11 @@ def generate_class_xml(
             class_tag,
             "elements",
         )
+
+        parse_enumerator(
+            session.list(className)
+        )
+
         return elements_tag
 
     def generate_classes_tag(
