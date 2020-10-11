@@ -279,20 +279,25 @@ def generate_class_xml(
 
         return code_tag
 
-    generate_code_tag()
-
-    classes_tag = xml.SubElement(
-        class_tag,
-        "classes",
-    )
-
-    for ident in session.getClassNames(className):
-        subClassName = className / ident
-        generate_class_xml(
-            session,
-            classes_tag,
-            subClassName,
+    def generate_classes_tag(
+    ) -> xml.Element:
+        classes_tag = xml.SubElement(
+            class_tag,
+            "classes",
         )
+
+        for ident in session.getClassNames(className):
+            subClassName = className / ident
+            generate_class_xml(
+                session,
+                classes_tag,
+                subClassName,
+            )
+        return classes_tag
+
+    generate_code_tag()
+    generate_classes_tag()
+
     return parent
 
 
