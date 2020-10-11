@@ -279,6 +279,14 @@ def generate_class_xml(
 
         return code_tag
 
+    def generate_type_elements_tag(
+    ) -> xml.Element:
+        elements_tag = xml.SubElement(
+            class_tag,
+            "elements",
+        )
+        return elements_tag
+
     def generate_classes_tag(
     ) -> xml.Element:
         classes_tag = xml.SubElement(
@@ -296,6 +304,8 @@ def generate_class_xml(
         return classes_tag
 
     generate_code_tag()
+    if restriction is ClassRestriction.type:
+        generate_type_elements_tag()
     generate_classes_tag()
 
     return parent

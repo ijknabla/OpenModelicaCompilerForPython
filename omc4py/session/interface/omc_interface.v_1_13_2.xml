@@ -51,6 +51,7 @@ end timerClear;</code>
           </package>
           <type id="OpenModelica.Scripting.Internal.FileType">
             <code interfaceOnly="false">type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);</code>
+            <elements/>
             <classes/>
           </type>
           <function id="OpenModelica.Scripting.Internal.stat">
@@ -651,10 +652,12 @@ end SourceInfo;</code>
       </record>
       <type id="OpenModelica.Scripting.ErrorKind">
         <code interfaceOnly="false">type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");</code>
+        <elements/>
         <classes/>
       </type>
       <type id="OpenModelica.Scripting.ErrorLevel">
         <code interfaceOnly="false">type ErrorLevel = enumeration(notification, warning, error);</code>
+        <elements/>
         <classes/>
       </type>
       <record id="OpenModelica.Scripting.ErrorMessage">
@@ -1022,6 +1025,7 @@ end escapeXML;</code>
       </function>
       <type id="OpenModelica.Scripting.ExportKind">
         <code interfaceOnly="false">type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");</code>
+        <elements/>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.list">
@@ -1043,6 +1047,7 @@ end listFile;</code>
       </function>
       <type id="OpenModelica.Scripting.DiffFormat">
         <code interfaceOnly="false">type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");</code>
+        <elements/>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.diffModelicaFileListings">
@@ -1109,6 +1114,7 @@ end getLoadedLibraries;</code>
       </function>
       <type id="OpenModelica.Scripting.LinearSystemSolver">
         <code interfaceOnly="false">type LinearSystemSolver = enumeration(dgesv, lpsolve55);</code>
+        <elements/>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.solveLinearSystem">
@@ -1124,6 +1130,7 @@ end solveLinearSystem;</code>
       </function>
       <type id="OpenModelica.Scripting.StandardStream">
         <code interfaceOnly="false">type StandardStream = enumeration(stdin, stdout, stderr);</code>
+        <elements/>
         <classes/>
       </type>
       <function id="OpenModelica.Scripting.reopenStandardStream">
