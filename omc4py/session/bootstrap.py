@@ -297,7 +297,7 @@ def generate_class_elem(
 
         enumeration_tag = xml.SubElement(
             components_tag,
-            "enumeration",
+            "enumerators",
         )
 
         enumeration = parse_enumerator(

@@ -145,12 +145,12 @@ end timerClear;</code>
               <classes/>
               <code interfaceOnly="false">type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);</code>
               <components>
-                <enumeration>
+                <enumerators>
                   <enumerator name="NoFile" comment=""/>
                   <enumerator name="RegularFile" comment=""/>
                   <enumerator name="Directory" comment=""/>
                   <enumerator name="SpecialFile" comment=""/>
-                </enumeration>
+                </enumerators>
               </components>
             </type>
             <function id="OpenModelica.Scripting.Internal.stat">
@@ -1663,25 +1663,25 @@ end SourceInfo;</code>
           <classes/>
           <code interfaceOnly="false">type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");</code>
           <components>
-            <enumeration>
+            <enumerators>
               <enumerator name="syntax" comment="syntax errors"/>
               <enumerator name="grammar" comment="grammatical errors"/>
               <enumerator name="translation" comment="instantiation errors: up to flat modelica"/>
               <enumerator name="symbolic" comment="symbolic manipulation error, simcodegen, up to executable file"/>
               <enumerator name="runtime" comment="simulation/function runtime error"/>
               <enumerator name="scripting" comment="runtime scripting /interpretation error"/>
-            </enumeration>
+            </enumerators>
           </components>
         </type>
         <type id="OpenModelica.Scripting.ErrorLevel">
           <classes/>
           <code interfaceOnly="false">type ErrorLevel = enumeration(notification, warning, error);</code>
           <components>
-            <enumeration>
+            <enumerators>
               <enumerator name="notification" comment=""/>
               <enumerator name="warning" comment=""/>
               <enumerator name="error" comment=""/>
-            </enumeration>
+            </enumerators>
           </components>
         </type>
         <record id="OpenModelica.Scripting.ErrorMessage">
@@ -2609,12 +2609,12 @@ end escapeXML;</code>
           <classes/>
           <code interfaceOnly="false">type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");</code>
           <components>
-            <enumeration>
+            <enumerators>
               <enumerator name="Absyn" comment="Normal Absyn"/>
               <enumerator name="SCode" comment="Normal SCode"/>
               <enumerator name="MetaModelicaInterface" comment="A restricted MetaModelica package interface (protected parts are stripped)"/>
               <enumerator name="Internal" comment="True unparsing of the Absyn"/>
-            </enumeration>
+            </enumerators>
           </components>
         </type>
         <function id="OpenModelica.Scripting.list">
@@ -2667,11 +2667,11 @@ end listFile;</code>
           <classes/>
           <code interfaceOnly="false">type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");</code>
           <components>
-            <enumeration>
+            <enumerators>
               <enumerator name="plain" comment="no deletions, no markup"/>
               <enumerator name="color" comment="terminal escape sequences"/>
               <enumerator name="xml" comment="XML tags"/>
-            </enumeration>
+            </enumerators>
           </components>
         </type>
         <function id="OpenModelica.Scripting.diffModelicaFileListings">
@@ -2844,10 +2844,10 @@ end getLoadedLibraries;</code>
           <classes/>
           <code interfaceOnly="false">type LinearSystemSolver = enumeration(dgesv, lpsolve55);</code>
           <components>
-            <enumeration>
+            <enumerators>
               <enumerator name="dgesv" comment=""/>
               <enumerator name="lpsolve55" comment=""/>
-            </enumeration>
+            </enumerators>
           </components>
         </type>
         <function id="OpenModelica.Scripting.solveLinearSystem">
@@ -2896,11 +2896,11 @@ end solveLinearSystem;</code>
           <classes/>
           <code interfaceOnly="false">type StandardStream = enumeration(stdin, stdout, stderr);</code>
           <components>
-            <enumeration>
+            <enumerators>
               <enumerator name="stdin" comment=""/>
               <enumerator name="stdout" comment=""/>
               <enumerator name="stderr" comment=""/>
-            </enumeration>
+            </enumerators>
           </components>
         </type>
         <function id="OpenModelica.Scripting.reopenStandardStream">
