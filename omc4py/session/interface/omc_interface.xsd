@@ -130,6 +130,7 @@
             <xsd:attribute name="inputOutput" type="xsd:string"/>
             <xsd:attribute name="className" type="xsd:token"/>
             <xsd:attribute name="name" type="xsd:token"/>
+            <xsd:attribute name="hasDefault" type="xsd:boolean"/>
             <xsd:attribute name="comment" type="xsd:string"/>
         </xsd:complexType>
       </xsd:element>
