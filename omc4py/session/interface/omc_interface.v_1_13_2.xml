@@ -46,12 +46,26 @@ end CheckSettingsResult;</code>
   input Real sec;
   output String str;
 end readableTime;</code>
+                <components>
+                  <input_arguments>
+                    <input_argument className="Real" name="sec" hasDefault="false"/>
+                  </input_arguments>
+                  <output_arguments>
+                    <output_argument className="String" name="str"/>
+                  </output_arguments>
+                </components>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerTick">
                 <code interfaceOnly="true">function timerTick
   input Integer index;
 end timerTick;</code>
+                <components>
+                  <input_arguments>
+                    <input_argument className="Integer" name="index" hasDefault="false"/>
+                  </input_arguments>
+                  <output_arguments/>
+                </components>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerTock">
@@ -59,12 +73,26 @@ end timerTick;</code>
   input Integer index;
   output Real elapsed;
 end timerTock;</code>
+                <components>
+                  <input_arguments>
+                    <input_argument className="Integer" name="index" hasDefault="false"/>
+                  </input_arguments>
+                  <output_arguments>
+                    <output_argument className="Real" name="elapsed"/>
+                  </output_arguments>
+                </components>
                 <classes/>
               </function>
               <function id="OpenModelica.Scripting.Internal.Time.timerClear">
                 <code interfaceOnly="true">function timerClear
   input Integer index;
 end timerClear;</code>
+                <components>
+                  <input_arguments>
+                    <input_argument className="Integer" name="index" hasDefault="false"/>
+                  </input_arguments>
+                  <output_arguments/>
+                </components>
                 <classes/>
               </function>
             </classes>
@@ -86,6 +114,14 @@ end timerClear;</code>
   input String name;
   output FileType fileType;
 end stat;</code>
+            <components>
+              <input_arguments>
+                <input_argument className="String" name="name" hasDefault="false"/>
+              </input_arguments>
+              <output_arguments>
+                <output_argument className="OpenModelica.Scripting.Internal.FileType" name="fileType"/>
+              </output_arguments>
+            </components>
             <classes/>
           </function>
         </classes>
@@ -94,6 +130,12 @@ end stat;</code>
         <code interfaceOnly="true">function checkSettings
   output CheckSettingsResult result;
 end checkSettings;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="OpenModelica.Scripting.CheckSettingsResult" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFile">
@@ -103,6 +145,16 @@ end checkSettings;</code>
   input Boolean uses = true;
   output Boolean success;
 end loadFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="String" name="encoding" hasDefault="true"/>
+            <input_argument className="Boolean" name="uses" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFiles">
@@ -112,6 +164,16 @@ end loadFile;</code>
   input Integer numThreads = OpenModelica.Scripting.numProcessors();
   output Boolean success;
 end loadFiles;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileNames" hasDefault="false"/>
+            <input_argument className="String" name="encoding" hasDefault="true"/>
+            <input_argument className="Integer" name="numThreads" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadEncryptedPackage">
@@ -120,6 +182,15 @@ end loadFiles;</code>
   input String workdir = "&lt;default&gt;" "The output directory for imported encrypted files. &lt;default&gt; will put the files to current working directory.";
   output Boolean success;
 end loadEncryptedPackage;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="String" name="workdir" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.reloadClass">
@@ -128,6 +199,15 @@ end loadEncryptedPackage;</code>
   input String encoding = "UTF-8";
   output Boolean success;
 end reloadClass;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="name" hasDefault="false"/>
+            <input_argument className="String" name="encoding" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadString">
@@ -138,6 +218,17 @@ end reloadClass;</code>
   input Boolean merge = false "if merge is true the parsed AST is merged with the existing AST, default to false which means that is replaced, not merged";
   output Boolean success;
 end loadString;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="data" hasDefault="false"/>
+            <input_argument className="String" name="filename" hasDefault="true"/>
+            <input_argument className="String" name="encoding" hasDefault="true"/>
+            <input_argument className="Boolean" name="merge" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.parseString">
@@ -146,6 +237,15 @@ end loadString;</code>
   input String filename = "&lt;interactive&gt;";
   output TypeName names[:];
 end parseString;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="data" hasDefault="false"/>
+            <input_argument className="String" name="filename" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="names"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.parseFile">
@@ -154,6 +254,15 @@ end parseString;</code>
   input String encoding = "UTF-8";
   output TypeName names[:];
 end parseFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="encoding" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="names"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFileInteractiveQualified">
@@ -162,6 +271,15 @@ end parseFile;</code>
   input String encoding = "UTF-8";
   output TypeName names[:];
 end loadFileInteractiveQualified;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="encoding" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="names"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadFileInteractive">
@@ -170,6 +288,15 @@ end loadFileInteractiveQualified;</code>
   input String encoding = "UTF-8";
   output TypeName names[:];
 end loadFileInteractive;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="encoding" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="names"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.system">
@@ -178,6 +305,15 @@ end loadFileInteractive;</code>
   input String outputFile = "" "The output is redirected to this file (unless already done by callStr)";
   output Integer retval "Return value of the system call; usually 0 on success";
 end system;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="callStr" hasDefault="false"/>
+            <input_argument className="String" name="outputFile" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="retval"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.system_parallel">
@@ -186,6 +322,15 @@ end system;</code>
   input Integer numThreads = numProcessors();
   output Integer retval[:] "Return value of the system call; usually 0 on success";
 end system_parallel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="callStr" hasDefault="false"/>
+            <input_argument className="Integer" name="numThreads" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="retval"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveAll">
@@ -193,6 +338,14 @@ end system_parallel;</code>
   input String fileName;
   output Boolean success;
 end saveAll;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.help">
@@ -200,24 +353,50 @@ end saveAll;</code>
   input String topic = "topics";
   output String helpText;
 end help;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="topic" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="helpText"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clear">
         <code interfaceOnly="true">function clear
   output Boolean success;
 end clear;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearProgram">
         <code interfaceOnly="true">function clearProgram
   output Boolean success;
 end clearProgram;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearVariables">
         <code interfaceOnly="true">function clearVariables
   output Boolean success;
 end clearVariables;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateHeader">
@@ -225,6 +404,14 @@ end clearVariables;</code>
   input String fileName;
   output Boolean success;
 end generateHeader;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCode">
@@ -233,6 +420,15 @@ end generateHeader;</code>
   input Boolean cleanCache = false "If true, the cache is reset between each generated package. This conserves memory at the cost of speed.";
   output Boolean success;
 end generateSeparateCode;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Boolean" name="cleanCache" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCodeDependencies">
@@ -240,6 +436,14 @@ end generateSeparateCode;</code>
   input String stampSuffix = ".c" "Suffix to add to dependencies (often .c.stamp)";
   output String[:] dependencies;
 end generateSeparateCodeDependencies;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="stampSuffix" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="dependencies"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile">
@@ -249,12 +453,28 @@ end generateSeparateCodeDependencies;</code>
   input String suffix = ".c" "Often .stamp since we do not update all the files";
   output Boolean success;
 end generateSeparateCodeDependenciesMakefile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="directory" hasDefault="true"/>
+            <input_argument className="String" name="suffix" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLinker">
         <code interfaceOnly="true">function getLinker
   output String linker;
 end getLinker;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="linker"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLinker">
@@ -262,12 +482,26 @@ end getLinker;</code>
   input String linker;
   output Boolean success;
 end setLinker;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="linker" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLinkerFlags">
         <code interfaceOnly="true">function getLinkerFlags
   output String linkerFlags;
 end getLinkerFlags;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="linkerFlags"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLinkerFlags">
@@ -275,12 +509,26 @@ end getLinkerFlags;</code>
   input String linkerFlags;
   output Boolean success;
 end setLinkerFlags;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="linkerFlags" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCompiler">
         <code interfaceOnly="true">function getCompiler
   output String compiler;
 end getCompiler;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="compiler"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompiler">
@@ -288,6 +536,14 @@ end getCompiler;</code>
   input String compiler;
   output Boolean success;
 end setCompiler;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="compiler" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCFlags">
@@ -295,18 +551,38 @@ end setCompiler;</code>
   input String inString;
   output Boolean success;
 end setCFlags;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="inString" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCFlags">
         <code interfaceOnly="true">function getCFlags
   output String outString;
 end getCFlags;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="outString"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCXXCompiler">
         <code interfaceOnly="true">function getCXXCompiler
   output String compiler;
 end getCXXCompiler;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="compiler"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCXXCompiler">
@@ -314,12 +590,26 @@ end getCXXCompiler;</code>
   input String compiler;
   output Boolean success;
 end setCXXCompiler;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="compiler" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.verifyCompiler">
         <code interfaceOnly="true">function verifyCompiler
   output Boolean compilerWorks;
 end verifyCompiler;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="compilerWorks"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompilerPath">
@@ -327,12 +617,26 @@ end verifyCompiler;</code>
   input String compilerPath;
   output Boolean success;
 end setCompilerPath;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="compilerPath" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCompileCommand">
         <code interfaceOnly="true">function getCompileCommand
   output String compileCommand;
 end getCompileCommand;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="compileCommand"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompileCommand">
@@ -340,6 +644,14 @@ end getCompileCommand;</code>
   input String compileCommand;
   output Boolean success;
 end setCompileCommand;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="compileCommand" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPlotCommand">
@@ -347,12 +659,26 @@ end setCompileCommand;</code>
   input String plotCommand;
   output Boolean success;
 end setPlotCommand;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="plotCommand" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSettings">
         <code interfaceOnly="true">function getSettings
   output String settings;
 end getSettings;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="settings"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setTempDirectoryPath">
@@ -360,12 +686,26 @@ end getSettings;</code>
   input String tempDirectoryPath;
   output Boolean success;
 end setTempDirectoryPath;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="tempDirectoryPath" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTempDirectoryPath">
         <code interfaceOnly="true">function getTempDirectoryPath
   output String tempDirectoryPath;
 end getTempDirectoryPath;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="tempDirectoryPath"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEnvironmentVar">
@@ -373,6 +713,14 @@ end getTempDirectoryPath;</code>
   input String var;
   output String value "returns empty string on failure";
 end getEnvironmentVar;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="var" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="value"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setEnvironmentVar">
@@ -381,6 +729,15 @@ end getEnvironmentVar;</code>
   input String value;
   output Boolean success;
 end setEnvironmentVar;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="var" hasDefault="false"/>
+            <input_argument className="String" name="value" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.appendEnvironmentVar">
@@ -389,6 +746,15 @@ end setEnvironmentVar;</code>
   input String value;
   output String result "returns \"error\" if the variable could not be appended";
 end appendEnvironmentVar;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="var" hasDefault="false"/>
+            <input_argument className="String" name="value" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setInstallationDirectoryPath">
@@ -396,12 +762,26 @@ end appendEnvironmentVar;</code>
   input String installationDirectoryPath;
   output Boolean success;
 end setInstallationDirectoryPath;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="installationDirectoryPath" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInstallationDirectoryPath">
         <code interfaceOnly="true">function getInstallationDirectoryPath
   output String installationDirectoryPath;
 end getInstallationDirectoryPath;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="installationDirectoryPath"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setModelicaPath">
@@ -409,12 +789,26 @@ end getInstallationDirectoryPath;</code>
   input String modelicaPath;
   output Boolean success;
 end setModelicaPath;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="modelicaPath" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getModelicaPath">
         <code interfaceOnly="true">function getModelicaPath
   output String modelicaPath;
 end getModelicaPath;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="modelicaPath"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCompilerFlags">
@@ -422,6 +816,14 @@ end getModelicaPath;</code>
   input String compilerFlags;
   output Boolean success;
 end setCompilerFlags;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="compilerFlags" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDebugFlags">
@@ -429,12 +831,26 @@ end setCompilerFlags;</code>
   input String debugFlags;
   output Boolean success;
 end setDebugFlags;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="debugFlags" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearDebugFlags">
         <code interfaceOnly="true">function clearDebugFlags
   output Boolean success;
 end clearDebugFlags;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPreOptModules">
@@ -442,6 +858,14 @@ end clearDebugFlags;</code>
   input String modules;
   output Boolean success;
 end setPreOptModules;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="modules" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCheapMatchingAlgorithm">
@@ -449,12 +873,26 @@ end setPreOptModules;</code>
   input Integer matchingAlgorithm;
   output Boolean success;
 end setCheapMatchingAlgorithm;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Integer" name="matchingAlgorithm" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMatchingAlgorithm">
         <code interfaceOnly="true">function getMatchingAlgorithm
   output String selected;
 end getMatchingAlgorithm;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="selected"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableMatchingAlgorithms">
@@ -462,6 +900,13 @@ end getMatchingAlgorithm;</code>
   output String[:] allChoices;
   output String[:] allComments;
 end getAvailableMatchingAlgorithms;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="allChoices"/>
+            <output_argument className="String" name="allComments"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setMatchingAlgorithm">
@@ -469,12 +914,26 @@ end getAvailableMatchingAlgorithms;</code>
   input String matchingAlgorithm;
   output Boolean success;
 end setMatchingAlgorithm;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="matchingAlgorithm" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getIndexReductionMethod">
         <code interfaceOnly="true">function getIndexReductionMethod
   output String selected;
 end getIndexReductionMethod;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="selected"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableIndexReductionMethods">
@@ -482,6 +941,13 @@ end getIndexReductionMethod;</code>
   output String[:] allChoices;
   output String[:] allComments;
 end getAvailableIndexReductionMethods;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="allChoices"/>
+            <output_argument className="String" name="allComments"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setIndexReductionMethod">
@@ -489,6 +955,14 @@ end getAvailableIndexReductionMethods;</code>
   input String method;
   output Boolean success;
 end setIndexReductionMethod;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="method" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setPostOptModules">
@@ -496,12 +970,26 @@ end setIndexReductionMethod;</code>
   input String modules;
   output Boolean success;
 end setPostOptModules;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="modules" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTearingMethod">
         <code interfaceOnly="true">function getTearingMethod
   output String selected;
 end getTearingMethod;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="selected"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableTearingMethods">
@@ -509,6 +997,13 @@ end getTearingMethod;</code>
   output String[:] allChoices;
   output String[:] allComments;
 end getAvailableTearingMethods;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="allChoices"/>
+            <output_argument className="String" name="allComments"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setTearingMethod">
@@ -516,6 +1011,14 @@ end getAvailableTearingMethods;</code>
   input String tearingMethod;
   output Boolean success;
 end setTearingMethod;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="tearingMethod" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setCommandLineOptions">
@@ -523,12 +1026,26 @@ end setTearingMethod;</code>
   input String option;
   output Boolean success;
 end setCommandLineOptions;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="option" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getCommandLineOptions">
         <code interfaceOnly="true">function getCommandLineOptions
   output String[:] flags;
 end getCommandLineOptions;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="flags"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getConfigFlagValidOptions">
@@ -538,12 +1055,28 @@ end getCommandLineOptions;</code>
   output String mainDescription;
   output String descriptions[:];
 end getConfigFlagValidOptions;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="flag" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="validOptions"/>
+            <output_argument className="String" name="mainDescription"/>
+            <output_argument className="String" name="descriptions"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearCommandLineOptions">
         <code interfaceOnly="true">function clearCommandLineOptions
   output Boolean success;
 end clearCommandLineOptions;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getVersion">
@@ -551,6 +1084,14 @@ end clearCommandLineOptions;</code>
   input TypeName cl = $Code(OpenModelica);
   output String version;
 end getVersion;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="version"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regularFileExists">
@@ -558,6 +1099,14 @@ end getVersion;</code>
   input String fileName;
   output Boolean exists;
 end regularFileExists;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="exists"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.directoryExists">
@@ -565,6 +1114,14 @@ end regularFileExists;</code>
   input String dirName;
   output Boolean exists;
 end directoryExists;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="dirName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="exists"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stat">
@@ -574,6 +1131,16 @@ end directoryExists;</code>
   output Real fileSize;
   output Real mtime;
 end stat;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+            <output_argument className="Real" name="fileSize"/>
+            <output_argument className="Real" name="mtime"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readFile">
@@ -581,6 +1148,14 @@ end stat;</code>
   input String fileName;
   output String contents;
 end readFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="contents"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.writeFile">
@@ -590,6 +1165,16 @@ end readFile;</code>
   input Boolean append = false;
   output Boolean success;
 end writeFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="String" name="data" hasDefault="false"/>
+            <input_argument className="Boolean" name="append" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareFilesAndMove">
@@ -598,6 +1183,15 @@ end writeFile;</code>
   input String oldFile;
   output Boolean success;
 end compareFilesAndMove;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="newFile" hasDefault="false"/>
+            <input_argument className="String" name="oldFile" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareFiles">
@@ -606,6 +1200,15 @@ end compareFilesAndMove;</code>
   input String file2;
   output Boolean isEqual;
 end compareFiles;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="file1" hasDefault="false"/>
+            <input_argument className="String" name="file2" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="isEqual"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.alarm">
@@ -613,6 +1216,14 @@ end compareFiles;</code>
   input Integer seconds;
   output Integer previousSeconds;
 end alarm;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Integer" name="seconds" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="previousSeconds"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regex">
@@ -625,6 +1236,19 @@ end alarm;</code>
   output Integer numMatches "-1 is an error, 0 means no match, else returns a number 1..maxMatches";
   output String matchedSubstrings[maxMatches] "unmatched strings are returned as empty";
 end regex;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="str" hasDefault="false"/>
+            <input_argument className="String" name="re" hasDefault="false"/>
+            <input_argument className="Integer" name="maxMatches" hasDefault="true"/>
+            <input_argument className="Boolean" name="extended" hasDefault="true"/>
+            <input_argument className="Boolean" name="caseInsensitive" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="numMatches"/>
+            <output_argument className="String" name="matchedSubstrings"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.regexBool">
@@ -635,6 +1259,17 @@ end regex;</code>
   input Boolean caseInsensitive = false;
   output Boolean matches;
 end regexBool;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="str" hasDefault="false"/>
+            <input_argument className="String" name="re" hasDefault="false"/>
+            <input_argument className="Boolean" name="extended" hasDefault="true"/>
+            <input_argument className="Boolean" name="caseInsensitive" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="matches"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.testsuiteFriendlyName">
@@ -642,6 +1277,14 @@ end regexBool;</code>
   input String path;
   output String fixed;
 end testsuiteFriendlyName;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="path" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="fixed"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readFileNoNumeric">
@@ -649,6 +1292,14 @@ end testsuiteFriendlyName;</code>
   input String fileName;
   output String contents;
 end readFileNoNumeric;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="contents"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getErrorString">
@@ -656,12 +1307,26 @@ end readFileNoNumeric;</code>
   input Boolean warningsAsErrors = false;
   output String errorString;
 end getErrorString;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Boolean" name="warningsAsErrors" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="errorString"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMessagesString">
         <code interfaceOnly="true">function getMessagesString
   output String messagesString;
 end getMessagesString;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="messagesString"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <record id="OpenModelica.Scripting.SourceInfo">
@@ -734,6 +1399,14 @@ end ErrorMessage;</code>
   input Boolean unique = true;
   output ErrorMessage[:] messagesString;
 end getMessagesStringInternal;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Boolean" name="unique" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.Scripting.ErrorMessage" name="messagesString"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.countMessages">
@@ -742,12 +1415,26 @@ end getMessagesStringInternal;</code>
   output Integer numErrors;
   output Integer numWarnings;
 end countMessages;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Integer" name="numMessages"/>
+            <output_argument className="Integer" name="numErrors"/>
+            <output_argument className="Integer" name="numWarnings"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.clearMessages">
         <code interfaceOnly="true">function clearMessages
   output Boolean success;
 end clearMessages;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runScript">
@@ -755,6 +1442,14 @@ end clearMessages;</code>
   input String fileName "*.mos";
   output String result;
 end runScript;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.echo">
@@ -762,18 +1457,38 @@ end runScript;</code>
   input Boolean setEcho;
   output Boolean newEcho;
 end echo;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Boolean" name="setEcho" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="newEcho"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassesInModelicaPath">
         <code interfaceOnly="true">function getClassesInModelicaPath
   output String classesInModelicaPath;
 end getClassesInModelicaPath;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="classesInModelicaPath"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationVersion">
         <code interfaceOnly="true">function getAnnotationVersion
   output String annotationVersion;
 end getAnnotationVersion;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="annotationVersion"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setAnnotationVersion">
@@ -781,12 +1496,26 @@ end getAnnotationVersion;</code>
   input String annotationVersion;
   output Boolean success;
 end setAnnotationVersion;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="annotationVersion" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNoSimplify">
         <code interfaceOnly="true">function getNoSimplify
   output Boolean noSimplify;
 end getNoSimplify;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="noSimplify"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setNoSimplify">
@@ -794,12 +1523,26 @@ end getNoSimplify;</code>
   input Boolean noSimplify;
   output Boolean success;
 end setNoSimplify;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Boolean" name="noSimplify" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getVectorizationLimit">
         <code interfaceOnly="true">function getVectorizationLimit
   output Integer vectorizationLimit;
 end getVectorizationLimit;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Integer" name="vectorizationLimit"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setVectorizationLimit">
@@ -807,12 +1550,26 @@ end getVectorizationLimit;</code>
   input Integer vectorizationLimit;
   output Boolean success;
 end setVectorizationLimit;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Integer" name="vectorizationLimit" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDefaultOpenCLDevice">
         <code interfaceOnly="true">function getDefaultOpenCLDevice
   output Integer defdevid;
 end getDefaultOpenCLDevice;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Integer" name="defdevid"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDefaultOpenCLDevice">
@@ -820,6 +1577,14 @@ end getDefaultOpenCLDevice;</code>
   input Integer defdevid;
   output Boolean success;
 end setDefaultOpenCLDevice;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Integer" name="defdevid" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setShowAnnotations">
@@ -827,12 +1592,26 @@ end setDefaultOpenCLDevice;</code>
   input Boolean show;
   output Boolean success;
 end setShowAnnotations;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Boolean" name="show" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getShowAnnotations">
         <code interfaceOnly="true">function getShowAnnotations
   output Boolean show;
 end getShowAnnotations;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="show"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setOrderConnections">
@@ -840,12 +1619,26 @@ end getShowAnnotations;</code>
   input Boolean orderConnections;
   output Boolean success;
 end setOrderConnections;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Boolean" name="orderConnections" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getOrderConnections">
         <code interfaceOnly="true">function getOrderConnections
   output Boolean orderConnections;
 end getOrderConnections;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="orderConnections"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setLanguageStandard">
@@ -853,12 +1646,26 @@ end getOrderConnections;</code>
   input String inVersion;
   output Boolean success;
 end setLanguageStandard;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="inVersion" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLanguageStandard">
         <code interfaceOnly="true">function getLanguageStandard
   output String outVersion;
 end getLanguageStandard;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="outVersion"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAstAsCorbaString">
@@ -866,6 +1673,14 @@ end getLanguageStandard;</code>
   input String fileName = "&lt;interactive&gt;";
   output String result "returns the string if fileName is interactive; else it returns ok or error depending on if writing the file succeeded";
 end getAstAsCorbaString;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.cd">
@@ -873,6 +1688,14 @@ end getAstAsCorbaString;</code>
   input String newWorkingDirectory = "";
   output String workingDirectory;
 end cd;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="newWorkingDirectory" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="workingDirectory"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.mkdir">
@@ -880,6 +1703,14 @@ end cd;</code>
   input String newDirectory;
   output Boolean success;
 end mkdir;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="newDirectory" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.copy">
@@ -888,6 +1719,15 @@ end mkdir;</code>
   input String destination;
   output Boolean success;
 end copy;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="source" hasDefault="false"/>
+            <input_argument className="String" name="destination" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.remove">
@@ -895,6 +1735,14 @@ end copy;</code>
   input String path;
   output Boolean success "Returns true on success.";
 end remove;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="path" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkModel">
@@ -902,6 +1750,14 @@ end remove;</code>
   input TypeName className;
   output String result;
 end checkModel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkAllModelsRecursive">
@@ -910,6 +1766,15 @@ end checkModel;</code>
   input Boolean checkProtected = false "Checks also protected classes if true";
   output String result;
 end checkAllModelsRecursive;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Boolean" name="checkProtected" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeOf">
@@ -917,6 +1782,14 @@ end checkAllModelsRecursive;</code>
   input VariableName variableName;
   output String result;
 end typeOf;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.VariableName" name="variableName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.instantiateModel">
@@ -924,6 +1797,14 @@ end typeOf;</code>
   input TypeName className;
   output String result;
 end instantiateModel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildOpenTURNSInterface">
@@ -933,6 +1814,16 @@ end instantiateModel;</code>
   input Boolean showFlatModelica = false;
   output String outPythonScript;
 end buildOpenTURNSInterface;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="String" name="pythonTemplateFile" hasDefault="false"/>
+            <input_argument className="Boolean" name="showFlatModelica" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="outPythonScript"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runOpenTURNSPythonScript">
@@ -940,6 +1831,14 @@ end buildOpenTURNSInterface;</code>
   input String pythonScriptFile;
   output String logOutputFile;
 end runOpenTURNSPythonScript;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="pythonScriptFile" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="logOutputFile"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateCode">
@@ -947,6 +1846,14 @@ end runOpenTURNSPythonScript;</code>
   input TypeName className;
   output Boolean success;
 end generateCode;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadModel">
@@ -958,6 +1865,18 @@ end generateCode;</code>
   input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\"3.2\"), Modelica 3.2.1 will not match it.";
   output Boolean success;
 end loadModel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="String" name="priorityVersion" hasDefault="true"/>
+            <input_argument className="Boolean" name="notify" hasDefault="true"/>
+            <input_argument className="String" name="languageStandard" hasDefault="true"/>
+            <input_argument className="Boolean" name="requireExactVersion" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteFile">
@@ -965,6 +1884,14 @@ end loadModel;</code>
   input String fileName;
   output Boolean success;
 end deleteFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveModel">
@@ -973,6 +1900,15 @@ end deleteFile;</code>
   input TypeName className;
   output Boolean success;
 end saveModel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveTotalModel">
@@ -983,6 +1919,17 @@ end saveModel;</code>
   input Boolean stripComments = false;
   output Boolean success;
 end saveTotalModel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Boolean" name="stripAnnotations" hasDefault="true"/>
+            <input_argument className="Boolean" name="stripComments" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.save">
@@ -990,10 +1937,19 @@ end saveTotalModel;</code>
   input TypeName className;
   output Boolean success;
 end save;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.saveTotalSCode">
         <code interfaceOnly="true"></code>
+        <components>TODO: [/opt/OpenModelica/v1.13.2/lib/omc/ModelicaBuiltin.mo:2135:1-2135:41:readonly] Warning: Ignoring external declaration of the extended class: saveTotalModel.<input_arguments/><output_arguments/></components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.translateGraphics">
@@ -1001,6 +1957,14 @@ end save;</code>
   input TypeName className;
   output String result;
 end translateGraphics;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.codeToString">
@@ -1008,6 +1972,14 @@ end translateGraphics;</code>
   input $Code className;
   output String string;
 end codeToString;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="string"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.dumpXMLDAE">
@@ -1023,6 +1995,22 @@ end codeToString;</code>
   output Boolean success "if the function succeeded true/false";
   output String xmlfileName "the Xml file";
 end dumpXMLDAE;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="String" name="translationLevel" hasDefault="true"/>
+            <input_argument className="Boolean" name="addOriginalIncidenceMatrix" hasDefault="true"/>
+            <input_argument className="Boolean" name="addSolvingInfo" hasDefault="true"/>
+            <input_argument className="Boolean" name="addMathMLCode" hasDefault="true"/>
+            <input_argument className="Boolean" name="dumpResiduals" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="String" name="rewriteRulesFile" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+            <output_argument className="String" name="xmlfileName"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.convertUnits">
@@ -1033,6 +2021,17 @@ end dumpXMLDAE;</code>
   output Real scaleFactor;
   output Real offset;
 end convertUnits;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="s1" hasDefault="false"/>
+            <input_argument className="String" name="s2" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="unitsCompatible"/>
+            <output_argument className="Real" name="scaleFactor"/>
+            <output_argument className="Real" name="offset"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedUnits">
@@ -1040,12 +2039,26 @@ end convertUnits;</code>
   input String baseUnit;
   output String[:] derivedUnits;
 end getDerivedUnits;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="baseUnit" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="derivedUnits"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.listVariables">
         <code interfaceOnly="true">function listVariables
   output TypeName variables[:];
 end listVariables;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="variables"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.strtok">
@@ -1054,6 +2067,15 @@ end listVariables;</code>
   input String token;
   output String[:] strings;
 end strtok;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="string" hasDefault="false"/>
+            <input_argument className="String" name="token" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="strings"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringSplit">
@@ -1062,6 +2084,15 @@ end strtok;</code>
   input String token "single character only";
   output String[:] strings;
 end stringSplit;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="string" hasDefault="false"/>
+            <input_argument className="String" name="token" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="strings"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringReplace">
@@ -1071,6 +2102,16 @@ end stringSplit;</code>
   input String target;
   output String res;
 end stringReplace;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="str" hasDefault="false"/>
+            <input_argument className="String" name="source" hasDefault="false"/>
+            <input_argument className="String" name="target" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="res"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.escapeXML">
@@ -1078,6 +2119,14 @@ end stringReplace;</code>
   input String inStr;
   output String outStr;
 end escapeXML;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="inStr" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="outStr"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.ExportKind">
@@ -1100,6 +2149,17 @@ end escapeXML;</code>
   input ExportKind exportKind = ExportKind.Absyn;
   output String contents;
 end list;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="true"/>
+            <input_argument className="Boolean" name="interfaceOnly" hasDefault="true"/>
+            <input_argument className="Boolean" name="shortOnly" hasDefault="true"/>
+            <input_argument className="OpenModelica.Scripting.ExportKind" name="exportKind" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="contents"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.listFile">
@@ -1107,6 +2167,14 @@ end list;</code>
   input TypeName class_;
   output String contents;
 end listFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="contents"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.DiffFormat">
@@ -1126,6 +2194,16 @@ end listFile;</code>
   input DiffFormat diffFormat = DiffFormat.color;
   output String result;
 end diffModelicaFileListings;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="after" hasDefault="false"/>
+            <input_argument className="String" name="before" hasDefault="false"/>
+            <input_argument className="OpenModelica.Scripting.DiffFormat" name="diffFormat" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.exportToFigaro">
@@ -1138,6 +2216,19 @@ end diffModelicaFileListings;</code>
   input String processor;
   output Boolean success;
 end exportToFigaro;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="path" hasDefault="false"/>
+            <input_argument className="String" name="directory" hasDefault="true"/>
+            <input_argument className="String" name="database" hasDefault="false"/>
+            <input_argument className="String" name="mode" hasDefault="false"/>
+            <input_argument className="String" name="options" hasDefault="false"/>
+            <input_argument className="String" name="processor" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.inferBindings">
@@ -1145,6 +2236,14 @@ end exportToFigaro;</code>
   input TypeName path;
   output Boolean success;
 end inferBindings;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="path" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateVerificationScenarios">
@@ -1152,6 +2251,14 @@ end inferBindings;</code>
   input TypeName path;
   output Boolean success;
 end generateVerificationScenarios;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="path" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.rewriteBlockCall">
@@ -1160,6 +2267,15 @@ end generateVerificationScenarios;</code>
   input TypeName inDefs;
   output Boolean success;
 end rewriteBlockCall;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="inDefs" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.realpath">
@@ -1167,6 +2283,14 @@ end rewriteBlockCall;</code>
   input String name "Absolute or relative file or directory name";
   output String fullName "Full path of 'name'";
 end realpath;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="name" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="fullName"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.uriToFilename">
@@ -1174,12 +2298,26 @@ end realpath;</code>
   input String uri;
   output String filename = "";
 end uriToFilename;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="uri" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="filename"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getLoadedLibraries">
         <code interfaceOnly="true">function getLoadedLibraries
   output String[:, 2] libraries;
 end getLoadedLibraries;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="libraries"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.LinearSystemSolver">
@@ -1201,6 +2339,18 @@ end getLoadedLibraries;</code>
   output Real[size(B, 1)] X;
   output Integer info;
 end solveLinearSystem;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Real" name="A" hasDefault="false"/>
+            <input_argument className="Real" name="B" hasDefault="false"/>
+            <input_argument className="OpenModelica.Scripting.LinearSystemSolver" name="solver" hasDefault="true"/>
+            <input_argument className="Integer" name="isInt" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Real" name="X"/>
+            <output_argument className="Integer" name="info"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <type id="OpenModelica.Scripting.StandardStream">
@@ -1220,6 +2370,15 @@ end solveLinearSystem;</code>
   input String filename;
   output Boolean success;
 end reopenStandardStream;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.Scripting.StandardStream" name="_stream" hasDefault="false"/>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.importFMU">
@@ -1233,6 +2392,20 @@ end reopenStandardStream;</code>
   input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
   output String generatedFileName "Returns the full path of the generated file.";
 end importFMU;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="workdir" hasDefault="true"/>
+            <input_argument className="Integer" name="loglevel" hasDefault="true"/>
+            <input_argument className="Boolean" name="fullPath" hasDefault="true"/>
+            <input_argument className="Boolean" name="debugLogging" hasDefault="true"/>
+            <input_argument className="Boolean" name="generateInputConnectors" hasDefault="true"/>
+            <input_argument className="Boolean" name="generateOutputConnectors" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="generatedFileName"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.importFMUModelDescription">
@@ -1246,6 +2419,20 @@ end importFMU;</code>
   input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
   output String generatedFileName "Returns the full path of the generated file.";
 end importFMUModelDescription;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="workdir" hasDefault="true"/>
+            <input_argument className="Integer" name="loglevel" hasDefault="true"/>
+            <input_argument className="Boolean" name="fullPath" hasDefault="true"/>
+            <input_argument className="Boolean" name="debugLogging" hasDefault="true"/>
+            <input_argument className="Boolean" name="generateInputConnectors" hasDefault="true"/>
+            <input_argument className="Boolean" name="generateOutputConnectors" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="generatedFileName"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.translateModelFMU">
@@ -1257,6 +2444,18 @@ end importFMUModelDescription;</code>
   input Boolean includeResources = false "include Modelica based resources via loadResource or not";
   output String generatedFileName "Returns the full path of the generated FMU.";
 end translateModelFMU;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="String" name="version" hasDefault="true"/>
+            <input_argument className="String" name="fmuType" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="Boolean" name="includeResources" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="generatedFileName"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildModelFMU">
@@ -1269,6 +2468,19 @@ end translateModelFMU;</code>
   input Boolean includeResources = false "include Modelica based resources via loadResource or not";
   output String generatedFileName "Returns the full path of the generated FMU.";
 end buildModelFMU;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="String" name="version" hasDefault="true"/>
+            <input_argument className="String" name="fmuType" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="String" name="platforms" hasDefault="true"/>
+            <input_argument className="Boolean" name="includeResources" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="generatedFileName"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildEncryptedPackage">
@@ -1277,6 +2489,15 @@ end buildModelFMU;</code>
   output Boolean success;
   output String commandOutput "Output of the packagetool executable";
 end buildEncryptedPackage;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+            <output_argument className="String" name="commandOutput"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.simulate">
@@ -1308,6 +2529,10 @@ end buildEncryptedPackage;</code>
     Real timeTotal;
   end SimulationResult;
 end simulate;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments/>
+        </components>
         <classes>
           <record id="OpenModelica.Scripting.simulate.SimulationResult">
             <code interfaceOnly="false">record SimulationResult
@@ -1354,6 +2579,25 @@ end SimulationResult;</code>
   input String simflags = "&lt;default&gt;" "simflags. &lt;default&gt; = \"\"";
   output String[2] buildModelResults;
 end buildModel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Real" name="startTime" hasDefault="true"/>
+            <input_argument className="Real" name="stopTime" hasDefault="true"/>
+            <input_argument className="Real" name="numberOfIntervals" hasDefault="true"/>
+            <input_argument className="Real" name="tolerance" hasDefault="true"/>
+            <input_argument className="String" name="method" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="String" name="options" hasDefault="true"/>
+            <input_argument className="String" name="outputFormat" hasDefault="true"/>
+            <input_argument className="String" name="variableFilter" hasDefault="true"/>
+            <input_argument className="String" name="cflags" hasDefault="true"/>
+            <input_argument className="String" name="simflags" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="buildModelResults"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.buildLabel">
@@ -1372,6 +2616,25 @@ end buildModel;</code>
   input String simflags = "" "simflags. &lt;default&gt; = \"\"";
   output String[2] buildModelResults;
 end buildLabel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Real" name="startTime" hasDefault="true"/>
+            <input_argument className="Real" name="stopTime" hasDefault="true"/>
+            <input_argument className="Integer" name="numberOfIntervals" hasDefault="true"/>
+            <input_argument className="Real" name="tolerance" hasDefault="true"/>
+            <input_argument className="String" name="method" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="String" name="options" hasDefault="true"/>
+            <input_argument className="String" name="outputFormat" hasDefault="true"/>
+            <input_argument className="String" name="variableFilter" hasDefault="true"/>
+            <input_argument className="String" name="cflags" hasDefault="true"/>
+            <input_argument className="String" name="simflags" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="buildModelResults"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.reduceTerms">
@@ -1391,6 +2654,26 @@ end buildLabel;</code>
   input String labelstoCancel = "";
   output String[2] buildModelResults;
 end reduceTerms;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Real" name="startTime" hasDefault="true"/>
+            <input_argument className="Real" name="stopTime" hasDefault="true"/>
+            <input_argument className="Integer" name="numberOfIntervals" hasDefault="true"/>
+            <input_argument className="Real" name="tolerance" hasDefault="true"/>
+            <input_argument className="String" name="method" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="String" name="options" hasDefault="true"/>
+            <input_argument className="String" name="outputFormat" hasDefault="true"/>
+            <input_argument className="String" name="variableFilter" hasDefault="true"/>
+            <input_argument className="String" name="cflags" hasDefault="true"/>
+            <input_argument className="String" name="simflags" hasDefault="true"/>
+            <input_argument className="String" name="labelstoCancel" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="buildModelResults"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClass">
@@ -1399,6 +2682,15 @@ end reduceTerms;</code>
   input Integer offset "Offset in the class list.";
   output Boolean result;
 end moveClass;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Integer" name="offset" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClassToTop">
@@ -1406,6 +2698,14 @@ end moveClass;</code>
   input TypeName className;
   output Boolean result;
 end moveClassToTop;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.moveClassToBottom">
@@ -1413,6 +2713,14 @@ end moveClassToTop;</code>
   input TypeName className;
   output Boolean result;
 end moveClassToBottom;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.copyClass">
@@ -1422,6 +2730,16 @@ end moveClassToBottom;</code>
   input TypeName withIn = $Code(TopLevel) "the with in path for new class";
   output Boolean result;
 end copyClass;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="String" name="newClassName" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="withIn" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.linearize">
@@ -1443,6 +2761,28 @@ end copyClass;</code>
   input String simflags = "&lt;default&gt;" "simflags. &lt;default&gt; = \"\"";
   output String linearizationResult;
 end linearize;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Real" name="startTime" hasDefault="true"/>
+            <input_argument className="Real" name="stopTime" hasDefault="true"/>
+            <input_argument className="Real" name="numberOfIntervals" hasDefault="true"/>
+            <input_argument className="Real" name="stepSize" hasDefault="true"/>
+            <input_argument className="Real" name="tolerance" hasDefault="true"/>
+            <input_argument className="String" name="method" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="Boolean" name="storeInTemp" hasDefault="true"/>
+            <input_argument className="Boolean" name="noClean" hasDefault="true"/>
+            <input_argument className="String" name="options" hasDefault="true"/>
+            <input_argument className="String" name="outputFormat" hasDefault="true"/>
+            <input_argument className="String" name="variableFilter" hasDefault="true"/>
+            <input_argument className="String" name="cflags" hasDefault="true"/>
+            <input_argument className="String" name="simflags" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="linearizationResult"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.optimize">
@@ -1464,6 +2804,28 @@ end linearize;</code>
   input String simflags = "&lt;default&gt;" "simflags. &lt;default&gt; = \"\"";
   output String optimizationResults;
 end optimize;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Real" name="startTime" hasDefault="true"/>
+            <input_argument className="Real" name="stopTime" hasDefault="true"/>
+            <input_argument className="Real" name="numberOfIntervals" hasDefault="true"/>
+            <input_argument className="Real" name="stepSize" hasDefault="true"/>
+            <input_argument className="Real" name="tolerance" hasDefault="true"/>
+            <input_argument className="String" name="method" hasDefault="true"/>
+            <input_argument className="String" name="fileNamePrefix" hasDefault="true"/>
+            <input_argument className="Boolean" name="storeInTemp" hasDefault="true"/>
+            <input_argument className="Boolean" name="noClean" hasDefault="true"/>
+            <input_argument className="String" name="options" hasDefault="true"/>
+            <input_argument className="String" name="outputFormat" hasDefault="true"/>
+            <input_argument className="String" name="variableFilter" hasDefault="true"/>
+            <input_argument className="String" name="cflags" hasDefault="true"/>
+            <input_argument className="String" name="simflags" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="optimizationResults"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSourceFile">
@@ -1471,6 +2833,14 @@ end optimize;</code>
   input TypeName class_;
   output String filename "empty on failure";
 end getSourceFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="filename"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setSourceFile">
@@ -1479,6 +2849,15 @@ end getSourceFile;</code>
   input String filename;
   output Boolean success;
 end setSourceFile;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isShortDefinition">
@@ -1486,6 +2865,14 @@ end setSourceFile;</code>
   input TypeName class_;
   output Boolean isShortCls;
 end isShortDefinition;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="isShortCls"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setClassComment">
@@ -1494,6 +2881,15 @@ end isShortDefinition;</code>
   input String filename;
   output Boolean success;
 end setClassComment;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassNames">
@@ -1507,6 +2903,20 @@ end setClassComment;</code>
   input Boolean includeConstants = false "List also constants in the class if true";
   output TypeName classNames[:];
 end getClassNames;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="true"/>
+            <input_argument className="Boolean" name="recursive" hasDefault="true"/>
+            <input_argument className="Boolean" name="qualified" hasDefault="true"/>
+            <input_argument className="Boolean" name="sort" hasDefault="true"/>
+            <input_argument className="Boolean" name="builtin" hasDefault="true"/>
+            <input_argument className="Boolean" name="showProtected" hasDefault="true"/>
+            <input_argument className="Boolean" name="includeConstants" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="classNames"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getUsedClassNames">
@@ -1514,6 +2924,14 @@ end getClassNames;</code>
   input TypeName className;
   output TypeName classNames[:];
 end getUsedClassNames;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="classNames"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getPackages">
@@ -1521,6 +2939,14 @@ end getUsedClassNames;</code>
   input TypeName class_ = $Code(AllLoadedClasses);
   output TypeName classNames[:];
 end getPackages;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="classNames"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.basePlotFunction">
@@ -1542,6 +2968,25 @@ end getPackages;</code>
   input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
   output Boolean success "Returns true on success";
 end basePlotFunction;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="true"/>
+            <input_argument className="String" name="interpolation" hasDefault="true"/>
+            <input_argument className="String" name="title" hasDefault="true"/>
+            <input_argument className="Boolean" name="legend" hasDefault="true"/>
+            <input_argument className="Boolean" name="grid" hasDefault="true"/>
+            <input_argument className="Boolean" name="logX" hasDefault="true"/>
+            <input_argument className="Boolean" name="logY" hasDefault="true"/>
+            <input_argument className="String" name="xLabel" hasDefault="true"/>
+            <input_argument className="String" name="yLabel" hasDefault="true"/>
+            <input_argument className="Boolean" name="points" hasDefault="true"/>
+            <input_argument className="Real" name="xRange" hasDefault="true"/>
+            <input_argument className="Real" name="yRange" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plot">
@@ -1565,6 +3010,30 @@ end basePlotFunction;</code>
   input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
   output Boolean success "Returns true on success";
 end plot;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.VariableNames" name="vars" hasDefault="false"/>
+            <input_argument className="Boolean" name="externalWindow" hasDefault="true"/>
+            <input_argument className="String" name="fileName" hasDefault="true"/>
+            <input_argument className="String" name="title" hasDefault="true"/>
+            <input_argument className="String" name="grid" hasDefault="true"/>
+            <input_argument className="Boolean" name="logX" hasDefault="true"/>
+            <input_argument className="Boolean" name="logY" hasDefault="true"/>
+            <input_argument className="String" name="xLabel" hasDefault="true"/>
+            <input_argument className="String" name="yLabel" hasDefault="true"/>
+            <input_argument className="Real" name="xRange" hasDefault="true"/>
+            <input_argument className="Real" name="yRange" hasDefault="true"/>
+            <input_argument className="Real" name="curveWidth" hasDefault="true"/>
+            <input_argument className="Integer" name="curveStyle" hasDefault="true"/>
+            <input_argument className="String" name="legendPosition" hasDefault="true"/>
+            <input_argument className="String" name="footer" hasDefault="true"/>
+            <input_argument className="Boolean" name="autoScale" hasDefault="true"/>
+            <input_argument className="Boolean" name="forceOMPlot" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plotAll">
@@ -1587,6 +3056,29 @@ end plot;</code>
   input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
   output Boolean success "Returns true on success";
 end plotAll;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Boolean" name="externalWindow" hasDefault="true"/>
+            <input_argument className="String" name="fileName" hasDefault="true"/>
+            <input_argument className="String" name="title" hasDefault="true"/>
+            <input_argument className="String" name="grid" hasDefault="true"/>
+            <input_argument className="Boolean" name="logX" hasDefault="true"/>
+            <input_argument className="Boolean" name="logY" hasDefault="true"/>
+            <input_argument className="String" name="xLabel" hasDefault="true"/>
+            <input_argument className="String" name="yLabel" hasDefault="true"/>
+            <input_argument className="Real" name="xRange" hasDefault="true"/>
+            <input_argument className="Real" name="yRange" hasDefault="true"/>
+            <input_argument className="Real" name="curveWidth" hasDefault="true"/>
+            <input_argument className="Integer" name="curveStyle" hasDefault="true"/>
+            <input_argument className="String" name="legendPosition" hasDefault="true"/>
+            <input_argument className="String" name="footer" hasDefault="true"/>
+            <input_argument className="Boolean" name="autoScale" hasDefault="true"/>
+            <input_argument className="Boolean" name="forceOMPlot" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.plotParametric">
@@ -1611,6 +3103,31 @@ end plotAll;</code>
   input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
   output Boolean success "Returns true on success";
 end plotParametric;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.VariableName" name="xVariable" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.VariableName" name="yVariable" hasDefault="false"/>
+            <input_argument className="Boolean" name="externalWindow" hasDefault="true"/>
+            <input_argument className="String" name="fileName" hasDefault="true"/>
+            <input_argument className="String" name="title" hasDefault="true"/>
+            <input_argument className="String" name="grid" hasDefault="true"/>
+            <input_argument className="Boolean" name="logX" hasDefault="true"/>
+            <input_argument className="Boolean" name="logY" hasDefault="true"/>
+            <input_argument className="String" name="xLabel" hasDefault="true"/>
+            <input_argument className="String" name="yLabel" hasDefault="true"/>
+            <input_argument className="Real" name="xRange" hasDefault="true"/>
+            <input_argument className="Real" name="yRange" hasDefault="true"/>
+            <input_argument className="Real" name="curveWidth" hasDefault="true"/>
+            <input_argument className="Integer" name="curveStyle" hasDefault="true"/>
+            <input_argument className="String" name="legendPosition" hasDefault="true"/>
+            <input_argument className="String" name="footer" hasDefault="true"/>
+            <input_argument className="Boolean" name="autoScale" hasDefault="true"/>
+            <input_argument className="Boolean" name="forceOMPlot" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResult">
@@ -1620,6 +3137,16 @@ end plotParametric;</code>
   input Integer size = 0 "0=read any size... If the size is not the same as the result-file, this function fails";
   output Real result[:, :];
 end readSimulationResult;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.VariableNames" name="variables" hasDefault="false"/>
+            <input_argument className="Integer" name="size" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Real" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResultSize">
@@ -1627,6 +3154,14 @@ end readSimulationResult;</code>
   input String fileName;
   output Integer sz;
 end readSimulationResultSize;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="sz"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.readSimulationResultVars">
@@ -1636,6 +3171,16 @@ end readSimulationResultSize;</code>
   input Boolean openmodelicaStyle = false;
   output String[:] vars;
 end readSimulationResultVars;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="Boolean" name="readParameters" hasDefault="true"/>
+            <input_argument className="Boolean" name="openmodelicaStyle" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="vars"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.filterSimulationResults">
@@ -1647,6 +3192,18 @@ end readSimulationResultVars;</code>
   input Boolean removeDescription = false;
   output Boolean success;
 end filterSimulationResults;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="inFile" hasDefault="false"/>
+            <input_argument className="String" name="outFile" hasDefault="false"/>
+            <input_argument className="String" name="vars" hasDefault="false"/>
+            <input_argument className="Integer" name="numberOfIntervals" hasDefault="true"/>
+            <input_argument className="Boolean" name="removeDescription" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.compareSimulationResults">
@@ -1659,6 +3216,19 @@ end filterSimulationResults;</code>
   input String[:] vars = fill("", 0);
   output String[:] result;
 end compareSimulationResults;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="reffilename" hasDefault="false"/>
+            <input_argument className="String" name="logfilename" hasDefault="false"/>
+            <input_argument className="Real" name="relTol" hasDefault="true"/>
+            <input_argument className="Real" name="absTol" hasDefault="true"/>
+            <input_argument className="String" name="vars" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deltaSimulationResults">
@@ -1669,6 +3239,17 @@ end compareSimulationResults;</code>
   input String[:] vars = fill("", 0);
   output Real result;
 end deltaSimulationResults;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="reffilename" hasDefault="false"/>
+            <input_argument className="String" name="method" hasDefault="false"/>
+            <input_argument className="String" name="vars" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Real" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.diffSimulationResults">
@@ -1684,6 +3265,22 @@ end deltaSimulationResults;</code>
   output Boolean success;
   output String[:] failVars;
 end diffSimulationResults;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="actualFile" hasDefault="false"/>
+            <input_argument className="String" name="expectedFile" hasDefault="false"/>
+            <input_argument className="String" name="diffPrefix" hasDefault="false"/>
+            <input_argument className="Real" name="relTol" hasDefault="true"/>
+            <input_argument className="Real" name="relTolDiffMinMax" hasDefault="true"/>
+            <input_argument className="Real" name="rangeDelta" hasDefault="true"/>
+            <input_argument className="String" name="vars" hasDefault="true"/>
+            <input_argument className="Boolean" name="keepEqualResults" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+            <output_argument className="String" name="failVars"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.diffSimulationResultsHtml">
@@ -1696,6 +3293,19 @@ end diffSimulationResults;</code>
   input Real rangeDelta = 0.002 "x tolerance";
   output String html;
 end diffSimulationResultsHtml;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="var" hasDefault="false"/>
+            <input_argument className="String" name="actualFile" hasDefault="false"/>
+            <input_argument className="String" name="expectedFile" hasDefault="false"/>
+            <input_argument className="Real" name="relTol" hasDefault="true"/>
+            <input_argument className="Real" name="relTolDiffMinMax" hasDefault="true"/>
+            <input_argument className="Real" name="rangeDelta" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="html"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkTaskGraph">
@@ -1704,6 +3314,15 @@ end diffSimulationResultsHtml;</code>
   input String reffilename;
   output String[:] result;
 end checkTaskGraph;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="filename" hasDefault="false"/>
+            <input_argument className="String" name="reffilename" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkCodeGraph">
@@ -1712,6 +3331,15 @@ end checkTaskGraph;</code>
   input String codefile;
   output String[:] result;
 end checkCodeGraph;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="graphfile" hasDefault="false"/>
+            <input_argument className="String" name="codefile" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.val">
@@ -1721,12 +3349,28 @@ end checkCodeGraph;</code>
   input String fileName = "&lt;default&gt;" "The contents of the currentSimulationResult variable";
   output Real valAtTime;
 end val;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.VariableName" name="var" hasDefault="false"/>
+            <input_argument className="Real" name="timePoint" hasDefault="true"/>
+            <input_argument className="String" name="fileName" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Real" name="valAtTime"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.closeSimulationResultFile">
         <code interfaceOnly="true">function closeSimulationResultFile
   output Boolean success;
 end closeSimulationResultFile;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addClassAnnotation">
@@ -1735,6 +3379,15 @@ end closeSimulationResultFile;</code>
   input ExpressionOrModification annotate;
   output Boolean bool;
 end addClassAnnotation;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.ExpressionOrModification" name="annotate" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getParameterNames">
@@ -1742,6 +3395,14 @@ end addClassAnnotation;</code>
   input TypeName class_;
   output String[:] parameters;
 end getParameterNames;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="parameters"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getParameterValue">
@@ -1750,6 +3411,15 @@ end getParameterNames;</code>
   input String parameterName;
   output String parameterValue;
 end getParameterValue;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="String" name="parameterName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="parameterValue"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierNames">
@@ -1758,6 +3428,15 @@ end getParameterValue;</code>
   input String componentName;
   output String[:] modifiers;
 end getComponentModifierNames;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="String" name="componentName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="modifiers"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierValue">
@@ -1766,6 +3445,15 @@ end getComponentModifierNames;</code>
   input TypeName modifier;
   output String value;
 end getComponentModifierValue;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="modifier" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="value"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentModifierValues">
@@ -1774,6 +3462,15 @@ end getComponentModifierValue;</code>
   input TypeName modifier;
   output String value;
 end getComponentModifierValues;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="modifier" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="value"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInstantiatedParametersAndValues">
@@ -1781,6 +3478,14 @@ end getComponentModifierValues;</code>
   input TypeName cls;
   output String[:] values;
 end getInstantiatedParametersAndValues;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cls" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="values"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.removeComponentModifiers">
@@ -1790,6 +3495,16 @@ end getInstantiatedParametersAndValues;</code>
   input Boolean keepRedeclares = false;
   output Boolean success;
 end removeComponentModifiers;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="String" name="componentName" hasDefault="false"/>
+            <input_argument className="Boolean" name="keepRedeclares" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.removeExtendsModifiers">
@@ -1799,6 +3514,16 @@ end removeComponentModifiers;</code>
   input Boolean keepRedeclares = false;
   output Boolean success;
 end removeExtendsModifiers;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="baseClassName" hasDefault="false"/>
+            <input_argument className="Boolean" name="keepRedeclares" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getConnectionCount">
@@ -1806,6 +3531,14 @@ end removeExtendsModifiers;</code>
   input TypeName className;
   output Integer count;
 end getConnectionCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthConnection">
@@ -1814,6 +3547,15 @@ end getConnectionCount;</code>
   input Integer index;
   output String[:] result;
 end getNthConnection;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAlgorithmCount">
@@ -1821,6 +3563,14 @@ end getNthConnection;</code>
   input TypeName class_;
   output Integer count;
 end getAlgorithmCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAlgorithm">
@@ -1829,6 +3579,15 @@ end getAlgorithmCount;</code>
   input Integer index;
   output String result;
 end getNthAlgorithm;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialAlgorithmCount">
@@ -1836,6 +3595,14 @@ end getNthAlgorithm;</code>
   input TypeName class_;
   output Integer count;
 end getInitialAlgorithmCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialAlgorithm">
@@ -1844,6 +3611,15 @@ end getInitialAlgorithmCount;</code>
   input Integer index;
   output String result;
 end getNthInitialAlgorithm;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAlgorithmItemsCount">
@@ -1851,6 +3627,14 @@ end getNthInitialAlgorithm;</code>
   input TypeName class_;
   output Integer count;
 end getAlgorithmItemsCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAlgorithmItem">
@@ -1859,6 +3643,15 @@ end getAlgorithmItemsCount;</code>
   input Integer index;
   output String result;
 end getNthAlgorithmItem;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialAlgorithmItemsCount">
@@ -1866,6 +3659,14 @@ end getNthAlgorithmItem;</code>
   input TypeName class_;
   output Integer count;
 end getInitialAlgorithmItemsCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialAlgorithmItem">
@@ -1874,6 +3675,15 @@ end getInitialAlgorithmItemsCount;</code>
   input Integer index;
   output String result;
 end getNthInitialAlgorithmItem;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEquationCount">
@@ -1881,6 +3691,14 @@ end getNthInitialAlgorithmItem;</code>
   input TypeName class_;
   output Integer count;
 end getEquationCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthEquation">
@@ -1889,6 +3707,15 @@ end getEquationCount;</code>
   input Integer index;
   output String result;
 end getNthEquation;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialEquationCount">
@@ -1896,6 +3723,14 @@ end getNthEquation;</code>
   input TypeName class_;
   output Integer count;
 end getInitialEquationCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialEquation">
@@ -1904,6 +3739,15 @@ end getInitialEquationCount;</code>
   input Integer index;
   output String result;
 end getNthInitialEquation;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getEquationItemsCount">
@@ -1911,6 +3755,14 @@ end getNthInitialEquation;</code>
   input TypeName class_;
   output Integer count;
 end getEquationItemsCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthEquationItem">
@@ -1919,6 +3771,15 @@ end getEquationItemsCount;</code>
   input Integer index;
   output String result;
 end getNthEquationItem;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialEquationItemsCount">
@@ -1926,6 +3787,14 @@ end getNthEquationItem;</code>
   input TypeName class_;
   output Integer count;
 end getInitialEquationItemsCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthInitialEquationItem">
@@ -1934,6 +3803,15 @@ end getInitialEquationItemsCount;</code>
   input Integer index;
   output String result;
 end getNthInitialEquationItem;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationCount">
@@ -1941,6 +3819,14 @@ end getNthInitialEquationItem;</code>
   input TypeName class_;
   output Integer count;
 end getAnnotationCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthAnnotationString">
@@ -1949,6 +3835,15 @@ end getAnnotationCount;</code>
   input Integer index;
   output String result;
 end getNthAnnotationString;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getImportCount">
@@ -1956,6 +3851,14 @@ end getNthAnnotationString;</code>
   input TypeName class_;
   output Integer count;
 end getImportCount;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Integer" name="count"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getNthImport">
@@ -1964,6 +3867,15 @@ end getImportCount;</code>
   input Integer index;
   output String out[3] "{\"Path\",\"Id\",\"Kind\"}";
 end getNthImport;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="Integer" name="index" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="out"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.iconv">
@@ -1973,6 +3885,16 @@ end getNthImport;</code>
   input String to = "UTF-8";
   output String result;
 end iconv;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="string" hasDefault="false"/>
+            <input_argument className="String" name="from" hasDefault="false"/>
+            <input_argument className="String" name="to" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDocumentationAnnotation">
@@ -1980,6 +3902,14 @@ end iconv;</code>
   input TypeName cl;
   output String out[3] "{info,revision,infoHeader} TODO: Should be changed to have 2 outputs instead of an array of 2 Strings...";
 end getDocumentationAnnotation;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="out"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setDocumentationAnnotation">
@@ -1989,6 +3919,16 @@ end getDocumentationAnnotation;</code>
   input String revisions = "";
   output Boolean bool;
 end setDocumentationAnnotation;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="class_" hasDefault="false"/>
+            <input_argument className="String" name="info" hasDefault="true"/>
+            <input_argument className="String" name="revisions" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTimeStamp">
@@ -1997,6 +3937,15 @@ end setDocumentationAnnotation;</code>
   output Real timeStamp;
   output String timeStampAsString;
 end getTimeStamp;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Real" name="timeStamp"/>
+            <output_argument className="String" name="timeStampAsString"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringTypeName">
@@ -2004,6 +3953,14 @@ end getTimeStamp;</code>
   input String str;
   output TypeName cl;
 end stringTypeName;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="str" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="cl"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.stringVariableName">
@@ -2011,6 +3968,14 @@ end stringTypeName;</code>
   input String str;
   output VariableName cl;
 end stringVariableName;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="str" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.VariableName" name="cl"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeNameString">
@@ -2018,6 +3983,14 @@ end stringVariableName;</code>
   input TypeName cl;
   output String out;
 end typeNameString;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="out"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.typeNameStrings">
@@ -2025,6 +3998,14 @@ end typeNameString;</code>
   input TypeName cl;
   output String out[:];
 end typeNameStrings;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="out"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassComment">
@@ -2032,6 +4013,14 @@ end typeNameStrings;</code>
   input TypeName cl;
   output String comment;
 end getClassComment;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="comment"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.dirname">
@@ -2039,6 +4028,14 @@ end getClassComment;</code>
   input String path;
   output String dirname;
 end dirname;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="path" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="dirname"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.basename">
@@ -2046,6 +4043,14 @@ end dirname;</code>
   input String path;
   output String basename;
 end basename;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="path" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="basename"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassRestriction">
@@ -2053,6 +4058,14 @@ end basename;</code>
   input TypeName cl;
   output String restriction;
 end getClassRestriction;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="restriction"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isType">
@@ -2060,6 +4073,14 @@ end getClassRestriction;</code>
   input TypeName cl;
   output Boolean b;
 end isType;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isPackage">
@@ -2067,6 +4088,14 @@ end isType;</code>
   input TypeName cl;
   output Boolean b;
 end isPackage;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isClass">
@@ -2074,6 +4103,14 @@ end isPackage;</code>
   input TypeName cl;
   output Boolean b;
 end isClass;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isRecord">
@@ -2081,6 +4118,14 @@ end isClass;</code>
   input TypeName cl;
   output Boolean b;
 end isRecord;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isBlock">
@@ -2088,6 +4133,14 @@ end isRecord;</code>
   input TypeName cl;
   output Boolean b;
 end isBlock;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isFunction">
@@ -2095,6 +4148,14 @@ end isBlock;</code>
   input TypeName cl;
   output Boolean b;
 end isFunction;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isPartial">
@@ -2102,6 +4163,14 @@ end isFunction;</code>
   input TypeName cl;
   output Boolean b;
 end isPartial;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isModel">
@@ -2109,6 +4178,14 @@ end isPartial;</code>
   input TypeName cl;
   output Boolean b;
 end isModel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isConnector">
@@ -2116,6 +4193,14 @@ end isModel;</code>
   input TypeName cl;
   output Boolean b;
 end isConnector;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOptimization">
@@ -2123,6 +4208,14 @@ end isConnector;</code>
   input TypeName cl;
   output Boolean b;
 end isOptimization;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isEnumeration">
@@ -2130,6 +4223,14 @@ end isOptimization;</code>
   input TypeName cl;
   output Boolean b;
 end isEnumeration;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperator">
@@ -2137,6 +4238,14 @@ end isEnumeration;</code>
   input TypeName cl;
   output Boolean b;
 end isOperator;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperatorRecord">
@@ -2144,6 +4253,14 @@ end isOperator;</code>
   input TypeName cl;
   output Boolean b;
 end isOperatorRecord;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isOperatorFunction">
@@ -2151,6 +4268,14 @@ end isOperatorRecord;</code>
   input TypeName cl;
   output Boolean b;
 end isOperatorFunction;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.isProtectedClass">
@@ -2159,6 +4284,15 @@ end isOperatorFunction;</code>
   input String c2;
   output Boolean b;
 end isProtectedClass;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="c2" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="b"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getBuiltinType">
@@ -2166,6 +4300,14 @@ end isProtectedClass;</code>
   input TypeName cl;
   output String name;
 end getBuiltinType;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="name"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.setInitXmlStartValue">
@@ -2176,6 +4318,17 @@ end getBuiltinType;</code>
   input String outputFile;
   output Boolean success = false;
 end setInitXmlStartValue;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="String" name="variableName" hasDefault="false"/>
+            <input_argument className="String" name="startValue" hasDefault="false"/>
+            <input_argument className="String" name="outputFile" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.ngspicetoModelica">
@@ -2183,6 +4336,14 @@ end setInitXmlStartValue;</code>
   input String netlistfileName;
   output Boolean success = false;
 end ngspicetoModelica;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="netlistfileName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInheritedClasses">
@@ -2190,6 +4351,14 @@ end ngspicetoModelica;</code>
   input TypeName name;
   output TypeName inheritedClasses[:];
 end getInheritedClasses;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="name" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="inheritedClasses"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getComponentsTest">
@@ -2213,6 +4382,10 @@ end getInheritedClasses;</code>
     String dimensions[:];
   end Component;
 end getComponentsTest;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments/>
+        </components>
         <classes>
           <record id="OpenModelica.Scripting.getComponentsTest.Component">
             <code interfaceOnly="false">record Component
@@ -2253,6 +4426,14 @@ end Component;</code>
   input TypeName name;
   output Boolean res;
 end isExperiment;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="name" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="res"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getSimulationOptions">
@@ -2269,6 +4450,23 @@ end isExperiment;</code>
   output Integer numberOfIntervals;
   output Real interval;
 end getSimulationOptions;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="name" hasDefault="false"/>
+            <input_argument className="Real" name="defaultStartTime" hasDefault="true"/>
+            <input_argument className="Real" name="defaultStopTime" hasDefault="true"/>
+            <input_argument className="Real" name="defaultTolerance" hasDefault="true"/>
+            <input_argument className="Integer" name="defaultNumberOfIntervals" hasDefault="true"/>
+            <input_argument className="Real" name="defaultInterval" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Real" name="startTime"/>
+            <output_argument className="Real" name="stopTime"/>
+            <output_argument className="Real" name="tolerance"/>
+            <output_argument className="Integer" name="numberOfIntervals"/>
+            <output_argument className="Real" name="interval"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationNamedModifiers">
@@ -2277,6 +4475,15 @@ end getSimulationOptions;</code>
   input String vendorannotation;
   output String[:] modifiernamelist;
 end getAnnotationNamedModifiers;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="name" hasDefault="false"/>
+            <input_argument className="String" name="vendorannotation" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="modifiernamelist"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAnnotationModifierValue">
@@ -2286,6 +4493,16 @@ end getAnnotationNamedModifiers;</code>
   input String modifiername;
   output String modifiernamevalue;
 end getAnnotationModifierValue;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="name" hasDefault="false"/>
+            <input_argument className="String" name="vendorannotation" hasDefault="false"/>
+            <input_argument className="String" name="modifiername" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="modifiernamevalue"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.classAnnotationExists">
@@ -2294,6 +4511,15 @@ end getAnnotationModifierValue;</code>
   input TypeName annotationName;
   output Boolean exists;
 end classAnnotationExists;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="annotationName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="exists"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getBooleanClassAnnotation">
@@ -2302,6 +4528,15 @@ end classAnnotationExists;</code>
   input TypeName annotationName;
   output Boolean value;
 end getBooleanClassAnnotation;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="annotationName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="value"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.extendsFrom">
@@ -2310,6 +4545,15 @@ end getBooleanClassAnnotation;</code>
   input TypeName baseClassName;
   output Boolean res;
 end extendsFrom;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="baseClassName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="res"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.loadModelica3D">
@@ -2317,6 +4561,14 @@ end extendsFrom;</code>
   input String version = "3.2.1";
   output Boolean status;
 end loadModelica3D;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="version" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="status"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.searchClassNames">
@@ -2325,12 +4577,27 @@ end loadModelica3D;</code>
   input Boolean findInText = false;
   output TypeName classNames[:];
 end searchClassNames;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="searchText" hasDefault="false"/>
+            <input_argument className="Boolean" name="findInText" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="OpenModelica.$Code.TypeName" name="classNames"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getAvailableLibraries">
         <code interfaceOnly="true">function getAvailableLibraries
   output String[:] libraries;
 end getAvailableLibraries;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="String" name="libraries"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getUses">
@@ -2338,6 +4605,14 @@ end getAvailableLibraries;</code>
   input TypeName pack;
   output String[:, :] uses;
 end getUses;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="pack" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="uses"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedClassModifierNames">
@@ -2345,6 +4620,14 @@ end getUses;</code>
   input TypeName className;
   output String[:] modifierNames;
 end getDerivedClassModifierNames;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="modifierNames"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getDerivedClassModifierValue">
@@ -2353,6 +4636,15 @@ end getDerivedClassModifierNames;</code>
   input TypeName modifierName;
   output String modifierValue;
 end getDerivedClassModifierValue;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="className" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="modifierName" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="modifierValue"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateEntryPoint">
@@ -2361,12 +4653,26 @@ end getDerivedClassModifierValue;</code>
   input TypeName entryPoint;
   input String url = "https://trac.openmodelica.org/OpenModelica/newticket";
 end generateEntryPoint;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="fileName" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.TypeName" name="entryPoint" hasDefault="false"/>
+            <input_argument className="String" name="url" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments/>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.numProcessors">
         <code interfaceOnly="true">function numProcessors
   output Integer result;
 end numProcessors;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Integer" name="result"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.runScriptParallel">
@@ -2376,26 +4682,56 @@ end numProcessors;</code>
   input Boolean useThreads = false;
   output Boolean results[:];
 end runScriptParallel;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="scripts" hasDefault="false"/>
+            <input_argument className="Integer" name="numThreads" hasDefault="true"/>
+            <input_argument className="Boolean" name="useThreads" hasDefault="true"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="results"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.exit">
         <code interfaceOnly="true">function exit
   input Integer status;
 end exit;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Integer" name="status" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments/>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.threadWorkFailed">
         <code interfaceOnly="true"></code>
+        <components>
+          <input_arguments/>
+          <output_arguments/>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getMemorySize">
         <code interfaceOnly="true">function getMemorySize
   output Real memory(unit = "MiB");
 end getMemorySize;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="Real" name="memory"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_gcollect_and_unmap">
         <code interfaceOnly="true"></code>
+        <components>
+          <input_arguments/>
+          <output_arguments/>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_expand_hp">
@@ -2403,6 +4739,14 @@ end getMemorySize;</code>
   input Integer size;
   output Boolean success;
 end GC_expand_hp;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Integer" name="size" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.GC_set_max_heap_size">
@@ -2410,6 +4754,14 @@ end GC_expand_hp;</code>
   input Integer size;
   output Boolean success;
 end GC_set_max_heap_size;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="Integer" name="size" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <record id="OpenModelica.Scripting.GC_PROFSTATS">
@@ -2443,6 +4795,12 @@ end GC_PROFSTATS;</code>
         <code interfaceOnly="true">function GC_get_prof_stats
   output GC_PROFSTATS gcStats;
 end GC_get_prof_stats;</code>
+        <components>
+          <input_arguments/>
+          <output_arguments>
+            <output_argument className="OpenModelica.Scripting.GC_PROFSTATS" name="gcStats"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.checkInterfaceOfPackages">
@@ -2451,6 +4809,15 @@ end GC_get_prof_stats;</code>
   input String dependencyMatrix[:, :];
   output Boolean success;
 end checkInterfaceOfPackages;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="dependencyMatrix" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.sortStrings">
@@ -2458,6 +4825,14 @@ end checkInterfaceOfPackages;</code>
   input String arr[:];
   output String sorted[:];
 end sortStrings;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="String" name="arr" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="sorted"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getClassInformation">
@@ -2476,6 +4851,31 @@ end sortStrings;</code>
   output Boolean state;
   output String access;
 end getClassInformation;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="comment"/>
+            <output_argument className="String" name="restriction"/>
+            <output_argument className="Boolean" name="encapsulatedPrefix"/>
+            <output_argument className="Boolean" name="finalPrefix"/>
+            <output_argument className="Boolean" name="partialPrefix"/>
+            <output_argument className="String" name="fileName"/>
+            <output_argument className="Boolean" name="fileReadOnly"/>
+            <output_argument className="Integer" name="columnNumberEnd"/>
+            <output_argument className="Integer" name="lineNumberEnd"/>
+            <output_argument className="Integer" name="columnNumberStart"/>
+            <output_argument className="Integer" name="lineNumberStart"/>
+            <output_argument className="String" name="dimensions"/>
+            <output_argument className="Boolean" name="isProtectedClass"/>
+            <output_argument className="Boolean" name="isDocumentationClass"/>
+            <output_argument className="String" name="version"/>
+            <output_argument className="String" name="preferredView"/>
+            <output_argument className="Boolean" name="state"/>
+            <output_argument className="String" name="access"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getTransitions">
@@ -2483,6 +4883,14 @@ end getClassInformation;</code>
   input TypeName cl;
   output String[:, :] transitions;
 end getTransitions;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="transitions"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addTransition">
@@ -2498,6 +4906,22 @@ end getTransitions;</code>
   input ExpressionOrModification annotate;
   output Boolean bool;
 end addTransition;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="from" hasDefault="false"/>
+            <input_argument className="String" name="to" hasDefault="false"/>
+            <input_argument className="String" name="condition" hasDefault="false"/>
+            <input_argument className="Boolean" name="immediate" hasDefault="true"/>
+            <input_argument className="Boolean" name="reset" hasDefault="true"/>
+            <input_argument className="Boolean" name="synchronize" hasDefault="true"/>
+            <input_argument className="Integer" name="priority" hasDefault="true"/>
+            <input_argument className="OpenModelica.$Code.ExpressionOrModification" name="annotate" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteTransition">
@@ -2512,6 +4936,21 @@ end addTransition;</code>
   input Integer priority;
   output Boolean bool;
 end deleteTransition;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="from" hasDefault="false"/>
+            <input_argument className="String" name="to" hasDefault="false"/>
+            <input_argument className="String" name="condition" hasDefault="false"/>
+            <input_argument className="Boolean" name="immediate" hasDefault="false"/>
+            <input_argument className="Boolean" name="reset" hasDefault="false"/>
+            <input_argument className="Boolean" name="synchronize" hasDefault="false"/>
+            <input_argument className="Integer" name="priority" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.updateTransition">
@@ -2532,6 +4971,27 @@ end deleteTransition;</code>
   input ExpressionOrModification annotate;
   output Boolean bool;
 end updateTransition;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="from" hasDefault="false"/>
+            <input_argument className="String" name="to" hasDefault="false"/>
+            <input_argument className="String" name="oldCondition" hasDefault="false"/>
+            <input_argument className="Boolean" name="oldImmediate" hasDefault="false"/>
+            <input_argument className="Boolean" name="oldReset" hasDefault="false"/>
+            <input_argument className="Boolean" name="oldSynchronize" hasDefault="false"/>
+            <input_argument className="Integer" name="oldPriority" hasDefault="false"/>
+            <input_argument className="String" name="newCondition" hasDefault="false"/>
+            <input_argument className="Boolean" name="newImmediate" hasDefault="false"/>
+            <input_argument className="Boolean" name="newReset" hasDefault="false"/>
+            <input_argument className="Boolean" name="newSynchronize" hasDefault="false"/>
+            <input_argument className="Integer" name="newPriority" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.ExpressionOrModification" name="annotate" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.getInitialStates">
@@ -2539,6 +4999,14 @@ end updateTransition;</code>
   input TypeName cl;
   output String[:, :] initialStates;
 end getInitialStates;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="String" name="initialStates"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.addInitialState">
@@ -2548,6 +5016,16 @@ end getInitialStates;</code>
   input ExpressionOrModification annotate;
   output Boolean bool;
 end addInitialState;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="state" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.ExpressionOrModification" name="annotate" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.deleteInitialState">
@@ -2556,6 +5034,15 @@ end addInitialState;</code>
   input String state;
   output Boolean bool;
 end deleteInitialState;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="state" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.updateInitialState">
@@ -2565,6 +5052,16 @@ end deleteInitialState;</code>
   input ExpressionOrModification annotate;
   output Boolean bool;
 end updateInitialState;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="state" hasDefault="false"/>
+            <input_argument className="OpenModelica.$Code.ExpressionOrModification" name="annotate" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="bool"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.generateScriptingAPI">
@@ -2576,6 +5073,18 @@ end updateInitialState;</code>
   output String qtFile;
   output String qtHeader;
 end generateScriptingAPI;</code>
+        <components>
+          <input_arguments>
+            <input_argument className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false"/>
+            <input_argument className="String" name="name" hasDefault="false"/>
+          </input_arguments>
+          <output_arguments>
+            <output_argument className="Boolean" name="success"/>
+            <output_argument className="String" name="moFile"/>
+            <output_argument className="String" name="qtFile"/>
+            <output_argument className="String" name="qtHeader"/>
+          </output_arguments>
+        </components>
         <classes/>
       </function>
       <package id="OpenModelica.Scripting.Experimental">
@@ -2586,6 +5095,15 @@ end generateScriptingAPI;</code>
   input String names[:, 2];
   output Boolean success;
 end relocateFunctions;</code>
+            <components>
+              <input_arguments>
+                <input_argument className="String" name="fileName" hasDefault="false"/>
+                <input_argument className="String" name="names" hasDefault="false"/>
+              </input_arguments>
+              <output_arguments>
+                <output_argument className="Boolean" name="success"/>
+              </output_arguments>
+            </components>
             <classes/>
           </function>
         </classes>

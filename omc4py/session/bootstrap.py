@@ -336,6 +336,61 @@ def generate_class_xml(
 
         return components_tag
 
+    def generate_function_components_tag(
+    ) -> xml.Element:
+        components_tag = xml.SubElement(
+            class_tag,
+            "components",
+        )
+
+        input_arguments_tag = xml.SubElement(
+            components_tag,
+            "input_arguments",
+        )
+        output_arguments_tag = xml.SubElement(
+            components_tag,
+            "output_arguments",
+        )
+
+        defaultValueInfoDict = parse_defaultValueInfoDict(
+            session.list(className, interfaceOnly=True),
+        )
+
+        try:
+            components = session.getComponentsTest(className)
+        except OMCError as error:
+            print(f"TODO: handle OMCError {error}", file=sys.stderr)
+            components_tag.text = f"TODO: {error}"
+            return components_tag
+
+        for component in components:
+            if component.isProtected:
+                continue
+            if component.inputOutput == "input":
+                hasDefault = defaultValueInfoDict[
+                    types.Identifier(component.name)
+                ]
+                xml.SubElement(
+                    input_arguments_tag,
+                    "input_argument",
+                    {
+                        "className": str(component.className),
+                        "name": str(component.name),
+                        "hasDefault": "true" if hasDefault else "false",
+                    }
+                )
+            if component.inputOutput == "output":
+                xml.SubElement(
+                    output_arguments_tag,
+                    "output_argument",
+                    {
+                        "className": str(component.className),
+                        "name": str(component.name),
+                    }
+                )
+
+        return components_tag
+
     def generate_classes_tag(
     ) -> xml.Element:
         classes_tag = xml.SubElement(
@@ -357,6 +412,8 @@ def generate_class_xml(
         generate_type_components_tag()
     elif restriction is ClassRestriction.record:
         generate_record_components_tag()
+    elif restriction is ClassRestriction.function:
+        generate_function_components_tag()
     generate_classes_tag()
 
     return parent
