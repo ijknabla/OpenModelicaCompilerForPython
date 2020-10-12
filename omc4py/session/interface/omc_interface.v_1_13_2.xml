@@ -1,6 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<omcInterface>
-  <version>OMCompiler v1.13.2</version>
+<omcInterface omcVersion="OMCompiler v1.13.2">
   <package id="OpenModelica.Scripting">
     <classes>
       <record id="OpenModelica.Scripting.CheckSettingsResult">
