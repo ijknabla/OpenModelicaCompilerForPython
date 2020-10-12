@@ -4,7 +4,7 @@
   <xsd:element name="omcInterface" type="OmcInterface"/>
 
   <xsd:complexType name="OmcInterface">
-    <xsd:attribute name="omc_version" type="xsd:string"/>
+    <xsd:attribute name="omcVersion" type="xsd:string"/>
   </xsd:complexType>
 
 </xsd:schema>
