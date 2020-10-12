@@ -40,6 +40,13 @@
       <xsd:extension base="ModelicaClass">
         <xsd:sequence>
           <xsd:element name="code" type="Code"/>
+          <xsd:element name="components">
+            <xsd:complexType>
+              <xsd:choice>
+                <xsd:element name="enumerators" type="Enumerators"/>
+              </xsd:choice>
+            </xsd:complexType>
+          </xsd:element>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
@@ -71,6 +78,17 @@
         <xsd:attribute name="interfaceOnly" type="xsd:boolean"/>
       </xsd:extension>
     </xsd:simpleContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Enumerators">
+    <xsd:sequence maxOccurs="unbounded">
+      <xsd:element name="enumerator">
+        <xsd:complexType>
+          <xsd:attribute name="name" type="xsd:token"/>
+          <xsd:attribute name="comment" type="xsd:string"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaClassAlias">
