@@ -316,35 +316,42 @@ def generate_class_elem(
 
         return components_tag
 
-    def generate_record_components_tag(
+    def generate_record_elem(
     ) -> xml.Element:
-        components_tag = xml.SubElement(
+        components_elem = xml.SubElement(
             class_tag,
-            "components"
+            "components",
+        )
+
+        elements_elem = xml.SubElement(
+            components_elem,
+            "elements",
         )
 
         for component in session.getComponentsTest(className):
-            component_tag = xml.SubElement(
-                components_tag,
-                "component",
+            element_elem = xml.SubElement(
+                elements_elem,
+                "element",
                 {
                     "className": str(component.className),
                     "name": str(component.name),
                     "comment": component.comment
                 }
             )
-            dimensions_tag = xml.SubElement(
-                component_tag,
+            dimensions_elem = xml.SubElement(
+                element_elem,
                 "dimensions"
             )
             for dimension in component.dimensions:
-                dimension_tag = xml.SubElement(
-                    dimensions_tag,
-                    "dimension"
+                xml.SubElement(
+                    dimensions_elem,
+                    "dimension",
+                    {
+                        "size": dimension,
+                    }
                 )
-                dimension_tag.text = dimension
 
-        return components_tag
+        return components_elem
 
     def generate_function_components_tag(
     ) -> xml.Element:
@@ -435,7 +442,7 @@ def generate_class_elem(
     if restriction is ClassRestriction.type:
         generate_type_components_tag()
     elif restriction is ClassRestriction.record:
-        generate_record_components_tag()
+        generate_record_elem()
     elif restriction is ClassRestriction.function:
         generate_function_components_tag()
 
