@@ -3,6 +3,8 @@ import argparse
 import arpeggio  # type: ignore
 import enum
 from lxml import etree as xml
+from pathlib import Path
+import pkg_resources
 import sys
 import typing
 import warnings
@@ -468,12 +470,33 @@ def bootstrap(
         omc_interface_xml = generate_omc_interface_xml(
             session
         )
+
     omc_interface_xml.write(
         sys.stdout.buffer,
         pretty_print=True,
         xml_declaration=True,
         encoding="utf-8",
     )
+
+
+def load_schema(
+) -> xml.XMLSchema:
+    return xml.XMLSchema(
+        xml.XML(
+            pkg_resources.resource_string(
+                __name__,
+                "interface/omc_interface.xsd",
+            )
+        )
+    )
+
+
+def validate(
+    interface_xml_path: Path,
+):
+    schema = load_schema()
+    parser = xml.XMLParser(schema=schema)
+    xml.fromstring(interface_xml_path.read_bytes(), parser)
 
 
 def main():
