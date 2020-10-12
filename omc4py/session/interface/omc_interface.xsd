@@ -13,10 +13,11 @@
   <xsd:complexType name="AnyModelicaClasses">
     <xsd:sequence minOccurs="0" maxOccurs="unbounded">
       <xsd:choice>
-        <xsd:element name="package"  type="ModelicaPackage" />
-        <xsd:element name="type"     type="ModelicaType"    />
-        <xsd:element name="record"   type="ModelicaRecord"  />
-        <xsd:element name="function" type="ModelicaFunction"/>
+        <xsd:element name="package"  type="ModelicaPackage"   />
+        <xsd:element name="type"     type="ModelicaType"      />
+        <xsd:element name="record"   type="ModelicaRecord"    />
+        <xsd:element name="function" type="ModelicaFunction"  />
+        <xsd:element name="alias"    type="ModelicaClassAlias"/>
       </xsd:choice>
     </xsd:sequence>
   </xsd:complexType>
@@ -62,6 +63,12 @@
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="ModelicaClassAlias">
+    <xsd:attribute name="id" type="xsd:token"/>
+    <xsd:attribute name="restriction" type="xsd:token"/>
+    <xsd:attribute name="reference" type="xsd:token"/>
   </xsd:complexType>
 
 </xsd:schema>
