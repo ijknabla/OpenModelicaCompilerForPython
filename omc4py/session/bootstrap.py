@@ -430,6 +430,7 @@ def generate_class_elem(
             )
         return classes_tag
 
+    generate_classes_tag()
     generate_code_tag()
     if restriction is ClassRestriction.type:
         generate_type_components_tag()
@@ -437,7 +438,6 @@ def generate_class_elem(
         generate_record_components_tag()
     elif restriction is ClassRestriction.function:
         generate_function_components_tag()
-    generate_classes_tag()
 
     return parent
 
