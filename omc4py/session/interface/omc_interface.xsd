@@ -11,6 +11,7 @@
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaPackage">
+    <xsd:attribute name="id" type="xsd:token"/>
   </xsd:complexType>
 
 </xsd:schema>
