@@ -3,6 +3,7 @@ __all__ = (
     "OMCError",
     "OMCException",
     "OMCWarning",
+    "find_omc_error",
 )
 
 import re
@@ -45,11 +46,13 @@ omc_error_pattern = re.compile(
 )
 
 
-def parse_omc_error_message(
-    error_message: str
+def find_omc_error(
+    omc: InteractiveOMC
 ) -> typing.Optional[OMCException]:
-    error_message = error_message.rstrip()
-    if not error_message:
+    error_message = string.unquote_modelica_string(
+        omc.execute("getErrorString()").rstrip()
+    )
+    if not error_message or error_message.isspace():
         return None
 
     matched = omc_error_pattern.match(
@@ -71,12 +74,3 @@ def parse_omc_error_message(
         raise NotImplementedError(
             "Unexpected omc error kind: {kind!r}"
         )
-
-
-def find_omc_error(
-    omc: InteractiveOMC
-) -> typing.Optional[OMCException]:
-    error_message = omc.execute("getErrorString()").rstrip()
-    return parse_omc_error_message(
-        string.unquote_modelica_string(error_message)
-    )
