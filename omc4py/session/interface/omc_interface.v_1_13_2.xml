@@ -1949,7 +1949,10 @@ end save;</code>
       </function>
       <function id="OpenModelica.Scripting.saveTotalSCode">
         <code interfaceOnly="true"></code>
-        <components>TODO: [/opt/OpenModelica/v1.13.2/lib/omc/ModelicaBuiltin.mo:2135:1-2135:41:readonly] Warning: Ignoring external declaration of the extended class: saveTotalModel.<input_arguments/><output_arguments/></components>
+        <components>
+          <input_arguments/>
+          <output_arguments/>
+        </components>
         <classes/>
       </function>
       <function id="OpenModelica.Scripting.translateGraphics">

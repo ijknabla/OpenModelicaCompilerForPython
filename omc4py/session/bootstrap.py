@@ -5,6 +5,7 @@ import enum
 from lxml import etree as xml
 import sys
 import typing
+import warnings
 
 from . import (
     StrOrPathLike,
@@ -129,13 +130,14 @@ class OMCSession(
         result_literal = self._omc.execute(
             f"{funcName}({arguments_literal})"
         )
-        if check:
-            errorString_literal = self._omc.execute(
-                "getErrorString()"
-            ).rstrip()
-            errorString = parse_omc_value(errorString_literal).rstrip()
-            if errorString:
-                raise exception.OMCError(errorString)
+
+        error = exception.find_omc_error(self._omc)
+
+        if check and error is not None:
+            if isinstance(error, exception.OMCWarning):
+                warnings.warn(error)
+            else:
+                raise error
 
         return parse_omc_value(result_literal)
 
@@ -352,14 +354,7 @@ def generate_class_xml(
             session.list(className, interfaceOnly=True),
         )
 
-        try:
-            components = session.getComponentsTest(className)
-        except exception.OMCError as error:
-            print(f"TODO: handle exception.OMCError {error}", file=sys.stderr)
-            components_tag.text = f"TODO: {error}"
-            return components_tag
-
-        for component in components:
+        for component in session.getComponentsTest(className):
             if component.isProtected:
                 continue
             if component.inputOutput == "input":
