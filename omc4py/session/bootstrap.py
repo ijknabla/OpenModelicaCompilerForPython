@@ -371,7 +371,7 @@ def generate_class_xml(
                 hasDefault = defaultValueInfoDict[
                     types.Identifier(component.name)
                 ]
-                xml.SubElement(
+                input_argument_tag = xml.SubElement(
                     input_arguments_tag,
                     "input_argument",
                     {
@@ -380,8 +380,18 @@ def generate_class_xml(
                         "hasDefault": "true" if hasDefault else "false",
                     }
                 )
+                dimensions_tag = xml.SubElement(
+                    input_argument_tag,
+                    "dimensions"
+                )
+                for dimension in component.dimensions:
+                    dimension_tag = xml.SubElement(
+                        dimensions_tag,
+                        "dimension"
+                    )
+                    dimension_tag.text = dimension
             if component.inputOutput == "output":
-                xml.SubElement(
+                output_argument_tag = xml.SubElement(
                     output_arguments_tag,
                     "output_argument",
                     {
@@ -389,6 +399,16 @@ def generate_class_xml(
                         "name": str(component.name),
                     }
                 )
+                dimensions_tag = xml.SubElement(
+                    output_argument_tag,
+                    "dimensions"
+                )
+                for dimension in component.dimensions:
+                    dimension_tag = xml.SubElement(
+                        dimensions_tag,
+                        "dimension"
+                    )
+                    dimension_tag.text = dimension
 
         return components_tag
 
