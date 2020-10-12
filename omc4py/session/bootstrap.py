@@ -288,15 +288,15 @@ def generate_class_xml(
 
         return code_tag
 
-    def generate_type_elements_tag(
+    def generate_type_components_tag(
     ) -> xml.Element:
-        elements_tag = xml.SubElement(
+        components_tag = xml.SubElement(
             class_tag,
-            "elements",
+            "components",
         )
 
         enumeration_tag = xml.SubElement(
-            elements_tag,
+            components_tag,
             "enumeration",
         )
 
@@ -314,7 +314,7 @@ def generate_class_xml(
                 }
             )
 
-        return elements_tag
+        return components_tag
 
     def generate_classes_tag(
     ) -> xml.Element:
@@ -334,7 +334,7 @@ def generate_class_xml(
 
     generate_code_tag()
     if restriction is ClassRestriction.type:
-        generate_type_elements_tag()
+        generate_type_components_tag()
     generate_classes_tag()
 
     return parent
