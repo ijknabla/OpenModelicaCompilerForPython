@@ -74,6 +74,13 @@
       <xsd:extension base="ModelicaClass">
         <xsd:sequence>
           <xsd:element name="code" type="Code"/>
+          <xsd:element name="components">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="arguments" type="Arguments"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
@@ -108,6 +115,22 @@
           <xsd:attribute name="className" type="xsd:token"/>
           <xsd:attribute name="name" type="xsd:token"/>
           <xsd:attribute name="comment" type="xsd:string"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Arguments">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="argument">
+        <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="dimensions" type="Dimensions"/>
+          </xsd:sequence>
+            <xsd:attribute name="inputOutput" type="xsd:string"/>
+            <xsd:attribute name="className" type="xsd:token"/>
+            <xsd:attribute name="name" type="xsd:token"/>
+            <xsd:attribute name="comment" type="xsd:string"/>
         </xsd:complexType>
       </xsd:element>
     </xsd:sequence>
