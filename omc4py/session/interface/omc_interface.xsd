@@ -13,8 +13,8 @@
   <xsd:complexType name="AnyModelicaClasses">
     <xsd:sequence minOccurs="0" maxOccurs="unbounded">
       <xsd:choice>
-        <xsd:element name="package" type="ModelicaClass"/>
-        <xsd:element name="type" type="ModelicaClass"/>
+        <xsd:element name="package" type="ModelicaPackage"/>
+        <xsd:element name="type" type="ModelicaType"/>
       </xsd:choice>
     </xsd:sequence>
   </xsd:complexType>
