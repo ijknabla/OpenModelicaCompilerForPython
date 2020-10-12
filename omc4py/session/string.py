@@ -55,11 +55,11 @@ def unquote_modelica_string(
 ) -> str:
     if not modelica_string.startswith('"'):
         raise ValueError(
-            "modelica_string must starts with '\"' got {modelica_string!r}"
+            f"modelica_string must starts with '\"' got {modelica_string!r}"
         )
     if not modelica_string.endswith('"'):
         raise ValueError(
-            "modelica_string must ends with '\"' got {modelica_string!r}"
+            f"modelica_string must ends with '\"' got {modelica_string!r}"
         )
     return unescape_modelica_string(modelica_string[1:-1])
 
