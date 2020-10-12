@@ -295,9 +295,24 @@ def generate_class_xml(
             "elements",
         )
 
-        parse_enumerator(
+        enumeration_tag = xml.SubElement(
+            elements_tag,
+            "enumeration",
+        )
+
+        enumeration = parse_enumerator(
             session.list(className)
         )
+
+        for name, comment in enumeration:
+            xml.SubElement(
+                enumeration_tag,
+                "enumerator",
+                {
+                    "name": str(name),
+                    "comment": comment,
+                }
+            )
 
         return elements_tag
 
