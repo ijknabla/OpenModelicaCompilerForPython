@@ -102,9 +102,22 @@
     <xsd:sequence minOccurs="0" maxOccurs="unbounded">
       <xsd:element name="element">
         <xsd:complexType>
+          <xsd:sequence>
+            <xsd:element name="dimensions" type="Dimensions"/>
+          </xsd:sequence>
           <xsd:attribute name="className" type="xsd:token"/>
           <xsd:attribute name="name" type="xsd:token"/>
           <xsd:attribute name="comment" type="xsd:string"/>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+  <xsd:complexType name="Dimensions">
+    <xsd:sequence minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="dimension">
+        <xsd:complexType>
+          <xsd:attribute name="size" type="xsd:string"/>
         </xsd:complexType>
       </xsd:element>
     </xsd:sequence>
