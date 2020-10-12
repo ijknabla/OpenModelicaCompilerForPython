@@ -355,18 +355,14 @@ def generate_class_elem(
 
     def generate_function_components_tag(
     ) -> xml.Element:
-        components_tag = xml.SubElement(
+        components_elem = xml.SubElement(
             class_tag,
             "components",
         )
 
-        input_arguments_tag = xml.SubElement(
-            components_tag,
-            "input_arguments",
-        )
-        output_arguments_tag = xml.SubElement(
-            components_tag,
-            "output_arguments",
+        arguments_elem = xml.SubElement(
+            components_elem,
+            "arguments"
         )
 
         defaultValueInfoDict = parse_defaultValueInfoDict(
@@ -376,50 +372,34 @@ def generate_class_elem(
         for component in session.getComponentsTest(className):
             if component.isProtected:
                 continue
-            if component.inputOutput == "input":
-                hasDefault = defaultValueInfoDict[
-                    types.Identifier(component.name)
-                ]
-                input_argument_tag = xml.SubElement(
-                    input_arguments_tag,
-                    "input_argument",
+            hasDefault = defaultValueInfoDict[
+                types.Identifier(component.name)
+            ]
+            argument_elem = xml.SubElement(
+                arguments_elem,
+                "argument",
+                {
+                    "inputOutput": component.inputOutput,
+                    "className": str(component.className),
+                    "name": str(component.name),
+                    "hasDefault": "true" if hasDefault else "false",
+                    "comment": component.comment,
+                }
+            )
+            dimensions_elem = xml.SubElement(
+                argument_elem,
+                "dimensions"
+            )
+            for dimension in component.dimensions:
+                xml.SubElement(
+                    dimensions_elem,
+                    "dimension",
                     {
-                        "className": str(component.className),
-                        "name": str(component.name),
-                        "hasDefault": "true" if hasDefault else "false",
+                        "size": dimension
                     }
                 )
-                dimensions_tag = xml.SubElement(
-                    input_argument_tag,
-                    "dimensions"
-                )
-                for dimension in component.dimensions:
-                    dimension_tag = xml.SubElement(
-                        dimensions_tag,
-                        "dimension"
-                    )
-                    dimension_tag.text = dimension
-            if component.inputOutput == "output":
-                output_argument_tag = xml.SubElement(
-                    output_arguments_tag,
-                    "output_argument",
-                    {
-                        "className": str(component.className),
-                        "name": str(component.name),
-                    }
-                )
-                dimensions_tag = xml.SubElement(
-                    output_argument_tag,
-                    "dimensions"
-                )
-                for dimension in component.dimensions:
-                    dimension_tag = xml.SubElement(
-                        dimensions_tag,
-                        "dimension"
-                    )
-                    dimension_tag.text = dimension
 
-        return components_tag
+        return components_elem
 
     def generate_classes_tag(
     ) -> xml.Element:
