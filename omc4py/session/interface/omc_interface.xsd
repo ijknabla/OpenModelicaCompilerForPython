@@ -4,7 +4,13 @@
   <xsd:element name="omcInterface" type="OmcInterface"/>
 
   <xsd:complexType name="OmcInterface">
+    <xsd:sequence>
+      <xsd:element name="package" type="ModelicaPackage"/>
+    </xsd:sequence>
     <xsd:attribute name="omcVersion" type="xsd:string"/>
+  </xsd:complexType>
+
+  <xsd:complexType name="ModelicaPackage">
   </xsd:complexType>
 
 </xsd:schema>
