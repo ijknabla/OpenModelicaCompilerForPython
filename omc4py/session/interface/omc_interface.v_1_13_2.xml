@@ -16,24 +16,60 @@
     preferredView = "text");
 end CheckSettingsResult;</code>
         <components>
-          <component className="String" name="OMDEV_PATH" comment=""/>
-          <component className="String" name="SYSTEM_PATH" comment=""/>
-          <component className="String" name="OMC_PATH" comment=""/>
-          <component className="String" name="OPENMODELICALIBRARY" comment=""/>
-          <component className="String" name="OPENMODELICAHOME" comment=""/>
-          <component className="Boolean" name="OMC_FOUND" comment=""/>
-          <component className="String" name="WORKING_DIRECTORY" comment=""/>
-          <component className="String" name="MODELICAUSERCFLAGS" comment=""/>
-          <component className="Boolean" name="REMOVE_FILE_WORKS" comment=""/>
-          <component className="Boolean" name="CREATE_FILE_WORKS" comment=""/>
-          <component className="String" name="C_COMPILER_VERSION" comment=""/>
-          <component className="String" name="C_COMPILER" comment=""/>
-          <component className="String" name="SENDDATALIBS" comment=""/>
-          <component className="String" name="SYSTEM_INFO" comment=""/>
-          <component className="String" name="OS" comment=""/>
-          <component className="Boolean" name="HAVE_CORBA" comment=""/>
-          <component className="Boolean" name="C_COMPILER_RESPONDING" comment=""/>
-          <component className="String" name="CONFIGURE_CMDLINE" comment=""/>
+          <component className="String" name="OMDEV_PATH" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="SYSTEM_PATH" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="OMC_PATH" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="OPENMODELICALIBRARY" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="OPENMODELICAHOME" comment="">
+            <dimensions/>
+          </component>
+          <component className="Boolean" name="OMC_FOUND" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="WORKING_DIRECTORY" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="MODELICAUSERCFLAGS" comment="">
+            <dimensions/>
+          </component>
+          <component className="Boolean" name="REMOVE_FILE_WORKS" comment="">
+            <dimensions/>
+          </component>
+          <component className="Boolean" name="CREATE_FILE_WORKS" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="C_COMPILER_VERSION" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="C_COMPILER" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="SENDDATALIBS" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="SYSTEM_INFO" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="OS" comment="">
+            <dimensions/>
+          </component>
+          <component className="Boolean" name="HAVE_CORBA" comment="">
+            <dimensions/>
+          </component>
+          <component className="Boolean" name="C_COMPILER_RESPONDING" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="CONFIGURE_CMDLINE" comment="">
+            <dimensions/>
+          </component>
         </components>
         <classes/>
       </record>
@@ -1341,12 +1377,24 @@ end getMessagesString;</code>
     preferredView = "text");
 end SourceInfo;</code>
         <components>
-          <component className="String" name="fileName" comment=""/>
-          <component className="Boolean" name="readonly" comment=""/>
-          <component className="Integer" name="lineStart" comment=""/>
-          <component className="Integer" name="columnStart" comment=""/>
-          <component className="Integer" name="lineEnd" comment=""/>
-          <component className="Integer" name="columnEnd" comment=""/>
+          <component className="String" name="fileName" comment="">
+            <dimensions/>
+          </component>
+          <component className="Boolean" name="readonly" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="lineStart" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="columnStart" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="lineEnd" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="columnEnd" comment="">
+            <dimensions/>
+          </component>
         </components>
         <classes/>
       </record>
@@ -1386,11 +1434,21 @@ end SourceInfo;</code>
     preferredView = "text");
 end ErrorMessage;</code>
         <components>
-          <component className="OpenModelica.Scripting.SourceInfo" name="info" comment=""/>
-          <component className="String" name="message" comment="After applying the individual arguments"/>
-          <component className="OpenModelica.Scripting.ErrorKind" name="kind" comment=""/>
-          <component className="OpenModelica.Scripting.ErrorLevel" name="level" comment=""/>
-          <component className="Integer" name="id" comment="Internal ID of the error (just ignore this)"/>
+          <component className="OpenModelica.Scripting.SourceInfo" name="info" comment="">
+            <dimensions/>
+          </component>
+          <component className="String" name="message" comment="After applying the individual arguments">
+            <dimensions/>
+          </component>
+          <component className="OpenModelica.Scripting.ErrorKind" name="kind" comment="">
+            <dimensions/>
+          </component>
+          <component className="OpenModelica.Scripting.ErrorLevel" name="level" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="id" comment="Internal ID of the error (just ignore this)">
+            <dimensions/>
+          </component>
         </components>
         <classes/>
       </record>
@@ -2551,16 +2609,36 @@ end simulate;</code>
   Real timeTotal;
 end SimulationResult;</code>
             <components>
-              <component className="String" name="resultFile" comment=""/>
-              <component className="String" name="simulationOptions" comment=""/>
-              <component className="String" name="messages" comment=""/>
-              <component className="Real" name="timeFrontend" comment=""/>
-              <component className="Real" name="timeBackend" comment=""/>
-              <component className="Real" name="timeSimCode" comment=""/>
-              <component className="Real" name="timeTemplates" comment=""/>
-              <component className="Real" name="timeCompile" comment=""/>
-              <component className="Real" name="timeSimulation" comment=""/>
-              <component className="Real" name="timeTotal" comment=""/>
+              <component className="String" name="resultFile" comment="">
+                <dimensions/>
+              </component>
+              <component className="String" name="simulationOptions" comment="">
+                <dimensions/>
+              </component>
+              <component className="String" name="messages" comment="">
+                <dimensions/>
+              </component>
+              <component className="Real" name="timeFrontend" comment="">
+                <dimensions/>
+              </component>
+              <component className="Real" name="timeBackend" comment="">
+                <dimensions/>
+              </component>
+              <component className="Real" name="timeSimCode" comment="">
+                <dimensions/>
+              </component>
+              <component className="Real" name="timeTemplates" comment="">
+                <dimensions/>
+              </component>
+              <component className="Real" name="timeCompile" comment="">
+                <dimensions/>
+              </component>
+              <component className="Real" name="timeSimulation" comment="">
+                <dimensions/>
+              </component>
+              <component className="Real" name="timeTotal" comment="">
+                <dimensions/>
+              </component>
             </components>
             <classes/>
           </record>
@@ -4407,18 +4485,44 @@ end getComponentsTest;</code>
   String dimensions[:];
 end Component;</code>
             <components>
-              <component className="String" name="className" comment=""/>
-              <component className="String" name="name" comment=""/>
-              <component className="String" name="comment" comment=""/>
-              <component className="Boolean" name="isProtected" comment=""/>
-              <component className="Boolean" name="isFinal" comment=""/>
-              <component className="Boolean" name="isFlow" comment=""/>
-              <component className="Boolean" name="isStream" comment=""/>
-              <component className="Boolean" name="isReplaceable" comment=""/>
-              <component className="String" name="variability" comment="'constant', 'parameter', 'discrete', ''"/>
-              <component className="String" name="innerOuter" comment="'inner', 'outer', ''"/>
-              <component className="String" name="inputOutput" comment="'input', 'output', ''"/>
-              <component className="String" name="dimensions" comment=""/>
+              <component className="String" name="className" comment="">
+                <dimensions/>
+              </component>
+              <component className="String" name="name" comment="">
+                <dimensions/>
+              </component>
+              <component className="String" name="comment" comment="">
+                <dimensions/>
+              </component>
+              <component className="Boolean" name="isProtected" comment="">
+                <dimensions/>
+              </component>
+              <component className="Boolean" name="isFinal" comment="">
+                <dimensions/>
+              </component>
+              <component className="Boolean" name="isFlow" comment="">
+                <dimensions/>
+              </component>
+              <component className="Boolean" name="isStream" comment="">
+                <dimensions/>
+              </component>
+              <component className="Boolean" name="isReplaceable" comment="">
+                <dimensions/>
+              </component>
+              <component className="String" name="variability" comment="'constant', 'parameter', 'discrete', ''">
+                <dimensions/>
+              </component>
+              <component className="String" name="innerOuter" comment="'inner', 'outer', ''">
+                <dimensions/>
+              </component>
+              <component className="String" name="inputOutput" comment="'input', 'output', ''">
+                <dimensions/>
+              </component>
+              <component className="String" name="dimensions" comment="">
+                <dimensions>
+                  <dimension>:</dimension>
+                </dimensions>
+              </component>
             </components>
             <classes/>
           </record>
@@ -4781,16 +4885,36 @@ end GC_set_max_heap_size;</code>
   Integer reclaimed_bytes_before_gc;
 end GC_PROFSTATS;</code>
         <components>
-          <component className="Integer" name="heapsize_full" comment=""/>
-          <component className="Integer" name="free_bytes_full" comment=""/>
-          <component className="Integer" name="unmapped_bytes" comment=""/>
-          <component className="Integer" name="bytes_allocd_since_gc" comment=""/>
-          <component className="Integer" name="allocd_bytes_before_gc" comment=""/>
-          <component className="Integer" name="non_gc_bytes" comment=""/>
-          <component className="Integer" name="gc_no" comment=""/>
-          <component className="Integer" name="markers_m1" comment=""/>
-          <component className="Integer" name="bytes_reclaimed_since_gc" comment=""/>
-          <component className="Integer" name="reclaimed_bytes_before_gc" comment=""/>
+          <component className="Integer" name="heapsize_full" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="free_bytes_full" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="unmapped_bytes" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="bytes_allocd_since_gc" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="allocd_bytes_before_gc" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="non_gc_bytes" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="gc_no" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="markers_m1" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="bytes_reclaimed_since_gc" comment="">
+            <dimensions/>
+          </component>
+          <component className="Integer" name="reclaimed_bytes_before_gc" comment="">
+            <dimensions/>
+          </component>
         </components>
         <classes/>
       </record>

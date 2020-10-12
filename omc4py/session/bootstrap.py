@@ -322,7 +322,7 @@ def generate_class_xml(
         )
 
         for component in session.getComponentsTest(className):
-            xml.SubElement(
+            component_tag = xml.SubElement(
                 components_tag,
                 "component",
                 {
@@ -331,6 +331,16 @@ def generate_class_xml(
                     "comment": component.comment
                 }
             )
+            dimensions_tag = xml.SubElement(
+                component_tag,
+                "dimensions"
+            )
+            for dimension in component.dimensions:
+                dimension_tag = xml.SubElement(
+                    dimensions_tag,
+                    "dimension"
+                )
+                dimension_tag.text = dimension
 
         return components_tag
 
