@@ -316,6 +316,26 @@ def generate_class_xml(
 
         return components_tag
 
+    def generate_record_components_tag(
+    ) -> xml.Element:
+        components_tag = xml.SubElement(
+            class_tag,
+            "components"
+        )
+
+        for component in session.getComponentsTest(className):
+            xml.SubElement(
+                components_tag,
+                "component",
+                {
+                    "className": str(component.className),
+                    "name": str(component.name),
+                    "comment": component.comment
+                }
+            )
+
+        return components_tag
+
     def generate_classes_tag(
     ) -> xml.Element:
         classes_tag = xml.SubElement(
@@ -335,6 +355,8 @@ def generate_class_xml(
     generate_code_tag()
     if restriction is ClassRestriction.type:
         generate_type_components_tag()
+    elif restriction is ClassRestriction.record:
+        generate_record_components_tag()
     generate_classes_tag()
 
     return parent

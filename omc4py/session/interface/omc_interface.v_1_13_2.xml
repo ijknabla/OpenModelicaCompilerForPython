@@ -15,6 +15,26 @@
   annotation(
     preferredView = "text");
 end CheckSettingsResult;</code>
+        <components>
+          <component className="String" name="OMDEV_PATH" comment=""/>
+          <component className="String" name="SYSTEM_PATH" comment=""/>
+          <component className="String" name="OMC_PATH" comment=""/>
+          <component className="String" name="OPENMODELICALIBRARY" comment=""/>
+          <component className="String" name="OPENMODELICAHOME" comment=""/>
+          <component className="Boolean" name="OMC_FOUND" comment=""/>
+          <component className="String" name="WORKING_DIRECTORY" comment=""/>
+          <component className="String" name="MODELICAUSERCFLAGS" comment=""/>
+          <component className="Boolean" name="REMOVE_FILE_WORKS" comment=""/>
+          <component className="Boolean" name="CREATE_FILE_WORKS" comment=""/>
+          <component className="String" name="C_COMPILER_VERSION" comment=""/>
+          <component className="String" name="C_COMPILER" comment=""/>
+          <component className="String" name="SENDDATALIBS" comment=""/>
+          <component className="String" name="SYSTEM_INFO" comment=""/>
+          <component className="String" name="OS" comment=""/>
+          <component className="Boolean" name="HAVE_CORBA" comment=""/>
+          <component className="Boolean" name="C_COMPILER_RESPONDING" comment=""/>
+          <component className="String" name="CONFIGURE_CMDLINE" comment=""/>
+        </components>
         <classes/>
       </record>
       <package id="OpenModelica.Scripting.Internal">
@@ -655,6 +675,14 @@ end getMessagesString;</code>
   annotation(
     preferredView = "text");
 end SourceInfo;</code>
+        <components>
+          <component className="String" name="fileName" comment=""/>
+          <component className="Boolean" name="readonly" comment=""/>
+          <component className="Integer" name="lineStart" comment=""/>
+          <component className="Integer" name="columnStart" comment=""/>
+          <component className="Integer" name="lineEnd" comment=""/>
+          <component className="Integer" name="columnEnd" comment=""/>
+        </components>
         <classes/>
       </record>
       <type id="OpenModelica.Scripting.ErrorKind">
@@ -692,6 +720,13 @@ end SourceInfo;</code>
   annotation(
     preferredView = "text");
 end ErrorMessage;</code>
+        <components>
+          <component className="OpenModelica.Scripting.SourceInfo" name="info" comment=""/>
+          <component className="String" name="message" comment="After applying the individual arguments"/>
+          <component className="OpenModelica.Scripting.ErrorKind" name="kind" comment=""/>
+          <component className="OpenModelica.Scripting.ErrorLevel" name="level" comment=""/>
+          <component className="Integer" name="id" comment="Internal ID of the error (just ignore this)"/>
+        </components>
         <classes/>
       </record>
       <function id="OpenModelica.Scripting.getMessagesStringInternal">
@@ -1287,6 +1322,18 @@ end simulate;</code>
   Real timeSimulation;
   Real timeTotal;
 end SimulationResult;</code>
+            <components>
+              <component className="String" name="resultFile" comment=""/>
+              <component className="String" name="simulationOptions" comment=""/>
+              <component className="String" name="messages" comment=""/>
+              <component className="Real" name="timeFrontend" comment=""/>
+              <component className="Real" name="timeBackend" comment=""/>
+              <component className="Real" name="timeSimCode" comment=""/>
+              <component className="Real" name="timeTemplates" comment=""/>
+              <component className="Real" name="timeCompile" comment=""/>
+              <component className="Real" name="timeSimulation" comment=""/>
+              <component className="Real" name="timeTotal" comment=""/>
+            </components>
             <classes/>
           </record>
         </classes>
@@ -2183,6 +2230,20 @@ end getComponentsTest;</code>
   String inputOutput "'input', 'output', ''";
   String dimensions[:];
 end Component;</code>
+            <components>
+              <component className="String" name="className" comment=""/>
+              <component className="String" name="name" comment=""/>
+              <component className="String" name="comment" comment=""/>
+              <component className="Boolean" name="isProtected" comment=""/>
+              <component className="Boolean" name="isFinal" comment=""/>
+              <component className="Boolean" name="isFlow" comment=""/>
+              <component className="Boolean" name="isStream" comment=""/>
+              <component className="Boolean" name="isReplaceable" comment=""/>
+              <component className="String" name="variability" comment="'constant', 'parameter', 'discrete', ''"/>
+              <component className="String" name="innerOuter" comment="'inner', 'outer', ''"/>
+              <component className="String" name="inputOutput" comment="'input', 'output', ''"/>
+              <component className="String" name="dimensions" comment=""/>
+            </components>
             <classes/>
           </record>
         </classes>
@@ -2364,6 +2425,18 @@ end GC_set_max_heap_size;</code>
   Integer bytes_reclaimed_since_gc;
   Integer reclaimed_bytes_before_gc;
 end GC_PROFSTATS;</code>
+        <components>
+          <component className="Integer" name="heapsize_full" comment=""/>
+          <component className="Integer" name="free_bytes_full" comment=""/>
+          <component className="Integer" name="unmapped_bytes" comment=""/>
+          <component className="Integer" name="bytes_allocd_since_gc" comment=""/>
+          <component className="Integer" name="allocd_bytes_before_gc" comment=""/>
+          <component className="Integer" name="non_gc_bytes" comment=""/>
+          <component className="Integer" name="gc_no" comment=""/>
+          <component className="Integer" name="markers_m1" comment=""/>
+          <component className="Integer" name="bytes_reclaimed_since_gc" comment=""/>
+          <component className="Integer" name="reclaimed_bytes_before_gc" comment=""/>
+        </components>
         <classes/>
       </record>
       <function id="OpenModelica.Scripting.GC_get_prof_stats">
