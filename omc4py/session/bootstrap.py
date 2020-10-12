@@ -9,6 +9,7 @@ import typing
 from . import (
     StrOrPathLike,
     InteractiveOMC,
+    exception,
     parse_omc_value,
     parser,
     string,
@@ -45,12 +46,6 @@ def call_optional(
         return None
     else:
         return func(obj)
-
-
-class OMCError(
-    Exception
-):
-    ...
 
 
 class Component(
@@ -140,7 +135,7 @@ class OMCSession(
             ).rstrip()
             errorString = parse_omc_value(errorString_literal).rstrip()
             if errorString:
-                raise OMCError(errorString)
+                raise exception.OMCError(errorString)
 
         return parse_omc_value(result_literal)
 
@@ -359,8 +354,8 @@ def generate_class_xml(
 
         try:
             components = session.getComponentsTest(className)
-        except OMCError as error:
-            print(f"TODO: handle OMCError {error}", file=sys.stderr)
+        except exception.OMCError as error:
+            print(f"TODO: handle exception.OMCError {error}", file=sys.stderr)
             components_tag.text = f"TODO: {error}"
             return components_tag
 
