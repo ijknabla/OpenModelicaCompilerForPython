@@ -39,7 +39,7 @@
     <xsd:complexContent>
       <xsd:extension base="ModelicaClass">
         <xsd:sequence>
-          <xsd:element name="code"/>
+          <xsd:element name="code" type="Code"/>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
@@ -49,7 +49,7 @@
     <xsd:complexContent>
       <xsd:extension base="ModelicaClass">
         <xsd:sequence>
-          <xsd:element name="code"/>
+          <xsd:element name="code" type="Code"/>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
@@ -59,10 +59,18 @@
     <xsd:complexContent>
       <xsd:extension base="ModelicaClass">
         <xsd:sequence>
-          <xsd:element name="code"/>
+          <xsd:element name="code" type="Code"/>
         </xsd:sequence>
       </xsd:extension>
     </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="Code">
+    <xsd:simpleContent>
+      <xsd:extension base="xsd:string">
+        <xsd:attribute name="interfaceOnly" type="xsd:boolean"/>
+      </xsd:extension>
+    </xsd:simpleContent>
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaClassAlias">
