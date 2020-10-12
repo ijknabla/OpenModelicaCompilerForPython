@@ -1,4 +1,10 @@
 
+__all__ = (
+    "OMCError",
+    "OMCException",
+    "OMCWarning",
+)
+
 
 class OMCException(
     Exception,
