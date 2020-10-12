@@ -36,19 +36,31 @@
 
   <xsd:complexType name="ModelicaType">
     <xsd:complexContent>
-      <xsd:extension base="ModelicaClass"/>
+      <xsd:extension base="ModelicaClass">
+        <xsd:sequence>
+          <xsd:element name="code"/>
+        </xsd:sequence>
+      </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaRecord">
     <xsd:complexContent>
-      <xsd:extension base="ModelicaClass"/>
+      <xsd:extension base="ModelicaClass">
+        <xsd:sequence>
+          <xsd:element name="code"/>
+        </xsd:sequence>
+      </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaFunction">
     <xsd:complexContent>
-      <xsd:extension base="ModelicaClass"/>
+      <xsd:extension base="ModelicaClass">
+        <xsd:sequence>
+          <xsd:element name="code"/>
+        </xsd:sequence>
+      </xsd:extension>
     </xsd:complexContent>
   </xsd:complexType>
 
