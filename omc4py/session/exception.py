@@ -8,6 +8,11 @@ __all__ = (
 import re
 import typing
 
+from . import (
+    InteractiveOMC,
+    string,
+)
+
 
 class OMCException(
     Exception,
@@ -66,3 +71,12 @@ def parse_omc_error_message(
         raise NotImplementedError(
             "Unexpected omc error kind: {kind!r}"
         )
+
+
+def find_omc_error(
+    omc: InteractiveOMC
+) -> typing.Optional[OMCException]:
+    error_message = omc.execute("getErrorString()").rstrip()
+    return parse_omc_error_message(
+        string.unquote_modelica_string(error_message)
+    )
