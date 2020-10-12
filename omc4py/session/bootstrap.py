@@ -2,7 +2,6 @@
 import argparse
 import arpeggio  # type: ignore
 import enum
-import functools
 from lxml import etree as xml
 import sys
 import typing
