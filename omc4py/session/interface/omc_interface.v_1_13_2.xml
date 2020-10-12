@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<OMCInterface>
+<omcInterface>
   <version>OMCompiler v1.13.2</version>
   <package id="OpenModelica.Scripting">
     <classes>
@@ -7167,4 +7167,4 @@ end relocateFunctions;</code>
       </package>
     </classes>
   </package>
-</OMCInterface>
+</omcInterface>

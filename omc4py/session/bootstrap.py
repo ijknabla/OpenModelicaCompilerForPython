@@ -446,7 +446,7 @@ def generate_omc_interface_xml(
     session: OMCSession,
 ) -> xml.ElementTree:
     root = xml.Element(
-        "OMCInterface"
+        "omcInterface"
     )
     version_tag = xml.SubElement(
         root, "version",
