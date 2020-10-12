@@ -248,7 +248,7 @@ class ClassRestriction(
         )
 
 
-def generate_class_xml(
+def generate_class_elem(
     session: OMCSession,
     parent: xml.Element,
     className: types.TypeName,
@@ -423,7 +423,7 @@ def generate_class_xml(
 
         for ident in session.getClassNames(className):
             subClassName = className / ident
-            generate_class_xml(
+            generate_class_elem(
                 session,
                 classes_tag,
                 subClassName,
@@ -445,20 +445,25 @@ def generate_class_xml(
 def generate_omc_interface_xml(
     session: OMCSession,
 ) -> xml.ElementTree:
-    root = xml.Element(
+    omcInterface_elem = xml.Element(
         "omcInterface",
         {
             "omcVersion": session.getVersion()
         }
     )
 
-    generate_class_xml(
+    classes_elem = xml.SubElement(
+        omcInterface_elem,
+        "classes"
+    )
+
+    generate_class_elem(
         session,
-        root,
+        classes_elem,
         types.TypeName("OpenModelica.Scripting")
     )
 
-    return xml.ElementTree(root)
+    return xml.ElementTree(omcInterface_elem)
 
 
 def bootstrap(
