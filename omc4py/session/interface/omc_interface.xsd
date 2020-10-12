@@ -26,4 +26,16 @@
     <xsd:attribute name="id" type="xsd:token"/>
   </xsd:complexType>
 
+  <xsd:complexType name="ModelicaPackage">
+    <xsd:complexContent>
+      <xsd:extension base="ModelicaClass"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
+  <xsd:complexType name="ModelicaType">
+    <xsd:complexContent>
+      <xsd:extension base="ModelicaClass"/>
+    </xsd:complexContent>
+  </xsd:complexType>
+
 </xsd:schema>
