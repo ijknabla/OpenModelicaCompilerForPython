@@ -59,9 +59,9 @@
           <xsd:element name="code" type="Code"/>
           <xsd:element name="components">
             <xsd:complexType>
-              <xsd:choice>
+              <xsd:sequence>
                 <xsd:element name="elements" type="Elements"/>
-              </xsd:choice>
+              </xsd:sequence>
             </xsd:complexType>
           </xsd:element>
         </xsd:sequence>
