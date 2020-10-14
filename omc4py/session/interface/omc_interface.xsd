@@ -38,20 +38,19 @@
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaType">
-    <xsd:complexContent>
-      <xsd:extension base="ModelicaClass">
-        <xsd:sequence>
-          <xsd:element name="code" type="Code"/>
-          <xsd:element name="components">
-            <xsd:complexType>
-              <xsd:choice>
-                <xsd:element name="enumerators" type="Enumerators"/>
-              </xsd:choice>
-            </xsd:complexType>
-          </xsd:element>
-        </xsd:sequence>
-      </xsd:extension>
-    </xsd:complexContent>
+    <xsd:sequence minOccurs="0">
+      <xsd:element name="classes" type="AnyModelicaClasses"/>
+      <xsd:element name="code" type="Code"/>
+      <xsd:element name="components">
+        <xsd:complexType>
+          <xsd:choice>
+            <xsd:element name="enumerators" type="Enumerators"/>
+          </xsd:choice>
+        </xsd:complexType>
+      </xsd:element>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:token" use="required"/>
+    <xsd:attribute name="ref" type="xsd:token" use="optional"/>
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaRecord">
