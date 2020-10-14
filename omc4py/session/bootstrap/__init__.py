@@ -308,11 +308,23 @@ def generate_omc_interface_xml(
 
             if variableName_className is None:
                 return False
+
+            variableName, className = variableName_className
+
+            for parent in self.name.parents:
+                candidate = parent/className
+                try:
+                    restriction = restriction_from_typeName(candidate)
+                except ValueError:
+                    continue
+                if restriction is self.restriction:
+                    break
             else:
-                variableName, className = variableName_className
-                assert(self.name.parts[-1] == variableName)
-                self.element.attrib["ref"] = str(className)
-                return True
+                raise ValueError(f"Can't resolve {className} from {self.name}")
+
+            assert(self.name.parts[-1] == variableName)
+            self.element.attrib["ref"] = str(candidate)
+            return True
 
         def generate_classes_element(
             self,
