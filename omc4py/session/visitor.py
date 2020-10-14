@@ -250,3 +250,47 @@ class EnumeratorVisitor(
         return list(
             children.enumeration_literal
         )
+
+
+class AliasInfo(
+    typing.NamedTuple
+):
+    name: Identifier
+    target: TypeName
+
+
+class AliasVisitor(
+    TypeSpecifierVisitor,
+):
+    def visit_short_class_specifier(
+        self,
+        node,
+        children
+    ) -> typing.Optional[typing.Tuple[Identifier, TypeName]]:
+        identifier, = children.IDENT
+        type_specifier = getitem_with_default(
+            children.type_specifier, 0,
+            default=None
+        )
+
+        if type_specifier is None:
+            return None
+        else:
+            return AliasInfo(
+                name=identifier,
+                target=type_specifier
+            )
+
+    def visit_file(
+        self,
+        node,
+        children,
+    ):
+        aliases = [
+            child
+            for child in children
+            if isinstance(child, AliasInfo)
+        ]
+        if aliases:
+            return aliases[0]
+        return None
