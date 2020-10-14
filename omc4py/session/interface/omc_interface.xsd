@@ -17,7 +17,6 @@
         <xsd:element name="type" type="ModelicaType"/>
         <xsd:element name="record" type="ModelicaRecord"/>
         <xsd:element name="function" type="ModelicaFunction"/>
-        <xsd:element name="alias" type="ModelicaClassAlias"/>
       </xsd:choice>
     </xsd:sequence>
   </xsd:complexType>
@@ -144,12 +143,6 @@
         </xsd:complexType>
       </xsd:element>
     </xsd:sequence>
-  </xsd:complexType>
-
-  <xsd:complexType name="ModelicaClassAlias">
-    <xsd:attribute name="id" type="xsd:token"/>
-    <xsd:attribute name="restriction" type="xsd:token"/>
-    <xsd:attribute name="reference" type="xsd:token"/>
   </xsd:complexType>
 
 </xsd:schema>
