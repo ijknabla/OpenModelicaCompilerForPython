@@ -70,9 +70,6 @@ class VariableName(
         return super().__str__()
 
 
-VariableNameTuple = typing.Tuple[VariableName, ...]
-
-
 @functools.total_ordering
 class TypeName(
 ):
@@ -80,16 +77,16 @@ class TypeName(
         "__parts",
     )
 
-    __parts: VariableNameTuple
+    __parts: typing.Tuple[VariableName, ...]
 
     @property
-    def parts(self) -> VariableNameTuple:
+    def parts(self) -> typing.Tuple[VariableName, ...]:
         return self.__parts
 
     @staticmethod
     def to_variableNames(
         name: typing.Union[str, VariableName, "TypeName"]
-    ) -> VariableNameTuple:
+    ) -> typing.Tuple[VariableName, ...]:
         if isinstance(name, str):
             return tuple(
                 map(VariableName, split_type_specifier(name))
