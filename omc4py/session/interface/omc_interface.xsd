@@ -30,9 +30,11 @@
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaPackage">
-    <xsd:complexContent>
-      <xsd:extension base="ModelicaClass"/>
-    </xsd:complexContent>
+    <xsd:sequence minOccurs="0">
+      <xsd:element name="classes" type="AnyModelicaClasses"/>
+    </xsd:sequence>
+    <xsd:attribute name="id" type="xsd:token" use="required"/>
+    <xsd:attribute name="ref" type="xsd:token" use="optional"/>
   </xsd:complexType>
 
   <xsd:complexType name="ModelicaType">
