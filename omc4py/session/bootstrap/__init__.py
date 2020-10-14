@@ -474,14 +474,14 @@ def generate_omc_interface_xml(
         restriction = ClassRestriction(
             session.getClassRestriction(className).split()[-1]
         )
-        if restriction is ClassRestriction.package:
-            return ModelicaPackage(className)
-        elif restriction is ClassRestriction.type:
-            return ModelicaType(className)
-        elif restriction is ClassRestriction.record:
-            return ModelicaRecord(className)
-        elif restriction is ClassRestriction.function:
-            return ModelicaFunction(className)
+        for klass in [
+            ModelicaPackage,
+            ModelicaType,
+            ModelicaRecord,
+            ModelicaFunction,
+        ]:
+            if klass.restriction is restriction:
+                return klass(className)
         else:
             raise NotImplementedError(restriction)
 
