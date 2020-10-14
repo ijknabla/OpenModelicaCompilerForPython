@@ -3,7 +3,7 @@ import abc
 import argparse
 import arpeggio  # type: ignore
 import enum
-from lxml import etree as xml
+from lxml import etree as xml  # type: ignore
 import pkg_resources
 import sys
 import typing
