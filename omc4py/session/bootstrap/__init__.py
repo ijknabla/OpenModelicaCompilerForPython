@@ -251,8 +251,13 @@ def generate_omc_interface_xml(
     def restriction_from_typeName(
         typeName: types.TypeName
     ) -> ClassRestriction:
+        raw_restriction = session.getClassRestriction(typeName)
+        if not raw_restriction:
+            raise ValueError(
+                f"getClassRestriction({typeName}) returns empty string"
+            )
         return ClassRestriction(
-            session.getClassRestriction(typeName).split()[-1]
+            raw_restriction.split()[-1]
         )
 
     class ModelicaClass(
