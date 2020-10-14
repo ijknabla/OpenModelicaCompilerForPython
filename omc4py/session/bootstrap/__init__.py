@@ -4,7 +4,6 @@ import argparse
 import arpeggio  # type: ignore
 import enum
 from lxml import etree as xml
-from pathlib import Path
 import pkg_resources
 import sys
 import typing
