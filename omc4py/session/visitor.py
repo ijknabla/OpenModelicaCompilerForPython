@@ -6,7 +6,7 @@ import typing
 
 from . import string
 from .types import (
-    Identifier,
+    VariableName,
     OMCRecord,
     TypeName,
 )
@@ -48,14 +48,14 @@ class TypeSpecifierVisitor(
         self,
         node,
         children
-    ) -> Identifier:
-        return Identifier(node.value)
+    ) -> VariableName:
+        return VariableName(node.value)
 
     def visit_name(
         self,
         node,
         children,
-    ) -> typing.Tuple[Identifier, ...]:
+    ) -> typing.Tuple[VariableName, ...]:
         return tuple(children.IDENT)
 
     def visit_type_specifier(
@@ -65,7 +65,7 @@ class TypeSpecifierVisitor(
     ) -> TypeName:
         name = children.name[0]
         if node[0].value == ".":
-            return TypeName(Identifier(), *name)
+            return TypeName(VariableName(), *name)
         else:
             return TypeName(*name)
 
@@ -150,7 +150,7 @@ class OMCRecordVisitor(
         self,
         node,
         children,
-    ) -> typing.Tuple[Identifier, typing.Any]:
+    ) -> typing.Tuple[VariableName, typing.Any]:
         IDENT = children.IDENT[0]
         value = children.omc_value[0]
         return IDENT, value
@@ -159,7 +159,7 @@ class OMCRecordVisitor(
         self,
         node,
         children
-    ) -> typing.List[typing.Tuple[Identifier, typing.Any]]:
+    ) -> typing.List[typing.Tuple[VariableName, typing.Any]]:
         return children.omc_record_element
 
     def visit_omc_record_literal(
@@ -185,7 +185,7 @@ class OMCValueVisitor(
 class DefaultValueInfo(
     typing.NamedTuple
 ):
-    name: Identifier
+    name: VariableName
     hasDefault: bool
 
 
@@ -219,7 +219,7 @@ class DefaultValueInfoVisitor(
 class EnumeratorInfo(
     typing.NamedTuple,
 ):
-    name: Identifier
+    name: VariableName
     comment: str
 
 
@@ -255,7 +255,7 @@ class EnumeratorVisitor(
 class AliasInfo(
     typing.NamedTuple
 ):
-    name: Identifier
+    name: VariableName
     target: TypeName
 
 
@@ -266,8 +266,8 @@ class AliasVisitor(
         self,
         node,
         children
-    ) -> typing.Optional[typing.Tuple[Identifier, TypeName]]:
-        identifier, = children.IDENT
+    ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
+        variableName, = children.IDENT
         type_specifier = getitem_with_default(
             children.type_specifier, 0,
             default=None
@@ -277,7 +277,7 @@ class AliasVisitor(
             return None
         else:
             return AliasInfo(
-                name=identifier,
+                name=variableName,
                 target=type_specifier
             )
 

@@ -1,6 +1,6 @@
 
 __all__ = (
-    "Identifier",
+    "VariableName",
     "TypeName",
 )
 
@@ -56,7 +56,7 @@ def split_type_specifier(
     )
 
 
-class Identifier(
+class VariableName(
     str
 ):
     def __repr__(
@@ -70,7 +70,7 @@ class Identifier(
         return super().__str__()
 
 
-IdentifierTuple = typing.Tuple[Identifier, ...]
+VariableNameTuple = typing.Tuple[VariableName, ...]
 
 
 @functools.total_ordering
@@ -80,21 +80,21 @@ class TypeName(
         "__parts",
     )
 
-    __parts: IdentifierTuple
+    __parts: VariableNameTuple
 
     @property
-    def parts(self) -> IdentifierTuple:
+    def parts(self) -> VariableNameTuple:
         return self.__parts
 
     @staticmethod
-    def to_identifiers(
-        name: typing.Union[str, Identifier, "TypeName"]
-    ) -> IdentifierTuple:
+    def to_variableNames(
+        name: typing.Union[str, VariableName, "TypeName"]
+    ) -> VariableNameTuple:
         if isinstance(name, str):
             return tuple(
-                map(Identifier, split_type_specifier(name))
+                map(VariableName, split_type_specifier(name))
             )
-        elif isinstance(name, Identifier):
+        elif isinstance(name, VariableName):
             return name,
         elif isinstance(name, TypeName):
             return name.parts
@@ -104,7 +104,7 @@ class TypeName(
     def __new__(cls, *parts):
         self = object.__new__(cls)
         self.__parts = sum(
-            map(cls.to_identifiers, parts),
+            map(cls.to_variableNames, parts),
             (),
         )
         return self
@@ -134,7 +134,7 @@ class TypeName(
 
     def __truediv__(
         self,
-        other: typing.Union[str, Identifier, "TypeName"]
+        other: typing.Union[str, VariableName, "TypeName"]
     ):
         return type(self)(self, other)
 
@@ -176,8 +176,8 @@ class OMCRecord(
             yield f"record {typeNameLiteral} "
             if self:
                 elements = [
-                    f"{identifier}={string.to_omc_literal(value)}"
-                    for identifier, value in self.items()
+                    f"{variableName}={string.to_omc_literal(value)}"
+                    for variableName, value in self.items()
                 ]
                 yield ", ".join(elements) + " "
             yield f"end {typeNameLiteral};"

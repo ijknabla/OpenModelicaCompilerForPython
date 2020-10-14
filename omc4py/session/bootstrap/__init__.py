@@ -24,7 +24,7 @@ from .. import (
 
 def parse_defaultValueInfoDict(
     interface: str
-) -> typing.Dict[types.Identifier, typing.Optional[str]]:
+) -> typing.Dict[types.VariableName, typing.Optional[str]]:
     return dict(
         arpeggio.visit_parse_tree(
             parser.stored_definition_parser.parse(interface),
@@ -35,7 +35,7 @@ def parse_defaultValueInfoDict(
 
 def parse_enumerator(
     code: str
-) -> typing.Tuple[types.Identifier]:
+) -> typing.Tuple[types.VariableName]:
     return arpeggio.visit_parse_tree(
         parser.stored_definition_parser.parse(code),
         visitor.EnumeratorVisitor(),
@@ -303,15 +303,15 @@ def generate_omc_interface_xml(
         def generate_ref_attribute(
             self,
         ) -> bool:
-            identifier_className = parse_alias(
+            variableName_className = parse_alias(
                 session.list(self.name, shortOnly=True)
             )
 
-            if identifier_className is None:
+            if variableName_className is None:
                 return False
             else:
-                identifier, className = identifier_className
-                assert(self.name.parts[-1] == identifier)
+                variableName, className = variableName_className
+                assert(self.name.parts[-1] == variableName)
                 self.element.attrib["ref"] = str(className)
                 return True
 
@@ -464,7 +464,7 @@ def generate_omc_interface_xml(
                 if component.isProtected:
                     continue
                 hasDefault = defaultValueInfoDict[
-                    types.Identifier(component.name)
+                    types.VariableName(component.name)
                 ]
                 argument_element = xml.SubElement(
                     arguments_element,
