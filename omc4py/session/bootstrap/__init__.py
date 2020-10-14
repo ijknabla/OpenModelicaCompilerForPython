@@ -250,7 +250,7 @@ def generate_omc_interface_xml(
     class ModelicaClass(
         abc.ABC
     ):
-        restriction: typing.ClassVar[str]
+        restriction: typing.ClassVar[ClassRestriction]
         element: xml.Element
 
         def __init__(
@@ -258,7 +258,7 @@ def generate_omc_interface_xml(
             typeName: types.TypeName,
         ):
             self.element = xml.Element(
-                self.restriction,
+                self.restriction.value,
                 {"id": str(typeName)}
             )
 
@@ -340,7 +340,7 @@ def generate_omc_interface_xml(
                 )
 
     class ModelicaPackage(ModelicaClass):
-        restriction = "package"
+        restriction = ClassRestriction.package
 
         def generate_element(
             self
@@ -350,7 +350,7 @@ def generate_omc_interface_xml(
             self.generate_classes_element()
 
     class ModelicaType(ModelicaClass):
-        restriction = "type"
+        restriction = ClassRestriction.type
 
         def generate_element(
             self
@@ -383,7 +383,7 @@ def generate_omc_interface_xml(
                 )
 
     class ModelicaRecord(ModelicaClass):
-        restriction = "record"
+        restriction = ClassRestriction.record
 
         def generate_element(
             self
@@ -421,7 +421,7 @@ def generate_omc_interface_xml(
                 )
 
     class ModelicaFunction(ModelicaClass):
-        restriction = "function"
+        restriction = ClassRestriction.function
 
         def generate_element(
             self
