@@ -139,7 +139,7 @@ class InteractiveOMC(
         self.close()
         return False
 
-    def execute(
+    def evaluate(
         self,
         expression: str
     ) -> str:

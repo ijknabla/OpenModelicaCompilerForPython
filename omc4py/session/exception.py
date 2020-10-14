@@ -50,7 +50,7 @@ def find_omc_error(
     omc: InteractiveOMC
 ) -> typing.Optional[OMCException]:
     error_message = string.unquote_modelica_string(
-        omc.execute("getErrorString()").rstrip()
+        omc.evaluate("getErrorString()").rstrip()
     )
     if not error_message or error_message.isspace():
         return None

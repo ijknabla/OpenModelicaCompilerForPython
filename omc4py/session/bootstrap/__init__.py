@@ -139,7 +139,7 @@ class OMCSession(
 
         arguments_literal = ", ".join(argument_literals)
 
-        result_literal = self._omc.execute(
+        result_literal = self._omc.evaluate(
             f"{funcName}({arguments_literal})"
         )
 

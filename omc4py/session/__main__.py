@@ -23,7 +23,7 @@ class OMCShell(
         self.omc = omc
 
     def do_shell(self, arg):
-        print(self.omc.execute(arg), end="")
+        print(self.omc.evaluate(arg), end="")
 
     def do_quit(self, arg):
         return True
