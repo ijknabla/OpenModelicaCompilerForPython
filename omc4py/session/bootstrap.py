@@ -433,18 +433,6 @@ def generate_class_elem(
 def generate_omc_interface_xml(
     session: OMCSession,
 ) -> xml.ElementTree:
-    omcInterface_elem = xml.Element(
-        "omcInterface",
-        {
-            "omcVersion": session.getVersion()
-        }
-    )
-
-    classes_elem = xml.SubElement(
-        omcInterface_elem,
-        "classes"
-    )
-
     class ModelicaClass(
         abc.ABC
     ):
@@ -643,10 +631,54 @@ def generate_omc_interface_xml(
                     component.dimensions,
                 )
 
-    generate_class_elem(
-        session,
-        classes_elem,
-        types.TypeName("OpenModelica.Scripting")
+    def modelica_class(
+        className: types.TypeName
+    ) -> ModelicaClass:
+        restriction = ClassRestriction.from_typeName(session, className)
+
+        if restriction is ClassRestriction.package:
+            return ModelicaPackage(className)
+        elif restriction is ClassRestriction.type:
+            return ModelicaType(className)
+        elif restriction is ClassRestriction.record:
+            return ModelicaRecord(className)
+        elif restriction is ClassRestriction.function:
+            return ModelicaFunction(className)
+        else:
+            raise NotImplementedError(restriction)
+
+    def generate_recursive(
+        parent: xml.Element,
+        classNames: typing.Sequence[types.TypeName],
+    ):
+        if not classNames:
+            return
+
+        classes_element, = parent.findall("classes")
+        for className in classNames:
+            classInfo = modelica_class(className)
+            classInfo.generate_element()
+            classes_element.append(classInfo.element)
+            generate_recursive(
+                classInfo.element,
+                session.getClassNames(className, qualified=True),
+            )
+
+    omcInterface_elem = xml.Element(
+        "omcInterface",
+        {
+            "omcVersion": session.getVersion()
+        }
+    )
+
+    classes_elem = xml.SubElement(
+        omcInterface_elem,
+        "classes"
+    )
+
+    generate_recursive(
+        omcInterface_elem,
+        [types.TypeName("OpenModelica.Scripting")]
     )
 
     return xml.ElementTree(omcInterface_elem)
