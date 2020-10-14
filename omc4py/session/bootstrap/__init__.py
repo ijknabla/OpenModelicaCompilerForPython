@@ -10,7 +10,7 @@ import sys
 import typing
 import warnings
 
-from . import (
+from .. import (
     StrOrPathLike,
     InteractiveOMC,
     exception,
@@ -557,7 +557,7 @@ def load_schema(
         xml.XML(
             pkg_resources.resource_string(
                 __name__,
-                "interface/omc_interface.xsd",
+                "../interface/omc_interface.xsd",
             )
         )
     )
@@ -582,7 +582,3 @@ def main():
     )
     args = parser.parse_args()
     bootstrap(args.omc)
-
-
-if __name__ == "__main__":
-    main()
