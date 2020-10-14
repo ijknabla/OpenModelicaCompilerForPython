@@ -42,6 +42,15 @@ def parse_enumerator(
     )
 
 
+def parse_alias(
+    code: str
+) -> typing.Optional[visitor.AliasInfo]:
+    return arpeggio.visit_parse_tree(
+        parser.stored_definition_parser.parse(code),
+        visitor.AliasVisitor(),
+    )
+
+
 def call_optional(
     func: typing.Callable,
     obj: typing.Optional[typing.Any],
