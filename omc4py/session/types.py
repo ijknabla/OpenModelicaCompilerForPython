@@ -80,8 +80,23 @@ class TypeName(
     __parts: typing.Tuple[VariableName, ...]
 
     @property
-    def parts(self) -> typing.Tuple[VariableName, ...]:
+    def parts(
+        self,
+    ) -> typing.Tuple[VariableName, ...]:
         return self.__parts
+
+    @property
+    def parents(
+        self,
+    ) -> typing.Iterator["TypeName"]:
+        parts = self.parts
+        if parts[0]:
+            begin = 0
+        else:
+            begin = 1
+        end = len(parts)
+        for end_of_slice in reversed(range(begin, end)):
+            yield type(self)(*parts[:end_of_slice])
 
     @staticmethod
     def to_variableNames(
