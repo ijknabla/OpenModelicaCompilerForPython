@@ -522,6 +522,127 @@ def generate_omc_interface_xml(
                     }
                 )
 
+    class ModelicaPackage(ModelicaClass):
+        restriction = "package"
+
+        def generate_element(
+            self
+        ) -> None:
+            self.generate_classes_element()
+
+    class ModelicaType(ModelicaClass):
+        restriction = "type"
+
+        def generate_element(
+            self
+        ) -> None:
+            self.generate_classes_element()
+            self.generate_code_element(interfaceOnly=False)
+            self.generate_components_element()
+
+        def generate_components_element(
+            self,
+        ) -> None:
+            enumerators_element = xml.SubElement(
+                xml.SubElement(
+                    self.element,
+                    "components",
+                ),
+                "enumerators",
+            )
+
+            for name, comment in parse_enumerator(self.code):
+                xml.SubElement(
+                    enumerators_element,
+                    "enumerator",
+                    {
+                        "name": str(name),
+                        "comment": comment,
+                    }
+                )
+
+    class ModelicaRecord(ModelicaClass):
+        restriction = "record"
+
+        def generate_element(
+            self
+        ) -> None:
+            self.generate_classes_element()
+            self.generate_code_element(interfaceOnly=False)
+            self.generate_components_element()
+
+        def generate_components_element(
+            self,
+        ) -> None:
+            elements_element = xml.SubElement(
+                xml.SubElement(
+                    self.element,
+                    "components",
+                ),
+                "elements",
+            )
+
+            for component in session.getComponentsTest(self.name):
+                element_element = xml.SubElement(
+                    elements_element,
+                    "element",
+                    {
+                        "className": str(component.className),
+                        "name": str(component.name),
+                        "comment": component.comment
+                    }
+                )
+                self.generate_dimensions_element(
+                    element_element,
+                    component.dimensions,
+                )
+
+    class ModelicaFunction(ModelicaClass):
+        restriction = "function"
+
+        def generate_element(
+            self
+        ) -> None:
+            self.generate_classes_element()
+            self.generate_code_element(interfaceOnly=True)
+            self.generate_components_element()
+
+        def generate_components_element(
+            self,
+        ) -> None:
+            defaultValueInfoDict = parse_defaultValueInfoDict(
+                self.code
+            )
+
+            arguments_element = xml.SubElement(
+                xml.SubElement(
+                    self.element,
+                    "components",
+                ),
+                "arguments"
+            )
+            for component in session.getComponentsTest(self.name):
+                if component.isProtected:
+                    continue
+                hasDefault = defaultValueInfoDict[
+                    types.Identifier(component.name)
+                ]
+                argument_element = xml.SubElement(
+                    arguments_element,
+                    "argument",
+                    {
+                        "inputOutput": component.inputOutput,
+                        "className": str(component.className),
+                        "name": str(component.name),
+                        "hasDefault": "true" if hasDefault else "false",
+                        "comment": component.comment,
+                    }
+                )
+                self.generate_dimensions_element(
+                    argument_element,
+                    component.dimensions,
+                )
+
     generate_class_elem(
         session,
         classes_elem,
