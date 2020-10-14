@@ -243,19 +243,6 @@ class ClassRestriction(
     record = "record"
     function = "function"
 
-    @classmethod
-    def from_typeName(
-        cls,
-        session: OMCSession,
-        typeName: types.TypeName,
-    ) -> "ClassRestriction":
-        raw_restriction = session.getClassRestriction(
-            typeName
-        )
-        return cls(
-            raw_restriction.split()[-1]
-        )
-
 
 def generate_omc_interface_xml(
     session: OMCSession,
@@ -484,8 +471,9 @@ def generate_omc_interface_xml(
     def modelica_class(
         className: types.TypeName
     ) -> ModelicaClass:
-        restriction = ClassRestriction.from_typeName(session, className)
-
+        restriction = ClassRestriction(
+            session.getClassRestriction(className).split()[-1]
+        )
         if restriction is ClassRestriction.package:
             return ModelicaPackage(className)
         elif restriction is ClassRestriction.type:
