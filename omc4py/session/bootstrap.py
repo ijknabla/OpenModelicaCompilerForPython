@@ -300,6 +300,21 @@ def generate_omc_interface_xml(
             else:
                 return session.list(self.name)
 
+        def generate_ref_attribute(
+            self,
+        ) -> bool:
+            identifier_className = parse_alias(
+                session.list(self.name, shortOnly=True)
+            )
+
+            if identifier_className is None:
+                return False
+            else:
+                identifier, className = identifier_className
+                assert(self.name.parts[-1] == identifier)
+                self.element.attrib["ref"] = str(className)
+                return True
+
         def generate_classes_element(
             self,
         ) -> None:
@@ -344,6 +359,8 @@ def generate_omc_interface_xml(
         def generate_element(
             self
         ) -> None:
+            if self.generate_ref_attribute():
+                return
             self.generate_classes_element()
 
     class ModelicaType(ModelicaClass):
@@ -352,6 +369,8 @@ def generate_omc_interface_xml(
         def generate_element(
             self
         ) -> None:
+            if self.generate_ref_attribute():
+                return
             self.generate_classes_element()
             self.generate_code_element(interfaceOnly=False)
             self.generate_components_element()
@@ -383,6 +402,8 @@ def generate_omc_interface_xml(
         def generate_element(
             self
         ) -> None:
+            if self.generate_ref_attribute():
+                return
             self.generate_classes_element()
             self.generate_code_element(interfaceOnly=False)
             self.generate_components_element()
@@ -419,6 +440,8 @@ def generate_omc_interface_xml(
         def generate_element(
             self
         ) -> None:
+            if self.generate_ref_attribute():
+                return
             self.generate_classes_element()
             self.generate_code_element(interfaceOnly=True)
             self.generate_components_element()

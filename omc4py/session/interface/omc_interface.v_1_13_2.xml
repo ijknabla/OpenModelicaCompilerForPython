@@ -2364,13 +2364,7 @@ end save;</code>
             </arguments>
           </components>
         </function>
-        <function id="OpenModelica.Scripting.saveTotalSCode">
-          <classes/>
-          <code interfaceOnly="true"></code>
-          <components>
-            <arguments/>
-          </components>
-        </function>
+        <function id="OpenModelica.Scripting.saveTotalSCode" ref="saveTotalModel"/>
         <function id="OpenModelica.Scripting.translateGraphics">
           <classes/>
           <code interfaceOnly="true">function translateGraphics
