@@ -522,7 +522,7 @@ def generate_omc_interface_xml(
         }
     )
 
-    classes_elem = xml.SubElement(
+    xml.SubElement(
         omcInterface_elem,
         "classes"
     )
