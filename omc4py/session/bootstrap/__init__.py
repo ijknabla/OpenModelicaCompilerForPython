@@ -247,6 +247,14 @@ class ClassRestriction(
 def generate_omc_interface_xml(
     session: OMCSession,
 ) -> xml.ElementTree:
+
+    def restriction_from_typeName(
+        typeName: types.TypeName
+    ) -> ClassRestriction:
+        return ClassRestriction(
+            session.getClassRestriction(typeName).split()[-1]
+        )
+
     class ModelicaClass(
         abc.ABC
     ):
@@ -471,9 +479,7 @@ def generate_omc_interface_xml(
     def modelica_class(
         className: types.TypeName
     ) -> ModelicaClass:
-        restriction = ClassRestriction(
-            session.getClassRestriction(className).split()[-1]
-        )
+        restriction = restriction_from_typeName(className)
         for klass in [
             ModelicaPackage,
             ModelicaType,
