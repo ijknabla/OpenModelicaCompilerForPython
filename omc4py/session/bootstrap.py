@@ -1,4 +1,5 @@
 
+import abc
 import argparse
 import arpeggio  # type: ignore
 import enum
@@ -443,6 +444,83 @@ def generate_omc_interface_xml(
         omcInterface_elem,
         "classes"
     )
+
+    class ModelicaClass(
+        abc.ABC
+    ):
+        restriction: typing.ClassVar[str]
+        element: xml.Element
+
+        def __init__(
+            self,
+            typeName: types.TypeName,
+        ):
+            self.element = xml.Element(
+                self.restriction,
+                {"id": str(typeName)}
+            )
+
+        @abc.abstractclassmethod
+        def generate_element(
+            self
+        ) -> None:
+            ...
+
+        @property
+        def name(
+            self,
+        ) -> types.TypeName:
+            return types.TypeName(
+                self.element.attrib["id"]
+            )
+
+        @property
+        def code(
+            self
+        ) -> str:
+            code_element = self.element.find("code")
+            if code_element is not None:
+                return code_element.text
+            else:
+                return session.list(self.name)
+
+        def generate_classes_element(
+            self,
+        ) -> None:
+            xml.SubElement(self.element, "classes")
+
+        def generate_code_element(
+            self,
+            interfaceOnly: bool,
+        ) -> None:
+            code_element = xml.SubElement(
+                self.element,
+                "code",
+                {
+                    "interfaceOnly": "true" if interfaceOnly else "false",
+                },
+            )
+            code_element.text = session.list(
+                self.name, interfaceOnly=interfaceOnly,
+            )
+
+        def generate_dimensions_element(
+            self,
+            parent: xml.Element,
+            dimensions: typing.Sequence[str],
+        ) -> None:
+            dimensions_element = xml.SubElement(
+                parent,
+                "dimensions"
+            )
+            for dimension in dimensions:
+                xml.SubElement(
+                    dimensions_element,
+                    "dimension",
+                    {
+                        "size": dimension,
+                    }
+                )
 
     generate_class_elem(
         session,
