@@ -563,14 +563,6 @@ def load_schema(
     )
 
 
-def validate(
-    interface_xml_path: Path,
-):
-    schema = load_schema()
-    parser = xml.XMLParser(schema=schema)
-    xml.fromstring(interface_xml_path.read_bytes(), parser)
-
-
 def main():
     parser = argparse.ArgumentParser(
         prog="omc4py.session.bootstrap debug script",
