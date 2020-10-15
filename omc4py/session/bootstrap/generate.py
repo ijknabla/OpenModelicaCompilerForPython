@@ -15,15 +15,14 @@ from . import (
 from .. import types
 
 
-def encode_typeName(
-    typeName: types.TypeName,
-    encoding: str = "utf-8",
+def encode_specifier(
+    specifier: typing.Union[types.VariableName, types.TypeName]
 ) -> str:
     pattern = re.compile(r"[0-9A-Za-z]")
 
     def characters(
     ) -> typing.Iterator[str]:
-        for char in str(typeName):
+        for char in str(specifier):
             if pattern.match(char):
                 yield char
             else:
