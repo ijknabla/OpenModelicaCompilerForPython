@@ -132,13 +132,59 @@ def export_function_names(
         yield types.TypeName(element.attrib["id"])
 
 
+def write_module(
+    file: typing.TextIO,
+    root: xml._Element,
+) -> None:
+    code_import = CodeBlock("""\
+from omc4py.session import OMCSessionBase as __OMCSessionBase\
+"""
+    )
+
+    code_class = CodeBlock(
+        [
+            "class OMCSession(",
+            CodeBlock(
+                [
+                    "__OMCSessionBase,"
+                ],
+                indent=INDENT,
+            ),
+            "):"
+        ]
+    )
+
+    code_class_element = CodeBlock(
+        [],
+        indent=INDENT,
+    )
+    code_class.append(code_class_element)
+
+    code_class_element.append("...")
+
+    code = CodeBlock(
+        [
+            "\n" * 1,
+            code_import,
+            "\n" * 2,
+            code_class,
+        ]
+    )
+
+    code.dump(file)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=Path)
+    parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
     interface_parser = xml.XMLParser(schema=load_schema())
-    xml.fromstring(args.input.read_bytes(), interface_parser)
+    root = xml.fromstring(args.input.read_bytes(), interface_parser)
+
+    with args.output.open("w", encoding="utf-8") as file:
+        write_module(file, root)
 
 
 if __name__ == "__main__":
