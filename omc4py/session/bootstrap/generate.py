@@ -119,6 +119,15 @@ class CodeBlock(collections.UserList):
         )
 
 
+def export_function_names(
+    root: xml._Element,
+) -> typing.Iterator[types.TypeName]:
+    for element in root.xpath(
+        '//package[@id="OpenModelica.Scripting"]/classes/function'
+    ):
+        yield types.TypeName(element.attrib["id"])
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=Path)
