@@ -201,6 +201,42 @@ class OMCSessionBase(
 ):
     _omc: InteractiveOMC
 
+    def __init__(
+        self,
+        omc: InteractiveOMC
+    ):
+        self._omc = omc
+
+    def __enter__(
+        self,
+    ):
+        return self
+
+    def __exit__(
+        self,
+        exc_type,
+        exc_value,
+        traceback,
+    ):
+        OMCSession__close(self)
+        return False
+
+
+def OMCSession__open(
+    OMCSessionType: typing.Type[OMCSessionBase],
+    omc_command: typing.Optional[StrOrPathLike] = None,
+) -> OMCSessionBase:
+    omc = InteractiveOMC.open(
+        omc_command=omc_command,
+    )
+    return OMCSessionType(omc)
+
+
+def OMCSession__close(
+    self: OMCSessionBase
+):
+    self._omc.close()
+
 
 PositionalArguments = typing.List[typing.Any]
 KeywordArguments = typing.Dict[str, typing.Any]

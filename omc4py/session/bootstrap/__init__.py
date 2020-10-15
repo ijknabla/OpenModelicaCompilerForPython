@@ -3,6 +3,7 @@ import abc
 import argparse
 import arpeggio  # type: ignore
 import enum
+import functools
 from lxml import etree as xml  # type: ignore
 import pkg_resources
 import sys
@@ -11,6 +12,8 @@ import warnings
 
 from .. import (
     OMCSession__call,
+    OMCSession__close,
+    OMCSession__open,
     OMCSessionBase,
     StrOrPathLike,
     InteractiveOMC,
@@ -82,39 +85,9 @@ OpenModelica.Scripting.getComponentsTest.Component
     dimensions: typing.List[str]
 
 
-def open_omc_session(
-    omc_command: typing.Optional[StrOrPathLike] = None,
-) -> "OMCSession":
-    self = OMCSession()
-    self._omc = InteractiveOMC.open(
-        omc_command=omc_command,
-    )
-    return self
-
-
-def close_omc_session(
-    session: "OMCSession"
-):
-    session._omc.close()
-
-
 class OMCSession(
     OMCSessionBase,
 ):
-    def __enter__(
-        self
-    ):
-        return self
-
-    def __exit__(
-        self,
-        exc_type,
-        exc_value,
-        traceback,
-    ):
-        close_omc_session(self)
-        return False
-
     def getVersion(
         self,
         cl: typing.Optional[types.TypeName] = None,
@@ -196,6 +169,10 @@ class OMCSession(
             Component(**record_literal)
             for record_literal in result
         ]
+
+
+open_session = functools.partial(OMCSession__open, OMCSession)
+close_session = OMCSession__close
 
 
 class ClassRestriction(
@@ -511,7 +488,7 @@ def generate_omc_interface_xml(
 def bootstrap(
     omc_command: StrOrPathLike
 ):
-    with open_omc_session(omc_command) as session:
+    with open_session(omc_command) as session:
         omc_interface_xml = generate_omc_interface_xml(
             session
         )
