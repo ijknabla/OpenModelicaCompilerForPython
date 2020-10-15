@@ -103,6 +103,36 @@ def register_profileClass(
     return profileClass
 
 
+primitive_typeNames = {
+    types.TypeName("Real"),
+    types.TypeName("Integer"),
+    types.TypeName("Boolean"),
+    types.TypeName("String"),
+}
+
+
+@register_profileClass
+class PromitiveTypeProfile(
+    AbstractTypeProfile,
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml._Element,
+        name: types.TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is not None:
+            return False
+        return name in primitive_typeNames
+
+    @property
+    def supported(
+        self
+    ) -> bool:
+        return True
+
+
 @register_profileClass
 class RecordDeclarationProfile(
     AbstractTypeProfile,
