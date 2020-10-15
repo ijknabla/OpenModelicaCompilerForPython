@@ -254,13 +254,9 @@ class FunctionDeclarationProfile(
         return code.CodeBlock(
             [
                 f"def {self.funcName}(",
+                self.code_arguments,
                 f"):",
-                code.CodeBlock(
-                    [
-                        "..."
-                    ],
-                    indent=code.INDENT,
-                )
+                self.code___doc__,
             ]
         )
 
@@ -276,6 +272,35 @@ class FunctionDeclarationProfile(
             for argument in self.element.xpath(".//argument")
         )
 
+    @property
+    def code_arguments(
+        self,
+    ) -> code.CodeBlock:
+        return code.CodeBlock(
+            [
+                "self,",
+            ],
+            indent=code.INDENT
+        )
+
+    @property
+    def code___doc__(
+        self,
+    ) -> code.CodeBlock:
+        return code.CodeBlock(
+            [
+                '"""',
+                code.CodeBlock(
+                    [
+                        '```modelica',
+                        '```'
+                    ],
+                    indent=code.IGNORE_INDENT,
+                ),
+                '"""',
+            ],
+            indent=code.INDENT,
+        )
 
 @register_profileClass
 class FunctionAliasProfile(
