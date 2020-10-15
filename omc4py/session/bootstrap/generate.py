@@ -1,4 +1,5 @@
 
+import abc
 import argparse
 import collections
 import enum
@@ -132,14 +133,103 @@ def export_function_names(
         yield types.TypeName(element.attrib["id"])
 
 
+ProfileFactory = typing.Callable[[types.TypeName], "AbstractProfile"]
+
+
+class AbstractProfile(
+    abc.ABC
+):
+    @classmethod
+    @abc.abstractmethod
+    def create(
+        cls,
+        element: xml._Element,
+        factory: ProfileFactory,
+    ) -> "AbstractProfile":
+        raise NotImplementedError()
+
+
+profile_classes: typing.List[typing.Type[AbstractProfile]] \
+    = []
+
+
+def register_profile(
+    klass: typing.Type[AbstractProfile]
+) -> typing.Type[AbstractProfile]:
+    profile_classes.append(klass)
+    return klass
+
+
+def get_profile_factory(
+    root: xml._Element,
+    cache: typing.Dict[types.TypeName, AbstractProfile],
+) -> ProfileFactory:
+    def factory(
+        className: types.TypeName
+    ) -> AbstractProfile:
+        if className not in cache:
+            element, = root.xpath(f'//*[@id="{className!s}"]')
+            for ProfileClass in profile_classes:
+                try:
+                    profile = ProfileClass.create(element, factory)
+                    break
+                except ValueError:
+                    continue
+            else:
+                raise ValueError(
+                    f"Failed to create profile for {className}"
+                )
+            cache[className] = profile
+        return cache[className]
+
+    return factory
+
+
+@register_profile
+class FunctionProfile(
+    AbstractProfile,
+):
+    @classmethod
+    def create(
+        cls,
+        element: xml._Element,
+        factory: ProfileFactory
+    ) -> AbstractProfile:
+        if not(
+            element.tag == "function"
+            and "ref" not in element.attrib
+        ):
+            raise ValueError()
+
+        return FunctionProfile()
+
+
+@register_profile
+class FunctionAliasProfile(
+    AbstractProfile
+):
+    @classmethod
+    def create(
+        cls,
+        element: xml._Element,
+        factory: ProfileFactory
+    ) -> AbstractProfile:
+        if not(
+            element.tag == "function"
+            and "ref" in element.attrib
+        ):
+            raise ValueError()
+
+        return FunctionAliasProfile()
+
+
 def write_module(
     file: typing.TextIO,
     root: xml._Element,
 ) -> None:
     code_import = CodeBlock("""\
 from omc4py.session import OMCSessionBase as __OMCSessionBase\
-"""
-    )
+""")
 
     code_class = CodeBlock(
         [
@@ -170,6 +260,14 @@ from omc4py.session import OMCSessionBase as __OMCSessionBase\
             code_class,
         ]
     )
+
+    cache: typing.Dict[types.TypeName, AbstractProfile] = {}
+    profile_factory = get_profile_factory(root, cache)
+
+    function_profiles = [
+        profile_factory(functionName)
+        for functionName in export_function_names(root)
+    ]
 
     code.dump(file)
 
