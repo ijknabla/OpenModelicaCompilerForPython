@@ -3,6 +3,7 @@ import abc
 import argparse
 import collections
 import enum
+import keyword
 from lxml import etree as xml  # type: ignore
 from pathlib import Path
 import re
@@ -13,6 +14,15 @@ from . import (
 )
 
 from .. import types
+
+
+def avoid_keyword(
+    variableName: types.VariableName,
+) -> str:
+    result = str(variableName)
+    while keyword.iskeyword(result):
+        result += "_"
+    return result
 
 
 def encode_specifier(
@@ -227,7 +237,7 @@ def dimensions2sizes(
 class InputArgument(
     typing.NamedTuple,
 ):
-    class_: types.TypeName
+    className: types.TypeName
     name: types.VariableName
     sizes: typing.Tuple[int, ...]
     comment: str
@@ -263,6 +273,19 @@ class FunctionProfile(
         )
 
     @property
+    def inputArguments(
+        self
+    ) -> typing.Iterator[InputArgument]:
+        for element in self.element.xpath('.//argument[@inputOutput="input"]'):
+            yield InputArgument(
+                className=types.TypeName(element.attrib["className"]),
+                name=types.VariableName(element.attrib["name"]),
+                sizes=dimensions2sizes(element.find("dimensions")),
+                comment=element.attrib["comment"],
+                hasDefault=bool(eval(element.attrib["hasDefault"].capitalize())),
+            )
+
+    @property
     def outputArguments(
         self
     ) -> typing.List[xml._Element]:
@@ -285,6 +308,17 @@ class FunctionProfile(
             return False
 
         return True
+
+    @property
+    def __code__arguments(
+        self,
+    ) -> CodeBlock:
+        code = CodeBlock([], indent=INDENT)
+        code.append("self,")
+        for argument in self.inputArguments:
+            code.append(avoid_keyword(argument.name)+",")
+
+        return code
 
     @property
     def __code__doc__(
@@ -314,12 +348,7 @@ class FunctionProfile(
         return CodeBlock(
             [
                 f"def {py_funcName}(",
-                CodeBlock(
-                    [
-                        "self,"
-                    ],
-                    indent=INDENT
-                ),
+                self.__code__arguments,
                 "):",
                 self.__code__doc__
             ]
