@@ -215,7 +215,7 @@ def dimensions2sizes(
     def size_generator(
     ) -> typing.Iterator[int]:
         assert(dimensions.tag == "dimensions")
-        for dimension in dimensions.xpath("//dimension"):
+        for dimension in dimensions.xpath(".//dimension"):
             size = dimension.attrib["size"]
             if size == ":":
                 yield 0
@@ -259,14 +259,32 @@ class FunctionProfile(
     ) -> typing.Set[types.TypeName]:
         return set(
             types.TypeName(argument.attrib["className"])
-            for argument in self.element.xpath(".//argument")
+            for argument in self.element.xpath('.//argument')
         )
+
+    @property
+    def outputArguments(
+        self
+    ) -> typing.List[xml._Element]:
+        return self.element.xpath('.//argument[@inputOutput="output"]')
 
     @property
     def supported(
         self,
     ) -> bool:
-        return self.variableTypes <= supportedTypes
+        if not self.variableTypes <= supportedTypes:
+            return False
+
+        outputs = self.outputArguments
+        if not len(outputs) <= 1:
+            return False
+        if not all(
+            len(dimensions2sizes(output.xpath('.//dimensions')[0])) == 0
+            for output in outputs
+        ):
+            return False
+
+        return True
 
     @property
     def __code__doc__(
