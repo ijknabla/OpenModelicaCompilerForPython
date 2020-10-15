@@ -2,6 +2,7 @@
 import arpeggio  # type: ignore
 import os
 from pathlib import Path
+import re
 import shutil
 import subprocess
 import tempfile
@@ -10,6 +11,7 @@ import uuid
 import warnings
 import zmq  # type: ignore
 from . import (
+    exception,
     parser,
     string,
     visitor,
@@ -54,6 +56,11 @@ def find_openmodelica_zmq_port_filepath(
         )
 
     return candidates[0]
+
+
+omc_error_pattern = re.compile(
+    r"\[(?P<info>[^]]*)\]\s+(?P<kind>\w+):\s+(?P<message>.*)"
+)
 
 
 class InteractiveOMC(
@@ -151,6 +158,35 @@ class InteractiveOMC(
         self.socket.send_string(expression)
         return self.socket.recv_string()
 
+    def find_error(
+        self
+    ) -> typing.Optional[exception.OMCException]:
+        error_message = string.unquote_modelica_string(
+            self.evaluate("getErrorString()").rstrip()
+        )
+        if not error_message or error_message.isspace():
+            return None
+
+        matched = omc_error_pattern.match(
+            error_message
+        )
+        if not matched:
+            raise exception.OMCRuntimeError(
+                f"Unexpected error message format: {error_message!r}"
+            )
+        # info = matched.group("info")
+        kind = matched.group("kind")
+        # message = matched.group("message")
+
+        if kind == "Error":
+            return exception.OMCError(error_message)
+        elif kind == "Warning":
+            return exception.OMCWarning(error_message)
+        else:
+            raise NotImplementedError(
+                "Unexpected omc error kind: {kind!r}"
+            )
+
 
 def parse_omc_value(
     literal: str
@@ -159,11 +195,6 @@ def parse_omc_value(
         parser.omc_value_parser.parse(literal),
         visitor.OMCValueVisitor()
     )
-
-
-from . import (
-    exception,
-)
 
 
 class OMCSessionBase(
@@ -205,7 +236,7 @@ def OMCSession__call(
         f"{funcName}({arguments_literal})"
     )
 
-    error = exception.find_omc_error(self._omc)
+    error = self._omc.find_error()
 
     if error is not None:
         if isinstance(error, Warning):
