@@ -10,6 +10,8 @@ import typing
 import warnings
 
 from .. import (
+    OMCSession__call,
+    OMCSessionBase,
     StrOrPathLike,
     InteractiveOMC,
     exception,
@@ -97,9 +99,8 @@ def close_omc_session(
 
 
 class OMCSession(
+    OMCSessionBase,
 ):
-    _omc: InteractiveOMC
-
     def __enter__(
         self
     ):
@@ -114,52 +115,14 @@ class OMCSession(
         close_omc_session(self)
         return False
 
-    def _call(
-        self,
-        funcName: str,
-        args: typing.List[typing.Any],
-        kwrds: typing.Dict[str, typing.Optional[typing.Any]],
-        check: bool = True
-    ) -> typing.Any:
-        argument_literals: typing.List[str] = []
-        for arg in args:
-            argument_literals.append(
-                string.to_omc_literal(arg)
-            )
-        for ident, value in kwrds.items():
-            if value is None:
-                continue
-            value_literal = string.to_omc_literal(
-                value
-            )
-            argument_literals.append(
-                f"{ident}={value_literal}"
-            )
-
-        arguments_literal = ", ".join(argument_literals)
-
-        result_literal = self._omc.evaluate(
-            f"{funcName}({arguments_literal})"
-        )
-
-        error = exception.find_omc_error(self._omc)
-
-        if check and error is not None:
-            if isinstance(error, exception.OMCWarning):
-                warnings.warn(error)
-            else:
-                raise error
-
-        return parse_omc_value(result_literal)
-
     def getVersion(
         self,
         cl: typing.Optional[types.TypeName] = None,
     ) -> str:
-        return self._call(
+        return OMCSession__call(
+            self,
             "getVersion",
-            [],
-            {
+            kwrds={
                 "cl": call_optional(types.TypeName, cl),
             },
         )
@@ -168,10 +131,10 @@ class OMCSession(
         self,
         cl: types.TypeName,
     ) -> str:
-        return self._call(
+        return OMCSession__call(
+            self,
             "getClassRestriction",
-            [],
-            {
+            kwrds={
                 "cl": types.TypeName(cl),
             },
         )
@@ -182,10 +145,10 @@ class OMCSession(
         interfaceOnly: typing.Optional[bool] = None,
         shortOnly: typing.Optional[bool] = None,
     ) -> str:
-        return self._call(
+        return OMCSession__call(
+            self,
             "list",
-            [],
-            {
+            kwrds={
                 "class_": call_optional(types.TypeName, class_),
                 "interfaceOnly": call_optional(bool, interfaceOnly),
                 "shortOnly": call_optional(bool, shortOnly),
@@ -202,10 +165,10 @@ class OMCSession(
         showProtected: typing.Optional[bool] = None,
         includeConstants: typing.Optional[bool] = None,
     ) -> typing.List[types.TypeName]:
-        result = self._call(
+        result = OMCSession__call(
+            self,
             "getClassNames",
-            [],
-            {
+            kwrds={
                 "class_": call_optional(types.TypeName, class_),
                 "recursive": call_optional(bool, recursive),
                 "qualified": call_optional(bool, qualified),
@@ -222,12 +185,12 @@ class OMCSession(
         self,
         name: types.TypeName,
     ) -> typing.List[Component]:
-        result = self._call(
+        result = OMCSession__call(
+            self,
             "getComponentsTest",
-            [
+            args=[
                 types.TypeName(name)
             ],
-            {},
         )
         return [
             Component(**record_literal)
