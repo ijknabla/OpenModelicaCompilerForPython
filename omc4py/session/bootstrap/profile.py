@@ -117,16 +117,18 @@ def register_profileClass(
     return profileClass
 
 
-primitive_typeNames = {
+builtinTypeNames = {
     types.TypeName("Real"),
     types.TypeName("Integer"),
     types.TypeName("Boolean"),
     types.TypeName("String"),
+    types.TypeName("OpenModelica.$Code.VariableName"),
+    types.TypeName("OpenModelica.$Code.TypeName"),
 }
 
 
 @register_profileClass
-class PromitiveTypeProfile(
+class BuiltinTypeProfile(
     AbstractTypeProfile,
 ):
     @classmethod
@@ -138,7 +140,7 @@ class PromitiveTypeProfile(
         element = cls.find_element(root, name)
         if element is not None:
             return False
-        return name in primitive_typeNames
+        return name in builtinTypeNames
 
     @property
     def supported(
