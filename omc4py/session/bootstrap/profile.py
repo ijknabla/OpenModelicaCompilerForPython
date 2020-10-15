@@ -172,6 +172,29 @@ class UnsupportedBuiltinTypeProfile(
 
 
 @register_profileClass
+class TypeDeclarationProfile(
+    AbstractTypeProfile,
+    ExtrinsicProfile,
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml._Element,
+        name: types.TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is None:
+            return False
+        return element.tag == "type"
+
+    @property
+    def supported(
+        self
+    ) -> bool:
+        return False
+
+
+@register_profileClass
 class RecordDeclarationProfile(
     AbstractTypeProfile,
     ExtrinsicProfile,
