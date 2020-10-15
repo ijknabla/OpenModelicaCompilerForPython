@@ -149,13 +149,38 @@ ProfileFactory = typing.Callable[[types.TypeName], "AbstractProfile"]
 class AbstractProfile(
     abc.ABC,
 ):
-    ...
+    @property
+    @abc.abstractmethod
+    def name(
+        self
+    ) -> types.TypeName:
+        raise NotImplementedError
 
 
 class AbstractIntrinsicProfile(
     AbstractProfile,
 ):
-    ...
+    className: types.TypeName
+
+    def __init__(
+        self,
+        className: types.TypeName,
+    ):
+        self.className = className
+
+    @classmethod
+    @abc.abstractmethod
+    def check_className(
+        cls,
+        className: types.TypeName,
+    ) -> bool:
+        return False
+
+    @property
+    def name(
+        self
+    ) -> types.TypeName:
+        return self.className
 
 
 class AbstractExtrinsicProfile(
@@ -199,12 +224,21 @@ class AbstractExtrinsicProfile(
 
 extrinsicProfileClasses: typing.List[typing.Type[AbstractExtrinsicProfile]] \
     = []
+intrinsicProfileClasses: typing.List[typing.Type[AbstractIntrinsicProfile]] \
+    = []
 
 
 def register_extrinsicProfileClass(
     klass: typing.Type[AbstractExtrinsicProfile]
 ) -> typing.Type[AbstractExtrinsicProfile]:
     extrinsicProfileClasses.append(klass)
+    return klass
+
+
+def register_intrinsicProfileClass(
+    klass: typing.Type[AbstractIntrinsicProfile]
+) -> typing.Type[AbstractIntrinsicProfile]:
+    intrinsicProfileClasses.append(klass)
     return klass
 
 
@@ -216,15 +250,27 @@ def get_profile_factory(
         className: types.TypeName
     ) -> AbstractProfile:
         if className not in cache:
-            element, = root.xpath(f'//*[@id="{className!s}"]')
-            for ExtrinsicProfileClass in extrinsicProfileClasses:
-                if ExtrinsicProfileClass.check_element(element):
-                    profile = ExtrinsicProfileClass(element, factory)
-                    break
+            element_optional = root.xpath(f'//*[@id="{className!s}"]')
+            if element_optional:
+                element, = element_optional
+                profile: AbstractProfile
+                for ExtrinsicProfileClass in extrinsicProfileClasses:
+                    if ExtrinsicProfileClass.check_element(element):
+                        profile = ExtrinsicProfileClass(element, factory)
+                        break
+                else:
+                    raise ValueError(
+                        f"Failed to create profile for {className}"
+                    )
             else:
-                raise ValueError(
-                    f"Failed to create profile for {className}"
-                )
+                for IntrinsicProfileClass in intrinsicProfileClasses:
+                    if IntrinsicProfileClass.check_className(className):
+                        profile = IntrinsicProfileClass(className)
+                        break
+                else:
+                    raise ValueError(
+                        f"Failed to create profile for {className}"
+                    )
             cache[className] = profile
         return cache[className]
 
