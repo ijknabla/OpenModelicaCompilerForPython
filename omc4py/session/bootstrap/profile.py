@@ -47,6 +47,13 @@ class AbstractProfile(
     ) -> bool:
         return False
 
+    @property
+    @abc.abstractmethod
+    def supported(
+        self
+    ) -> bool:
+        return False
+
     @staticmethod
     def find_element(
         root: xml._Element,
@@ -110,6 +117,12 @@ class FunctionDeclarationProfile(
                 and "ref" not in element.attrib
             )
 
+    @property
+    def supported(
+        self,
+    ) -> bool:
+        return False
+
 
 @register_profileClass
 class FunctionAliasProfile(
@@ -130,6 +143,12 @@ class FunctionAliasProfile(
                 element.tag == "function"
                 and "ref" in element.attrib
             )
+
+    @property
+    def supported(
+        self
+    ) -> bool:
+        return False
 
 
 def get_profile(
