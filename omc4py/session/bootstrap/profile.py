@@ -83,6 +83,12 @@ class ExtrinsicProfile(
             f'//*[@id="{self.name!s}"]'
         )[0]
 
+    @property
+    def code(
+        self
+    ) -> str:
+        return self.element.find("code").text
+
 
 class AbstractTypeProfile(
     AbstractProfile
@@ -293,6 +299,7 @@ class FunctionDeclarationProfile(
                 code.CodeBlock(
                     [
                         '```modelica',
+                        self.code,
                         '```'
                     ],
                     indent=code.IGNORE_INDENT,
