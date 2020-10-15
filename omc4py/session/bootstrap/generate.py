@@ -139,14 +139,24 @@ ProfileFactory = typing.Callable[[types.TypeName], "AbstractProfile"]
 class AbstractProfile(
     abc.ABC
 ):
-    @classmethod
-    @abc.abstractmethod
-    def create(
-        cls,
+    element: xml._Element
+    factory: ProfileFactory
+
+    def __init__(
+        self,
         element: xml._Element,
         factory: ProfileFactory,
-    ) -> "AbstractProfile":
-        raise NotImplementedError()
+    ):
+        self.element = element
+        self.factory = factory
+
+    @classmethod
+    @abc.abstractmethod
+    def check_element(
+        cls,
+        element: xml._Element,
+    ) -> bool:
+        return False
 
 
 profile_classes: typing.List[typing.Type[AbstractProfile]] \
@@ -170,11 +180,9 @@ def get_profile_factory(
         if className not in cache:
             element, = root.xpath(f'//*[@id="{className!s}"]')
             for ProfileClass in profile_classes:
-                try:
-                    profile = ProfileClass.create(element, factory)
+                if ProfileClass.check_element(element):
+                    profile = ProfileClass(element, factory)
                     break
-                except ValueError:
-                    continue
             else:
                 raise ValueError(
                     f"Failed to create profile for {className}"
@@ -185,23 +193,41 @@ def get_profile_factory(
     return factory
 
 
+def dimensions2sizes(
+    dimensions: xml._Element
+) -> typing.Tuple[int, ...]:
+    def size_generator(
+    ) -> typing.Iterator[int]:
+        assert(dimensions.tag == "dimensions")
+        for dimension in dimensions.xpath("//dimension"):
+            size = dimension.attrib["size"]
+            if size == ":":
+                yield 0
+            else:
+                yield int(size)
+    return tuple(size_generator())
+
+
+class InputArgument(
+    typing.NamedTuple,
+):
+    class_: types.TypeName
+    name: types.VariableName
+    sizes: typing.Tuple[int, ...]
+    comment: str
+    hasDefault: bool
+
+
 @register_profile
 class FunctionProfile(
     AbstractProfile,
 ):
     @classmethod
-    def create(
+    def check_element(
         cls,
         element: xml._Element,
-        factory: ProfileFactory
-    ) -> AbstractProfile:
-        if not(
-            element.tag == "function"
-            and "ref" not in element.attrib
-        ):
-            raise ValueError()
-
-        return FunctionProfile()
+    ) -> bool:
+        return element.tag == "function" and "ref" not in element.attrib
 
 
 @register_profile
@@ -209,18 +235,11 @@ class FunctionAliasProfile(
     AbstractProfile
 ):
     @classmethod
-    def create(
+    def check_element(
         cls,
         element: xml._Element,
-        factory: ProfileFactory
-    ) -> AbstractProfile:
-        if not(
-            element.tag == "function"
-            and "ref" in element.attrib
-        ):
-            raise ValueError()
-
-        return FunctionAliasProfile()
+    ) -> bool:
+        return element.tag == "function" and "ref" in element.attrib
 
 
 def write_module(
