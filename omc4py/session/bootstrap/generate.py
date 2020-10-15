@@ -223,6 +223,14 @@ class InputArgument(
     hasDefault: bool
 
 
+supportedTypes = {
+    types.TypeName("Real"),
+    types.TypeName("Integer"),
+    types.TypeName("Boolean"),
+    types.TypeName("String"),
+}
+
+
 @register_profile
 class FunctionProfile(
     AbstractProfile,
@@ -233,6 +241,45 @@ class FunctionProfile(
         element: xml._Element,
     ) -> bool:
         return element.tag == "function" and "ref" not in element.attrib
+
+    @property
+    def variableTypes(
+        self
+    ) -> typing.Set[types.TypeName]:
+        return set(
+            types.TypeName(argument.attrib["className"])
+            for argument in self.element.xpath(".//argument")
+        )
+
+    @property
+    def supported(
+        self,
+    ) -> bool:
+        return self.variableTypes <= supportedTypes
+
+    def to_codeBlock(
+        self,
+    ) -> CodeBlock:
+        py_funcName = str(self.name.parts[-1])
+        assert(py_funcName.isidentifier())
+        return CodeBlock(
+            [
+                f"def {py_funcName}(",
+                CodeBlock(
+                    [
+                        "self,"
+                    ],
+                    indent=INDENT
+                ),
+                "):",
+                CodeBlock(
+                    [
+                        "..."
+                    ],
+                    indent=INDENT
+                )
+            ]
+        )
 
 
 @register_profile
