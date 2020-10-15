@@ -9,6 +9,7 @@ import typing
 
 from . import (
     load_schema,
+    profile,
 )
 
 from .code import (
@@ -388,24 +389,24 @@ from omc4py.session import OMCSession__close as close_session
         ]
     )
 
-    cache: typing.Dict[types.TypeName, AbstractProfile] = {}
-    profile_factory = get_profile_factory(root, cache)
-
     function_profiles = [
-        profile_factory(functionName)
+        profile.get_profile(root, functionName)
         for functionName in export_function_names(root)
     ]
 
-    for profile in function_profiles:
-        if isinstance(profile, FunctionProfile) and profile.supported:
+    for function_profile in function_profiles:
+        if (
+            isinstance(function_profile, profile.AbstractFunctionProfile)
+            and function_profile.supported
+        ):
             code_class_element.extend(
                 [
-                    profile.to_codeBlock(),
+                    function_profile.generate_method_code(),
                     "",
                 ]
             )
         else:
-            print(f"Skip {profile.name}")
+            print(f"Skip {function_profile.name}")
 
     code.dump(file)
 
