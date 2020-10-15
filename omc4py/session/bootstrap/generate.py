@@ -107,7 +107,8 @@ class CodeBlock(collections.UserList):
             if isinstance(elem, CodeBlock):
                 yield from elem.to_lines(indentLevel)
             else:
-                yield self.indentString * currentIndent + elem + "\n"
+                line = self.indentString * currentIndent + elem
+                yield (line if line and not line.isspace() else "") + "\n"
 
     def dumps(
         self
