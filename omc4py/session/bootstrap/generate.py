@@ -321,8 +321,6 @@ from omc4py.session import OMCSessionBase as __OMCSessionBase\
     )
     code_class.append(code_class_element)
 
-    code_class_element.append("...")
-
     code = CodeBlock(
         [
             "\n" * 1,
@@ -339,6 +337,17 @@ from omc4py.session import OMCSessionBase as __OMCSessionBase\
         profile_factory(functionName)
         for functionName in export_function_names(root)
     ]
+
+    for profile in function_profiles:
+        if not isinstance(profile, FunctionProfile):
+            continue
+        if profile.supported:
+            code_class_element.extend(
+                [
+                    profile.to_codeBlock(),
+                    "",
+                ]
+            )
 
     code.dump(file)
 
