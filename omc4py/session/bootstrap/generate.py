@@ -75,8 +75,11 @@ class CodeBlock(collections.UserList):
         self,
         items
     ) -> None:
-        for item in items:
-            self.append(item)
+        if isinstance(items, str):
+            self.append(items)
+        else:
+            for item in items:
+                self.append(item)
 
     def __repr__(
         self
