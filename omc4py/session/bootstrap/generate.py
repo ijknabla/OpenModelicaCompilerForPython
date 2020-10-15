@@ -391,15 +391,15 @@ from omc4py.session import OMCSession__close as close_session
     ]
 
     for profile in function_profiles:
-        if not isinstance(profile, FunctionProfile):
-            continue
-        if profile.supported:
+        if isinstance(profile, FunctionProfile) and profile.supported:
             code_class_element.extend(
                 [
                     profile.to_codeBlock(),
                     "",
                 ]
             )
+        else:
+            print(f"Skip {profile.name}")
 
     code.dump(file)
 
