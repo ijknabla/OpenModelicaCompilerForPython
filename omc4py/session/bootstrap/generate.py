@@ -147,7 +147,19 @@ ProfileFactory = typing.Callable[[types.TypeName], "AbstractProfile"]
 
 
 class AbstractProfile(
-    abc.ABC
+    abc.ABC,
+):
+    ...
+
+
+class AbstractIntrinsicProfile(
+    AbstractProfile,
+):
+    ...
+
+
+class AbstractExtrinsicProfile(
+    AbstractProfile
 ):
     element: xml._Element
     factory: ProfileFactory
@@ -185,14 +197,14 @@ class AbstractProfile(
             return ""
 
 
-profile_classes: typing.List[typing.Type[AbstractProfile]] \
+extrinsicProfileClasses: typing.List[typing.Type[AbstractExtrinsicProfile]] \
     = []
 
 
-def register_profile(
-    klass: typing.Type[AbstractProfile]
-) -> typing.Type[AbstractProfile]:
-    profile_classes.append(klass)
+def register_extrinsicProfileClass(
+    klass: typing.Type[AbstractExtrinsicProfile]
+) -> typing.Type[AbstractExtrinsicProfile]:
+    extrinsicProfileClasses.append(klass)
     return klass
 
 
@@ -205,9 +217,9 @@ def get_profile_factory(
     ) -> AbstractProfile:
         if className not in cache:
             element, = root.xpath(f'//*[@id="{className!s}"]')
-            for ProfileClass in profile_classes:
-                if ProfileClass.check_element(element):
-                    profile = ProfileClass(element, factory)
+            for ExtrinsicProfileClass in extrinsicProfileClasses:
+                if ExtrinsicProfileClass.check_element(element):
+                    profile = ExtrinsicProfileClass(element, factory)
                     break
             else:
                 raise ValueError(
@@ -252,9 +264,9 @@ supportedTypes = {
 }
 
 
-@register_profile
+@register_extrinsicProfileClass
 class FunctionProfile(
-    AbstractProfile,
+    AbstractExtrinsicProfile,
 ):
     @classmethod
     def check_element(
@@ -282,7 +294,9 @@ class FunctionProfile(
                 name=types.VariableName(element.attrib["name"]),
                 sizes=dimensions2sizes(element.find("dimensions")),
                 comment=element.attrib["comment"],
-                hasDefault=bool(eval(element.attrib["hasDefault"].capitalize())),
+                hasDefault=bool(
+                    eval(element.attrib["hasDefault"].capitalize())
+                ),
             )
 
     @property
@@ -360,9 +374,9 @@ class FunctionProfile(
         )
 
 
-@register_profile
+@register_extrinsicProfileClass
 class FunctionAliasProfile(
-    AbstractProfile
+    AbstractExtrinsicProfile
 ):
     @classmethod
     def check_element(
