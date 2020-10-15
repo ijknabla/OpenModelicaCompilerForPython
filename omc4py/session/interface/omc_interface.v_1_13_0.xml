@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<omcInterface omcVersion="OMCompiler v1.13.2">
+<omcInterface omcVersion="OMCompiler v1.13.0">
   <classes>
     <package id="OpenModelica.Scripting">
       <classes>
