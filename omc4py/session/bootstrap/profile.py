@@ -80,6 +80,12 @@ class ExtrinsicProfile(
         )[0]
 
 
+class AbstractTypeProfile(
+    AbstractProfile
+):
+    ...
+
+
 class AbstractFunctionProfile(
     AbstractProfile
 ):
@@ -95,6 +101,29 @@ def register_profileClass(
 ) -> typing.Type[AbstractProfile]:
     __profileClasses.append(profileClass)
     return profileClass
+
+
+@register_profileClass
+class RecordDeclarationProfile(
+    AbstractTypeProfile,
+    ExtrinsicProfile,
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml._Element,
+        name: types.TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is None:
+            return False
+        return element.tag == "record"
+
+    @property
+    def supported(
+        self
+    ) -> bool:
+        return False
 
 
 @register_profileClass
@@ -118,10 +147,27 @@ class FunctionDeclarationProfile(
             )
 
     @property
+    def variableProfiles(
+        self,
+    ) -> typing.Set[AbstractTypeProfile]:
+        return set(
+            get_profile(
+                self.root,
+                types.TypeName(argument.attrib["className"]),
+            )
+            for argument in self.element.xpath(".//argument")
+        )
+
+    @property
     def supported(
         self,
     ) -> bool:
-        return False
+        if not all(
+            profile.supported
+            for profile in self.variableProfiles
+        ):
+            return False
+        return True
 
 
 @register_profileClass
