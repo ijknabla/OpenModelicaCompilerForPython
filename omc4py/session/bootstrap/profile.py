@@ -79,6 +79,26 @@ class FunctionDeclarationProfile(
             )
 
 
+@register_profileClass
+class FunctionAliasProfile(
+    AbstractFunctionProfile,
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml.Element,
+        name: types.TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is None:
+            return False
+        else:
+            return (
+                element.tag == "function"
+                and "ref" in element.attrib
+            )
+
+
 def get_profile(
     root: xml._Element,
     name: types.TypeName,
