@@ -163,6 +163,16 @@ class AbstractProfile(
     ) -> types.TypeName:
         return types.TypeName(self.element.attrib["id"])
 
+    @property
+    def code(
+        self
+    ) -> str:
+        code_optional = self.element.xpath(".//code")
+        if code_optional:
+            return code_optional[0].text
+        else:
+            return ""
+
 
 profile_classes: typing.List[typing.Type[AbstractProfile]] \
     = []
@@ -257,6 +267,26 @@ class FunctionProfile(
     ) -> bool:
         return self.variableTypes <= supportedTypes
 
+    @property
+    def __code__doc__(
+        self,
+    ) -> CodeBlock:
+        return CodeBlock(
+            [
+                '"""',
+                CodeBlock(
+                    [
+                        "```modelica",
+                        self.code,
+                        "```"
+                    ],
+                    indent=IGNORE_INDENT,
+                ),
+                '"""',
+            ],
+            indent=INDENT
+        )
+
     def to_codeBlock(
         self,
     ) -> CodeBlock:
@@ -272,12 +302,7 @@ class FunctionProfile(
                     indent=INDENT
                 ),
                 "):",
-                CodeBlock(
-                    [
-                        "..."
-                    ],
-                    indent=INDENT
-                )
+                self.__code__doc__
             ]
         )
 
