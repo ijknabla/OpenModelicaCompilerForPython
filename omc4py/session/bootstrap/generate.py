@@ -38,6 +38,11 @@ class Indentation(enum.Enum):
     ignore_indent = enum.auto()
 
 
+NO_INDENT = Indentation.no_indent
+INDENT = Indentation.indent
+IGNORE_INDENT = Indentation.no_indent
+
+
 class CodeBlock(collections.UserList):
     indentString: typing.ClassVar[str] = " " * 4
     indent: Indentation
