@@ -157,6 +157,12 @@ class AbstractProfile(
     ) -> bool:
         return False
 
+    @property
+    def name(
+        self
+    ) -> types.TypeName:
+        return types.TypeName(self.element.attrib["id"])
+
 
 profile_classes: typing.List[typing.Type[AbstractProfile]] \
     = []
