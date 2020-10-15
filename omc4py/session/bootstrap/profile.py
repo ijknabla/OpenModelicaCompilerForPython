@@ -61,6 +61,18 @@ class AbstractProfile(
             return None
 
 
+class ExtrinsicProfile(
+    AbstractProfile
+):
+    @property
+    def element(
+        self
+    ) -> xml._Element:
+        return self.root.xpath(
+            f'//*[@id="{self.name!s}"]'
+        )[0]
+
+
 class AbstractFunctionProfile(
     AbstractProfile
 ):
@@ -81,6 +93,7 @@ def register_profileClass(
 @register_profileClass
 class FunctionDeclarationProfile(
     AbstractFunctionProfile,
+    ExtrinsicProfile,
 ):
     @classmethod
     def match(
@@ -101,6 +114,7 @@ class FunctionDeclarationProfile(
 @register_profileClass
 class FunctionAliasProfile(
     AbstractFunctionProfile,
+    ExtrinsicProfile,
 ):
     @classmethod
     def match(
