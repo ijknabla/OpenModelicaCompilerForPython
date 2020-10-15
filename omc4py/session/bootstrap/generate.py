@@ -316,7 +316,12 @@ class FunctionProfile(
         code = CodeBlock([], indent=INDENT)
         code.append("self,")
         for argument in self.inputArguments:
-            code.append(avoid_keyword(argument.name)+",")
+            varName = avoid_keyword(argument.name)
+            if argument.hasDefault:
+                default = " = None"
+            else:
+                default = ""
+            code.append(f"{varName}{default},")
 
         return code
 
