@@ -1,6 +1,7 @@
 
 import argparse
 import collections
+import enum
 from lxml import etree as xml  # type: ignore
 from pathlib import Path
 import re
@@ -31,19 +32,25 @@ def encode_typeName(
     return "".join(characters())
 
 
+class Indentation(enum.Enum):
+    no_indent = enum.auto()
+    indent = enum.auto()
+    ignore_indent = enum.auto()
+
+
 class CodeBlock(collections.UserList):
     indentString: typing.ClassVar[str] = " " * 4
-    indentLevel: typing.Optional[int]
+    indent: Indentation
 
     def __init__(
         self,
         items,
         *,
-        indentLevel: typing.Optional[int] = 0,
+        indent: Indentation = Indentation.no_indent
     ):
         super().__init__()
         self.extend(items)
-        self.indentLevel = indentLevel
+        self.indent = indent
 
     def append(
         self,
@@ -70,7 +77,7 @@ class CodeBlock(collections.UserList):
     ) -> str:
         return (
             f"{type(self).__name__}("
-            f"{super().__repr__()}, indent={self.indentLevel!r}"
+            f"{super().__repr__()}, indent={self.indent!r}"
             f")"
         )
 
@@ -78,11 +85,14 @@ class CodeBlock(collections.UserList):
         self,
         indentLevel: int = 0,
     ) -> typing.Iterator[str]:
-        if self.indentLevel is None:
-            currentIndent = 0
-        else:
-            indentLevel += self.indentLevel
+        currentIndent: int
+        if self.indent is Indentation.no_indent:
             currentIndent = indentLevel
+        elif self.indent is Indentation.indent:
+            indentLevel += 1
+            currentIndent = indentLevel
+        elif self.indent is Indentation.ignore_indent:
+            currentIndent = 0
 
         for elem in self:
             if isinstance(elem, CodeBlock):
