@@ -7,8 +7,13 @@ import subprocess
 import tempfile
 import typing
 import uuid
+import warnings
 import zmq  # type: ignore
-from . import parser, visitor, types
+from . import (
+    parser,
+    string,
+    visitor,
+)
 
 
 StrOrPathLike = typing.Union[str, os.PathLike]
@@ -154,3 +159,58 @@ def parse_omc_value(
         parser.omc_value_parser.parse(literal),
         visitor.OMCValueVisitor()
     )
+
+
+from . import (
+    exception,
+)
+
+
+class OMCSessionBase(
+):
+    _omc: InteractiveOMC
+
+
+PositionalArguments = typing.List[typing.Any]
+KeywordArguments = typing.Dict[str, typing.Any]
+
+
+def OMCSession__call(
+    self: OMCSessionBase,
+    funcName: str,
+    *,
+    args: typing.Optional[PositionalArguments] = None,
+    kwrds: typing.Optional[KeywordArguments] = None,
+) -> typing.Any:
+    argument_literals: typing.List[str] = []
+    if args is not None:
+        for arg in args:
+            argument_literals.append(
+                string.to_omc_literal(arg)
+            )
+    if kwrds is not None:
+        for ident, value in kwrds.items():
+            if value is None:
+                continue
+            value_literal = string.to_omc_literal(
+                value
+            )
+            argument_literals.append(
+                f"{ident}={value_literal}"
+            )
+
+    arguments_literal = ", ".join(argument_literals)
+
+    result_literal = self._omc.evaluate(
+        f"{funcName}({arguments_literal})"
+    )
+
+    error = exception.find_omc_error(self._omc)
+
+    if error is not None:
+        if isinstance(error, Warning):
+            warnings.warn(error)
+        else:
+            raise error
+
+    return parse_omc_value(result_literal)
