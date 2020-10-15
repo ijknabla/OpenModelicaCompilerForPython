@@ -28,6 +28,25 @@ class AbstractProfile(
     ) -> bool:
         return False
 
+    @staticmethod
+    def find_element(
+        root: xml._Element,
+        name: types.TypeName,
+    ) -> typing.Optional[xml._Element]:
+        element_list = root.xpath(
+            f'//*[@id="{name!s}"]'
+        )
+        if element_list:
+            return element_list[0]
+        else:
+            return None
+
+
+class AbstractFunctionProfile(
+    AbstractProfile
+):
+    ...
+
 
 __profileClasses: typing.List[typing.Type[AbstractProfile]] \
     = []
@@ -38,6 +57,26 @@ def register_profileClass(
 ) -> typing.Type[AbstractProfile]:
     __profileClasses.append(profileClass)
     return profileClass
+
+
+@register_profileClass
+class FunctionDeclarationProfile(
+    AbstractFunctionProfile,
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml.Element,
+        name: types.TypeName
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is None:
+            return False
+        else:
+            return (
+                element.tag == "function"
+                and "ref" not in element.attrib
+            )
 
 
 def get_profile(
