@@ -325,7 +325,10 @@ def write_module(
     root: xml._Element,
 ) -> None:
     code_import = CodeBlock("""\
-from omc4py.session import OMCSessionBase as __OMCSessionBase\
+import functools as __functools
+from omc4py.session import OMCSessionBase as __OMCSessionBase
+from omc4py.session import OMCSession__open as __OMCSession__open
+from omc4py.session import OMCSession__close as close_session
 """)
 
     code_class = CodeBlock(
@@ -353,6 +356,11 @@ from omc4py.session import OMCSessionBase as __OMCSessionBase\
             code_import,
             "\n" * 2,
             code_class,
+            "\n" * 1,
+            (
+                "open_session = __functools.partial"
+                "(__OMCSession__open, OMCSession)"
+            ),
         ]
     )
 
