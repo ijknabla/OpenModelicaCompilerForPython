@@ -49,12 +49,13 @@ class CodeBlock(collections.UserList):
 
     def __init__(
         self,
-        items,
+        items: typing.Optional[typing.Iterable] = None,
         *,
         indent: Indentation = Indentation.no_indent
     ):
         super().__init__()
-        self.extend(items)
+        if items is not None:
+            self.extend(items)
         self.indent = indent
 
     def append(
