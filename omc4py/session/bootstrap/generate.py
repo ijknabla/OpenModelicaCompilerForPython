@@ -40,7 +40,7 @@ class Indentation(enum.Enum):
 
 NO_INDENT = Indentation.no_indent
 INDENT = Indentation.indent
-IGNORE_INDENT = Indentation.no_indent
+IGNORE_INDENT = Indentation.ignore_indent
 
 
 class CodeBlock(collections.UserList):
