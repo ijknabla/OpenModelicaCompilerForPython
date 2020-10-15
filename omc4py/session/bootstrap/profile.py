@@ -19,6 +19,25 @@ class AbstractProfile(
         self.root = root
         self.name = name
 
+    def __hash__(
+        self
+    ):
+        return hash(
+            tuple(map(hash, [self.root, self.name]))
+        )
+
+    def __eq__(
+        self,
+        other
+    ):
+        if not isinstance(other, AbstractProfile):
+            return False
+        else:
+            return (
+                self.root == other.root
+                and self.name == other.name
+            )
+
     @classmethod
     @abc.abstractmethod
     def match(
