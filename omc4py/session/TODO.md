@@ -1,10 +1,4 @@
 
-# OpenModelica.Scripting.saveTotalSCode
-## Definition
-```
-function saveTotalSCode = saveTotalModel;
-```
-
 # Unreadable error
 
 ```python3
