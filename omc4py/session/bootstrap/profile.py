@@ -118,7 +118,7 @@ class AbstractTypeProfile(
     ...
 
 
-class TypeWithSize(
+class TypeWithSizes(
     typing.NamedTuple,
 ):
     typeProfile: AbstractTypeProfile
@@ -278,7 +278,7 @@ class FunctionDeclarationProfile(
     ) -> bool:
         if not all(
             profile.supported
-            for profile in self.variableProfiles
+            for profile, _ in self.variableTypes
         ):
             return False
         return True
@@ -296,13 +296,16 @@ class FunctionDeclarationProfile(
         )
 
     @property
-    def variableProfiles(
+    def variableTypes(
         self,
-    ) -> typing.Set[AbstractTypeProfile]:
+    ) -> typing.Set[TypeWithSizes]:
         return set(
-            get_profile(
-                self.root,
-                types.TypeName(argument.attrib["className"]),
+            TypeWithSizes(
+                get_profile(
+                    self.root,
+                    types.TypeName(argument.attrib["className"]),
+                ),
+                dimensions2sizes(argument.find("dimensions"))
             )
             for argument in self.element.xpath(".//argument")
         )
