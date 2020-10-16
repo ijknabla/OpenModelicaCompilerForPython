@@ -368,7 +368,10 @@ class FunctionDeclarationProfile(
     ) -> code.CodeBlock:
         result = code.CodeBlock([], indent=code.INDENT)
         result.append("self,")
-        for argument in self.inputArguments:
+        for argument in sorted(
+            self.inputArguments,
+            key=lambda arg: 1 if arg.hasDefault else 0
+        ):
             varName = avoid_keyword(argument.name)
             if argument.hasDefault:
                 default = " = None"
