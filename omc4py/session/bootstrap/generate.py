@@ -21,15 +21,6 @@ from .code import (
 from .. import types
 
 
-def avoid_keyword(
-    variableName: types.VariableName,
-) -> str:
-    result = str(variableName)
-    while keyword.iskeyword(result):
-        result += "_"
-    return result
-
-
 def encode_specifier(
     specifier: typing.Union[types.VariableName, types.TypeName]
 ) -> str:
