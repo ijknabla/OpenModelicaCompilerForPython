@@ -48,12 +48,15 @@ class TypeSpecifierSplitVisitor(
 def split_type_specifier(
     type_specifier: str
 ) -> typing.Tuple[str, ...]:
-    return arpeggio.visit_parse_tree(
-        parser.type_specifier_parser.parse(
-            type_specifier,
-        ),
-        TypeSpecifierSplitVisitor()
-    )
+    try:
+        return arpeggio.visit_parse_tree(
+            parser.type_specifier_parser.parse(
+                type_specifier,
+            ),
+            TypeSpecifierSplitVisitor()
+        )
+    except arpeggio.NoMatch:
+        raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
 class VariableName(
