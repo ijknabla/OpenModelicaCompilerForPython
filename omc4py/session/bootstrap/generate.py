@@ -55,6 +55,7 @@ from omc4py.session import OMCSessionBase as OMCSessionBase__
 from omc4py.session import OMCSession__open as OMCSession__open__
 from omc4py.session import OMCSession__call as OMCSession__call__
 from omc4py.session import OMCSession__close as close_session
+from omc4py.session import types as types__
 """)
 
     code_class = CodeBlock(

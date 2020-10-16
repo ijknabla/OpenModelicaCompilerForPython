@@ -178,7 +178,9 @@ codeTypeNames = {
 }
 
 
-class PrimitiveTypes(types.TypeName, enum.Enum):
+class PrimitiveTypes(
+    types.TypeName, enum.Enum
+):
     Real = types.TypeName("Real"),
     Integer = types.TypeName("Integer"),
     Boolean = types.TypeName("Boolean"),
@@ -298,6 +300,35 @@ class PrimitiveTypeProfile(
             ),
         )
 
+    def generate_argument_cast_code(
+        self,
+        variableName: types.VariableName,
+        sizes: "Sizes",
+        hasDefault: bool
+    ) -> str:
+        if sizes:
+            raise NotImplementedError(f"{sizes}")
+
+        return to_pyVariableName(variableName)
+
+
+class CodeTypes(
+    types.TypeName, enum.Enum
+):
+    VariableName = types.TypeName("OpenModelica.$Code.VariableName")
+    TypeName = types.TypeName("OpenModelica.$Code.TypeName")
+
+    @property
+    def pyTypeName(
+        self
+    ) -> str:
+        if self is self.VariableName:
+            return "types__.VariableName"
+        elif self is self.TypeName:
+            return "types__.TypeName"
+        else:
+            raise NotImplementedError()
+
 
 @register_profileClass
 class CodeTypeProfile(
@@ -330,6 +361,19 @@ class CodeTypeProfile(
             raise NotImplementedError(f"{sizes}")
 
         return CodeBlock()
+
+    def generate_argument_cast_code(
+        self,
+        variableName: types.VariableName,
+        sizes: "Sizes",
+        hasDefault: bool
+    ) -> str:
+        if sizes:
+            raise NotImplementedError(f"{sizes}")
+
+        codeType = CodeTypes(self.name)
+
+        return f"{codeType.pyTypeName}({to_pyVariableName(variableName)})"
 
 
 @register_profileClass
@@ -617,9 +661,10 @@ class FunctionDeclarationProfile(
         argument_items = CodeBlock(indent=INDENT)
 
         for argument in self.inputArguments:
-            pyVariableName = to_pyVariableName(argument.name)
             argument_items.append(
-                f"{pyVariableName},"
+                argument.typeProfile.generate_argument_cast_code(
+                    argument.name, argument.sizes, argument.hasDefault
+                ) + ","
             )
 
         return CodeBlock(
@@ -647,9 +692,12 @@ class FunctionDeclarationProfile(
 
         for argument in self.inputArguments:
             omcVariableName = str(argument.name)
-            pyVariableName = to_pyVariableName(argument.name)
             argument_items.append(
-                f"{omcVariableName!r}: {pyVariableName},"
+                f"{omcVariableName!r}: "
+                + argument.typeProfile.generate_argument_cast_code(
+                    argument.name, argument.sizes, argument.hasDefault
+                )
+                + ","
             )
 
         return CodeBlock(
