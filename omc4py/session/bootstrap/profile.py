@@ -3,6 +3,10 @@ import abc
 from lxml import etree as xml  # type: ignore
 import typing
 
+from . import (
+    code
+)
+
 from .. import (
     types,
 )
@@ -89,7 +93,17 @@ class AbstractTypeProfile(
 class AbstractFunctionProfile(
     AbstractProfile
 ):
-    ...
+    @abc.abstractmethod
+    def generate_method_code(
+        self,
+    ) -> code.CodeBlock:
+        raise NotImplementedError()
+
+    @property
+    def funcName(
+        self,
+    ) -> str:
+        return str(self.name.parts[-1])
 
 
 __profileClasses: typing.List[typing.Type[AbstractProfile]] \
@@ -177,6 +191,33 @@ class FunctionDeclarationProfile(
             )
 
     @property
+    def supported(
+        self,
+    ) -> bool:
+        if not all(
+            profile.supported
+            for profile in self.variableProfiles
+        ):
+            return False
+        return True
+
+    def generate_method_code(
+        self
+    ) -> code.CodeBlock:
+        return code.CodeBlock(
+            [
+                f"def {self.funcName}(",
+                f"):",
+                code.CodeBlock(
+                    [
+                        "..."
+                    ],
+                    indent=code.INDENT,
+                )
+            ]
+        )
+
+    @property
     def variableProfiles(
         self,
     ) -> typing.Set[AbstractTypeProfile]:
@@ -187,17 +228,6 @@ class FunctionDeclarationProfile(
             )
             for argument in self.element.xpath(".//argument")
         )
-
-    @property
-    def supported(
-        self,
-    ) -> bool:
-        if not all(
-            profile.supported
-            for profile in self.variableProfiles
-        ):
-            return False
-        return True
 
 
 @register_profileClass
@@ -222,9 +252,29 @@ class FunctionAliasProfile(
 
     @property
     def supported(
-        self
+        self,
     ) -> bool:
-        return False
+        return self.target.supported
+
+    def generate_method_code(
+        self,
+    ) -> code.CodeBlock:
+        return code.CodeBlock(
+            [
+                f"{self.funcName} = {self.target.funcName}"
+            ]
+        )
+
+    @property
+    def target(
+        self
+    ) -> AbstractFunctionProfile:
+        profile = get_profile(
+            self.root,
+            types.TypeName(self.element.attrib["ref"]),
+        )
+        assert(isinstance(profile, AbstractFunctionProfile))
+        return profile
 
 
 def get_profile(
