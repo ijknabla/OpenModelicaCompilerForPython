@@ -372,8 +372,16 @@ class CodeTypeProfile(
             raise NotImplementedError(f"{sizes}")
 
         codeType = CodeTypes(self.name)
+        pyVariableName = to_pyVariableName(variableName)
+        pyTypeName = codeType.pyTypeName
 
-        return f"{codeType.pyTypeName}({to_pyVariableName(variableName)})"
+        if hasDefault:
+            return (
+                f"None if {pyVariableName} is None "
+                f"else {pyTypeName}({pyVariableName})"
+            )
+        else:
+            return f"{pyTypeName}({pyVariableName})"
 
 
 @register_profileClass
