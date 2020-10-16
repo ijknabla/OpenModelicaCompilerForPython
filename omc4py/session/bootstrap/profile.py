@@ -13,7 +13,7 @@ from .. import (
 )
 
 
-def avoid_keyword(
+def to_pyVariableName(
     variableName: types.VariableName,
 ) -> str:
     result = str(variableName)
@@ -372,7 +372,7 @@ class FunctionDeclarationProfile(
             self.inputArguments,
             key=lambda arg: 1 if arg.hasDefault else 0
         ):
-            varName = avoid_keyword(argument.name)
+            varName = to_pyVariableName(argument.name)
             if argument.hasDefault:
                 default = "=None"
             else:
