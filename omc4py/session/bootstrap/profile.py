@@ -239,7 +239,7 @@ class PrimitiveTypeProfile(
                         [
                             'raise TypeError(f"'
                             f'Argument {pyVariableName} must be {pyTypeName} or None '
-                            f'got {{{pyVariableName}}}: {{type({pyVariableName}).__name__}}'
+                            f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
                             '")'
                         ],
                         indent=code.INDENT
@@ -254,7 +254,7 @@ class PrimitiveTypeProfile(
                         [
                             'raise TypeError(f"'
                             f'Argument {pyVariableName} must be {pyTypeName} '
-                            f'got {{{pyVariableName}}}: {{type({pyVariableName}).__name__}}'
+                            f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
                             '")'
                         ],
                         indent=code.INDENT
