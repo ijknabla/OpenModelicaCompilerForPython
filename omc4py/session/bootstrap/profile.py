@@ -240,7 +240,7 @@ class PrimitiveTypeProfile(
         variableName: types.VariableName,
         sizes: "Sizes",
         hasDefault: bool
-    ) -> code.CodeBlock:
+    ) -> code.AbstractCodeBlock:
         pyVariableName = to_pyVariableName(variableName)
         primitiveType = PrimitiveTypes(self.name)
         pyTypeName = primitiveType.pyTypeName
@@ -250,32 +250,26 @@ class PrimitiveTypeProfile(
             raise NotImplementedError(f"{sizes}")
 
         if hasDefault:
-            return code.CodeBlock(
-                [
-                    f"if not({pyVariableName} is None or isinstance({pyVariableName}, {pyTypeName})):",
-                    NewCodeBlock(
-                        'raise TypeError(f"'
-                        f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
-                        f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
-                        '")',
-                        indent=code.INDENT
-                    ),
-                ]
+            return NewCodeBlock(
+                f"if not({pyVariableName} is None or isinstance({pyVariableName}, {pyTypeName})):",
+                NewCodeBlock(
+                    'raise TypeError(f"'
+                    f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
+                    f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
+                    '")',
+                    indent=code.INDENT
+                ),
             )
         else:
-            return code.CodeBlock(
-                [
-                    f"if not isinstance({pyVariableName}, {pyTypeName}):",
-                    code.CodeBlock(
-                        [
-                            'raise TypeError(f"'
-                            f'Argument {pyVariableName} must be {pyTypeNameShort} '
-                            f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
-                            '")'
-                        ],
-                        indent=code.INDENT
-                    )
-                ]
+            return NewCodeBlock(
+                f"if not isinstance({pyVariableName}, {pyTypeName}):",
+                NewCodeBlock(
+                    'raise TypeError(f"'
+                    f'Argument {pyVariableName} must be {pyTypeNameShort} '
+                    f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
+                    '")',
+                    indent=code.INDENT
+                )
             )
 
 
