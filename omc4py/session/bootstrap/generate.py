@@ -12,7 +12,6 @@ from . import (
 
 from .code import (
     INDENT,
-    CodeBlock,
     NewCodeBlock,
 )
 
