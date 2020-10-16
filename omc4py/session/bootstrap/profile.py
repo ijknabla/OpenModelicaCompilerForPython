@@ -515,6 +515,7 @@ class FunctionDeclarationProfile(
         self
     ) -> code.CodeBlock:
         result = code.CodeBlock(indent=code.INDENT)
+        result.append("# Argument check")
         for argument in self.inputArguments:
             typeProfile, sizes = argument.typeWithSizes
             result.append(
@@ -522,6 +523,7 @@ class FunctionDeclarationProfile(
                     argument.name, sizes, argument.hasDefault
                 )
             )
+        result.append("")
         return result
 
 
