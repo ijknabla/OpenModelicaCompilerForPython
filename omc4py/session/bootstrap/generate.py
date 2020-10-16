@@ -389,6 +389,8 @@ from omc4py.session import OMCSession__close as close_session
         ]
     )
 
+    variableTypes: typing.Set[profile.TypeWithSizes] = set()
+
     function_profiles = [
         profile.get_profile(root, functionName)
         for functionName in export_function_names(root)
@@ -405,8 +407,16 @@ from omc4py.session import OMCSession__close as close_session
                     "",
                 ]
             )
+            if isinstance(
+                function_profile,
+                profile.FunctionDeclarationProfile
+            ):
+                variableTypes |= function_profile.variableTypes
         else:
             print(f"Skip {function_profile.name}")
+
+    for typeProfile, sizes in variableTypes:
+        print(typeProfile.name, sizes)
 
     code.dump(file)
 
