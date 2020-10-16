@@ -13,6 +13,7 @@ from . import (
 from .code import (
     INDENT,
     CodeBlock,
+    NewCodeBlock,
 )
 
 from .. import types
@@ -48,7 +49,7 @@ def write_module(
     file: typing.TextIO,
     root: xml._Element,
 ) -> None:
-    code_import = CodeBlock("""\
+    code_import = NewCodeBlock("""\
 import builtins as builtins__
 import functools as functools__
 from omc4py.session import OMCSessionBase as OMCSessionBase__
@@ -57,37 +58,30 @@ from omc4py.session import OMCSession__call as OMCSession__call__
 from omc4py.session import OMCSession__close as close_session
 """)
 
-    code_class = CodeBlock(
-        [
-            "class OMCSession(",
-            CodeBlock(
-                [
-                    "OMCSessionBase__,"
-                ],
-                indent=INDENT,
-            ),
-            "):"
-        ]
+    code_class = NewCodeBlock(
+        "class OMCSession(",
+        NewCodeBlock(
+            "OMCSessionBase__,",
+            indent=INDENT,
+        ),
+        "):"
     )
 
-    code_class_element = CodeBlock(
-        [],
+    code_class_element = NewCodeBlock(
         indent=INDENT,
     )
     code_class.append(code_class_element)
 
-    code = CodeBlock(
-        [
-            "\n" * 1,
-            code_import,
-            "\n" * 2,
-            code_class,
-            "\n" * 1,
-            (
-                "open_session = functools__.partial"
-                "(OMCSession__open__, OMCSession)"
-            ),
-        ]
+    code = NewCodeBlock(
+        "\n" * 1,
+        code_import,
+        "\n" * 2,
+        code_class,
+        "\n" * 1,
+        (
+            "open_session = functools__.partial"
+            "(OMCSession__open__, OMCSession)"
+        ),
     )
 
     variableTypes: typing.Set[profile.TypeWithSizes] = set()
