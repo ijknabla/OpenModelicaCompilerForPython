@@ -254,8 +254,8 @@ class PrimitiveTypeProfile(
             return CodeBlock(
                 "if not(",
                 CodeBlock(
-                    f"{pyVariableName} is None",
-                    f"or isinstance({pyVariableName}, {pyTypeName})",
+                    f"isinstance({pyVariableName}, {pyTypeName})",
+                    f"or {pyVariableName} is None",
                     indent=INDENT,
                 ),
                 "):",
