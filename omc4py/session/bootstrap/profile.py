@@ -242,13 +242,13 @@ class PrimitiveTypeProfile(
         sizes: "Sizes",
         hasDefault: bool
     ) -> CodeBlock:
+        if sizes:
+            raise NotImplementedError(f"{sizes}")
+
         pyVariableName = to_pyVariableName(variableName)
         primitiveType = PrimitiveTypes(self.name)
         pyTypeName = primitiveType.pyTypeName
         pyTypeNameShort = primitiveType.pyTypeNameShort
-
-        if sizes:
-            raise NotImplementedError(f"{sizes}")
 
         if hasDefault:
             if_statement = CodeBlock(
