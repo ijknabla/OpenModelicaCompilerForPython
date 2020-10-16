@@ -1,7 +1,5 @@
 
-import abc
 import argparse
-import keyword
 from lxml import etree as xml  # type: ignore
 from pathlib import Path
 import re
@@ -13,7 +11,6 @@ from . import (
 )
 
 from .code import (
-    IGNORE_INDENT,
     INDENT,
     CodeBlock,
 )
