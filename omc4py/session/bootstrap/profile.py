@@ -298,6 +298,7 @@ class PrimitiveTypeProfile(
             ),
         )
 
+
 @register_profileClass
 class CodeTypeProfile(
     AbstractTypeProfile
@@ -476,7 +477,9 @@ class FunctionDeclarationProfile(
     def inputArguments(
         self
     ) -> typing.Iterator[InputArgument]:
-        for argument in self.element.xpath('.//argument[@inputOutput="input"]'):
+        for argument in self.element.xpath(
+            './/argument[@inputOutput="input"]'
+        ):
             typeProfile = get_profile(
                 self.root,
                 types.TypeName(argument.attrib["className"]),
@@ -500,7 +503,9 @@ class FunctionDeclarationProfile(
     def outputArguments(
         self
     ) -> typing.Iterator[OutputArgument]:
-        for argument in self.element.xpath('.//argument[@inputOutput="output"]'):
+        for argument in self.element.xpath(
+            './/argument[@inputOutput="output"]'
+        ):
             anyProfile = get_profile(
                 self.root,
                 types.TypeName(argument.attrib["className"]),
