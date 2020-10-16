@@ -19,6 +19,8 @@ IGNORE_INDENT = Indentation.ignore_indent
 class AbstractCodeBlock(
     abc.ABC
 ):
+    indentString: typing.ClassVar[str] = " " * 4
+
     @abc.abstractmethod
     def append(
         self, code
@@ -56,7 +58,6 @@ class CodeBlock(
     AbstractCodeBlock,
     collections.UserList,
 ):
-    indentString: typing.ClassVar[str] = " " * 4
     indent: Indentation
 
     def __init__(
