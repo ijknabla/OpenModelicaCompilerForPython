@@ -197,6 +197,21 @@ class PrimitiveTypes(types.TypeName, enum.Enum):
         else:
             raise NotImplementedError()
 
+    @property
+    def pyTypeNameShort(
+        self
+    ) -> str:
+        if self is self.Real:
+            return "float"
+        elif self is self.Integer:
+            return "int"
+        elif self is self.Boolean:
+            return "bool"
+        elif self is self.String:
+            return "str"
+        else:
+            raise NotImplementedError()
+
 
 @register_profileClass
 class PrimitiveTypeProfile(
@@ -226,7 +241,9 @@ class PrimitiveTypeProfile(
         hasDefault: bool
     ) -> code.CodeBlock:
         pyVariableName = to_pyVariableName(variableName)
-        pyTypeName = PrimitiveTypes(self.name).pyTypeName
+        primitiveType = PrimitiveTypes(self.name)
+        pyTypeName = primitiveType.pyTypeName
+        pyTypeNameShort = primitiveType.pyTypeNameShort
 
         if sizes:
             raise NotImplementedError(f"{sizes}")
@@ -238,7 +255,7 @@ class PrimitiveTypeProfile(
                     code.CodeBlock(
                         [
                             'raise TypeError(f"'
-                            f'Argument {pyVariableName} must be {pyTypeName} or None '
+                            f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
                             f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
                             '")'
                         ],
@@ -253,7 +270,7 @@ class PrimitiveTypeProfile(
                     code.CodeBlock(
                         [
                             'raise TypeError(f"'
-                            f'Argument {pyVariableName} must be {pyTypeName} '
+                            f'Argument {pyVariableName} must be {pyTypeNameShort} '
                             f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
                             '")'
                         ],
