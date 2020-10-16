@@ -454,25 +454,22 @@ class FunctionDeclarationProfile(
     def variableTypes(
         self,
     ) -> typing.Set[TypeWithSizes]:
-        def typeWithSizes_generator(
-        ) -> typing.Iterator[TypeWithSizes]:
-            for argument in self.element.xpath(".//argument"):
-                typeProfile = get_profile(
-                    self.root,
-                    types.TypeName(argument.attrib["className"])
+        return (
+            set(
+                TypeWithSizes(
+                    typeProfile=argument.typeProfile,
+                    sizes=argument.sizes
                 )
-                if isinstance(typeProfile, AbstractTypeProfile):
-                    yield TypeWithSizes(
-                        typeProfile=typeProfile,
-                        sizes=dimensions2sizes(argument.find("dimensions")),
-                    )
-                else:
-                    raise TypeError(
-                        "Profile must be AbstractTypeProfile "
-                        f"got {typeProfile}"
-                    )
-
-        return set(typeWithSizes_generator())
+                for argument in self.inputArguments
+            )
+            | set(
+                TypeWithSizes(
+                    typeProfile=argument.typeProfile,
+                    sizes=argument.sizes
+                )
+                for argument in self.outputArguments
+            )
+        )
 
     @property
     def inputArguments(
