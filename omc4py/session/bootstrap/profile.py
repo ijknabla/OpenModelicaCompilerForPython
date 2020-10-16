@@ -561,7 +561,73 @@ class FunctionDeclarationProfile(
             )
         result.append("")
 
+        if self.use_positional_argument:
+            result.append(self.code_call_by_positional)
+        else:
+            result.append(self.code_call_by_keyword)
+        result.append("")
+
+        result.append("return __result")
+
         return result
+
+    @property
+    def use_positional_argument(
+        self,
+    ) -> bool:
+        return all(
+            not argument.hasDefault
+            for argument in self.inputArguments
+        )
+
+    @property
+    def code_call_by_positional(
+        self,
+    ) -> code.CodeBlock:
+        argument_items = code.CodeBlock(indent=code.INDENT)
+
+        for argument in self.inputArguments:
+            pyVariableName = to_pyVariableName(argument.name)
+            argument_items.append(
+                f"{pyVariableName},"
+            )
+
+        return code.CodeBlock(
+            [
+                "# Pack positional arguments",
+                "__args = [",
+                argument_items,
+                "]",
+                "",
+                "# Call function",
+                f"__result = OMCSession__call__(self, {str(self.name)!r}, args=__args)",
+            ]
+        )
+
+    @property
+    def code_call_by_keyword(
+        self,
+    ) -> code.CodeBlock:
+        argument_items = code.CodeBlock(indent=code.INDENT)
+
+        for argument in self.inputArguments:
+            omcVariableName = str(argument.name)
+            pyVariableName = to_pyVariableName(argument.name)
+            argument_items.append(
+                f"{omcVariableName!r}: {pyVariableName},"
+            )
+
+        return code.CodeBlock(
+            [
+                "# Pack keyword arguments",
+                "__kwrds = {",
+                argument_items,
+                "}",
+                "",
+                "# Call function",
+                f"__result = OMCSession__call__(self, {str(self.name)!r}, kwrds=__kwrds)",
+            ]
+        )
 
 
 @register_profileClass
