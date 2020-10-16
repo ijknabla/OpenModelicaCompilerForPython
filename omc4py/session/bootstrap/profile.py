@@ -1,5 +1,6 @@
 
 import abc
+import enum
 import keyword
 from lxml import etree as xml  # type: ignore
 import typing
@@ -175,6 +176,28 @@ codeTypeNames = {
 }
 
 
+class PrimitiveTypes(types.TypeName, enum.Enum):
+    Real = types.TypeName("Real"),
+    Integer = types.TypeName("Integer"),
+    Boolean = types.TypeName("Boolean"),
+    String = types.TypeName("String"),
+
+    @property
+    def pyTypeName(
+        self
+    ) -> str:
+        if self is self.Real:
+            return "__builtins__.float"
+        elif self is self.Integer:
+            return "__builtins__.int"
+        elif self is self.Boolean:
+            return "__builtins__.bool"
+        elif self is self.String:
+            return "__builtins__.str"
+        else:
+            raise NotImplementedError()
+
+
 @register_profileClass
 class PrimitiveTypeProfile(
     AbstractTypeProfile,
@@ -195,6 +218,49 @@ class PrimitiveTypeProfile(
         self
     ) -> bool:
         return True
+
+    def generate_argument_check_code(
+        self,
+        variableName: types.VariableName,
+        sizes: "Sizes",
+        hasDefault: bool
+    ) -> code.CodeBlock:
+        pyVariableName = to_pyVariableName(variableName)
+        pyTypeName = PrimitiveTypes(self.name).pyTypeName
+
+        if sizes:
+            raise NotImplementedError(f"{sizes}")
+
+        if hasDefault:
+            return code.CodeBlock(
+                [
+                    f"if not({pyVariableName} is None or isinstance({pyVariableName}, {pyTypeName})):",
+                    code.CodeBlock(
+                        [
+                            'raise TypeError(f"'
+                            f'Argument {pyVariableName} must be {pyTypeName} or None '
+                            f'got {{{pyVariableName}}}: {{type({pyVariableName}).__name__}}'
+                            '")'
+                        ],
+                        indent=code.INDENT
+                    )
+                ]
+            )
+        else:
+            return code.CodeBlock(
+                [
+                    f"if not isinstance({pyVariableName}, {pyTypeName}):",
+                    code.CodeBlock(
+                        [
+                            'raise TypeError(f"'
+                            f'Argument {pyVariableName} must be {pyTypeName} '
+                            f'got {{{pyVariableName}}}: {{type({pyVariableName}).__name__}}'
+                            '")'
+                        ],
+                        indent=code.INDENT
+                    )
+                ]
+            )
 
 
 @register_profileClass
@@ -336,6 +402,7 @@ class FunctionDeclarationProfile(
                 self.code_arguments,
                 "):",
                 self.code___doc__,
+                self.code_execution,
             ]
         )
 
@@ -425,6 +492,20 @@ class FunctionDeclarationProfile(
             ],
             indent=code.INDENT,
         )
+
+    @property
+    def code_execution(
+        self
+    ) -> code.CodeBlock:
+        result = code.CodeBlock(indent=code.INDENT)
+        for argument in self.inputArguments:
+            typeProfile, sizes = argument.typeWithSizes
+            result.append(
+                typeProfile.generate_argument_check_code(
+                    argument.name, sizes, argument.hasDefault
+                )
+            )
+        return result
 
 
 @register_profileClass
