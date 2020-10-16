@@ -24,14 +24,14 @@ class AbstractCodeBlock(
     @abc.abstractmethod
     def append(
         self, code
-    ):
+    ) -> None:
         raise NotImplementedError()
 
-    @abc.abstractmethod
     def extend(
         self, codes
-    ):
-        raise NotImplementedError()
+    ) -> None:
+        for code in codes:
+            self.append(code)
 
     @abc.abstractmethod
     def to_lines(
@@ -55,8 +55,8 @@ class AbstractCodeBlock(
 
 
 class CodeBlock(
-    AbstractCodeBlock,
     collections.UserList,
+    AbstractCodeBlock,
 ):
     indent: Indentation
 
