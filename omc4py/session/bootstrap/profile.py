@@ -5,10 +5,11 @@ import keyword
 from lxml import etree as xml  # type: ignore
 import typing
 
-from . import (
-    code
+from .code import (
+    IGNORE_INDENT,
+    INDENT,
+    NewCodeBlock,
 )
-from .code import NewCodeBlock
 
 from .. import (
     types,
@@ -257,7 +258,7 @@ class PrimitiveTypeProfile(
                     f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
                     f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
                     '")',
-                    indent=code.INDENT
+                    indent=INDENT
                 ),
             )
         else:
@@ -268,7 +269,7 @@ class PrimitiveTypeProfile(
                     f'Argument {pyVariableName} must be {pyTypeNameShort} '
                     f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
                     '")',
-                    indent=code.INDENT
+                    indent=INDENT
                 )
             )
 
@@ -501,7 +502,7 @@ class FunctionDeclarationProfile(
     def code_arguments(
         self,
     ) -> NewCodeBlock:
-        result = NewCodeBlock(indent=code.INDENT)
+        result = NewCodeBlock(indent=INDENT)
         result.append("self,")
         for argument in sorted(
             self.inputArguments,
@@ -526,17 +527,17 @@ class FunctionDeclarationProfile(
                 '```modelica',
                 self.code,
                 '```',
-                indent=code.IGNORE_INDENT,
+                indent=IGNORE_INDENT,
             ),
             '"""',
-            indent=code.INDENT,
+            indent=INDENT,
         )
 
     @property
     def code_execution(
         self
     ) -> NewCodeBlock:
-        result = NewCodeBlock(indent=code.INDENT)
+        result = NewCodeBlock(indent=INDENT)
 
         result.append("# Argument check")
         for argument in self.inputArguments:
@@ -571,7 +572,7 @@ class FunctionDeclarationProfile(
     def code_call_by_positional(
         self,
     ) -> NewCodeBlock:
-        argument_items = NewCodeBlock(indent=code.INDENT)
+        argument_items = NewCodeBlock(indent=INDENT)
 
         for argument in self.inputArguments:
             pyVariableName = to_pyVariableName(argument.name)
@@ -593,7 +594,7 @@ class FunctionDeclarationProfile(
     def code_call_by_keyword(
         self,
     ) -> NewCodeBlock:
-        argument_items = NewCodeBlock(indent=code.INDENT)
+        argument_items = NewCodeBlock(indent=INDENT)
 
         for argument in self.inputArguments:
             omcVariableName = str(argument.name)
