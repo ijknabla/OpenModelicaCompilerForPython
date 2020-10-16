@@ -260,33 +260,28 @@ class PrimitiveTypeProfile(
                 ),
                 "):",
             )
-            raise_statement = CodeBlock(
-                'raise TypeError(',
-                CodeBlock(
-                    f'f"Argument {pyVariableName} must be {pyTypeNameShort} or None '
-                    f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}"',
-                    indent=INDENT,
-                ),
-                ')',
+            typeError_message = CodeBlock(
+                f'f"Argument {pyVariableName} must be {pyTypeNameShort} or None '
+                f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}"',
             )
         else:
             if_statement = CodeBlock(
                 f"if not isinstance({pyVariableName}, {pyTypeName}):",
             )
-            raise_statement = CodeBlock(
-                'raise TypeError(',
-                CodeBlock(
-                    f'f"Argument {pyVariableName} must be {pyTypeNameShort} '
-                    f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}"',
-                    indent=INDENT,
-                ),
-                ')',
+            typeError_message = CodeBlock(
+                f'f"Argument {pyVariableName} must be {pyTypeNameShort} '
+                f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}"',
             )
 
         return CodeBlock(
             if_statement,
             CodeBlock(
-                raise_statement,
+                "raise TypeError(",
+                CodeBlock(
+                    typeError_message,
+                    indent=INDENT,
+                ),
+                ")",
                 indent=INDENT
             ),
         )
