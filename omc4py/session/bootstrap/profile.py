@@ -90,10 +90,39 @@ class ExtrinsicProfile(
         return self.element.find("code").text
 
 
+Sizes = typing.Tuple[typing.Union[None, int, str], ...]
+
+
+def dimensions2sizes(
+    dimensions: xml._Element,
+) -> Sizes:
+    def size_generator(
+    ) -> typing.Iterator[typing.Union[None, int, str]]:
+        assert(dimensions.tag == "dimensions")
+        for dimension in dimensions.xpath("./dimension"):
+            size = dimension.attrib["size"]
+            if size == ":":
+                yield None
+            else:
+                try:
+                    yield int(size)
+                except ValueError:
+                    yield size
+
+    return tuple(size_generator())
+
+
 class AbstractTypeProfile(
     AbstractProfile
 ):
     ...
+
+
+class TypeWithSize(
+    typing.NamedTuple,
+):
+    typeProfile: AbstractTypeProfile
+    sizes: Sizes
 
 
 class AbstractFunctionProfile(
