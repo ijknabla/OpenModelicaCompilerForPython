@@ -53,7 +53,7 @@ class AbstractCodeBlock(
         )
 
 
-class NewCodeBlock(
+class CodeBlock(
     AbstractCodeBlock,
 ):
     __list: typing.List[typing.Union[str, AbstractCodeBlock]]

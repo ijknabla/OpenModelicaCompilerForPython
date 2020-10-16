@@ -12,7 +12,7 @@ from . import (
 
 from .code import (
     INDENT,
-    NewCodeBlock,
+    CodeBlock,
 )
 
 from .. import types
@@ -48,7 +48,7 @@ def write_module(
     file: typing.TextIO,
     root: xml._Element,
 ) -> None:
-    code_import = NewCodeBlock("""\
+    code_import = CodeBlock("""\
 import builtins as builtins__
 import functools as functools__
 from omc4py.session import OMCSessionBase as OMCSessionBase__
@@ -57,21 +57,21 @@ from omc4py.session import OMCSession__call as OMCSession__call__
 from omc4py.session import OMCSession__close as close_session
 """)
 
-    code_class = NewCodeBlock(
+    code_class = CodeBlock(
         "class OMCSession(",
-        NewCodeBlock(
+        CodeBlock(
             "OMCSessionBase__,",
             indent=INDENT,
         ),
         "):"
     )
 
-    code_class_element = NewCodeBlock(
+    code_class_element = CodeBlock(
         indent=INDENT,
     )
     code_class.append(code_class_element)
 
-    code = NewCodeBlock(
+    code = CodeBlock(
         "\n" * 1,
         code_import,
         "\n" * 2,

@@ -8,7 +8,7 @@ import typing
 from .code import (
     IGNORE_INDENT,
     INDENT,
-    NewCodeBlock,
+    CodeBlock,
 )
 
 from .. import (
@@ -144,7 +144,7 @@ class AbstractFunctionProfile(
     @abc.abstractmethod
     def generate_method_code(
         self,
-    ) -> NewCodeBlock:
+    ) -> CodeBlock:
         raise NotImplementedError()
 
     @property
@@ -241,7 +241,7 @@ class PrimitiveTypeProfile(
         variableName: types.VariableName,
         sizes: "Sizes",
         hasDefault: bool
-    ) -> NewCodeBlock:
+    ) -> CodeBlock:
         pyVariableName = to_pyVariableName(variableName)
         primitiveType = PrimitiveTypes(self.name)
         pyTypeName = primitiveType.pyTypeName
@@ -251,9 +251,9 @@ class PrimitiveTypeProfile(
             raise NotImplementedError(f"{sizes}")
 
         if hasDefault:
-            return NewCodeBlock(
+            return CodeBlock(
                 f"if not({pyVariableName} is None or isinstance({pyVariableName}, {pyTypeName})):",
-                NewCodeBlock(
+                CodeBlock(
                     'raise TypeError(f"'
                     f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
                     f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
@@ -262,9 +262,9 @@ class PrimitiveTypeProfile(
                 ),
             )
         else:
-            return NewCodeBlock(
+            return CodeBlock(
                 f"if not isinstance({pyVariableName}, {pyTypeName}):",
-                NewCodeBlock(
+                CodeBlock(
                     'raise TypeError(f"'
                     f'Argument {pyVariableName} must be {pyTypeNameShort} '
                     f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
@@ -415,8 +415,8 @@ class FunctionDeclarationProfile(
 
     def generate_method_code(
         self
-    ) -> NewCodeBlock:
-        return NewCodeBlock(
+    ) -> CodeBlock:
+        return CodeBlock(
             f"def {self.funcName}(",
             self.code_arguments,
             "):",
@@ -501,8 +501,8 @@ class FunctionDeclarationProfile(
     @property
     def code_arguments(
         self,
-    ) -> NewCodeBlock:
-        result = NewCodeBlock(indent=INDENT)
+    ) -> CodeBlock:
+        result = CodeBlock(indent=INDENT)
         result.append("self,")
         for argument in sorted(
             self.inputArguments,
@@ -520,10 +520,10 @@ class FunctionDeclarationProfile(
     @property
     def code___doc__(
         self,
-    ) -> NewCodeBlock:
-        return NewCodeBlock(
+    ) -> CodeBlock:
+        return CodeBlock(
             '"""',
-            NewCodeBlock(
+            CodeBlock(
                 '```modelica',
                 self.code,
                 '```',
@@ -536,8 +536,8 @@ class FunctionDeclarationProfile(
     @property
     def code_execution(
         self
-    ) -> NewCodeBlock:
-        result = NewCodeBlock(indent=INDENT)
+    ) -> CodeBlock:
+        result = CodeBlock(indent=INDENT)
 
         result.append("# Argument check")
         for argument in self.inputArguments:
@@ -571,8 +571,8 @@ class FunctionDeclarationProfile(
     @property
     def code_call_by_positional(
         self,
-    ) -> NewCodeBlock:
-        argument_items = NewCodeBlock(indent=INDENT)
+    ) -> CodeBlock:
+        argument_items = CodeBlock(indent=INDENT)
 
         for argument in self.inputArguments:
             pyVariableName = to_pyVariableName(argument.name)
@@ -580,7 +580,7 @@ class FunctionDeclarationProfile(
                 f"{pyVariableName},"
             )
 
-        return NewCodeBlock(
+        return CodeBlock(
             "# Pack positional arguments",
             "__args = [",
             argument_items,
@@ -593,8 +593,8 @@ class FunctionDeclarationProfile(
     @property
     def code_call_by_keyword(
         self,
-    ) -> NewCodeBlock:
-        argument_items = NewCodeBlock(indent=INDENT)
+    ) -> CodeBlock:
+        argument_items = CodeBlock(indent=INDENT)
 
         for argument in self.inputArguments:
             omcVariableName = str(argument.name)
@@ -603,7 +603,7 @@ class FunctionDeclarationProfile(
                 f"{omcVariableName!r}: {pyVariableName},"
             )
 
-        return NewCodeBlock(
+        return CodeBlock(
             "# Pack keyword arguments",
             "__kwrds = {",
             argument_items,
@@ -642,8 +642,8 @@ class FunctionAliasProfile(
 
     def generate_method_code(
         self,
-    ) -> NewCodeBlock:
-        return NewCodeBlock(
+    ) -> CodeBlock:
+        return CodeBlock(
             f"{self.funcName} = {self.target.funcName}",
         )
 
