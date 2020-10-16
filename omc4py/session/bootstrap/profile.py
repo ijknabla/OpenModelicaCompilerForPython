@@ -277,8 +277,8 @@ class FunctionDeclarationProfile(
         self,
     ) -> bool:
         if not all(
-            profile.supported
-            for profile, _ in self.variableTypes
+            profile.supported and not sizes
+            for profile, sizes in self.variableTypes
         ):
             return False
         return True
