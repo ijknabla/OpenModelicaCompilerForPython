@@ -350,6 +350,7 @@ def write_module(
     root: xml._Element,
 ) -> None:
     code_import = CodeBlock("""\
+import builtins as __builtins
 import functools as __functools
 from omc4py.session import OMCSessionBase as __OMCSessionBase
 from omc4py.session import OMCSession__open as __OMCSession__open

@@ -187,13 +187,13 @@ class PrimitiveTypes(types.TypeName, enum.Enum):
         self
     ) -> str:
         if self is self.Real:
-            return "__builtins__.float"
+            return "__builtins.float"
         elif self is self.Integer:
-            return "__builtins__.int"
+            return "__builtins.int"
         elif self is self.Boolean:
-            return "__builtins__.bool"
+            return "__builtins.bool"
         elif self is self.String:
-            return "__builtins__.str"
+            return "__builtins.str"
         else:
             raise NotImplementedError()
 
