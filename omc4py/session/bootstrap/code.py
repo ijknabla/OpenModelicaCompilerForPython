@@ -42,8 +42,8 @@ class AbstractCodeBlock(
 
     def dumps(
         self
-    ):
-        "".join(self.to_lines())
+    ) -> str:
+        return "".join(self.to_lines())
 
     def dump(
         self,
