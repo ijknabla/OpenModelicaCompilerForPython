@@ -352,8 +352,8 @@ def write_module(
     code_import = CodeBlock("""\
 import builtins as builtins__
 import functools as functools__
-from omc4py.session import OMCSessionBase as __OMCSessionBase
-from omc4py.session import OMCSession__open as __OMCSession__open
+from omc4py.session import OMCSessionBase as OMCSessionBase__
+from omc4py.session import OMCSession__open as OMCSession__open__
 from omc4py.session import OMCSession__close as close_session
 """)
 
@@ -362,7 +362,7 @@ from omc4py.session import OMCSession__close as close_session
             "class OMCSession(",
             CodeBlock(
                 [
-                    "__OMCSessionBase,"
+                    "OMCSessionBase__,"
                 ],
                 indent=INDENT,
             ),
@@ -385,7 +385,7 @@ from omc4py.session import OMCSession__close as close_session
             "\n" * 1,
             (
                 "open_session = functools__.partial"
-                "(__OMCSession__open, OMCSession)"
+                "(OMCSession__open__, OMCSession)"
             ),
         ]
     )
