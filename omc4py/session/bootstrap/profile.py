@@ -290,7 +290,7 @@ class FunctionDeclarationProfile(
             [
                 f"def {self.funcName}(",
                 self.code_arguments,
-                f"):",
+                "):",
                 self.code___doc__,
             ]
         )
@@ -299,16 +299,25 @@ class FunctionDeclarationProfile(
     def variableTypes(
         self,
     ) -> typing.Set[TypeWithSizes]:
-        return set(
-            TypeWithSizes(
-                get_profile(
+        def typeWithSizes_generator(
+        ) -> typing.Iterator[TypeWithSizes]:
+            for argument in self.element.xpath(".//argument"):
+                typeProfile = get_profile(
                     self.root,
-                    types.TypeName(argument.attrib["className"]),
-                ),
-                dimensions2sizes(argument.find("dimensions"))
-            )
-            for argument in self.element.xpath(".//argument")
-        )
+                    types.TypeName(argument.attrib["className"])
+                )
+                if isinstance(typeProfile, AbstractTypeProfile):
+                    yield TypeWithSizes(
+                        typeProfile=typeProfile,
+                        sizes=dimensions2sizes(argument.find("dimensions")),
+                    )
+                else:
+                    raise TypeError(
+                        "Profile must be AbstractTypeProfile "
+                        f"got {typeProfile}"
+                    )
+
+        return set(typeWithSizes_generator())
 
     @property
     def code_arguments(
@@ -340,6 +349,7 @@ class FunctionDeclarationProfile(
             ],
             indent=code.INDENT,
         )
+
 
 @register_profileClass
 class FunctionAliasProfile(
@@ -391,8 +401,7 @@ class FunctionAliasProfile(
 def get_profile(
     root: xml._Element,
     name: types.TypeName,
-):
-    profile: AbstractProfile
+) -> AbstractProfile:
     for ProfileClass in __profileClasses:
         if ProfileClass.match(root, name):
             return ProfileClass(root, name)
