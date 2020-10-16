@@ -354,6 +354,7 @@ import builtins as builtins__
 import functools as functools__
 from omc4py.session import OMCSessionBase as OMCSessionBase__
 from omc4py.session import OMCSession__open as OMCSession__open__
+from omc4py.session import OMCSession__call as OMCSession__call__
 from omc4py.session import OMCSession__close as close_session
 """)
 
