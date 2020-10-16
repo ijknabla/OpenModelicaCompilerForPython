@@ -616,7 +616,14 @@ class FunctionDeclarationProfile(
             "]",
             "",
             "# Call function",
-            f"__result = OMCSession__call__(self, {str(self.name)!r}, args=__args)",
+            "__result = OMCSession__call__(",
+            CodeBlock(
+                "self,",
+                f"{str(self.name)!r},",
+                "args=__args",
+                indent=INDENT,
+            ),
+            ")",
         )
 
     @property
@@ -639,7 +646,14 @@ class FunctionDeclarationProfile(
             "}",
             "",
             "# Call function",
-            f"__result = OMCSession__call__(self, {str(self.name)!r}, kwrds=__kwrds)",
+            "__result = OMCSession__call__(",
+            CodeBlock(
+                "self,",
+                f"{str(self.name)!r},",
+                "kwrds=__kwrds",
+                indent=INDENT,
+            ),
+            ")",
         )
 
 
