@@ -122,3 +122,57 @@ class CodeBlock(
             else:
                 line = self.indentString * currentIndent + elem
                 yield (line if line and not line.isspace() else "") + "\n"
+
+
+class NewCodeBlock(
+    AbstractCodeBlock,
+):
+    __list: typing.List[typing.Union[str, AbstractCodeBlock]]
+    indent: Indentation
+
+    def __init__(
+        self,
+        *codes,
+        indent: Indentation = NO_INDENT,
+    ):
+        self.__list = []
+        self.extend(codes)
+        self.indent = indent
+
+    def append(
+        self,
+        code
+    ) -> None:
+        if isinstance(code, AbstractCodeBlock):
+            self.__list.append(code)
+        else:
+            scode = str(code)
+            if scode:
+                self.__list.extend(scode.splitlines())
+            else:
+                self.__list.append(scode)
+
+    def __iter__(
+        self
+    ) -> typing.Iterator[typing.Union[str, AbstractCodeBlock]]:
+        yield from self.__list
+
+    def to_lines(
+        self,
+        indentLevel: int = 0,
+    ) -> typing.Iterator[str]:
+        currentIndent: int
+        if self.indent is Indentation.no_indent:
+            currentIndent = indentLevel
+        elif self.indent is Indentation.indent:
+            indentLevel += 1
+            currentIndent = indentLevel
+        elif self.indent is Indentation.ignore_indent:
+            currentIndent = 0
+
+        for elem in self:
+            if isinstance(elem, AbstractCodeBlock):
+                yield from elem.to_lines(indentLevel)
+            else:
+                line = self.indentString * currentIndent + elem
+                yield (line if line and not line.isspace() else "") + "\n"
