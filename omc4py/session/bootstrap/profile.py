@@ -263,7 +263,7 @@ class PrimitiveTypeProfile(
             typeError_message = CodeBlock(
                 (
                     f'"Argument {pyVariableName!r} '
-                    f'must be {pyTypeNameShort} or None "'
+                    f'must be {pyTypeNameShort} or None, "'
                 ),
                 (
                     f'f"got {{{pyVariableName}!r}}'
@@ -277,7 +277,7 @@ class PrimitiveTypeProfile(
             typeError_message = CodeBlock(
                 (
                     f'"Argument {pyVariableName!r} '
-                    f'must be {pyTypeNameShort} "'
+                    f'must be {pyTypeNameShort}, "'
                 ),
                 (
                     f'f"got {{{pyVariableName}!r}}'
