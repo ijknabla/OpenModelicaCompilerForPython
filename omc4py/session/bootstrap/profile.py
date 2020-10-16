@@ -379,6 +379,15 @@ class InputArgument(
     hasDefault: bool
 
 
+class OutputArgument(
+    typing.NamedTuple,
+):
+    typeProfile: AbstractTypeProfile
+    sizes: Sizes
+    name: types.VariableName
+    comment: str
+
+
 @register_profileClass
 class FunctionDeclarationProfile(
     AbstractFunctionProfile,
@@ -469,6 +478,32 @@ class FunctionDeclarationProfile(
                 hasDefault=bool(
                     eval(argument.attrib["hasDefault"].capitalize())
                 ),
+            )
+
+    @property
+    def outputArguments(
+        self
+    ) -> typing.Iterator[OutputArgument]:
+        for argument in self.element.xpath('.//argument[@inputOutput="output"]'):
+            anyProfile = get_profile(
+                self.root,
+                types.TypeName(argument.attrib["className"]),
+            )
+
+            typeProfile: AbstractTypeProfile
+            if not isinstance(anyProfile, AbstractTypeProfile):
+                raise TypeError(
+                    "Argument class profile must be AbstractTypeProfile "
+                    f"got {anyProfile!r}: {type(anyProfile).__name__}"
+                )
+            else:
+                typeProfile = anyProfile
+
+            yield OutputArgument(
+                typeProfile=typeProfile,
+                sizes=dimensions2sizes(argument.find("dimensions")),
+                name=types.VariableName(argument.attrib["name"]),
+                comment=argument.attrib["comment"],
             )
 
     @property
