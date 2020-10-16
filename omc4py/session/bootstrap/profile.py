@@ -162,18 +162,21 @@ def register_profileClass(
     return profileClass
 
 
-builtinTypeNames = {
+primitiveTypeNames = {
     types.TypeName("Real"),
     types.TypeName("Integer"),
     types.TypeName("Boolean"),
     types.TypeName("String"),
+}
+
+codeTypeNames = {
     types.TypeName("OpenModelica.$Code.VariableName"),
     types.TypeName("OpenModelica.$Code.TypeName"),
 }
 
 
 @register_profileClass
-class BuiltinTypeProfile(
+class PrimitiveTypeProfile(
     AbstractTypeProfile,
 ):
     @classmethod
@@ -185,13 +188,35 @@ class BuiltinTypeProfile(
         element = cls.find_element(root, name)
         if element is not None:
             return False
-        return name in builtinTypeNames
+        return name in primitiveTypeNames
 
     @property
     def supported(
         self
     ) -> bool:
         return True
+
+
+@register_profileClass
+class CodeTypeProfile(
+    AbstractTypeProfile
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml._Element,
+        name: types.TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is not None:
+            return False
+        return name in codeTypeNames
+
+    @property
+    def supported(
+        self
+    ) -> bool:
+        return False
 
 
 @register_profileClass
@@ -207,7 +232,7 @@ class UnsupportedBuiltinTypeProfile(
         element = cls.find_element(root, name)
         if element is not None:
             return False
-        return name not in builtinTypeNames
+        return name not in primitiveTypeNames | codeTypeNames
 
     @property
     def supported(
