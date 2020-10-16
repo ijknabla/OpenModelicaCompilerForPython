@@ -374,7 +374,7 @@ class FunctionDeclarationProfile(
         ):
             varName = avoid_keyword(argument.name)
             if argument.hasDefault:
-                default = " = None"
+                default = "=None"
             else:
                 default = ""
             result.append(f"{varName}{default},")
