@@ -38,6 +38,19 @@ class AbstractCodeBlock(
     ) -> typing.Iterator[str]:
         raise NotImplementedError()
 
+    def dumps(
+        self
+    ):
+        "".join(self.to_lines())
+
+    def dump(
+        self,
+        file: typing.TextIO
+    ) -> None:
+        file.writelines(
+            self.to_lines()
+        )
+
 
 class CodeBlock(
     AbstractCodeBlock,
@@ -108,16 +121,3 @@ class CodeBlock(
             else:
                 line = self.indentString * currentIndent + elem
                 yield (line if line and not line.isspace() else "") + "\n"
-
-    def dumps(
-        self
-    ):
-        "".join(self.to_lines())
-
-    def dump(
-        self,
-        file: typing.TextIO
-    ) -> None:
-        file.writelines(
-            self.to_lines()
-        )
