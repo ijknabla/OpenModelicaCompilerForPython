@@ -143,7 +143,7 @@ class AbstractFunctionProfile(
     @abc.abstractmethod
     def generate_method_code(
         self,
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         raise NotImplementedError()
 
     @property
@@ -240,7 +240,7 @@ class PrimitiveTypeProfile(
         variableName: types.VariableName,
         sizes: "Sizes",
         hasDefault: bool
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         pyVariableName = to_pyVariableName(variableName)
         primitiveType = PrimitiveTypes(self.name)
         pyTypeName = primitiveType.pyTypeName
@@ -414,7 +414,7 @@ class FunctionDeclarationProfile(
 
     def generate_method_code(
         self
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         return NewCodeBlock(
             f"def {self.funcName}(",
             self.code_arguments,
@@ -500,7 +500,7 @@ class FunctionDeclarationProfile(
     @property
     def code_arguments(
         self,
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         result = NewCodeBlock(indent=code.INDENT)
         result.append("self,")
         for argument in sorted(
@@ -519,7 +519,7 @@ class FunctionDeclarationProfile(
     @property
     def code___doc__(
         self,
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         return NewCodeBlock(
             '"""',
             NewCodeBlock(
@@ -535,7 +535,7 @@ class FunctionDeclarationProfile(
     @property
     def code_execution(
         self
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         result = NewCodeBlock(indent=code.INDENT)
 
         result.append("# Argument check")
@@ -570,7 +570,7 @@ class FunctionDeclarationProfile(
     @property
     def code_call_by_positional(
         self,
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         argument_items = NewCodeBlock(indent=code.INDENT)
 
         for argument in self.inputArguments:
@@ -592,7 +592,7 @@ class FunctionDeclarationProfile(
     @property
     def code_call_by_keyword(
         self,
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         argument_items = NewCodeBlock(indent=code.INDENT)
 
         for argument in self.inputArguments:
@@ -641,7 +641,7 @@ class FunctionAliasProfile(
 
     def generate_method_code(
         self,
-    ) -> code.AbstractCodeBlock:
+    ) -> NewCodeBlock:
         return NewCodeBlock(
             f"{self.funcName} = {self.target.funcName}",
         )
