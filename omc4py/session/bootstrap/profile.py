@@ -1,5 +1,6 @@
 
 import abc
+import keyword
 from lxml import etree as xml  # type: ignore
 import typing
 
@@ -10,6 +11,15 @@ from . import (
 from .. import (
     types,
 )
+
+
+def avoid_keyword(
+    variableName: types.VariableName,
+) -> str:
+    result = str(variableName)
+    while keyword.iskeyword(result):
+        result += "_"
+    return result
 
 
 class AbstractProfile(
@@ -252,6 +262,15 @@ class RecordDeclarationProfile(
         return False
 
 
+class InputArgument(
+    typing.NamedTuple,
+):
+    typeWithSizes: TypeWithSizes
+    name: types.VariableName
+    comment: str
+    hasDefault: bool
+
+
 @register_profileClass
 class FunctionDeclarationProfile(
     AbstractFunctionProfile,
@@ -320,15 +339,44 @@ class FunctionDeclarationProfile(
         return set(typeWithSizes_generator())
 
     @property
+    def inputArguments(
+        self
+    ) -> typing.Iterator[InputArgument]:
+        for argument in self.element.xpath('.//argument[@inputOutput="input"]'):
+            typeProfile = get_profile(
+                self.root,
+                types.TypeName(argument.attrib["className"]),
+            )
+            if isinstance(typeProfile, AbstractTypeProfile):
+                typeWithSizes = TypeWithSizes(
+                    typeProfile=typeProfile,
+                    sizes=dimensions2sizes(argument.find("dimensions"))
+                )
+
+            yield InputArgument(
+                typeWithSizes=typeWithSizes,
+                name=types.VariableName(argument.attrib["name"]),
+                comment=argument.attrib["comment"],
+                hasDefault=bool(
+                    eval(argument.attrib["hasDefault"].capitalize())
+                ),
+            )
+
+    @property
     def code_arguments(
         self,
     ) -> code.CodeBlock:
-        return code.CodeBlock(
-            [
-                "self,",
-            ],
-            indent=code.INDENT
-        )
+        result = code.CodeBlock([], indent=code.INDENT)
+        result.append("self,")
+        for argument in self.inputArguments:
+            varName = avoid_keyword(argument.name)
+            if argument.hasDefault:
+                default = " = None"
+            else:
+                default = ""
+            result.append(f"{varName}{default},")
+
+        return result
 
     @property
     def code___doc__(
