@@ -392,7 +392,8 @@ class RecordDeclarationProfile(
 class InputArgument(
     typing.NamedTuple,
 ):
-    typeWithSizes: TypeWithSizes
+    typeProfile: AbstractTypeProfile
+    sizes: Sizes
     name: types.VariableName
     comment: str
     hasDefault: bool
@@ -480,18 +481,23 @@ class FunctionDeclarationProfile(
         for argument in self.element.xpath(
             './/argument[@inputOutput="input"]'
         ):
-            typeProfile = get_profile(
+            anyProfile = get_profile(
                 self.root,
                 types.TypeName(argument.attrib["className"]),
             )
-            if isinstance(typeProfile, AbstractTypeProfile):
-                typeWithSizes = TypeWithSizes(
-                    typeProfile=typeProfile,
-                    sizes=dimensions2sizes(argument.find("dimensions"))
+
+            typeProfile: AbstractTypeProfile
+            if not isinstance(anyProfile, AbstractTypeProfile):
+                raise TypeError(
+                    "Argument class profile must be AbstractTypeProfile "
+                    f"got {anyProfile!r}: {type(anyProfile).__name__}"
                 )
+            else:
+                typeProfile = anyProfile
 
             yield InputArgument(
-                typeWithSizes=typeWithSizes,
+                typeProfile=typeProfile,
+                sizes=dimensions2sizes(argument.find("dimensions")),
                 name=types.VariableName(argument.attrib["name"]),
                 comment=argument.attrib["comment"],
                 hasDefault=bool(
@@ -570,10 +576,9 @@ class FunctionDeclarationProfile(
 
         result.append("# Argument check")
         for argument in self.inputArguments:
-            typeProfile, sizes = argument.typeWithSizes
             result.append(
-                typeProfile.generate_argument_check_code(
-                    argument.name, sizes, argument.hasDefault
+                argument.typeProfile.generate_argument_check_code(
+                    argument.name, argument.sizes, argument.hasDefault
                 )
             )
         result.append("")
