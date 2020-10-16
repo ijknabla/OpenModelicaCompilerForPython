@@ -252,7 +252,13 @@ class PrimitiveTypeProfile(
 
         if hasDefault:
             return CodeBlock(
-                f"if not({pyVariableName} is None or isinstance({pyVariableName}, {pyTypeName})):",
+                "if not(",
+                CodeBlock(
+                    f"{pyVariableName} is None",
+                    f"or isinstance({pyVariableName}, {pyTypeName})",
+                    indent=INDENT,
+                ),
+                "):",
                 CodeBlock(
                     'raise TypeError(f"'
                     f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
