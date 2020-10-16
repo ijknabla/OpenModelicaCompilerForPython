@@ -318,7 +318,18 @@ class CodeTypeProfile(
     def supported(
         self
     ) -> bool:
-        return False
+        return True
+
+    def generate_argument_check_code(
+        self,
+        variableName: types.VariableName,
+        sizes: "Sizes",
+        hasDefault: bool
+    ) -> CodeBlock:
+        if sizes:
+            raise NotImplementedError(f"{sizes}")
+
+        return CodeBlock()
 
 
 @register_profileClass
