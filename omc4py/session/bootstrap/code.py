@@ -1,4 +1,5 @@
 
+import abc
 import collections
 import enum
 import typing
@@ -15,7 +16,33 @@ INDENT = Indentation.indent
 IGNORE_INDENT = Indentation.ignore_indent
 
 
-class CodeBlock(collections.UserList):
+class AbstractCodeBlock(
+    abc.ABC
+):
+    @abc.abstractmethod
+    def append(
+        self, code
+    ):
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def extend(
+        self, codes
+    ):
+        raise NotImplementedError()
+
+    @abc.abstractmethod
+    def to_lines(
+        self,
+        indentLevel: int = 0,
+    ) -> typing.Iterator[str]:
+        raise NotImplementedError()
+
+
+class CodeBlock(
+    AbstractCodeBlock,
+    collections.UserList,
+):
     indentString: typing.ClassVar[str] = " " * 4
     indent: Indentation
 
@@ -34,7 +61,7 @@ class CodeBlock(collections.UserList):
         self,
         item,
     ) -> None:
-        if isinstance(item, CodeBlock):
+        if isinstance(item, AbstractCodeBlock):
             super().append(item)
         else:
             item = str(item)
@@ -76,7 +103,7 @@ class CodeBlock(collections.UserList):
             currentIndent = 0
 
         for elem in self:
-            if isinstance(elem, CodeBlock):
+            if isinstance(elem, AbstractCodeBlock):
                 yield from elem.to_lines(indentLevel)
             else:
                 line = self.indentString * currentIndent + elem
