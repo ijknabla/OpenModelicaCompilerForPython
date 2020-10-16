@@ -8,6 +8,7 @@ import typing
 from . import (
     code
 )
+from .code import NewCodeBlock
 
 from .. import (
     types,
@@ -252,15 +253,13 @@ class PrimitiveTypeProfile(
             return code.CodeBlock(
                 [
                     f"if not({pyVariableName} is None or isinstance({pyVariableName}, {pyTypeName})):",
-                    code.CodeBlock(
-                        [
-                            'raise TypeError(f"'
-                            f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
-                            f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
-                            '")'
-                        ],
+                    NewCodeBlock(
+                        'raise TypeError(f"'
+                        f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
+                        f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
+                        '")',
                         indent=code.INDENT
-                    )
+                    ),
                 ]
             )
         else:
