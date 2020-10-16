@@ -251,7 +251,7 @@ class PrimitiveTypeProfile(
             raise NotImplementedError(f"{sizes}")
 
         if hasDefault:
-            return CodeBlock(
+            if_statement = CodeBlock(
                 "if not(",
                 CodeBlock(
                     f"isinstance({pyVariableName}, {pyTypeName})",
@@ -259,26 +259,31 @@ class PrimitiveTypeProfile(
                     indent=INDENT,
                 ),
                 "):",
-                CodeBlock(
-                    'raise TypeError(f"'
-                    f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
-                    f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
-                    '")',
-                    indent=INDENT
-                ),
+            )
+            raise_statement = CodeBlock(
+                'raise TypeError(f"'
+                f'Argument {pyVariableName} must be {pyTypeNameShort} or None '
+                f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
+                '")',
             )
         else:
-            return CodeBlock(
+            if_statement = CodeBlock(
                 f"if not isinstance({pyVariableName}, {pyTypeName}):",
-                CodeBlock(
-                    'raise TypeError(f"'
-                    f'Argument {pyVariableName} must be {pyTypeNameShort} '
-                    f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
-                    '")',
-                    indent=INDENT
-                )
+            )
+            raise_statement = CodeBlock(
+                'raise TypeError(f"'
+                f'Argument {pyVariableName} must be {pyTypeNameShort} '
+                f'got {{{pyVariableName}!r}}: {{type({pyVariableName}).__name__}}'
+                '")',
             )
 
+        return CodeBlock(
+            if_statement,
+            CodeBlock(
+                raise_statement,
+                indent=INDENT
+            ),
+        )
 
 @register_profileClass
 class CodeTypeProfile(
