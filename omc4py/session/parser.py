@@ -11,6 +11,10 @@ from . import syntax
 
 
 with syntax.omc_dialect_context:
+    IDENT_parser = arpeggio.ParserPython(
+        syntax.IDENT_withEOF,
+    )
+
     type_specifier_parser = arpeggio.ParserPython(
         syntax.type_specifier_withEOF,
     )

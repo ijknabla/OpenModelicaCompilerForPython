@@ -93,8 +93,8 @@ def omc_value():
 
 
 @change___name__("file")
-def stored_definition_withEOF():
-    return std.stored_definition, arpeggio.EOF
+def IDENT_withEOF():
+    return std.IDENT, arpeggio.EOF
 
 
 @change___name__("file")
@@ -105,6 +105,11 @@ def type_specifier_withEOF():
 @change___name__("file")
 def omc_value_withEOF():
     return omc_value, arpeggio.EOF
+
+
+@change___name__("file")
+def stored_definition_withEOF():
+    return std.stored_definition, arpeggio.EOF
 
 
 class OMCDialectContext():
