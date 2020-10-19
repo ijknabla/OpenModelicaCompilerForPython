@@ -19,6 +19,8 @@ from .base import (
     AbstractProfile,
     AbstractTypeProfile,
     AbstractExtrinsicProfile,
+    get_profile,
+    register_profileClass,
 )
 
 
@@ -58,17 +60,6 @@ class TypeWithSizes(
 ):
     typeProfile: AbstractTypeProfile
     sizes: Sizes
-
-
-__profileClasses: typing.List[typing.Type[AbstractProfile]] \
-    = []
-
-
-def register_profileClass(
-    profileClass: typing.Type[AbstractProfile],
-) -> typing.Type[AbstractProfile]:
-    __profileClasses.append(profileClass)
-    return profileClass
 
 
 primitiveTypeNames = {
@@ -654,16 +645,3 @@ class FunctionAliasProfile(
         )
         assert(isinstance(profile, AbstractFunctionProfile))
         return profile
-
-
-def get_profile(
-    root: xml._Element,
-    name: types.TypeName,
-) -> AbstractProfile:
-    for ProfileClass in __profileClasses:
-        if ProfileClass.match(root, name):
-            return ProfileClass(root, name)
-
-    raise ValueError(
-        f"Failed to create profile for {name}"
-    )
