@@ -251,6 +251,14 @@ class EnumeratorVisitor(
             children.enumeration_literal
         )
 
+    def visit_file(
+        self,
+        node,
+        children
+    ):
+        print(children)
+        return children[0]
+
 
 class AliasInfo(
     typing.NamedTuple
