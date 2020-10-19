@@ -4,6 +4,7 @@ from lxml import etree as xml
 import typing
 
 from omc4py.session import types
+from omc4py.session.bootstrap import code
 
 
 class AbstractProfile(
@@ -82,3 +83,25 @@ class AbstractExtrinsicProfile(
         self
     ) -> str:
         return self.element.find("code").text
+
+
+class AbstractTypeProfile(
+    AbstractProfile
+):
+    ...
+
+
+class AbstractFunctionProfile(
+    AbstractProfile
+):
+    @abc.abstractmethod
+    def generate_method_code(
+        self,
+    ) -> code.CodeBlock:
+        raise NotImplementedError()
+
+    @property
+    def funcName(
+        self,
+    ) -> str:
+        return str(self.name.parts[-1])

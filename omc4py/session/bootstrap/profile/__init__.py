@@ -16,7 +16,9 @@ from omc4py.session import (
 )
 
 from .base import (
+    AbstractFunctionProfile,
     AbstractProfile,
+    AbstractTypeProfile,
     AbstractExtrinsicProfile,
 )
 
@@ -52,33 +54,11 @@ def dimensions2sizes(
     return tuple(size_generator())
 
 
-class AbstractTypeProfile(
-    AbstractProfile
-):
-    ...
-
-
 class TypeWithSizes(
     typing.NamedTuple,
 ):
     typeProfile: AbstractTypeProfile
     sizes: Sizes
-
-
-class AbstractFunctionProfile(
-    AbstractProfile
-):
-    @abc.abstractmethod
-    def generate_method_code(
-        self,
-    ) -> CodeBlock:
-        raise NotImplementedError()
-
-    @property
-    def funcName(
-        self,
-    ) -> str:
-        return str(self.name.parts[-1])
 
 
 __profileClasses: typing.List[typing.Type[AbstractProfile]] \
