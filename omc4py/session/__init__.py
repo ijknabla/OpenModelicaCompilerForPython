@@ -286,7 +286,7 @@ def OMCSession__call(
 def check_scalar_value(
     class_or_tuple: typing.Union[typing.Type, typing.Tuple[typing.Type, ...]],
     optional: bool,
-    name: typing.Optional[str],
+    name: str,
     value: typing.Any,
 ) -> typing.Any:
     if value is None:
@@ -310,7 +310,7 @@ def check_scalar_value(
 def cast_scalar_value(
     class_: typing.Type,
     optional: bool,
-    name: typing.Optional[str],
+    name: str,
     value: typing.Any,
 ) -> typing.Any:
     if value is None and optional:
