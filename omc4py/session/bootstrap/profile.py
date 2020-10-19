@@ -201,21 +201,6 @@ class PrimitiveTypes(
         else:
             raise NotImplementedError()
 
-    @property
-    def pyTypeNameShort(
-        self
-    ) -> str:
-        if self is self.Real:
-            return "float"
-        elif self is self.Integer:
-            return "int"
-        elif self is self.Boolean:
-            return "bool"
-        elif self is self.String:
-            return "str"
-        else:
-            raise NotImplementedError()
-
 
 @register_profileClass
 class PrimitiveTypeProfile(
