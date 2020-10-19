@@ -486,7 +486,8 @@ def generate_omc_interface_xml(
 
 
 def bootstrap(
-    omc_command: StrOrPathLike
+    binary_output: typing.BinaryIO,
+    omc_command: StrOrPathLike,
 ):
     with open_session(omc_command) as session:
         omc_interface_xml = generate_omc_interface_xml(
@@ -494,7 +495,7 @@ def bootstrap(
         )
 
     omc_interface_xml.write(
-        sys.stdout.buffer,
+        binary_output,
         pretty_print=True,
         xml_declaration=True,
         encoding="utf-8",
@@ -521,6 +522,15 @@ def main():
         "--omc",
         help="omc executable",
         default=None,
+    ),
+    parser.add_argument(
+        "--output",
+        type=argparse.FileType("wb"),
+        default=sys.stdout.buffer
     )
     args = parser.parse_args()
-    bootstrap(args.omc)
+
+    bootstrap(
+        args.output,
+        args.omc
+    )
