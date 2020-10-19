@@ -224,7 +224,13 @@ class OMCRecord(
         typeName: typing.Union[str, TypeName],
         **kwrds,
     ):
-        super().__init__(*args, **kwrds)
+        _dict = dict(*args, **kwrds)
+        super().__init__(
+            {
+                str(key): value
+                for key, value in _dict.items()
+            }
+        )
         self.__typeName = TypeName(typeName)
 
     @property
