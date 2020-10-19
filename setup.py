@@ -23,6 +23,7 @@ setup(
         "PyZMQ",
         "Arpeggio",
         "lxml",
+        "numpy",
     ],
     python_requires='>=3.6',
 )
