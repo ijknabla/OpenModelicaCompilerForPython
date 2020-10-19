@@ -70,20 +70,6 @@ def split_type_specifier(
 
 
 class VariableName(
-    str
-):
-    def __repr__(
-        self,
-    ) -> str:
-        return f"{type(self).__name__}({super().__repr__()})"
-
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return super().__str__()
-
-
-class NewVariableName(
 ):
     __slots__ = "__str"
 
@@ -93,7 +79,7 @@ class NewVariableName(
         cls,
         obj,
     ):
-        if isinstance(obj, NewVariableName):
+        if isinstance(obj, VariableName):
             return obj
 
         obj_str = str(obj)
@@ -109,7 +95,7 @@ class NewVariableName(
     def __eq__(
         self, other,
     ):
-        if not isinstance(other, NewVariableName):
+        if not isinstance(other, VariableName):
             return False
         else:
             return str(self) == str(other)
