@@ -7,6 +7,7 @@ __all__ = (
 
 
 from modelica_language.util import replace_all
+import numpy
 import typing
 
 
@@ -69,11 +70,11 @@ def to_omc_literal(
 ) -> str:
     if hasattr(obj, "__to_omc_literal__"):
         return obj.__to_omc_literal__()
-    if isinstance(obj, bool):
-        if obj:
-            return 'true'
-        else:
-            return 'false'
-    if isinstance(obj, str):
+    elif isinstance(obj, bool):
+        return "true" if obj else "false"
+    elif isinstance(obj, str):
         return '"' + escape_py_string(obj) + '"'
-    return str(obj)
+    elif isinstance(obj, (typing.Sequence, numpy.ndarray)):
+        return "{" + ", ".join(map(to_omc_literal, obj)) + "}"
+    else:
+        return str(obj)
