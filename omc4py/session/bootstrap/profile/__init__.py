@@ -17,6 +17,7 @@ from omc4py.session import (
 
 from .base import (
     AbstractProfile,
+    ExtrinsicProfile,
 )
 
 
@@ -27,24 +28,6 @@ def to_pyVariableName(
     while keyword.iskeyword(result):
         result += "_"
     return result
-
-
-class ExtrinsicProfile(
-    AbstractProfile
-):
-    @property
-    def element(
-        self
-    ) -> xml._Element:
-        return self.root.xpath(
-            f'//*[@id="{self.name!s}"]'
-        )[0]
-
-    @property
-    def code(
-        self
-    ) -> str:
-        return self.element.find("code").text
 
 
 Sizes = typing.Tuple[typing.Union[None, int, str], ...]

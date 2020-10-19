@@ -64,3 +64,21 @@ class AbstractProfile(
             return element_list[0]
         else:
             return None
+
+
+class ExtrinsicProfile(
+    AbstractProfile
+):
+    @property
+    def element(
+        self
+    ) -> xml._Element:
+        return self.root.xpath(
+            f'//*[@id="{self.name!s}"]'
+        )[0]
+
+    @property
+    def code(
+        self
+    ) -> str:
+        return self.element.find("code").text
