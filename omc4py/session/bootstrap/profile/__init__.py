@@ -5,13 +5,13 @@ import keyword
 from lxml import etree as xml  # type: ignore
 import typing
 
-from .code import (
+from omc4py.session.bootstrap.code import (
     IGNORE_INDENT,
     INDENT,
     CodeBlock,
 )
 
-from .. import (
+from omc4py.session import (
     types,
 )
 
