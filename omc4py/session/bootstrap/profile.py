@@ -244,61 +244,8 @@ class PrimitiveTypeProfile(
         sizes: "Sizes",
         hasDefault: bool
     ) -> CodeBlock:
-        if sizes:
-            raise NotImplementedError(f"{sizes}")
+        return CodeBlock()
 
-        pyVariableName = to_pyVariableName(variableName)
-        primitiveType = PrimitiveTypes(self.name)
-        pyTypeName = primitiveType.pyTypeName
-        pyTypeNameShort = primitiveType.pyTypeNameShort
-
-        if hasDefault:
-            if_statement = CodeBlock(
-                "if not(",
-                CodeBlock(
-                    f"isinstance({pyVariableName}, {pyTypeName})",
-                    f"or {pyVariableName} is None",
-                    indent=INDENT,
-                ),
-                "):",
-            )
-            typeError_message = CodeBlock(
-                (
-                    f'"Argument {pyVariableName!r} '
-                    f'must be {pyTypeNameShort} or None, "'
-                ),
-                (
-                    f'f"got {{{pyVariableName}!r}}'
-                    f': {{type({pyVariableName}).__name__}}"'
-                ),
-            )
-        else:
-            if_statement = CodeBlock(
-                f"if not isinstance({pyVariableName}, {pyTypeName}):",
-            )
-            typeError_message = CodeBlock(
-                (
-                    f'"Argument {pyVariableName!r} '
-                    f'must be {pyTypeNameShort}, "'
-                ),
-                (
-                    f'f"got {{{pyVariableName}!r}}'
-                    f': {{type({pyVariableName}).__name__}}"'
-                ),
-            )
-
-        return CodeBlock(
-            if_statement,
-            CodeBlock(
-                "raise TypeError(",
-                CodeBlock(
-                    typeError_message,
-                    indent=INDENT,
-                ),
-                ")",
-                indent=INDENT
-            ),
-        )
 
     def generate_argument_cast_code(
         self,
@@ -309,7 +256,28 @@ class PrimitiveTypeProfile(
         if sizes:
             raise NotImplementedError(f"{sizes}")
 
-        return to_pyVariableName(variableName)
+        pyVariableName = to_pyVariableName(variableName)
+
+        class_or_tuple: str
+        if PrimitiveTypes(self.name) is PrimitiveTypes.Real:
+            class_or_tuple = "(numpy__.float, numpy__.double)"
+        elif PrimitiveTypes(self.name) is PrimitiveTypes.Integer:
+            class_or_tuple = "(numpy__.int, numpy__.uint)"
+        elif PrimitiveTypes(self.name) is PrimitiveTypes.Boolean:
+            class_or_tuple = "(numpy__.bool, numpy__.bool_)"
+        elif PrimitiveTypes(self.name) is PrimitiveTypes.String:
+            class_or_tuple = "(numpy__.str, numpy__.str_)"
+        else:
+            raise NotImplementedError()
+
+        return (
+            "check_scalar_value__("
+            f"class_or_tuple={class_or_tuple},"
+            f"optional={hasDefault},"
+            f"name={pyVariableName!r},"
+            f"value={pyVariableName},"
+            ")"
+        )
 
 
 class CodeTypes(
