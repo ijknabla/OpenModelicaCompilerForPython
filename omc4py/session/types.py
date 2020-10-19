@@ -16,6 +16,16 @@ from . import (
 )
 
 
+def valid_identifier(
+    ident: str
+) -> bool:
+    try:
+        parser.IDENT_parser.parse(ident)
+        return True
+    except arpeggio.NoMatch:
+        return False
+
+
 class TypeSpecifierSplitVisitor(
     arpeggio.PTNodeVisitor,
 ):
