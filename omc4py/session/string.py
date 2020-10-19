@@ -70,7 +70,7 @@ def to_omc_literal(
 ) -> str:
     if hasattr(obj, "__to_omc_literal__"):
         return obj.__to_omc_literal__()
-    elif isinstance(obj, bool):
+    elif isinstance(obj, (bool, numpy.bool_)):
         return "true" if obj else "false"
     elif isinstance(obj, str):
         return '"' + escape_py_string(obj) + '"'
