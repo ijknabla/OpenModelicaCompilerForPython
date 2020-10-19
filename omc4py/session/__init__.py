@@ -1,5 +1,6 @@
 
 import arpeggio  # type: ignore
+import numpy
 import os
 from pathlib import Path
 import re
@@ -317,3 +318,24 @@ def cast_scalar_value(
         return None
 
     return class_(value)
+
+
+def cast_array_value(
+    class_: typing.Type,
+    shape,
+    optional: bool,
+    name: str,
+    value: typing.Any,
+) -> typing.Any:
+    if value is None and optional:
+        return None
+
+    arr = numpy.array(
+        value,
+        dtype=class_
+    )
+    if arr.dtype == numpy.object_:
+        arr = numpy.vectorize(class_, otypes=[numpy.object_])(arr)
+
+    assert(len(shape) == arr.ndim)
+    return arr
