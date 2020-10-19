@@ -242,22 +242,30 @@ class EnumeratorVisitor(
             comment=comment,
         )
 
-    def visit_enum_list(
-        self,
-        node,
-        children
-    ) -> typing.List[EnumeratorInfo]:
-        return list(
-            children.enumeration_literal
-        )
-
-    def visit_file(
+    def visit_comment(
         self,
         node,
         children
     ):
-        print(children)
-        return children[0]
+        return children.string_comment[0]
+
+    def visit_string_comment(
+        self,
+        node,
+        children,
+    ):
+        return "".join(children.STRING)
+
+    def visit__default__(
+        self,
+        node,
+        children
+    ):
+        return [
+            child
+            for child in flatten_list(children)
+            if isinstance(child, EnumeratorInfo)
+        ]
 
 
 class AliasInfo(
