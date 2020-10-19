@@ -16,7 +16,6 @@ from omc4py.session import (
 
 from .base import (
     AbstractFunctionProfile,
-    AbstractProfile,
     AbstractTypeProfile,
     AbstractExtrinsicProfile,
     get_profile,
