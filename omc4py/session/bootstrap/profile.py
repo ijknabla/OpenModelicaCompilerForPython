@@ -246,7 +246,6 @@ class PrimitiveTypeProfile(
     ) -> CodeBlock:
         return CodeBlock()
 
-
     def generate_argument_cast_code(
         self,
         variableName: types.VariableName,
@@ -343,13 +342,14 @@ class CodeTypeProfile(
         pyVariableName = to_pyVariableName(variableName)
         pyTypeName = codeType.pyTypeName
 
-        if hasDefault:
-            return (
-                f"None if {pyVariableName} is None "
-                f"else {pyTypeName}({pyVariableName})"
-            )
-        else:
-            return f"{pyTypeName}({pyVariableName})"
+        return (
+            "cast_scalar_value__("
+            f"class_={pyTypeName},"
+            f"optional={hasDefault},"
+            f"name={pyVariableName!r},"
+            f"value={pyVariableName},"
+            ")"
+        )
 
 
 @register_profileClass

@@ -305,3 +305,15 @@ def check_scalar_value(
             + " or None" if optional else ""
             + f", got {value!r}: {type(value).__name__}"
         )
+
+
+def cast_scalar_value(
+    class_: typing.Type,
+    optional: bool,
+    name: typing.Optional[str],
+    value: typing.Any,
+) -> typing.Any:
+    if value is None and optional:
+        return None
+
+    return class_(value)
