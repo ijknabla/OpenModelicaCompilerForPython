@@ -66,7 +66,7 @@ class AbstractProfile(
             return None
 
 
-class ExtrinsicProfile(
+class AbstractExtrinsicProfile(
     AbstractProfile
 ):
     @property

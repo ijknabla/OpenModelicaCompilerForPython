@@ -17,7 +17,7 @@ from omc4py.session import (
 
 from .base import (
     AbstractProfile,
-    ExtrinsicProfile,
+    AbstractExtrinsicProfile,
 )
 
 
@@ -315,7 +315,7 @@ class UnsupportedBuiltinTypeProfile(
 @register_profileClass
 class TypeDeclarationProfile(
     AbstractTypeProfile,
-    ExtrinsicProfile,
+    AbstractExtrinsicProfile,
 ):
     @classmethod
     def match(
@@ -338,7 +338,7 @@ class TypeDeclarationProfile(
 @register_profileClass
 class RecordDeclarationProfile(
     AbstractTypeProfile,
-    ExtrinsicProfile,
+    AbstractExtrinsicProfile,
 ):
     @classmethod
     def match(
@@ -380,7 +380,7 @@ class OutputArgument(
 @register_profileClass
 class FunctionDeclarationProfile(
     AbstractFunctionProfile,
-    ExtrinsicProfile,
+    AbstractExtrinsicProfile,
 ):
     @classmethod
     def match(
@@ -635,7 +635,7 @@ class FunctionDeclarationProfile(
 @register_profileClass
 class FunctionAliasProfile(
     AbstractFunctionProfile,
-    ExtrinsicProfile,
+    AbstractExtrinsicProfile,
 ):
     @classmethod
     def match(
