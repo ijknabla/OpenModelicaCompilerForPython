@@ -1,6 +1,7 @@
 
 import arpeggio  # type: ignore
 import enum
+import numpy
 import operator
 import typing
 
@@ -127,20 +128,16 @@ class SequenceVisitor(
         return children.omc_value
 
     def visit_omc_tuple(self, node, children):
-        value_list = getitem_with_default(
-            children.omc_value_list,
-            0,
-            default=[],
-        )
-        return tuple(value_list)
+        if children.omc_value_list:
+            return tuple(children.omc_value_list[0])
+        else:
+            return tuple()
 
     def visit_omc_array(self, node, children):
-        value_list = getitem_with_default(
-            children.omc_value_list,
-            0,
-            default=[],
-        )
-        return list(value_list)
+        if children.omc_value_list:
+            return numpy.array(children.omc_value_list[0])
+        else:
+            return list()
 
 
 class OMCRecordVisitor(
