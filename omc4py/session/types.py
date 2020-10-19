@@ -83,6 +83,55 @@ class VariableName(
         return super().__str__()
 
 
+class NewVariableName(
+):
+    __slots__ = "__str"
+
+    __str: str
+
+    def __new__(
+        cls,
+        obj,
+    ):
+        if isinstance(obj, NewVariableName):
+            return obj
+
+        obj_str = str(obj)
+        if not valid_identifier(obj_str):
+            raise ValueError(
+                f"Invalid modelica identifier, got {obj_str!r}"
+            )
+
+        self = object.__new__(cls)
+        self.__str = obj_str
+        return self
+
+    def __eq__(
+        self, other,
+    ):
+        if not isinstance(other, NewVariableName):
+            return False
+        else:
+            return str(self) == str(other)
+
+    def __hash__(
+        self,
+    ):
+        return hash(str(self))
+
+    def __str__(
+        self,
+    ) -> str:
+        return self.__str
+
+    def __repr__(
+        self,
+    ) -> str:
+        return f"{type(self).__name__}({str(self)!r})"
+
+    __to_omc_literal__ = __str__
+
+
 @functools.total_ordering
 class TypeName(
 ):
