@@ -1,6 +1,8 @@
 
 import enum
+import itertools
 from lxml import etree as xml  # type: ignore
+import operator
 import typing
 
 from omc4py.session.bootstrap.code import (
@@ -242,12 +244,10 @@ class FunctionDeclarationProfile(
     def supported(
         self,
     ) -> bool:
-        if not all(
-            profile.supported
-            for profile, sizes in self.variableTypes
-        ):
-            return False
-        return True
+        return all(
+            typeProfile.supported
+            for typeProfile in self.variableTypes
+        )
 
     def generate_method_code(
         self
@@ -266,21 +266,14 @@ class FunctionDeclarationProfile(
     @property
     def variableTypes(
         self,
-    ) -> typing.Set[TypeWithSizes]:
-        return (
-            set(
-                TypeWithSizes(
-                    typeProfile=argument.typeProfile,
-                    sizes=argument.sizes
+    ) -> typing.Set[AbstractTypeProfile]:
+        return set(
+            map(
+                operator.attrgetter("typeProfile"),
+                itertools.chain(
+                    self.inputArguments,
+                    self.outputArguments
                 )
-                for argument in self.inputArguments
-            )
-            | set(
-                TypeWithSizes(
-                    typeProfile=argument.typeProfile,
-                    sizes=argument.sizes
-                )
-                for argument in self.outputArguments
             )
         )
 
