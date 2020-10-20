@@ -98,9 +98,16 @@ class AbstractExtrinsicProfile(
     def element(
         self
     ) -> xml._Element:
-        return self.root.xpath(
-            f'//*[@id="{self.name!s}"]'
-        )[0]
+        element = self.find_element(
+            self.root,
+            self.name,
+        )
+        if element is None:
+            raise ValueError(
+                "Can't find element "
+                f"@id=\"{self.name}\" from {self.root}"
+            )
+        return element
 
     @property
     def code(
