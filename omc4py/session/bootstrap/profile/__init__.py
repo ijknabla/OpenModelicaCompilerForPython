@@ -359,7 +359,10 @@ class FunctionDeclarationProfile(
     ) -> CodeBlock:
         return CodeBlock(
             f"def {self.funcName}(",
-            self.code_arguments,
+            CodeBlock(
+                self.code_arguments,
+                indent=INDENT,
+            ),
             "):",
             self.code___doc__,
             self.code_execution,
@@ -449,20 +452,19 @@ class FunctionDeclarationProfile(
     def code_arguments(
         self,
     ) -> CodeBlock:
-        result = CodeBlock(indent=INDENT)
-        result.append("self,")
+        code = CodeBlock()
+        code.append("self,")
         for argument in sorted(
             self.inputArguments,
             key=lambda arg: 1 if arg.hasDefault else 0
         ):
-            varName = to_pyVariableName(argument.name)
             if argument.hasDefault:
                 default = "=None"
             else:
                 default = ""
-            result.append(f"{varName}{default},")
+            code.append(f"{argument.py_argument}{default},")
 
-        return result
+        return code
 
     @property
     def code___doc__(
