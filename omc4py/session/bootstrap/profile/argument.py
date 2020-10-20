@@ -78,26 +78,35 @@ class InputArgument(
     hasDefault: bool
 
     @property
-    def py_argument(
+    def py_variable(
         self,
     ) -> str:
-        result = str(self.name)
-        while keyword.iskeyword(result):
-            result += "_"
-        return result
+        if keyword.iskeyword(str(self.name)):
+            return f"{self.name}_"
+        else:
+            return f"{self.name}"
 
     @property
     def py_internal_variable(
         self,
     ) -> str:
-        return f"{self.py_argument!s}__internal__"
+        return f"{self.py_variable}__internal__"
+
+    @property
+    def py_argument(
+        self,
+    ) -> str:
+        if self.hasDefault:
+            return f"{self.py_variable}=None"
+        else:
+            return f"{self.py_variable}"
 
     @property
     def py_checked_argument(
         self,
     ) -> str:
         if self.needs_check:
-            return self.py_argument
+            return self.py_variable
         else:
             return self.py_internal_variable
 
@@ -129,8 +138,8 @@ class InputArgument(
                 CodeBlock(
                     f"class_or_tuple={py_type},",
                     f"optional={self.hasDefault},",
-                    f"name={self.py_argument!r},",
-                    f"value={self.py_argument},",
+                    f"name={self.py_variable!r},",
+                    f"value={self.py_variable},",
                     indent=INDENT,
                 ),
                 ")",
@@ -144,8 +153,8 @@ class InputArgument(
                 CodeBlock(
                     f"class_={py_type},",
                     f"optional={self.hasDefault},",
-                    f"name={self.py_argument!r},",
-                    f"value={self.py_argument},",
+                    f"name={self.py_variable!r},",
+                    f"value={self.py_variable},",
                     indent=INDENT
                 ),
                 ")",
@@ -160,8 +169,8 @@ class InputArgument(
                     f"class_={py_type},",
                     f"shape={self.sizes},",
                     f"optional={self.hasDefault},",
-                    f"name={self.py_argument!r},",
-                    f"value={self.py_argument},",
+                    f"name={self.py_variable!r},",
+                    f"value={self.py_variable},",
                     indent=INDENT
                 ),
                 ")",

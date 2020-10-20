@@ -357,12 +357,7 @@ class FunctionDeclarationProfile(
             self.inputArguments,
             key=lambda arg: 1 if arg.hasDefault else 0
         ):
-            if argument.hasDefault:
-                default = "=None"
-            else:
-                default = ""
-            code.append(f"{argument.py_argument}{default},")
-
+            code.append(f"{argument.py_argument},")
         return code
 
     @property
