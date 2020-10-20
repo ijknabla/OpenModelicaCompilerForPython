@@ -1,6 +1,6 @@
 
 import abc
-from lxml import etree as xml
+from lxml import etree as xml  # type: ignore
 import typing
 
 from omc4py.session import types
