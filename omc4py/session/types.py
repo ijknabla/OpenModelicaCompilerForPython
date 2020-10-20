@@ -134,6 +134,12 @@ class TypeName(
         return self.__parts
 
     @property
+    def last_identifier(
+        self,
+    ) -> VariableName:
+        return VariableName(self.parts[-1])
+
+    @property
     def parents(
         self,
     ) -> typing.Iterator["TypeName"]:
