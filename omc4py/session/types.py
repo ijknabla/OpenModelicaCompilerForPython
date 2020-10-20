@@ -200,7 +200,7 @@ class TypeName(
 
 
 class OMCRecord(
-    collections.UserDict,
+    dict,
 ):
     __typeName: TypeName
 
