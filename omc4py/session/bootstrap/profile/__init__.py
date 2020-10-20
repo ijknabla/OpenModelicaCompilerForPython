@@ -1,6 +1,5 @@
 
 import enum
-import keyword
 from lxml import etree as xml  # type: ignore
 import typing
 
