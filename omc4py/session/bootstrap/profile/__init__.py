@@ -67,21 +67,6 @@ class PrimitiveTypes(
     Boolean = types.TypeName("Boolean"),
     String = types.TypeName("String"),
 
-    @property
-    def pyTypeName(
-        self
-    ) -> str:
-        if self is self.Real:
-            return "builtins__.float"
-        elif self is self.Integer:
-            return "builtins__.int"
-        elif self is self.Boolean:
-            return "builtins__.bool"
-        elif self is self.String:
-            return "builtins__.str"
-        else:
-            raise NotImplementedError()
-
 
 @register_profileClass
 class PrimitiveTypeProfile(
@@ -110,17 +95,6 @@ class CodeTypes(
 ):
     VariableName = types.TypeName("OpenModelica.$Code.VariableName")
     TypeName = types.TypeName("OpenModelica.$Code.TypeName")
-
-    @property
-    def pyTypeName(
-        self
-    ) -> str:
-        if self is self.VariableName:
-            return "types__.VariableName"
-        elif self is self.TypeName:
-            return "types__.TypeName"
-        else:
-            raise NotImplementedError()
 
 
 @register_profileClass
