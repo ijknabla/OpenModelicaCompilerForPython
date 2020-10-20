@@ -119,6 +119,8 @@ from omc4py.session import types as types__
         "):"
     )
 
+    code_types = CodeBlock()
+
     code_class_element = CodeBlock(
         indent=INDENT,
     )
@@ -128,6 +130,8 @@ from omc4py.session import types as types__
         "\n" * 1,
         code_import,
         "\n" * 2,
+        code_types,
+        "\n" * 1,
         code_class,
         "\n" * 1,
         (
@@ -135,6 +139,23 @@ from omc4py.session import types as types__
             "(OMCSession__open__, OMCSession)"
         ),
     )
+
+    type_profiles = [
+        profile.get_profile_from_xml(root, typeName)
+        for typeName in defined_type_names(root)
+    ]
+
+    for type_profile in type_profiles:
+        if isinstance(
+            type_profile,
+            profile.base.AbstractExtrinsicTypeProfile,
+        ):
+            code_types.extend(
+                [
+                    type_profile.generate_class_definition(),
+                    "\n" * 2,
+                ]
+            )
 
     function_profiles = [
         profile.get_profile_from_xml(root, functionName)
@@ -149,7 +170,7 @@ from omc4py.session import types as types__
             code_class_element.extend(
                 [
                     function_profile.generate_method_code(),
-                    "",
+                    "\n" * 1,
                 ]
             )
         else:
