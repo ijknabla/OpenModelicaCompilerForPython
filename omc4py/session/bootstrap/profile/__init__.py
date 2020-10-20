@@ -491,9 +491,7 @@ class FunctionDeclarationProfile(
         result.append("# Argument check")
         for argument in self.inputArguments:
             result.append(
-                argument.typeProfile.generate_argument_check_code(
-                    argument.name, argument.sizes, argument.hasDefault
-                )
+                argument.check_code
             )
         result.append("")
 
@@ -524,9 +522,7 @@ class FunctionDeclarationProfile(
 
         for argument in self.inputArguments:
             argument_items.append(
-                argument.typeProfile.generate_argument_cast_code(
-                    argument.name, argument.sizes, argument.hasDefault
-                ) + ","
+                f"{argument.py_checked_argument},"
             )
 
         return CodeBlock(
@@ -553,13 +549,8 @@ class FunctionDeclarationProfile(
         argument_items = CodeBlock(indent=INDENT)
 
         for argument in self.inputArguments:
-            omcVariableName = str(argument.name)
             argument_items.append(
-                f"{omcVariableName!r}: "
-                + argument.typeProfile.generate_argument_cast_code(
-                    argument.name, argument.sizes, argument.hasDefault
-                )
-                + ","
+                f"{str(argument.name)!r}: {argument.py_checked_argument},"
             )
 
         return CodeBlock(
