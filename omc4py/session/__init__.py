@@ -349,36 +349,3 @@ def cast_value(
                 )
 
         return arr
-
-
-def cast_scalar_value(
-    class_: typing.Type,
-    optional: bool,
-    name: str,
-    value: typing.Any,
-) -> typing.Any:
-    if value is None and optional:
-        return None
-
-    return class_(value)
-
-
-def cast_array_value(
-    class_: typing.Type,
-    shape,
-    optional: bool,
-    name: str,
-    value: typing.Any,
-) -> typing.Any:
-    if value is None and optional:
-        return None
-
-    arr = numpy.array(
-        value,
-        dtype=class_
-    )
-    if arr.dtype == numpy.object_:
-        arr = numpy.vectorize(class_, otypes=[numpy.object_])(arr)
-
-    assert(len(shape) == arr.ndim)
-    return arr
