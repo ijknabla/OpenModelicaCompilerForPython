@@ -68,15 +68,6 @@ def TypeProfile__py_dtype_reference(
         raise NotImplementedError(typeProfile)
 
 
-def to_pyVariableName(
-    variableName: VariableName,
-) -> str:
-    result = str(variableName)
-    while keyword.iskeyword(result):
-        result += "_"
-    return result
-
-
 class InputArgument(
     typing.NamedTuple,
 ):
