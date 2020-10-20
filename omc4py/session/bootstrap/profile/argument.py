@@ -1,4 +1,5 @@
 
+import keyword
 import typing
 
 from omc4py.session.types import (
@@ -12,6 +13,15 @@ from .base import (
 
 Size = typing.Optional[int]
 Sizes = typing.Tuple[Size, ...]
+
+
+def to_pyVariableName(
+    variableName: VariableName,
+) -> str:
+    result = str(variableName)
+    while keyword.iskeyword(result):
+        result += "_"
+    return result
 
 
 class InputArgument(

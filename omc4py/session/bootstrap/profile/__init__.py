@@ -24,16 +24,8 @@ from .base import (
 from .argument import (
     InputArgument,
     OutputArgument,
+    to_pyVariableName,
 )
-
-
-def to_pyVariableName(
-    variableName: types.VariableName,
-) -> str:
-    result = str(variableName)
-    while keyword.iskeyword(result):
-        result += "_"
-    return result
 
 
 Sizes = typing.Tuple[typing.Union[None, int, str], ...]
