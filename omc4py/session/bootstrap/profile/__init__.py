@@ -46,13 +46,6 @@ def dimensions2sizes(
     return tuple(size_generator())
 
 
-class TypeWithSizes(
-    typing.NamedTuple,
-):
-    typeProfile: AbstractTypeProfile
-    sizes: Sizes
-
-
 primitiveTypeNames = {
     types.TypeName("Real"),
     types.TypeName("Integer"),
