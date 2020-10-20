@@ -147,33 +147,20 @@ class InputArgument(
                 ),
                 ")",
             )
-        elif self.is_scalar:
-            py_type = TypeProfile__py_dtype_reference(
-                self.typeProfile,
-            )
-            return CodeBlock(
-                f"{self.py_internal_variable} = cast_scalar_value__(",
-                CodeBlock(
-                    f"class_={py_type},",
-                    f"optional={self.hasDefault},",
-                    f"name={self.py_variable!r},",
-                    f"value={self.py_variable},",
-                    indent=INDENT
-                ),
-                ")",
-            )
         else:
             py_type = TypeProfile__py_dtype_reference(
                 self.typeProfile,
             )
             return CodeBlock(
-                f"{self.py_internal_variable} = cast_array_value__(",
+                f"{self.py_internal_variable} = cast_value__(",
                 CodeBlock(
+                    (
+                        f"name={self.py_variable!r}, "
+                        f"value={self.py_variable},"
+                    ),
                     f"class_={py_type},",
-                    f"shape={self.sizes},",
+                    f"sizes={self.sizes},",
                     f"optional={self.hasDefault},",
-                    f"name={self.py_variable!r},",
-                    f"value={self.py_variable},",
                     indent=INDENT
                 ),
                 ")",
