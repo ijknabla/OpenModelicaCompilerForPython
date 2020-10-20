@@ -25,10 +25,8 @@ from .base import (
 from .argument import (
     InputArgument,
     OutputArgument,
+    Sizes,
 )
-
-
-Sizes = typing.Tuple[typing.Optional[int], ...]
 
 
 def dimensions2sizes(
