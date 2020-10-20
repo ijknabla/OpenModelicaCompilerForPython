@@ -295,16 +295,16 @@ def check_scalar_value(
             return None
         else:
             raise TypeError(
-                f"{name} must be {class_or_tuple}, got None"
+                f"{name!r} must be {class_or_tuple}, got None"
             )
 
     if isinstance(value, class_or_tuple):
         return value
     else:
         raise TypeError(
-            f"{name} must be {class_or_tuple}"
-            + " or None" if optional else ""
-            + f", got {value!r}: {type(value).__name__}"
+            f"{name!r} must be {class_or_tuple}"
+            + (" or None" if optional else "")
+            + f", got {value!r}: {type(value)}"
         )
 
 
