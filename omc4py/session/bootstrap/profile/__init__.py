@@ -26,24 +26,20 @@ from .argument import (
 )
 
 
-Sizes = typing.Tuple[typing.Union[None, int, str], ...]
+Sizes = typing.Tuple[typing.Optional[int], ...]
 
 
 def dimensions2sizes(
     dimensions: xml._Element,
 ) -> Sizes:
     def size_generator(
-    ) -> typing.Iterator[typing.Union[None, int, str]]:
+    ) -> typing.Iterator[typing.Optional[int]]:
         assert(dimensions.tag == "dimensions")
         for dimension in dimensions.xpath("./dimension"):
-            size = dimension.attrib["size"]
-            if size == ":":
+            try:
+                yield int(dimension.attrib["size"])
+            except ValueError:
                 yield None
-            else:
-                try:
-                    yield int(size)
-                except ValueError:
-                    yield size
 
     return tuple(size_generator())
 
