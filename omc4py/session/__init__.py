@@ -284,28 +284,27 @@ def OMCSession__call(
     return parse_omc_value(result_literal)
 
 
-def check_scalar_value(
-    class_or_tuple: typing.Union[typing.Type, typing.Tuple[typing.Type, ...]],
-    optional: bool,
+def check_value(
     name: str,
     value: typing.Any,
-) -> typing.Any:
-    if value is None:
-        if optional:
-            return None
-        else:
+    class_or_tuple: typing.Union[typing.Type, typing.Tuple[typing.Type, ...]],
+    optional: bool,
+) -> None:
+    if value is not None:
+        if not isinstance(value, class_or_tuple):
+            raise TypeError(
+                f"{name!r} must be {class_or_tuple}"
+                + (" or None" if optional else "")
+                + f", got {value!r}: {type(value)}"
+            )
+    else:  # value is None
+        if not optional:
             raise TypeError(
                 f"{name!r} must be {class_or_tuple}, got None"
             )
 
-    if isinstance(value, class_or_tuple):
-        return value
-    else:
-        raise TypeError(
-            f"{name!r} must be {class_or_tuple}"
-            + (" or None" if optional else "")
-            + f", got {value!r}: {type(value)}"
-        )
+
+check_scalar_value = check_value
 
 
 def cast_scalar_value(
