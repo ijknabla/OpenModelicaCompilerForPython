@@ -21,6 +21,10 @@ from .base import (
     get_profile,
     register_profileClass,
 )
+from .argument import (
+    InputArgument,
+    OutputArgument,
+)
 
 
 def to_pyVariableName(
@@ -325,25 +329,6 @@ class RecordDeclarationProfile(
         self
     ) -> bool:
         return False
-
-
-class InputArgument(
-    typing.NamedTuple,
-):
-    typeProfile: AbstractTypeProfile
-    sizes: Sizes
-    name: types.VariableName
-    comment: str
-    hasDefault: bool
-
-
-class OutputArgument(
-    typing.NamedTuple,
-):
-    typeProfile: AbstractTypeProfile
-    sizes: Sizes
-    name: types.VariableName
-    comment: str
 
 
 @register_profileClass
