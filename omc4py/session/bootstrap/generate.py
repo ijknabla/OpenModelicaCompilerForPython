@@ -1,5 +1,6 @@
 
 import argparse
+import itertools
 from lxml import etree as xml  # type: ignore
 from pathlib import Path
 import re
@@ -44,10 +45,59 @@ def export_function_names(
         yield types.TypeName(element.attrib["id"])
 
 
+def defined_type_names(
+    root: xml._Element,
+) -> typing.Iterator[types.TypeName]:
+    for element in itertools.chain(
+        root.xpath('//record'),
+        root.xpath('//type')
+    ):
+        yield types.TypeName(element.attrib["id"])
+
+
+def ensure_defined_type_names_are_unique(
+    root: xml._Element,
+) -> None:
+    typeNames = list(defined_type_names(root))
+    variableNameDict: typing.DefaultDict[
+        types.VariableName,
+        typing.List[types.TypeName]
+    ] = typing.DefaultDict(lambda: [])
+
+    for typeName in typeNames:
+        identifier = typeName.last_identifier
+        must_unique = variableNameDict[identifier]
+        must_unique.append(typeName)
+        if 1 < len(must_unique):
+            raise ValueError(
+                f"Find duplicate VariableName in {must_unique}"
+            )
+
+    conflictedVariableNames = (
+        variableNameDict.keys()
+        & {
+            types.VariableName("Real"),
+            types.VariableName("Integer"),
+            types.VariableName("Boolean"),
+            types.VariableName("String"),
+            types.VariableName("VariableName"),
+            types.VariableName("VariableNames"),
+            types.VariableName("TypeName"),
+        }
+    )
+
+    if conflictedVariableNames:
+        raise ValueError(
+            "Last identifier in defined type name conflicts builtin type name"
+        )
+
+
 def write_module(
     file: typing.TextIO,
     root: xml._Element,
 ) -> None:
+    ensure_defined_type_names_are_unique(root)
+
     code_import = CodeBlock("""\
 import functools as functools__
 import numpy as numpy__
