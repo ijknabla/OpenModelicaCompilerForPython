@@ -134,12 +134,15 @@ class InputArgument(
                 self.typeProfile,
             )
             return CodeBlock(
-                "check_scalar_value__(",
+                "check_value__(",
                 CodeBlock(
+                    (
+                        f"name={self.py_variable!r}, "
+                        f"value={self.py_variable},"
+                    ),
                     f"class_or_tuple={py_type},",
                     f"optional={self.hasDefault},",
-                    f"name={self.py_variable!r},",
-                    f"value={self.py_variable},",
+
                     indent=INDENT,
                 ),
                 ")",

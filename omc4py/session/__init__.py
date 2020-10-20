@@ -304,9 +304,6 @@ def check_value(
             )
 
 
-check_scalar_value = check_value
-
-
 def cast_scalar_value(
     class_: typing.Type,
     optional: bool,
