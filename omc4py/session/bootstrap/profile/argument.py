@@ -33,6 +33,21 @@ class InputArgument(
     comment: str
     hasDefault: bool
 
+    @property
+    def py_argument(
+        self,
+    ) -> str:
+        result = str(self.name)
+        while keyword.iskeyword(result):
+            result += "_"
+        return result
+
+    @property
+    def py_internal_variable(
+        self,
+    ) -> str:
+        return f"{self.py_argument!s}__internal__"
+
 
 class OutputArgument(
     typing.NamedTuple,
