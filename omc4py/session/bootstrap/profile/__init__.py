@@ -114,72 +114,6 @@ class PrimitiveTypeProfile(
     ) -> bool:
         return True
 
-    def generate_argument_check_code(
-        self,
-        variableName: types.VariableName,
-        sizes: "Sizes",
-        hasDefault: bool
-    ) -> CodeBlock:
-        return CodeBlock()
-
-    def generate_argument_cast_code(
-        self,
-        variableName: types.VariableName,
-        sizes: "Sizes",
-        hasDefault: bool
-    ) -> str:
-        pyVariableName = to_pyVariableName(variableName)
-
-        if sizes:
-            shape = tuple(
-                size if isinstance(size, int) else None
-                for size in sizes
-            )
-
-            class_: str
-            if PrimitiveTypes(self.name) is PrimitiveTypes.Real:
-                class_ = "numpy__.double"
-            elif PrimitiveTypes(self.name) is PrimitiveTypes.Integer:
-                class_ = "numpy__.uint"
-            elif PrimitiveTypes(self.name) is PrimitiveTypes.Boolean:
-                class_ = "numpy__.bool_"
-            elif PrimitiveTypes(self.name) is PrimitiveTypes.String:
-                class_ = "numpy__.str_"
-            else:
-                raise NotImplementedError()
-
-            return (
-                "cast_array_value__("
-                f"class_={class_},"
-                f"shape={shape},"
-                f"optional={hasDefault},"
-                f"name={pyVariableName!r},"
-                f"value={pyVariableName},"
-                ")"
-            )
-
-        else:
-            class_or_tuple: str
-            if PrimitiveTypes(self.name) is PrimitiveTypes.Real:
-                class_or_tuple = "(numpy__.float, numpy__.double)"
-            elif PrimitiveTypes(self.name) is PrimitiveTypes.Integer:
-                class_or_tuple = "(numpy__.int, numpy__.uint)"
-            elif PrimitiveTypes(self.name) is PrimitiveTypes.Boolean:
-                class_or_tuple = "(numpy__.bool, numpy__.bool_)"
-            elif PrimitiveTypes(self.name) is PrimitiveTypes.String:
-                class_or_tuple = "(numpy__.str, numpy__.str_)"
-            else:
-                raise NotImplementedError()
-
-            return (
-                "check_scalar_value__("
-                f"class_or_tuple={class_or_tuple},"
-                f"optional={hasDefault},"
-                f"name={pyVariableName!r},"
-                f"value={pyVariableName},"
-                ")"
-            )
-
 
 class CodeTypes(
     types.TypeName, enum.Enum
@@ -219,39 +153,6 @@ class CodeTypeProfile(
         self
     ) -> bool:
         return True
-
-    def generate_argument_check_code(
-        self,
-        variableName: types.VariableName,
-        sizes: "Sizes",
-        hasDefault: bool
-    ) -> CodeBlock:
-        if sizes:
-            raise NotImplementedError(f"{sizes}")
-
-        return CodeBlock()
-
-    def generate_argument_cast_code(
-        self,
-        variableName: types.VariableName,
-        sizes: "Sizes",
-        hasDefault: bool
-    ) -> str:
-        if sizes:
-            raise NotImplementedError(f"{sizes}")
-
-        codeType = CodeTypes(self.name)
-        pyVariableName = to_pyVariableName(variableName)
-        pyTypeName = codeType.pyTypeName
-
-        return (
-            "cast_scalar_value__("
-            f"class_={pyTypeName},"
-            f"optional={hasDefault},"
-            f"name={pyVariableName!r},"
-            f"value={pyVariableName},"
-            ")"
-        )
 
 
 @register_profileClass
