@@ -10,7 +10,6 @@ from omc4py.session.types import (
 from .base import (
     AbstractTypeProfile,
 )
-from . import types
 
 from omc4py.session.bootstrap.code import (
     INDENT,
