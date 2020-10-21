@@ -268,7 +268,7 @@ class FunctionDeclarationProfile(
                 sizes=dimensions2sizes(argument.find("dimensions")),
                 name=types.VariableName(argument.attrib["name"]),
                 comment=argument.attrib["comment"],
-                hasDefault=bool(
+                optional=bool(
                     eval(argument.attrib["hasDefault"].capitalize())
                 ),
             )
@@ -309,7 +309,7 @@ class FunctionDeclarationProfile(
         code.append("self,")
         for argument in sorted(
             self.inputArguments,
-            key=lambda arg: 1 if arg.hasDefault else 0
+            key=lambda arg: 1 if arg.optional else 0
         ):
             code.append(f"{argument.py_argument},")
         return code
@@ -358,7 +358,7 @@ class FunctionDeclarationProfile(
         self,
     ) -> bool:
         return all(
-            not argument.hasDefault
+            not argument.optional
             for argument in self.inputArguments
         )
 

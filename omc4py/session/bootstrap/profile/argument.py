@@ -75,7 +75,7 @@ class InputArgument(
     sizes: Sizes
     name: VariableName
     comment: str
-    hasDefault: bool
+    optional: bool
 
     @property
     def py_variable(
@@ -96,7 +96,7 @@ class InputArgument(
     def py_argument(
         self,
     ) -> str:
-        if self.hasDefault:
+        if self.optional:
             return f"{self.py_variable}=None"
         else:
             return f"{self.py_variable}"
@@ -141,7 +141,7 @@ class InputArgument(
                         f"value={self.py_variable},"
                     ),
                     f"class_or_tuple={py_type},",
-                    f"optional={self.hasDefault},",
+                    f"optional={self.optional},",
 
                     indent=INDENT,
                 ),
@@ -160,7 +160,7 @@ class InputArgument(
                     ),
                     f"class_={py_type},",
                     f"sizes={self.sizes},",
-                    f"optional={self.hasDefault},",
+                    f"optional={self.optional},",
                     indent=INDENT
                 ),
                 ")",
