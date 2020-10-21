@@ -162,7 +162,7 @@ class EnumerationDeclarationProfile(
             yield VariableName(enumerator.attrib["name"])
 
     @property
-    def supported(self) -> bool: return False
+    def supported(self) -> bool: return True
 
     @property
     def primitive(self) -> bool: return False
