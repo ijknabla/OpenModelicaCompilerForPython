@@ -20,7 +20,6 @@ from .base import (
     AbstractTypeProfile,
     AbstractExtrinsicProfile,
     get_profile,
-    register_profileClass,
 )
 from .argument import (
     InputArgument,
@@ -66,7 +65,7 @@ class PrimitiveTypes(
     String = types.TypeName("String"),
 
 
-@register_profileClass
+@AbstractTypeProfile.register_concrete_class
 class PrimitiveTypeProfile(
     AbstractTypeProfile,
 ):
@@ -95,7 +94,7 @@ class CodeTypes(
     TypeName = types.TypeName("OpenModelica.$Code.TypeName")
 
 
-@register_profileClass
+@AbstractTypeProfile.register_concrete_class
 class CodeTypeProfile(
     AbstractTypeProfile
 ):
@@ -117,7 +116,7 @@ class CodeTypeProfile(
         return True
 
 
-@register_profileClass
+@AbstractTypeProfile.register_concrete_class
 class UnsupportedBuiltinTypeProfile(
     AbstractTypeProfile,
 ):
@@ -139,7 +138,7 @@ class UnsupportedBuiltinTypeProfile(
         return False
 
 
-@register_profileClass
+@AbstractTypeProfile.register_concrete_class
 class TypeDeclarationProfile(
     AbstractTypeProfile,
     AbstractExtrinsicProfile,
@@ -162,7 +161,7 @@ class TypeDeclarationProfile(
         return False
 
 
-@register_profileClass
+@AbstractTypeProfile.register_concrete_class
 class RecordDeclarationProfile(
     AbstractTypeProfile,
     AbstractExtrinsicProfile,
@@ -185,7 +184,7 @@ class RecordDeclarationProfile(
         return False
 
 
-@register_profileClass
+@AbstractFunctionProfile.register_concrete_class
 class FunctionDeclarationProfile(
     AbstractFunctionProfile,
     AbstractExtrinsicProfile,
@@ -419,7 +418,7 @@ class FunctionDeclarationProfile(
         )
 
 
-@register_profileClass
+@AbstractFunctionProfile.register_concrete_class
 class FunctionAliasProfile(
     AbstractFunctionProfile,
     AbstractExtrinsicProfile,

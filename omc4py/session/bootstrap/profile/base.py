@@ -94,9 +94,6 @@ class AbstractProfile(
             return None
 
 
-register_profileClass = AbstractProfile.register_concrete_class
-
-
 def get_profile(
     root: xml._Element,
     name: types.TypeName,
