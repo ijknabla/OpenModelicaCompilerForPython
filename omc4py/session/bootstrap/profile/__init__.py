@@ -120,28 +120,6 @@ class CodeTypeProfile(
 
 
 @AbstractTypeProfile.register_concrete_class
-class UnsupportedBuiltinTypeProfile(
-    AbstractTypeProfile,
-):
-    @classmethod
-    def match(
-        cls,
-        root: xml._Element,
-        name: TypeName,
-    ) -> bool:
-        element = cls.find_element(root, name)
-        if element is not None:
-            return False
-        return name not in primitiveTypeNames | codeTypeNames
-
-    @property
-    def supported(
-        self
-    ) -> bool:
-        return False
-
-
-@AbstractTypeProfile.register_concrete_class
 class TypeDeclarationProfile(
     AbstractTypeProfile,
     AbstractExtrinsicProfile,

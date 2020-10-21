@@ -79,3 +79,25 @@ class IntrinsicTypeProfile(
         self,
     ) -> bool:
         return self.config.supported
+
+
+@AbstractTypeProfile.register_concrete_class
+class UnsupportedIntrinsicTypeProfile(
+    AbstractTypeProfile,
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml._Element,
+        name: TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is not None:
+            return False
+        return name not in _intrinsicTypeConfigs
+
+    @property
+    def supported(
+        self
+    ) -> bool:
+        return False
