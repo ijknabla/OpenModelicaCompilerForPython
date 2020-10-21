@@ -28,6 +28,8 @@ from .argument import (
     Sizes,
 )
 
+from . import type_declaration
+
 
 def dimensions2sizes(
     dimensions: xml._Element,
@@ -66,7 +68,7 @@ class PrimitiveTypes(
     String = TypeName("String"),
 
 
-@AbstractTypeProfile.register_concrete_class
+# @AbstractTypeProfile.register_concrete_class
 class PrimitiveTypeProfile(
     AbstractTypeProfile,
 ):
@@ -95,7 +97,7 @@ class CodeTypes(
     TypeName = TypeName("OpenModelica.$Code.TypeName")
 
 
-@AbstractTypeProfile.register_concrete_class
+# @AbstractTypeProfile.register_concrete_class
 class CodeTypeProfile(
     AbstractTypeProfile
 ):

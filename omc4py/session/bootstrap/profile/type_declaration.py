@@ -61,7 +61,7 @@ _intrinsicTypeConfigs: IntrinsicTypeConfigs = {
 }
 
 
-# @AbstractTypeProfile.register_concrete_class
+@AbstractTypeProfile.register_concrete_class
 class IntrinsicTypeProfile(
     AbstractTypeProfile,
 ):
