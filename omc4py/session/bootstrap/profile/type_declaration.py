@@ -15,7 +15,6 @@ class IntrinsicTypeConfig(
     typing.NamedTuple,
 ):
     primitive: bool
-    supported: bool
     py_cast_type_expression: str
 
 
@@ -27,37 +26,31 @@ _intrinsicTypeConfigs: IntrinsicTypeConfigs = {
     TypeName("Real"):
         IntrinsicTypeConfig(
             primitive=True,
-            supported=True,
             py_cast_type_expression="numpy__.double",
         ),
     TypeName("Integer"):
         IntrinsicTypeConfig(
             primitive=True,
-            supported=True,
             py_cast_type_expression="numpy__.intc",
         ),
     TypeName("Boolean"):
         IntrinsicTypeConfig(
             primitive=True,
-            supported=True,
             py_cast_type_expression="numpy__.bool_",
         ),
     TypeName("String"):
         IntrinsicTypeConfig(
             primitive=True,
-            supported=True,
             py_cast_type_expression="numpy__.str_",
         ),
     TypeName("OpenModelica.$Code.VariableName"):
         IntrinsicTypeConfig(
             primitive=False,
-            supported=True,
             py_cast_type_expression="types__.VariableName",
         ),
     TypeName("OpenModelica.$Code.TypeName"):
         IntrinsicTypeConfig(
             primitive=False,
-            supported=True,
             py_cast_type_expression="types__.TypeName",
         ),
 }
@@ -82,10 +75,7 @@ class IntrinsicTypeProfile(
         return _intrinsicTypeConfigs[self.name]
 
     @property
-    def supported(
-        self,
-    ) -> bool:
-        return self.config.supported
+    def supported(self) -> bool: return True
 
     @property
     def primitive(
