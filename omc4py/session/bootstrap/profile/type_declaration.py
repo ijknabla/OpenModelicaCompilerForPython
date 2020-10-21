@@ -48,11 +48,6 @@ _intrinsicTypeConfigs: IntrinsicTypeConfigs = {
             primitive=False,
             supported=True,
         ),
-    TypeName("OpenModelica.$Code.VariableNames"):
-        IntrinsicTypeConfig(
-            primitive=False,
-            supported=False,
-        ),
     TypeName("OpenModelica.$Code.TypeName"):
         IntrinsicTypeConfig(
             primitive=False,
