@@ -3,7 +3,8 @@ from lxml import etree as xml  # type: ignore
 import typing
 
 from omc4py.session.types import (
-    TypeName
+    TypeName,
+    VariableName,
 )
 
 from . base import (
@@ -152,6 +153,15 @@ class EnumerationDeclarationProfile(
         return element.tag == "type" and element.xpath(".//enumerators")
 
     @property
+    def enumerators(
+        self,
+    ) -> typing.Iterator[VariableName]:
+        for enumerator in self.element.xpath(
+            ".//enumerator"
+        ):
+            yield VariableName(enumerator.attrib["name"])
+
+    @property
     def supported(self) -> bool: return False
 
     @property
@@ -167,9 +177,19 @@ class EnumerationDeclarationProfile(
         self,
     ) -> code.CodeBlock:
         return code.CodeBlock(
-            f"class {self.name.parts[-1]}:",
+            f"class {self.name.last_identifier!s}(",
             code.CodeBlock(
-                "...",
+                "enum__.Enum",
+                indent=code.INDENT,
+            ),
+            "):",
+            code.CodeBlock(
+                *(
+                    f"{str(enumerator)} = {i}"
+                    for i, enumerator in enumerate(
+                        self.enumerators, start=1
+                    )
+                ),
                 indent=code.INDENT,
             ),
         )

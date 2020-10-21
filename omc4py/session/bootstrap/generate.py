@@ -99,6 +99,7 @@ def write_module(
     ensure_defined_type_names_are_unique(root)
 
     code_import = CodeBlock("""\
+import enum as enum__
 import functools as functools__
 import numpy as numpy__
 from omc4py.session import OMCSessionBase as OMCSessionBase__
