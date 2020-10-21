@@ -16,6 +16,7 @@ class IntrinsicTypeConfig(
 ):
     primitive: bool
     supported: bool
+    py_cast_type_expression: str
 
 
 IntrinsicTypeConfigs = typing.Dict[
@@ -27,31 +28,37 @@ _intrinsicTypeConfigs: IntrinsicTypeConfigs = {
         IntrinsicTypeConfig(
             primitive=True,
             supported=True,
+            py_cast_type_expression="numpy__.double",
         ),
     TypeName("Integer"):
         IntrinsicTypeConfig(
             primitive=True,
             supported=True,
+            py_cast_type_expression="numpy__.intc",
         ),
     TypeName("Boolean"):
         IntrinsicTypeConfig(
             primitive=True,
             supported=True,
+            py_cast_type_expression="numpy__.bool_",
         ),
     TypeName("String"):
         IntrinsicTypeConfig(
             primitive=True,
             supported=True,
+            py_cast_type_expression="numpy__.str_",
         ),
     TypeName("OpenModelica.$Code.VariableName"):
         IntrinsicTypeConfig(
             primitive=False,
             supported=True,
+            py_cast_type_expression="types__.VariableName",
         ),
     TypeName("OpenModelica.$Code.TypeName"):
         IntrinsicTypeConfig(
             primitive=False,
             supported=True,
+            py_cast_type_expression="types__.TypeName",
         ),
 }
 
@@ -86,6 +93,12 @@ class IntrinsicTypeProfile(
     ) -> bool:
         return self.config.primitive
 
+    @property
+    def py_cast_type_expression(
+        self,
+    ) -> str:
+        return self.config.py_cast_type_expression
+
 
 @AbstractTypeProfile.register_concrete_class
 class UnsupportedIntrinsicTypeProfile(
@@ -107,3 +120,11 @@ class UnsupportedIntrinsicTypeProfile(
 
     @property
     def primitive(self) -> bool: return False
+
+    @property
+    def py_cast_type_expression(
+        self,
+    ) -> str:
+        raise ValueError(
+            f"{self.name} is unsupported type"
+        )

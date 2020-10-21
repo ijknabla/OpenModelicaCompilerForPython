@@ -68,6 +68,12 @@ class TypeDeclarationProfile(
     @property
     def primitive(self) -> bool: return False
 
+    @property
+    def py_cast_type_expression(
+        self,
+    ) -> str:
+        return super().py_cast_type_expression
+
 
 @AbstractTypeProfile.register_concrete_class
 class RecordDeclarationProfile(
@@ -90,6 +96,12 @@ class RecordDeclarationProfile(
 
     @property
     def primitive(self) -> bool: return False
+
+    @property
+    def py_cast_type_expression(
+        self,
+    ) -> str:
+        return super().py_cast_type_expression
 
 
 @AbstractFunctionProfile.register_concrete_class

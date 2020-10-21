@@ -37,25 +37,6 @@ def TypeProfile__py_type_reference(
         raise NotImplementedError(typeProfile)
 
 
-def TypeProfile__py_dtype_reference(
-    typeProfile: AbstractTypeProfile
-) -> str:
-    if typeProfile.name == TypeName("Real"):
-        return "numpy__.double"
-    elif typeProfile.name == TypeName("Integer"):
-        return "numpy__.uint"
-    elif typeProfile.name == TypeName("Boolean"):
-        return "numpy__.bool_"
-    elif typeProfile.name == TypeName("String"):
-        return "numpy__.str_"
-    elif typeProfile.name == TypeName("OpenModelica.$Code.VariableName"):
-        return "types__.VariableName"
-    elif typeProfile.name == TypeName("OpenModelica.$Code.TypeName"):
-        return "types__.TypeName"
-    else:
-        raise NotImplementedError(typeProfile)
-
-
 class InputArgument(
 ):
     __slots__ = (
@@ -169,9 +150,7 @@ class InputArgument(
                 ")",
             )
         else:
-            py_type = TypeProfile__py_dtype_reference(
-                self.typeProfile,
-            )
+            py_cast_type = self.typeProfile.py_cast_type_expression
             return CodeBlock(
                 f"{self.py_internal_variable} = cast_value__(",
                 CodeBlock(
@@ -179,7 +158,7 @@ class InputArgument(
                         f"name={self.py_variable!r}, "
                         f"value={self.py_variable},"
                     ),
-                    f"class_={py_type},",
+                    f"class_={py_cast_type},",
                     f"sizes={self.sizes},",
                     f"optional={self.optional},",
                     indent=INDENT

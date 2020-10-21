@@ -144,6 +144,13 @@ class AbstractTypeProfile(
     ) -> bool:
         raise NotImplementedError()
 
+    @property
+    @abc.abstractmethod
+    def py_cast_type_expression(
+        self,
+    ) -> str:
+        raise NotImplementedError()
+
 
 class AbstractFunctionProfile(
     AbstractProfile
