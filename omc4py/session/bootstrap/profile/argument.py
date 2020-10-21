@@ -132,9 +132,7 @@ class InputArgument(
         self,
     ) -> CodeBlock:
         if self.needs_check:
-            py_type = TypeProfile__py_type_reference(
-                self.typeProfile,
-            )
+            py_check_type = self.typeProfile.py_check_type_expression
             return CodeBlock(
                 "check_value__(",
                 CodeBlock(
@@ -142,7 +140,7 @@ class InputArgument(
                         f"name={self.py_variable!r}, "
                         f"value={self.py_variable},"
                     ),
-                    f"class_or_tuple={py_type},",
+                    f"class_or_tuple={py_check_type},",
                     f"optional={self.optional},",
 
                     indent=INDENT,

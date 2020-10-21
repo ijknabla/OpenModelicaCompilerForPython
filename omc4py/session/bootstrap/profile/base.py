@@ -151,6 +151,12 @@ class AbstractTypeProfile(
     ) -> str:
         raise NotImplementedError()
 
+    @property
+    def py_check_type_expression(
+        self,
+    ):
+        return self.py_cast_type_expression
+
 
 class AbstractFunctionProfile(
     AbstractProfile

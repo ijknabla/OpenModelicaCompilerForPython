@@ -16,6 +16,7 @@ class IntrinsicTypeConfig(
 ):
     primitive: bool
     py_cast_type_expression: str
+    py_check_type_expression: str
 
 
 IntrinsicTypeConfigs = typing.Dict[
@@ -27,31 +28,37 @@ _intrinsicTypeConfigs: IntrinsicTypeConfigs = {
         IntrinsicTypeConfig(
             primitive=True,
             py_cast_type_expression="numpy__.double",
+            py_check_type_expression="(numpy__.float, numpy__.double)",
         ),
     TypeName("Integer"):
         IntrinsicTypeConfig(
             primitive=True,
             py_cast_type_expression="numpy__.intc",
+            py_check_type_expression="(numpy__.int, numpy__.intc)",
         ),
     TypeName("Boolean"):
         IntrinsicTypeConfig(
             primitive=True,
             py_cast_type_expression="numpy__.bool_",
+            py_check_type_expression="(numpy__.bool, numpy__.bool_)",
         ),
     TypeName("String"):
         IntrinsicTypeConfig(
             primitive=True,
             py_cast_type_expression="numpy__.str_",
+            py_check_type_expression="(numpy__.str, numpy__.str_)",
         ),
     TypeName("OpenModelica.$Code.VariableName"):
         IntrinsicTypeConfig(
             primitive=False,
             py_cast_type_expression="types__.VariableName",
+            py_check_type_expression="types__.VariableName",
         ),
     TypeName("OpenModelica.$Code.TypeName"):
         IntrinsicTypeConfig(
             primitive=False,
             py_cast_type_expression="types__.TypeName",
+            py_check_type_expression="types__.TypeName",
         ),
 }
 
@@ -88,6 +95,12 @@ class IntrinsicTypeProfile(
         self,
     ) -> str:
         return self.config.py_cast_type_expression
+
+    @property
+    def py_check_type_expression(
+        self,
+    ) -> str:
+        return self.config.py_check_type_expression
 
 
 @AbstractTypeProfile.register_concrete_class
