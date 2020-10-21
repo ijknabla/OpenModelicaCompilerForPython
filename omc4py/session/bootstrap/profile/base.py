@@ -137,7 +137,12 @@ class AbstractExtrinsicProfile(
 class AbstractTypeProfile(
     AbstractProfile
 ):
-    ...
+    @property
+    @abc.abstractmethod
+    def primitive(
+        self,
+    ) -> bool:
+        raise NotImplementedError()
 
 
 class AbstractFunctionProfile(

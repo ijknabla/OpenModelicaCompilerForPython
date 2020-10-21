@@ -80,6 +80,12 @@ class IntrinsicTypeProfile(
     ) -> bool:
         return self.config.supported
 
+    @property
+    def primitive(
+        self,
+    ) -> bool:
+        return self.config.primitive
+
 
 @AbstractTypeProfile.register_concrete_class
 class UnsupportedIntrinsicTypeProfile(
@@ -97,7 +103,7 @@ class UnsupportedIntrinsicTypeProfile(
         return name not in _intrinsicTypeConfigs
 
     @property
-    def supported(
-        self
-    ) -> bool:
-        return False
+    def supported(self) -> bool: return False
+
+    @property
+    def primitive(self) -> bool: return False

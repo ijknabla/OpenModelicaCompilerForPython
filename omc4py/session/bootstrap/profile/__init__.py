@@ -63,10 +63,10 @@ class TypeDeclarationProfile(
         return element.tag == "type"
 
     @property
-    def supported(
-        self
-    ) -> bool:
-        return False
+    def supported(self) -> bool: return False
+
+    @property
+    def primitive(self) -> bool: return False
 
 
 @AbstractTypeProfile.register_concrete_class
@@ -86,10 +86,10 @@ class RecordDeclarationProfile(
         return element.tag == "record"
 
     @property
-    def supported(
-        self
-    ) -> bool:
-        return False
+    def supported(self) -> bool: return False
+
+    @property
+    def primitive(self) -> bool: return False
 
 
 @AbstractFunctionProfile.register_concrete_class
