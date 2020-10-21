@@ -171,13 +171,19 @@ class EnumerationDeclarationProfile(
     def py_cast_type_expression(
         self,
     ) -> str:
-        return super().py_cast_type_expression
+        return self.py_type
+
+    @property
+    def py_type(
+        self,
+    ):
+        return str(self.name.last_identifier)
 
     def generate_class_definition(
         self,
     ) -> code.CodeBlock:
         return code.CodeBlock(
-            f"class {self.name.last_identifier!s}(",
+            f"class {self.py_type}(",
             code.CodeBlock(
                 "enum__.Enum",
                 indent=code.INDENT,
