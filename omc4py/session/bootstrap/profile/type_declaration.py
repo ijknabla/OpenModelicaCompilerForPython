@@ -21,7 +21,7 @@ IntrinsicTypeConfigs = typing.Dict[
     TypeName, IntrinsicTypeConfig
 ]
 
-__intrinsicTypeConfigs: IntrinsicTypeConfigs = {
+_intrinsicTypeConfigs: IntrinsicTypeConfigs = {
     TypeName("Real"):
         IntrinsicTypeConfig(
             primitive=True,
@@ -63,4 +63,4 @@ class IntrinsicTypeProfile(
         root: xml._Element,
         name: TypeName,
     ) -> bool:
-        return name in __intrinsicTypeConfigs
+        return name in _intrinsicTypeConfigs
