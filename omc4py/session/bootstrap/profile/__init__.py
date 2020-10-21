@@ -11,8 +11,9 @@ from omc4py.session.bootstrap.code import (
     CodeBlock,
 )
 
-from omc4py.session import (
-    types,
+from omc4py.session.types import (
+    TypeName,
+    VariableName,
 )
 
 from .base import (
@@ -44,25 +45,25 @@ def dimensions2sizes(
 
 
 primitiveTypeNames = {
-    types.TypeName("Real"),
-    types.TypeName("Integer"),
-    types.TypeName("Boolean"),
-    types.TypeName("String"),
+    TypeName("Real"),
+    TypeName("Integer"),
+    TypeName("Boolean"),
+    TypeName("String"),
 }
 
 codeTypeNames = {
-    types.TypeName("OpenModelica.$Code.VariableName"),
-    types.TypeName("OpenModelica.$Code.TypeName"),
+    TypeName("OpenModelica.$Code.VariableName"),
+    TypeName("OpenModelica.$Code.TypeName"),
 }
 
 
 class PrimitiveTypes(
-    types.TypeName, enum.Enum
+    TypeName, enum.Enum
 ):
-    Real = types.TypeName("Real"),
-    Integer = types.TypeName("Integer"),
-    Boolean = types.TypeName("Boolean"),
-    String = types.TypeName("String"),
+    Real = TypeName("Real"),
+    Integer = TypeName("Integer"),
+    Boolean = TypeName("Boolean"),
+    String = TypeName("String"),
 
 
 @AbstractTypeProfile.register_concrete_class
@@ -73,7 +74,7 @@ class PrimitiveTypeProfile(
     def match(
         cls,
         root: xml._Element,
-        name: types.TypeName,
+        name: TypeName,
     ) -> bool:
         element = cls.find_element(root, name)
         if element is not None:
@@ -88,10 +89,10 @@ class PrimitiveTypeProfile(
 
 
 class CodeTypes(
-    types.TypeName, enum.Enum
+    TypeName, enum.Enum
 ):
-    VariableName = types.TypeName("OpenModelica.$Code.VariableName")
-    TypeName = types.TypeName("OpenModelica.$Code.TypeName")
+    VariableName = TypeName("OpenModelica.$Code.VariableName")
+    TypeName = TypeName("OpenModelica.$Code.TypeName")
 
 
 @AbstractTypeProfile.register_concrete_class
@@ -102,7 +103,7 @@ class CodeTypeProfile(
     def match(
         cls,
         root: xml._Element,
-        name: types.TypeName,
+        name: TypeName,
     ) -> bool:
         element = cls.find_element(root, name)
         if element is not None:
@@ -124,7 +125,7 @@ class UnsupportedBuiltinTypeProfile(
     def match(
         cls,
         root: xml._Element,
-        name: types.TypeName,
+        name: TypeName,
     ) -> bool:
         element = cls.find_element(root, name)
         if element is not None:
@@ -147,7 +148,7 @@ class TypeDeclarationProfile(
     def match(
         cls,
         root: xml._Element,
-        name: types.TypeName,
+        name: TypeName,
     ) -> bool:
         element = cls.find_element(root, name)
         if element is None:
@@ -170,7 +171,7 @@ class RecordDeclarationProfile(
     def match(
         cls,
         root: xml._Element,
-        name: types.TypeName,
+        name: TypeName,
     ) -> bool:
         element = cls.find_element(root, name)
         if element is None:
@@ -193,7 +194,7 @@ class FunctionDeclarationProfile(
     def match(
         cls,
         root: xml.Element,
-        name: types.TypeName
+        name: TypeName
     ) -> bool:
         element = cls.find_element(root, name)
         if element is None:
@@ -250,7 +251,7 @@ class FunctionDeclarationProfile(
         ):
             anyProfile = get_profile_from_xml(
                 self.root,
-                types.TypeName(argument.attrib["className"]),
+                TypeName(argument.attrib["className"]),
             )
 
             typeProfile: AbstractTypeProfile
@@ -265,7 +266,7 @@ class FunctionDeclarationProfile(
             yield InputArgument(
                 typeProfile=typeProfile,
                 sizes=dimensions2sizes(argument.find("dimensions")),
-                name=types.VariableName(argument.attrib["name"]),
+                name=VariableName(argument.attrib["name"]),
                 comment=argument.attrib["comment"],
                 optional=bool(
                     eval(argument.attrib["hasDefault"].capitalize())
@@ -281,7 +282,7 @@ class FunctionDeclarationProfile(
         ):
             anyProfile = get_profile_from_xml(
                 self.root,
-                types.TypeName(argument.attrib["className"]),
+                TypeName(argument.attrib["className"]),
             )
 
             typeProfile: AbstractTypeProfile
@@ -296,7 +297,7 @@ class FunctionDeclarationProfile(
             yield OutputArgument(
                 typeProfile=typeProfile,
                 sizes=dimensions2sizes(argument.find("dimensions")),
-                name=types.VariableName(argument.attrib["name"]),
+                name=VariableName(argument.attrib["name"]),
                 comment=argument.attrib["comment"],
             )
 
@@ -427,7 +428,7 @@ class FunctionAliasProfile(
     def match(
         cls,
         root: xml.Element,
-        name: types.TypeName,
+        name: TypeName,
     ) -> bool:
         element = cls.find_element(root, name)
         if element is None:
@@ -457,7 +458,7 @@ class FunctionAliasProfile(
     ) -> AbstractFunctionProfile:
         profile = get_profile_from_xml(
             self.root,
-            types.TypeName(self.element.attrib["ref"]),
+            TypeName(self.element.attrib["ref"]),
         )
         assert(isinstance(profile, AbstractFunctionProfile))
         return profile
