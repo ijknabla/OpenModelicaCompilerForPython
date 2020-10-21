@@ -47,35 +47,6 @@ def dimensions2sizes(
 
 
 @AbstractTypeProfile.register_concrete_class
-class TypeDeclarationProfile(
-    AbstractTypeProfile,
-    AbstractExtrinsicProfile,
-):
-    @classmethod
-    def match(
-        cls,
-        root: xml._Element,
-        name: TypeName,
-    ) -> bool:
-        element = cls.find_element(root, name)
-        if element is None:
-            return False
-        return element.tag == "type"
-
-    @property
-    def supported(self) -> bool: return False
-
-    @property
-    def primitive(self) -> bool: return False
-
-    @property
-    def py_cast_type_expression(
-        self,
-    ) -> str:
-        return super().py_cast_type_expression
-
-
-@AbstractTypeProfile.register_concrete_class
 class RecordDeclarationProfile(
     AbstractTypeProfile,
     AbstractExtrinsicProfile,

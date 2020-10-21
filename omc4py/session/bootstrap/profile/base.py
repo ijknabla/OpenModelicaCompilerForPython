@@ -158,6 +158,17 @@ class AbstractTypeProfile(
         return self.py_cast_type_expression
 
 
+class AbstractExtrinsicTypeProfile(
+    AbstractExtrinsicProfile,
+    AbstractTypeProfile,
+):
+    @abc.abstractmethod
+    def generate_class_definition(
+        self
+    ) -> code.CodeBlock:
+        raise NotImplementedError()
+
+
 class AbstractFunctionProfile(
     AbstractProfile
 ):

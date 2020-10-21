@@ -8,7 +8,10 @@ from omc4py.session.types import (
 
 from . base import (
     AbstractTypeProfile,
+    AbstractExtrinsicTypeProfile,
 )
+
+from .. import code
 
 
 class IntrinsicTypeConfig(
@@ -130,4 +133,43 @@ class UnsupportedIntrinsicTypeProfile(
     ) -> str:
         raise ValueError(
             f"{self.name} is unsupported type"
+        )
+
+
+@AbstractExtrinsicTypeProfile.register_concrete_class
+class EnumerationDeclarationProfile(
+    AbstractExtrinsicTypeProfile
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml._Element,
+        name: TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is None:
+            return False
+        return element.tag == "type" and element.xpath(".//enumerators")
+
+    @property
+    def supported(self) -> bool: return False
+
+    @property
+    def primitive(self) -> bool: return False
+
+    @property
+    def py_cast_type_expression(
+        self,
+    ) -> str:
+        return super().py_cast_type_expression
+
+    def generate_class_definition(
+        self,
+    ) -> code.CodeBlock:
+        return code.CodeBlock(
+            f"class {self.name.parts[-1]}:",
+            code.CodeBlock(
+                "...",
+                indent=code.INDENT,
+            ),
         )
