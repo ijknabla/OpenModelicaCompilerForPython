@@ -37,3 +37,7 @@ with open_session as session:
 
 >>>
 ```
+
+# `omc4py.session.bootstrap.profile.abc.AbstractProfile`
+
+Is it needed to change AbstractProfile.find_element from static-method to method?
