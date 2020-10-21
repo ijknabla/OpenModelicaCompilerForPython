@@ -87,7 +87,7 @@ from omc4py.session import types as types__
     )
 
     function_profiles = [
-        profile.get_profile(root, functionName)
+        profile.get_profile_from_xml(root, functionName)
         for functionName in export_function_names(root)
     ]
 

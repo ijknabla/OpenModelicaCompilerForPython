@@ -94,7 +94,7 @@ class AbstractProfile(
             return None
 
 
-def get_profile(
+def get_profile_from_xml(
     root: xml._Element,
     name: types.TypeName,
 ) -> AbstractProfile:

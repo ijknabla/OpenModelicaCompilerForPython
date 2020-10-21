@@ -19,7 +19,7 @@ from .base import (
     AbstractFunctionProfile,
     AbstractTypeProfile,
     AbstractExtrinsicProfile,
-    get_profile,
+    get_profile_from_xml,
 )
 from .argument import (
     InputArgument,
@@ -248,7 +248,7 @@ class FunctionDeclarationProfile(
         for argument in self.element.xpath(
             './/argument[@inputOutput="input"]'
         ):
-            anyProfile = get_profile(
+            anyProfile = get_profile_from_xml(
                 self.root,
                 types.TypeName(argument.attrib["className"]),
             )
@@ -279,7 +279,7 @@ class FunctionDeclarationProfile(
         for argument in self.element.xpath(
             './/argument[@inputOutput="output"]'
         ):
-            anyProfile = get_profile(
+            anyProfile = get_profile_from_xml(
                 self.root,
                 types.TypeName(argument.attrib["className"]),
             )
@@ -455,7 +455,7 @@ class FunctionAliasProfile(
     def target(
         self
     ) -> AbstractFunctionProfile:
-        profile = get_profile(
+        profile = get_profile_from_xml(
             self.root,
             types.TypeName(self.element.attrib["ref"]),
         )
