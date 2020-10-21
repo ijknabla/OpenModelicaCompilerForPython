@@ -93,6 +93,14 @@ class AbstractProfile(
         else:
             return None
 
+    def get_profile(
+        self,
+        name: types.TypeName,
+    ) -> "AbstractProfile":
+        return get_profile_from_xml(
+            self.root, name
+        )
+
 
 def get_profile_from_xml(
     root: xml._Element,

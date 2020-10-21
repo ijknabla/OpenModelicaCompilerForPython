@@ -92,6 +92,21 @@ class InputArgument(
         comment: str,
         optional: bool,
     ):
+        if typeProfile.name == TypeName(
+            "OpenModelica.$Code.VariableNames"
+        ):
+            variableNameProfile = typeProfile.get_profile(
+                TypeName("OpenModelica.$Code.VariableName")
+            )
+            if sizes:
+                raise ValueError(
+                    f"VariableNames must be scalar, got sizes={sizes}"
+                )
+
+            assert(isinstance(variableNameProfile, AbstractTypeProfile))
+            typeProfile = variableNameProfile
+            sizes = (None,)
+
         self.typeProfile = typeProfile
         self.sizes = sizes
         self.name = name
