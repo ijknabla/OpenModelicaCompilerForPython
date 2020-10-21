@@ -2,6 +2,7 @@
 import abc
 from lxml import etree as xml  # type: ignore
 import typing
+import typing_extensions
 
 from omc4py.session import types
 from omc4py.session.bootstrap import code
@@ -10,6 +11,32 @@ from omc4py.session.bootstrap import code
 class AbstractProfile(
     abc.ABC
 ):
+    __concrete_classes: \
+        typing_extensions.Final[typing.List[typing.Type["AbstractProfile"]]] \
+        = []
+
+    @classmethod
+    def register_concrete_class(
+        cls,
+        class_: typing.Type["AbstractProfile"],
+    ) -> typing.Type["AbstractProfile"]:
+        cls.__concrete_classes.append(class_)
+        return class_
+
+    @classmethod
+    def find_concrete_class(
+        cls,
+        root: xml._Element,
+        name: types.TypeName,
+    ) -> typing.Type["AbstractProfile"]:
+        for ProfileClass in cls.__concrete_classes:
+            if ProfileClass.match(root, name):
+                return ProfileClass
+
+        raise ValueError(
+            f"Can't find profile class for {name}"
+        )
+
     def __init__(
         self,
         root: xml._Element,
@@ -67,28 +94,14 @@ class AbstractProfile(
             return None
 
 
-__profileClasses: typing.List[typing.Type[AbstractProfile]] \
-    = []
-
-
-def register_profileClass(
-    profileClass: typing.Type[AbstractProfile],
-) -> typing.Type[AbstractProfile]:
-    __profileClasses.append(profileClass)
-    return profileClass
+register_profileClass = AbstractProfile.register_concrete_class
 
 
 def get_profile(
     root: xml._Element,
     name: types.TypeName,
 ) -> AbstractProfile:
-    for ProfileClass in __profileClasses:
-        if ProfileClass.match(root, name):
-            return ProfileClass(root, name)
-
-    raise ValueError(
-        f"Failed to create profile for {name}"
-    )
+    return AbstractProfile.find_concrete_class(root, name)(root, name)
 
 
 class AbstractExtrinsicProfile(
