@@ -22,18 +22,6 @@ Sizes = typing.Tuple[Size, ...]
 
 
 # TODO: move implementation to TypeProfile
-def TypeProfile__is_primitive(
-    typeProfile: AbstractTypeProfile,
-) -> bool:
-    return typeProfile.name in {
-        TypeName("Real"),
-        TypeName("Integer"),
-        TypeName("Boolean"),
-        TypeName("String"),
-    }
-
-
-# TODO: move implementation to TypeProfile
 def TypeProfile__py_type_reference(
     typeProfile: AbstractTypeProfile
 ) -> str:
@@ -156,10 +144,7 @@ class InputArgument(
     def needs_check(
         self,
     ) -> bool:
-        return (
-            TypeProfile__is_primitive(self.typeProfile)
-            and self.is_scalar
-        )
+        return self.typeProfile.primitive and self.is_scalar
 
     @property
     def check_code(
