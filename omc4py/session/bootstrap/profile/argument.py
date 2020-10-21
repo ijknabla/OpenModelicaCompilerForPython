@@ -69,13 +69,34 @@ def TypeProfile__py_dtype_reference(
 
 
 class InputArgument(
-    typing.NamedTuple,
 ):
+    __slots__ = (
+        "typeProfile",
+        "sizes",
+        "name",
+        "comment",
+        "optional",
+    )
+
     typeProfile: AbstractTypeProfile
     sizes: Sizes
     name: VariableName
     comment: str
     optional: bool
+
+    def __init__(
+        self,
+        typeProfile: AbstractTypeProfile,
+        sizes: Sizes,
+        name: VariableName,
+        comment: str,
+        optional: bool,
+    ):
+        self.typeProfile = typeProfile
+        self.sizes = sizes
+        self.name = name
+        self.comment = comment
+        self.optional = optional
 
     @property
     def py_variable(
