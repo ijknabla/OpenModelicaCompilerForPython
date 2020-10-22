@@ -21,21 +21,22 @@ Size = typing.Optional[int]
 Sizes = typing.Tuple[Size, ...]
 
 
-class InputArgument(
+_common_attributes = (
+    "typeProfile",
+    "sizes",
+    "name",
+    "comment",
+)
+
+
+class Component(
 ):
-    __slots__ = (
-        "typeProfile",
-        "sizes",
-        "name",
-        "comment",
-        "optional",
-    )
+    __slots__ = _common_attributes
 
     typeProfile: AbstractTypeProfile
     sizes: Sizes
     name: VariableName
     comment: str
-    optional: bool
 
     def __init__(
         self,
@@ -43,7 +44,6 @@ class InputArgument(
         sizes: Sizes,
         name: VariableName,
         comment: str,
-        optional: bool,
     ):
         if typeProfile.name == TypeName(
             "OpenModelica.$Code.VariableNames"
@@ -64,6 +64,27 @@ class InputArgument(
         self.sizes = sizes
         self.name = name
         self.comment = comment
+
+
+class InputArgument(
+    Component,
+):
+    __slots__ = (
+        *_common_attributes,
+        "optional",
+    )
+
+    optional: bool
+
+    def __init__(
+        self,
+        typeProfile: AbstractTypeProfile,
+        sizes: Sizes,
+        name: VariableName,
+        comment: str,
+        optional: bool,
+    ):
+        super().__init__(typeProfile, sizes, name, comment)
         self.optional = optional
 
     @property
