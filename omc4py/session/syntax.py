@@ -92,6 +92,43 @@ def omc_value():
     ]
 
 
+def subscript_list():
+    return arpeggio.ZeroOrMore(std.subscript, sep=",")
+
+
+def omc_dimensions():
+    return "{", subscript_list, "}"
+
+
+def omc_component():
+    return (
+        "{",
+        (
+            std.type_specifier, ",",  # className
+            std.IDENT, ",",  # name
+            std.STRING, ",",  # comment
+            std.STRING, ",",  # protected
+            boolean, ",",  # isFinal
+            boolean, ",",  # isFlow
+            boolean, ",",  # isStream
+            boolean, ",",  # isReplaceable
+            std.STRING, ",",  # variability
+            std.STRING, ",",  # innerOuter
+            std.STRING, ",",  # inputOutput
+            omc_dimensions,  # dimensions
+        ),
+        "}",
+    )
+
+
+def omc_component_list():
+    return arpeggio.ZeroOrMore(omc_component, sep=",")
+
+
+def omc_component_array():
+    return "{", component_list, "}"
+
+
 @change___name__("file")
 def IDENT_withEOF():
     return std.IDENT, arpeggio.EOF
@@ -105,6 +142,11 @@ def type_specifier_withEOF():
 @change___name__("file")
 def omc_value_withEOF():
     return omc_value, arpeggio.EOF
+
+
+@change___name__("file")
+def omc_component_array_withEOF():
+    return omc_component_array, arpeggio.EOF
 
 
 @change___name__("file")
