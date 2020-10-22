@@ -123,44 +123,28 @@ class InputArgument(
     def py_checked_argument(
         self,
     ) -> str:
-        if self.needs_check:
-            return self.py_variable
-        else:
+        if self.is_forced_to_cast:
             return self.py_internal_variable
+        else:
+            return self.py_variable
 
     @property
-    def is_scalar(
-        self
-    ) -> bool:
-        return not self.sizes
-
-    @property
-    def needs_check(
+    def is_array(
         self,
     ) -> bool:
-        return self.typeProfile.primitive and self.is_scalar
+        return bool(self.sizes)
+
+    @property
+    def is_forced_to_cast(
+        self,
+    ) -> bool:
+        return self.is_array or not self.typeProfile.primitive
 
     @property
     def check_code(
         self,
     ) -> CodeBlock:
-        if self.needs_check:
-            py_check_type = self.typeProfile.py_check_type_expression
-            return CodeBlock(
-                "check_value__(",
-                CodeBlock(
-                    (
-                        f"name={self.py_variable!r}, "
-                        f"value={self.py_variable},"
-                    ),
-                    f"class_or_tuple={py_check_type},",
-                    f"optional={self.optional},",
-
-                    indent=INDENT,
-                ),
-                ")",
-            )
-        else:
+        if self.is_forced_to_cast:
             py_cast_type = self.typeProfile.py_cast_type_expression
             return CodeBlock(
                 f"{self.py_internal_variable} = cast_value__(",
@@ -173,6 +157,21 @@ class InputArgument(
                     f"sizes={self.sizes},",
                     f"optional={self.optional},",
                     indent=INDENT
+                ),
+                ")",
+            )
+        else:
+            py_check_type = self.typeProfile.py_check_type_expression
+            return CodeBlock(
+                "check_value__(",
+                CodeBlock(
+                    (
+                        f"name={self.py_variable!r}, "
+                        f"value={self.py_variable},"
+                    ),
+                    f"class_or_tuple={py_check_type},",
+                    f"optional={self.optional},",
+                    indent=INDENT,
                 ),
                 ")",
             )
