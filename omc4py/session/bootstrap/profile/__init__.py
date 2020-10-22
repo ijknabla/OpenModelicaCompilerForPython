@@ -31,21 +31,6 @@ from .component import (
 from . import type_declaration
 
 
-def dimensions2sizes(
-    dimensions: xml._Element,
-) -> Sizes:
-    def size_generator(
-    ) -> typing.Iterator[typing.Optional[int]]:
-        assert(dimensions.tag == "dimensions")
-        for dimension in dimensions.xpath("./dimension"):
-            try:
-                yield int(dimension.attrib["size"])
-            except ValueError:
-                yield None
-
-    return tuple(size_generator())
-
-
 @AbstractFunctionProfile.register_concrete_class
 class FunctionDeclarationProfile(
     AbstractFunctionProfile,
@@ -126,7 +111,8 @@ class FunctionDeclarationProfile(
 
             yield InputArgument(
                 typeProfile=typeProfile,
-                sizes=dimensions2sizes(argument.find("dimensions")),
+                sizes=InputArgument.dimensions2sizes(
+                    argument.find("dimensions")),
                 name=VariableName(argument.attrib["name"]),
                 comment=argument.attrib["comment"],
                 optional=bool(
@@ -157,7 +143,8 @@ class FunctionDeclarationProfile(
 
             yield OutputArgument(
                 typeProfile=typeProfile,
-                sizes=dimensions2sizes(argument.find("dimensions")),
+                sizes=OutputArgument.dimensions2sizes(
+                    argument.find("dimensions")),
                 name=VariableName(argument.attrib["name"]),
                 comment=argument.attrib["comment"],
             )

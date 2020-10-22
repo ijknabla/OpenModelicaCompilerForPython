@@ -1,5 +1,6 @@
 
 import keyword
+from lxml import etree as xml  # type: ignore
 import typing
 
 from omc4py.session.types import (
@@ -107,6 +108,21 @@ class Component(
             return self.py_internal_variable
         else:
             return self.py_variable
+
+    @staticmethod
+    def dimensions2sizes(
+        dimensions: xml._Element,
+    ) -> Sizes:
+        def size_generator(
+        ) -> typing.Iterator[typing.Optional[int]]:
+            assert(dimensions.tag == "dimensions")
+            for dimension in dimensions.xpath("./dimension"):
+                try:
+                    yield int(dimension.attrib["size"])
+                except ValueError:
+                    yield None
+
+        return tuple(size_generator())
 
 
 class InputArgument(
