@@ -75,6 +75,19 @@ class Component(
         self.name = name
         self.comment = comment
 
+    @property
+    def py_variable(
+        self,
+    ) -> str:
+        return py_identifier(self.name)
+
+    @property
+    def py_internal_variable(
+        self,
+    ) -> str:
+        return f"{self.py_variable}__internal__"
+
+
 
 class InputArgument(
     Component,
@@ -96,18 +109,6 @@ class InputArgument(
     ):
         super().__init__(typeProfile, sizes, name, comment)
         self.optional = optional
-
-    @property
-    def py_variable(
-        self,
-    ) -> str:
-        return py_identifier(self.name)
-
-    @property
-    def py_internal_variable(
-        self,
-    ) -> str:
-        return f"{self.py_variable}__internal__"
 
     @property
     def py_argument(
