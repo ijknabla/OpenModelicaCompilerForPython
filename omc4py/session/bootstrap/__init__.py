@@ -424,6 +424,7 @@ def generate_omc_interface_xml(
             )
 
             componentsTest = session.getComponentsTest(self.name)
+            # components = session.getComponents(self.name)
             for componentTest in componentsTest:
                 if componentTest.isProtected:
                     continue
