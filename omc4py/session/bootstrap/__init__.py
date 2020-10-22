@@ -505,28 +505,26 @@ def generate_omc_interface_xml(
                 "arguments"
             )
 
-            componentsTest = session.getComponentsTest(self.name)
-            components = session.getComponents(self.name)
-            for componentTest in componentsTest:
-                if componentTest.isProtected:
+            for component in session.getComponents(self.name):
+                if component.protected == "protected":
                     continue
                 hasDefault = defaultValueInfoDict[
-                    types.VariableName(componentTest.name)
+                    component.name
                 ]
                 argument_element = xml.SubElement(
                     arguments_element,
                     "argument",
                     {
-                        "inputOutput": componentTest.inputOutput,
-                        "className": str(componentTest.className),
-                        "name": str(componentTest.name),
+                        "inputOutput": component.inputOutput,
+                        "className": str(component.className),
+                        "name": str(component.name),
                         "hasDefault": "true" if hasDefault else "false",
-                        "comment": componentTest.comment,
+                        "comment": component.comment,
                     }
                 )
                 self.generate_dimensions_element(
                     argument_element,
-                    componentTest.dimensions,
+                    component.dimensions,
                 )
 
     def modelica_class(

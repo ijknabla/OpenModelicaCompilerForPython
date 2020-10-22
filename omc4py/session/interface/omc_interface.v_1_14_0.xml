@@ -964,7 +964,7 @@ end appendEnvironmentVar;</code>
               <argument inputOutput="input" className="String" name="value" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="output" className="String" name="result" hasDefault="false" comment="returns \&quot;error\&quot; if the variable could not be appended">
+              <argument inputOutput="output" className="String" name="result" hasDefault="false" comment="returns &quot;error&quot; if the variable could not be appended">
                 <dimensions/>
               </argument>
             </arguments>
@@ -2337,7 +2337,7 @@ end loadModel;</code>
               <argument inputOutput="input" className="String" name="languageStandard" hasDefault="true" comment="Override the set language standard. Parse with the given setting, but do not change it permanently.">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="Boolean" name="requireExactVersion" hasDefault="true" comment="If the version is required to be exact, if there is a uses Modelica(version=\&quot;3.2\&quot;), Modelica 3.2.1 will not match it.">
+              <argument inputOutput="input" className="Boolean" name="requireExactVersion" hasDefault="true" comment="If the version is required to be exact, if there is a uses Modelica(version=&quot;3.2&quot;), Modelica 3.2.1 will not match it.">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="Boolean" name="success" hasDefault="false" comment="">
@@ -2747,10 +2747,10 @@ end listFile;</code>
 end diffModelicaFileListings;</code>
           <components>
             <arguments>
-              <argument inputOutput="input" className="String" name="after" hasDefault="false" comment="">
+              <argument inputOutput="input" className="String" name="before" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="before" hasDefault="false" comment="">
+              <argument inputOutput="input" className="String" name="after" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
               <argument inputOutput="input" className="OpenModelica.Scripting.DiffFormat" name="diffFormat" hasDefault="true" comment="">
@@ -2928,8 +2928,8 @@ end solveLinearSystem;</code>
             <arguments>
               <argument inputOutput="input" className="Real" name="A" hasDefault="false" comment="">
                 <dimensions>
-                  <dimension size="size(B, 1)"/>
-                  <dimension size="size(B, 1)"/>
+                  <dimension size="size(B,1)"/>
+                  <dimension size="size(B,1)"/>
                 </dimensions>
               </argument>
               <argument inputOutput="input" className="Real" name="B" hasDefault="false" comment="">
@@ -2947,7 +2947,7 @@ end solveLinearSystem;</code>
               </argument>
               <argument inputOutput="output" className="Real" name="X" hasDefault="false" comment="">
                 <dimensions>
-                  <dimension size="size(B, 1)"/>
+                  <dimension size="size(B,1)"/>
                 </dimensions>
               </argument>
               <argument inputOutput="output" className="Integer" name="info" hasDefault="false" comment="">
@@ -3091,7 +3091,7 @@ end translateModelFMU;</code>
               <argument inputOutput="input" className="String" name="fmuType" hasDefault="true" comment="FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = \&quot;className\&quot;">
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;className&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="input" className="Boolean" name="includeResources" hasDefault="true" comment="include Modelica based resources via loadResource or not">
@@ -3125,10 +3125,10 @@ end buildModelFMU;</code>
               <argument inputOutput="input" className="String" name="fmuType" hasDefault="true" comment="FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = \&quot;className\&quot;">
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;className&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="platforms" hasDefault="true" comment="The list of platforms to generate code for. \&quot;dynamic\&quot;=current platform, dynamically link the runtime. \&quot;static\&quot;=current platform, statically link everything. Else, use a host triple, e.g. \&quot;x86_64-linux-gnu\&quot; or \&quot;x86_64-w64-mingw32\&quot;">
+              <argument inputOutput="input" className="String" name="platforms" hasDefault="true" comment="The list of platforms to generate code for. &quot;dynamic&quot;=current platform, dynamically link the runtime. &quot;static&quot;=current platform, statically link everything. Else, use a host triple, e.g. &quot;x86_64-linux-gnu&quot; or &quot;x86_64-w64-mingw32&quot;">
                 <dimensions>
                   <dimension size=":"/>
                 </dimensions>
@@ -3244,7 +3244,47 @@ end SimulationResult;</code>
   end SimulationResult;
 end simulate;</code>
           <components>
-            <arguments/>
+            <arguments>
+              <argument inputOutput="input" className="OpenModelica.$Code.TypeName" name="className" hasDefault="false" comment="the class that should simulated">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="Real" name="startTime" hasDefault="true" comment="the start time of the simulation. &lt;default&gt; = 0.0">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="Real" name="stopTime" hasDefault="true" comment="the stop time of the simulation. &lt;default&gt; = 1.0">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="Real" name="numberOfIntervals" hasDefault="true" comment="number of intervals in the result file. &lt;default&gt; = 500">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="Real" name="tolerance" hasDefault="true" comment="tolerance used by the integration method. &lt;default&gt; = 1e-6">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="String" name="method" hasDefault="true" comment="integration method used for simulation. &lt;default&gt; = dassl">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;&quot;">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = &quot;&quot;">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = &quot;mat&quot;">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = &quot;.*&quot;">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = &quot;&quot;">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = &quot;&quot;">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="output" className="OpenModelica.Scripting.simulate.SimulationResult" name="simulationResults" hasDefault="false" comment="">
+                <dimensions/>
+              </argument>
+            </arguments>
           </components>
         </function>
         <function id="OpenModelica.Scripting.buildModel">
@@ -3284,22 +3324,22 @@ end buildModel;</code>
               <argument inputOutput="input" className="String" name="method" hasDefault="true" comment="integration method used for simulation. &lt;default&gt; = dassl">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = \&quot;mat\&quot;">
+              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = &quot;mat&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = \&quot;.*\&quot;">
+              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = &quot;.*&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="String" name="buildModelResults" hasDefault="false" comment="">
@@ -3347,22 +3387,22 @@ end buildLabel;</code>
               <argument inputOutput="input" className="String" name="method" hasDefault="true" comment="integration method used for simulation. &lt;default&gt; = dassl">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = \&quot;mat\&quot;">
+              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = &quot;mat&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = \&quot;.*\&quot;">
+              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = &quot;.*&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="String" name="buildModelResults" hasDefault="false" comment="">
@@ -3411,22 +3451,22 @@ end reduceTerms;</code>
               <argument inputOutput="input" className="String" name="method" hasDefault="true" comment="integration method used for simulation. &lt;default&gt; = dassl">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = \&quot;mat\&quot;">
+              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = &quot;mat&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = \&quot;.*\&quot;">
+              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = &quot;.*&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="input" className="String" name="labelstoCancel" hasDefault="true" comment="">
@@ -3563,7 +3603,7 @@ end linearize;</code>
               <argument inputOutput="input" className="String" name="method" hasDefault="true" comment="integration method used for simulation. &lt;default&gt; = dassl">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="input" className="Boolean" name="storeInTemp" hasDefault="true" comment="storeInTemp. &lt;default&gt; = false">
@@ -3572,19 +3612,19 @@ end linearize;</code>
               <argument inputOutput="input" className="Boolean" name="noClean" hasDefault="true" comment="noClean. &lt;default&gt; = false">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = \&quot;mat\&quot;">
+              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = &quot;mat&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = \&quot;.*\&quot;">
+              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = &quot;.*&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="String" name="linearizationResult" hasDefault="false" comment="">
@@ -3636,7 +3676,7 @@ end optimize;</code>
               <argument inputOutput="input" className="String" name="method" hasDefault="true" comment="optimize a modelica/optimica model.">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="fileNamePrefix" hasDefault="true" comment="fileNamePrefix. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="input" className="Boolean" name="storeInTemp" hasDefault="true" comment="storeInTemp. &lt;default&gt; = false">
@@ -3645,19 +3685,19 @@ end optimize;</code>
               <argument inputOutput="input" className="Boolean" name="noClean" hasDefault="true" comment="noClean. &lt;default&gt; = false">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="options" hasDefault="true" comment="options. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = \&quot;mat\&quot;">
+              <argument inputOutput="input" className="String" name="outputFormat" hasDefault="true" comment="Format for the result file. &lt;default&gt; = &quot;mat&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = \&quot;.*\&quot;">
+              <argument inputOutput="input" className="String" name="variableFilter" hasDefault="true" comment="Filter for variables that should store in result file. &lt;default&gt; = &quot;.*&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="cflags" hasDefault="true" comment="cflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = \&quot;\&quot;">
+              <argument inputOutput="input" className="String" name="simflags" hasDefault="true" comment="simflags. &lt;default&gt; = &quot;&quot;">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="String" name="optimizationResults" hasDefault="false" comment="">
@@ -3883,7 +3923,7 @@ end basePlotFunction;</code>
               <argument inputOutput="input" className="String" name="fileName" hasDefault="true" comment="The filename containing the variables. &lt;default&gt; will read the last simulation result">
                 <dimensions/>
               </argument>
-              <argument inputOutput="input" className="String" name="interpolation" hasDefault="true" comment="&#10;    Determines if the simulation data should be interpolated to allow drawing of continuous lines in the diagram.&#10;    \&quot;linear\&quot; results in linear interpolation between data points, \&quot;constant\&quot; keeps the value of the last known&#10;    data point until a new one is found and \&quot;none\&quot; results in a diagram where only known data points are plotted.">
+              <argument inputOutput="input" className="String" name="interpolation" hasDefault="true" comment="&#10;    Determines if the simulation data should be interpolated to allow drawing of continuous lines in the diagram.&#10;    &quot;linear&quot; results in linear interpolation between data points, &quot;constant&quot; keeps the value of the last known&#10;    data point until a new one is found and &quot;none&quot; results in a diagram where only known data points are plotted.">
                 <dimensions/>
               </argument>
               <argument inputOutput="input" className="String" name="title" hasDefault="true" comment="This text will be used as the diagram title.">
@@ -5205,7 +5245,7 @@ end getNthImport;</code>
               <argument inputOutput="input" className="Integer" name="index" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="output" className="String" name="out" hasDefault="false" comment="{\&quot;Path\&quot;,\&quot;Id\&quot;,\&quot;Kind\&quot;}">
+              <argument inputOutput="output" className="String" name="out" hasDefault="false" comment="{&quot;Path&quot;,&quot;Id&quot;,&quot;Kind&quot;}">
                 <dimensions>
                   <dimension size="3"/>
                 </dimensions>
@@ -5866,7 +5906,16 @@ end Component;</code>
   end Component;
 end getComponentsTest;</code>
           <components>
-            <arguments/>
+            <arguments>
+              <argument inputOutput="input" className="OpenModelica.$Code.TypeName" name="name" hasDefault="false" comment="">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="output" className="OpenModelica.Scripting.getComponentsTest.Component" name="components" hasDefault="false" comment="">
+                <dimensions>
+                  <dimension size=":"/>
+                </dimensions>
+              </argument>
+            </arguments>
           </components>
         </function>
         <function id="OpenModelica.Scripting.isExperiment">
@@ -6431,19 +6480,19 @@ end getClassInformation;</code>
               <argument inputOutput="input" className="OpenModelica.$Code.TypeName" name="cl" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="output" className="String" name="comment" hasDefault="false" comment="">
-                <dimensions/>
-              </argument>
               <argument inputOutput="output" className="String" name="restriction" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="output" className="Boolean" name="encapsulatedPrefix" hasDefault="false" comment="">
+              <argument inputOutput="output" className="String" name="comment" hasDefault="false" comment="">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="output" className="Boolean" name="partialPrefix" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="Boolean" name="finalPrefix" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="output" className="Boolean" name="partialPrefix" hasDefault="false" comment="">
+              <argument inputOutput="output" className="Boolean" name="encapsulatedPrefix" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="String" name="fileName" hasDefault="false" comment="">
@@ -6452,16 +6501,16 @@ end getClassInformation;</code>
               <argument inputOutput="output" className="Boolean" name="fileReadOnly" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="output" className="Integer" name="columnNumberEnd" hasDefault="false" comment="">
-                <dimensions/>
-              </argument>
-              <argument inputOutput="output" className="Integer" name="lineNumberEnd" hasDefault="false" comment="">
+              <argument inputOutput="output" className="Integer" name="lineNumberStart" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="Integer" name="columnNumberStart" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
-              <argument inputOutput="output" className="Integer" name="lineNumberStart" hasDefault="false" comment="">
+              <argument inputOutput="output" className="Integer" name="lineNumberEnd" hasDefault="false" comment="">
+                <dimensions/>
+              </argument>
+              <argument inputOutput="output" className="Integer" name="columnNumberEnd" hasDefault="false" comment="">
                 <dimensions/>
               </argument>
               <argument inputOutput="output" className="String" name="dimensions" hasDefault="false" comment="">
