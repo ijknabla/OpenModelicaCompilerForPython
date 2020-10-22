@@ -381,7 +381,9 @@ def generate_omc_interface_xml(
                 "elements",
             )
 
-            for component in session.getComponentsTest(self.name):
+            componentsTest = session.getComponentsTest(self.name)
+            components = session.getComponents(self.name)
+            for component in componentsTest:
                 element_element = xml.SubElement(
                     elements_element,
                     "element",
