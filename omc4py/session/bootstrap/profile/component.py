@@ -167,16 +167,18 @@ class InputArgument(
     ) -> CodeBlock:
         if self.is_forced_to_cast:
             py_cast_type = self.typeProfile.py_cast_type_expression
+            py_class_restrictions = self.typeProfile.py_check_type_expression
             return CodeBlock(
-                f"{self.py_internal_variable} = cast_value__(",
+                f"{self.py_internal_variable} = cast_value2__(",
                 CodeBlock(
                     (
                         f"name={self.py_variable!r}, "
                         f"value={self.py_variable},"
                     ),
-                    f"class_={py_cast_type},",
-                    f"sizes={self.sizes},",
                     f"optional={self.optional},",
+                    f"class_={py_cast_type},",
+                    f"class_restrictions={py_class_restrictions},",
+                    f"sizes={self.sizes},",
                     indent=INDENT
                 ),
                 ")",

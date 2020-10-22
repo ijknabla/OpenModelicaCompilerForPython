@@ -60,13 +60,13 @@ _intrinsicTypeConfigs: IntrinsicTypeConfigs = {
         IntrinsicTypeConfig(
             primitive=False,
             py_cast_type_expression="types__.VariableName",
-            py_check_type_expression="types__.VariableName",
+            py_check_type_expression="()",
         ),
     TypeName("OpenModelica.$Code.TypeName"):
         IntrinsicTypeConfig(
             primitive=False,
             py_cast_type_expression="types__.TypeName",
-            py_check_type_expression="types__.TypeName",
+            py_check_type_expression="()",
         ),
 }
 
