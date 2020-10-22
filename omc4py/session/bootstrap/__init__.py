@@ -383,7 +383,12 @@ def generate_omc_interface_xml(
 
             componentsTest = session.getComponentsTest(self.name)
             components = session.getComponents(self.name)
-            for component in componentsTest:
+            for componentTest in componentsTest:
+                for component in components:
+                    if component.name == componentTest.name:
+                        break
+                else:
+                    raise ValueError("Can't find component")
                 element_element = xml.SubElement(
                     elements_element,
                     "element",
