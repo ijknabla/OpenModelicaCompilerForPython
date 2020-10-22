@@ -9,6 +9,8 @@ import pkg_resources
 import sys
 import typing
 
+from omc4py.parsers import parseComponents
+
 from .. import (
     OMCSession__call,
     OMCSession__close,
@@ -164,6 +166,20 @@ class OMCSession(
             Component(**record_literal)
             for record_literal in result
         ]
+
+    def getComponents(
+        self,
+        name: types.TypeName,
+    ):
+        result_literal = OMCSession__call(
+            self,
+            "getComponents",
+            parse=False,
+            args=[
+                types.TypeName(name)
+            ],
+        )
+        return parseComponents(result_literal)
 
 
 open_session = functools.partial(OMCSession__open, OMCSession)
