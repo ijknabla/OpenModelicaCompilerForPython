@@ -271,7 +271,7 @@ class RecordDeclarationProfile(
         return code.CodeBlock(
             f"class {self.py_type}(",
             code.CodeBlock(
-                "dict,",
+                "OMCRecord__,",
                 indent=code.INDENT,
             ),
             "):",
@@ -306,8 +306,8 @@ class RecordDeclarationProfile(
                 )
             )
 
-
         return code.CodeBlock(
+            f"__recordName__ = {self.name!r}",
             "__fields__ = {",
             code.CodeBlock(
                 *field_items,

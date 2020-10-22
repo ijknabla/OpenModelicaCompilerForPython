@@ -205,53 +205,67 @@ class TypeName(
         return type(self)(self, other)
 
 
+RecordFields = typing.Dict[
+    str,
+    typing.Callable[[typing.Any], typing.Any],
+]
+
+
 class OMCRecord(
     dict,
 ):
-    __typeName: TypeName
+    __recordName__: typing.ClassVar[TypeName]
+    __fields__: typing.ClassVar[RecordFields]
 
     def __init__(
         self,
         *args,
-        typeName: typing.Union[str, TypeName],
         **kwrds,
     ):
         _dict = dict(*args, **kwrds)
-        super().__init__(
-            {
-                str(key): value
-                for key, value in _dict.items()
-            }
-        )
-        self.__typeName = TypeName(typeName)
+        expected_keys = self.__fields__.keys()
+        actual_keys = _dict.keys()
 
-    @property
-    def typeName(
-        self
-    ) -> TypeName:
-        return self.__typeName
+        if actual_keys != expected_keys:
+            raise KeyError(
+                f"{type(self)} keys must be {expected_keys}, "
+                f"got {actual_keys}"
+            )
 
-    def __repr__(
-        self
-    ):
-        return (
-            f"{type(self).__name__}("
-            f"{super().__repr__()}, typeName={self.typeName!r}"
-            f")"
+        self.update(_dict)
+
+    def keys(
+        self,
+    ) -> typing.KeysView[str]:
+        return self.__fields__.keys()
+
+    def __setitem__(
+        self,
+        key, value
+    ) -> None:
+        if key not in self.keys():
+            raise KeyError(
+                f"Key must be one of the {self.keys()}, "
+                f"got {key!r}"
+            )
+        value__internal__ = self.__fields__[key](value)
+        super().__setitem__(
+            key,
+            value__internal__,
         )
 
     def __to_omc_literal__(
         self,
     ) -> str:
         def lines():
-            typeNameLiteral = string.to_omc_literal(self.typeName)
-            yield f"record {typeNameLiteral} "
+            recordNameLiteral = string.to_omc_literal(self.__recordName__)
+            yield f"record {recordNameLiteral} "
             if self:
                 elements = [
                     f"{variableName}={string.to_omc_literal(value)}"
                     for variableName, value in self.items()
                 ]
                 yield ", ".join(elements) + " "
-            yield f"end {typeNameLiteral};"
+            yield f"end {recordNameLiteral};"
 
         return "".join(lines())
