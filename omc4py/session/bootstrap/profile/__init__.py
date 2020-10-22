@@ -22,7 +22,7 @@ from .base import (
     AbstractExtrinsicProfile,
     get_profile_from_xml,
 )
-from .argument import (
+from .component import (
     InputArgument,
     OutputArgument,
     Sizes,

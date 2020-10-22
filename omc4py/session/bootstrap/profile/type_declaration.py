@@ -212,7 +212,6 @@ class EnumerationDeclarationProfile(
         )
 
 
-
 @AbstractExtrinsicTypeProfile.register_concrete_class
 class RecordDeclarationProfile(
     AbstractExtrinsicTypeProfile,
