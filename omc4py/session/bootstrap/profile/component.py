@@ -83,12 +83,6 @@ class Component(
         return bool(self.sizes)
 
     @property
-    def is_forced_to_cast(
-        self,
-    ) -> bool:
-        return self.is_array or not self.typeProfile.primitive
-
-    @property
     def py_variable(
         self,
     ) -> str:
@@ -104,10 +98,7 @@ class Component(
     def py_checked_variable(
         self,
     ) -> str:
-        if self.is_forced_to_cast:
-            return self.py_internal_variable
-        else:
-            return self.py_variable
+        return self.py_internal_variable
 
     @staticmethod
     def dimensions2sizes(
@@ -165,39 +156,23 @@ class InputArgument(
     def check_code(
         self,
     ) -> CodeBlock:
-        if self.is_forced_to_cast:
-            py_cast_type = self.typeProfile.py_cast_type_expression
-            py_class_restrictions = self.typeProfile.py_check_type_expression
-            return CodeBlock(
-                f"{self.py_internal_variable} = cast_value2__(",
-                CodeBlock(
-                    (
-                        f"name={self.py_variable!r}, "
-                        f"value={self.py_variable},"
-                    ),
-                    f"optional={self.optional},",
-                    f"class_={py_cast_type},",
-                    f"class_restrictions={py_class_restrictions},",
-                    f"sizes={self.sizes},",
-                    indent=INDENT
+        py_cast_type = self.typeProfile.py_cast_type_expression
+        py_class_restrictions = self.typeProfile.py_check_type_expression
+        return CodeBlock(
+            f"{self.py_internal_variable} = cast_value2__(",
+            CodeBlock(
+                (
+                    f"name={self.py_variable!r}, "
+                    f"value={self.py_variable},"
                 ),
-                ")",
-            )
-        else:
-            py_check_type = self.typeProfile.py_check_type_expression
-            return CodeBlock(
-                "check_value__(",
-                CodeBlock(
-                    (
-                        f"name={self.py_variable!r}, "
-                        f"value={self.py_variable},"
-                    ),
-                    f"class_or_tuple={py_check_type},",
-                    f"optional={self.optional},",
-                    indent=INDENT,
-                ),
-                ")",
-            )
+                f"optional={self.optional},",
+                f"class_={py_cast_type},",
+                f"class_restrictions={py_class_restrictions},",
+                f"sizes={self.sizes},",
+                indent=INDENT
+            ),
+            ")",
+        )
 
 
 class OutputArgument(
