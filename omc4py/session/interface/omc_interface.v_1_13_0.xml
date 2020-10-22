@@ -18,55 +18,55 @@
 end CheckSettingsResult;</code>
           <components>
             <elements>
-              <element className="String" name="OMDEV_PATH" comment="">
-                <dimensions/>
-              </element>
-              <element className="String" name="SYSTEM_PATH" comment="">
-                <dimensions/>
-              </element>
-              <element className="String" name="OMC_PATH" comment="">
+              <element className="String" name="OPENMODELICAHOME" comment="">
                 <dimensions/>
               </element>
               <element className="String" name="OPENMODELICALIBRARY" comment="">
                 <dimensions/>
               </element>
-              <element className="String" name="OPENMODELICAHOME" comment="">
+              <element className="String" name="OMC_PATH" comment="">
+                <dimensions/>
+              </element>
+              <element className="String" name="SYSTEM_PATH" comment="">
+                <dimensions/>
+              </element>
+              <element className="String" name="OMDEV_PATH" comment="">
                 <dimensions/>
               </element>
               <element className="Boolean" name="OMC_FOUND" comment="">
                 <dimensions/>
               </element>
-              <element className="String" name="WORKING_DIRECTORY" comment="">
-                <dimensions/>
-              </element>
               <element className="String" name="MODELICAUSERCFLAGS" comment="">
                 <dimensions/>
               </element>
-              <element className="Boolean" name="REMOVE_FILE_WORKS" comment="">
+              <element className="String" name="WORKING_DIRECTORY" comment="">
                 <dimensions/>
               </element>
               <element className="Boolean" name="CREATE_FILE_WORKS" comment="">
                 <dimensions/>
               </element>
-              <element className="String" name="C_COMPILER_VERSION" comment="">
-                <dimensions/>
-              </element>
-              <element className="String" name="C_COMPILER" comment="">
-                <dimensions/>
-              </element>
-              <element className="String" name="SENDDATALIBS" comment="">
-                <dimensions/>
-              </element>
-              <element className="String" name="SYSTEM_INFO" comment="">
+              <element className="Boolean" name="REMOVE_FILE_WORKS" comment="">
                 <dimensions/>
               </element>
               <element className="String" name="OS" comment="">
                 <dimensions/>
               </element>
-              <element className="Boolean" name="HAVE_CORBA" comment="">
+              <element className="String" name="SYSTEM_INFO" comment="">
+                <dimensions/>
+              </element>
+              <element className="String" name="SENDDATALIBS" comment="">
+                <dimensions/>
+              </element>
+              <element className="String" name="C_COMPILER" comment="">
+                <dimensions/>
+              </element>
+              <element className="String" name="C_COMPILER_VERSION" comment="">
                 <dimensions/>
               </element>
               <element className="Boolean" name="C_COMPILER_RESPONDING" comment="">
+                <dimensions/>
+              </element>
+              <element className="Boolean" name="HAVE_CORBA" comment="">
                 <dimensions/>
               </element>
               <element className="String" name="CONFIGURE_CMDLINE" comment="">
