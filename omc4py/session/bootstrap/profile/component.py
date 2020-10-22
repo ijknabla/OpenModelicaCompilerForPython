@@ -159,7 +159,7 @@ class InputArgument(
         py_cast_type = self.typeProfile.py_cast_type_expression
         py_class_restrictions = self.typeProfile.py_check_type_expression
         return CodeBlock(
-            f"{self.py_internal_variable} = cast_value2__(",
+            f"{self.py_internal_variable} = cast_value__(",
             CodeBlock(
                 (
                     f"name={self.py_variable!r}, "

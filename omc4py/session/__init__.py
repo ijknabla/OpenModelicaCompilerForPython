@@ -352,7 +352,7 @@ def cast_array_value(
     return class_vectorized(object_array)
 
 
-def cast_value2(
+def cast_value(
     name: str,
     value: typing.Any,
     optional: bool,
