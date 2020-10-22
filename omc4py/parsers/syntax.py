@@ -41,44 +41,11 @@ from arpeggio import (
     RegExMatch, Optional, ZeroOrMore,
 )
 from modelica_language.parsers import syntax
-
-
-def sign():
-    return ["+", "-"]
-
-
-def number():
-    return (
-        Optional(sign),
-        syntax.UNSIGNED_NUMBER
-    )
-
-
-def boolean():
-    return [syntax.TRUE, syntax.FALSE]
-
-
-def omc_value_list():
-    return ZeroOrMore(omc_value, sep=",")
-
-
-def omc_tuple():
-    return "(", omc_value_list, ")",
-
-
-def omc_array():
-    return "{", omc_value_list, "}",
-
-
-def omc_value():
-    return [
-        boolean,
-        syntax.STRING,
-        number,
-        syntax.name,
-        omc_tuple,
-        omc_array,
-    ]
+from omc4py.session.syntax import (
+    boolean,
+    omc_dialect_context,
+    omc_value,
+)
 
 
 def dimensions():
@@ -112,34 +79,3 @@ def component_record_list():
 
 def component_record_array():
     return "{", component_record_list, "}"
-
-
-_MODELICA_STANDARD_IDENT = syntax.IDENT
-
-
-def STANDARD_IDENT():
-    return _MODELICA_STANDARD_IDENT
-
-
-def IDENT():
-    return [STANDARD_IDENT, RegExMatch(r"\$\w*")]
-
-
-class OMCDialectContext():
-    __enabled = False
-
-    def __enter__(self):
-        if self.__enabled:
-            raise ValueError("Duplicate OMCDialectContext")
-
-        self.__enabled = True
-        syntax.IDENT = IDENT
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        self.__enabled = False
-        syntax.IDENT = _MODELICA_STANDARD_IDENT
-
-        return False
-
-
-omc_dialect_context = OMCDialectContext()

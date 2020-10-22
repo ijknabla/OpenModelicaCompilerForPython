@@ -22,6 +22,9 @@ setup(
         "OMPython",
         "PyZMQ",
         "Arpeggio",
+        "lxml",
+        "numpy",
+        "typing_extensions",
     ],
     python_requires='>=3.6',
 )

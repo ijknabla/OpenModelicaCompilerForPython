@@ -37,9 +37,14 @@ __all__ = (
     "ComponentsVisitor",
 )
 
-from typing import Sequence, Tuple
+from typing import Iterable, Tuple
 from arpeggio import PTNodeVisitor
 from ..scripting.types import Component
+from ..session.visitor import (
+    BooleanVisitor,
+    StringVisitor,
+    OMCValueVisitor,
+)
 
 
 def get_first_item(lis: list, default=None):
@@ -51,72 +56,12 @@ def get_first_item(lis: list, default=None):
 
 def replace_all(
     string: str,
-    pairs: Sequence[Tuple[str, str]]
+    pairs: Iterable[Tuple[str, str]]
 ):
     result = string
     for old, new in pairs:
         result = result.replace(old, new)
     return result
-
-
-class NumberVisitor(
-    PTNodeVisitor,
-):
-    def visit_sign(self, node, *_):
-        return node.value
-
-    def visit_UNSIGNED_NUMBER(self, node, *_):
-        try:
-            return int(node.value)
-        except ValueError:
-            return float(node.value)
-
-    def visit_number(self, node, children):
-        sign = get_first_item(children.sign, default="+")
-        unsigned, = children.UNSIGNED_NUMBER
-
-        if sign == "+":
-            return +unsigned
-        elif sign == "-":
-            return -unsigned
-        else:
-            raise ValueError(
-                f"sign must be '+' or '-'"
-                f"got {sign}"
-            )
-
-
-class BooleanVisitor(
-    PTNodeVisitor,
-):
-    def visit_TRUE(self, *_):
-        return True
-
-    def visit_FALSE(self, *_):
-        return False
-
-    def visit_boolean(self, node, children):
-        return children[0]
-
-
-class StringVisitor(
-    PTNodeVisitor,
-):
-    def visit_STRING(self, node, *_):
-        return replace_all(
-            node.value[1:-1],
-            [
-                (r"\\", "\\"),
-                (r"\'", "\'"),
-                (r'\"', '\"'),
-                (r"\a", "\a"),
-                (r"\b", "\b"),
-                (r"\f", "\f"),
-                (r"\n", "\n"),
-                (r"\t", "\t"),
-                (r"\v", "\v"),
-            ],
-        )
 
 
 class TypeNameVisitor(
@@ -130,38 +75,6 @@ class TypeNameVisitor(
             return children.IDENT[0]
         else:
             return children.IDENT
-
-
-class SequenceVisitor(
-    PTNodeVisitor,
-):
-    def visit_omc_value_list(self, node, children):
-        return children.omc_value
-
-    def visit_omc_tuple(self, node, children):
-        value_list = get_first_item(
-            children.omc_value_list,
-            default=[],
-        )
-        return tuple(value_list)
-
-    def visit_omc_array(self, node, children):
-        value_list = get_first_item(
-            children.omc_value_list,
-            default=[],
-        )
-        return list(value_list)
-
-
-class OMCValueVisitor(
-    NumberVisitor,
-    BooleanVisitor,
-    StringVisitor,
-    TypeNameVisitor,
-    SequenceVisitor,
-):
-    def visit_omc_value(self, node, children):
-        return children[0]
 
 
 class DimensionsVisitor(
