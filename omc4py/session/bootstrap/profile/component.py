@@ -177,9 +177,6 @@ class InputArgument(
 
 
 class OutputArgument(
-    typing.NamedTuple,
+    Component,
 ):
-    typeProfile: AbstractTypeProfile
-    sizes: Sizes
-    name: VariableName
-    comment: str
+    ...
