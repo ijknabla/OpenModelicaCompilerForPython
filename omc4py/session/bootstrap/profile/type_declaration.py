@@ -276,7 +276,42 @@ class RecordDeclarationProfile(
             ),
             "):",
             code.CodeBlock(
-                "...",
+                self.fields_definition,
                 indent=code.INDENT,
             )
+        )
+
+    @property
+    def fields_definition(
+        self,
+    ) -> code.CodeBlock:
+        field_items = code.CodeBlock()
+        for element in self.elements:
+            name = str(element.name)
+            py_class = element.typeProfile.py_cast_type_expression
+            py_class_restrictions = element.typeProfile.py_check_type_expression
+            field_items.append(
+                code.CodeBlock(
+                    f"{name!r}: functools__.partial(",
+                    code.CodeBlock(
+                        "cast_value__,",
+                        f"name={name!r},",
+                        "optional=False,",
+                        f"class_={py_class},",
+                        f"class_restrictions={py_class_restrictions},",
+                        f"sizes={element.sizes!r},",
+                        indent=code.INDENT,
+                    ),
+                    "),",
+                )
+            )
+
+
+        return code.CodeBlock(
+            "__fields__ = {",
+            code.CodeBlock(
+                *field_items,
+                indent=code.INDENT,
+            ),
+            "}",
         )
