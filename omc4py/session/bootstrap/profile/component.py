@@ -21,22 +21,6 @@ Size = typing.Optional[int]
 Sizes = typing.Tuple[Size, ...]
 
 
-# TODO: move implementation to TypeProfile
-def TypeProfile__py_type_reference(
-    typeProfile: AbstractTypeProfile
-) -> str:
-    if typeProfile.name == TypeName("Real"):
-        return "(numpy__.float_, numpy__.double)"
-    elif typeProfile.name == TypeName("Integer"):
-        return "(numpy__.int, numpy__.uint)"
-    elif typeProfile.name == TypeName("Boolean"):
-        return "(numpy__.bool, numpy__.bool_)"
-    elif typeProfile.name == TypeName("String"):
-        return "(numpy__.str, numpy__.str_)"
-    else:
-        raise NotImplementedError(typeProfile)
-
-
 class InputArgument(
 ):
     __slots__ = (
