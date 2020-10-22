@@ -91,10 +91,11 @@ class InputArgument(
     def py_variable(
         self,
     ) -> str:
-        if keyword.iskeyword(str(self.name)):
-            return f"{self.name}_"
+        name = str(self.name)
+        if keyword.iskeyword(name):
+            return name + "_"
         else:
-            return f"{self.name}"
+            return name
 
     @property
     def py_internal_variable(
