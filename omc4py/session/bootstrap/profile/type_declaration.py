@@ -232,7 +232,7 @@ class RecordDeclarationProfile(
         return element.tag == "record"
 
     @property
-    def supported(self) -> bool: return False
+    def supported(self) -> bool: return True
 
     @property
     def primitive(self) -> bool: return False
