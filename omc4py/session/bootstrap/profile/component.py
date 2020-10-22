@@ -76,6 +76,18 @@ class Component(
         self.comment = comment
 
     @property
+    def is_array(
+        self,
+    ) -> bool:
+        return bool(self.sizes)
+
+    @property
+    def is_forced_to_cast(
+        self,
+    ) -> bool:
+        return self.is_array or not self.typeProfile.primitive
+
+    @property
     def py_variable(
         self,
     ) -> str:
@@ -87,6 +99,14 @@ class Component(
     ) -> str:
         return f"{self.py_variable}__internal__"
 
+    @property
+    def py_checked_variable(
+        self,
+    ) -> str:
+        if self.is_forced_to_cast:
+            return self.py_internal_variable
+        else:
+            return self.py_variable
 
 
 class InputArgument(
@@ -118,27 +138,6 @@ class InputArgument(
             return f"{self.py_variable}=None"
         else:
             return f"{self.py_variable}"
-
-    @property
-    def py_checked_variable(
-        self,
-    ) -> str:
-        if self.is_forced_to_cast:
-            return self.py_internal_variable
-        else:
-            return self.py_variable
-
-    @property
-    def is_array(
-        self,
-    ) -> bool:
-        return bool(self.sizes)
-
-    @property
-    def is_forced_to_cast(
-        self,
-    ) -> bool:
-        return self.is_array or not self.typeProfile.primitive
 
     @property
     def check_code(
