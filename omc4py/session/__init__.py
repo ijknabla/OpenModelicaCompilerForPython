@@ -60,7 +60,7 @@ def find_openmodelica_zmq_port_filepath(
 
 
 omc_error_pattern = re.compile(
-    r"\[(?P<info>[^]]*)\]\s+(?P<kind>\w+):\s+(?P<message>.*)"
+    r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
 )
 
 
@@ -181,12 +181,8 @@ class InteractiveOMC(
 
         if kind == "Error":
             return exception.OMCError(error_message)
-        elif kind == "Warning":
-            return exception.OMCWarning(error_message)
         else:
-            raise NotImplementedError(
-                "Unexpected omc error kind: {kind!r}"
-            )
+            return exception.OMCWarning(error_message)
 
 
 def parse_omc_value(
