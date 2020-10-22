@@ -120,7 +120,7 @@ class InputArgument(
             return f"{self.py_variable}"
 
     @property
-    def py_checked_argument(
+    def py_checked_variable(
         self,
     ) -> str:
         if self.is_forced_to_cast:

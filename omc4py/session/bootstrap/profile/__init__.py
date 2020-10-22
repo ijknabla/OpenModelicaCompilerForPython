@@ -231,7 +231,7 @@ class FunctionDeclarationProfile(
 
         for argument in self.inputArguments:
             argument_items.append(
-                f"{argument.py_checked_argument},"
+                f"{argument.py_checked_variable},"
             )
 
         return CodeBlock(
@@ -259,7 +259,7 @@ class FunctionDeclarationProfile(
 
         for argument in self.inputArguments:
             argument_items.append(
-                f"{str(argument.name)!r}: {argument.py_checked_argument},"
+                f"{str(argument.name)!r}: {argument.py_checked_variable},"
             )
 
         return CodeBlock(
