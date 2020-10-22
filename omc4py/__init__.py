@@ -31,23 +31,3 @@ __license__ = '''
  *
  */
 '''
-
-__all__ = (
-    "Session",
-)
-
-import OMPython
-from .scripting import funcs
-
-
-class Session(OMPython.OMCSessionZMQ):
-    def __enter__(self):
-        return self
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        return False
-
-
-for func_name in funcs.__all__:
-    func_obj = funcs.__dict__[func_name]
-    setattr(Session, func_name, func_obj)
