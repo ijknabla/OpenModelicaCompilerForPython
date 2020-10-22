@@ -8,7 +8,6 @@ from lxml import etree as xml  # type: ignore
 import pkg_resources
 import sys
 import typing
-import warnings
 
 from .. import (
     OMCSession__call,
@@ -16,11 +15,7 @@ from .. import (
     OMCSession__open,
     OMCSessionBase,
     StrOrPathLike,
-    InteractiveOMC,
-    exception,
-    parse_omc_value,
     parser,
-    string,
     types,
     visitor,
 )
