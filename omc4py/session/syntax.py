@@ -126,7 +126,7 @@ def omc_component_list():
 
 
 def omc_component_array():
-    return "{", component_list, "}"
+    return "{", omc_component_list, "}"
 
 
 @change___name__("file")
