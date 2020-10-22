@@ -148,7 +148,25 @@ from omc4py.session.types import (
         for typeName in defined_type_names(root)
     ]
 
-    for type_profile in type_profiles:
+    def type_priority(
+        typeProfile: profile.base.AbstractTypeProfile,
+    ) -> int:
+        if isinstance(
+            typeProfile,
+            profile.type_declaration.EnumerationDeclarationProfile,
+        ):
+            return 2
+        elif isinstance(
+            typeProfile,
+            profile.type_declaration.RecordDeclarationProfile,
+        ):
+            return 1
+        else:
+            return 0
+
+    for type_profile in sorted(
+        type_profiles, key=type_priority, reverse=True
+    ):
         if isinstance(
             type_profile,
             profile.base.AbstractExtrinsicTypeProfile,
