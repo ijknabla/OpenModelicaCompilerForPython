@@ -21,6 +21,16 @@ Size = typing.Optional[int]
 Sizes = typing.Tuple[Size, ...]
 
 
+def py_identifier(
+    variableName: VariableName
+) -> str:
+    identifier = str(variableName)
+    if keyword.iskeyword(identifier):
+        return identifier + "_"
+    else:
+        return identifier
+
+
 _common_attributes = (
     "typeProfile",
     "sizes",
@@ -91,11 +101,7 @@ class InputArgument(
     def py_variable(
         self,
     ) -> str:
-        name = str(self.name)
-        if keyword.iskeyword(name):
-            return name + "_"
-        else:
-            return name
+        return py_identifier(self.name)
 
     @property
     def py_internal_variable(
