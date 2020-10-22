@@ -210,3 +210,54 @@ class EnumerationDeclarationProfile(
                 indent=code.INDENT,
             ),
         )
+
+
+
+@AbstractExtrinsicTypeProfile.register_concrete_class
+class RecordDeclarationProfile(
+    AbstractExtrinsicTypeProfile,
+):
+    @classmethod
+    def match(
+        cls,
+        root: xml._Element,
+        name: TypeName,
+    ) -> bool:
+        element = cls.find_element(root, name)
+        if element is None:
+            return False
+        return element.tag == "record"
+
+    @property
+    def supported(self) -> bool: return False
+
+    @property
+    def primitive(self) -> bool: return False
+
+    @property
+    def py_cast_type_expression(
+        self,
+    ) -> str:
+        return self.py_type
+
+    @property
+    def py_type(
+        self,
+    ):
+        return str(self.name.last_identifier)
+
+    def generate_class_definition(
+        self,
+    ) -> code.CodeBlock:
+        return code.CodeBlock(
+            f"class {self.py_type}(",
+            code.CodeBlock(
+                "dict,",
+                indent=code.INDENT,
+            ),
+            "):",
+            code.CodeBlock(
+                "...",
+                indent=code.INDENT,
+            )
+        )

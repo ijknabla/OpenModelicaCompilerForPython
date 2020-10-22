@@ -46,35 +46,6 @@ def dimensions2sizes(
     return tuple(size_generator())
 
 
-@AbstractTypeProfile.register_concrete_class
-class RecordDeclarationProfile(
-    AbstractTypeProfile,
-    AbstractExtrinsicProfile,
-):
-    @classmethod
-    def match(
-        cls,
-        root: xml._Element,
-        name: TypeName,
-    ) -> bool:
-        element = cls.find_element(root, name)
-        if element is None:
-            return False
-        return element.tag == "record"
-
-    @property
-    def supported(self) -> bool: return False
-
-    @property
-    def primitive(self) -> bool: return False
-
-    @property
-    def py_cast_type_expression(
-        self,
-    ) -> str:
-        return super().py_cast_type_expression
-
-
 @AbstractFunctionProfile.register_concrete_class
 class FunctionDeclarationProfile(
     AbstractFunctionProfile,
