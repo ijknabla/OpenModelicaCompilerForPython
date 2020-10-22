@@ -107,7 +107,10 @@ from omc4py.session import OMCSession__open as OMCSession__open__
 from omc4py.session import OMCSession__call as OMCSession__call__
 from omc4py.session import cast_value as cast_value__
 from omc4py.session import OMCSession__close as close_session
-from omc4py.session import types as types__
+from omc4py.session.types import (
+    TypeName,
+    VariableName,
+)
 """)
 
     code_class = CodeBlock(
