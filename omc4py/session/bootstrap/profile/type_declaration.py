@@ -12,6 +12,10 @@ from . base import (
     AbstractExtrinsicTypeProfile,
 )
 
+from .component import (
+    RecordElement,
+)
+
 from .. import code
 
 
@@ -244,6 +248,22 @@ class RecordDeclarationProfile(
         self,
     ):
         return str(self.name.last_identifier)
+
+    @property
+    def elements(
+        self,
+    ) -> typing.Iterator[RecordElement]:
+        for tag in self.element.xpath(".//elements/element"):
+            typeProfile = self.get_profile(
+                TypeName(tag.attrib["className"])
+            )
+            assert(isinstance(typeProfile, AbstractTypeProfile))
+            yield RecordElement(
+                typeProfile=typeProfile,
+                sizes=RecordElement.dimensions2sizes(tag.find("dimensions")),
+                name=VariableName(tag.attrib["name"]),
+                comment=tag.attrib["comment"],
+            )
 
     def generate_class_definition(
         self,

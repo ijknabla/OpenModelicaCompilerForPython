@@ -125,6 +125,12 @@ class Component(
         return tuple(size_generator())
 
 
+class RecordElement(
+    Component
+):
+    ...
+
+
 class InputArgument(
     Component,
 ):
