@@ -150,7 +150,7 @@ class OMCRecordVisitor(
     ) -> typing.Tuple[VariableName, typing.Any]:
         IDENT = children.IDENT[0]
         value = children.omc_value[0]
-        return IDENT, value
+        return str(IDENT), value
 
     def visit_omc_record_element_list(
         self,
@@ -163,10 +163,9 @@ class OMCRecordVisitor(
         self,
         node,
         children
-    ) -> OMCRecord:
-        typeName = children.type_specifier[0]
+    ) -> dict:
         elements = children.omc_record_element_list[0]
-        return OMCRecord(elements, typeName=typeName)
+        return dict(elements)
 
 
 class OMCValueVisitor(
