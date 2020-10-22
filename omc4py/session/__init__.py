@@ -243,6 +243,7 @@ def OMCSession__call(
     self: OMCSessionBase,
     funcName: str,
     *,
+    parse: bool = True,
     args: typing.Optional[PositionalArguments] = None,
     kwrds: typing.Optional[KeywordArguments] = None,
 ) -> typing.Any:
@@ -277,7 +278,10 @@ def OMCSession__call(
         else:
             raise error
 
-    return parse_omc_value(result_literal)
+    if parse:
+        return parse_omc_value(result_literal)
+    else:
+        return result_literal
 
 
 def cast_scalar_value(
