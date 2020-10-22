@@ -114,25 +114,9 @@ class CheckSettingsResult(
 ):
     __recordName__ = TypeName('OpenModelica.Scripting.CheckSettingsResult')
     __fields__ = {
-        'OMDEV_PATH': functools__.partial(
+        'OPENMODELICAHOME': functools__.partial(
             cast_value__,
-            name='OMDEV_PATH',
-            optional=False,
-            class_=numpy__.str_,
-            class_restrictions=(numpy__.str, numpy__.str_),
-            sizes=(),
-        ),
-        'SYSTEM_PATH': functools__.partial(
-            cast_value__,
-            name='SYSTEM_PATH',
-            optional=False,
-            class_=numpy__.str_,
-            class_restrictions=(numpy__.str, numpy__.str_),
-            sizes=(),
-        ),
-        'OMC_PATH': functools__.partial(
-            cast_value__,
-            name='OMC_PATH',
+            name='OPENMODELICAHOME',
             optional=False,
             class_=numpy__.str_,
             class_restrictions=(numpy__.str, numpy__.str_),
@@ -146,9 +130,25 @@ class CheckSettingsResult(
             class_restrictions=(numpy__.str, numpy__.str_),
             sizes=(),
         ),
-        'OPENMODELICAHOME': functools__.partial(
+        'OMC_PATH': functools__.partial(
             cast_value__,
-            name='OPENMODELICAHOME',
+            name='OMC_PATH',
+            optional=False,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        ),
+        'SYSTEM_PATH': functools__.partial(
+            cast_value__,
+            name='SYSTEM_PATH',
+            optional=False,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        ),
+        'OMDEV_PATH': functools__.partial(
+            cast_value__,
+            name='OMDEV_PATH',
             optional=False,
             class_=numpy__.str_,
             class_restrictions=(numpy__.str, numpy__.str_),
@@ -162,14 +162,6 @@ class CheckSettingsResult(
             class_restrictions=(numpy__.bool, numpy__.bool_),
             sizes=(),
         ),
-        'WORKING_DIRECTORY': functools__.partial(
-            cast_value__,
-            name='WORKING_DIRECTORY',
-            optional=False,
-            class_=numpy__.str_,
-            class_restrictions=(numpy__.str, numpy__.str_),
-            sizes=(),
-        ),
         'MODELICAUSERCFLAGS': functools__.partial(
             cast_value__,
             name='MODELICAUSERCFLAGS',
@@ -178,12 +170,12 @@ class CheckSettingsResult(
             class_restrictions=(numpy__.str, numpy__.str_),
             sizes=(),
         ),
-        'REMOVE_FILE_WORKS': functools__.partial(
+        'WORKING_DIRECTORY': functools__.partial(
             cast_value__,
-            name='REMOVE_FILE_WORKS',
+            name='WORKING_DIRECTORY',
             optional=False,
-            class_=numpy__.bool_,
-            class_restrictions=(numpy__.bool, numpy__.bool_),
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
             sizes=(),
         ),
         'CREATE_FILE_WORKS': functools__.partial(
@@ -194,25 +186,17 @@ class CheckSettingsResult(
             class_restrictions=(numpy__.bool, numpy__.bool_),
             sizes=(),
         ),
-        'C_COMPILER_VERSION': functools__.partial(
+        'REMOVE_FILE_WORKS': functools__.partial(
             cast_value__,
-            name='C_COMPILER_VERSION',
+            name='REMOVE_FILE_WORKS',
             optional=False,
-            class_=numpy__.str_,
-            class_restrictions=(numpy__.str, numpy__.str_),
+            class_=numpy__.bool_,
+            class_restrictions=(numpy__.bool, numpy__.bool_),
             sizes=(),
         ),
-        'C_COMPILER': functools__.partial(
+        'OS': functools__.partial(
             cast_value__,
-            name='C_COMPILER',
-            optional=False,
-            class_=numpy__.str_,
-            class_restrictions=(numpy__.str, numpy__.str_),
-            sizes=(),
-        ),
-        'SENDDATALIBS': functools__.partial(
-            cast_value__,
-            name='SENDDATALIBS',
+            name='OS',
             optional=False,
             class_=numpy__.str_,
             class_restrictions=(numpy__.str, numpy__.str_),
@@ -226,25 +210,41 @@ class CheckSettingsResult(
             class_restrictions=(numpy__.str, numpy__.str_),
             sizes=(),
         ),
-        'OS': functools__.partial(
+        'SENDDATALIBS': functools__.partial(
             cast_value__,
-            name='OS',
+            name='SENDDATALIBS',
             optional=False,
             class_=numpy__.str_,
             class_restrictions=(numpy__.str, numpy__.str_),
             sizes=(),
         ),
-        'HAVE_CORBA': functools__.partial(
+        'C_COMPILER': functools__.partial(
             cast_value__,
-            name='HAVE_CORBA',
+            name='C_COMPILER',
             optional=False,
-            class_=numpy__.bool_,
-            class_restrictions=(numpy__.bool, numpy__.bool_),
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        ),
+        'C_COMPILER_VERSION': functools__.partial(
+            cast_value__,
+            name='C_COMPILER_VERSION',
+            optional=False,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
             sizes=(),
         ),
         'C_COMPILER_RESPONDING': functools__.partial(
             cast_value__,
             name='C_COMPILER_RESPONDING',
+            optional=False,
+            class_=numpy__.bool_,
+            class_restrictions=(numpy__.bool, numpy__.bool_),
+            sizes=(),
+        ),
+        'HAVE_CORBA': functools__.partial(
+            cast_value__,
+            name='HAVE_CORBA',
             optional=False,
             class_=numpy__.bool_,
             class_restrictions=(numpy__.bool, numpy__.bool_),
@@ -5366,8 +5366,8 @@ end listFile;
 
     def diffModelicaFileListings(
         self,
-        after,
         before,
+        after,
         diffFormat=None,
     ):
         """
@@ -5380,15 +5380,15 @@ end diffModelicaFileListings;
 ```
         """
         # Argument check
-        after__internal__ = cast_value__(
-            name='after', value=after,
+        before__internal__ = cast_value__(
+            name='before', value=before,
             optional=False,
             class_=numpy__.str_,
             class_restrictions=(numpy__.str, numpy__.str_),
             sizes=(),
         )
-        before__internal__ = cast_value__(
-            name='before', value=before,
+        after__internal__ = cast_value__(
+            name='after', value=after,
             optional=False,
             class_=numpy__.str_,
             class_restrictions=(numpy__.str, numpy__.str_),
@@ -5404,8 +5404,8 @@ end diffModelicaFileListings;
 
         # Pack keyword arguments
         __kwrds = {
-            'after': after__internal__,
             'before': before__internal__,
+            'after': after__internal__,
             'diffFormat': diffFormat__internal__,
         }
 
@@ -6212,6 +6212,18 @@ end buildEncryptedPackage;
 
     def simulate(
         self,
+        className,
+        startTime=None,
+        stopTime=None,
+        numberOfIntervals=None,
+        tolerance=None,
+        method=None,
+        fileNamePrefix=None,
+        options=None,
+        outputFormat=None,
+        variableFilter=None,
+        cflags=None,
+        simflags=None,
     ):
         """
 ```modelica
@@ -6246,16 +6258,112 @@ end simulate;
 ```
         """
         # Argument check
+        className__internal__ = cast_value__(
+            name='className', value=className,
+            optional=False,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
+        startTime__internal__ = cast_value__(
+            name='startTime', value=startTime,
+            optional=True,
+            class_=numpy__.double,
+            class_restrictions=(numpy__.float, numpy__.double),
+            sizes=(),
+        )
+        stopTime__internal__ = cast_value__(
+            name='stopTime', value=stopTime,
+            optional=True,
+            class_=numpy__.double,
+            class_restrictions=(numpy__.float, numpy__.double),
+            sizes=(),
+        )
+        numberOfIntervals__internal__ = cast_value__(
+            name='numberOfIntervals', value=numberOfIntervals,
+            optional=True,
+            class_=numpy__.double,
+            class_restrictions=(numpy__.float, numpy__.double),
+            sizes=(),
+        )
+        tolerance__internal__ = cast_value__(
+            name='tolerance', value=tolerance,
+            optional=True,
+            class_=numpy__.double,
+            class_restrictions=(numpy__.float, numpy__.double),
+            sizes=(),
+        )
+        method__internal__ = cast_value__(
+            name='method', value=method,
+            optional=True,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        )
+        fileNamePrefix__internal__ = cast_value__(
+            name='fileNamePrefix', value=fileNamePrefix,
+            optional=True,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        )
+        options__internal__ = cast_value__(
+            name='options', value=options,
+            optional=True,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        )
+        outputFormat__internal__ = cast_value__(
+            name='outputFormat', value=outputFormat,
+            optional=True,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        )
+        variableFilter__internal__ = cast_value__(
+            name='variableFilter', value=variableFilter,
+            optional=True,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        )
+        cflags__internal__ = cast_value__(
+            name='cflags', value=cflags,
+            optional=True,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        )
+        simflags__internal__ = cast_value__(
+            name='simflags', value=simflags,
+            optional=True,
+            class_=numpy__.str_,
+            class_restrictions=(numpy__.str, numpy__.str_),
+            sizes=(),
+        )
 
-        # Pack positional arguments
-        __args = [
-        ]
+        # Pack keyword arguments
+        __kwrds = {
+            'className': className__internal__,
+            'startTime': startTime__internal__,
+            'stopTime': stopTime__internal__,
+            'numberOfIntervals': numberOfIntervals__internal__,
+            'tolerance': tolerance__internal__,
+            'method': method__internal__,
+            'fileNamePrefix': fileNamePrefix__internal__,
+            'options': options__internal__,
+            'outputFormat': outputFormat__internal__,
+            'variableFilter': variableFilter__internal__,
+            'cflags': cflags__internal__,
+            'simflags': simflags__internal__,
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'OpenModelica.Scripting.simulate',
-            args=__args
+            kwrds=__kwrds
         )
 
         return __result
@@ -11422,6 +11530,7 @@ end getInheritedClasses;
 
     def getComponentsTest(
         self,
+        name,
     ):
         """
 ```modelica
@@ -11448,9 +11557,17 @@ end getComponentsTest;
 ```
         """
         # Argument check
+        name__internal__ = cast_value__(
+            name='name', value=name,
+            optional=False,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
 
         # Pack positional arguments
         __args = [
+            name__internal__,
         ]
 
         # Call function
