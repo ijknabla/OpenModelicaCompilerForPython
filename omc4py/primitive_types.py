@@ -30,35 +30,6 @@ def valid_identifier(
         return False
 
 
-class TypeSpecifierSplitVisitor(
-    arpeggio.PTNodeVisitor,
-):
-    def visit_IDENT(
-        self,
-        node,
-        children,
-    ) -> str:
-        return node.value
-
-    def visit_name(
-        self,
-        node,
-        children
-    ) -> typing.Tuple[str, ...]:
-        return tuple(children.IDENT)
-
-    def visit_type_specifier(
-        self,
-        node,
-        children,
-    ) -> typing.Tuple[str, ...]:
-        name = children.name[0]
-        if node[0].value == ".":
-            return (".", *name)
-        else:
-            return name
-
-
 def split_type_specifier(
     type_specifier: str
 ) -> typing.Tuple[str, ...]:
@@ -67,7 +38,7 @@ def split_type_specifier(
             parser.type_specifier_parser.parse(
                 type_specifier,
             ),
-            TypeSpecifierSplitVisitor()
+            visitor.TypeSpecifierSplitVisitor()
         )
     except arpeggio.NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
@@ -228,4 +199,5 @@ class TypeName(
 from omc4py.session import (  # noqa: E402
     parser,
     string,
+    visitor,
 )
