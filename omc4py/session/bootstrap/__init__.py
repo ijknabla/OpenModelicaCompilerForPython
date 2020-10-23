@@ -647,6 +647,38 @@ class OutputType(
     xml = enum.auto()
 
 
+from . import generate  # TODO: organize package structure
+
+
+def generate_omc_interface(
+    inputPath: Path,
+    inputType: InputType,
+    outputFile: typing.BinaryIO,
+    outputType: OutputType,
+):
+    if inputType is InputType.executable:
+        with open_session(inputPath) as session:
+            omc_interface_xml = generate_omc_interface_xml(
+                session
+            )
+    else:  # inputType is InputType.xml:
+        omc_interface_xml = xml.parse(inputPath)
+
+    schema = load_schema()
+    schema.assertValid(omc_interface_xml)
+
+    if outputType is OutputType.module:
+        module_code = generate.create_module(omc_interface_xml)
+        module_code.bdump(outputFile)
+    else:  # outputType is OutputType.xml:
+        omc_interface_xml.write(
+            outputFile,
+            pretty_print=True,
+            xml_declaration=True,
+            encoding="utf-8",
+        )
+
+
 def check_input_args(
     input_str: str,
     inputType_hint: typing.Optional[InputType]
@@ -774,5 +806,7 @@ Refactored main
         None if args.outputType is None else OutputType[args.outputType],
     )
 
-    print(inputPath, inputType)
-    print(outputFile, outputType)
+    generate_omc_interface(
+        inputPath, inputType,
+        outputFile, outputType,
+    )
