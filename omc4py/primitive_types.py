@@ -111,9 +111,8 @@ class TypeName(
 
     def __new__(cls, *parts):
         return cls._from_parts_no_check(
-            sum(
-                map(cls.to_variableNames, parts),
-                (),
+            cls.__checked_parts(
+                parts
             )
         )
 
@@ -158,6 +157,30 @@ class TypeName(
             return parent
         else:
             return self
+
+    @staticmethod
+    def __checked_parts(
+        objs: typing.Iterable,
+    ) -> typing.Iterator[str]:
+
+        def not_checked_parts(
+        ) -> typing.Iterator[str]:
+            for obj in objs:
+                if isinstance(obj, TypeName):
+                    yield from obj.parts
+                elif isinstance(obj, VariableName):
+                    yield str(obj)
+                else:
+                    yield from split_type_specifier(str(obj))
+
+        for i, part in enumerate(
+            not_checked_parts()
+        ):
+            if part == "." and not i == 0:
+                raise ValueError(
+                    f"parts[{i}] is invalid, got {part!r}"
+                )
+            yield part
 
     @staticmethod
     def to_variableNames(
