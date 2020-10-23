@@ -715,6 +715,9 @@ Refactored main
 
     args = parser.parse_args()
 
+    inputPath: Path
+    inputType: InputType
+
     inputPath, inputType = check_input(
         args.input,
         None if args.inputType is None else InputType[args.inputType],
