@@ -92,9 +92,7 @@ class VariableName(
                 f"Invalid modelica identifier, got {obj_str!r}"
             )
 
-        self = object.__new__(cls)
-        self.__str = obj_str
-        return self
+        return cls._from_str_no_check(obj_str)
 
     @classmethod
     def _from_str_no_check(
