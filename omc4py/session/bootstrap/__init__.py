@@ -647,15 +647,15 @@ class OutputType(
     xml = enum.auto()
 
 
-def check_input(
+def check_input_args(
     input_str: str,
     inputType_hint: typing.Optional[InputType]
 ) -> typing.Tuple[Path, InputType]:
     if inputType_hint is None:
         if Path(input_str).suffix == ".xml":
-            return check_input(input_str, InputType.xml)
+            return check_input_args(input_str, InputType.xml)
         else:
-            return check_input(input_str, InputType.executable)
+            return check_input_args(input_str, InputType.executable)
 
     elif inputType_hint is InputType.executable:
         executable = shutil.which(input_str)
@@ -678,7 +678,7 @@ def check_input(
         return absPath, InputType.xml
 
 
-def check_output(
+def check_output_args(
     output_optional: typing.Optional[typing.BinaryIO],
     outputType_hint: typing.Optional[OutputType],
 ) -> typing.Tuple[typing.BinaryIO, OutputType]:
@@ -765,17 +765,11 @@ Refactored main
 
     args = parser.parse_args()
 
-    inputPath: Path
-    inputType: InputType
-    outputFile: typing.BinaryIO
-    outputType: OutputType
-
-    inputPath, inputType = check_input(
+    inputPath, inputType = check_input_args(
         args.input,
         None if args.inputType is None else InputType[args.inputType],
     )
-
-    outputFile, outputType = check_output(
+    outputFile, outputType = check_output_args(
         args.output,
         None if args.outputType is None else OutputType[args.outputType],
     )
