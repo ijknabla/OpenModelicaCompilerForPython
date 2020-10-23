@@ -120,8 +120,8 @@ class TypeName(
     @property
     def parts(
         self,
-    ) -> typing.Tuple[VariableName, ...]:
-        return self.__parts
+    ) -> typing.Tuple[str, ...]:
+        return tuple(map(str, self.__parts))
 
     @property
     def last_identifier(
