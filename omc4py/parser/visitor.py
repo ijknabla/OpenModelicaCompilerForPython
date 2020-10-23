@@ -6,8 +6,10 @@ import operator
 import typing
 
 from omc4py.primitive_types import (
-    VariableName,
+    Integer,
+    Real,
     TypeName,
+    VariableName,
     _TypeName_from_valid_parts_no_check,
 )
 
@@ -105,9 +107,9 @@ class NumberVisitor(
 
     def visit_UNSIGNED_NUMBER(self, node, *_):
         try:
-            return int(node.value)
+            return Integer(int(node.value))
         except ValueError:
-            return float(node.value)
+            return Real(node.value)
 
     def visit_number(self, node, children):
         sign = getitem_with_default(
