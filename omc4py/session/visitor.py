@@ -1,7 +1,7 @@
 
 import arpeggio  # type: ignore
 import enum
-import numpy
+import numpy  # type: ignore
 import operator
 import typing
 
