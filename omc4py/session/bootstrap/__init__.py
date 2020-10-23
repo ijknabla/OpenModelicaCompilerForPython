@@ -693,6 +693,7 @@ Refactored main
     # default is None (selected by `input`)
     parser.add_argument(
         "--inputType",
+        choices=InputType.__members__,
     )
 
     # # output
@@ -706,7 +707,14 @@ Refactored main
     # default is None (select by `output`)
     parser.add_argument(
         "--outputType",
+        choices=OutputType.__members__,
     )
 
     args = parser.parse_args()
-    print(args)
+
+    inputPath, inputType = check_input(
+        args.input,
+        None if args.inputType is None else InputType[args.inputType],
+    )
+
+    print(inputPath, inputType)
