@@ -668,7 +668,7 @@ end checkSettings;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.checkSettings',
+            'checkSettings',
             args=__args
         )
 
@@ -723,7 +723,7 @@ end loadFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadFile',
+            'loadFile',
             kwrds=__kwrds
         )
 
@@ -778,7 +778,7 @@ end loadFiles;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadFiles',
+            'loadFiles',
             kwrds=__kwrds
         )
 
@@ -823,7 +823,7 @@ end loadEncryptedPackage;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadEncryptedPackage',
+            'loadEncryptedPackage',
             kwrds=__kwrds
         )
 
@@ -868,7 +868,7 @@ end reloadClass;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.reloadClass',
+            'reloadClass',
             kwrds=__kwrds
         )
 
@@ -933,7 +933,7 @@ end loadString;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadString',
+            'loadString',
             kwrds=__kwrds
         )
 
@@ -978,7 +978,7 @@ end parseString;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.parseString',
+            'parseString',
             kwrds=__kwrds
         )
 
@@ -1023,7 +1023,7 @@ end parseFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.parseFile',
+            'parseFile',
             kwrds=__kwrds
         )
 
@@ -1068,7 +1068,7 @@ end loadFileInteractiveQualified;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadFileInteractiveQualified',
+            'loadFileInteractiveQualified',
             kwrds=__kwrds
         )
 
@@ -1113,7 +1113,7 @@ end loadFileInteractive;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadFileInteractive',
+            'loadFileInteractive',
             kwrds=__kwrds
         )
 
@@ -1158,7 +1158,7 @@ end system;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.system',
+            'system',
             kwrds=__kwrds
         )
 
@@ -1203,7 +1203,7 @@ end system_parallel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.system_parallel',
+            'system_parallel',
             kwrds=__kwrds
         )
 
@@ -1238,7 +1238,7 @@ end saveAll;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.saveAll',
+            'saveAll',
             args=__args
         )
 
@@ -1273,7 +1273,7 @@ end help;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.help',
+            'help',
             kwrds=__kwrds
         )
 
@@ -1298,7 +1298,7 @@ end clear;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.clear',
+            'clear',
             args=__args
         )
 
@@ -1323,7 +1323,7 @@ end clearProgram;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.clearProgram',
+            'clearProgram',
             args=__args
         )
 
@@ -1348,7 +1348,7 @@ end clearVariables;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.clearVariables',
+            'clearVariables',
             args=__args
         )
 
@@ -1383,7 +1383,7 @@ end generateHeader;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateHeader',
+            'generateHeader',
             args=__args
         )
 
@@ -1428,7 +1428,7 @@ end generateSeparateCode;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateSeparateCode',
+            'generateSeparateCode',
             kwrds=__kwrds
         )
 
@@ -1463,7 +1463,7 @@ end generateSeparateCodeDependencies;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateSeparateCodeDependencies',
+            'generateSeparateCodeDependencies',
             kwrds=__kwrds
         )
 
@@ -1518,7 +1518,7 @@ end generateSeparateCodeDependenciesMakefile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile',
+            'generateSeparateCodeDependenciesMakefile',
             kwrds=__kwrds
         )
 
@@ -1543,7 +1543,7 @@ end getLinker;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getLinker',
+            'getLinker',
             args=__args
         )
 
@@ -1578,7 +1578,7 @@ end setLinker;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setLinker',
+            'setLinker',
             args=__args
         )
 
@@ -1603,7 +1603,7 @@ end getLinkerFlags;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getLinkerFlags',
+            'getLinkerFlags',
             args=__args
         )
 
@@ -1638,7 +1638,7 @@ end setLinkerFlags;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setLinkerFlags',
+            'setLinkerFlags',
             args=__args
         )
 
@@ -1663,7 +1663,7 @@ end getCompiler;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getCompiler',
+            'getCompiler',
             args=__args
         )
 
@@ -1698,7 +1698,7 @@ end setCompiler;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCompiler',
+            'setCompiler',
             args=__args
         )
 
@@ -1733,7 +1733,7 @@ end setCFlags;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCFlags',
+            'setCFlags',
             args=__args
         )
 
@@ -1758,7 +1758,7 @@ end getCFlags;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getCFlags',
+            'getCFlags',
             args=__args
         )
 
@@ -1783,7 +1783,7 @@ end getCXXCompiler;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getCXXCompiler',
+            'getCXXCompiler',
             args=__args
         )
 
@@ -1818,7 +1818,7 @@ end setCXXCompiler;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCXXCompiler',
+            'setCXXCompiler',
             args=__args
         )
 
@@ -1843,7 +1843,7 @@ end verifyCompiler;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.verifyCompiler',
+            'verifyCompiler',
             args=__args
         )
 
@@ -1878,7 +1878,7 @@ end setCompilerPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCompilerPath',
+            'setCompilerPath',
             args=__args
         )
 
@@ -1903,7 +1903,7 @@ end getCompileCommand;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getCompileCommand',
+            'getCompileCommand',
             args=__args
         )
 
@@ -1938,7 +1938,7 @@ end setCompileCommand;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCompileCommand',
+            'setCompileCommand',
             args=__args
         )
 
@@ -1973,7 +1973,7 @@ end setPlotCommand;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setPlotCommand',
+            'setPlotCommand',
             args=__args
         )
 
@@ -1998,7 +1998,7 @@ end getSettings;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getSettings',
+            'getSettings',
             args=__args
         )
 
@@ -2033,7 +2033,7 @@ end setTempDirectoryPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setTempDirectoryPath',
+            'setTempDirectoryPath',
             args=__args
         )
 
@@ -2058,7 +2058,7 @@ end getTempDirectoryPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getTempDirectoryPath',
+            'getTempDirectoryPath',
             args=__args
         )
 
@@ -2093,7 +2093,7 @@ end getEnvironmentVar;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getEnvironmentVar',
+            'getEnvironmentVar',
             args=__args
         )
 
@@ -2138,7 +2138,7 @@ end setEnvironmentVar;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setEnvironmentVar',
+            'setEnvironmentVar',
             args=__args
         )
 
@@ -2183,7 +2183,7 @@ end appendEnvironmentVar;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.appendEnvironmentVar',
+            'appendEnvironmentVar',
             args=__args
         )
 
@@ -2218,7 +2218,7 @@ end setInstallationDirectoryPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setInstallationDirectoryPath',
+            'setInstallationDirectoryPath',
             args=__args
         )
 
@@ -2243,7 +2243,7 @@ end getInstallationDirectoryPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInstallationDirectoryPath',
+            'getInstallationDirectoryPath',
             args=__args
         )
 
@@ -2278,7 +2278,7 @@ end setModelicaPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setModelicaPath',
+            'setModelicaPath',
             args=__args
         )
 
@@ -2303,7 +2303,7 @@ end getModelicaPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getModelicaPath',
+            'getModelicaPath',
             args=__args
         )
 
@@ -2338,7 +2338,7 @@ end setCompilerFlags;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCompilerFlags',
+            'setCompilerFlags',
             args=__args
         )
 
@@ -2373,7 +2373,7 @@ end setDebugFlags;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setDebugFlags',
+            'setDebugFlags',
             args=__args
         )
 
@@ -2398,7 +2398,7 @@ end clearDebugFlags;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.clearDebugFlags',
+            'clearDebugFlags',
             args=__args
         )
 
@@ -2433,7 +2433,7 @@ end setPreOptModules;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setPreOptModules',
+            'setPreOptModules',
             args=__args
         )
 
@@ -2468,7 +2468,7 @@ end setCheapMatchingAlgorithm;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCheapMatchingAlgorithm',
+            'setCheapMatchingAlgorithm',
             args=__args
         )
 
@@ -2493,7 +2493,7 @@ end getMatchingAlgorithm;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getMatchingAlgorithm',
+            'getMatchingAlgorithm',
             args=__args
         )
 
@@ -2519,7 +2519,7 @@ end getAvailableMatchingAlgorithms;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAvailableMatchingAlgorithms',
+            'getAvailableMatchingAlgorithms',
             args=__args
         )
 
@@ -2554,7 +2554,7 @@ end setMatchingAlgorithm;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setMatchingAlgorithm',
+            'setMatchingAlgorithm',
             args=__args
         )
 
@@ -2579,7 +2579,7 @@ end getIndexReductionMethod;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getIndexReductionMethod',
+            'getIndexReductionMethod',
             args=__args
         )
 
@@ -2605,7 +2605,7 @@ end getAvailableIndexReductionMethods;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAvailableIndexReductionMethods',
+            'getAvailableIndexReductionMethods',
             args=__args
         )
 
@@ -2640,7 +2640,7 @@ end setIndexReductionMethod;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setIndexReductionMethod',
+            'setIndexReductionMethod',
             args=__args
         )
 
@@ -2675,7 +2675,7 @@ end setPostOptModules;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setPostOptModules',
+            'setPostOptModules',
             args=__args
         )
 
@@ -2700,7 +2700,7 @@ end getTearingMethod;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getTearingMethod',
+            'getTearingMethod',
             args=__args
         )
 
@@ -2726,7 +2726,7 @@ end getAvailableTearingMethods;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAvailableTearingMethods',
+            'getAvailableTearingMethods',
             args=__args
         )
 
@@ -2761,7 +2761,7 @@ end setTearingMethod;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setTearingMethod',
+            'setTearingMethod',
             args=__args
         )
 
@@ -2796,7 +2796,7 @@ end setCommandLineOptions;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setCommandLineOptions',
+            'setCommandLineOptions',
             args=__args
         )
 
@@ -2821,7 +2821,7 @@ end getCommandLineOptions;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getCommandLineOptions',
+            'getCommandLineOptions',
             args=__args
         )
 
@@ -2858,7 +2858,7 @@ end getConfigFlagValidOptions;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getConfigFlagValidOptions',
+            'getConfigFlagValidOptions',
             args=__args
         )
 
@@ -2883,7 +2883,7 @@ end clearCommandLineOptions;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.clearCommandLineOptions',
+            'clearCommandLineOptions',
             args=__args
         )
 
@@ -2918,7 +2918,7 @@ end getVersion;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getVersion',
+            'getVersion',
             kwrds=__kwrds
         )
 
@@ -2953,7 +2953,7 @@ end regularFileExists;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.regularFileExists',
+            'regularFileExists',
             args=__args
         )
 
@@ -2988,7 +2988,7 @@ end directoryExists;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.directoryExists',
+            'directoryExists',
             args=__args
         )
 
@@ -3025,7 +3025,7 @@ end stat;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.stat',
+            'stat',
             args=__args
         )
 
@@ -3060,7 +3060,7 @@ end readFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.readFile',
+            'readFile',
             args=__args
         )
 
@@ -3115,7 +3115,7 @@ end writeFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.writeFile',
+            'writeFile',
             kwrds=__kwrds
         )
 
@@ -3160,7 +3160,7 @@ end compareFilesAndMove;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.compareFilesAndMove',
+            'compareFilesAndMove',
             args=__args
         )
 
@@ -3205,7 +3205,7 @@ end compareFiles;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.compareFiles',
+            'compareFiles',
             args=__args
         )
 
@@ -3240,7 +3240,7 @@ end alarm;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.alarm',
+            'alarm',
             args=__args
         )
 
@@ -3316,7 +3316,7 @@ end regex;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.regex',
+            'regex',
             kwrds=__kwrds
         )
 
@@ -3381,7 +3381,7 @@ end regexBool;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.regexBool',
+            'regexBool',
             kwrds=__kwrds
         )
 
@@ -3416,7 +3416,7 @@ end testsuiteFriendlyName;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.testsuiteFriendlyName',
+            'testsuiteFriendlyName',
             args=__args
         )
 
@@ -3451,7 +3451,7 @@ end readFileNoNumeric;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.readFileNoNumeric',
+            'readFileNoNumeric',
             args=__args
         )
 
@@ -3486,7 +3486,7 @@ end getErrorString;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getErrorString',
+            'getErrorString',
             kwrds=__kwrds
         )
 
@@ -3511,7 +3511,7 @@ end getMessagesString;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getMessagesString',
+            'getMessagesString',
             args=__args
         )
 
@@ -3546,7 +3546,7 @@ end getMessagesStringInternal;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getMessagesStringInternal',
+            'getMessagesStringInternal',
             kwrds=__kwrds
         )
 
@@ -3573,7 +3573,7 @@ end countMessages;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.countMessages',
+            'countMessages',
             args=__args
         )
 
@@ -3598,7 +3598,7 @@ end clearMessages;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.clearMessages',
+            'clearMessages',
             args=__args
         )
 
@@ -3633,7 +3633,7 @@ end runScript;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.runScript',
+            'runScript',
             args=__args
         )
 
@@ -3668,7 +3668,7 @@ end echo;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.echo',
+            'echo',
             args=__args
         )
 
@@ -3693,7 +3693,7 @@ end getClassesInModelicaPath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getClassesInModelicaPath',
+            'getClassesInModelicaPath',
             args=__args
         )
 
@@ -3718,7 +3718,7 @@ end getAnnotationVersion;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAnnotationVersion',
+            'getAnnotationVersion',
             args=__args
         )
 
@@ -3753,7 +3753,7 @@ end setAnnotationVersion;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setAnnotationVersion',
+            'setAnnotationVersion',
             args=__args
         )
 
@@ -3778,7 +3778,7 @@ end getNoSimplify;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNoSimplify',
+            'getNoSimplify',
             args=__args
         )
 
@@ -3813,7 +3813,7 @@ end setNoSimplify;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setNoSimplify',
+            'setNoSimplify',
             args=__args
         )
 
@@ -3838,7 +3838,7 @@ end getVectorizationLimit;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getVectorizationLimit',
+            'getVectorizationLimit',
             args=__args
         )
 
@@ -3873,7 +3873,7 @@ end setVectorizationLimit;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setVectorizationLimit',
+            'setVectorizationLimit',
             args=__args
         )
 
@@ -3898,7 +3898,7 @@ end getDefaultOpenCLDevice;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getDefaultOpenCLDevice',
+            'getDefaultOpenCLDevice',
             args=__args
         )
 
@@ -3933,7 +3933,7 @@ end setDefaultOpenCLDevice;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setDefaultOpenCLDevice',
+            'setDefaultOpenCLDevice',
             args=__args
         )
 
@@ -3968,7 +3968,7 @@ end setShowAnnotations;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setShowAnnotations',
+            'setShowAnnotations',
             args=__args
         )
 
@@ -3993,7 +3993,7 @@ end getShowAnnotations;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getShowAnnotations',
+            'getShowAnnotations',
             args=__args
         )
 
@@ -4028,7 +4028,7 @@ end setOrderConnections;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setOrderConnections',
+            'setOrderConnections',
             args=__args
         )
 
@@ -4053,7 +4053,7 @@ end getOrderConnections;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getOrderConnections',
+            'getOrderConnections',
             args=__args
         )
 
@@ -4088,7 +4088,7 @@ end setLanguageStandard;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setLanguageStandard',
+            'setLanguageStandard',
             args=__args
         )
 
@@ -4113,7 +4113,7 @@ end getLanguageStandard;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getLanguageStandard',
+            'getLanguageStandard',
             args=__args
         )
 
@@ -4148,7 +4148,7 @@ end getAstAsCorbaString;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAstAsCorbaString',
+            'getAstAsCorbaString',
             kwrds=__kwrds
         )
 
@@ -4183,7 +4183,7 @@ end cd;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.cd',
+            'cd',
             kwrds=__kwrds
         )
 
@@ -4218,7 +4218,7 @@ end mkdir;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.mkdir',
+            'mkdir',
             args=__args
         )
 
@@ -4263,7 +4263,7 @@ end copy;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.copy',
+            'copy',
             args=__args
         )
 
@@ -4298,7 +4298,7 @@ end remove;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.remove',
+            'remove',
             args=__args
         )
 
@@ -4333,7 +4333,7 @@ end checkModel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.checkModel',
+            'checkModel',
             args=__args
         )
 
@@ -4378,7 +4378,7 @@ end checkAllModelsRecursive;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.checkAllModelsRecursive',
+            'checkAllModelsRecursive',
             kwrds=__kwrds
         )
 
@@ -4413,7 +4413,7 @@ end typeOf;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.typeOf',
+            'typeOf',
             args=__args
         )
 
@@ -4448,7 +4448,7 @@ end instantiateModel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.instantiateModel',
+            'instantiateModel',
             args=__args
         )
 
@@ -4503,7 +4503,7 @@ end buildOpenTURNSInterface;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.buildOpenTURNSInterface',
+            'buildOpenTURNSInterface',
             kwrds=__kwrds
         )
 
@@ -4538,7 +4538,7 @@ end runOpenTURNSPythonScript;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.runOpenTURNSPythonScript',
+            'runOpenTURNSPythonScript',
             args=__args
         )
 
@@ -4573,7 +4573,7 @@ end generateCode;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateCode',
+            'generateCode',
             args=__args
         )
 
@@ -4648,7 +4648,7 @@ end loadModel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadModel',
+            'loadModel',
             kwrds=__kwrds
         )
 
@@ -4683,7 +4683,7 @@ end deleteFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.deleteFile',
+            'deleteFile',
             args=__args
         )
 
@@ -4728,7 +4728,7 @@ end saveModel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.saveModel',
+            'saveModel',
             args=__args
         )
 
@@ -4793,7 +4793,7 @@ end saveTotalModel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.saveTotalModel',
+            'saveTotalModel',
             kwrds=__kwrds
         )
 
@@ -4828,7 +4828,7 @@ end save;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.save',
+            'save',
             args=__args
         )
 
@@ -4865,7 +4865,7 @@ end translateGraphics;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.translateGraphics',
+            'translateGraphics',
             args=__args
         )
 
@@ -4971,7 +4971,7 @@ end dumpXMLDAE;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.dumpXMLDAE',
+            'dumpXMLDAE',
             kwrds=__kwrds
         )
 
@@ -5018,7 +5018,7 @@ end convertUnits;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.convertUnits',
+            'convertUnits',
             args=__args
         )
 
@@ -5053,7 +5053,7 @@ end getDerivedUnits;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getDerivedUnits',
+            'getDerivedUnits',
             args=__args
         )
 
@@ -5078,7 +5078,7 @@ end listVariables;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.listVariables',
+            'listVariables',
             args=__args
         )
 
@@ -5123,7 +5123,7 @@ end strtok;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.strtok',
+            'strtok',
             args=__args
         )
 
@@ -5168,7 +5168,7 @@ end stringSplit;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.stringSplit',
+            'stringSplit',
             args=__args
         )
 
@@ -5223,7 +5223,7 @@ end stringReplace;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.stringReplace',
+            'stringReplace',
             args=__args
         )
 
@@ -5258,7 +5258,7 @@ end escapeXML;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.escapeXML',
+            'escapeXML',
             args=__args
         )
 
@@ -5323,7 +5323,7 @@ end list;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.list',
+            'list',
             kwrds=__kwrds
         )
 
@@ -5358,7 +5358,7 @@ end listFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.listFile',
+            'listFile',
             args=__args
         )
 
@@ -5412,7 +5412,7 @@ end diffModelicaFileListings;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.diffModelicaFileListings',
+            'diffModelicaFileListings',
             kwrds=__kwrds
         )
 
@@ -5497,7 +5497,7 @@ end exportToFigaro;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.exportToFigaro',
+            'exportToFigaro',
             kwrds=__kwrds
         )
 
@@ -5532,7 +5532,7 @@ end inferBindings;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.inferBindings',
+            'inferBindings',
             args=__args
         )
 
@@ -5567,7 +5567,7 @@ end generateVerificationScenarios;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateVerificationScenarios',
+            'generateVerificationScenarios',
             args=__args
         )
 
@@ -5612,7 +5612,7 @@ end rewriteBlockCall;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.rewriteBlockCall',
+            'rewriteBlockCall',
             args=__args
         )
 
@@ -5647,7 +5647,7 @@ end realpath;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.realpath',
+            'realpath',
             args=__args
         )
 
@@ -5682,7 +5682,7 @@ end uriToFilename;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.uriToFilename',
+            'uriToFilename',
             args=__args
         )
 
@@ -5707,7 +5707,7 @@ end getLoadedLibraries;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getLoadedLibraries',
+            'getLoadedLibraries',
             args=__args
         )
 
@@ -5773,7 +5773,7 @@ end solveLinearSystem;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.solveLinearSystem',
+            'solveLinearSystem',
             kwrds=__kwrds
         )
 
@@ -5818,7 +5818,7 @@ end reopenStandardStream;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.reopenStandardStream',
+            'reopenStandardStream',
             args=__args
         )
 
@@ -5913,7 +5913,7 @@ end importFMU;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.importFMU',
+            'importFMU',
             kwrds=__kwrds
         )
 
@@ -6008,7 +6008,7 @@ end importFMUModelDescription;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.importFMUModelDescription',
+            'importFMUModelDescription',
             kwrds=__kwrds
         )
 
@@ -6083,7 +6083,7 @@ end translateModelFMU;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.translateModelFMU',
+            'translateModelFMU',
             kwrds=__kwrds
         )
 
@@ -6168,7 +6168,7 @@ end buildModelFMU;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.buildModelFMU',
+            'buildModelFMU',
             kwrds=__kwrds
         )
 
@@ -6204,7 +6204,7 @@ end buildEncryptedPackage;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.buildEncryptedPackage',
+            'buildEncryptedPackage',
             args=__args
         )
 
@@ -6362,7 +6362,7 @@ end simulate;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.simulate',
+            'simulate',
             kwrds=__kwrds
         )
 
@@ -6507,7 +6507,7 @@ end buildModel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.buildModel',
+            'buildModel',
             kwrds=__kwrds
         )
 
@@ -6652,7 +6652,7 @@ end buildLabel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.buildLabel',
+            'buildLabel',
             kwrds=__kwrds
         )
 
@@ -6807,7 +6807,7 @@ end reduceTerms;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.reduceTerms',
+            'reduceTerms',
             kwrds=__kwrds
         )
 
@@ -6852,7 +6852,7 @@ end moveClass;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.moveClass',
+            'moveClass',
             args=__args
         )
 
@@ -6887,7 +6887,7 @@ end moveClassToTop;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.moveClassToTop',
+            'moveClassToTop',
             args=__args
         )
 
@@ -6922,7 +6922,7 @@ end moveClassToBottom;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.moveClassToBottom',
+            'moveClassToBottom',
             args=__args
         )
 
@@ -6977,7 +6977,7 @@ end copyClass;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.copyClass',
+            'copyClass',
             kwrds=__kwrds
         )
 
@@ -7152,7 +7152,7 @@ end linearize;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.linearize',
+            'linearize',
             kwrds=__kwrds
         )
 
@@ -7327,7 +7327,7 @@ end optimize;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.optimize',
+            'optimize',
             kwrds=__kwrds
         )
 
@@ -7362,7 +7362,7 @@ end getSourceFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getSourceFile',
+            'getSourceFile',
             args=__args
         )
 
@@ -7407,7 +7407,7 @@ end setSourceFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setSourceFile',
+            'setSourceFile',
             args=__args
         )
 
@@ -7442,7 +7442,7 @@ end isShortDefinition;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isShortDefinition',
+            'isShortDefinition',
             args=__args
         )
 
@@ -7487,7 +7487,7 @@ end setClassComment;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setClassComment',
+            'setClassComment',
             args=__args
         )
 
@@ -7582,7 +7582,7 @@ end getClassNames;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getClassNames',
+            'getClassNames',
             kwrds=__kwrds
         )
 
@@ -7617,7 +7617,7 @@ end getUsedClassNames;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getUsedClassNames',
+            'getUsedClassNames',
             args=__args
         )
 
@@ -7652,7 +7652,7 @@ end getPackages;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getPackages',
+            'getPackages',
             kwrds=__kwrds
         )
 
@@ -7800,7 +7800,7 @@ end basePlotFunction;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.basePlotFunction',
+            'basePlotFunction',
             kwrds=__kwrds
         )
 
@@ -7995,7 +7995,7 @@ end plot;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.plot',
+            'plot',
             kwrds=__kwrds
         )
 
@@ -8180,7 +8180,7 @@ end plotAll;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.plotAll',
+            'plotAll',
             kwrds=__kwrds
         )
 
@@ -8385,7 +8385,7 @@ end plotParametric;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.plotParametric',
+            'plotParametric',
             kwrds=__kwrds
         )
 
@@ -8440,7 +8440,7 @@ end readSimulationResult;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.readSimulationResult',
+            'readSimulationResult',
             kwrds=__kwrds
         )
 
@@ -8475,7 +8475,7 @@ end readSimulationResultSize;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.readSimulationResultSize',
+            'readSimulationResultSize',
             args=__args
         )
 
@@ -8530,7 +8530,7 @@ end readSimulationResultVars;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.readSimulationResultVars',
+            'readSimulationResultVars',
             kwrds=__kwrds
         )
 
@@ -8605,7 +8605,7 @@ end filterSimulationResults;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.filterSimulationResults',
+            'filterSimulationResults',
             kwrds=__kwrds
         )
 
@@ -8690,7 +8690,7 @@ end compareSimulationResults;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.compareSimulationResults',
+            'compareSimulationResults',
             kwrds=__kwrds
         )
 
@@ -8755,7 +8755,7 @@ end deltaSimulationResults;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.deltaSimulationResults',
+            'deltaSimulationResults',
             kwrds=__kwrds
         )
 
@@ -8861,7 +8861,7 @@ end diffSimulationResults;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.diffSimulationResults',
+            'diffSimulationResults',
             kwrds=__kwrds
         )
 
@@ -8946,7 +8946,7 @@ end diffSimulationResultsHtml;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.diffSimulationResultsHtml',
+            'diffSimulationResultsHtml',
             kwrds=__kwrds
         )
 
@@ -8991,7 +8991,7 @@ end checkTaskGraph;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.checkTaskGraph',
+            'checkTaskGraph',
             args=__args
         )
 
@@ -9036,7 +9036,7 @@ end checkCodeGraph;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.checkCodeGraph',
+            'checkCodeGraph',
             args=__args
         )
 
@@ -9091,7 +9091,7 @@ end val;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.val',
+            'val',
             kwrds=__kwrds
         )
 
@@ -9116,7 +9116,7 @@ end closeSimulationResultFile;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.closeSimulationResultFile',
+            'closeSimulationResultFile',
             args=__args
         )
 
@@ -9151,7 +9151,7 @@ end getParameterNames;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getParameterNames',
+            'getParameterNames',
             args=__args
         )
 
@@ -9196,7 +9196,7 @@ end getParameterValue;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getParameterValue',
+            'getParameterValue',
             args=__args
         )
 
@@ -9241,7 +9241,7 @@ end getComponentModifierNames;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getComponentModifierNames',
+            'getComponentModifierNames',
             args=__args
         )
 
@@ -9286,7 +9286,7 @@ end getComponentModifierValue;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getComponentModifierValue',
+            'getComponentModifierValue',
             args=__args
         )
 
@@ -9331,7 +9331,7 @@ end getComponentModifierValues;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getComponentModifierValues',
+            'getComponentModifierValues',
             args=__args
         )
 
@@ -9366,7 +9366,7 @@ end getInstantiatedParametersAndValues;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInstantiatedParametersAndValues',
+            'getInstantiatedParametersAndValues',
             args=__args
         )
 
@@ -9421,7 +9421,7 @@ end removeComponentModifiers;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.removeComponentModifiers',
+            'removeComponentModifiers',
             kwrds=__kwrds
         )
 
@@ -9476,7 +9476,7 @@ end removeExtendsModifiers;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.removeExtendsModifiers',
+            'removeExtendsModifiers',
             kwrds=__kwrds
         )
 
@@ -9511,7 +9511,7 @@ end getConnectionCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getConnectionCount',
+            'getConnectionCount',
             args=__args
         )
 
@@ -9556,7 +9556,7 @@ end getNthConnection;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthConnection',
+            'getNthConnection',
             args=__args
         )
 
@@ -9591,7 +9591,7 @@ end getAlgorithmCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAlgorithmCount',
+            'getAlgorithmCount',
             args=__args
         )
 
@@ -9636,7 +9636,7 @@ end getNthAlgorithm;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthAlgorithm',
+            'getNthAlgorithm',
             args=__args
         )
 
@@ -9671,7 +9671,7 @@ end getInitialAlgorithmCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInitialAlgorithmCount',
+            'getInitialAlgorithmCount',
             args=__args
         )
 
@@ -9716,7 +9716,7 @@ end getNthInitialAlgorithm;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthInitialAlgorithm',
+            'getNthInitialAlgorithm',
             args=__args
         )
 
@@ -9751,7 +9751,7 @@ end getAlgorithmItemsCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAlgorithmItemsCount',
+            'getAlgorithmItemsCount',
             args=__args
         )
 
@@ -9796,7 +9796,7 @@ end getNthAlgorithmItem;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthAlgorithmItem',
+            'getNthAlgorithmItem',
             args=__args
         )
 
@@ -9831,7 +9831,7 @@ end getInitialAlgorithmItemsCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInitialAlgorithmItemsCount',
+            'getInitialAlgorithmItemsCount',
             args=__args
         )
 
@@ -9876,7 +9876,7 @@ end getNthInitialAlgorithmItem;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthInitialAlgorithmItem',
+            'getNthInitialAlgorithmItem',
             args=__args
         )
 
@@ -9911,7 +9911,7 @@ end getEquationCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getEquationCount',
+            'getEquationCount',
             args=__args
         )
 
@@ -9956,7 +9956,7 @@ end getNthEquation;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthEquation',
+            'getNthEquation',
             args=__args
         )
 
@@ -9991,7 +9991,7 @@ end getInitialEquationCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInitialEquationCount',
+            'getInitialEquationCount',
             args=__args
         )
 
@@ -10036,7 +10036,7 @@ end getNthInitialEquation;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthInitialEquation',
+            'getNthInitialEquation',
             args=__args
         )
 
@@ -10071,7 +10071,7 @@ end getEquationItemsCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getEquationItemsCount',
+            'getEquationItemsCount',
             args=__args
         )
 
@@ -10116,7 +10116,7 @@ end getNthEquationItem;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthEquationItem',
+            'getNthEquationItem',
             args=__args
         )
 
@@ -10151,7 +10151,7 @@ end getInitialEquationItemsCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInitialEquationItemsCount',
+            'getInitialEquationItemsCount',
             args=__args
         )
 
@@ -10196,7 +10196,7 @@ end getNthInitialEquationItem;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthInitialEquationItem',
+            'getNthInitialEquationItem',
             args=__args
         )
 
@@ -10231,7 +10231,7 @@ end getAnnotationCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAnnotationCount',
+            'getAnnotationCount',
             args=__args
         )
 
@@ -10276,7 +10276,7 @@ end getNthAnnotationString;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthAnnotationString',
+            'getNthAnnotationString',
             args=__args
         )
 
@@ -10311,7 +10311,7 @@ end getImportCount;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getImportCount',
+            'getImportCount',
             args=__args
         )
 
@@ -10356,7 +10356,7 @@ end getNthImport;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getNthImport',
+            'getNthImport',
             args=__args
         )
 
@@ -10411,7 +10411,7 @@ end iconv;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.iconv',
+            'iconv',
             kwrds=__kwrds
         )
 
@@ -10446,7 +10446,7 @@ end getDocumentationAnnotation;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getDocumentationAnnotation',
+            'getDocumentationAnnotation',
             args=__args
         )
 
@@ -10501,7 +10501,7 @@ end setDocumentationAnnotation;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setDocumentationAnnotation',
+            'setDocumentationAnnotation',
             kwrds=__kwrds
         )
 
@@ -10537,7 +10537,7 @@ end getTimeStamp;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getTimeStamp',
+            'getTimeStamp',
             args=__args
         )
 
@@ -10572,7 +10572,7 @@ end stringTypeName;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.stringTypeName',
+            'stringTypeName',
             args=__args
         )
 
@@ -10607,7 +10607,7 @@ end stringVariableName;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.stringVariableName',
+            'stringVariableName',
             args=__args
         )
 
@@ -10642,7 +10642,7 @@ end typeNameString;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.typeNameString',
+            'typeNameString',
             args=__args
         )
 
@@ -10677,7 +10677,7 @@ end typeNameStrings;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.typeNameStrings',
+            'typeNameStrings',
             args=__args
         )
 
@@ -10712,7 +10712,7 @@ end getClassComment;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getClassComment',
+            'getClassComment',
             args=__args
         )
 
@@ -10747,7 +10747,7 @@ end dirname;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.dirname',
+            'dirname',
             args=__args
         )
 
@@ -10782,7 +10782,7 @@ end basename;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.basename',
+            'basename',
             args=__args
         )
 
@@ -10817,7 +10817,7 @@ end getClassRestriction;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getClassRestriction',
+            'getClassRestriction',
             args=__args
         )
 
@@ -10852,7 +10852,7 @@ end isType;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isType',
+            'isType',
             args=__args
         )
 
@@ -10887,7 +10887,7 @@ end isPackage;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isPackage',
+            'isPackage',
             args=__args
         )
 
@@ -10922,7 +10922,7 @@ end isClass;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isClass',
+            'isClass',
             args=__args
         )
 
@@ -10957,7 +10957,7 @@ end isRecord;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isRecord',
+            'isRecord',
             args=__args
         )
 
@@ -10992,7 +10992,7 @@ end isBlock;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isBlock',
+            'isBlock',
             args=__args
         )
 
@@ -11027,7 +11027,7 @@ end isFunction;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isFunction',
+            'isFunction',
             args=__args
         )
 
@@ -11062,7 +11062,7 @@ end isPartial;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isPartial',
+            'isPartial',
             args=__args
         )
 
@@ -11097,7 +11097,7 @@ end isModel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isModel',
+            'isModel',
             args=__args
         )
 
@@ -11132,7 +11132,7 @@ end isConnector;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isConnector',
+            'isConnector',
             args=__args
         )
 
@@ -11167,7 +11167,7 @@ end isOptimization;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isOptimization',
+            'isOptimization',
             args=__args
         )
 
@@ -11202,7 +11202,7 @@ end isEnumeration;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isEnumeration',
+            'isEnumeration',
             args=__args
         )
 
@@ -11237,7 +11237,7 @@ end isOperator;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isOperator',
+            'isOperator',
             args=__args
         )
 
@@ -11272,7 +11272,7 @@ end isOperatorRecord;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isOperatorRecord',
+            'isOperatorRecord',
             args=__args
         )
 
@@ -11307,7 +11307,7 @@ end isOperatorFunction;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isOperatorFunction',
+            'isOperatorFunction',
             args=__args
         )
 
@@ -11352,7 +11352,7 @@ end isProtectedClass;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isProtectedClass',
+            'isProtectedClass',
             args=__args
         )
 
@@ -11387,7 +11387,7 @@ end getBuiltinType;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getBuiltinType',
+            'getBuiltinType',
             args=__args
         )
 
@@ -11452,7 +11452,7 @@ end setInitXmlStartValue;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.setInitXmlStartValue',
+            'setInitXmlStartValue',
             args=__args
         )
 
@@ -11487,7 +11487,7 @@ end ngspicetoModelica;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.ngspicetoModelica',
+            'ngspicetoModelica',
             args=__args
         )
 
@@ -11522,7 +11522,7 @@ end getInheritedClasses;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInheritedClasses',
+            'getInheritedClasses',
             args=__args
         )
 
@@ -11573,7 +11573,7 @@ end getComponentsTest;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getComponentsTest',
+            'getComponentsTest',
             args=__args
         )
 
@@ -11608,7 +11608,7 @@ end isExperiment;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.isExperiment',
+            'isExperiment',
             args=__args
         )
 
@@ -11697,7 +11697,7 @@ end getSimulationOptions;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getSimulationOptions',
+            'getSimulationOptions',
             kwrds=__kwrds
         )
 
@@ -11742,7 +11742,7 @@ end getAnnotationNamedModifiers;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAnnotationNamedModifiers',
+            'getAnnotationNamedModifiers',
             args=__args
         )
 
@@ -11797,7 +11797,7 @@ end getAnnotationModifierValue;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAnnotationModifierValue',
+            'getAnnotationModifierValue',
             args=__args
         )
 
@@ -11842,7 +11842,7 @@ end classAnnotationExists;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.classAnnotationExists',
+            'classAnnotationExists',
             args=__args
         )
 
@@ -11887,7 +11887,7 @@ end getBooleanClassAnnotation;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getBooleanClassAnnotation',
+            'getBooleanClassAnnotation',
             args=__args
         )
 
@@ -11932,7 +11932,7 @@ end extendsFrom;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.extendsFrom',
+            'extendsFrom',
             args=__args
         )
 
@@ -11967,7 +11967,7 @@ end loadModelica3D;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.loadModelica3D',
+            'loadModelica3D',
             kwrds=__kwrds
         )
 
@@ -12012,7 +12012,7 @@ end searchClassNames;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.searchClassNames',
+            'searchClassNames',
             kwrds=__kwrds
         )
 
@@ -12037,7 +12037,7 @@ end getAvailableLibraries;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getAvailableLibraries',
+            'getAvailableLibraries',
             args=__args
         )
 
@@ -12072,7 +12072,7 @@ end getUses;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getUses',
+            'getUses',
             args=__args
         )
 
@@ -12107,7 +12107,7 @@ end getDerivedClassModifierNames;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getDerivedClassModifierNames',
+            'getDerivedClassModifierNames',
             args=__args
         )
 
@@ -12152,7 +12152,7 @@ end getDerivedClassModifierValue;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getDerivedClassModifierValue',
+            'getDerivedClassModifierValue',
             args=__args
         )
 
@@ -12206,7 +12206,7 @@ end generateEntryPoint;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateEntryPoint',
+            'generateEntryPoint',
             kwrds=__kwrds
         )
 
@@ -12231,7 +12231,7 @@ end numProcessors;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.numProcessors',
+            'numProcessors',
             args=__args
         )
 
@@ -12286,7 +12286,7 @@ end runScriptParallel;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.runScriptParallel',
+            'runScriptParallel',
             kwrds=__kwrds
         )
 
@@ -12320,7 +12320,7 @@ end exit;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.exit',
+            'exit',
             args=__args
         )
 
@@ -12343,7 +12343,7 @@ None
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.threadWorkFailed',
+            'threadWorkFailed',
             args=__args
         )
 
@@ -12368,7 +12368,7 @@ end getMemorySize;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getMemorySize',
+            'getMemorySize',
             args=__args
         )
 
@@ -12391,7 +12391,7 @@ None
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.GC_gcollect_and_unmap',
+            'GC_gcollect_and_unmap',
             args=__args
         )
 
@@ -12426,7 +12426,7 @@ end GC_expand_hp;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.GC_expand_hp',
+            'GC_expand_hp',
             args=__args
         )
 
@@ -12461,7 +12461,7 @@ end GC_set_max_heap_size;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.GC_set_max_heap_size',
+            'GC_set_max_heap_size',
             args=__args
         )
 
@@ -12486,7 +12486,7 @@ end GC_get_prof_stats;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.GC_get_prof_stats',
+            'GC_get_prof_stats',
             args=__args
         )
 
@@ -12531,7 +12531,7 @@ end checkInterfaceOfPackages;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.checkInterfaceOfPackages',
+            'checkInterfaceOfPackages',
             args=__args
         )
 
@@ -12566,7 +12566,7 @@ end sortStrings;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.sortStrings',
+            'sortStrings',
             args=__args
         )
 
@@ -12612,7 +12612,7 @@ end getClassInformation;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getClassInformation',
+            'getClassInformation',
             args=__args
         )
 
@@ -12647,7 +12647,7 @@ end getTransitions;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getTransitions',
+            'getTransitions',
             args=__args
         )
 
@@ -12752,7 +12752,7 @@ end deleteTransition;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.deleteTransition',
+            'deleteTransition',
             args=__args
         )
 
@@ -12787,7 +12787,7 @@ end getInitialStates;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.getInitialStates',
+            'getInitialStates',
             args=__args
         )
 
@@ -12832,7 +12832,7 @@ end deleteInitialState;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.deleteInitialState',
+            'deleteInitialState',
             args=__args
         )
 
@@ -12880,7 +12880,7 @@ end generateScriptingAPI;
         # Call function
         __result = OMCSession__call__(
             self,
-            'OpenModelica.Scripting.generateScriptingAPI',
+            'generateScriptingAPI',
             args=__args
         )
 

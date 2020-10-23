@@ -276,7 +276,7 @@ class FunctionDeclarationProfile(
     def omc_func_name(
         self,
     ) -> str:
-        return str(self.name)
+        return str(self.name.last_identifier)
 
 
 @AbstractFunctionProfile.register_concrete_class
