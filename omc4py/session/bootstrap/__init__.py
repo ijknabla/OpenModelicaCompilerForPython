@@ -751,7 +751,8 @@ Refactored main
     # # output
     # default is stdout, (generate python module)
     parser.add_argument(
-        "-o", "--output",  # default is stdout
+        "-o", "--output",
+        type=argparse.FileType("xb"),
     )
 
     # # outputType
@@ -766,10 +767,18 @@ Refactored main
 
     inputPath: Path
     inputType: InputType
+    outputFile: typing.BinaryIO
+    outputType: OutputType
 
     inputPath, inputType = check_input(
         args.input,
         None if args.inputType is None else InputType[args.inputType],
     )
 
+    outputFile, outputType = check_output(
+        args.output,
+        None if args.outputType is None else OutputType[args.outputType],
+    )
+
     print(inputPath, inputType)
+    print(outputFile, outputType)
