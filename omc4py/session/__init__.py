@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import tempfile
 import typing
+import typing_extensions
 import uuid
 import warnings
 import zmq  # type: ignore
@@ -71,6 +72,9 @@ class InteractiveOMC(
         "__process",
     )
 
+    __instances: typing_extensions.Final[typing.Set["InteractiveOMC"]] \
+        = set()
+
     __socket: zmq.Socket
     __process: subprocess.Popen
 
@@ -82,6 +86,8 @@ class InteractiveOMC(
         self = super().__new__(cls)
         self.__socket = socket
         self.__process = process
+
+        self.__instances.add(self)
 
         return self
 
@@ -154,10 +160,12 @@ class InteractiveOMC(
                 pass
 
     def close(
-        self
+        self,
     ) -> None:
-        self.socket.close()
-        self.process.terminate()
+        if self in self.__instances:
+            self.socket.close()
+            self.process.terminate()
+            self.__instances.remove(self)
 
     def __enter__(
         self
