@@ -198,20 +198,3 @@ from omc4py.session.types import (
             print(f"Skip {function_profile.name}")
 
     return code
-
-
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--input", type=Path)
-    parser.add_argument("--output", type=Path)
-    args = parser.parse_args()
-
-    interface_parser = xml.XMLParser(schema=load_schema())
-    root = xml.fromstring(args.input.read_bytes(), interface_parser)
-
-    with args.output.open("w", encoding="utf-8") as file:
-        create_module(root).dump(file)
-
-
-if __name__ == "__main__":
-    main()
