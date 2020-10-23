@@ -152,6 +152,15 @@ class TypeName(
         for end_of_slice in reversed(range(begin, end)):
             yield type(self)(*parts[:end_of_slice])
 
+    @property
+    def parent(
+        self,
+    ) -> "TypeName":
+        for parent in self.parents:
+            return parent
+        else:
+            return self
+
     @staticmethod
     def to_variableNames(
         name: typing.Union[str, VariableName, "TypeName"]
