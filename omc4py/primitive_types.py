@@ -200,7 +200,7 @@ class TypeName(
         self,
     ) -> str:
         if self.is_absolute:
-            return "." + ".".join(self.parts[1:])
+            return self.parts[0] + ".".join(self.parts[1:])
         else:
             return ".".join(self.parts)
 
