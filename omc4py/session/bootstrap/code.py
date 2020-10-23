@@ -40,9 +40,21 @@ class AbstractCodeBlock(
         raise NotImplementedError()
 
     def dumps(
-        self
+        self,
     ) -> str:
         return "".join(self.to_lines())
+
+    def bdump(
+        self,
+        file: typing.BinaryIO,
+        encoding="utf-8",
+    ):
+        file.writelines(
+            (
+                line.encode(encoding)
+                for line in self.to_lines()
+            )
+        )
 
     def dump(
         self,
