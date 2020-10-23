@@ -9,7 +9,6 @@ __all__ = (
 )
 
 import arpeggio  # type: ignore
-import functools
 import numpy  # type: ignore
 import typing
 
