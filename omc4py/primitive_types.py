@@ -110,12 +110,12 @@ class TypeName(
     __parts: typing.Tuple[str, ...]
 
     def __new__(cls, *parts):
-        self = object.__new__(cls)
-        self.__parts = sum(
-            map(cls.to_variableNames, parts),
-            (),
+        return cls._from_parts_no_check(
+            sum(
+                map(cls.to_variableNames, parts),
+                (),
+            )
         )
-        return self
 
     @classmethod
     def _from_parts_no_check(
