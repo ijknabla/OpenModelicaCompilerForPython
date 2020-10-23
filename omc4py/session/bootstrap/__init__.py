@@ -5,7 +5,9 @@ import arpeggio  # type: ignore
 import enum
 import functools
 from lxml import etree as xml  # type: ignore
+from pathlib import Path
 import pkg_resources
+import shutil
 import sys
 import typing
 
@@ -642,6 +644,34 @@ class OutputType(
 ):
     module = enum.auto()
     xml = enum.auto()
+
+
+def check_input(
+    input_str: str,
+    inputType_hint: typing.Optional[InputType]
+) -> typing.Tuple[Path, InputType]:
+    if inputType_hint is None:
+        raise NotImplementedError()
+
+    elif inputType_hint is InputType.executable:
+        executable = shutil.which(input_str)
+        if executable is None:
+            raise ValueError(
+                f"Can't find executable for {input_str}"
+            )
+        return Path(executable), InputType.executable
+
+    elif inputType_hint is InputType.xml:
+        absPath = Path(input_str).resolve()
+        if not absPath.exists():
+            raise FileNotFoundError(
+                f"{input_str!r} does not exists!"
+            )
+        if absPath.suffix != ".xml":
+            raise ValueError(
+                f"input must be xml, got {input_str!s}"
+            )
+        return absPath, InputType.xml
 
 
 def main2():
