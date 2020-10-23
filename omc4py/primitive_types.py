@@ -107,7 +107,7 @@ class TypeName(
         "__parts",
     )
 
-    __parts: typing.Tuple[VariableName, ...]
+    __parts: typing.Tuple[str, ...]
 
     def __new__(cls, *parts):
         self = object.__new__(cls)
@@ -121,7 +121,7 @@ class TypeName(
     def parts(
         self,
     ) -> typing.Tuple[str, ...]:
-        return tuple(map(str, self.__parts))
+        return self.__parts
 
     @property
     def is_absolute(self) -> bool: return str(self.parts[0]) == "."
@@ -157,13 +157,13 @@ class TypeName(
     @staticmethod
     def to_variableNames(
         name: typing.Union[str, VariableName, "TypeName"]
-    ) -> typing.Tuple[VariableName, ...]:
+    ) -> typing.Tuple[str, ...]:
         if isinstance(name, str):
             return tuple(
-                map(VariableName, split_type_specifier(name))
+                split_type_specifier(name)
             )
         elif isinstance(name, VariableName):
-            return name,
+            return str(name),
         elif isinstance(name, TypeName):
             return name.parts
         else:
