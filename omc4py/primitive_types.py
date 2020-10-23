@@ -10,7 +10,7 @@ __all__ = (
 
 import arpeggio  # type: ignore
 import functools
-import numpy
+import numpy  # type: ignore
 import typing
 
 from omc4py.session import (
