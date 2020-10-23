@@ -145,14 +145,10 @@ class TypeName(
     def parents(
         self,
     ) -> typing.Iterator["TypeName"]:
-        parts = self.parts
-        if parts[0]:
-            begin = 0
-        else:
-            begin = 1
-        end = len(parts)
-        for end_of_slice in reversed(range(begin, end)):
-            yield type(self)(*parts[:end_of_slice])
+        for end in reversed(range(1, len(self.parts))):
+            yield type(self)._from_parts_no_check(
+                self.parts[:end]
+            )
 
     @property
     def parent(
