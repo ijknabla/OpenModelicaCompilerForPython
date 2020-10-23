@@ -1,5 +1,6 @@
 
 import arpeggio  # type: ignore
+import atexit
 import numpy
 import os
 from pathlib import Path
@@ -8,6 +9,7 @@ import shutil
 import subprocess
 import tempfile
 import typing
+import typing_extensions
 import uuid
 import warnings
 import zmq  # type: ignore
@@ -65,10 +67,36 @@ omc_error_pattern = re.compile(
 
 
 class InteractiveOMC(
-    typing.NamedTuple
 ):
-    socket: zmq.Socket
-    process: subprocess.Popen
+    __slots__ = (
+        "__socket",
+        "__process",
+    )
+
+    __instances: typing_extensions.Final[typing.Set["InteractiveOMC"]] \
+        = set()
+
+    __socket: zmq.Socket
+    __process: subprocess.Popen
+
+    def __new__(
+        cls,
+        socket: zmq.Socket,
+        process: subprocess.Popen,
+    ):
+        self = super().__new__(cls)
+        self.__socket = socket
+        self.__process = process
+
+        self.__instances.add(self)
+
+        return self
+
+    @property
+    def socket(self) -> zmq.Socket: return self.__socket
+
+    @property
+    def process(self) -> subprocess.Popen: return self.__process
 
     @classmethod
     def open(
@@ -87,7 +115,7 @@ class InteractiveOMC(
 
         process = subprocess.Popen(
             [
-                resolve_command(omc_command),
+                str(resolve_command(omc_command)),
                 "--interactive=zmq", f"-z={suffix}"
             ],
             universal_newlines=True,
@@ -133,10 +161,19 @@ class InteractiveOMC(
                 pass
 
     def close(
-        self
+        self,
     ) -> None:
-        self.socket.close()
-        self.process.terminate()
+        if self in self.__instances:
+            self.socket.close()
+            self.process.terminate()
+            self.__instances.remove(self)
+
+    @classmethod
+    def close_all(
+        cls,
+    ) -> None:
+        for self in cls.__instances.copy():
+            self.close()
 
     def __enter__(
         self
@@ -183,6 +220,9 @@ class InteractiveOMC(
             return exception.OMCError(error_message)
         else:
             return exception.OMCWarning(error_message)
+
+
+atexit.register(InteractiveOMC.close_all)
 
 
 def parse_omc_value(
