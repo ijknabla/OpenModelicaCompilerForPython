@@ -43,7 +43,7 @@ def getitem_with_default(
             raise
 
 
-class TypeSpecifierSplitVisitor(
+class NameVisitor(
     arpeggio.PTNodeVisitor,
 ):
     def visit_IDENT(
@@ -56,10 +56,14 @@ class TypeSpecifierSplitVisitor(
     def visit_name(
         self,
         node,
-        children
+        children,
     ) -> typing.Tuple[str, ...]:
         return tuple(children.IDENT)
 
+
+class TypeSpecifierSplitVisitor(
+    NameVisitor,
+):
     def visit_type_specifier(
         self,
         node,
@@ -73,22 +77,8 @@ class TypeSpecifierSplitVisitor(
 
 
 class TypeSpecifierVisitor(
-    arpeggio.PTNodeVisitor,
+    NameVisitor,
 ):
-    def visit_IDENT(
-        self,
-        node,
-        children
-    ) -> str:
-        return node.value
-
-    def visit_name(
-        self,
-        node,
-        children,
-    ) -> typing.Tuple[str, ...]:
-        return tuple(children.IDENT)
-
     def visit_type_specifier(
         self,
         node,
