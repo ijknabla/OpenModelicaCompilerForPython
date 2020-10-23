@@ -1,5 +1,6 @@
 
 import arpeggio  # type: ignore
+import atexit
 import numpy
 import os
 from pathlib import Path
@@ -219,6 +220,9 @@ class InteractiveOMC(
             return exception.OMCError(error_message)
         else:
             return exception.OMCWarning(error_message)
+
+
+atexit.register(InteractiveOMC.close_all)
 
 
 def parse_omc_value(
