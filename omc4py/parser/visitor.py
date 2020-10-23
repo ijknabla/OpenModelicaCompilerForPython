@@ -107,9 +107,9 @@ class NumberVisitor(
 
     def visit_UNSIGNED_NUMBER(self, node, *_):
         try:
-            return Integer(int(node.value))
+            return int(node.value)
         except ValueError:
-            return Real(node.value)
+            return float(node.value)
 
     def visit_number(self, node, children):
         sign = getitem_with_default(
@@ -119,13 +119,17 @@ class NumberVisitor(
         unsigned, = children.UNSIGNED_NUMBER
 
         if sign == "+":
-            return +unsigned
+            signed = +unsigned
         elif sign == "-":
-            return -unsigned
+            signed = -unsigned
+
+        if isinstance(signed, int):
+            return Integer(signed)
+        elif isinstance(signed, float):
+            return Real(signed)
         else:
-            raise ValueError(
-                f"sign must be '+' or '-'"
-                f"got {sign}"
+            raise TypeError(
+                f"Unexpected number type, got {signed!r}: {type(signed)}"
             )
 
 
