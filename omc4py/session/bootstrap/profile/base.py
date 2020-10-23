@@ -177,4 +177,3 @@ class AbstractFunctionProfile(
         self,
     ) -> code.CodeBlock:
         raise NotImplementedError()
-

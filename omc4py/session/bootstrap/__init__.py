@@ -358,7 +358,7 @@ def generate_omc_interface_xml(
             else:
                 raise ValueError(f"Can't resolve {className} from {self.name}")
 
-            assert(self.name.parts[-1] == variableName)
+            assert(self.name.last_identifier == variableName)
             self.element.attrib["ref"] = str(candidate)
             return True
 

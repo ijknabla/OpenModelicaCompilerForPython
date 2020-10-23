@@ -1,15 +1,15 @@
 
 import arpeggio  # type: ignore
 import enum
-import numpy
+import numpy  # type: ignore
 import operator
 import typing
 
 from . import string
-from .types import (
+from omc4py.primitive_types import (
     VariableName,
-    OMCRecord,
     TypeName,
+    _TypeName_from_valid_parts_no_check,
 )
 
 
@@ -42,6 +42,35 @@ def getitem_with_default(
             raise
 
 
+class TypeSpecifierSplitVisitor(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_IDENT(
+        self,
+        node,
+        children,
+    ) -> str:
+        return node.value
+
+    def visit_name(
+        self,
+        node,
+        children
+    ) -> typing.Tuple[str, ...]:
+        return tuple(children.IDENT)
+
+    def visit_type_specifier(
+        self,
+        node,
+        children,
+    ) -> typing.Tuple[str, ...]:
+        name = children.name[0]
+        if node[0].value == ".":
+            return (".", *name)
+        else:
+            return name
+
+
 class TypeSpecifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
@@ -49,14 +78,14 @@ class TypeSpecifierVisitor(
         self,
         node,
         children
-    ) -> VariableName:
-        return VariableName(node.value)
+    ) -> str:
+        return node.value
 
     def visit_name(
         self,
         node,
         children,
-    ) -> typing.Tuple[VariableName, ...]:
+    ) -> typing.Tuple[str, ...]:
         return tuple(children.IDENT)
 
     def visit_type_specifier(
@@ -66,9 +95,15 @@ class TypeSpecifierVisitor(
     ) -> TypeName:
         name = children.name[0]
         if node[0].value == ".":
-            return TypeName(VariableName(), *name)
+            return _TypeName_from_valid_parts_no_check(
+                TypeName,
+                (".", *name),
+            )
         else:
-            return TypeName(*name)
+            return _TypeName_from_valid_parts_no_check(
+                TypeName,
+                name,
+            )
 
 
 class NumberVisitor(
@@ -147,7 +182,7 @@ class OMCRecordVisitor(
         self,
         node,
         children,
-    ) -> typing.Tuple[VariableName, typing.Any]:
+    ) -> typing.Tuple[str, typing.Any]:
         IDENT = children.IDENT[0]
         value = children.omc_value[0]
         return str(IDENT), value
@@ -279,7 +314,7 @@ class AliasVisitor(
         node,
         children
     ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
-        variableName, = children.IDENT
+        variableName = VariableName(children.IDENT[0])
         type_specifier = getitem_with_default(
             children.type_specifier, 0,
             default=None
