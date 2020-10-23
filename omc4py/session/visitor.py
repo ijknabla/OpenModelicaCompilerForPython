@@ -77,14 +77,14 @@ class TypeSpecifierVisitor(
         self,
         node,
         children
-    ) -> VariableName:
-        return VariableName(node.value)
+    ) -> str:
+        return node.value
 
     def visit_name(
         self,
         node,
         children,
-    ) -> typing.Tuple[VariableName, ...]:
+    ) -> typing.Tuple[str, ...]:
         return tuple(children.IDENT)
 
     def visit_type_specifier(
@@ -94,9 +94,9 @@ class TypeSpecifierVisitor(
     ) -> TypeName:
         name = children.name[0]
         if node[0].value == ".":
-            return TypeName(VariableName(), *name)
+            return TypeName._from_parts_no_check((".", *name))
         else:
-            return TypeName(*name)
+            return TypeName._from_parts_no_check(name)
 
 
 class NumberVisitor(
@@ -307,7 +307,7 @@ class AliasVisitor(
         node,
         children
     ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
-        variableName, = children.IDENT
+        variableName = VariableName(children.IDENT[0])
         type_specifier = getitem_with_default(
             children.type_specifier, 0,
             default=None

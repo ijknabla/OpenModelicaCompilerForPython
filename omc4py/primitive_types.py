@@ -123,7 +123,7 @@ class TypeName(
         parts: typing.Iterable[str]
     ) -> "TypeName":
         self = super().__new__(cls)
-        self.__parts = parts
+        self.__parts = tuple(parts)
         return self
 
     @property
