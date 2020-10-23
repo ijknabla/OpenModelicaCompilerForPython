@@ -101,6 +101,15 @@ class VariableName(
         self.__str = obj_str
         return self
 
+    @classmethod
+    def _from_str_no_check(
+        cls,
+        variableName: str,
+    ) -> "VariableName":
+        self = super().__new__(cls)
+        self.__str = variableName
+        return self
+
     def __eq__(
         self, other,
     ):
