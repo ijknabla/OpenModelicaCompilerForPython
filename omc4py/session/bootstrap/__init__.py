@@ -5,6 +5,7 @@ import arpeggio  # type: ignore
 import enum
 import functools
 from lxml import etree as xml  # type: ignore
+import os
 from pathlib import Path
 import pkg_resources
 import shutil
@@ -675,6 +676,54 @@ def check_input(
                 f"input must be xml, got {input_str!r}"
             )
         return absPath, InputType.xml
+
+
+def check_output(
+    output_optional: typing.Optional[typing.BinaryIO],
+    outputType_hint: typing.Optional[OutputType],
+) -> typing.Tuple[typing.BinaryIO, OutputType]:
+    if output_optional is None:
+        binary_stdout = sys.stdout.buffer
+        if outputType_hint is None:
+            return binary_stdout, OutputType.module
+        else:
+            return binary_stdout, outputType_hint
+
+    output: typing.BinaryIO = output_optional
+    path = Path(output.name)
+
+    def close_output():
+        output.close()
+        os.remove(path)
+
+    if outputType_hint is None:
+        if path.suffix == ".py":
+            return output, OutputType.module
+        elif path.suffix == ".xml":
+            return output, OutputType.xml
+        else:
+            close_output()
+            raise ValueError(
+                "output file suffix must be .py or .xml"
+                f", got {output.name!r}"
+            )
+
+    outputType: OutputType = outputType_hint
+
+    if outputType is OutputType.module and path.suffix != ".py":
+        close_output()
+        raise ValueError(
+            "--outputType=module, but output file suffix is not .py"
+            f", got {output.name!r}"
+        )
+    if outputType is OutputType.xml and path.suffix != ".xml":
+        close_output()
+        raise ValueError(
+            "--outputType=xml, but output file suffix is not .xml"
+            f", got {output.name!r}"
+        )
+
+    return output, outputType
 
 
 def main2():
