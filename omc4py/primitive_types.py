@@ -182,21 +182,6 @@ class TypeName(
                 )
             yield part
 
-    @staticmethod
-    def to_variableNames(
-        name: typing.Union[str, VariableName, "TypeName"]
-    ) -> typing.Tuple[str, ...]:
-        if isinstance(name, str):
-            return tuple(
-                split_type_specifier(name)
-            )
-        elif isinstance(name, VariableName):
-            return str(name),
-        elif isinstance(name, TypeName):
-            return name.parts
-        else:
-            raise TypeError()
-
     def __hash__(self):
         return hash(self.parts)
 
