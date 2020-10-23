@@ -3,6 +3,7 @@ import arpeggio  # type: ignore
 import atexit
 import numpy
 import os
+import logging
 from pathlib import Path
 import re
 import shutil
@@ -19,6 +20,9 @@ from . import (
     string,
     visitor,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 StrOrPathLike = typing.Union[str, os.PathLike]
@@ -113,14 +117,22 @@ class InteractiveOMC(
             zmq.REQ
         )
 
+        command = [
+            str(resolve_command(omc_command)),
+            "--interactive=zmq", f"-z={suffix}",
+        ]
+
         process = subprocess.Popen(
-            [
-                str(resolve_command(omc_command)),
-                "--interactive=zmq", f"-z={suffix}"
-            ],
+            command,
             universal_newlines=True,
             stdout=subprocess.PIPE,
             stderr=subprocess.DEVNULL,
+        )
+
+        logger.info(
+            "(pid={pid}) Start omc :: {scommand}".format(
+                pid=process.pid,
+                scommand=" ".join(command))
         )
 
         self = cls(
@@ -152,11 +164,22 @@ class InteractiveOMC(
 
         port_filepath = find_openmodelica_zmq_port_filepath(suffix)
 
+        logger.info(
+            f"(pid={self.process.pid}) Find zmq port file at {port_filepath}"
+        )
+
         try:
-            self.socket.connect(port_filepath.read_text())
+            port = port_filepath.read_text()
+            self.socket.connect(port)
+            logger.info(
+                f"(pid={self.process.pid}) Connect zmq sokcet via {port}"
+            )
         finally:
             try:
                 port_filepath.unlink()
+                logger.info(
+                    f"(pid={self.process.pid}) Remove zmq port file at {port_filepath}"
+                )
             except FileNotFoundError:
                 pass
 
@@ -165,7 +188,13 @@ class InteractiveOMC(
     ) -> None:
         if self in self.__instances:
             self.socket.close()
+            logger.info(
+                f"(pid={self.process.pid}) Close zmq sokcet"
+            )
             self.process.terminate()
+            logger.info(
+                f"(pid={self.process.pid}) Stop omc"
+            )
             self.__instances.remove(self)
 
     @classmethod
@@ -193,8 +222,15 @@ class InteractiveOMC(
         self,
         expression: str
     ) -> str:
+        logger.debug(
+            f"(pid={self.process.pid}) >>> {expression}"
+        )
         self.socket.send_string(expression)
-        return self.socket.recv_string()
+        result = self.socket.recv_string()
+        logger.debug(
+            f"(pid={self.process.pid}) {result}"
+        )
+        return result
 
     def find_error(
         self
