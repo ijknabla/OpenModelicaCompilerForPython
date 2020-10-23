@@ -186,9 +186,10 @@ class TypeName(
     def __str__(
         self,
     ) -> str:
-        return ".".join(
-            map(string.to_omc_literal, self.parts)
-        )
+        if self.is_absolute:
+            return "." + ".".join(self.parts[1:])
+        else:
+            return ".".join(self.parts)
 
     __to_omc_literal__ = __str__
 
