@@ -3,6 +3,7 @@ import arpeggio  # type: ignore
 import atexit
 import numpy
 import os
+import logging
 from pathlib import Path
 import re
 import shutil
@@ -19,6 +20,9 @@ from . import (
     string,
     visitor,
 )
+
+
+logger = logging.getLogger(__name__)
 
 
 StrOrPathLike = typing.Union[str, os.PathLike]
@@ -193,8 +197,15 @@ class InteractiveOMC(
         self,
         expression: str
     ) -> str:
+        logger.info(
+            f"(pid={self.process.pid}) >>> {expression}"
+        )
         self.socket.send_string(expression)
-        return self.socket.recv_string()
+        result = self.socket.recv_string()
+        logger.info(
+            f"(pid={self.process.pid}) {result}"
+        )
+        return result
 
     def find_error(
         self
