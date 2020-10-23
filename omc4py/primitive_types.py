@@ -109,6 +109,14 @@ class TypeName(
 
     __parts: typing.Tuple[VariableName, ...]
 
+    def __new__(cls, *parts):
+        self = object.__new__(cls)
+        self.__parts = sum(
+            map(cls.to_variableNames, parts),
+            (),
+        )
+        return self
+
     @property
     def parts(
         self,
@@ -157,14 +165,6 @@ class TypeName(
             return name.parts
         else:
             raise TypeError()
-
-    def __new__(cls, *parts):
-        self = object.__new__(cls)
-        self.__parts = sum(
-            map(cls.to_variableNames, parts),
-            (),
-        )
-        return self
 
     def __hash__(self):
         return hash(self.parts)
