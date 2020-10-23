@@ -64,7 +64,7 @@ class FunctionDeclarationProfile(
         self
     ) -> CodeBlock:
         return CodeBlock(
-            f"def {self.funcName}(",
+            f"def {self.py_method_name}(",
             CodeBlock(
                 self.code_arguments,
                 indent=INDENT,
@@ -231,7 +231,7 @@ class FunctionDeclarationProfile(
             "__result = OMCSession__call__(",
             CodeBlock(
                 "self,",
-                f"{str(self.name)!r},",
+                f"{self.omc_func_name!r},",
                 "args=__args",
                 indent=INDENT,
             ),
@@ -259,12 +259,24 @@ class FunctionDeclarationProfile(
             "__result = OMCSession__call__(",
             CodeBlock(
                 "self,",
-                f"{str(self.name)!r},",
+                f"{self.omc_func_name!r},",
                 "kwrds=__kwrds",
                 indent=INDENT,
             ),
             ")",
         )
+
+    @property
+    def py_method_name(
+        self,
+    ) -> str:
+        return str(self.name.last_identifier)
+
+    @property
+    def omc_func_name(
+        self,
+    ) -> str:
+        return str(self.name)
 
 
 @AbstractFunctionProfile.register_concrete_class
@@ -297,16 +309,22 @@ class FunctionAliasProfile(
         self,
     ) -> CodeBlock:
         return CodeBlock(
-            f"{self.funcName} = {self.target.funcName}",
+            f"{self.py_method_name} = {self.target.py_method_name}",
         )
 
     @property
     def target(
         self
-    ) -> AbstractFunctionProfile:
+    ) -> FunctionDeclarationProfile:
         profile = get_profile_from_xml(
             self.root,
             TypeName(self.element.attrib["ref"]),
         )
-        assert(isinstance(profile, AbstractFunctionProfile))
+        assert(isinstance(profile, FunctionDeclarationProfile))
         return profile
+
+    @property
+    def py_method_name(
+        self,
+    ) -> str:
+        return str(self.name.last_identifier)
