@@ -94,7 +94,6 @@ class VariableName(
     __to_omc_literal__ = __str__
 
 
-@functools.total_ordering
 class TypeName(
 ):
     __slots__ = (
@@ -179,9 +178,6 @@ class TypeName(
 
     def __eq__(self, other):
         return self.parts == type(self)(other).parts
-
-    def __lt__(self, other):
-        return self.parts < type(self)(other).parts
 
     def __repr__(
         self,
