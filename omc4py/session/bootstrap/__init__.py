@@ -630,6 +630,20 @@ def main():
     )
 
 
+class InputType(
+    enum.Enum,
+):
+    executable = enum.auto()
+    xml = enum.auto()
+
+
+class OutputType(
+    enum.Enum,
+):
+    module = enum.auto()
+    xml = enum.auto()
+
+
 def main2():
     """\
 Refactored main
@@ -658,7 +672,7 @@ Refactored main
     )
 
     # # outputType
-    # {python_module, xml}
+    # {module, xml}
     # default is None (select by `output`)
     parser.add_argument(
         "--outputType",
