@@ -623,7 +623,7 @@ def generate_omc_interface(
                 session
             )
     else:  # inputType is InputType.xml:
-        omc_interface_xml = xml.parse(inputPath)
+        omc_interface_xml = xml.parse(str(inputPath))
 
     schema = load_schema()
     schema.assertValid(omc_interface_xml)
