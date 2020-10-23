@@ -7,7 +7,7 @@ __all__ = (
 
 
 from modelica_language.util import replace_all
-import numpy
+import numpy  # type: ignore
 import typing
 
 
