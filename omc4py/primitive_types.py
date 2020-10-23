@@ -13,11 +13,6 @@ import functools
 import numpy  # type: ignore
 import typing
 
-from omc4py.session import (
-    parser,
-    string,
-)
-
 
 Real = numpy.double
 Integer = numpy.intc
@@ -230,3 +225,9 @@ class TypeName(
         other: typing.Union[str, VariableName, "TypeName"]
     ):
         return type(self)(self, other)
+
+
+from omc4py.session import (  # noqa: E402
+    parser,
+    string,
+)
