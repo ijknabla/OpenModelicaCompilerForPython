@@ -651,7 +651,10 @@ def check_input(
     inputType_hint: typing.Optional[InputType]
 ) -> typing.Tuple[Path, InputType]:
     if inputType_hint is None:
-        raise NotImplementedError()
+        if Path(input_str).suffix == ".xml":
+            return check_input(input_str, InputType.xml)
+        else:
+            return check_input(input_str, InputType.executable)
 
     elif inputType_hint is InputType.executable:
         executable = shutil.which(input_str)
