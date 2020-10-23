@@ -59,7 +59,7 @@ class TypeSpecifierSplitVisitor(
     ) -> typing.Tuple[str, ...]:
         name = children.name[0]
         if node[0].value == ".":
-            return ("", *name)
+            return (".", *name)
         else:
             return name
 
