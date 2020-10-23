@@ -222,12 +222,12 @@ class InteractiveOMC(
         self,
         expression: str
     ) -> str:
-        logger.info(
+        logger.debug(
             f"(pid={self.process.pid}) >>> {expression}"
         )
         self.socket.send_string(expression)
         result = self.socket.recv_string()
-        logger.info(
+        logger.debug(
             f"(pid={self.process.pid}) {result}"
         )
         return result
