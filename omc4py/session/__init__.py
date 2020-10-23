@@ -87,7 +87,7 @@ class InteractiveOMC(
 
         process = subprocess.Popen(
             [
-                resolve_command(omc_command),
+                str(resolve_command(omc_command)),
                 "--interactive=zmq", f"-z={suffix}"
             ],
             universal_newlines=True,
