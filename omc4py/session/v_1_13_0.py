@@ -664,12 +664,15 @@ end checkSettings;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'checkSettings',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -713,9 +716,11 @@ end loadFile;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            fileName__internal__,
+        ]
         __kwrds = {
-            'fileName': fileName__internal__,
             'encoding': encoding__internal__,
             'uses': uses__internal__,
         }
@@ -724,7 +729,8 @@ end loadFile;
         __result = OMCSession__call__(
             self,
             'loadFile',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -768,9 +774,11 @@ end loadFiles;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            fileNames__internal__,
+        ]
         __kwrds = {
-            'fileNames': fileNames__internal__,
             'encoding': encoding__internal__,
             'numThreads': numThreads__internal__,
         }
@@ -779,7 +787,8 @@ end loadFiles;
         __result = OMCSession__call__(
             self,
             'loadFiles',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -814,9 +823,11 @@ end loadEncryptedPackage;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            fileName__internal__,
+        ]
         __kwrds = {
-            'fileName': fileName__internal__,
             'workdir': workdir__internal__,
         }
 
@@ -824,7 +835,8 @@ end loadEncryptedPackage;
         __result = OMCSession__call__(
             self,
             'loadEncryptedPackage',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -859,9 +871,11 @@ end reloadClass;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            name__internal__,
+        ]
         __kwrds = {
-            'name': name__internal__,
             'encoding': encoding__internal__,
         }
 
@@ -869,7 +883,8 @@ end reloadClass;
         __result = OMCSession__call__(
             self,
             'reloadClass',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -922,9 +937,11 @@ end loadString;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            data__internal__,
+        ]
         __kwrds = {
-            'data': data__internal__,
             'filename': filename__internal__,
             'encoding': encoding__internal__,
             'merge': merge__internal__,
@@ -934,7 +951,8 @@ end loadString;
         __result = OMCSession__call__(
             self,
             'loadString',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -969,9 +987,11 @@ end parseString;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            data__internal__,
+        ]
         __kwrds = {
-            'data': data__internal__,
             'filename': filename__internal__,
         }
 
@@ -979,7 +999,8 @@ end parseString;
         __result = OMCSession__call__(
             self,
             'parseString',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1014,9 +1035,11 @@ end parseFile;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
             'encoding': encoding__internal__,
         }
 
@@ -1024,7 +1047,8 @@ end parseFile;
         __result = OMCSession__call__(
             self,
             'parseFile',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1059,9 +1083,11 @@ end loadFileInteractiveQualified;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
             'encoding': encoding__internal__,
         }
 
@@ -1069,7 +1095,8 @@ end loadFileInteractiveQualified;
         __result = OMCSession__call__(
             self,
             'loadFileInteractiveQualified',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1104,9 +1131,11 @@ end loadFileInteractive;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
             'encoding': encoding__internal__,
         }
 
@@ -1114,7 +1143,8 @@ end loadFileInteractive;
         __result = OMCSession__call__(
             self,
             'loadFileInteractive',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1149,9 +1179,11 @@ end system;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            callStr__internal__,
+        ]
         __kwrds = {
-            'callStr': callStr__internal__,
             'outputFile': outputFile__internal__,
         }
 
@@ -1159,7 +1191,8 @@ end system;
         __result = OMCSession__call__(
             self,
             'system',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1194,9 +1227,11 @@ end system_parallel;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            callStr__internal__,
+        ]
         __kwrds = {
-            'callStr': callStr__internal__,
             'numThreads': numThreads__internal__,
         }
 
@@ -1204,7 +1239,8 @@ end system_parallel;
         __result = OMCSession__call__(
             self,
             'system_parallel',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1234,12 +1270,15 @@ end saveAll;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'saveAll',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1265,7 +1304,9 @@ end help;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'topic': topic__internal__,
         }
@@ -1274,7 +1315,8 @@ end help;
         __result = OMCSession__call__(
             self,
             'help',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1294,12 +1336,15 @@ end clear;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'clear',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1319,12 +1364,15 @@ end clearProgram;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'clearProgram',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1344,12 +1392,15 @@ end clearVariables;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'clearVariables',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1379,12 +1430,15 @@ end generateHeader;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'generateHeader',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1419,9 +1473,11 @@ end generateSeparateCode;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'cleanCache': cleanCache__internal__,
         }
 
@@ -1429,7 +1485,8 @@ end generateSeparateCode;
         __result = OMCSession__call__(
             self,
             'generateSeparateCode',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1455,7 +1512,9 @@ end generateSeparateCodeDependencies;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'stampSuffix': stampSuffix__internal__,
         }
@@ -1464,7 +1523,8 @@ end generateSeparateCodeDependencies;
         __result = OMCSession__call__(
             self,
             'generateSeparateCodeDependencies',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1508,9 +1568,11 @@ end generateSeparateCodeDependenciesMakefile;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
             'directory': directory__internal__,
             'suffix': suffix__internal__,
         }
@@ -1519,7 +1581,8 @@ end generateSeparateCodeDependenciesMakefile;
         __result = OMCSession__call__(
             self,
             'generateSeparateCodeDependenciesMakefile',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1539,12 +1602,15 @@ end getLinker;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getLinker',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1574,12 +1640,15 @@ end setLinker;
         __args = [
             linker__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setLinker',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1599,12 +1668,15 @@ end getLinkerFlags;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getLinkerFlags',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1634,12 +1706,15 @@ end setLinkerFlags;
         __args = [
             linkerFlags__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setLinkerFlags',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1659,12 +1734,15 @@ end getCompiler;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getCompiler',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1694,12 +1772,15 @@ end setCompiler;
         __args = [
             compiler__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCompiler',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1729,12 +1810,15 @@ end setCFlags;
         __args = [
             inString__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCFlags',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1754,12 +1838,15 @@ end getCFlags;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getCFlags',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1779,12 +1866,15 @@ end getCXXCompiler;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getCXXCompiler',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1814,12 +1904,15 @@ end setCXXCompiler;
         __args = [
             compiler__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCXXCompiler',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1839,12 +1932,15 @@ end verifyCompiler;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'verifyCompiler',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1874,12 +1970,15 @@ end setCompilerPath;
         __args = [
             compilerPath__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCompilerPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1899,12 +1998,15 @@ end getCompileCommand;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getCompileCommand',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1934,12 +2036,15 @@ end setCompileCommand;
         __args = [
             compileCommand__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCompileCommand',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1969,12 +2074,15 @@ end setPlotCommand;
         __args = [
             plotCommand__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setPlotCommand',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -1994,12 +2102,15 @@ end getSettings;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getSettings',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2029,12 +2140,15 @@ end setTempDirectoryPath;
         __args = [
             tempDirectoryPath__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setTempDirectoryPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2054,12 +2168,15 @@ end getTempDirectoryPath;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getTempDirectoryPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2089,12 +2206,15 @@ end getEnvironmentVar;
         __args = [
             var__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getEnvironmentVar',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2134,12 +2254,15 @@ end setEnvironmentVar;
             var__internal__,
             value__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setEnvironmentVar',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2179,12 +2302,15 @@ end appendEnvironmentVar;
             var__internal__,
             value__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'appendEnvironmentVar',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2214,12 +2340,15 @@ end setInstallationDirectoryPath;
         __args = [
             installationDirectoryPath__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setInstallationDirectoryPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2239,12 +2368,15 @@ end getInstallationDirectoryPath;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInstallationDirectoryPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2274,12 +2406,15 @@ end setModelicaPath;
         __args = [
             modelicaPath__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setModelicaPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2299,12 +2434,15 @@ end getModelicaPath;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getModelicaPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2334,12 +2472,15 @@ end setCompilerFlags;
         __args = [
             compilerFlags__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCompilerFlags',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2369,12 +2510,15 @@ end setDebugFlags;
         __args = [
             debugFlags__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setDebugFlags',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2394,12 +2538,15 @@ end clearDebugFlags;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'clearDebugFlags',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2429,12 +2576,15 @@ end setPreOptModules;
         __args = [
             modules__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setPreOptModules',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2464,12 +2614,15 @@ end setCheapMatchingAlgorithm;
         __args = [
             matchingAlgorithm__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCheapMatchingAlgorithm',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2489,12 +2642,15 @@ end getMatchingAlgorithm;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getMatchingAlgorithm',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2515,12 +2671,15 @@ end getAvailableMatchingAlgorithms;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAvailableMatchingAlgorithms',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2550,12 +2709,15 @@ end setMatchingAlgorithm;
         __args = [
             matchingAlgorithm__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setMatchingAlgorithm',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2575,12 +2737,15 @@ end getIndexReductionMethod;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getIndexReductionMethod',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2601,12 +2766,15 @@ end getAvailableIndexReductionMethods;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAvailableIndexReductionMethods',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2636,12 +2804,15 @@ end setIndexReductionMethod;
         __args = [
             method__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setIndexReductionMethod',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2671,12 +2842,15 @@ end setPostOptModules;
         __args = [
             modules__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setPostOptModules',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2696,12 +2870,15 @@ end getTearingMethod;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getTearingMethod',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2722,12 +2899,15 @@ end getAvailableTearingMethods;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAvailableTearingMethods',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2757,12 +2937,15 @@ end setTearingMethod;
         __args = [
             tearingMethod__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setTearingMethod',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2792,12 +2975,15 @@ end setCommandLineOptions;
         __args = [
             option__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setCommandLineOptions',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2817,12 +3003,15 @@ end getCommandLineOptions;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getCommandLineOptions',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2854,12 +3043,15 @@ end getConfigFlagValidOptions;
         __args = [
             flag__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getConfigFlagValidOptions',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2879,12 +3071,15 @@ end clearCommandLineOptions;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'clearCommandLineOptions',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2910,7 +3105,9 @@ end getVersion;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'cl': cl__internal__,
         }
@@ -2919,7 +3116,8 @@ end getVersion;
         __result = OMCSession__call__(
             self,
             'getVersion',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2949,12 +3147,15 @@ end regularFileExists;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'regularFileExists',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -2984,12 +3185,15 @@ end directoryExists;
         __args = [
             dirName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'directoryExists',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3021,12 +3225,15 @@ end stat;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'stat',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3056,12 +3263,15 @@ end readFile;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'readFile',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3105,10 +3315,12 @@ end writeFile;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            fileName__internal__,
+            data__internal__,
+        ]
         __kwrds = {
-            'fileName': fileName__internal__,
-            'data': data__internal__,
             'append': append__internal__,
         }
 
@@ -3116,7 +3328,8 @@ end writeFile;
         __result = OMCSession__call__(
             self,
             'writeFile',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3156,12 +3369,15 @@ end compareFilesAndMove;
             newFile__internal__,
             oldFile__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'compareFilesAndMove',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3201,12 +3417,15 @@ end compareFiles;
             file1__internal__,
             file2__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'compareFiles',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3236,12 +3455,15 @@ end alarm;
         __args = [
             seconds__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'alarm',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3304,10 +3526,12 @@ end regex;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            str__internal__,
+            re__internal__,
+        ]
         __kwrds = {
-            'str': str__internal__,
-            're': re__internal__,
             'maxMatches': maxMatches__internal__,
             'extended': extended__internal__,
             'caseInsensitive': caseInsensitive__internal__,
@@ -3317,7 +3541,8 @@ end regex;
         __result = OMCSession__call__(
             self,
             'regex',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3370,10 +3595,12 @@ end regexBool;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            str__internal__,
+            re__internal__,
+        ]
         __kwrds = {
-            'str': str__internal__,
-            're': re__internal__,
             'extended': extended__internal__,
             'caseInsensitive': caseInsensitive__internal__,
         }
@@ -3382,7 +3609,8 @@ end regexBool;
         __result = OMCSession__call__(
             self,
             'regexBool',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3412,12 +3640,15 @@ end testsuiteFriendlyName;
         __args = [
             path__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'testsuiteFriendlyName',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3447,12 +3678,15 @@ end readFileNoNumeric;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'readFileNoNumeric',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3478,7 +3712,9 @@ end getErrorString;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'warningsAsErrors': warningsAsErrors__internal__,
         }
@@ -3487,7 +3723,8 @@ end getErrorString;
         __result = OMCSession__call__(
             self,
             'getErrorString',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3507,12 +3744,15 @@ end getMessagesString;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getMessagesString',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3538,7 +3778,9 @@ end getMessagesStringInternal;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'unique': unique__internal__,
         }
@@ -3547,7 +3789,8 @@ end getMessagesStringInternal;
         __result = OMCSession__call__(
             self,
             'getMessagesStringInternal',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3569,12 +3812,15 @@ end countMessages;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'countMessages',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3594,12 +3840,15 @@ end clearMessages;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'clearMessages',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3629,12 +3878,15 @@ end runScript;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'runScript',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3664,12 +3916,15 @@ end echo;
         __args = [
             setEcho__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'echo',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3689,12 +3944,15 @@ end getClassesInModelicaPath;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getClassesInModelicaPath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3714,12 +3972,15 @@ end getAnnotationVersion;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAnnotationVersion',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3749,12 +4010,15 @@ end setAnnotationVersion;
         __args = [
             annotationVersion__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setAnnotationVersion',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3774,12 +4038,15 @@ end getNoSimplify;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNoSimplify',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3809,12 +4076,15 @@ end setNoSimplify;
         __args = [
             noSimplify__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setNoSimplify',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3834,12 +4104,15 @@ end getVectorizationLimit;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getVectorizationLimit',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3869,12 +4142,15 @@ end setVectorizationLimit;
         __args = [
             vectorizationLimit__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setVectorizationLimit',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3894,12 +4170,15 @@ end getDefaultOpenCLDevice;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getDefaultOpenCLDevice',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3929,12 +4208,15 @@ end setDefaultOpenCLDevice;
         __args = [
             defdevid__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setDefaultOpenCLDevice',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3964,12 +4246,15 @@ end setShowAnnotations;
         __args = [
             show__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setShowAnnotations',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -3989,12 +4274,15 @@ end getShowAnnotations;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getShowAnnotations',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4024,12 +4312,15 @@ end setOrderConnections;
         __args = [
             orderConnections__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setOrderConnections',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4049,12 +4340,15 @@ end getOrderConnections;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getOrderConnections',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4084,12 +4378,15 @@ end setLanguageStandard;
         __args = [
             inVersion__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setLanguageStandard',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4109,12 +4406,15 @@ end getLanguageStandard;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getLanguageStandard',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4140,7 +4440,9 @@ end getAstAsCorbaString;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'fileName': fileName__internal__,
         }
@@ -4149,7 +4451,8 @@ end getAstAsCorbaString;
         __result = OMCSession__call__(
             self,
             'getAstAsCorbaString',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4175,7 +4478,9 @@ end cd;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'newWorkingDirectory': newWorkingDirectory__internal__,
         }
@@ -4184,7 +4489,8 @@ end cd;
         __result = OMCSession__call__(
             self,
             'cd',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4214,12 +4520,15 @@ end mkdir;
         __args = [
             newDirectory__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'mkdir',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4259,12 +4568,15 @@ end copy;
             source__internal__,
             destination__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'copy',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4294,12 +4606,15 @@ end remove;
         __args = [
             path__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'remove',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4329,12 +4644,15 @@ end checkModel;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'checkModel',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4369,9 +4687,11 @@ end checkAllModelsRecursive;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'checkProtected': checkProtected__internal__,
         }
 
@@ -4379,7 +4699,8 @@ end checkAllModelsRecursive;
         __result = OMCSession__call__(
             self,
             'checkAllModelsRecursive',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4409,12 +4730,15 @@ end typeOf;
         __args = [
             variableName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'typeOf',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4444,12 +4768,15 @@ end instantiateModel;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'instantiateModel',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4493,10 +4820,12 @@ end buildOpenTURNSInterface;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+            pythonTemplateFile__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
-            'pythonTemplateFile': pythonTemplateFile__internal__,
             'showFlatModelica': showFlatModelica__internal__,
         }
 
@@ -4504,7 +4833,8 @@ end buildOpenTURNSInterface;
         __result = OMCSession__call__(
             self,
             'buildOpenTURNSInterface',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4534,12 +4864,15 @@ end runOpenTURNSPythonScript;
         __args = [
             pythonScriptFile__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'runOpenTURNSPythonScript',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4569,12 +4902,15 @@ end generateCode;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'generateCode',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4636,9 +4972,11 @@ end loadModel;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'priorityVersion': priorityVersion__internal__,
             'notify': notify__internal__,
             'languageStandard': languageStandard__internal__,
@@ -4649,7 +4987,8 @@ end loadModel;
         __result = OMCSession__call__(
             self,
             'loadModel',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4679,12 +5018,15 @@ end deleteFile;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'deleteFile',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4724,12 +5066,15 @@ end saveModel;
             fileName__internal__,
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'saveModel',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4782,10 +5127,12 @@ end saveTotalModel;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            fileName__internal__,
+            className__internal__,
+        ]
         __kwrds = {
-            'fileName': fileName__internal__,
-            'className': className__internal__,
             'stripAnnotations': stripAnnotations__internal__,
             'stripComments': stripComments__internal__,
         }
@@ -4794,7 +5141,8 @@ end saveTotalModel;
         __result = OMCSession__call__(
             self,
             'saveTotalModel',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4824,12 +5172,15 @@ end save;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'save',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4861,12 +5212,15 @@ end translateGraphics;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'translateGraphics',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -4956,9 +5310,11 @@ end dumpXMLDAE;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'translationLevel': translationLevel__internal__,
             'addOriginalIncidenceMatrix': addOriginalIncidenceMatrix__internal__,
             'addSolvingInfo': addSolvingInfo__internal__,
@@ -4972,7 +5328,8 @@ end dumpXMLDAE;
         __result = OMCSession__call__(
             self,
             'dumpXMLDAE',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5014,12 +5371,15 @@ end convertUnits;
             s1__internal__,
             s2__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'convertUnits',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5049,12 +5409,15 @@ end getDerivedUnits;
         __args = [
             baseUnit__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getDerivedUnits',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5074,12 +5437,15 @@ end listVariables;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'listVariables',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5119,12 +5485,15 @@ end strtok;
             string__internal__,
             token__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'strtok',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5164,12 +5533,15 @@ end stringSplit;
             string__internal__,
             token__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'stringSplit',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5219,12 +5591,15 @@ end stringReplace;
             source__internal__,
             target__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'stringReplace',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5254,12 +5629,15 @@ end escapeXML;
         __args = [
             inStr__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'escapeXML',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5312,7 +5690,9 @@ end list;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'class_': class___internal__,
             'interfaceOnly': interfaceOnly__internal__,
@@ -5324,7 +5704,8 @@ end list;
         __result = OMCSession__call__(
             self,
             'list',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5354,12 +5735,15 @@ end listFile;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'listFile',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5402,10 +5786,12 @@ end diffModelicaFileListings;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            before__internal__,
+            after__internal__,
+        ]
         __kwrds = {
-            'before': before__internal__,
-            'after': after__internal__,
             'diffFormat': diffFormat__internal__,
         }
 
@@ -5413,7 +5799,8 @@ end diffModelicaFileListings;
         __result = OMCSession__call__(
             self,
             'diffModelicaFileListings',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5484,9 +5871,11 @@ end exportToFigaro;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            path__internal__,
+        ]
         __kwrds = {
-            'path': path__internal__,
             'directory': directory__internal__,
             'database': database__internal__,
             'mode': mode__internal__,
@@ -5498,7 +5887,8 @@ end exportToFigaro;
         __result = OMCSession__call__(
             self,
             'exportToFigaro',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5528,12 +5918,15 @@ end inferBindings;
         __args = [
             path__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'inferBindings',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5563,12 +5956,15 @@ end generateVerificationScenarios;
         __args = [
             path__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'generateVerificationScenarios',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5608,12 +6004,15 @@ end rewriteBlockCall;
             className__internal__,
             inDefs__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'rewriteBlockCall',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5643,12 +6042,15 @@ end realpath;
         __args = [
             name__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'realpath',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5678,12 +6080,15 @@ end uriToFilename;
         __args = [
             uri__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'uriToFilename',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5703,12 +6108,15 @@ end getLoadedLibraries;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getLoadedLibraries',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5762,10 +6170,12 @@ end solveLinearSystem;
             sizes=(None,),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            A__internal__,
+            B__internal__,
+        ]
         __kwrds = {
-            'A': A__internal__,
-            'B': B__internal__,
             'solver': solver__internal__,
             'isInt': isInt__internal__,
         }
@@ -5774,7 +6184,8 @@ end solveLinearSystem;
         __result = OMCSession__call__(
             self,
             'solveLinearSystem',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5814,12 +6225,15 @@ end reopenStandardStream;
             _stream__internal__,
             filename__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'reopenStandardStream',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5899,9 +6313,11 @@ end importFMU;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
             'workdir': workdir__internal__,
             'loglevel': loglevel__internal__,
             'fullPath': fullPath__internal__,
@@ -5914,7 +6330,8 @@ end importFMU;
         __result = OMCSession__call__(
             self,
             'importFMU',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -5994,9 +6411,11 @@ end importFMUModelDescription;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
             'workdir': workdir__internal__,
             'loglevel': loglevel__internal__,
             'fullPath': fullPath__internal__,
@@ -6009,7 +6428,8 @@ end importFMUModelDescription;
         __result = OMCSession__call__(
             self,
             'importFMUModelDescription',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6071,9 +6491,11 @@ end translateModelFMU;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'version': version__internal__,
             'fmuType': fmuType__internal__,
             'fileNamePrefix': fileNamePrefix__internal__,
@@ -6084,7 +6506,8 @@ end translateModelFMU;
         __result = OMCSession__call__(
             self,
             'translateModelFMU',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6155,9 +6578,11 @@ end buildModelFMU;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'version': version__internal__,
             'fmuType': fmuType__internal__,
             'fileNamePrefix': fileNamePrefix__internal__,
@@ -6169,7 +6594,8 @@ end buildModelFMU;
         __result = OMCSession__call__(
             self,
             'buildModelFMU',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6200,12 +6626,15 @@ end buildEncryptedPackage;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'buildEncryptedPackage',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6343,9 +6772,11 @@ end simulate;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'startTime': startTime__internal__,
             'stopTime': stopTime__internal__,
             'numberOfIntervals': numberOfIntervals__internal__,
@@ -6363,7 +6794,8 @@ end simulate;
         __result = OMCSession__call__(
             self,
             'simulate',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6488,9 +6920,11 @@ end buildModel;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'startTime': startTime__internal__,
             'stopTime': stopTime__internal__,
             'numberOfIntervals': numberOfIntervals__internal__,
@@ -6508,7 +6942,8 @@ end buildModel;
         __result = OMCSession__call__(
             self,
             'buildModel',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6633,9 +7068,11 @@ end buildLabel;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'startTime': startTime__internal__,
             'stopTime': stopTime__internal__,
             'numberOfIntervals': numberOfIntervals__internal__,
@@ -6653,7 +7090,8 @@ end buildLabel;
         __result = OMCSession__call__(
             self,
             'buildLabel',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6787,9 +7225,11 @@ end reduceTerms;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'startTime': startTime__internal__,
             'stopTime': stopTime__internal__,
             'numberOfIntervals': numberOfIntervals__internal__,
@@ -6808,7 +7248,8 @@ end reduceTerms;
         __result = OMCSession__call__(
             self,
             'reduceTerms',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6848,12 +7289,15 @@ end moveClass;
             className__internal__,
             offset__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'moveClass',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6883,12 +7327,15 @@ end moveClassToTop;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'moveClassToTop',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6918,12 +7365,15 @@ end moveClassToBottom;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'moveClassToBottom',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -6967,10 +7417,12 @@ end copyClass;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+            newClassName__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
-            'newClassName': newClassName__internal__,
             'withIn': withIn__internal__,
         }
 
@@ -6978,7 +7430,8 @@ end copyClass;
         __result = OMCSession__call__(
             self,
             'copyClass',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7130,9 +7583,11 @@ end linearize;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'startTime': startTime__internal__,
             'stopTime': stopTime__internal__,
             'numberOfIntervals': numberOfIntervals__internal__,
@@ -7153,7 +7608,8 @@ end linearize;
         __result = OMCSession__call__(
             self,
             'linearize',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7305,9 +7761,11 @@ end optimize;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
             'startTime': startTime__internal__,
             'stopTime': stopTime__internal__,
             'numberOfIntervals': numberOfIntervals__internal__,
@@ -7328,7 +7786,8 @@ end optimize;
         __result = OMCSession__call__(
             self,
             'optimize',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7358,12 +7817,15 @@ end getSourceFile;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getSourceFile',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7403,12 +7865,15 @@ end setSourceFile;
             class___internal__,
             filename__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setSourceFile',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7438,12 +7903,15 @@ end isShortDefinition;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isShortDefinition',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7483,12 +7951,15 @@ end setClassComment;
             class___internal__,
             filename__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setClassComment',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7568,7 +8039,9 @@ end getClassNames;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'class_': class___internal__,
             'recursive': recursive__internal__,
@@ -7583,7 +8056,8 @@ end getClassNames;
         __result = OMCSession__call__(
             self,
             'getClassNames',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7613,12 +8087,15 @@ end getUsedClassNames;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getUsedClassNames',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7644,7 +8121,9 @@ end getPackages;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'class_': class___internal__,
         }
@@ -7653,7 +8132,8 @@ end getPackages;
         __result = OMCSession__call__(
             self,
             'getPackages',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7781,7 +8261,9 @@ end basePlotFunction;
             sizes=(2,),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'fileName': fileName__internal__,
             'interpolation': interpolation__internal__,
@@ -7801,7 +8283,8 @@ end basePlotFunction;
         __result = OMCSession__call__(
             self,
             'basePlotFunction',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -7971,9 +8454,11 @@ end plot;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            vars__internal__,
+        ]
         __kwrds = {
-            'vars': vars__internal__,
             'externalWindow': externalWindow__internal__,
             'fileName': fileName__internal__,
             'title': title__internal__,
@@ -7996,7 +8481,8 @@ end plot;
         __result = OMCSession__call__(
             self,
             'plot',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8157,7 +8643,9 @@ end plotAll;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'externalWindow': externalWindow__internal__,
             'fileName': fileName__internal__,
@@ -8181,7 +8669,8 @@ end plotAll;
         __result = OMCSession__call__(
             self,
             'plotAll',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8360,10 +8849,12 @@ end plotParametric;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            xVariable__internal__,
+            yVariable__internal__,
+        ]
         __kwrds = {
-            'xVariable': xVariable__internal__,
-            'yVariable': yVariable__internal__,
             'externalWindow': externalWindow__internal__,
             'fileName': fileName__internal__,
             'title': title__internal__,
@@ -8386,7 +8877,8 @@ end plotParametric;
         __result = OMCSession__call__(
             self,
             'plotParametric',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8430,10 +8922,12 @@ end readSimulationResult;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+            variables__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
-            'variables': variables__internal__,
             'size': size__internal__,
         }
 
@@ -8441,7 +8935,8 @@ end readSimulationResult;
         __result = OMCSession__call__(
             self,
             'readSimulationResult',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8471,12 +8966,15 @@ end readSimulationResultSize;
         __args = [
             fileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'readSimulationResultSize',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8520,9 +9018,11 @@ end readSimulationResultVars;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            fileName__internal__,
+        ]
         __kwrds = {
-            'fileName': fileName__internal__,
             'readParameters': readParameters__internal__,
             'openmodelicaStyle': openmodelicaStyle__internal__,
         }
@@ -8531,7 +9031,8 @@ end readSimulationResultVars;
         __result = OMCSession__call__(
             self,
             'readSimulationResultVars',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8593,11 +9094,13 @@ end filterSimulationResults;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            inFile__internal__,
+            outFile__internal__,
+            vars__internal__,
+        ]
         __kwrds = {
-            'inFile': inFile__internal__,
-            'outFile': outFile__internal__,
-            'vars': vars__internal__,
             'numberOfIntervals': numberOfIntervals__internal__,
             'removeDescription': removeDescription__internal__,
         }
@@ -8606,7 +9109,8 @@ end filterSimulationResults;
         __result = OMCSession__call__(
             self,
             'filterSimulationResults',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8677,11 +9181,13 @@ end compareSimulationResults;
             sizes=(None,),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+            reffilename__internal__,
+            logfilename__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
-            'reffilename': reffilename__internal__,
-            'logfilename': logfilename__internal__,
             'relTol': relTol__internal__,
             'absTol': absTol__internal__,
             'vars': vars__internal__,
@@ -8691,7 +9197,8 @@ end compareSimulationResults;
         __result = OMCSession__call__(
             self,
             'compareSimulationResults',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8744,11 +9251,13 @@ end deltaSimulationResults;
             sizes=(None,),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            filename__internal__,
+            reffilename__internal__,
+            method__internal__,
+        ]
         __kwrds = {
-            'filename': filename__internal__,
-            'reffilename': reffilename__internal__,
-            'method': method__internal__,
             'vars': vars__internal__,
         }
 
@@ -8756,7 +9265,8 @@ end deltaSimulationResults;
         __result = OMCSession__call__(
             self,
             'deltaSimulationResults',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8846,11 +9356,13 @@ end diffSimulationResults;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            actualFile__internal__,
+            expectedFile__internal__,
+            diffPrefix__internal__,
+        ]
         __kwrds = {
-            'actualFile': actualFile__internal__,
-            'expectedFile': expectedFile__internal__,
-            'diffPrefix': diffPrefix__internal__,
             'relTol': relTol__internal__,
             'relTolDiffMinMax': relTolDiffMinMax__internal__,
             'rangeDelta': rangeDelta__internal__,
@@ -8862,7 +9374,8 @@ end diffSimulationResults;
         __result = OMCSession__call__(
             self,
             'diffSimulationResults',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8933,11 +9446,13 @@ end diffSimulationResultsHtml;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            var__internal__,
+            actualFile__internal__,
+            expectedFile__internal__,
+        ]
         __kwrds = {
-            'var': var__internal__,
-            'actualFile': actualFile__internal__,
-            'expectedFile': expectedFile__internal__,
             'relTol': relTol__internal__,
             'relTolDiffMinMax': relTolDiffMinMax__internal__,
             'rangeDelta': rangeDelta__internal__,
@@ -8947,7 +9462,8 @@ end diffSimulationResultsHtml;
         __result = OMCSession__call__(
             self,
             'diffSimulationResultsHtml',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -8987,12 +9503,15 @@ end checkTaskGraph;
             filename__internal__,
             reffilename__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'checkTaskGraph',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9032,12 +9551,15 @@ end checkCodeGraph;
             graphfile__internal__,
             codefile__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'checkCodeGraph',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9081,9 +9603,11 @@ end val;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            var__internal__,
+        ]
         __kwrds = {
-            'var': var__internal__,
             'timePoint': timePoint__internal__,
             'fileName': fileName__internal__,
         }
@@ -9092,7 +9616,8 @@ end val;
         __result = OMCSession__call__(
             self,
             'val',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9112,12 +9637,15 @@ end closeSimulationResultFile;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'closeSimulationResultFile',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9147,12 +9675,15 @@ end getParameterNames;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getParameterNames',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9192,12 +9723,15 @@ end getParameterValue;
             class___internal__,
             parameterName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getParameterValue',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9237,12 +9771,15 @@ end getComponentModifierNames;
             class___internal__,
             componentName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getComponentModifierNames',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9282,12 +9819,15 @@ end getComponentModifierValue;
             class___internal__,
             modifier__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getComponentModifierValue',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9327,12 +9867,15 @@ end getComponentModifierValues;
             class___internal__,
             modifier__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getComponentModifierValues',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9362,12 +9905,15 @@ end getInstantiatedParametersAndValues;
         __args = [
             cls__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInstantiatedParametersAndValues',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9411,10 +9957,12 @@ end removeComponentModifiers;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            class___internal__,
+            componentName__internal__,
+        ]
         __kwrds = {
-            'class_': class___internal__,
-            'componentName': componentName__internal__,
             'keepRedeclares': keepRedeclares__internal__,
         }
 
@@ -9422,7 +9970,8 @@ end removeComponentModifiers;
         __result = OMCSession__call__(
             self,
             'removeComponentModifiers',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9466,10 +10015,12 @@ end removeExtendsModifiers;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            className__internal__,
+            baseClassName__internal__,
+        ]
         __kwrds = {
-            'className': className__internal__,
-            'baseClassName': baseClassName__internal__,
             'keepRedeclares': keepRedeclares__internal__,
         }
 
@@ -9477,7 +10028,8 @@ end removeExtendsModifiers;
         __result = OMCSession__call__(
             self,
             'removeExtendsModifiers',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9507,12 +10059,15 @@ end getConnectionCount;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getConnectionCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9552,12 +10107,15 @@ end getNthConnection;
             className__internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthConnection',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9587,12 +10145,15 @@ end getAlgorithmCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAlgorithmCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9632,12 +10193,15 @@ end getNthAlgorithm;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthAlgorithm',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9667,12 +10231,15 @@ end getInitialAlgorithmCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInitialAlgorithmCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9712,12 +10279,15 @@ end getNthInitialAlgorithm;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthInitialAlgorithm',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9747,12 +10317,15 @@ end getAlgorithmItemsCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAlgorithmItemsCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9792,12 +10365,15 @@ end getNthAlgorithmItem;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthAlgorithmItem',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9827,12 +10403,15 @@ end getInitialAlgorithmItemsCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInitialAlgorithmItemsCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9872,12 +10451,15 @@ end getNthInitialAlgorithmItem;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthInitialAlgorithmItem',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9907,12 +10489,15 @@ end getEquationCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getEquationCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9952,12 +10537,15 @@ end getNthEquation;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthEquation',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -9987,12 +10575,15 @@ end getInitialEquationCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInitialEquationCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10032,12 +10623,15 @@ end getNthInitialEquation;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthInitialEquation',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10067,12 +10661,15 @@ end getEquationItemsCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getEquationItemsCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10112,12 +10709,15 @@ end getNthEquationItem;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthEquationItem',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10147,12 +10747,15 @@ end getInitialEquationItemsCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInitialEquationItemsCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10192,12 +10795,15 @@ end getNthInitialEquationItem;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthInitialEquationItem',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10227,12 +10833,15 @@ end getAnnotationCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAnnotationCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10272,12 +10881,15 @@ end getNthAnnotationString;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthAnnotationString',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10307,12 +10919,15 @@ end getImportCount;
         __args = [
             class___internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getImportCount',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10352,12 +10967,15 @@ end getNthImport;
             class___internal__,
             index__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getNthImport',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10401,10 +11019,12 @@ end iconv;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            string__internal__,
+            from___internal__,
+        ]
         __kwrds = {
-            'string': string__internal__,
-            'from': from___internal__,
             'to': to__internal__,
         }
 
@@ -10412,7 +11032,8 @@ end iconv;
         __result = OMCSession__call__(
             self,
             'iconv',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10442,12 +11063,15 @@ end getDocumentationAnnotation;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getDocumentationAnnotation',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10491,9 +11115,11 @@ end setDocumentationAnnotation;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            class___internal__,
+        ]
         __kwrds = {
-            'class_': class___internal__,
             'info': info__internal__,
             'revisions': revisions__internal__,
         }
@@ -10502,7 +11128,8 @@ end setDocumentationAnnotation;
         __result = OMCSession__call__(
             self,
             'setDocumentationAnnotation',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10533,12 +11160,15 @@ end getTimeStamp;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getTimeStamp',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10568,12 +11198,15 @@ end stringTypeName;
         __args = [
             str__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'stringTypeName',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10603,12 +11236,15 @@ end stringVariableName;
         __args = [
             str__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'stringVariableName',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10638,12 +11274,15 @@ end typeNameString;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'typeNameString',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10673,12 +11312,15 @@ end typeNameStrings;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'typeNameStrings',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10708,12 +11350,15 @@ end getClassComment;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getClassComment',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10743,12 +11388,15 @@ end dirname;
         __args = [
             path__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'dirname',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10778,12 +11426,15 @@ end basename;
         __args = [
             path__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'basename',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10813,12 +11464,15 @@ end getClassRestriction;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getClassRestriction',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10848,12 +11502,15 @@ end isType;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isType',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10883,12 +11540,15 @@ end isPackage;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isPackage',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10918,12 +11578,15 @@ end isClass;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isClass',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10953,12 +11616,15 @@ end isRecord;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isRecord',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -10988,12 +11654,15 @@ end isBlock;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isBlock',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11023,12 +11692,15 @@ end isFunction;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isFunction',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11058,12 +11730,15 @@ end isPartial;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isPartial',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11093,12 +11768,15 @@ end isModel;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isModel',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11128,12 +11806,15 @@ end isConnector;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isConnector',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11163,12 +11844,15 @@ end isOptimization;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isOptimization',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11198,12 +11882,15 @@ end isEnumeration;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isEnumeration',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11233,12 +11920,15 @@ end isOperator;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isOperator',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11268,12 +11958,15 @@ end isOperatorRecord;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isOperatorRecord',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11303,12 +11996,15 @@ end isOperatorFunction;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isOperatorFunction',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11348,12 +12044,15 @@ end isProtectedClass;
             cl__internal__,
             c2__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isProtectedClass',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11383,12 +12082,15 @@ end getBuiltinType;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getBuiltinType',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11448,12 +12150,15 @@ end setInitXmlStartValue;
             startValue__internal__,
             outputFile__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'setInitXmlStartValue',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11483,12 +12188,15 @@ end ngspicetoModelica;
         __args = [
             netlistfileName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'ngspicetoModelica',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11518,12 +12226,15 @@ end getInheritedClasses;
         __args = [
             name__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInheritedClasses',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11569,12 +12280,15 @@ end getComponentsTest;
         __args = [
             name__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getComponentsTest',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11604,12 +12318,15 @@ end isExperiment;
         __args = [
             name__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'isExperiment',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11684,9 +12401,11 @@ end getSimulationOptions;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            name__internal__,
+        ]
         __kwrds = {
-            'name': name__internal__,
             'defaultStartTime': defaultStartTime__internal__,
             'defaultStopTime': defaultStopTime__internal__,
             'defaultTolerance': defaultTolerance__internal__,
@@ -11698,7 +12417,8 @@ end getSimulationOptions;
         __result = OMCSession__call__(
             self,
             'getSimulationOptions',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11738,12 +12458,15 @@ end getAnnotationNamedModifiers;
             name__internal__,
             vendorannotation__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAnnotationNamedModifiers',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11793,12 +12516,15 @@ end getAnnotationModifierValue;
             vendorannotation__internal__,
             modifiername__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAnnotationModifierValue',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11838,12 +12564,15 @@ end classAnnotationExists;
             className__internal__,
             annotationName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'classAnnotationExists',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11883,12 +12612,15 @@ end getBooleanClassAnnotation;
             className__internal__,
             annotationName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getBooleanClassAnnotation',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11928,12 +12660,15 @@ end extendsFrom;
             className__internal__,
             baseClassName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'extendsFrom',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -11959,7 +12694,9 @@ end loadModelica3D;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+        ]
         __kwrds = {
             'version': version__internal__,
         }
@@ -11968,7 +12705,8 @@ end loadModelica3D;
         __result = OMCSession__call__(
             self,
             'loadModelica3D',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12003,9 +12741,11 @@ end searchClassNames;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            searchText__internal__,
+        ]
         __kwrds = {
-            'searchText': searchText__internal__,
             'findInText': findInText__internal__,
         }
 
@@ -12013,7 +12753,8 @@ end searchClassNames;
         __result = OMCSession__call__(
             self,
             'searchClassNames',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12033,12 +12774,15 @@ end getAvailableLibraries;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getAvailableLibraries',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12068,12 +12812,15 @@ end getUses;
         __args = [
             pack__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getUses',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12103,12 +12850,15 @@ end getDerivedClassModifierNames;
         __args = [
             className__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getDerivedClassModifierNames',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12148,12 +12898,15 @@ end getDerivedClassModifierValue;
             className__internal__,
             modifierName__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getDerivedClassModifierValue',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12196,10 +12949,12 @@ end generateEntryPoint;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            fileName__internal__,
+            entryPoint__internal__,
+        ]
         __kwrds = {
-            'fileName': fileName__internal__,
-            'entryPoint': entryPoint__internal__,
             'url': url__internal__,
         }
 
@@ -12207,7 +12962,8 @@ end generateEntryPoint;
         __result = OMCSession__call__(
             self,
             'generateEntryPoint',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12227,12 +12983,15 @@ end numProcessors;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'numProcessors',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12276,9 +13035,11 @@ end runScriptParallel;
             sizes=(),
         )
 
-        # Pack keyword arguments
+        # Pack positional arguments
+        __args = [
+            scripts__internal__,
+        ]
         __kwrds = {
-            'scripts': scripts__internal__,
             'numThreads': numThreads__internal__,
             'useThreads': useThreads__internal__,
         }
@@ -12287,7 +13048,8 @@ end runScriptParallel;
         __result = OMCSession__call__(
             self,
             'runScriptParallel',
-            kwrds=__kwrds
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12316,12 +13078,15 @@ end exit;
         __args = [
             status__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'exit',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12339,12 +13104,15 @@ None
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'threadWorkFailed',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12364,12 +13132,15 @@ end getMemorySize;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getMemorySize',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12387,12 +13158,15 @@ None
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'GC_gcollect_and_unmap',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12422,12 +13196,15 @@ end GC_expand_hp;
         __args = [
             size__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'GC_expand_hp',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12457,12 +13234,15 @@ end GC_set_max_heap_size;
         __args = [
             size__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'GC_set_max_heap_size',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12482,12 +13262,15 @@ end GC_get_prof_stats;
         # Pack positional arguments
         __args = [
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'GC_get_prof_stats',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12527,12 +13310,15 @@ end checkInterfaceOfPackages;
             cl__internal__,
             dependencyMatrix__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'checkInterfaceOfPackages',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12562,12 +13348,15 @@ end sortStrings;
         __args = [
             arr__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'sortStrings',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12608,12 +13397,15 @@ end getClassInformation;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getClassInformation',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12643,12 +13435,15 @@ end getTransitions;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getTransitions',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12748,12 +13543,15 @@ end deleteTransition;
             synchronize__internal__,
             priority__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'deleteTransition',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12783,12 +13581,15 @@ end getInitialStates;
         __args = [
             cl__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'getInitialStates',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12828,12 +13629,15 @@ end deleteInitialState;
             cl__internal__,
             state__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'deleteInitialState',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result
@@ -12876,12 +13680,15 @@ end generateScriptingAPI;
             cl__internal__,
             name__internal__,
         ]
+        __kwrds = {
+        }
 
         # Call function
         __result = OMCSession__call__(
             self,
             'generateScriptingAPI',
-            args=__args
+            args=__args,
+            kwrds=__kwrds,
         )
 
         return __result

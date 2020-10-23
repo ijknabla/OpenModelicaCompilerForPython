@@ -189,14 +189,9 @@ class FunctionDeclarationProfile(
             result.append(
                 argument.check_code
             )
-        result.append("")
-
-        if self.use_positional_argument:
-            result.append(self.code_call_by_positional)
-        else:
-            result.append(self.code_call_by_keyword)
-        result.append("")
-
+        result.append("\n")
+        result.append(self.code_call)
+        result.append("\n")
         result.append("return __result")
 
         return result
