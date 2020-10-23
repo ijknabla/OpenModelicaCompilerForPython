@@ -178,8 +178,3 @@ class AbstractFunctionProfile(
     ) -> code.CodeBlock:
         raise NotImplementedError()
 
-    @property
-    def funcName(
-        self,
-    ) -> str:
-        return str(self.name.parts[-1])

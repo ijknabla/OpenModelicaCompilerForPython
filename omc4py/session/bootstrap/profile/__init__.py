@@ -64,7 +64,7 @@ class FunctionDeclarationProfile(
         self
     ) -> CodeBlock:
         return CodeBlock(
-            f"def {self.funcName}(",
+            f"def {self.py_method_name}(",
             CodeBlock(
                 self.code_arguments,
                 indent=INDENT,
@@ -189,82 +189,70 @@ class FunctionDeclarationProfile(
             result.append(
                 argument.check_code
             )
-        result.append("")
-
-        if self.use_positional_argument:
-            result.append(self.code_call_by_positional)
-        else:
-            result.append(self.code_call_by_keyword)
-        result.append("")
-
+        result.append("\n")
+        result.append(self.code_call)
+        result.append("\n")
         result.append("return __result")
 
         return result
 
     @property
-    def use_positional_argument(
-        self,
-    ) -> bool:
-        return all(
-            not argument.optional
-            for argument in self.inputArguments
-        )
-
-    @property
-    def code_call_by_positional(
+    def code_call(
         self,
     ) -> CodeBlock:
-        argument_items = CodeBlock(indent=INDENT)
+        args_list = []
+        kwrds_list = []
 
+        to_args = True
         for argument in self.inputArguments:
-            argument_items.append(
-                f"{argument.py_checked_variable},"
-            )
+            to_args &= not argument.optional
+            if to_args:
+                args_list.append(
+                    f"{argument.py_checked_variable},"
+                )
+            else:
+                kwrds_list.append(
+                    f"{str(argument.name)!r}: {argument.py_checked_variable},"
+                )
 
         return CodeBlock(
             "# Pack positional arguments",
             "__args = [",
-            argument_items,
-            "]",
-            "",
-            "# Call function",
-            "__result = OMCSession__call__(",
             CodeBlock(
-                "self,",
-                f"{str(self.name)!r},",
-                "args=__args",
+                *args_list,
                 indent=INDENT,
             ),
-            ")",
-        )
-
-    @property
-    def code_call_by_keyword(
-        self,
-    ) -> CodeBlock:
-        argument_items = CodeBlock(indent=INDENT)
-
-        for argument in self.inputArguments:
-            argument_items.append(
-                f"{str(argument.name)!r}: {argument.py_checked_variable},"
-            )
-
-        return CodeBlock(
-            "# Pack keyword arguments",
+            "]",
             "__kwrds = {",
-            argument_items,
+            CodeBlock(
+                *kwrds_list,
+                indent=INDENT,
+            ),
             "}",
             "",
             "# Call function",
             "__result = OMCSession__call__(",
             CodeBlock(
                 "self,",
-                f"{str(self.name)!r},",
-                "kwrds=__kwrds",
+                f"{self.omc_func_name!r},",
+                "args=__args,",
+                "kwrds=__kwrds,",
                 indent=INDENT,
             ),
             ")",
         )
+
+    @property
+    def py_method_name(
+        self,
+    ) -> str:
+        return str(self.name.last_identifier)
+
+    @property
+    def omc_func_name(
+        self,
+    ) -> str:
+        return str(self.name.last_identifier)
 
 
 @AbstractFunctionProfile.register_concrete_class
@@ -297,16 +285,22 @@ class FunctionAliasProfile(
         self,
     ) -> CodeBlock:
         return CodeBlock(
-            f"{self.funcName} = {self.target.funcName}",
+            f"{self.py_method_name} = {self.target.py_method_name}",
         )
 
     @property
     def target(
         self
-    ) -> AbstractFunctionProfile:
+    ) -> FunctionDeclarationProfile:
         profile = get_profile_from_xml(
             self.root,
             TypeName(self.element.attrib["ref"]),
         )
-        assert(isinstance(profile, AbstractFunctionProfile))
+        assert(isinstance(profile, FunctionDeclarationProfile))
         return profile
+
+    @property
+    def py_method_name(
+        self,
+    ) -> str:
+        return str(self.name.last_identifier)
