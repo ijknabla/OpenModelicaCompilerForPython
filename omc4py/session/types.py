@@ -6,7 +6,6 @@ __all__ = (
 
 
 import arpeggio  # type: ignore
-import collections
 import functools
 import typing
 
