@@ -660,7 +660,7 @@ def check_input(
         executable = shutil.which(input_str)
         if executable is None:
             raise ValueError(
-                f"Can't find executable for {input_str}"
+                f"Can't find executable for {input_str!r}"
             )
         return Path(executable), InputType.executable
 
@@ -672,7 +672,7 @@ def check_input(
             )
         if absPath.suffix != ".xml":
             raise ValueError(
-                f"input must be xml, got {input_str!s}"
+                f"input must be xml, got {input_str!r}"
             )
         return absPath, InputType.xml
 
