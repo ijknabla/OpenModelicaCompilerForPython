@@ -124,6 +124,9 @@ class TypeName(
         return tuple(map(str, self.__parts))
 
     @property
+    def is_absolute(self) -> bool: return str(self.parts[0]) == "."
+
+    @property
     def last_identifier(
         self,
     ) -> VariableName:
