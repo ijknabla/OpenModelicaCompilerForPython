@@ -44,6 +44,15 @@ def split_type_specifier(
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
+def _VariableName_from_valid_identifier_no_check(
+    cls: typing.Type["VariableName"],
+    identifier: str,
+):
+    variableName = object.__new__(VariableName)
+    variableName._VariableName__str = identifier
+    return variableName
+
+
 class VariableName(
 ):
     __slots__ = "__str"
