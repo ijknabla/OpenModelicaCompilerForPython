@@ -5,12 +5,13 @@ import numpy  # type: ignore
 import operator
 import typing
 
-from . import string
 from omc4py.primitive_types import (
     VariableName,
     TypeName,
     _TypeName_from_valid_parts_no_check,
 )
+
+from omc4py import string
 
 
 def flatten_list(
