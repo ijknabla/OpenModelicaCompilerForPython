@@ -173,29 +173,29 @@ class SequenceVisitor(
 
 
 class OMCRecordVisitor(
-    TypeSpecifierVisitor,
+    NameVisitor,
 ):
     def visit_omc_record_element(
         self,
         node,
         children,
     ) -> typing.Tuple[str, typing.Any]:
-        IDENT = children.IDENT[0]
+        key = children.IDENT[0]
         value = children.omc_value[0]
-        return str(IDENT), value
+        return key, value
 
     def visit_omc_record_element_list(
         self,
         node,
         children
-    ) -> typing.List[typing.Tuple[VariableName, typing.Any]]:
+    ) -> typing.List[typing.Tuple[str, typing.Any]]:
         return children.omc_record_element
 
     def visit_omc_record_literal(
         self,
         node,
         children
-    ) -> dict:
+    ) -> typing.Dict[str, typing.Any]:
         elements = children.omc_record_element_list[0]
         return dict(elements)
 
