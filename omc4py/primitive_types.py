@@ -117,6 +117,15 @@ class TypeName(
         )
         return self
 
+    @classmethod
+    def _from_parts_no_check(
+        cls,
+        parts: typing.Iterable[str]
+    ) -> "TypeName":
+        self = super().__new__(cls)
+        self.__parts = parts
+        return self
+
     @property
     def parts(
         self,
