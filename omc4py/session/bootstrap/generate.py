@@ -92,10 +92,9 @@ def ensure_defined_type_names_are_unique(
         )
 
 
-def write_module(
-    file: typing.TextIO,
+def create_module(
     root: xml._Element,
-) -> None:
+) -> CodeBlock:
     ensure_defined_type_names_are_unique(root)
 
     code_import = CodeBlock("""\
@@ -198,7 +197,7 @@ from omc4py.session.types import (
         else:
             print(f"Skip {function_profile.name}")
 
-    code.dump(file)
+    return code
 
 
 def main():
@@ -211,7 +210,7 @@ def main():
     root = xml.fromstring(args.input.read_bytes(), interface_parser)
 
     with args.output.open("w", encoding="utf-8") as file:
-        write_module(file, root)
+        create_module(root).dump(file)
 
 
 if __name__ == "__main__":
