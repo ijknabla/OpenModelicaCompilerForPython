@@ -167,6 +167,13 @@ class InteractiveOMC(
             self.process.terminate()
             self.__instances.remove(self)
 
+    @classmethod
+    def close_all(
+        cls,
+    ) -> None:
+        for self in cls.__instances.copy():
+            self.close()
+
     def __enter__(
         self
     ):
