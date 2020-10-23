@@ -8,7 +8,6 @@ import typing
 from . import string
 from .types import (
     VariableName,
-    OMCRecord,
     TypeName,
 )
 
