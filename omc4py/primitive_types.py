@@ -219,7 +219,5 @@ def _TypeName_from_valid_parts_no_check(
     return typeName
 
 
-from omc4py.session import (  # noqa: E402
-    parser,
-    visitor,
-)
+from omc4py.parser import visitor  # noqa: E402
+from omc4py.session import parser  # noqa: E402
