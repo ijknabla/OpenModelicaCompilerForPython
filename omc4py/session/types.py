@@ -1,5 +1,9 @@
 
 __all__ = (
+    "Boolean",
+    "Integer",
+    "Real",
+    "String",
     "VariableName",
     "TypeName",
 )
@@ -7,12 +11,19 @@ __all__ = (
 
 import arpeggio  # type: ignore
 import functools
+import numpy
 import typing
 
 from . import (
     parser,
     string,
 )
+
+
+Real = numpy.double
+Integer = numpy.intc
+Boolean = numpy.bool
+String = numpy.str
 
 
 def valid_identifier(
