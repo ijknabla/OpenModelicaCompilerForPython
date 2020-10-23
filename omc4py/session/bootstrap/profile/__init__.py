@@ -202,6 +202,52 @@ class FunctionDeclarationProfile(
         return result
 
     @property
+    def code_call(
+        self,
+    ) -> CodeBlock:
+        args_list = []
+        kwrds_list = []
+
+        to_args = True
+        for argument in self.inputArguments:
+            to_args &= not argument.optional
+            if to_args:
+                args_list.append(
+                    f"{argument.py_checked_variable},"
+                )
+            else:
+                kwrds_list.append(
+                    f"{str(argument.name)!r}: {argument.py_checked_variable},"
+                )
+
+        return CodeBlock(
+            "# Pack positional arguments",
+            "__args = [",
+            CodeBlock(
+                *args_list,
+                indent=INDENT,
+            ),
+            "]",
+            "__kwrds = {",
+            CodeBlock(
+                *kwrds_list,
+                indent=INDENT,
+            ),
+            "}",
+            "",
+            "# Call function",
+            "__result = OMCSession__call__(",
+            CodeBlock(
+                "self,",
+                f"{self.omc_func_name!r},",
+                "args=__args,",
+                "kwrds=__kwrds,",
+                indent=INDENT,
+            ),
+            ")",
+        )
+
+    @property
     def use_positional_argument(
         self,
     ) -> bool:
