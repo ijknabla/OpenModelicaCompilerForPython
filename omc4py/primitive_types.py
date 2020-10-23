@@ -44,15 +44,6 @@ def split_type_specifier(
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
-def _VariableName_from_valid_identifier_no_check(
-    cls: typing.Type["VariableName"],
-    identifier: str,
-):
-    variableName = object.__new__(VariableName)
-    variableName._VariableName__str = identifier
-    return variableName
-
-
 class VariableName(
 ):
     __slots__ = "__str"
@@ -113,20 +104,17 @@ class TypeName(
     __parts: typing.Tuple[str, ...]
 
     def __new__(cls, *parts):
-        return cls._from_parts_no_check(
+        if len(parts) == 1:
+            part, = parts
+            if isinstance(part, TypeName):
+                return part
+
+        return _TypeName_from_valid_parts_no_check(
+            cls,
             cls.__checked_parts(
                 parts
             )
         )
-
-    @classmethod
-    def _from_parts_no_check(
-        cls,
-        parts: typing.Iterable[str]
-    ) -> "TypeName":
-        self = super().__new__(cls)
-        self.__parts = tuple(parts)
-        return self
 
     @property
     def parts(
@@ -148,8 +136,9 @@ class TypeName(
         self,
     ) -> typing.Iterator["TypeName"]:
         for end in reversed(range(1, len(self.parts))):
-            yield type(self)._from_parts_no_check(
-                self.parts[:end]
+            yield _TypeName_from_valid_parts_no_check(
+                type(self),
+                self.parts[:end],
             )
 
     @property
@@ -214,6 +203,24 @@ class TypeName(
         other: typing.Union[str, VariableName, "TypeName"]
     ):
         return type(self)(self, other)
+
+
+def _VariableName_from_valid_identifier_no_check(
+    cls: typing.Type["VariableName"],
+    identifier: str,
+):
+    variableName = object.__new__(VariableName)
+    variableName._VariableName__str = identifier
+    return variableName
+
+
+def _TypeName_from_valid_parts_no_check(
+    cls: typing.Type["TypeName"],
+    parts: typing.Iterable[str],
+):
+    typeName = object.__new__(TypeName)
+    typeName._TypeName__parts = tuple(parts)
+    return typeName
 
 
 from omc4py.session import (  # noqa: E402

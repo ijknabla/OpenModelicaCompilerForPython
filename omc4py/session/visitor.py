@@ -6,9 +6,10 @@ import operator
 import typing
 
 from . import string
-from .types import (
+from omc4py.primitive_types import (
     VariableName,
     TypeName,
+    _TypeName_from_valid_parts_no_check,
 )
 
 
@@ -94,9 +95,15 @@ class TypeSpecifierVisitor(
     ) -> TypeName:
         name = children.name[0]
         if node[0].value == ".":
-            return TypeName._from_parts_no_check((".", *name))
+            return _TypeName_from_valid_parts_no_check(
+                TypeName,
+                (".", *name),
+            )
         else:
-            return TypeName._from_parts_no_check(name)
+            return _TypeName_from_valid_parts_no_check(
+                TypeName,
+                name,
+            )
 
 
 class NumberVisitor(
