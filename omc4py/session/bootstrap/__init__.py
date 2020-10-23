@@ -582,23 +582,6 @@ def generate_omc_interface_xml(
     return xml.ElementTree(omcInterface_elem)
 
 
-def bootstrap(
-    binary_output: typing.BinaryIO,
-    omc_command: StrOrPathLike,
-):
-    with open_session(omc_command) as session:
-        omc_interface_xml = generate_omc_interface_xml(
-            session
-        )
-
-    omc_interface_xml.write(
-        binary_output,
-        pretty_print=True,
-        xml_declaration=True,
-        encoding="utf-8",
-    )
-
-
 def load_schema(
 ) -> xml.XMLSchema:
     return xml.XMLSchema(
@@ -608,28 +591,6 @@ def load_schema(
                 "../interface/omc_interface.xsd",
             )
         )
-    )
-
-
-def main():
-    parser = argparse.ArgumentParser(
-        prog="omc4py.session.bootstrap debug script",
-    )
-    parser.add_argument(
-        "--omc",
-        help="omc executable",
-        default=None,
-    ),
-    parser.add_argument(
-        "--output",
-        type=argparse.FileType("wb"),
-        default=sys.stdout.buffer
-    )
-    args = parser.parse_args()
-
-    bootstrap(
-        args.output,
-        args.omc
     )
 
 
@@ -758,7 +719,7 @@ def check_output_args(
     return output, outputType
 
 
-def main2():
+def main():
     """\
 Refactored main
     """
