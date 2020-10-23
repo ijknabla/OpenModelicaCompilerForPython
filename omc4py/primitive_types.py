@@ -202,6 +202,5 @@ class TypeName(
 
 from omc4py.session import (  # noqa: E402
     parser,
-    string,
     visitor,
 )
