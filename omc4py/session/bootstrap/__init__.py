@@ -628,3 +628,41 @@ def main():
         args.output,
         args.omc
     )
+
+
+def main2():
+    """\
+Refactored main
+    """
+    parser = argparse.ArgumentParser(
+        prog="omc4py bootstrap",
+    )
+
+    # # input
+    # omc executable or omc interface xml
+    parser.add_argument(
+        "input",
+    )
+
+    # # inputType
+    # {executable, xml}
+    # default is None (selected by `input`)
+    parser.add_argument(
+        "--inputType",
+    )
+
+    # # output
+    # default is stdout, (generate python module)
+    parser.add_argument(
+        "-o", "--output",  # default is stdout
+    )
+
+    # # outputType
+    # {python_module, xml}
+    # default is None (select by `output`)
+    parser.add_argument(
+        "--outputType",
+    )
+
+    args = parser.parse_args()
+    print(args)
