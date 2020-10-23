@@ -65,10 +65,31 @@ omc_error_pattern = re.compile(
 
 
 class InteractiveOMC(
-    typing.NamedTuple
 ):
-    socket: zmq.Socket
-    process: subprocess.Popen
+    __slots__ = (
+        "__socket",
+        "__process",
+    )
+
+    __socket: zmq.Socket
+    __process: subprocess.Popen
+
+    def __new__(
+        cls,
+        socket: zmq.Socket,
+        process: subprocess.Popen,
+    ):
+        self = super().__new__(cls)
+        self.__socket = socket
+        self.__process = process
+
+        return self
+
+    @property
+    def socket(self) -> zmq.Socket: return self.__socket
+
+    @property
+    def process(self) -> subprocess.Popen: return self.__process
 
     @classmethod
     def open(
