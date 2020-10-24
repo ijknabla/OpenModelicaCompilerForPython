@@ -12,6 +12,8 @@ import shutil
 import sys
 import typing
 
+from omc4py import primitive_types
+
 from .. import (
     OMCSession__call,
     OMCSession__close,
@@ -42,23 +44,6 @@ class DimensionsVisitor(
         return node.flat_str()
 
 
-class Component2(
-    typing.NamedTuple,
-):
-    className: types.TypeName
-    name: types.VariableName
-    comment: str
-    protected: str
-    isFinal: bool
-    isFlow: bool
-    isStream: bool
-    isReplaceable: bool
-    variability: str
-    innerOuter: str
-    inputOutput: str
-    dimensions: typing.Tuple[str, ...]
-
-
 class ComponentsVisitor(
     visitor.BooleanVisitor,
     visitor.StringVisitor,
@@ -74,7 +59,7 @@ class ComponentsVisitor(
         isFinal, isFlow, isStream, isReplaceable, = children.boolean
         dimensions, = children.omc_dimensions
 
-        return Component2(
+        return primitive_types.Component(
             className=className,
             name=name,
             comment=comment,

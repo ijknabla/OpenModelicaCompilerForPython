@@ -1,6 +1,7 @@
 
 __all__ = (
     "Boolean",
+    "Component",
     "Integer",
     "Real",
     "String",
@@ -216,6 +217,23 @@ def _TypeName_from_valid_parts_no_check(
     typeName = object.__new__(TypeName)
     typeName._TypeName__parts = tuple(parts)
     return typeName
+
+
+class Component(
+    typing.NamedTuple,
+):
+    className: TypeName
+    name: VariableName
+    comment: str
+    protected: str
+    isFinal: bool
+    isFlow: bool
+    isStream: bool
+    isReplaceable: bool
+    variability: str
+    innerOuter: str
+    inputOutput: str
+    dimensions: typing.Tuple[str, ...]
 
 
 from omc4py.parser import visitor  # noqa: E402
