@@ -98,6 +98,10 @@ def create_module(
     ensure_defined_type_names_are_unique(root)
 
     code_import = CodeBlock("""\
+
+# type: ignore
+# flake8: noqa
+
 import enum as enum__
 import functools as functools__
 import numpy as numpy__
