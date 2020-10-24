@@ -45,7 +45,7 @@ def getitem_with_default(
             raise
 
 
-class NameVisitor(
+class TypeSpecifierVisitor(
     arpeggio.PTNodeVisitor,
 ):
     def visit_IDENT(
@@ -62,25 +62,6 @@ class NameVisitor(
     ) -> typing.Tuple[str, ...]:
         return tuple(children.IDENT)
 
-
-class TypeSpecifierSplitVisitor(
-    NameVisitor,
-):
-    def visit_type_specifier(
-        self,
-        node,
-        children,
-    ) -> typing.Tuple[str, ...]:
-        name = children.name[0]
-        if node[0].value == ".":
-            return (".", *name)
-        else:
-            return name
-
-
-class TypeSpecifierVisitor(
-    NameVisitor,
-):
     def visit_type_specifier(
         self,
         node,
@@ -173,7 +154,7 @@ class SequenceVisitor(
 
 
 class OMCRecordVisitor(
-    NameVisitor,
+    TypeSpecifierVisitor,
 ):
     def visit_omc_record_element(
         self,
