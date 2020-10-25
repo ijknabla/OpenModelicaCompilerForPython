@@ -349,7 +349,7 @@ def OMCSession__call(
             raise error
 
     if parse:
-        return parser.parse_omc_value(result_literal)
+        return parser.parse_OMCValue(result_literal)
     else:
         return result_literal
 

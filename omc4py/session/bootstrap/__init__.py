@@ -179,7 +179,7 @@ class OMCSession(
                 types.TypeName(name)
             ],
         )
-        return parser.parseComponents(result_literal)
+        return parser.parse_ComponentArray(result_literal)
 
 
 open_session = functools.partial(OMCSession__open, OMCSession)

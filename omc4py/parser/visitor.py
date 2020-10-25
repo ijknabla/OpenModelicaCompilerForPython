@@ -322,7 +322,7 @@ class AliasVisitor(
         return None
 
 
-class ComponentsVisitor(
+class ComponentArrayVisitor(
     BooleanVisitor,
     StringVisitor,
     TypeSpecifierVisitor,
