@@ -24,11 +24,11 @@ from .. import (
 
 
 def parseComponents(
-    omc_record_array: str
+    literal: str
 ):
-    tree = parser.omc_record_array_parser.parse(omc_record_array)
     return arpeggio.visit_parse_tree(
-        tree, visitor.ComponentsVisitor(),
+        parser.omc_record_array_parser.parse(literal),
+        visitor.ComponentsVisitor(source=literal),
     )
 
 

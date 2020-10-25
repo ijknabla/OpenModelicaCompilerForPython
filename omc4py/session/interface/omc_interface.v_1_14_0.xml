@@ -2928,8 +2928,8 @@ end solveLinearSystem;</code>
             <arguments>
               <argument inputOutput="input" className="Real" name="A" hasDefault="false" comment="">
                 <dimensions>
-                  <dimension size="size(B,1)"/>
-                  <dimension size="size(B,1)"/>
+                  <dimension size="size(B, 1)"/>
+                  <dimension size="size(B, 1)"/>
                 </dimensions>
               </argument>
               <argument inputOutput="input" className="Real" name="B" hasDefault="false" comment="">
@@ -2947,7 +2947,7 @@ end solveLinearSystem;</code>
               </argument>
               <argument inputOutput="output" className="Real" name="X" hasDefault="false" comment="">
                 <dimensions>
-                  <dimension size="size(B,1)"/>
+                  <dimension size="size(B, 1)"/>
                 </dimensions>
               </argument>
               <argument inputOutput="output" className="Integer" name="info" hasDefault="false" comment="">

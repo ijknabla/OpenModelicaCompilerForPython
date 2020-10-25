@@ -322,30 +322,32 @@ class AliasVisitor(
         return None
 
 
-class DimensionsVisitor(
-    arpeggio.PTNodeVisitor,
-):
-    def visit_omc_dimensions(self, node, children):
-        if children.subscript_list:
-            return tuple(children.subscript_list[0])
-        else:
-            return tuple()
-
-    def visit_subscript_list(
-        self, node, children,
-    ):
-        return children.subscript
-
-    def visit_subscript(self, node, children):
-        return node.flat_str()
-
-
 class ComponentsVisitor(
     BooleanVisitor,
     StringVisitor,
     TypeSpecifierVisitor,
-    DimensionsVisitor,
 ):
+    __source: str
+
+    @property
+    def source(self) -> str: return self.__source
+
+    def __init__(
+        self,
+        source: str
+    ):
+        super().__init__()
+        self.__source = source
+
+    def visit_omc_component_array(self, node, children):
+        return getitem_with_default(
+            children.omc_component_list, 0,
+            default=[],
+        )
+
+    def visit_omc_component_list(self, node, children):
+        return children.omc_component
+
     def visit_omc_component(self, node, children):
         className, = children.type_specifier
         name, = children.IDENT
@@ -370,11 +372,20 @@ class ComponentsVisitor(
             dimensions=dimensions,
         )
 
-    def visit_omc_component_list(self, node, children):
-        return children.omc_component
+    def visit_omc_dimensions(self, node, children):
+        return tuple(
+            getitem_with_default(
+                children.subscript_list, 0,
+                default=(),
+            )
+        )
 
-    def visit_omc_component_array(self, node, children):
-        if children.omc_component_list:
-            return children.omc_component_list[0]
-        else:
-            return []
+    def visit_subscript_list(
+        self, node, children,
+    ):
+        return children.subscript
+
+    def visit_subscript(self, node, children):
+        return self.source[
+            node.position:node.position_end
+        ]
