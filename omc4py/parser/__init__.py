@@ -24,10 +24,10 @@ with syntax.omc_dialect_context:
         syntax.std.CPP_STYLE_COMMENT,
     )
 
-    omc_value_parser = arpeggio.ParserPython(
-        syntax.omc_value_withEOF,
-    )
-
     omc_record_array_parser = arpeggio.ParserPython(
         syntax.omc_component_array_withEOF,
+    )
+
+    omc_value_parser = arpeggio.ParserPython(
+        syntax.omc_value_withEOF,
     )
