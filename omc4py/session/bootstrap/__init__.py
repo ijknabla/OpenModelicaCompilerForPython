@@ -12,14 +12,11 @@ import shutil
 import sys
 import typing
 
-from omc4py import primitive_types
-
 from .. import (
     OMCSession__call,
     OMCSession__close,
     OMCSession__open,
     OMCSessionBase,
-    StrOrPathLike,
     parser,
     types,
     visitor,
