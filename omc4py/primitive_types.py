@@ -20,20 +20,6 @@ Boolean = numpy.bool
 String = numpy.str
 
 
-def _TypeName_from_string(
-    type_specifier: str
-) -> "TypeName":
-    try:
-        return arpeggio.visit_parse_tree(
-            parser.type_specifier_parser.parse(
-                type_specifier,
-            ),
-            visitor.TypeSpecifierVisitor()
-        )
-    except arpeggio.NoMatch:
-        raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
-
-
 class VariableName(
 ):
     __slots__ = "__str"
@@ -152,7 +138,7 @@ class TypeName(
                 elif isinstance(obj, VariableName):
                     yield str(obj)
                 else:
-                    yield from _TypeName_from_string(str(obj)).parts
+                    yield from parser._TypeName_from_string(str(obj)).parts
 
         for i, part in enumerate(
             not_checked_parts()
@@ -227,5 +213,3 @@ class Component(
 
 
 from . import parser  # noqa: E402
-from omc4py.parser import visitor  # noqa: E402
-from omc4py.session import parser  # noqa: E402

@@ -5,7 +5,12 @@ __all__ = (
 
 import arpeggio  # type: ignore
 
-from omc4py.parser import syntax
+from omc4py.primitive_types import TypeName
+
+from . import (
+    syntax,
+    visitor,
+)
 
 
 with syntax.omc_dialect_context:
@@ -39,3 +44,17 @@ def valid_identifier(
         return True
     except arpeggio.NoMatch:
         return False
+
+
+def _TypeName_from_string(
+    type_specifier: str
+) -> TypeName:
+    try:
+        return arpeggio.visit_parse_tree(
+            type_specifier_parser.parse(
+                type_specifier,
+            ),
+            visitor.TypeSpecifierVisitor()
+        )
+    except arpeggio.NoMatch:
+        raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
