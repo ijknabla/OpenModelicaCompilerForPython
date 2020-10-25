@@ -8,6 +8,7 @@ __all__ = (
 
 
 import arpeggio  # type: ignore
+import typing
 
 import modelica_language.parsers.syntax as std  # type: ignore
 
@@ -155,17 +156,17 @@ def stored_definition_withEOF():
 
 
 class OMCDialectContext():
-    __enabled = False
+    __enabled: typing.ClassVar[bool] = False
 
     def __enter__(self):
-        if self.__enabled:
+        if OMCDialectContext.__enabled:
             raise ValueError("Duplicate OMCDialectContext")
 
-        self.__enabled = True
+        OMCDialectContext.__enabled = True
         std.IDENT = IDENT
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.__enabled = False
+        OMCDialectContext.__enabled = False
         std.IDENT = _MODELICA_STANDARD_IDENT
 
         return False
