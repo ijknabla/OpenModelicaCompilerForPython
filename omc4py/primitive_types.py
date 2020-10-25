@@ -1,6 +1,7 @@
 
 __all__ = (
     "Boolean",
+    "Component",
     "Integer",
     "Real",
     "String",
@@ -9,7 +10,6 @@ __all__ = (
 )
 
 import arpeggio  # type: ignore
-import functools
 import numpy  # type: ignore
 import typing
 
@@ -30,15 +30,15 @@ def valid_identifier(
         return False
 
 
-def split_type_specifier(
+def _TypeName_from_string(
     type_specifier: str
-) -> typing.Tuple[str, ...]:
+) -> "TypeName":
     try:
         return arpeggio.visit_parse_tree(
             parser.type_specifier_parser.parse(
                 type_specifier,
             ),
-            visitor.TypeSpecifierSplitVisitor()
+            visitor.TypeSpecifierVisitor()
         )
     except arpeggio.NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
@@ -162,7 +162,7 @@ class TypeName(
                 elif isinstance(obj, VariableName):
                     yield str(obj)
                 else:
-                    yield from split_type_specifier(str(obj))
+                    yield from _TypeName_from_string(str(obj)).parts
 
         for i, part in enumerate(
             not_checked_parts()
@@ -219,7 +219,22 @@ def _TypeName_from_valid_parts_no_check(
     return typeName
 
 
-from omc4py.session import (  # noqa: E402
-    parser,
-    visitor,
-)
+class Component(
+    typing.NamedTuple,
+):
+    className: TypeName
+    name: VariableName
+    comment: str
+    protected: str
+    isFinal: bool
+    isFlow: bool
+    isStream: bool
+    isReplaceable: bool
+    variability: str
+    innerOuter: str
+    inputOutput: str
+    dimensions: typing.Tuple[str, ...]
+
+
+from omc4py.parser import visitor  # noqa: E402
+from omc4py.session import parser  # noqa: E402

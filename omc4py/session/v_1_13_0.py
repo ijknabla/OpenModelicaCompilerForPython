@@ -1,4 +1,8 @@
 
+
+# type: ignore
+# flake8: noqa
+
 import enum as enum__
 import functools as functools__
 import numpy as numpy__
@@ -13096,7 +13100,7 @@ end exit;
     ):
         """
 ```modelica
-None
+
 ```
         """
         # Argument check
@@ -13150,7 +13154,7 @@ end getMemorySize;
     ):
         """
 ```modelica
-None
+
 ```
         """
         # Argument check

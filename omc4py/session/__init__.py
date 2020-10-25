@@ -14,12 +14,14 @@ import typing_extensions
 import uuid
 import warnings
 import zmq  # type: ignore
+
 from . import (
     exception,
     parser,
-    string,
-    visitor,
 )
+
+from omc4py import string
+from omc4py.parser import visitor
 
 
 logger = logging.getLogger(__name__)
