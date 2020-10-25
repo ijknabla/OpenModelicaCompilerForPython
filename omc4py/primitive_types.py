@@ -20,16 +20,6 @@ Boolean = numpy.bool
 String = numpy.str
 
 
-def valid_identifier(
-    ident: str
-) -> bool:
-    try:
-        parser.IDENT_parser.parse(ident)
-        return True
-    except arpeggio.NoMatch:
-        return False
-
-
 def _TypeName_from_string(
     type_specifier: str
 ) -> "TypeName":
@@ -58,7 +48,7 @@ class VariableName(
             return obj
 
         obj_str = str(obj)
-        if not valid_identifier(obj_str):
+        if not parser.valid_identifier(obj_str):
             raise ValueError(
                 f"Invalid modelica identifier, got {obj_str!r}"
             )
@@ -236,5 +226,6 @@ class Component(
     dimensions: typing.Tuple[str, ...]
 
 
+from . import parser  # noqa: E402
 from omc4py.parser import visitor  # noqa: E402
 from omc4py.session import parser  # noqa: E402

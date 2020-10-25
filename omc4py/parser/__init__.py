@@ -31,3 +31,13 @@ with syntax.omc_dialect_context:
     omc_value_parser = arpeggio.ParserPython(
         syntax.omc_value_withEOF,
     )
+
+
+def valid_identifier(
+    ident: str
+) -> bool:
+    try:
+        IDENT_parser.parse(ident)
+        return True
+    except arpeggio.NoMatch:
+        return False
