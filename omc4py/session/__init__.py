@@ -17,10 +17,12 @@ import zmq  # type: ignore
 
 from . import (
     exception,
-    parser,
 )
 
-from omc4py import string
+from omc4py import (
+    parser,
+    string,
+)
 from omc4py.parser import visitor
 
 
