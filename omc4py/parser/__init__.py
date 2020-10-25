@@ -59,3 +59,12 @@ def _TypeName_from_str(
         )
     except arpeggio.NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
+
+
+def parse_omc_value(
+    literal: str
+):
+    return arpeggio.visit_parse_tree(
+        omc_value_parser.parse(literal),
+        visitor.OMCValueVisitor()
+    )

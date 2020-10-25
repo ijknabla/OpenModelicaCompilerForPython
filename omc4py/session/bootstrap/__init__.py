@@ -12,14 +12,14 @@ import shutil
 import sys
 import typing
 
+from omc4py import parser
+
 from .. import (
     OMCSession__call,
     OMCSession__close,
     OMCSession__open,
     OMCSessionBase,
-    parser,
     types,
-    visitor,
 )
 
 
@@ -28,7 +28,7 @@ def parseComponents(
 ):
     return arpeggio.visit_parse_tree(
         parser.omc_record_array_parser.parse(literal),
-        visitor.ComponentsVisitor(source=literal),
+        parser.visitor.ComponentsVisitor(source=literal),
     )
 
 
@@ -38,7 +38,7 @@ def parse_defaultValueInfoDict(
     return dict(
         arpeggio.visit_parse_tree(
             parser.stored_definition_parser.parse(interface),
-            visitor.DefaultValueInfoVisitor(),
+            parser.visitor.DefaultValueInfoVisitor(),
         )
     )
 
@@ -48,16 +48,16 @@ def parse_enumerator(
 ) -> typing.Tuple[types.VariableName]:
     return arpeggio.visit_parse_tree(
         parser.stored_definition_parser.parse(code),
-        visitor.EnumeratorVisitor(),
+        parser.visitor.EnumeratorVisitor(),
     )
 
 
 def parse_alias(
     code: str
-) -> typing.Optional[visitor.AliasInfo]:
+) -> typing.Optional[parser.visitor.AliasInfo]:
     return arpeggio.visit_parse_tree(
         parser.stored_definition_parser.parse(code),
-        visitor.AliasVisitor(),
+        parser.visitor.AliasVisitor(),
     )
 
 

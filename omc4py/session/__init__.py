@@ -23,7 +23,6 @@ from omc4py import (
     parser,
     string,
 )
-from omc4py.parser import visitor
 
 
 logger = logging.getLogger(__name__)
@@ -265,15 +264,6 @@ class InteractiveOMC(
 atexit.register(InteractiveOMC.close_all)
 
 
-def parse_omc_value(
-    literal: str
-):
-    return arpeggio.visit_parse_tree(
-        parser.omc_value_parser.parse(literal),
-        visitor.OMCValueVisitor()
-    )
-
-
 class OMCSessionBase(
 ):
     _omc: InteractiveOMC
@@ -359,7 +349,7 @@ def OMCSession__call(
             raise error
 
     if parse:
-        return parse_omc_value(result_literal)
+        return parser.parse_omc_value(result_literal)
     else:
         return result_literal
 
