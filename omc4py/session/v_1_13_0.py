@@ -13100,7 +13100,7 @@ end exit;
     ):
         """
 ```modelica
-None
+
 ```
         """
         # Argument check
@@ -13154,7 +13154,7 @@ end getMemorySize;
     ):
         """
 ```modelica
-None
+
 ```
         """
         # Argument check
