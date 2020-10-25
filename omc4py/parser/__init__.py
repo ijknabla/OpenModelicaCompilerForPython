@@ -1,5 +1,6 @@
 
 __all__ = (
+    "_TypeName_from_str",
     "valid_identifier",
 )
 
@@ -46,7 +47,7 @@ def valid_identifier(
         return False
 
 
-def _TypeName_from_string(
+def _TypeName_from_str(
     type_specifier: str
 ) -> TypeName:
     try:

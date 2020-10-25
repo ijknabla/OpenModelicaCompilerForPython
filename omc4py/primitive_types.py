@@ -91,6 +91,13 @@ class TypeName(
             )
         )
 
+    @classmethod
+    def from_str(
+        cls,
+        s: str
+    ) -> "TypeName":
+        return parser._TypeName_from_str(s)
+
     @property
     def parts(
         self,
@@ -125,8 +132,9 @@ class TypeName(
         else:
             return self
 
-    @staticmethod
+    @classmethod
     def __checked_parts(
+        cls,
         objs: typing.Iterable,
     ) -> typing.Iterator[str]:
 
@@ -138,7 +146,7 @@ class TypeName(
                 elif isinstance(obj, VariableName):
                     yield str(obj)
                 else:
-                    yield from parser._TypeName_from_string(str(obj)).parts
+                    yield from cls.from_str(str(obj)).parts
 
         for i, part in enumerate(
             not_checked_parts()
