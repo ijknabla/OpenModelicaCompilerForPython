@@ -9,7 +9,6 @@ __all__ = (
     "VariableName",
 )
 
-import arpeggio  # type: ignore
 import numpy  # type: ignore
 import typing
 
