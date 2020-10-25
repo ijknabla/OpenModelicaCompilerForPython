@@ -26,70 +26,12 @@ from .. import (
 )
 
 
-class DimensionsVisitor(
-    arpeggio.PTNodeVisitor,
-):
-    def visit_omc_dimensions(self, node, children):
-        if children.subscript_list:
-            return tuple(children.subscript_list[0])
-        else:
-            return tuple()
-
-    def visit_subscript_list(
-        self, node, children,
-    ):
-        return children.subscript
-
-    def visit_subscript(self, node, children):
-        return node.flat_str()
-
-
-class ComponentsVisitor(
-    visitor.BooleanVisitor,
-    visitor.StringVisitor,
-    visitor.TypeSpecifierVisitor,
-    DimensionsVisitor,
-):
-    def visit_omc_component(self, node, children):
-        className, = children.type_specifier
-        name, = children.IDENT
-        (
-            comment, protected, variability, innerOuter, inputOutput,
-        ) = children.STRING
-        isFinal, isFlow, isStream, isReplaceable, = children.boolean
-        dimensions, = children.omc_dimensions
-
-        return primitive_types.Component(
-            className=className,
-            name=name,
-            comment=comment,
-            protected=protected,
-            isFinal=isFinal,
-            isFlow=isFlow,
-            isStream=isStream,
-            isReplaceable=isReplaceable,
-            variability=variability,
-            innerOuter=innerOuter,
-            inputOutput=inputOutput,
-            dimensions=dimensions,
-        )
-
-    def visit_omc_component_list(self, node, children):
-        return children.omc_component
-
-    def visit_omc_component_array(self, node, children):
-        if children.omc_component_list:
-            return children.omc_component_list[0]
-        else:
-            return []
-
-
 def parseComponents(
     omc_record_array: str
 ):
     tree = parser.omc_record_array_parser.parse(omc_record_array)
     return arpeggio.visit_parse_tree(
-        tree, ComponentsVisitor(),
+        tree, visitor.ComponentsVisitor(),
     )
 
 
