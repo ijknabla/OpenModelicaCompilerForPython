@@ -23,15 +23,6 @@ from .. import (
 )
 
 
-def parseComponents(
-    literal: str
-):
-    return arpeggio.visit_parse_tree(
-        parser.omc_record_array_parser.parse(literal),
-        parser.visitor.ComponentsVisitor(source=literal),
-    )
-
-
 def parse_defaultValueInfoDict(
     interface: str
 ) -> typing.Dict[types.VariableName, typing.Optional[str]]:
@@ -188,7 +179,7 @@ class OMCSession(
                 types.TypeName(name)
             ],
         )
-        return parseComponents(result_literal)
+        return parser.parseComponents(result_literal)
 
 
 open_session = functools.partial(OMCSession__open, OMCSession)

@@ -61,6 +61,15 @@ def _TypeName_from_str(
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
+def parseComponents(
+    literal: str
+):
+    return arpeggio.visit_parse_tree(
+        omc_record_array_parser.parse(literal),
+        visitor.ComponentsVisitor(source=literal),
+    )
+
+
 def parse_omc_value(
     literal: str
 ):
