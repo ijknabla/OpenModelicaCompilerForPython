@@ -8,6 +8,12 @@ class AbstractInteractiveOMC(
     @abc.abstractmethod
     def close(self) -> None: ...
 
+    @abc.abstractmethod
+    def evaluate(
+        self,
+        expression: str,
+    ) -> str: ...
+
     def __enter__(
         self,
     ) -> "AbstractInteractiveOMC":
