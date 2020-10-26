@@ -1,5 +1,4 @@
 
-import arpeggio  # type: ignore
 import atexit
 import numpy
 import os
