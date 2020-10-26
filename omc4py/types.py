@@ -13,29 +13,31 @@ class OMCEnumerationMeta(
 ):
     __className__: TypeName
 
-    def __getitem__(
+    def __call__(
         cls,
-        key,
+        value,
     ):
-        if isinstance(key, VariableName):
-            return super().__getitem__(str(key))
-        elif isinstance(key, TypeName):
-            if not key.parent == cls.__className__:
+        if isinstance(value, VariableName):
+            return cls[str(value)]
+        if isinstance(value, TypeName):
+            if not value.parent == cls.__className__:
                 raise KeyError(
-                    "key must be in {className}.{{{enumerator_list}}}"
-                    ", got {key}".format(
+                    "TypeName must be in {className}.{{{enumerator_list}}}"
+                    ", got {value}".format(
                         className=cls.__className__,
                         enumerator_list=", ".join(cls.__members__),
-                        key=key,
+                        value=value,
                     )
                 )
-            return cls[key.last_identifier]
-        else:
+            return cls(value.last_identifier)
+        elif isinstance(value, str):
             try:
-                return cls[VariableName(key)]
+                return cls(VariableName(value))
             except ValueError:
                 pass
-            return cls[TypeName(key)]
+            return cls(TypeName(value))
+        else:
+            return super().__call__(value)
 
 
 class OMCEnumeration(
