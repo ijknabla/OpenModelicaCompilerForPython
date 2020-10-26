@@ -19,6 +19,7 @@ from . import (
 )
 
 from omc4py import (
+    abstract,
     parser,
     string,
 )
@@ -73,6 +74,7 @@ omc_error_pattern = re.compile(
 
 
 class InteractiveOMC(
+    abstract.AbstractInteractiveOMC,
 ):
     __slots__ = (
         "__socket",
@@ -205,20 +207,6 @@ class InteractiveOMC(
     ) -> None:
         for self in cls.__instances.copy():
             self.close()
-
-    def __enter__(
-        self
-    ):
-        return self
-
-    def __exit__(
-        self,
-        exc_type,
-        exc_value,
-        traceback,
-    ):
-        self.close()
-        return False
 
     def evaluate(
         self,
