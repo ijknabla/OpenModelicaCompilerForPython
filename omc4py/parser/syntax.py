@@ -8,20 +8,9 @@ __all__ = (
 
 
 import arpeggio  # type: ignore
+import typing
 
 import modelica_language.parsers.syntax as std  # type: ignore
-
-
-def change___name__(
-    name: str
-):
-    def decorator(
-        obj
-    ):
-        obj.__name__ = name
-        return obj
-
-    return decorator
 
 
 _MODELICA_STANDARD_IDENT = std.IDENT
@@ -129,43 +118,38 @@ def omc_component_array():
     return "{", omc_component_list, "}"
 
 
-@change___name__("file")
 def IDENT_withEOF():
     return std.IDENT, arpeggio.EOF
 
 
-@change___name__("file")
 def type_specifier_withEOF():
     return std.type_specifier, arpeggio.EOF
 
 
-@change___name__("file")
 def omc_value_withEOF():
     return omc_value, arpeggio.EOF
 
 
-@change___name__("file")
 def omc_component_array_withEOF():
     return omc_component_array, arpeggio.EOF
 
 
-@change___name__("file")
 def stored_definition_withEOF():
     return std.stored_definition, arpeggio.EOF
 
 
 class OMCDialectContext():
-    __enabled = False
+    __enabled: typing.ClassVar[bool] = False
 
     def __enter__(self):
-        if self.__enabled:
+        if OMCDialectContext.__enabled:
             raise ValueError("Duplicate OMCDialectContext")
 
-        self.__enabled = True
+        OMCDialectContext.__enabled = True
         std.IDENT = IDENT
 
     def __exit__(self, exc_type, exc_value, traceback):
-        self.__enabled = False
+        OMCDialectContext.__enabled = False
         std.IDENT = _MODELICA_STANDARD_IDENT
 
         return False
