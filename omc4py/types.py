@@ -1,5 +1,6 @@
 
 import enum
+import typing
 
 from .primitive_types import (
     TypeName,
@@ -41,6 +42,8 @@ class OMCEnumeration(
     enum.Enum,
     metaclass=OMCEnumerationMeta,
 ):
+    __className__: typing.ClassVar[TypeName]
+
     def __str__(
         self,
     ) -> str:
