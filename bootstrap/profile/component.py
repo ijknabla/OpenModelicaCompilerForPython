@@ -12,7 +12,7 @@ from .base import (
     AbstractTypeProfile,
 )
 
-from omc4py.session.bootstrap.code import (
+from ..code import (
     INDENT,
     CodeBlock,
 )

@@ -5,7 +5,7 @@ import typing
 import typing_extensions
 
 from omc4py.session import types
-from omc4py.session.bootstrap import code
+from .. import code
 
 
 class AbstractProfile(
