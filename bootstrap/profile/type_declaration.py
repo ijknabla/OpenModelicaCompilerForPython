@@ -189,27 +189,18 @@ class EnumerationDeclarationProfile(
         return code.CodeBlock(
             f"class {self.py_type}(",
             code.CodeBlock(
-                "enum__.Enum",
+                "Enumeration__",
                 indent=code.INDENT,
             ),
             "):",
             code.CodeBlock(
+                f"__className__ = TypeName({str(self.name)!r})",
+                "\n",
                 *(
                     f"{str(enumerator)} = {i}"
                     for i, enumerator in enumerate(
                         self.enumerators, start=1
                     )
-                ),
-                "\n",
-                "def __to_omc_literal__(",
-                code.CodeBlock(
-                    "self,",
-                    indent=code.INDENT,
-                ),
-                ") -> str:",
-                code.CodeBlock(
-                    f'return f"{self.name!s}.{{self.name}}"',
-                    indent=code.INDENT,
                 ),
                 indent=code.INDENT,
             ),

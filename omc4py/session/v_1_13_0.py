@@ -3,38 +3,37 @@
 # type: ignore
 # flake8: noqa
 
-import enum as enum__
 import functools as functools__
 import numpy as numpy__
+from omc4py.primitive_types import (
+    TypeName,
+    VariableName,
+)
+from omc4py.types import Enumeration as Enumeration__
 from omc4py.session import OMCSessionBase as OMCSessionBase__
 from omc4py.session import OMCSession__open as OMCSession__open__
 from omc4py.session import OMCSession__call as OMCSession__call__
 from omc4py.session import cast_value as cast_value__
 from omc4py.session import OMCSession__close as close_session
 from omc4py.session.types import OMCRecord as OMCRecord__
-from omc4py.session.types import (
-    TypeName,
-    VariableName,
-)
 
 
 class FileType(
-    enum__.Enum
+    Enumeration__
 ):
+    __className__ = TypeName('OpenModelica.Scripting.Internal.FileType')
+
     NoFile = 1
     RegularFile = 2
     Directory = 3
     SpecialFile = 4
 
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return f"OpenModelica.Scripting.Internal.FileType.{self.name}"
-
 
 class ErrorKind(
-    enum__.Enum
+    Enumeration__
 ):
+    __className__ = TypeName('OpenModelica.Scripting.ErrorKind')
+
     syntax = 1
     grammar = 2
     translation = 3
@@ -42,75 +41,55 @@ class ErrorKind(
     runtime = 5
     scripting = 6
 
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return f"OpenModelica.Scripting.ErrorKind.{self.name}"
-
 
 class ErrorLevel(
-    enum__.Enum
+    Enumeration__
 ):
+    __className__ = TypeName('OpenModelica.Scripting.ErrorLevel')
+
     notification = 1
     warning = 2
     error = 3
 
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return f"OpenModelica.Scripting.ErrorLevel.{self.name}"
-
 
 class ExportKind(
-    enum__.Enum
+    Enumeration__
 ):
+    __className__ = TypeName('OpenModelica.Scripting.ExportKind')
+
     Absyn = 1
     SCode = 2
     MetaModelicaInterface = 3
     Internal = 4
 
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return f"OpenModelica.Scripting.ExportKind.{self.name}"
-
 
 class DiffFormat(
-    enum__.Enum
+    Enumeration__
 ):
+    __className__ = TypeName('OpenModelica.Scripting.DiffFormat')
+
     plain = 1
     color = 2
     xml = 3
 
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return f"OpenModelica.Scripting.DiffFormat.{self.name}"
-
 
 class LinearSystemSolver(
-    enum__.Enum
+    Enumeration__
 ):
+    __className__ = TypeName('OpenModelica.Scripting.LinearSystemSolver')
+
     dgesv = 1
     lpsolve55 = 2
 
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return f"OpenModelica.Scripting.LinearSystemSolver.{self.name}"
-
 
 class StandardStream(
-    enum__.Enum
+    Enumeration__
 ):
+    __className__ = TypeName('OpenModelica.Scripting.StandardStream')
+
     stdin = 1
     stdout = 2
     stderr = 3
-
-    def __to_omc_literal__(
-        self,
-    ) -> str:
-        return f"OpenModelica.Scripting.StandardStream.{self.name}"
 
 
 class CheckSettingsResult(
