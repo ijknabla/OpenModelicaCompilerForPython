@@ -14,7 +14,7 @@ from . import (
     string,
 )
 
-from ..primitive_types import (
+from ..types import (
     Real,
     Integer,
     Boolean,

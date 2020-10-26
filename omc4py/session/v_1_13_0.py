@@ -5,7 +5,7 @@
 
 import functools as functools__
 import numpy as numpy__
-from omc4py.primitive_types import (
+from omc4py.types import (
     TypeName,
     VariableName,
 )
