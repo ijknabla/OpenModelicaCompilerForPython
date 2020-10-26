@@ -307,7 +307,7 @@ class AliasVisitor(
                 target=type_specifier
             )
 
-    def visit_file(
+    def visit_stored_definition(
         self,
         node,
         children,
