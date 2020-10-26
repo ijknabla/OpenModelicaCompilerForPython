@@ -6,7 +6,7 @@ __all__ = (
 
 import arpeggio  # type: ignore
 
-from omc4py.primitive_types import TypeName
+from omc4py.types import TypeName
 
 from . import (
     syntax,

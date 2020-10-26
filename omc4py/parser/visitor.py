@@ -5,7 +5,7 @@ import numpy  # type: ignore
 import operator
 import typing
 
-from omc4py.primitive_types import (
+from omc4py.types import (
     Component,
     Integer,
     Real,
