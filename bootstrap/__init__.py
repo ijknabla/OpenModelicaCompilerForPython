@@ -14,7 +14,7 @@ import typing
 
 from omc4py import parser
 
-from .. import (
+from omc4py.session import (
     OMCSession__call,
     OMCSession__close,
     OMCSession__open,
@@ -503,7 +503,7 @@ def load_schema(
         xml.XML(
             pkg_resources.resource_string(
                 __name__,
-                "../interface/omc_interface.xsd",
+                "interface/omc_interface.xsd",
             )
         )
     )

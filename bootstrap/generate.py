@@ -16,7 +16,7 @@ from .code import (
     CodeBlock,
 )
 
-from .. import types
+from omc4py.session import types
 
 
 def encode_specifier(

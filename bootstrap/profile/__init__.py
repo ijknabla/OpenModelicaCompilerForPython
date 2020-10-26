@@ -5,7 +5,7 @@ from lxml import etree as xml  # type: ignore
 import operator
 import typing
 
-from omc4py.session.bootstrap.code import (
+from ..code import (
     IGNORE_INDENT,
     INDENT,
     CodeBlock,
