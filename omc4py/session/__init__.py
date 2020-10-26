@@ -14,12 +14,9 @@ import uuid
 import warnings
 import zmq  # type: ignore
 
-from . import (
-    exception,
-)
-
 from omc4py import (
     abstract,
+    exception,
     parser,
     string,
 )
