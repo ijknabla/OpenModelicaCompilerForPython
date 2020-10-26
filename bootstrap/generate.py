@@ -108,7 +108,7 @@ from omc4py.primitive_types import (
     TypeName,
     VariableName,
 )
-from omc4py.types import Enumeration as Enumeration__
+from omc4py.types import OMCEnumeration as OMCEnumeration__
 from omc4py.session import OMCSessionBase as OMCSessionBase__
 from omc4py.session import OMCSession__open as OMCSession__open__
 from omc4py.session import OMCSession__call as OMCSession__call__

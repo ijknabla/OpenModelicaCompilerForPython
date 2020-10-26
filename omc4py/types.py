@@ -7,7 +7,7 @@ from .primitive_types import (
 )
 
 
-class EnumerationMeta(
+class OMCEnumerationMeta(
     enum.EnumMeta,
 ):
     __className__: TypeName
@@ -37,9 +37,9 @@ class EnumerationMeta(
             return cls[TypeName(key)]
 
 
-class Enumeration(
+class OMCEnumeration(
     enum.Enum,
-    metaclass=EnumerationMeta,
+    metaclass=OMCEnumerationMeta,
 ):
     def __str__(
         self,

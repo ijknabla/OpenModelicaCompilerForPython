@@ -189,7 +189,7 @@ class EnumerationDeclarationProfile(
         return code.CodeBlock(
             f"class {self.py_type}(",
             code.CodeBlock(
-                "Enumeration__",
+                "OMCEnumeration__",
                 indent=code.INDENT,
             ),
             "):",

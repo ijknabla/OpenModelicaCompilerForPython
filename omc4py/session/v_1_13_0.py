@@ -9,7 +9,7 @@ from omc4py.primitive_types import (
     TypeName,
     VariableName,
 )
-from omc4py.types import Enumeration as Enumeration__
+from omc4py.types import OMCEnumeration as OMCEnumeration__
 from omc4py.session import OMCSessionBase as OMCSessionBase__
 from omc4py.session import OMCSession__open as OMCSession__open__
 from omc4py.session import OMCSession__call as OMCSession__call__
@@ -19,7 +19,7 @@ from omc4py.session.types import OMCRecord as OMCRecord__
 
 
 class FileType(
-    Enumeration__
+    OMCEnumeration__
 ):
     __className__ = TypeName('OpenModelica.Scripting.Internal.FileType')
 
@@ -30,7 +30,7 @@ class FileType(
 
 
 class ErrorKind(
-    Enumeration__
+    OMCEnumeration__
 ):
     __className__ = TypeName('OpenModelica.Scripting.ErrorKind')
 
@@ -43,7 +43,7 @@ class ErrorKind(
 
 
 class ErrorLevel(
-    Enumeration__
+    OMCEnumeration__
 ):
     __className__ = TypeName('OpenModelica.Scripting.ErrorLevel')
 
@@ -53,7 +53,7 @@ class ErrorLevel(
 
 
 class ExportKind(
-    Enumeration__
+    OMCEnumeration__
 ):
     __className__ = TypeName('OpenModelica.Scripting.ExportKind')
 
@@ -64,7 +64,7 @@ class ExportKind(
 
 
 class DiffFormat(
-    Enumeration__
+    OMCEnumeration__
 ):
     __className__ = TypeName('OpenModelica.Scripting.DiffFormat')
 
@@ -74,7 +74,7 @@ class DiffFormat(
 
 
 class LinearSystemSolver(
-    Enumeration__
+    OMCEnumeration__
 ):
     __className__ = TypeName('OpenModelica.Scripting.LinearSystemSolver')
 
@@ -83,7 +83,7 @@ class LinearSystemSolver(
 
 
 class StandardStream(
-    Enumeration__
+    OMCEnumeration__
 ):
     __className__ = TypeName('OpenModelica.Scripting.StandardStream')
 
