@@ -1,5 +1,6 @@
 
 import abc
+import typing_extensions
 
 
 class AbstractInteractiveOMC(
@@ -24,6 +25,6 @@ class AbstractInteractiveOMC(
         exc_type,
         exc_value,
         traceback,
-    ):
+    ) -> typing_extensions.Literal[False]:
         self.close()
         return False
