@@ -18,7 +18,8 @@ class OMCEnumerationMeta(
         value,
     ):
         if isinstance(value, VariableName):
-            return cls[str(value)]
+            return cls[str(value)] \
+                # pylint: disable=unsubscriptable-object
         if isinstance(value, TypeName):
             if not value.parent == cls.__className__:
                 raise KeyError(
@@ -29,13 +30,16 @@ class OMCEnumerationMeta(
                         value=value,
                     )
                 )
-            return cls(value.last_identifier)
+            return cls(value.last_identifier) \
+                # pylint: disable=no-value-for-parameter
         elif isinstance(value, str):
             try:
-                return cls(VariableName(value))
+                return cls(VariableName(value)) \
+                    # pylint: disable=no-value-for-parameter
             except ValueError:
                 pass
-            return cls(TypeName(value))
+            return cls(TypeName(value)) \
+                # pylint: disable=no-value-for-parameter
         else:
             return super().__call__(value)
 
