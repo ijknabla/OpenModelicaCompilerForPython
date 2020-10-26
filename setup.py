@@ -16,7 +16,11 @@ setup(
         "Programming Language :: Python :: 3.6",
     ],
     url="https://github.com/ijknabla/OpenModelicaCompilerForPython",
-    packages=find_packages(),
+    packages=[
+        "omc4py",
+        "omc4py.parser",
+        "omc4py.session",
+    ],
     install_requires=[
         "ModelicaLanguage==0.0.0a6",  # fix to current alpha version
         "PyZMQ",
