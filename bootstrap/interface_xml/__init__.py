@@ -8,7 +8,12 @@ from omc4py.types import (
     TypeName,
 )
 
-from ..session import OMCSessionBootstrap
+from ..session import (
+    OMCSessionBootstrap,
+)
+from ..parser import (
+    parse_alias,
+)
 
 
 def generate_omc_interface_xml(
@@ -96,8 +101,18 @@ def generate_class_element(
     )
 
     restriction = getRestriction(session, className)
+    alias_optional = parse_alias(session.list(className))
 
-    if restriction is Restriction.package:
+    if alias_optional is not None:
+        name, target = alias_optional
+        return add_alias_element(
+            session,
+            parent_classes,
+            className,
+            restriction,
+            target,
+        )
+    elif restriction is Restriction.package:
         return add_package_element(
             session,
             parent_classes,
@@ -132,6 +147,36 @@ def find_parent_classes(
         classes = root.find("classes")
 
     return classes
+
+
+def add_alias_element(
+    session: OMCSessionBootstrap,
+    parent_classes: etree._Element,
+    className: TypeName,
+    restriction: Restriction,
+    rel_target: TypeName,
+) -> etree._Element:
+    for parent in className.parents:
+        try:
+            target = parent/rel_target
+            if getRestriction(session, target) == restriction:
+                break
+        except ValueError:
+            continue
+    else:
+        raise RuntimeError(
+            "Can't resolve absolute className "
+            f"of {rel_target} from {className}"
+        )
+
+    return etree.SubElement(
+        parent_classes,
+        restriction.name,
+        {
+            "id": str(className),
+            "ref": str(target)
+        },
+    )
 
 
 def add_package_element(
