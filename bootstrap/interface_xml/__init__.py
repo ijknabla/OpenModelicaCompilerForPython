@@ -67,6 +67,13 @@ def generate_class_element(
         className
     )
 
+    if session.isPackage(className):
+        return add_package_element(
+            session,
+            parent_classes,
+            className,
+        )
+
     element = etree.SubElement(
         parent_classes,
         "class",
@@ -95,3 +102,20 @@ def find_parent_classes(
         classes = root.find("classes")
 
     return classes
+
+
+def add_package_element(
+    session: OMCSessionBootstrap,
+    parent_classes: etree._Element,
+    className: TypeName,
+) -> etree._Element:
+    package_element = etree.SubElement(
+        parent_classes,
+        "package",
+        {"id": str(className)},
+    )
+    etree.SubElement(
+        package_element,
+        "classes"
+    )
+    return package_element
