@@ -61,13 +61,11 @@ def generate_class_element(
     root: etree._Element,
     className: TypeName,
 ) -> etree._Element:
-    parent_classes_optional = root.xpath(
-        f'//*[@id="{className.parent}"]/classes'
+    parent_classes = find_parent_classes(
+        session,
+        root,
+        className
     )
-    if parent_classes_optional:
-        parent_classes, = parent_classes_optional
-    else:
-        parent_classes = root.find("classes")
 
     element = etree.SubElement(
         parent_classes,
@@ -80,3 +78,20 @@ def generate_class_element(
     )
 
     return element
+
+
+def find_parent_classes(
+    session: OMCSessionBootstrap,
+    root: etree._Element,
+    className: TypeName,
+) -> etree._Element:
+    classes_optional = root.xpath(
+        f'//*[@id="{className.parent}"]/classes'
+    )
+
+    if classes_optional:
+        classes, = classes_optional
+    else:
+        classes = root.find("classes")
+
+    return classes
