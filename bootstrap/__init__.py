@@ -478,7 +478,7 @@ def load_schema(
         xml.XML(
             pkg_resources.resource_string(
                 __name__,
-                "interface/omc_interface.xsd",
+                "interface_xml/omc_interface.xsd",
             )
         )
     )
