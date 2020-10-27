@@ -8,16 +8,8 @@ from ..session import OMCSessionBootstrap
 def generate_omc_interface_xml(
     session: OMCSessionBootstrap
 ) -> etree._ElementTree:
-    root = etree.Element(
-        "omcInterface",
-        {
-            "omcVersion": session.getVersion()
-        }
-    )
-    etree.SubElement(
-        root,
-        "classes"
-    )
+
+    root = generate_root_element(session)
 
     return etree.ElementTree(root)
 
@@ -32,3 +24,19 @@ def load_schema(
             )
         )
     )
+
+
+def generate_root_element(
+    session: OMCSessionBootstrap,
+) -> etree._Element:
+    root = etree.Element(
+        "omcInterface",
+        {
+            "omcVersion": session.getVersion()
+        }
+    )
+    etree.SubElement(
+        root,
+        "classes"
+    )
+    return root
