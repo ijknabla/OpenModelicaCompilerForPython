@@ -1,4 +1,5 @@
 
+import enum
 from lxml import etree  # type: ignore
 import pkg_resources
 import tqdm
@@ -56,6 +57,33 @@ def generate_root_element(
     return root
 
 
+class Restriction(
+    enum.Enum,
+):
+    type = enum.auto()
+    package = enum.auto()
+    record = enum.auto()
+    function = enum.auto()
+
+
+def getRestriction(
+    session: OMCSessionBootstrap,
+    className: TypeName,
+) -> Restriction:
+    if session.isType(className):
+        return Restriction.type
+    elif session.isPackage(className):
+        return Restriction.package
+    elif session.isRecord(className):
+        return Restriction.record
+    elif session.isFunction(className):
+        return Restriction.function
+    else:
+        raise ValueError(
+            f"Can't determine restriction of {className}"
+        )
+
+
 def generate_class_element(
     session: OMCSessionBootstrap,
     root: etree._Element,
@@ -67,7 +95,9 @@ def generate_class_element(
         className
     )
 
-    if session.isPackage(className):
+    restriction = getRestriction(session, className)
+
+    if restriction is Restriction.package:
         return add_package_element(
             session,
             parent_classes,
