@@ -1,6 +1,11 @@
 
-import pkg_resources
 from lxml import etree  # type: ignore
+import pkg_resources
+import tqdm
+
+from omc4py.types import (
+    TypeName,
+)
 
 from ..session import OMCSessionBootstrap
 
@@ -10,6 +15,15 @@ def generate_omc_interface_xml(
 ) -> etree._ElementTree:
 
     root = generate_root_element(session)
+
+    classNames = session.getClassNames(
+        TypeName("OpenModelica.Scripting"),
+        recursive=True,
+    )
+
+    for i, className in enumerate(tqdm.tqdm(classNames)):
+        assert(i == 0 or className.parent in classNames[:i])
+        generate_class_element(session, root, className)
 
     return etree.ElementTree(root)
 
@@ -40,3 +54,29 @@ def generate_root_element(
         "classes"
     )
     return root
+
+
+def generate_class_element(
+    session: OMCSessionBootstrap,
+    root: etree._Element,
+    className: TypeName,
+) -> etree._Element:
+    parent_classes_optional = root.xpath(
+        f'//*[@id="{className.parent}"]/classes'
+    )
+    if parent_classes_optional:
+        parent_classes, = parent_classes_optional
+    else:
+        parent_classes = root.find("classes")
+
+    element = etree.SubElement(
+        parent_classes,
+        "class",
+        {"id": str(className)}
+    )
+    etree.SubElement(
+        element,
+        "classes",
+    )
+
+    return element
