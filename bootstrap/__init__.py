@@ -6,7 +6,6 @@ import functools
 from lxml import etree as xml  # type: ignore
 import os
 from pathlib import Path
-import pkg_resources
 import shutil
 import sys
 import typing
@@ -18,6 +17,8 @@ from omc4py.session import (
     OMCSessionBase,
     types,
 )
+
+from . import interface_xml
 
 from .parser import (
     parse_alias,
@@ -472,18 +473,6 @@ def generate_omc_interface_xml(
     return xml.ElementTree(omcInterface_elem)
 
 
-def load_schema(
-) -> xml.XMLSchema:
-    return xml.XMLSchema(
-        xml.XML(
-            pkg_resources.resource_string(
-                __name__,
-                "interface_xml/omc_interface.xsd",
-            )
-        )
-    )
-
-
 class InputType(
     enum.Enum,
 ):
@@ -515,7 +504,7 @@ def generate_omc_interface(
     else:  # inputType is InputType.xml:
         omc_interface_xml = xml.parse(str(inputPath))
 
-    schema = load_schema()
+    schema = interface_xml.load_schema()
     schema.assertValid(omc_interface_xml)
 
     if outputType is OutputType.module:
