@@ -18,6 +18,37 @@ from omc4py.types import (
 class OMCSessionBootstrap(
     OMCSessionMinimal,
 ):
+    def list(
+        self,
+        class_: typing.Optional[TypeName] = None,
+        interfaceOnly: typing.Optional[bool] = None,
+    ):
+        # Check arguments
+        class___internal__ = cast_value(
+            "class_", class_,
+            optional=True,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
+        interfaceOnly__internal__ = cast_value(
+            "interfaceOnly", interfaceOnly,
+            optional=True,
+            class_=Boolean,
+            class_restrictions=(),
+            sizes=(),
+        )
+
+        # Call function
+        return self.__omc_call__(
+            "list",
+            kwrds={
+                VariableName("class_"): class___internal__,
+                VariableName("interfaceOnly"): interfaceOnly__internal__,
+            },
+            parser=parse_OMCValue,
+        )
+
     def getClassNames(
         self,
         class_: typing.Optional[TypeName] = None,
@@ -55,5 +86,93 @@ class OMCSessionBootstrap(
                 VariableName("recursive"): recursive__internal__,
                 VariableName("qualified"): qualified__internal__,
             },
+            parser=parse_OMCValue,
+        )
+
+    def isType(
+        self,
+        cl: TypeName
+    ):
+        # Check arguments
+        cl__internal__ = cast_value(
+            "cl", cl,
+            optional=False,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
+
+        # Call function
+        return self.__omc_call__(
+            "isType",
+            args=(
+                cl__internal__,
+            ),
+            parser=parse_OMCValue,
+        )
+
+    def isPackage(
+        self,
+        cl: TypeName
+    ):
+        # Check arguments
+        cl__internal__ = cast_value(
+            "cl", cl,
+            optional=False,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
+
+        # Call function
+        return self.__omc_call__(
+            "isPackage",
+            args=(
+                cl__internal__,
+            ),
+            parser=parse_OMCValue,
+        )
+
+    def isRecord(
+        self,
+        cl: TypeName
+    ):
+        # Check arguments
+        cl__internal__ = cast_value(
+            "cl", cl,
+            optional=False,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
+
+        # Call function
+        return self.__omc_call__(
+            "isRecord",
+            args=(
+                cl__internal__,
+            ),
+            parser=parse_OMCValue,
+        )
+
+    def isFunction(
+        self,
+        cl: TypeName
+    ):
+        # Check arguments
+        cl__internal__ = cast_value(
+            "cl", cl,
+            optional=False,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
+
+        # Call function
+        return self.__omc_call__(
+            "isFunction",
+            args=(
+                cl__internal__,
+            ),
             parser=parse_OMCValue,
         )
