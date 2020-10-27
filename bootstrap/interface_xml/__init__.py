@@ -1,12 +1,12 @@
 
 import pkg_resources
-from lxml import etree as xml  # type: ignore
+from lxml import etree  # type: ignore
 
 
 def load_schema(
-) -> xml.XMLSchema:
-    return xml.XMLSchema(
-        xml.XML(
+) -> etree.XMLSchema:
+    return etree.XMLSchema(
+        etree.XML(
             pkg_resources.resource_string(
                 __name__,
                 "omc_interface.xsd",
