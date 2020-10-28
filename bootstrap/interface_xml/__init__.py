@@ -13,6 +13,7 @@ from ..session import (
 )
 from ..parser import (
     parse_alias,
+    parse_enumerator,
 )
 
 
@@ -101,7 +102,8 @@ def generate_class_element(
     )
 
     restriction = getRestriction(session, className)
-    alias_optional = parse_alias(session.list(className))
+    full_code = session.list(className)
+    alias_optional = parse_alias(full_code)
 
     if alias_optional is not None:
         name, target = alias_optional
@@ -111,6 +113,13 @@ def generate_class_element(
             className,
             restriction,
             target,
+        )
+    elif restriction is Restriction.type:
+        return add_type_element(
+            session,
+            parent_classes,
+            className,
+            full_code,
         )
     elif restriction is Restriction.package:
         return add_package_element(
@@ -177,6 +186,60 @@ def add_alias_element(
             "ref": str(target)
         },
     )
+
+
+def add_type_element(
+    session: OMCSessionBootstrap,
+    parent_classes: etree._Element,
+    className: TypeName,
+    full_code: str,
+) -> etree._Element:
+    enumerators = parse_enumerator(full_code)
+    if not enumerators:
+        raise ValueError(
+            f"Modelica type {className} has no enumeration"
+        )
+
+    type_element = etree.SubElement(
+        parent_classes,
+        "type",
+        {
+            "id": str(className),
+        },
+    )
+
+    etree.SubElement(
+        type_element,
+        "classes",
+    )
+
+    code_element = etree.SubElement(
+        type_element,
+        "code",
+        {
+            "interfaceOnly": "false"
+        }
+    )
+    code_element.text = full_code
+
+    enumerators_element = etree.SubElement(
+        etree.SubElement(
+            type_element,
+            "components",
+        ),
+        "enumerators",
+    )
+    for name, comment in enumerators:
+        etree.SubElement(
+            enumerators_element,
+            "enumerator",
+            {
+                "name": str(name),
+                "comment": comment,
+            },
+        )
+
+    return type_element
 
 
 def add_package_element(
