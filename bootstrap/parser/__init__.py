@@ -35,7 +35,7 @@ def parse_enumerators(
 ) -> typing.List[typing.Tuple[VariableName, str]]:
     return arpeggio.visit_parse_tree(
         stored_definition_parser.parse(code),
-        visitor.EnumeratorVisitor(),
+        visitor.EnumeratorsVisitor(),
     )
 
 
@@ -45,6 +45,6 @@ def parse_variableHasDefault(
     return dict(
         arpeggio.visit_parse_tree(
             stored_definition_parser.parse(code),
-            visitor.DefaultValueInfoVisitor(),
+            visitor.VariableHasDefaultVisitor(),
         )
     )

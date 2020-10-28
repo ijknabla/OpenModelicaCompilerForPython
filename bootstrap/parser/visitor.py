@@ -1,8 +1,8 @@
 
 __all__ = (
     "AliasVisitor",
-    "EnumeratorVisitor",
-    "DefaultValueInfoVisitor",
+    "EnumeratorsVisitor",
+    "VariableHasDefaultVisitor",
 )
 
 import typing
@@ -20,48 +20,48 @@ from omc4py.types import (
 )
 
 
-class DefaultValueInfo(
+class VariableHasDefault(
     typing.NamedTuple
 ):
     name: VariableName
     hasDefault: bool
 
 
-class DefaultValueInfoVisitor(
+class VariableHasDefaultVisitor(
     TypeSpecifierVisitor,
 ):
     def visit__default__(
         self,
         node,
         children,
-    ) -> typing.List[DefaultValueInfo]:
+    ) -> typing.List[VariableHasDefault]:
         return [
             child
             for child in flatten_list(children)
-            if isinstance(child, DefaultValueInfo)
+            if isinstance(child, VariableHasDefault)
         ]
 
     def visit_declaration(
         self,
         node,
         children
-    ) -> DefaultValueInfo:
+    ) -> VariableHasDefault:
         name = children.IDENT[0]
         hasDefault = bool(children.modification)
-        return DefaultValueInfo(
+        return VariableHasDefault(
             name=name,
             hasDefault=hasDefault,
         )
 
 
-class EnumeratorInfo(
+class Enumerator(
     typing.NamedTuple,
 ):
     name: VariableName
     comment: str
 
 
-class EnumeratorVisitor(
+class EnumeratorsVisitor(
     TypeSpecifierVisitor,
     StringVisitor,
 ):
@@ -69,13 +69,13 @@ class EnumeratorVisitor(
         self,
         node,
         children,
-    ) -> EnumeratorInfo:
+    ) -> Enumerator:
         name = children.IDENT[0]
         comment = getitem_with_default(
             children.comment, 0,
             default=""
         )
-        return EnumeratorInfo(
+        return Enumerator(
             name=name,
             comment=comment,
         )
@@ -102,7 +102,7 @@ class EnumeratorVisitor(
         return [
             child
             for child in flatten_list(children)
-            if isinstance(child, EnumeratorInfo)
+            if isinstance(child, Enumerator)
         ]
 
 
