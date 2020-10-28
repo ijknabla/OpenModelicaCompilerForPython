@@ -26,7 +26,7 @@ from omc4py.parser import (
 )
 from .parser import (
     parse_alias,
-    parse_defaultValueInfoDict,
+    parse_variableHasDefault,
     parse_enumerators,
 )
 
@@ -390,7 +390,7 @@ def generate_omc_interface_xml(
         def generate_components_element(
             self,
         ) -> None:
-            defaultValueInfoDict = parse_defaultValueInfoDict(
+            variableHasDefault = parse_variableHasDefault(
                 self.code
             )
 
@@ -405,7 +405,7 @@ def generate_omc_interface_xml(
             for component in session.getComponents(self.name):
                 if component.protected == "protected":
                     continue
-                hasDefault = defaultValueInfoDict[
+                hasDefault = variableHasDefault[
                     component.name
                 ]
                 argument_element = xml.SubElement(

@@ -21,7 +21,7 @@ def parse_alias(
     )
 
 
-def parse_defaultValueInfoDict(
+def parse_variableHasDefault(
     code: str
 ) -> typing.Dict[VariableName, bool]:
     return dict(
