@@ -7,13 +7,14 @@ from omc4py.parser import (
     visitor,
 )
 from omc4py.types import (
+    TypeName,
     VariableName,
 )
 
 
 def parse_alias(
     code: str
-) -> typing.Optional[visitor.AliasInfo]:
+) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
     return arpeggio.visit_parse_tree(
         stored_definition_parser.parse(code),
         visitor.AliasVisitor(),
@@ -22,7 +23,7 @@ def parse_alias(
 
 def parse_defaultValueInfoDict(
     interface: str
-) -> typing.Dict[VariableName, typing.Optional[str]]:
+) -> typing.Dict[VariableName, bool]:
     return dict(
         arpeggio.visit_parse_tree(
             stored_definition_parser.parse(interface),
@@ -33,7 +34,7 @@ def parse_defaultValueInfoDict(
 
 def parse_enumerator(
     code: str
-) -> typing.Tuple[VariableName]:
+) -> typing.List[typing.Tuple[VariableName, str]]:
     return arpeggio.visit_parse_tree(
         stored_definition_parser.parse(code),
         visitor.EnumeratorVisitor(),
