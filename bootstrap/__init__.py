@@ -21,35 +21,14 @@ from omc4py.session import (
     OMCSessionBase,
     types,
 )
-
-
-def parse_defaultValueInfoDict(
-    interface: str
-) -> typing.Dict[types.VariableName, typing.Optional[str]]:
-    return dict(
-        arpeggio.visit_parse_tree(
-            parser.stored_definition_parser.parse(interface),
-            parser.visitor.DefaultValueInfoVisitor(),
-        )
-    )
-
-
-def parse_enumerator(
-    code: str
-) -> typing.Tuple[types.VariableName]:
-    return arpeggio.visit_parse_tree(
-        parser.stored_definition_parser.parse(code),
-        parser.visitor.EnumeratorVisitor(),
-    )
-
-
-def parse_alias(
-    code: str
-) -> typing.Optional[parser.visitor.AliasInfo]:
-    return arpeggio.visit_parse_tree(
-        parser.stored_definition_parser.parse(code),
-        parser.visitor.AliasVisitor(),
-    )
+from omc4py.parser import (
+    parse_ComponentArray
+)
+from .parser import (
+    parse_alias,
+    parse_defaultValueInfoDict,
+    parse_enumerator,
+)
 
 
 def call_optional(
@@ -179,7 +158,7 @@ class OMCSession(
                 types.TypeName(name)
             ],
         )
-        return parser.parse_ComponentArray(result_literal)
+        return parse_ComponentArray(result_literal)
 
 
 open_session = functools.partial(OMCSession__open, OMCSession)
