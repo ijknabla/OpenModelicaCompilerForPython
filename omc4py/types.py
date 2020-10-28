@@ -41,10 +41,18 @@ class VariableName(
                 f"Invalid modelica identifier, got {obj_str!r}"
             )
 
-        return _VariableName_from_valid_identifier_no_check(
-            cls,
+        return cls.__from_valid_identifier_no_check__(
             obj_str
         )
+
+    @classmethod
+    def __from_valid_identifier_no_check__(
+        cls,
+        identifier: str
+    ) -> "VariableName":
+        variableName = object.__new__(cls)
+        variableName.__str = identifier
+        return variableName
 
     def __eq__(
         self, other,
@@ -185,15 +193,6 @@ class TypeName(
         other: typing.Union[str, VariableName, "TypeName"]
     ):
         return type(self)(self, other)
-
-
-def _VariableName_from_valid_identifier_no_check(
-    cls: typing.Type["VariableName"],
-    identifier: str,
-):
-    variableName = object.__new__(VariableName)
-    variableName._VariableName__str = identifier
-    return variableName
 
 
 def _TypeName_from_valid_parts_no_check(
