@@ -1,7 +1,6 @@
 
 import abc
 import argparse
-import arpeggio  # type: ignore
 import enum
 import functools
 from lxml import etree as xml  # type: ignore
@@ -12,8 +11,6 @@ import shutil
 import sys
 import typing
 
-from omc4py import parser
-
 from omc4py.session import (
     OMCSession__call,
     OMCSession__close,
@@ -21,10 +18,9 @@ from omc4py.session import (
     OMCSessionBase,
     types,
 )
-from omc4py.parser import (
-    parse_ComponentArray
-)
+
 from .parser import (
+    parse_ComponentArray,
     parse_alias,
     parse_variableHasDefault,
     parse_enumerators,
