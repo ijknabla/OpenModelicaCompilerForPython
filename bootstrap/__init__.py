@@ -20,10 +20,10 @@ from omc4py.session import (
 )
 
 from .parser import (
-    parse_components,
     parse_alias,
-    parse_variableHasDefault,
+    parse_components,
     parse_enumerators,
+    parse_variableHasDefault,
 )
 
 

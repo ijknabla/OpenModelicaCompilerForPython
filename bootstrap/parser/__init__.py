@@ -1,7 +1,7 @@
 
 __all__ = (
-    "parse_components",
     "parse_alias",
+    "parse_components",
     "parse_enumerators",
     "parse_variableHasDefault",
 )
