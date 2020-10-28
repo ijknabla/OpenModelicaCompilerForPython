@@ -1,7 +1,6 @@
 
 import abc
 import argparse
-import arpeggio  # type: ignore
 import enum
 import functools
 from lxml import etree as xml  # type: ignore
@@ -12,8 +11,6 @@ import shutil
 import sys
 import typing
 
-from omc4py import parser
-
 from omc4py.session import (
     OMCSession__call,
     OMCSession__close,
@@ -22,34 +19,12 @@ from omc4py.session import (
     types,
 )
 
-
-def parse_defaultValueInfoDict(
-    interface: str
-) -> typing.Dict[types.VariableName, typing.Optional[str]]:
-    return dict(
-        arpeggio.visit_parse_tree(
-            parser.stored_definition_parser.parse(interface),
-            parser.visitor.DefaultValueInfoVisitor(),
-        )
-    )
-
-
-def parse_enumerator(
-    code: str
-) -> typing.Tuple[types.VariableName]:
-    return arpeggio.visit_parse_tree(
-        parser.stored_definition_parser.parse(code),
-        parser.visitor.EnumeratorVisitor(),
-    )
-
-
-def parse_alias(
-    code: str
-) -> typing.Optional[parser.visitor.AliasInfo]:
-    return arpeggio.visit_parse_tree(
-        parser.stored_definition_parser.parse(code),
-        parser.visitor.AliasVisitor(),
-    )
+from .parser import (
+    parse_alias,
+    parse_components,
+    parse_enumerators,
+    parse_variableHasDefault,
+)
 
 
 def call_optional(
@@ -179,7 +154,7 @@ class OMCSession(
                 types.TypeName(name)
             ],
         )
-        return parser.parse_ComponentArray(result_literal)
+        return parse_components(result_literal)
 
 
 open_session = functools.partial(OMCSession__open, OMCSession)
@@ -348,7 +323,7 @@ def generate_omc_interface_xml(
                 "enumerators",
             )
 
-            for name, comment in parse_enumerator(self.code):
+            for name, comment in parse_enumerators(self.code):
                 xml.SubElement(
                     enumerators_element,
                     "enumerator",
@@ -411,7 +386,7 @@ def generate_omc_interface_xml(
         def generate_components_element(
             self,
         ) -> None:
-            defaultValueInfoDict = parse_defaultValueInfoDict(
+            variableHasDefault = parse_variableHasDefault(
                 self.code
             )
 
@@ -426,8 +401,8 @@ def generate_omc_interface_xml(
             for component in session.getComponents(self.name):
                 if component.protected == "protected":
                     continue
-                hasDefault = defaultValueInfoDict[
-                    component.name
+                hasDefault = variableHasDefault[
+                    types.VariableName(component.name)
                 ]
                 argument_element = xml.SubElement(
                     arguments_element,
