@@ -48,7 +48,7 @@ class AliasVisitor(
         self,
         node,
         children
-    ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
+    ) -> typing.Optional[Alias]:
         variableName, = children.IDENT
         type_specifier = getitem_with_default(
             children.type_specifier, 0,
