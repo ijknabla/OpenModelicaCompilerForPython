@@ -1,5 +1,5 @@
 
-import numpy
+import numpy  # type: ignore
 import typing
 import warnings
 
