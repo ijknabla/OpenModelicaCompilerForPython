@@ -15,6 +15,7 @@ from ..session import (
 from ..parser import (
     parse_alias,
     parse_enumerators,
+    parse_variableHasDefault,
 )
 
 
@@ -134,6 +135,12 @@ def generate_class_element(
             parent_classes,
             className,
             full_code,
+        )
+    elif restriction is Restriction.function:
+        return add_function_element(
+            session,
+            parent_classes,
+            className,
         )
 
     element = etree.SubElement(
@@ -336,3 +343,77 @@ def add_record_element(
         )
 
     return record_element
+
+
+def add_function_element(
+    session: OMCSessionBootstrap,
+    parent_classes: etree._Element,
+    className: TypeName,
+) -> etree._Element:
+    function_element = etree.SubElement(
+        parent_classes,
+        "function",
+        {
+            "id": str(className),
+        },
+    )
+
+    etree.SubElement(
+        function_element,
+        "classes",
+    )
+
+    code_interfaceOnly = session.list(
+        className,
+        interfaceOnly=True,
+    )
+    defaultValueDict = parse_variableHasDefault(
+        code_interfaceOnly,
+    )
+
+    code_element = etree.SubElement(
+        function_element,
+        "code",
+        {
+            "interfaceOnly": "true",
+        }
+    )
+    code_element.text = code_interfaceOnly
+
+    arguments_element = etree.SubElement(
+        etree.SubElement(
+            function_element,
+            "components",
+        ),
+        "arguments",
+    )
+
+    for component in session.getComponents(className):
+        if component.protected == "protected":
+            continue
+
+        hasDefault = defaultValueDict[component.name]
+
+        argument_element = etree.SubElement(
+            arguments_element,
+            "argument",
+            {
+                "inputOutput": component.inputOutput,
+                "className": str(component.className),
+                "name": str(component.name),
+                "hasDefault": to_xml_boolean(hasDefault),
+                "comment": component.comment,
+            }
+        )
+        add_dimensions_element(
+            argument_element,
+            component.dimensions,
+        )
+
+    return function_element
+
+
+def to_xml_boolean(
+    value: bool,
+) -> str:
+    return "true" if value else "false"
