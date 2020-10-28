@@ -12,12 +12,13 @@ import typing
 from omc4py.parser import (
     parse_components,
     stored_definition_parser,
-    visitor,
 )
 from omc4py.types import (
     TypeName,
     VariableName,
 )
+
+from . import visitor
 
 
 def parse_alias(
