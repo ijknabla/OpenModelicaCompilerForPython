@@ -62,6 +62,15 @@ class OMCSessionMinimal(
         else:
             raise error
 
+    def getVersion(
+        self,
+    ):
+        # Call function
+        return self.__omc_call__(
+            "getVersion",
+            parser=parser.parse_OMCValue,
+        )
+
 
 class OMCSessionBase(
 ):
