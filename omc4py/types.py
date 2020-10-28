@@ -36,15 +36,23 @@ class VariableName(
             return obj
 
         obj_str = str(obj)
-        if not parser.valid_identifier(obj_str):
+        if not parser.is_valid_identifier(obj_str):
             raise ValueError(
                 f"Invalid modelica identifier, got {obj_str!r}"
             )
 
-        return _VariableName_from_valid_identifier_no_check(
-            cls,
+        return cls.__from_valid_identifier_no_check__(
             obj_str
         )
+
+    @classmethod
+    def __from_valid_identifier_no_check__(
+        cls,
+        identifier: str
+    ) -> "VariableName":
+        variableName = object.__new__(cls)
+        variableName.__str = identifier
+        return variableName
 
     def __eq__(
         self, other,
@@ -86,8 +94,7 @@ class TypeName(
             if isinstance(part, TypeName):
                 return part
 
-        return _TypeName_from_valid_parts_no_check(
-            cls,
+        return cls.__from_valid_parts_no_check__(
             cls.__checked_parts(
                 parts
             )
@@ -98,7 +105,16 @@ class TypeName(
         cls,
         s: str
     ) -> "TypeName":
-        return parser._TypeName_from_str(s)
+        return parser.parse_typeName(s)
+
+    @classmethod
+    def __from_valid_parts_no_check__(
+        cls,
+        parts: typing.Iterable[typing.Union[str, VariableName]],
+    ):
+        typeName = object.__new__(TypeName)
+        typeName._TypeName__parts = tuple(map(str, parts))
+        return typeName
 
     @property
     def parts(
@@ -120,8 +136,7 @@ class TypeName(
         self,
     ) -> typing.Iterator["TypeName"]:
         for end in reversed(range(1, len(self.parts))):
-            yield _TypeName_from_valid_parts_no_check(
-                type(self),
+            yield self.__from_valid_parts_no_check__(
                 self.parts[:end],
             )
 
@@ -138,15 +153,15 @@ class TypeName(
     def __checked_parts(
         cls,
         objs: typing.Iterable,
-    ) -> typing.Iterator[str]:
+    ) -> typing.Iterator[typing.Union[str, VariableName]]:
 
         def not_checked_parts(
-        ) -> typing.Iterator[str]:
+        ) -> typing.Iterator[typing.Union[str, VariableName]]:
             for obj in objs:
                 if isinstance(obj, TypeName):
                     yield from obj.parts
                 elif isinstance(obj, VariableName):
-                    yield str(obj)
+                    yield obj
                 else:
                     yield from cls.from_str(str(obj)).parts
 
@@ -185,24 +200,6 @@ class TypeName(
         other: typing.Union[str, VariableName, "TypeName"]
     ):
         return type(self)(self, other)
-
-
-def _VariableName_from_valid_identifier_no_check(
-    cls: typing.Type["VariableName"],
-    identifier: str,
-):
-    variableName = object.__new__(VariableName)
-    variableName._VariableName__str = identifier
-    return variableName
-
-
-def _TypeName_from_valid_parts_no_check(
-    cls: typing.Type["TypeName"],
-    parts: typing.Iterable[str],
-):
-    typeName = object.__new__(TypeName)
-    typeName._TypeName__parts = tuple(parts)
-    return typeName
 
 
 class OMCEnumerationMeta(

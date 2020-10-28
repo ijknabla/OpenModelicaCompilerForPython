@@ -11,7 +11,6 @@ from omc4py.types import (
     Real,
     TypeName,
     VariableName,
-    _TypeName_from_valid_parts_no_check,
 )
 
 from omc4py import string
@@ -53,15 +52,17 @@ class TypeSpecifierVisitor(
         self,
         node,
         children,
-    ) -> str:
-        return node.value
+    ) -> VariableName:
+        return VariableName.__from_valid_identifier_no_check__(
+            node.value
+        )
 
     def visit_name(
         self,
         node,
         children,
-    ) -> typing.Tuple[str, ...]:
-        return tuple(children.IDENT)
+    ) -> typing.List[VariableName]:
+        return children.IDENT
 
     def visit_type_specifier(
         self,
@@ -70,15 +71,9 @@ class TypeSpecifierVisitor(
     ) -> TypeName:
         name = children.name[0]
         if node[0].value == ".":
-            return _TypeName_from_valid_parts_no_check(
-                TypeName,
-                (".", *name),
-            )
+            return TypeName(".", *name)
         else:
-            return _TypeName_from_valid_parts_no_check(
-                TypeName,
-                name,
-            )
+            return TypeName(*name)
 
 
 class NumberVisitor(

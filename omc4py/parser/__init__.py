@@ -1,7 +1,9 @@
 
 __all__ = (
-    "_TypeName_from_str",
-    "valid_identifier",
+    "is_valid_identifier",
+    "parse_OMCValue",
+    "parse_typeName",
+    "parse_components",
 )
 
 import arpeggio  # type: ignore
@@ -37,7 +39,7 @@ with syntax.omc_dialect_context:
     )
 
 
-def valid_identifier(
+def is_valid_identifier(
     ident: str
 ) -> bool:
     try:
@@ -47,7 +49,7 @@ def valid_identifier(
         return False
 
 
-def _TypeName_from_str(
+def parse_typeName(
     type_specifier: str
 ) -> TypeName:
     try:
