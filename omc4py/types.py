@@ -36,7 +36,7 @@ class VariableName(
             return obj
 
         obj_str = str(obj)
-        if not parser.valid_identifier(obj_str):
+        if not parser.is_valid_identifier(obj_str):
             raise ValueError(
                 f"Invalid modelica identifier, got {obj_str!r}"
             )
@@ -105,7 +105,7 @@ class TypeName(
         cls,
         s: str
     ) -> "TypeName":
-        return parser._TypeName_from_str(s)
+        return parser.parse_typeName(s)
 
     @classmethod
     def __from_valid_parts_no_check__(
