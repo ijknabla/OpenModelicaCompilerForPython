@@ -20,38 +20,48 @@ from omc4py.types import (
 )
 
 
-class VariableHasDefault(
+class AliasInfo(
     typing.NamedTuple
 ):
     name: VariableName
-    hasDefault: bool
+    target: TypeName
 
 
-class VariableHasDefaultVisitor(
+class AliasVisitor(
     TypeSpecifierVisitor,
 ):
-    def visit__default__(
-        self,
-        node,
-        children,
-    ) -> typing.List[VariableHasDefault]:
-        return [
-            child
-            for child in flatten_list(children)
-            if isinstance(child, VariableHasDefault)
-        ]
-
-    def visit_declaration(
+    def visit_short_class_specifier(
         self,
         node,
         children
-    ) -> VariableHasDefault:
-        name = children.IDENT[0]
-        hasDefault = bool(children.modification)
-        return VariableHasDefault(
-            name=name,
-            hasDefault=hasDefault,
+    ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
+        variableName = VariableName(children.IDENT[0])
+        type_specifier = getitem_with_default(
+            children.type_specifier, 0,
+            default=None
         )
+
+        if type_specifier is None:
+            return None
+        else:
+            return AliasInfo(
+                name=variableName,
+                target=type_specifier
+            )
+
+    def visit_stored_definition(
+        self,
+        node,
+        children,
+    ):
+        aliases = [
+            child
+            for child in children
+            if isinstance(child, AliasInfo)
+        ]
+        if aliases:
+            return aliases[0]
+        return None
 
 
 class Enumerator(
@@ -106,45 +116,35 @@ class EnumeratorsVisitor(
         ]
 
 
-class AliasInfo(
+class VariableHasDefault(
     typing.NamedTuple
 ):
     name: VariableName
-    target: TypeName
+    hasDefault: bool
 
 
-class AliasVisitor(
+class VariableHasDefaultVisitor(
     TypeSpecifierVisitor,
 ):
-    def visit_short_class_specifier(
-        self,
-        node,
-        children
-    ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
-        variableName = VariableName(children.IDENT[0])
-        type_specifier = getitem_with_default(
-            children.type_specifier, 0,
-            default=None
-        )
-
-        if type_specifier is None:
-            return None
-        else:
-            return AliasInfo(
-                name=variableName,
-                target=type_specifier
-            )
-
-    def visit_stored_definition(
+    def visit__default__(
         self,
         node,
         children,
-    ):
-        aliases = [
+    ) -> typing.List[VariableHasDefault]:
+        return [
             child
-            for child in children
-            if isinstance(child, AliasInfo)
+            for child in flatten_list(children)
+            if isinstance(child, VariableHasDefault)
         ]
-        if aliases:
-            return aliases[0]
-        return None
+
+    def visit_declaration(
+        self,
+        node,
+        children
+    ) -> VariableHasDefault:
+        name = children.IDENT[0]
+        hasDefault = bool(children.modification)
+        return VariableHasDefault(
+            name=name,
+            hasDefault=hasDefault,
+        )
