@@ -20,7 +20,7 @@ from omc4py.types import (
 )
 
 
-class AliasInfo(
+class Alias(
     typing.NamedTuple
 ):
     name: VariableName
@@ -34,11 +34,11 @@ class AliasVisitor(
         self,
         node,
         children,
-    ) -> typing.Optional[AliasInfo]:
+    ) -> typing.Optional[Alias]:
         aliases = [
             child
             for child in flatten_list(children)
-            if isinstance(child, AliasInfo)
+            if isinstance(child, Alias)
         ]
         if aliases:
             return aliases[0]
@@ -58,7 +58,7 @@ class AliasVisitor(
         if type_specifier is None:
             return None
         else:
-            return AliasInfo(
+            return Alias(
                 name=variableName,
                 target=type_specifier
             )
