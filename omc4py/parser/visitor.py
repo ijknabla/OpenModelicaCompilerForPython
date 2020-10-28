@@ -11,7 +11,6 @@ from omc4py.types import (
     Real,
     TypeName,
     VariableName,
-    _TypeName_from_valid_parts_no_check,
 )
 
 from omc4py import string
