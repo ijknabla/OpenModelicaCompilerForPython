@@ -9,6 +9,9 @@ from omc4py import (
     parser,
     string,
 )
+from . import (
+    base,
+)
 
 
 def parse_OMCError(
@@ -35,6 +38,29 @@ def parse_OMCError(
         return exception.OMCError(error_message)
     else:
         return exception.OMCWarning(error_message)
+
+
+class OMCSessionMinimal(
+    base.OMCSessionBase,
+):
+    def __omc_check__(
+        self,
+    ) -> None:
+        error_optional: typing.Optional[exception.OMCException]
+        error_optional = self.__omc_call__(
+            "getErrorString",
+            parser=parse_OMCError,
+            check=False,
+        )
+
+        if error_optional is None:
+            return
+
+        error = error_optional
+        if isinstance(error, Warning):
+            warnings.warn(error)
+        else:
+            raise error
 
 
 class OMCSessionBase(
