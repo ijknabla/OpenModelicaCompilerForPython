@@ -3,6 +3,7 @@ import enum
 from lxml import etree  # type: ignore
 import pkg_resources
 import tqdm
+import typing
 
 from omc4py.types import (
     TypeName,
@@ -13,7 +14,7 @@ from ..session import (
 )
 from ..parser import (
     parse_alias,
-    parse_enumerator,
+    parse_enumerators,
 )
 
 
@@ -127,6 +128,13 @@ def generate_class_element(
             parent_classes,
             className,
         )
+    elif restriction is Restriction.record:
+        return add_record_element(
+            session,
+            parent_classes,
+            className,
+            full_code,
+        )
 
     element = etree.SubElement(
         parent_classes,
@@ -194,7 +202,7 @@ def add_type_element(
     className: TypeName,
     full_code: str,
 ) -> etree._Element:
-    enumerators = parse_enumerator(full_code)
+    enumerators = parse_enumerators(full_code)
     if not enumerators:
         raise ValueError(
             f"Modelica type {className} has no enumeration"
@@ -257,3 +265,74 @@ def add_package_element(
         "classes"
     )
     return package_element
+
+
+def add_dimensions_element(
+    parent: etree._Element,
+    dimensions: typing.Sequence[str]
+):
+    dimensions_element = etree.SubElement(
+        parent,
+        "dimensions",
+    )
+    for dimension in dimensions:
+        etree.SubElement(
+            dimensions_element,
+            "dimension",
+            {
+                "size": dimension,
+            },
+        )
+
+
+def add_record_element(
+    session: OMCSessionBootstrap,
+    parent_classes: etree._Element,
+    className: TypeName,
+    full_code: str,
+) -> etree._Element:
+    record_element = etree.SubElement(
+        parent_classes,
+        "record",
+        {
+            "id": str(className),
+        }
+    )
+
+    etree.SubElement(
+        record_element,
+        "classes"
+    )
+
+    code_element = etree.SubElement(
+        record_element,
+        "code",
+        {
+            "interfaceOnly": "false",
+        }
+    )
+    code_element.text = full_code
+
+    elements_element = etree.SubElement(
+        etree.SubElement(
+            record_element,
+            "components",
+        ),
+        "elements",
+    )
+    for component in session.getComponents(className):
+        element_element = etree.SubElement(
+            elements_element,
+            "element",
+            {
+                "className": str(component.className),
+                "name": str(component.name),
+                "comment": component.comment,
+            }
+        )
+        add_dimensions_element(
+            element_element,
+            component.dimensions,
+        )
+
+    return record_element
