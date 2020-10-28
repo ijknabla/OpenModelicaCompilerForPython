@@ -27,7 +27,7 @@ from omc4py.parser import (
 from .parser import (
     parse_alias,
     parse_defaultValueInfoDict,
-    parse_enumerator,
+    parse_enumerators,
 )
 
 
@@ -327,7 +327,7 @@ def generate_omc_interface_xml(
                 "enumerators",
             )
 
-            for name, comment in parse_enumerator(self.code):
+            for name, comment in parse_enumerators(self.code):
                 xml.SubElement(
                     enumerators_element,
                     "enumerator",

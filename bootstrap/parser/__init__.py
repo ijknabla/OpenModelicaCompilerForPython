@@ -32,7 +32,7 @@ def parse_defaultValueInfoDict(
     )
 
 
-def parse_enumerator(
+def parse_enumerators(
     code: str
 ) -> typing.List[typing.Tuple[VariableName, str]]:
     return arpeggio.visit_parse_tree(
