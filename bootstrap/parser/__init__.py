@@ -1,8 +1,16 @@
 
+__all__ = (
+    "parse_ComponentArray",
+    "parse_alias",
+    "parse_enumerators",
+    "parse_variableHasDefault",
+)
+
 import arpeggio  # type: ignore
 import typing
 
 from omc4py.parser import (
+    parse_ComponentArray,
     stored_definition_parser,
     visitor,
 )
@@ -21,6 +29,15 @@ def parse_alias(
     )
 
 
+def parse_enumerators(
+    code: str
+) -> typing.List[typing.Tuple[VariableName, str]]:
+    return arpeggio.visit_parse_tree(
+        stored_definition_parser.parse(code),
+        visitor.EnumeratorVisitor(),
+    )
+
+
 def parse_variableHasDefault(
     code: str
 ) -> typing.Dict[VariableName, bool]:
@@ -29,13 +46,4 @@ def parse_variableHasDefault(
             stored_definition_parser.parse(code),
             visitor.DefaultValueInfoVisitor(),
         )
-    )
-
-
-def parse_enumerators(
-    code: str
-) -> typing.List[typing.Tuple[VariableName, str]]:
-    return arpeggio.visit_parse_tree(
-        stored_definition_parser.parse(code),
-        visitor.EnumeratorVisitor(),
     )
