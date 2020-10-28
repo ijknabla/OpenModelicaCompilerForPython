@@ -1,6 +1,5 @@
 
 import numpy
-import logging
 import typing
 import warnings
 
@@ -9,9 +8,6 @@ from omc4py import (
     parser,
     string,
 )
-
-
-logger = logging.getLogger(__name__)
 
 
 class OMCSessionBase(
