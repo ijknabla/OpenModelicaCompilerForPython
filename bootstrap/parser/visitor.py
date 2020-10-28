@@ -30,6 +30,20 @@ class AliasInfo(
 class AliasVisitor(
     TypeSpecifierVisitor,
 ):
+    def visit_stored_definition(
+        self,
+        node,
+        children,
+    ) -> typing.Optional[AliasInfo]:
+        aliases = [
+            child
+            for child in flatten_list(children)
+            if isinstance(child, AliasInfo)
+        ]
+        if aliases:
+            return aliases[0]
+        return None
+
     def visit_short_class_specifier(
         self,
         node,
@@ -49,20 +63,6 @@ class AliasVisitor(
                 target=type_specifier
             )
 
-    def visit_stored_definition(
-        self,
-        node,
-        children,
-    ):
-        aliases = [
-            child
-            for child in children
-            if isinstance(child, AliasInfo)
-        ]
-        if aliases:
-            return aliases[0]
-        return None
-
 
 class Enumerator(
     typing.NamedTuple,
@@ -75,6 +75,24 @@ class EnumeratorsVisitor(
     TypeSpecifierVisitor,
     StringVisitor,
 ):
+    def visit_stored_definition(
+        self,
+        node,
+        children,
+    ) -> typing.List[Enumerator]:
+        return [
+            child
+            for child in flatten_list(children)
+            if isinstance(child, Enumerator)
+        ]
+
+    def visit_enum_list(
+        self,
+        node,
+        children,
+    ) -> typing.List[Enumerator]:
+        return children.enumeration_literal
+
     def visit_enumeration_literal(
         self,
         node,
@@ -94,26 +112,15 @@ class EnumeratorsVisitor(
         self,
         node,
         children
-    ):
+    ) -> str:
         return children.string_comment[0]
 
     def visit_string_comment(
         self,
         node,
         children,
-    ):
+    ) -> str:
         return "".join(children.STRING)
-
-    def visit__default__(
-        self,
-        node,
-        children
-    ):
-        return [
-            child
-            for child in flatten_list(children)
-            if isinstance(child, Enumerator)
-        ]
 
 
 class VariableHasDefault(
@@ -142,7 +149,7 @@ class VariableHasDefaultVisitor(
         node,
         children
     ) -> VariableHasDefault:
-        name = children.IDENT[0]
+        name = VariableName(children.IDENT[0])
         hasDefault = bool(children.modification)
         return VariableHasDefault(
             name=name,

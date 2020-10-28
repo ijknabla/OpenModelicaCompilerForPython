@@ -402,7 +402,7 @@ def generate_omc_interface_xml(
                 if component.protected == "protected":
                     continue
                 hasDefault = variableHasDefault[
-                    component.name
+                    types.VariableName(component.name)
                 ]
                 argument_element = xml.SubElement(
                     arguments_element,
