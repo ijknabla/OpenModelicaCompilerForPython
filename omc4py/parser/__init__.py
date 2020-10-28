@@ -61,7 +61,7 @@ def _TypeName_from_str(
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
-def parse_ComponentArray(
+def parse_components(
     literal: str
 ):
     return arpeggio.visit_parse_tree(

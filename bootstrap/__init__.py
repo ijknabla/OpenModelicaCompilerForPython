@@ -20,7 +20,7 @@ from omc4py.session import (
 )
 
 from .parser import (
-    parse_ComponentArray,
+    parse_components,
     parse_alias,
     parse_variableHasDefault,
     parse_enumerators,
@@ -154,7 +154,7 @@ class OMCSession(
                 types.TypeName(name)
             ],
         )
-        return parse_ComponentArray(result_literal)
+        return parse_components(result_literal)
 
 
 open_session = functools.partial(OMCSession__open, OMCSession)

@@ -1,6 +1,6 @@
 
 __all__ = (
-    "parse_ComponentArray",
+    "parse_components",
     "parse_alias",
     "parse_enumerators",
     "parse_variableHasDefault",
@@ -10,7 +10,7 @@ import arpeggio  # type: ignore
 import typing
 
 from omc4py.parser import (
-    parse_ComponentArray,
+    parse_components,
     stored_definition_parser,
     visitor,
 )
