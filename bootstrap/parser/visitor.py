@@ -49,7 +49,7 @@ class AliasVisitor(
         node,
         children
     ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
-        variableName = VariableName(children.IDENT[0])
+        variableName, = children.IDENT
         type_specifier = getitem_with_default(
             children.type_specifier, 0,
             default=None
@@ -75,7 +75,7 @@ class EnumeratorsVisitor(
     TypeSpecifierVisitor,
     StringVisitor,
 ):
-    def visit_stored_definition(
+    def visit__default__(
         self,
         node,
         children,
@@ -86,19 +86,12 @@ class EnumeratorsVisitor(
             if isinstance(child, Enumerator)
         ]
 
-    def visit_enum_list(
-        self,
-        node,
-        children,
-    ) -> typing.List[Enumerator]:
-        return children.enumeration_literal
-
     def visit_enumeration_literal(
         self,
         node,
         children,
     ) -> Enumerator:
-        name = children.IDENT[0]
+        name, = children.IDENT
         comment = getitem_with_default(
             children.comment, 0,
             default=""
@@ -149,7 +142,7 @@ class VariableHasDefaultVisitor(
         node,
         children
     ) -> VariableHasDefault:
-        name = VariableName(children.IDENT[0])
+        name, = children.IDENT
         hasDefault = bool(children.modification)
         return VariableHasDefault(
             name=name,
