@@ -163,20 +163,23 @@ class InteractiveOMC(
         port_filepath = find_openmodelica_zmq_port_filepath(suffix)
 
         logger.info(
-            f"(pid={self.process.pid}) Find zmq port file at {port_filepath}"
+            f"(pid={self.process.pid}) "
+            f"Find zmq port file at {port_filepath}"
         )
 
         try:
             port = port_filepath.read_text()
             self.socket.connect(port)
             logger.info(
-                f"(pid={self.process.pid}) Connect zmq sokcet via {port}"
+                f"(pid={self.process.pid}) "
+                f"Connect zmq sokcet via {port}"
             )
         finally:
             try:
                 port_filepath.unlink()
                 logger.info(
-                    f"(pid={self.process.pid}) Remove zmq port file at {port_filepath}"
+                    f"(pid={self.process.pid}) "
+                    f"Remove zmq port file at {port_filepath}"
                 )
             except FileNotFoundError:
                 pass
