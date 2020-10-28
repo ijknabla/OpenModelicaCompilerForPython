@@ -22,11 +22,11 @@ def parse_alias(
 
 
 def parse_defaultValueInfoDict(
-    interface: str
+    code: str
 ) -> typing.Dict[VariableName, bool]:
     return dict(
         arpeggio.visit_parse_tree(
-            stored_definition_parser.parse(interface),
+            stored_definition_parser.parse(code),
             visitor.DefaultValueInfoVisitor(),
         )
     )
