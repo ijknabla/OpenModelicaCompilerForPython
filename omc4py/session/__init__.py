@@ -1,17 +1,75 @@
 
-import numpy
-import logging
+import numpy  # type: ignore
 import typing
 import warnings
 
 from omc4py import (
     compiler,
+    exception,
     parser,
     string,
 )
+from . import (
+    base,
+)
 
 
-logger = logging.getLogger(__name__)
+def parse_OMCError(
+    error_message_literal: str,
+) -> typing.Optional[exception.OMCException]:
+    error_message = string.unquote_modelica_string(
+        error_message_literal.rstrip()
+    )
+    if not error_message or error_message.isspace():
+        return None
+
+    matched = compiler.omc_error_pattern.match(
+        error_message
+    )
+    if not matched:
+        raise exception.OMCRuntimeError(
+            f"Unexpected error message format: {error_message!r}"
+        )
+    # info = matched.group("info")
+    kind = matched.group("kind")
+    # message = matched.group("message")
+
+    if kind == "Error":
+        return exception.OMCError(error_message)
+    else:
+        return exception.OMCWarning(error_message)
+
+
+class OMCSessionMinimal(
+    base.OMCSessionBase,
+):
+    def __omc_check__(
+        self,
+    ) -> None:
+        error_optional: typing.Optional[exception.OMCException]
+        error_optional = self.__omc_call__(
+            "getErrorString",
+            parser=parse_OMCError,
+            check=False,
+        )
+
+        if error_optional is None:
+            return
+
+        error = error_optional
+        if isinstance(error, Warning):
+            warnings.warn(error)
+        else:
+            raise error
+
+    def getVersion(
+        self,
+    ):
+        # Call function
+        return self.__omc_call__(
+            "getVersion",
+            parser=parser.parse_OMCValue,
+        )
 
 
 class OMCSessionBase(

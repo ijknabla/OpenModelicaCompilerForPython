@@ -2,6 +2,7 @@
 __all__ = (
     "OMCError",
     "OMCException",
+    "OMCRuntimeError",
     "OMCWarning",
 )
 

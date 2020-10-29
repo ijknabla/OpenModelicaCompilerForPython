@@ -7,7 +7,6 @@ import re
 import typing
 
 from . import (
-    load_schema,
     profile,
 )
 
