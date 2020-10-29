@@ -1,8 +1,6 @@
 
-import abc
 import argparse
 import enum
-import functools
 from lxml import etree as xml  # type: ignore
 import os
 from pathlib import Path
@@ -12,24 +10,9 @@ import typing
 
 import omc4py.compiler
 
-from omc4py.session import (
-    OMCSession__call,
-    OMCSession__close,
-    OMCSession__open,
-    OMCSessionBase,
-    types,
-)
-
 from . import (
     interface_xml,
     session,
-)
-
-from .parser import (
-    parse_alias,
-    parse_components,
-    parse_enumerators,
-    parse_variableHasDefault,
 )
 
 
