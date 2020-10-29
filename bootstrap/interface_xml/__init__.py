@@ -4,7 +4,6 @@ __all__ = (
     "load_schema",
 )
 
-import enum
 from lxml import etree  # type: ignore
 import pkg_resources
 import tqdm
