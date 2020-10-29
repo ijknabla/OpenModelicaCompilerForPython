@@ -10,6 +10,8 @@ import shutil
 import sys
 import typing
 
+import omc4py.compiler
+
 from omc4py.session import (
     OMCSession__call,
     OMCSession__close,
@@ -18,7 +20,10 @@ from omc4py.session import (
     types,
 )
 
-from . import interface_xml
+from . import (
+    interface_xml,
+    session,
+)
 
 from .parser import (
     parse_alias,
@@ -497,9 +502,9 @@ def generate_omc_interface(
     outputType: OutputType,
 ):
     if inputType is InputType.executable:
-        with open_session(inputPath) as session:
-            omc_interface_xml = generate_omc_interface_xml(
-                session
+        with omc4py.compiler.InteractiveOMC.open(inputPath) as omc:
+            omc_interface_xml = interface_xml.generate_omc_interface_xml(
+                session.OMCSessionBootstrap(omc)
             )
     else:  # inputType is InputType.xml:
         omc_interface_xml = xml.parse(str(inputPath))
