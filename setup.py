@@ -25,7 +25,6 @@ setup(
         "ModelicaLanguage==0.0.0a6",  # fix to current alpha version
         "PyZMQ",
         "Arpeggio",
-        "lxml",
         "numpy",
         "typing_extensions",
     ],
