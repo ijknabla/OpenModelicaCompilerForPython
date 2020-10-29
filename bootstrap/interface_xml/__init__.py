@@ -366,7 +366,7 @@ def add_function_element(
         session,
         function_element,
         className,
-        interfaceOnly = True
+        interfaceOnly=True,
     )
 
     defaultValueDict = parse_variableHasDefault(

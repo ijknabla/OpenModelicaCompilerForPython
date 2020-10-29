@@ -1,0 +1,4 @@
+OpenModelicaCompiler
+inquirer
+lxml
+tqdm
