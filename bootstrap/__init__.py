@@ -12,6 +12,7 @@ import omc4py.compiler
 
 from . import (
     interface_xml,
+    generate,
     session,
 )
 
@@ -28,9 +29,6 @@ class OutputType(
 ):
     module = enum.auto()
     xml = enum.auto()
-
-
-from . import generate  # TODO: organize package structure
 
 
 def generate_omc_interface(
