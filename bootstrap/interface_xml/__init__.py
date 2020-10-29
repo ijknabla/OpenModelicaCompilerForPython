@@ -180,7 +180,7 @@ def add_alias_element(
         except ValueError:
             continue
     else:
-        raise RuntimeError(
+        raise ValueError(
             "Can't resolve absolute className "
             f"of {rel_target} from {className}"
         )
