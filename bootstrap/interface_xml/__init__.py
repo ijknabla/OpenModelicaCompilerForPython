@@ -104,9 +104,7 @@ def generate_class_element(
     )
 
     restriction = getRestriction(session, className)
-    full_code = session.list(className)
-    shortOnly_code = session.list(className, shortOnly=True)
-    alias_optional = parse_alias(shortOnly_code)
+    alias_optional = parse_alias(session.list(className, shortOnly=True))
 
     if alias_optional is not None:
         _, target = alias_optional
@@ -122,7 +120,6 @@ def generate_class_element(
             session,
             parent_classes,
             className,
-            full_code,
         )
     elif restriction is Restriction.package:
         return add_package_element(
@@ -135,7 +132,6 @@ def generate_class_element(
             session,
             parent_classes,
             className,
-            full_code,
         )
     elif restriction is Restriction.function:
         return add_function_element(
@@ -170,6 +166,27 @@ def to_xml_boolean(
     value: bool,
 ) -> str:
     return "true" if value else "false"
+
+
+def add_code_element(
+    session: OMCSessionBootstrap,
+    parent: etree._Element,
+    className: TypeName,
+    interfaceOnly: bool
+) -> etree._Element:
+    code_element = etree.SubElement(
+        parent,
+        "code",
+        {
+            "interfaceOnly": to_xml_boolean(interfaceOnly)
+        }
+    )
+    code_element.text = session.list(
+        className,
+        interfaceOnly=interfaceOnly
+    )
+
+    return code_element
 
 
 def add_dimensions_element(
@@ -224,14 +241,7 @@ def add_type_element(
     session: OMCSessionBootstrap,
     parent_classes: etree._Element,
     className: TypeName,
-    full_code: str,
 ) -> etree._Element:
-    enumerators = parse_enumerators(full_code)
-    if not enumerators:
-        raise ValueError(
-            f"Modelica type {className} has no enumeration"
-        )
-
     type_element = etree.SubElement(
         parent_classes,
         "type",
@@ -245,14 +255,18 @@ def add_type_element(
         "classes",
     )
 
-    code_element = etree.SubElement(
+    code_element = add_code_element(
+        session,
         type_element,
-        "code",
-        {
-            "interfaceOnly": to_xml_boolean(False),
-        }
+        className,
+        interfaceOnly=False,
     )
-    code_element.text = full_code
+
+    enumerators = parse_enumerators(code_element.text)
+    if not enumerators:
+        raise ValueError(
+            f"Modelica type {className} has no enumeration"
+        )
 
     enumerators_element = etree.SubElement(
         etree.SubElement(
@@ -295,7 +309,6 @@ def add_record_element(
     session: OMCSessionBootstrap,
     parent_classes: etree._Element,
     className: TypeName,
-    full_code: str,
 ) -> etree._Element:
     record_element = etree.SubElement(
         parent_classes,
@@ -310,14 +323,12 @@ def add_record_element(
         "classes"
     )
 
-    code_element = etree.SubElement(
+    add_code_element(
+        session,
         record_element,
-        "code",
-        {
-            "interfaceOnly": to_xml_boolean(False),
-        }
+        className,
+        interfaceOnly=False,
     )
-    code_element.text = full_code
 
     elements_element = etree.SubElement(
         etree.SubElement(
@@ -362,22 +373,16 @@ def add_function_element(
         "classes",
     )
 
-    code_interfaceOnly = session.list(
+    code_element = add_code_element(
+        session,
+        function_element,
         className,
-        interfaceOnly=True,
-    )
-    defaultValueDict = parse_variableHasDefault(
-        code_interfaceOnly,
+        interfaceOnly = True
     )
 
-    code_element = etree.SubElement(
-        function_element,
-        "code",
-        {
-            "interfaceOnly": "true",
-        }
+    defaultValueDict = parse_variableHasDefault(
+        code_element.text,
     )
-    code_element.text = code_interfaceOnly
 
     arguments_element = etree.SubElement(
         etree.SubElement(
@@ -386,7 +391,6 @@ def add_function_element(
         ),
         "arguments",
     )
-
     for component in session.getComponents(className):
         if component.protected == "protected":
             continue
