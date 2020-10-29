@@ -143,17 +143,9 @@ def generate_class_element(
             className,
         )
 
-    element = etree.SubElement(
-        parent_classes,
-        "class",
-        {"id": str(className)}
+    raise ValueError(
+        f'Failed to find generate element function for {className}'
     )
-    etree.SubElement(
-        element,
-        "classes",
-    )
-
-    return element
 
 
 def find_parent_classes(
