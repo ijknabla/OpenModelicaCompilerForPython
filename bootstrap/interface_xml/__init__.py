@@ -248,7 +248,7 @@ def add_type_element(
         type_element,
         "code",
         {
-            "interfaceOnly": "false"
+            "interfaceOnly": to_xml_boolean(False),
         }
     )
     code_element.text = full_code
@@ -313,7 +313,7 @@ def add_record_element(
         record_element,
         "code",
         {
-            "interfaceOnly": "false",
+            "interfaceOnly": to_xml_boolean(False),
         }
     )
     code_element.text = full_code
