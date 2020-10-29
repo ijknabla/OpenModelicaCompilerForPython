@@ -1,4 +1,9 @@
 
+__all__ = (
+    "generate_omc_interface_xml",
+    "load_schema",
+)
+
 import enum
 from lxml import etree  # type: ignore
 import pkg_resources
