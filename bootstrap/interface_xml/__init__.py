@@ -70,33 +70,6 @@ def generate_root_element(
     return root
 
 
-class Restriction(
-    enum.Enum,
-):
-    type = enum.auto()
-    package = enum.auto()
-    record = enum.auto()
-    function = enum.auto()
-
-
-def getRestriction(
-    session: OMCSessionBootstrap,
-    className: TypeName,
-) -> Restriction:
-    if session.isType(className):
-        return Restriction.type
-    elif session.isPackage(className):
-        return Restriction.package
-    elif session.isRecord(className):
-        return Restriction.record
-    elif session.isFunction(className):
-        return Restriction.function
-    else:
-        raise ValueError(
-            f"Can't determine restriction of {className}"
-        )
-
-
 def generate_class_element(
     session: OMCSessionBootstrap,
     root: etree._Element,
@@ -108,7 +81,7 @@ def generate_class_element(
         className
     )
 
-    restriction = getRestriction(session, className)
+    restriction = session.getClassRestrictionEnum(className)
     alias_optional = parse_alias(session.list(className, shortOnly=True))
 
     if alias_optional is not None:
@@ -120,25 +93,25 @@ def generate_class_element(
             restriction,
             target,
         )
-    elif restriction is Restriction.type:
+    elif restriction is OMCSessionBootstrap.RestrictionEnum.type:
         return add_type_element(
             session,
             parent_classes,
             className,
         )
-    elif restriction is Restriction.package:
+    elif restriction is OMCSessionBootstrap.RestrictionEnum.package:
         return add_package_element(
             session,
             parent_classes,
             className,
         )
-    elif restriction is Restriction.record:
+    elif restriction is OMCSessionBootstrap.RestrictionEnum.record:
         return add_record_element(
             session,
             parent_classes,
             className,
         )
-    elif restriction is Restriction.function:
+    elif restriction is OMCSessionBootstrap.RestrictionEnum.function:
         return add_function_element(
             session,
             parent_classes,
@@ -218,13 +191,13 @@ def add_alias_element(
     session: OMCSessionBootstrap,
     parent_classes: etree._Element,
     className: TypeName,
-    restriction: Restriction,
+    restriction: OMCSessionBootstrap.RestrictionEnum,
     rel_target: TypeName,
 ) -> etree._Element:
     for parent in className.parents:
         try:
             target = parent/rel_target
-            if getRestriction(session, target) == restriction:
+            if session.getClassRestrictionEnum(target) == restriction:
                 break
         except ValueError:
             continue

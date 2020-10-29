@@ -1,4 +1,5 @@
 
+import enum
 import typing
 
 from omc4py.parser import (
@@ -97,6 +98,51 @@ class OMCSessionBootstrap(
             },
             parser=parse_OMCValue,
         )
+
+    def getClassRestriction(
+        self,
+        cl: TypeName,
+    ) -> str:
+        # Check arguments
+        cl__internal = cast_value(
+            "cl", cl,
+            optional=False,
+            class_=TypeName,
+            class_restrictions=(),
+            sizes=(),
+        )
+
+        # Call function
+        return self.__omc_call__(
+            "getClassRestriction",
+            args=(
+                cl__internal,
+            ),
+            parser=parse_OMCValue,
+        )
+
+    class RestrictionEnum(
+        enum.Enum,
+    ):
+        type = enum.auto()
+        package = enum.auto()
+        record = enum.auto()
+        function = enum.auto()
+
+    def getClassRestrictionEnum(
+        self,
+        cl: TypeName,
+    ) -> RestrictionEnum:
+        keywords_to_ignore = {
+            "impure",
+        }
+        return self.RestrictionEnum[
+            " ".join(
+                word
+                for word in self.getClassRestriction(cl).split(' ')
+                if word not in keywords_to_ignore
+            )
+        ]
 
     def isType(
         self,
