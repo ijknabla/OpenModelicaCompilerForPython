@@ -5,10 +5,21 @@ from lxml import etree  # type: ignore
 from ..session import OMCSessionBootstrap
 
 
-def generate_interface_xml(
+def generate_omc_interface_xml(
     session: OMCSessionBootstrap
 ) -> etree._ElementTree:
-    pass
+    root = etree.Element(
+        "omcInterface",
+        {
+            "omcVersion": session.getVersion()
+        }
+    )
+    etree.SubElement(
+        root,
+        "classes"
+    )
+
+    return etree.ElementTree(root)
 
 
 def load_schema(
