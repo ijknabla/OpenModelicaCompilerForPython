@@ -4,6 +4,7 @@ __all__ = (
     "validate_omc_interface_xml",
 )
 
+import functools
 from lxml import etree  # type: ignore
 import pkg_resources
 import tqdm
@@ -49,6 +50,7 @@ def validate_omc_interface_xml(
     )
 
 
+@functools.lru_cache(maxsize=1)
 def load_omc_interface_schema(
 ) -> etree.XMLSchema:
     return etree.XMLSchema(
