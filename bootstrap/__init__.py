@@ -177,13 +177,24 @@ Refactored main
 
     args = parser.parse_args()
 
+    inputType_hint = (
+        InputType[args.inputType]
+        if args.inputType is not None
+        else None
+    )
+    outputFormat_hint = (
+        OutputFormat[args.outputFormat]
+        if args.outputFormat is not None
+        else None
+    )
+
     inputPath, inputType = check_input_args(
         args.input,
-        None if args.inputType is None else InputType[args.inputType],
+        inputType_hint,
     )
     outputFile, outputFormat = check_output_args(
         args.output,
-        None if args.outputFormat is None else OutputFormat[args.outputFormat],
+        outputFormat_hint,
     )
 
     generate_omc_interface(
