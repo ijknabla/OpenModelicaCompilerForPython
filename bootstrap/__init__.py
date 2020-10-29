@@ -1,7 +1,7 @@
 
 import argparse
 import enum
-from lxml import etree as xml  # type: ignore
+from lxml import etree  # type: ignore
 import os
 from pathlib import Path
 import shutil
@@ -43,7 +43,7 @@ def generate_omc_interface(
                 session.OMCSessionBootstrap(omc)
             )
     else:  # inputType is InputType.xml:
-        omc_interface_xml = xml.parse(str(inputPath))
+        omc_interface_xml = etree.parse(str(inputPath))
 
     schema = interface_xml.load_schema()
     schema.assertValid(omc_interface_xml)
