@@ -1,7 +1,7 @@
 
 __all__ = (
     "generate_omc_interface_xml",
-    "load_schema",
+    "validate_omc_interface_xml",
 )
 
 from lxml import etree  # type: ignore
@@ -41,7 +41,15 @@ def generate_omc_interface_xml(
     return etree.ElementTree(root)
 
 
-def load_schema(
+def validate_omc_interface_xml(
+    omc_interface: etree._ElementTree,
+) -> None:
+    load_omc_interface_schema().assertValid(
+        omc_interface
+    )
+
+
+def load_omc_interface_schema(
 ) -> etree.XMLSchema:
     return etree.XMLSchema(
         etree.XML(

@@ -45,8 +45,7 @@ def generate_omc_interface(
     else:  # inputType is InputType.xml:
         omc_interface_xml = etree.parse(str(inputPath))
 
-    schema = interface_xml.load_schema()
-    schema.assertValid(omc_interface_xml)
+    interface_xml.validate_omc_interface_xml(omc_interface_xml)
 
     if outputType is OutputType.module:
         module_code = generate.create_module(omc_interface_xml)
