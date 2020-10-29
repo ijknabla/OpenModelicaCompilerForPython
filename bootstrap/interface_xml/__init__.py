@@ -108,7 +108,7 @@ def generate_class_element(
     alias_optional = parse_alias(full_code)
 
     if alias_optional is not None:
-        name, target = alias_optional
+        _, target = alias_optional
         return add_alias_element(
             session,
             parent_classes,
