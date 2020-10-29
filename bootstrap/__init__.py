@@ -24,7 +24,7 @@ class InputType(
     xml = enum.auto()
 
 
-class OutputType(
+class OutputFormat(
     enum.Enum,
 ):
     module = enum.auto()
@@ -35,7 +35,7 @@ def generate_omc_interface(
     inputPath: Path,
     inputType: InputType,
     outputFile: typing.BinaryIO,
-    outputType: OutputType,
+    outputFormat: OutputFormat,
 ):
     if inputType is InputType.executable:
         with omc4py.compiler.InteractiveOMC.open(inputPath) as omc:
@@ -47,10 +47,10 @@ def generate_omc_interface(
 
     interface_xml.validate_omc_interface_xml(omc_interface_xml)
 
-    if outputType is OutputType.module:
+    if outputFormat is OutputFormat.module:
         module_code = generate.create_module(omc_interface_xml)
         module_code.bdump(outputFile)
-    else:  # outputType is OutputType.xml:
+    else:  # outputFormat is OutputFormat.xml:
         omc_interface_xml.write(
             outputFile,
             pretty_print=True,
@@ -92,14 +92,14 @@ def check_input_args(
 
 def check_output_args(
     output_optional: typing.Optional[typing.BinaryIO],
-    outputType_hint: typing.Optional[OutputType],
-) -> typing.Tuple[typing.BinaryIO, OutputType]:
+    outputFormat_hint: typing.Optional[OutputFormat],
+) -> typing.Tuple[typing.BinaryIO, OutputFormat]:
     if output_optional is None:
         binary_stdout = sys.stdout.buffer
-        if outputType_hint is None:
-            return binary_stdout, OutputType.module
+        if outputFormat_hint is None:
+            return binary_stdout, OutputFormat.module
         else:
-            return binary_stdout, outputType_hint
+            return binary_stdout, outputFormat_hint
 
     output: typing.BinaryIO = output_optional
     path = Path(output.name)
@@ -108,11 +108,11 @@ def check_output_args(
         output.close()
         os.remove(path)
 
-    if outputType_hint is None:
+    if outputFormat_hint is None:
         if path.suffix == ".py":
-            return output, OutputType.module
+            return output, OutputFormat.module
         elif path.suffix == ".xml":
-            return output, OutputType.xml
+            return output, OutputFormat.xml
         else:
             close_output()
             raise ValueError(
@@ -120,22 +120,22 @@ def check_output_args(
                 f", got {output.name!r}"
             )
 
-    outputType: OutputType = outputType_hint
+    outputFormat: OutputFormat = outputFormat_hint
 
-    if outputType is OutputType.module and path.suffix != ".py":
+    if outputFormat is OutputFormat.module and path.suffix != ".py":
         close_output()
         raise ValueError(
-            "--outputType=module, but output file suffix is not .py"
+            "--outputFormat=module, but output file suffix is not .py"
             f", got {output.name!r}"
         )
-    if outputType is OutputType.xml and path.suffix != ".xml":
+    if outputFormat is OutputFormat.xml and path.suffix != ".xml":
         close_output()
         raise ValueError(
-            "--outputType=xml, but output file suffix is not .xml"
+            "--outputFormat=xml, but output file suffix is not .xml"
             f", got {output.name!r}"
         )
 
-    return output, outputType
+    return output, outputFormat
 
 
 def main():
@@ -167,12 +167,12 @@ Refactored main
         type=argparse.FileType("xb"),
     )
 
-    # # outputType
+    # # outputFormat
     # {module, xml}
     # default is None (select by `output`)
     parser.add_argument(
-        "--outputType",
-        choices=OutputType.__members__,
+        "--outputFormat",
+        choices=OutputFormat.__members__,
     )
 
     args = parser.parse_args()
@@ -181,12 +181,12 @@ Refactored main
         args.input,
         None if args.inputType is None else InputType[args.inputType],
     )
-    outputFile, outputType = check_output_args(
+    outputFile, outputFormat = check_output_args(
         args.output,
-        None if args.outputType is None else OutputType[args.outputType],
+        None if args.outputFormat is None else OutputFormat[args.outputFormat],
     )
 
     generate_omc_interface(
         inputPath, inputType,
-        outputFile, outputType,
+        outputFile, outputFormat,
     )
