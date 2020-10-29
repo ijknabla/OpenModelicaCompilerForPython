@@ -165,6 +165,30 @@ def find_parent_classes(
     return classes
 
 
+def to_xml_boolean(
+    value: bool,
+) -> str:
+    return "true" if value else "false"
+
+
+def add_dimensions_element(
+    parent: etree._Element,
+    dimensions: typing.Sequence[str]
+):
+    dimensions_element = etree.SubElement(
+        parent,
+        "dimensions",
+    )
+    for dimension in dimensions:
+        etree.SubElement(
+            dimensions_element,
+            "dimension",
+            {
+                "size": dimension,
+            },
+        )
+
+
 def add_alias_element(
     session: OMCSessionBootstrap,
     parent_classes: etree._Element,
@@ -264,24 +288,6 @@ def add_package_element(
         "classes"
     )
     return package_element
-
-
-def add_dimensions_element(
-    parent: etree._Element,
-    dimensions: typing.Sequence[str]
-):
-    dimensions_element = etree.SubElement(
-        parent,
-        "dimensions",
-    )
-    for dimension in dimensions:
-        etree.SubElement(
-            dimensions_element,
-            "dimension",
-            {
-                "size": dimension,
-            },
-        )
 
 
 def add_record_element(
@@ -403,9 +409,3 @@ def add_function_element(
         )
 
     return function_element
-
-
-def to_xml_boolean(
-    value: bool,
-) -> str:
-    return "true" if value else "false"
