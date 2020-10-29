@@ -2,6 +2,7 @@
 import argparse
 import contextlib
 import enum
+import inquirer
 from lxml import etree  # type: ignore
 import os
 from pathlib import Path
@@ -95,6 +96,7 @@ def check_input_args(
 def open_by_output_args(
     output_str: str,
     outputFormat_hint: typing.Optional[OutputFormat],
+    overwrite: typing.Optional[bool],
 ) -> typing.Iterator[typing.Tuple[typing.BinaryIO, OutputFormat]]:
     if output_str == '-':
         if outputFormat_hint is not None:
@@ -130,8 +132,29 @@ def open_by_output_args(
                     f", got {output_str!r}"
                 )
 
-        with output.open("xb") as outputFile:
-            yield outputFile, outputFormat
+        try:
+            with output.open("xb") as outputFile:
+                yield outputFile, outputFormat
+        except FileExistsError:
+            if overwrite is None:
+                answer = inquirer.prompt(
+                    [
+                        inquirer.Confirm(
+                            "overwrite",
+                            message=f"Do you want to overwrite {output_str!r}?",
+                        )
+                    ]
+                )
+                if answer:
+                    overwrite = answer["overwrite"]
+                else:
+                    overwrite = False
+
+            if not overwrite:
+                raise
+            else:
+                with output.open("wb") as outputFile:
+                    yield outputFile, outputFormat
 
 
 def main():
@@ -171,6 +194,11 @@ Refactored main
         choices=OutputFormat.__members__,
     )
 
+    parser.add_argument(
+        "--overwrite", action="store_true",
+        default=None,
+    )
+
     args = parser.parse_args()
 
     inputType_hint = (
@@ -192,6 +220,7 @@ Refactored main
     with open_by_output_args(
         args.output,
         outputFormat_hint,
+        args.overwrite,
     ) as (outputFile, outputFormat):
         generate_omc_interface(
             inputPath, inputType,
