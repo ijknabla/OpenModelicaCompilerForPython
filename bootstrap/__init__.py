@@ -1,5 +1,6 @@
 
 import argparse
+import contextlib
 import enum
 from lxml import etree  # type: ignore
 import os
@@ -90,52 +91,47 @@ def check_input_args(
         return absPath, InputType.xml
 
 
-def check_output_args(
-    output_optional: typing.Optional[typing.BinaryIO],
+@contextlib.contextmanager
+def open_by_output_args(
+    output_str: str,
     outputFormat_hint: typing.Optional[OutputFormat],
-) -> typing.Tuple[typing.BinaryIO, OutputFormat]:
-    if output_optional is None:
-        binary_stdout = sys.stdout.buffer
-        if outputFormat_hint is None:
-            return binary_stdout, OutputFormat.module
-        else:
-            return binary_stdout, outputFormat_hint
+) -> typing.Iterator[typing.Tuple[typing.BinaryIO, OutputFormat]]:
+    if output_str == '-':
+        if outputFormat_hint is not None:
+            yield sys.stdout.buffer, outputFormat_hint
+        else:  # outputFormat_hint is None
+            # default outputFormat is module
+            yield sys.stdout.buffer, OutputFormat.module
 
-    output: typing.BinaryIO = output_optional
-    path = Path(output.name)
+    else:
+        output = Path(output_str).resolve()
+        outputFormat: OutputFormat
 
-    def close_output():
-        output.close()
-        os.remove(path)
+        if outputFormat_hint is not None:
+            outputFormat = outputFormat_hint
+            if outputFormat is OutputFormat.module and output.suffix != ".py":
+                raise ValueError(
+                    "--outputFormat=module, but output file suffix is not .py"
+                    f", got {output_str!r}"
+                )
+            if outputFormat is OutputFormat.xml and output.suffix != ".xml":
+                raise ValueError(
+                    "--outputFormat=xml, but output file suffix is not .xml"
+                    f", got {output_str!r}"
+                )
+        else:  # outputFormat_hint is None:
+            if output.suffix == ".py":
+                outputFormat = OutputFormat.module
+            elif output.suffix == ".xml":
+                outputFormat = OutputFormat.xml
+            else:
+                raise ValueError(
+                    "output file suffix must be .py or .xml"
+                    f", got {output_str!r}"
+                )
 
-    if outputFormat_hint is None:
-        if path.suffix == ".py":
-            return output, OutputFormat.module
-        elif path.suffix == ".xml":
-            return output, OutputFormat.xml
-        else:
-            close_output()
-            raise ValueError(
-                "output file suffix must be .py or .xml"
-                f", got {output.name!r}"
-            )
-
-    outputFormat: OutputFormat = outputFormat_hint
-
-    if outputFormat is OutputFormat.module and path.suffix != ".py":
-        close_output()
-        raise ValueError(
-            "--outputFormat=module, but output file suffix is not .py"
-            f", got {output.name!r}"
-        )
-    if outputFormat is OutputFormat.xml and path.suffix != ".xml":
-        close_output()
-        raise ValueError(
-            "--outputFormat=xml, but output file suffix is not .xml"
-            f", got {output.name!r}"
-        )
-
-    return output, outputFormat
+        with output.open("xb") as outputFile:
+            yield outputFile, outputFormat
 
 
 def main():
@@ -164,7 +160,7 @@ Refactored main
     # default is stdout, (generate python module)
     parser.add_argument(
         "-o", "--output",
-        type=argparse.FileType("xb"),
+        default='-',
     )
 
     # # outputFormat
@@ -192,12 +188,12 @@ Refactored main
         args.input,
         inputType_hint,
     )
-    outputFile, outputFormat = check_output_args(
+
+    with open_by_output_args(
         args.output,
         outputFormat_hint,
-    )
-
-    generate_omc_interface(
-        inputPath, inputType,
-        outputFile, outputFormat,
-    )
+    ) as (outputFile, outputFormat):
+        generate_omc_interface(
+            inputPath, inputType,
+            outputFile, outputFormat,
+        )
