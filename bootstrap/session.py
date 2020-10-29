@@ -22,6 +22,7 @@ class OMCSessionBootstrap(
         self,
         class_: typing.Optional[TypeName] = None,
         interfaceOnly: typing.Optional[bool] = None,
+        shortOnly: typing.Optional[bool] = None,
     ):
         # Check arguments
         class___internal__ = cast_value(
@@ -38,6 +39,13 @@ class OMCSessionBootstrap(
             class_restrictions=(),
             sizes=(),
         )
+        shortOnly__internal__ = cast_value(
+            "shortOnly", shortOnly,
+            optional=True,
+            class_=Boolean,
+            class_restrictions=(),
+            sizes=(),
+        )
 
         # Call function
         return self.__omc_call__(
@@ -45,6 +53,7 @@ class OMCSessionBootstrap(
             kwrds={
                 VariableName("class_"): class___internal__,
                 VariableName("interfaceOnly"): interfaceOnly__internal__,
+                VariableName("shortOnly"): shortOnly__internal__,
             },
             parser=parse_OMCValue,
         )
