@@ -192,7 +192,7 @@ def add_code_element(
 def add_dimensions_element(
     parent: etree._Element,
     dimensions: typing.Sequence[str]
-):
+) -> etree._Element:
     dimensions_element = etree.SubElement(
         parent,
         "dimensions",
@@ -205,6 +205,8 @@ def add_dimensions_element(
                 "size": dimension,
             },
         )
+
+    return dimensions_element
 
 
 def add_alias_element(
