@@ -105,7 +105,8 @@ def generate_class_element(
 
     restriction = getRestriction(session, className)
     full_code = session.list(className)
-    alias_optional = parse_alias(full_code)
+    shortOnly_code = session.list(className, shortOnly=True)
+    alias_optional = parse_alias(shortOnly_code)
 
     if alias_optional is not None:
         _, target = alias_optional
