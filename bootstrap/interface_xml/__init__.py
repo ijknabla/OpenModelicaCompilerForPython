@@ -46,8 +46,8 @@ def generate_omc_interface_xml(
         recursive=True,
     )
 
-    for i, className in enumerate(tqdm.tqdm(classNames)):
-        assert(i == 0 or className.parent in classNames[:i])
+    for className in tqdm.tqdm(classNames):
+        assert(root.xpath(f'//*[@id="{className.parent!s}"]'))
         generate_class_element(session, package_OpenModelica, className)
 
     return etree.ElementTree(root)
