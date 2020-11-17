@@ -1,7 +1,7 @@
 
 from lxml import etree  # type: ignore
 
-from ..code import CodeBlock
+from .code import CodeBlock
 
 
 def generate_module_py(
