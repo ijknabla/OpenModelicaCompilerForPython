@@ -12,8 +12,8 @@ import typing
 import omc4py.compiler
 
 from . import (
-    interface_xml,
     generate,
+    interface_xml,
     session,
 )
 
