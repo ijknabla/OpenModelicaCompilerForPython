@@ -4,7 +4,6 @@ import contextlib
 import enum
 import inquirer
 from lxml import etree  # type: ignore
-import os
 from pathlib import Path
 import shutil
 import sys
