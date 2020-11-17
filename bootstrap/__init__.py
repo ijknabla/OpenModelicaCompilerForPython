@@ -2,7 +2,7 @@
 import argparse
 import contextlib
 import enum
-import inquirer
+import inquirer  # type: ignore
 from lxml import etree  # type: ignore
 from pathlib import Path
 import shutil
