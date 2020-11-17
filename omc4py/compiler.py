@@ -13,7 +13,7 @@ import uuid
 import zmq  # type: ignore
 
 from . import (
-    abstract,
+    classes,
     exception,
     string,
 )
@@ -68,7 +68,7 @@ def find_openmodelica_zmq_port_filepath(
 
 
 class InteractiveOMC(
-    abstract.AbstractInteractiveOMC,
+    classes.AbstractInteractiveOMC,
 ):
     __slots__ = (
         "__socket",

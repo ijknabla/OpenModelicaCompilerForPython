@@ -2,14 +2,14 @@
 import typing
 
 from .. import (
-    abstract,
+    classes,
     parser,
     types,
 )
 
 
 class OMCSessionBase(
-    abstract.AbstractOMCSession,
+    classes.AbstractOMCSession,
 ):
     def getComponents(
         self,
