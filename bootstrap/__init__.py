@@ -12,8 +12,8 @@ import typing
 import omc4py.compiler
 
 from . import (
-    generate,
     interface_xml,
+    module_py,
     session,
 )
 
@@ -49,7 +49,7 @@ def generate_omc_interface(
     interface_xml.validate_omc_interface_xml(omc_interface_xml)
 
     if outputFormat is OutputFormat.module:
-        module_code = generate.create_module(omc_interface_xml)
+        module_code = module_py.generate_module_py(omc_interface_xml)
         module_code.bdump(outputFile)
     else:  # outputFormat is OutputFormat.xml:
         omc_interface_xml.write(
