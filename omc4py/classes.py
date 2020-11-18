@@ -9,6 +9,62 @@ from . import (
 )
 
 
+Dimensions = typing.Tuple[typing.Optional[int], ...]
+
+
+class Component(
+):
+    class_: typing.Type
+    dimensions: Dimensions
+
+    def __init__(
+        self,
+        class_: typing.Type,
+        dimensions: typing.Optional[Dimensions] = None,
+    ):
+        self.class_ = class_
+        if dimensions is None:
+            self.dimensions = ()
+        else:
+            self.dimensions = dimensions
+
+    def __getitem__(
+        self, index,
+    ) -> "Component":
+        if not isinstance(index, tuple):
+            return self[(index,)]
+
+        def dimensions_generator(
+        ) -> typing.Iterator[typing.Optional[int]]:
+            for idim, dimension in enumerate(index):
+                if isinstance(dimension, int):
+                    if dimension < 0:
+                        raise ValueError(
+                            f'dimension #{idim}: int must be positive, '
+                            f'got {dimension!r}'
+                        )
+                    else:
+                        yield dimension
+                elif isinstance(dimension, slice):
+                    start = dimension.start
+                    stop = dimension.stop
+                    step = dimension.step
+                    if not (start is None and stop is None and step is None):
+                        raise ValueError(
+                            f"dimension #{idim}: slice must be ':', "
+                            f'got {start!s}:{stop!s}:{step!s}'
+                        )
+                    else:
+                        yield None
+                else:
+                    raise TypeError(
+                        f"dimension #{idim} must be int or slice, "
+                        f"got {dimension!r}: {type(dimension)}"
+                    )
+
+        return Component(self.class_, tuple(dimensions_generator()))
+
+
 class AbstractOMCInteractive(
     abc.ABC
 ):
