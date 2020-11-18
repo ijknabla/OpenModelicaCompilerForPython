@@ -411,30 +411,5 @@ class OMCInteractive(
                 )
             )
 
-    def find_error(
-        self
-    ) -> typing.Optional[exception.OMCException]:
-        error_message = string.unquote_modelica_string(
-            self.evaluate("getErrorString()").rstrip()
-        )
-        if not error_message or error_message.isspace():
-            return None
-
-        matched = omc_error_pattern.match(
-            error_message
-        )
-        if not matched:
-            raise exception.OMCRuntimeError(
-                f"Unexpected error message format: {error_message!r}"
-            )
-        # info = matched.group("info")
-        kind = matched.group("kind")
-        # message = matched.group("message")
-
-        if kind == "Error":
-            return exception.OMCError(error_message)
-        else:
-            return exception.OMCWarning(error_message)
-
 
 atexit.register(OMCInteractive.close_all)
