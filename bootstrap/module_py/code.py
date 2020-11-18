@@ -207,9 +207,42 @@ class Code(
         self,
         indentLevel: int = 0,
     ):
+        currentIndent = indentLevel
         for item in self.items():
-            if isinstance(item, str):
-                line = self.indentString * indentLevel + item
+            if isinstance(item, AbstractCode):
+                yield from item.to_lines(currentIndent)
+            elif isinstance(item, str):
+                line = self.indentString * currentIndent + item
                 yield (line if line and not line.isspace() else "") + "\n"
-            else:
-                yield from item.to_lines(indentLevel)
+
+
+class CodeWithIndent(
+    Code,
+):
+    def to_lines(
+        self,
+        indentLevel: int = 0,
+    ):
+        currentIndent = indentLevel + 1
+        for item in self.items():
+            if isinstance(item, AbstractCode):
+                yield from item.to_lines(currentIndent)
+            elif isinstance(item, str):
+                line = self.indentString * currentIndent + item
+                yield (line if line and not line.isspace() else "") + "\n"
+
+
+class CodeIgnoringIndent(
+    Code,
+):
+    def to_lines(
+        self,
+        indentLevel: int = 0,
+    ):
+        currentIndent = 0
+        for item in self.items():
+            if isinstance(item, AbstractCode):
+                yield from item.to_lines(currentIndent)
+            elif isinstance(item, str):
+                line = self.indentString * currentIndent + item
+                yield (line if line and not line.isspace() else "") + "\n"
