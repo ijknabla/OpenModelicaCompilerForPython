@@ -14,7 +14,6 @@ import zmq  # type: ignore
 
 from . import (
     classes,
-    exception,
     parser,
     string,
     types,
