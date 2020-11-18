@@ -16,10 +16,16 @@ import numpy  # type: ignore
 import typing
 
 
-Real: typing.Type = numpy.double
-Integer: typing.Type = numpy.intc
-Boolean: typing.Type = numpy.bool
-String: typing.Type = numpy.str
+if typing.TYPE_CHECKING:
+    Real: typing.Type[float]
+    Integer: typing.Type[int]
+    Boolean: typing.Type[bool]
+    String: typing.Type[str]
+else:
+    Real = numpy.double
+    Integer = numpy.intc
+    Boolean = numpy.bool
+    String = numpy.str
 
 
 class VariableName(
@@ -251,23 +257,6 @@ class OMCEnumeration(
         return f"{self.__className__}.{self.name}"
 
     __to_omc_literal__ = __str__
-
-
-class Component(
-    typing.NamedTuple,
-):
-    className: TypeName
-    name: VariableName
-    comment: str
-    protected: str
-    isFinal: bool
-    isFlow: bool
-    isStream: bool
-    isReplaceable: bool
-    variability: str
-    innerOuter: str
-    inputOutput: str
-    dimensions: typing.Tuple[str, ...]
 
 
 from . import parser  # noqa: E402
