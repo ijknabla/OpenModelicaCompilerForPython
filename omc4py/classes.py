@@ -90,7 +90,7 @@ class AbstractOMCInteractive(
     ) -> str:
         ...
 
-    # @abc.abstractmethod
+    @abc.abstractmethod
     def call_function(
         self,
         funcName: str,
