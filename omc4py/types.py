@@ -259,21 +259,4 @@ class OMCEnumeration(
     __to_omc_literal__ = __str__
 
 
-class Component(
-    typing.NamedTuple,
-):
-    className: TypeName
-    name: VariableName
-    comment: str
-    protected: str
-    isFinal: bool
-    isFlow: bool
-    isStream: bool
-    isReplaceable: bool
-    variability: str
-    innerOuter: str
-    inputOutput: str
-    dimensions: typing.Tuple[str, ...]
-
-
 from . import parser  # noqa: E402

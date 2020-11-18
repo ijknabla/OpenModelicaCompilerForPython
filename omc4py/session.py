@@ -47,7 +47,7 @@ class OMCSessionBase(
     def getComponents(
         self,
         name: types.TypeName
-    ) -> typing.List[types.Component]:
+    ) -> typing.List[parser.ComponentTuple]:
         return self.__omc_call__(
             "getComponents",
             args=(
