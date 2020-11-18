@@ -66,21 +66,18 @@ class OMCSessionMinimal(
     def __omc_check__(
         self,
     ) -> None:
-        error_optional: typing.Optional[exception.OMCException]
-        error_optional = self.__omc_call__(
-            "getErrorString",
-            parser=parse_OMCError,
-            check=False,
-        )
+        while True:
+            error_optional = parse_OMCError(
+                self.__omc__.evaluate("getErrorString()")
+            )
+            if error_optional is None:
+                return
 
-        if error_optional is None:
-            return
-
-        error = error_optional
-        if isinstance(error, Warning):
-            warnings.warn(error)
-        else:
-            raise error
+            error = error_optional
+            if isinstance(error, Warning):
+                warnings.warn(error)
+            else:
+                raise error
 
     def getVersion(
         self,
