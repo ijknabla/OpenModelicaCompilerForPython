@@ -5,7 +5,6 @@ import warnings
 from omc4py import (
     compiler,
     exception,
-    string,
 )
 
 from .classes import (
@@ -16,6 +15,7 @@ from .parser import (
     ComponentTuple,
     parse_components,
 )
+from .string import unquote_modelica_string
 from .types import (
     String,
     TypeName,
@@ -39,7 +39,7 @@ class OMCSessionBase(
 def parse_OMCError(
     error_message_literal: str,
 ) -> typing.Optional[exception.OMCException]:
-    error_message = string.unquote_modelica_string(
+    error_message = unquote_modelica_string(
         error_message_literal.rstrip()
     )
     if not error_message or error_message.isspace():
