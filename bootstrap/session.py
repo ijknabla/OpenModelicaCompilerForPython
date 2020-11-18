@@ -96,7 +96,7 @@ class OMCSessionBootstrap(
     def getClassRestrictionEnum(
         self,
         cl: TypeName,
-    ) -> RestrictionEnum:
+    ) -> "RestrictionEnum":
         keywords_to_ignore = {
             "impure",
         }
