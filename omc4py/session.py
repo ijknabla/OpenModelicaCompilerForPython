@@ -3,14 +3,16 @@ import typing
 import warnings
 
 from omc4py import (
-    classes,
     compiler,
     exception,
     parser,
     string,
 )
 
-from .classes import Component
+from .classes import (
+    AbstractOMCSession,
+    Component,
+)
 from .types import (
     String,
     TypeName,
@@ -18,7 +20,7 @@ from .types import (
 
 
 class OMCSessionBase(
-    classes.AbstractOMCSession,
+    AbstractOMCSession,
 ):
     def getComponents(
         self,
