@@ -5,13 +5,16 @@ import warnings
 from omc4py import (
     compiler,
     exception,
-    parser,
     string,
 )
 
 from .classes import (
     AbstractOMCSession,
     Component,
+)
+from .parser import (
+    ComponentTuple,
+    parse_components,
 )
 from .types import (
     String,
@@ -25,8 +28,8 @@ class OMCSessionBase(
     def getComponents(
         self,
         name: TypeName
-    ) -> typing.List[parser.ComponentTuple]:
-        __result = parser.parse_components(
+    ) -> typing.List[ComponentTuple]:
+        __result = parse_components(
             self.__omc__.evaluate(f"getComponents({TypeName(name)})")
         )
         self.__omc_check__()
