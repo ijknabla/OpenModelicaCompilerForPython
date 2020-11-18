@@ -4,13 +4,12 @@ import typing
 import warnings
 
 from omc4py import (
+    classes,
     compiler,
     exception,
     parser,
     string,
-)
-from . import (
-    base,
+    types,
 )
 
 
@@ -40,8 +39,24 @@ def parse_OMCError(
         return exception.OMCWarning(error_message)
 
 
+class OMCSessionBase(
+    classes.AbstractOMCSession,
+):
+    def getComponents(
+        self,
+        name: types.TypeName
+    ) -> typing.List[types.Component]:
+        return self.__omc_call__(
+            "getComponents",
+            args=(
+                types.TypeName(name),
+            ),
+            parser=parser.parse_components,
+        )
+
+
 class OMCSessionMinimal(
-    base.OMCSessionBase,
+    OMCSessionBase,
 ):
     def __omc_check__(
         self,
@@ -70,31 +85,6 @@ class OMCSessionMinimal(
             "getVersion",
             parser=parser.parse_OMCValue,
         )
-
-
-class OMCSessionBase(
-):
-    _omc: compiler.InteractiveOMC
-
-    def __init__(
-        self,
-        omc: compiler.InteractiveOMC
-    ):
-        self._omc = omc
-
-    def __enter__(
-        self,
-    ):
-        return self
-
-    def __exit__(
-        self,
-        exc_type,
-        exc_value,
-        traceback,
-    ):
-        OMCSession__close(self)
-        return False
 
 
 def OMCSession__open(
