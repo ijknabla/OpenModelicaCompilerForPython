@@ -16,10 +16,16 @@ import numpy  # type: ignore
 import typing
 
 
-Real: typing.Type = numpy.double
-Integer: typing.Type = numpy.intc
-Boolean: typing.Type = numpy.bool
-String: typing.Type = numpy.str
+if typing.TYPE_CHECKING:
+    Real: typing.Type[float]
+    Integer: typing.Type[int]
+    Boolean: typing.Type[bool]
+    String: typing.Type[str]
+else:
+    Real = numpy.double
+    Integer = numpy.intc
+    Boolean = numpy.bool
+    String = numpy.str
 
 
 class VariableName(
