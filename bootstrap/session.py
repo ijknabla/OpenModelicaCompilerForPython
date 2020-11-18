@@ -67,23 +67,17 @@ class OMCSessionBootstrap(
         self,
         cl: TypeName,
     ) -> str:
-        # Check arguments
-        cl__internal = cast_value(
-            "cl", cl,
-            optional=False,
-            class_=TypeName,
-            class_restrictions=(),
-            sizes=(),
+        __result = self.__omc__.call_function(
+            funcName="getClassRestriction",
+            inputArguments=[
+                (Component(TypeName), "cl", cl, "required"),
+            ],
+            outputArguments=[
+                (Component(String), "restriction"),
+            ],
         )
-
-        # Call function
-        return self.__omc_call__(
-            "getClassRestriction",
-            args=(
-                cl__internal,
-            ),
-            parser=parse_OMCValue,
-        )
+        self.__omc_check__()
+        return str(__result)
 
     class RestrictionEnum(
         enum.Enum,
