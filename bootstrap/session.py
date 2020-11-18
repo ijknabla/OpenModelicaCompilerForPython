@@ -27,9 +27,18 @@ class OMCSessionBootstrap(
         __result = self.__omc__.call_function(
             funcName="list",
             inputArguments=[
-                (Component(TypeName), "class_", class_, "optional"),
-                (Component(Boolean), "interfaceOnly", interfaceOnly, "optional"),
-                (Component(Boolean), "shortOnly", shortOnly, "optional"),
+                (
+                    Component(TypeName), "class_",
+                    class_, "optional"
+                ),
+                (
+                    Component(Boolean), "interfaceOnly",
+                    interfaceOnly, "optional"
+                ),
+                (
+                    Component(Boolean), "shortOnly",
+                    shortOnly, "optional"
+                ),
             ],
             outputArguments=[
                 (Component(String), "contents"),
