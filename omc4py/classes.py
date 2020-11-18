@@ -9,7 +9,7 @@ from . import (
 )
 
 
-class AbstractInteractiveOMC(
+class AbstractOMCInteractive(
     abc.ABC
 ):
     @abc.abstractmethod
@@ -23,7 +23,7 @@ class AbstractInteractiveOMC(
 
     def __enter__(
         self,
-    ) -> "AbstractInteractiveOMC":
+    ) -> "AbstractOMCInteractive":
         return self
 
     def __exit__(
@@ -44,16 +44,16 @@ Parser = typing.Callable[[str], typing.Any]
 class AbstractOMCSession(
     abc.ABC,
 ):
-    __omc: AbstractInteractiveOMC
+    __omc: AbstractOMCInteractive
 
     def __init__(
         self,
-        omc: AbstractInteractiveOMC,
+        omc: AbstractOMCInteractive,
     ):
         self.__omc = omc
 
     @property
-    def __omc__(self) -> AbstractInteractiveOMC:
+    def __omc__(self) -> AbstractOMCInteractive:
         return self.__omc
 
     def __omc_call__(

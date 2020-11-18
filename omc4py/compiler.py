@@ -67,15 +67,15 @@ def find_openmodelica_zmq_port_filepath(
     return candidates[0]
 
 
-class InteractiveOMC(
-    classes.AbstractInteractiveOMC,
+class OMCInteractive(
+    classes.AbstractOMCInteractive,
 ):
     __slots__ = (
         "__socket",
         "__process",
     )
 
-    __instances: typing_extensions.Final[typing.Set["InteractiveOMC"]] \
+    __instances: typing_extensions.Final[typing.Set["OMCInteractive"]] \
         = set()
 
     __socket: zmq.Socket
@@ -104,7 +104,7 @@ class InteractiveOMC(
     def open(
         cls,
         omc_command: typing.Optional[StrOrPathLike] = None,
-    ) -> "InteractiveOMC":
+    ) -> "OMCInteractive":
         if omc_command is None:
             omc_command = "omc"
 
@@ -245,4 +245,4 @@ class InteractiveOMC(
             return exception.OMCWarning(error_message)
 
 
-atexit.register(InteractiveOMC.close_all)
+atexit.register(OMCInteractive.close_all)

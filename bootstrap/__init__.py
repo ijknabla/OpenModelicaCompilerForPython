@@ -39,7 +39,7 @@ def generate_omc_interface(
     outputFormat: OutputFormat,
 ):
     if inputType is InputType.executable:
-        with omc4py.compiler.InteractiveOMC.open(inputPath) as omc:
+        with omc4py.compiler.OMCInteractive.open(inputPath) as omc:
             omc_interface_xml = interface_xml.generate_omc_interface_xml(
                 session.OMCSessionBootstrap(omc)
             )

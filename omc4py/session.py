@@ -91,7 +91,7 @@ def OMCSession__open(
     OMCSessionType: typing.Type[OMCSessionBase],
     omc_command: typing.Optional[compiler.StrOrPathLike] = None,
 ) -> OMCSessionBase:
-    omc = compiler.InteractiveOMC.open(
+    omc = compiler.OMCInteractive.open(
         omc_command=omc_command,
     )
     return OMCSessionType(omc)
