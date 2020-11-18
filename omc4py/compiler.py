@@ -16,7 +16,9 @@ import zmq  # type: ignore
 from . import (
     classes,
     exception,
+    parser,
     string,
+    types,
 )
 
 
@@ -167,6 +169,25 @@ def cast_value(
             class_restrictions=class_restrictions,
             sizes=sizes,
         )
+
+
+def get_class_restrictions(
+    component: classes.Component,
+) -> typing.Tuple[typing.Type, ...]:
+    if component.class_ is types.Real:
+        return (types.Real, float)
+    elif component.class_ is types.Integer:
+        return (types.Integer, int)
+    elif component.class_ is types.Boolean:
+        return (types.Boolean, bool)
+    elif component.class_ is types.String:
+        return (types.String, str)
+    elif component.class_ is types.TypeName:
+        return (types.TypeName, str)
+    elif component.class_ is types.VariableName:
+        return (types.VariableName, str)
+    else:
+        return ()
 
 
 class OMCInteractive(
@@ -320,6 +341,75 @@ class OMCInteractive(
             f"(pid={self.process.pid}) {result}"
         )
         return result
+
+    def call_function(
+        self,
+        funcName: str,
+        inputArguments: typing.Sequence[classes.InputArgument],
+        outputArguments: typing.Sequence[classes.OutputArgument],
+    ) -> typing.Any:
+        def arguments() -> typing.Iterator[str]:
+            to_keyword_argument = False
+            for component, name, value, required in inputArguments:
+                is_optional = (required == "optional")
+                to_keyword_argument |= is_optional
+                value = cast_value(
+                    name,
+                    value,
+                    is_optional,
+                    component.class_,
+                    get_class_restrictions(component),
+                    component.dimensions,
+                )
+                if value is None:
+                    continue
+
+                literal = string.to_omc_literal(value)
+
+                if to_keyword_argument:
+                    yield f"{name!s} = {literal!s}"
+                else:
+                    yield f"{literal!s}"
+
+        result_literal = self.evaluate(
+            "{funcName}({argument_list})".format(
+                funcName=funcName,
+                argument_list=", ".join(arguments())
+            )
+        )
+
+        if not outputArguments:
+            if not (not result_literal or result_literal.isspace()):
+                raise ValueError(
+                    "Unexpected result, got {result_literal!r}"
+                )
+            return
+
+        result_value = parser.parse_OMCValue(result_literal)
+        if len(outputArguments) == 1:
+            (component, name,), = outputArguments
+            return cast_value(
+                name,
+                result_value,
+                False,
+                component.class_,
+                (),
+                component.dimensions,
+            )
+        else:
+            return tuple(
+                cast_value(
+                    name,
+                    value,
+                    False,
+                    component.class_,
+                    (),
+                    component.dimensions,
+                )
+                for (component, name), value in zip(
+                    outputArguments, result_value
+                )
+            )
 
     def find_error(
         self
