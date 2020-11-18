@@ -1,6 +1,7 @@
 
 import abc
 import enum
+import itertools
 import typing
 
 
@@ -158,14 +159,21 @@ class Code(
     AbstractCode,
 ):
     __items: typing.List[typing.Union[str, AbstractCode]]
-    __sep: "Code"
+    __sep: typing.Optional[AbstractCode]
 
     def __init__(
         self,
         *codes,
         sep=None,
     ):
+        if not(sep is None or isinstance(sep, AbstractCode)):
+            raise TypeError(
+                "sep must be AbstractCode or None, "
+                f"got {sep}: {type(sep)}"
+            )
+
         self.__items = []
+        self.__sep = sep
         self.extend(codes)
 
     def append(
@@ -180,11 +188,26 @@ class Code(
                 f"item must be Code or str, got {item}: {type(item)}"
             )
 
+    def items(
+        self,
+    ) -> typing.Iterator[typing.Union[str, AbstractCode]]:
+        items_iter = iter(self.__items)
+        for sep in itertools.repeat(
+            self.__sep,
+            len(self.__items)-1
+        ):
+            yield next(items_iter)
+            if sep is None:
+                continue
+            else:
+                yield sep
+        yield from items_iter
+
     def to_lines(
         self,
         indentLevel: int = 0,
     ):
-        for item in self.__items:
+        for item in self.items():
             if isinstance(item, str):
                 line = self.indentString * indentLevel + item
                 yield (line if line and not line.isspace() else "") + "\n"
