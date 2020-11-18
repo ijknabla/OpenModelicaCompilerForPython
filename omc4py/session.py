@@ -1,5 +1,4 @@
 
-import numpy  # type: ignore
 import typing
 import warnings
 
@@ -11,6 +10,9 @@ from omc4py import (
     string,
     types,
 )
+
+__all__ = ("cast_value",)
+from .compiler import cast_value
 
 
 def parse_OMCError(
@@ -150,104 +152,3 @@ def OMCSession__call(
         return parser.parse_OMCValue(result_literal)
     else:
         return result_literal
-
-
-def cast_scalar_value(
-    name: str,
-    value: typing.Any,
-    class_: typing.Type,
-    class_restrictions: typing.Tuple[typing.Type, ...],
-) -> typing.Any:
-    if class_restrictions:
-        if not isinstance(value, class_restrictions):
-            raise TypeError(
-                f"{name!r} must be an instance of {class_restrictions}"
-                f", got {value!r}: {type(value)!r}"
-            )
-    return class_(value)
-
-
-def sizes_to_str(
-    sizes: typing.Tuple[typing.Optional[int], ...]
-) -> str:
-    return (
-        "{"
-        + ", ".join(
-            str(size) if size is not None else ":"
-            for size in sizes
-        )
-        + "}"
-    )
-
-
-def cast_array_value(
-    name: str,
-    value: typing.Any,
-    class_: typing.Type,
-    class_restrictions: typing.Tuple[typing.Type, ...],
-    sizes: typing.Tuple[typing.Optional[int], ...],
-) -> numpy.ndarray:
-    object_array = numpy.array(value, dtype=object)
-
-    same_n_dimensions = (len(sizes) == object_array.ndim)
-    dimensions_are_correct = [
-        True if expected is None else expected == actual
-        for expected, actual in zip(sizes, object_array.shape)
-    ]
-
-    if not(same_n_dimensions and all(dimensions_are_correct)):
-        raise ValueError(
-            f"Shape of the array must be {sizes_to_str(sizes)}, "
-            f"got {sizes_to_str(object_array.shape)}"
-        )
-
-    if class_restrictions:
-        isinstance_vectorized = numpy.vectorize(
-            lambda cls: isinstance(cls, class_restrictions),
-            otypes=[numpy.dtype(bool)],
-        )
-        isinstance_mask = isinstance_vectorized(
-            object_array
-        )
-        if not numpy.all(isinstance_mask):
-            raise TypeError(
-                f"All items of the array {name!r} "
-                f"must be instances of {class_restrictions}"
-            )
-
-    class_vectorized = numpy.vectorize(
-        class_, otypes=[numpy.dtype(class_)])
-    return class_vectorized(object_array)
-
-
-def cast_value(
-    name: str,
-    value: typing.Any,
-    optional: bool,
-    class_: typing.Type,
-    class_restrictions: typing.Tuple[typing.Type, ...],
-    sizes: typing.Tuple[typing.Optional[int], ...],
-) -> typing.Any:
-    if value is None:
-        if optional:
-            return None
-        else:
-            raise ValueError(
-                f"{name!r} must not be None"
-            )
-
-    if not sizes:  # scalar
-        return cast_scalar_value(
-            name=name,
-            value=value,
-            class_=class_,
-            class_restrictions=class_restrictions,
-        )
-    else:  # array
-        return cast_array_value(
-            name=name,
-            value=value,
-            class_=class_,
-            class_restrictions=class_restrictions,
-            sizes=sizes,
-        )
