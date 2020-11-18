@@ -15,7 +15,7 @@ INDENT = Indentation.indent
 IGNORE_INDENT = Indentation.ignore_indent
 
 
-class AbstractCodeBlock(
+class AbstractCode(
     abc.ABC
 ):
     indentString: typing.ClassVar[str] = " " * 4
@@ -66,9 +66,9 @@ class AbstractCodeBlock(
 
 
 class CodeBlock(
-    AbstractCodeBlock,
+    AbstractCode,
 ):
-    __list: typing.List[typing.Union[str, AbstractCodeBlock]]
+    __list: typing.List[typing.Union[str, AbstractCode]]
     indent: Indentation
 
     def __init__(
@@ -84,7 +84,7 @@ class CodeBlock(
         self,
         code
     ) -> None:
-        if isinstance(code, AbstractCodeBlock):
+        if isinstance(code, AbstractCode):
             self.__list.append(code)
         else:
             scode = str(code)
@@ -95,7 +95,7 @@ class CodeBlock(
 
     def __iter__(
         self
-    ) -> typing.Iterator[typing.Union[str, AbstractCodeBlock]]:
+    ) -> typing.Iterator[typing.Union[str, AbstractCode]]:
         yield from self.__list
 
     def to_lines(
@@ -112,7 +112,7 @@ class CodeBlock(
             currentIndent = 0
 
         for elem in self:
-            if isinstance(elem, AbstractCodeBlock):
+            if isinstance(elem, AbstractCode):
                 yield from elem.to_lines(indentLevel)
             else:
                 line = self.indentString * currentIndent + elem
