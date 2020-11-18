@@ -11,6 +11,11 @@ from omc4py import (
     types,
 )
 
+from .classes import Component
+from .types import (
+    String,
+)
+
 __all__ = ("cast_value",)
 from .compiler import cast_value
 
@@ -79,12 +84,17 @@ class OMCSessionMinimal(
 
     def getVersion(
         self,
-    ):
-        # Call function
-        return self.__omc_call__(
-            "getVersion",
-            parser=parser.parse_OMCValue,
+    ) -> str:
+        __result = self.__omc__.call_function(
+            funcName="getVersion",
+            inputArguments=[
+            ],
+            outputArguments=[
+                (Component(String), "version"),
+            ]
         )
+        self.__omc_check__()
+        return str(__result)
 
 
 def OMCSession__open(
