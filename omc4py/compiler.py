@@ -131,35 +131,37 @@ def cast_array_value(
 
 
 def cast_value(
+    component: classes.Component,
     name: str,
     value: typing.Any,
-    optional: bool,
-    class_: typing.Type,
-    class_restrictions: typing.Tuple[typing.Type, ...],
-    sizes: typing.Tuple[typing.Optional[int], ...],
+    required: classes.REQUIRED_or_OPTIONAL = "required",
 ) -> typing.Any:
     if value is None:
-        if optional:
-            return None
-        else:
+        if required == "required":
             raise ValueError(
                 f"{name!r} must not be None"
             )
+        if required == "optional":
+            return None
+        else:
+            raise ValueError(
+                f"required must be (required|optional) got {required!r}"
+            )
 
-    if not sizes:  # scalar
+    if not component.dimensions:  # scalar
         return cast_scalar_value(
             name=name,
             value=value,
-            class_=class_,
-            class_restrictions=class_restrictions,
+            class_=component.class_,
+            class_restrictions=get_class_restrictions(component),
         )
     else:  # array
         return cast_array_value(
             name=name,
             value=value,
-            class_=class_,
-            class_restrictions=class_restrictions,
-            sizes=sizes,
+            class_=component.class_,
+            class_restrictions=get_class_restrictions(component),
+            sizes=component.dimensions,
         )
 
 
@@ -343,21 +345,13 @@ class OMCInteractive(
         def arguments() -> typing.Iterator[str]:
             to_keyword_argument = False
             for component, name, value, required in inputArguments:
-                is_optional = (required == "optional")
-                to_keyword_argument |= is_optional
-                value = cast_value(
-                    name,
-                    value,
-                    is_optional,
-                    component.class_,
-                    get_class_restrictions(component),
-                    component.dimensions,
-                )
+                to_keyword_argument |= (required == "optional")
+
+                value = cast_value(component, name, value, required)
                 if value is None:
                     continue
 
                 literal = string.to_omc_literal(value)
-
                 if to_keyword_argument:
                     yield f"{name!s} = {literal!s}"
                 else:
@@ -371,33 +365,20 @@ class OMCInteractive(
         )
 
         if not outputArguments:
-            if not (not result_literal or result_literal.isspace()):
+            if result_literal and not result_literal.isspace():
                 raise ValueError(
                     f"Unexpected result, got {result_literal!r}"
                 )
             return
 
         result_value = parser.parse_OMCValue(result_literal)
+
         if len(outputArguments) == 1:
             (component, name,), = outputArguments
-            return cast_value(
-                name,
-                result_value,
-                False,
-                component.class_,
-                (),
-                component.dimensions,
-            )
+            return cast_value(component, name, result_value)
         else:
             return tuple(
-                cast_value(
-                    name,
-                    value,
-                    False,
-                    component.class_,
-                    (),
-                    component.dimensions,
-                )
+                cast_value(component, name, value)
                 for (component, name), value in zip(
                     outputArguments, result_value
                 )
