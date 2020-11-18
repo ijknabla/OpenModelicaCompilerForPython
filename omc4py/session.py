@@ -1,9 +1,9 @@
 
+import re
 import typing
 import warnings
 
 from omc4py import (
-    compiler,
     exception,
 )
 
@@ -36,6 +36,11 @@ class OMCSessionBase(
         return __result
 
 
+omc_error_pattern = re.compile(
+    r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
+)
+
+
 def parse_OMCError(
     error_message_literal: str,
 ) -> typing.Optional[exception.OMCException]:
@@ -45,7 +50,7 @@ def parse_OMCError(
     if not error_message or error_message.isspace():
         return None
 
-    matched = compiler.omc_error_pattern.match(
+    matched = omc_error_pattern.match(
         error_message
     )
     if not matched:

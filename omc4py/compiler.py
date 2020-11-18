@@ -4,7 +4,6 @@ import logging
 import numpy  # type: ignore
 import os
 from pathlib import Path
-import re
 import shutil
 import subprocess
 import tempfile
@@ -23,12 +22,6 @@ from . import (
 
 
 logger = logging.getLogger(__name__)
-
-
-omc_error_pattern = re.compile(
-    r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
-)
-
 
 StrOrPathLike = typing.Union[str, os.PathLike]
 
