@@ -48,13 +48,11 @@ class OMCSessionBase(
         self,
         name: types.TypeName
     ) -> typing.List[parser.ComponentTuple]:
-        return self.__omc_call__(
-            "getComponents",
-            args=(
-                types.TypeName(name),
-            ),
-            parser=parser.parse_components,
+        __result = parser.parse_components(
+            self.__omc__.evaluate(f"getComponents({types.TypeName(name)})")
         )
+        self.__omc_check__()
+        return __result
 
 
 class OMCSessionMinimal(
