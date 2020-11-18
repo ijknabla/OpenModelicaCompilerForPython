@@ -20,6 +20,20 @@ __all__ = ("cast_value",)
 from .compiler import cast_value
 
 
+class OMCSessionBase(
+    classes.AbstractOMCSession,
+):
+    def getComponents(
+        self,
+        name: types.TypeName
+    ) -> typing.List[parser.ComponentTuple]:
+        __result = parser.parse_components(
+            self.__omc__.evaluate(f"getComponents({types.TypeName(name)})")
+        )
+        self.__omc_check__()
+        return __result
+
+
 def parse_OMCError(
     error_message_literal: str,
 ) -> typing.Optional[exception.OMCException]:
@@ -44,20 +58,6 @@ def parse_OMCError(
         return exception.OMCError(error_message)
     else:
         return exception.OMCWarning(error_message)
-
-
-class OMCSessionBase(
-    classes.AbstractOMCSession,
-):
-    def getComponents(
-        self,
-        name: types.TypeName
-    ) -> typing.List[parser.ComponentTuple]:
-        __result = parser.parse_components(
-            self.__omc__.evaluate(f"getComponents({types.TypeName(name)})")
-        )
-        self.__omc_check__()
-        return __result
 
 
 class OMCSessionMinimal(
