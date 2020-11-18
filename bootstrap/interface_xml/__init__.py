@@ -7,7 +7,7 @@ __all__ = (
 import functools
 from lxml import etree  # type: ignore
 import pkg_resources
-import tqdm
+import tqdm  # type: ignore
 import typing
 
 from omc4py.types import (
