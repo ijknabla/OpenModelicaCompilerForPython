@@ -8,12 +8,12 @@ from omc4py import (
     exception,
     parser,
     string,
-    types,
 )
 
 from .classes import Component
 from .types import (
     String,
+    TypeName,
 )
 
 
@@ -22,10 +22,10 @@ class OMCSessionBase(
 ):
     def getComponents(
         self,
-        name: types.TypeName
+        name: TypeName
     ) -> typing.List[parser.ComponentTuple]:
         __result = parser.parse_components(
-            self.__omc__.evaluate(f"getComponents({types.TypeName(name)})")
+            self.__omc__.evaluate(f"getComponents({TypeName(name)})")
         )
         self.__omc_check__()
         return __result
