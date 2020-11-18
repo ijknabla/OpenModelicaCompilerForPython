@@ -381,7 +381,7 @@ class OMCInteractive(
         if not outputArguments:
             if not (not result_literal or result_literal.isspace()):
                 raise ValueError(
-                    "Unexpected result, got {result_literal!r}"
+                    f"Unexpected result, got {result_literal!r}"
                 )
             return
 
