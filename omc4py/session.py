@@ -42,29 +42,26 @@ omc_error_pattern = re.compile(
 
 
 def parse_OMCError(
-    error_message_literal: str,
+    error_string: str,
 ) -> typing.Optional[exception.OMCException]:
-    error_message = unquote_modelica_string(
-        error_message_literal.rstrip()
-    )
-    if not error_message or error_message.isspace():
+    if not error_string or error_string.isspace():
         return None
 
     matched = omc_error_pattern.match(
-        error_message
+        error_string
     )
     if not matched:
         raise exception.OMCRuntimeError(
-            f"Unexpected error message format: {error_message!r}"
+            f"Unexpected error message format: {error_string!r}"
         )
     # info = matched.group("info")
     kind = matched.group("kind")
     # message = matched.group("message")
 
     if kind == "Error":
-        return exception.OMCError(error_message)
+        return exception.OMCError(error_string)
     else:
-        return exception.OMCWarning(error_message)
+        return exception.OMCWarning(error_string)
 
 
 class OMCSessionMinimal(
@@ -73,19 +70,32 @@ class OMCSessionMinimal(
     def __omc_check__(
         self,
     ) -> None:
-        error_optional = parse_OMCError(
-            self.__omc__.evaluate("getErrorString()")
-        )
+        error_optional = parse_OMCError(self.getErrorString())
+        error: exception.OMCException
         if error_optional is None:
             return
+        else:
+            error = error_optional
 
-        error = error_optional
         if isinstance(error, Warning):
             warnings.warn(error)
         else:
             raise error
 
         self.__omc_check__()
+
+    def getErrorString(
+        self,
+    ) -> str:
+        __result = self.__omc__.call_function(
+            funcName="getErrorString",
+            inputArguments=[
+            ],
+            outputArguments=[
+                (Component(String), "errorString")
+            ],
+        )
+        return str(__result)
 
     def getVersion(
         self,
