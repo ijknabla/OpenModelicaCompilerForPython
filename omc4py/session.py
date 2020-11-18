@@ -16,9 +16,6 @@ from .types import (
     String,
 )
 
-__all__ = ("cast_value",)
-from .compiler import cast_value
-
 
 class OMCSessionBase(
     classes.AbstractOMCSession,
