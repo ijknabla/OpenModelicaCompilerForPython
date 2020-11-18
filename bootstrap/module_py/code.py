@@ -117,3 +117,76 @@ class CodeBlock(
             else:
                 line = self.indentString * currentIndent + elem
                 yield (line if line and not line.isspace() else "") + "\n"
+
+
+class EmptyLines(
+    AbstractCode,
+):
+    __size: int
+
+    def __init__(
+        self,
+        size: int,
+    ):
+        self.__size = size
+
+    def append(self, item):
+        raise TypeError(
+            f"Can't append item to {type(self)}"
+        )
+
+    def to_lines(
+        self,
+        indentLevel: int = 0
+    ):
+        yield from ["\n"] * self.__size
+
+    def __mul__(
+        self, n: int,
+    ):
+        if not isinstance(n, int):
+            raise TypeError(
+                f"n must be int, got {n}: {type(n)}"
+            )
+        return type(self)(self.__size * n)
+
+
+empty_line = EmptyLines(1)
+
+
+class Code(
+    AbstractCode,
+):
+    __items: typing.List[typing.Union[str, AbstractCode]]
+    __sep: "Code"
+
+    def __init__(
+        self,
+        *codes,
+        sep=None,
+    ):
+        self.__items = []
+        self.extend(codes)
+
+    def append(
+        self, item
+    ):
+        if isinstance(item, str):
+            self.__items.extend(item.splitlines())
+        elif isinstance(item, AbstractCode):
+            self.__items.append(item)
+        else:
+            raise TypeError(
+                f"item must be Code or str, got {item}: {type(item)}"
+            )
+
+    def to_lines(
+        self,
+        indentLevel: int = 0,
+    ):
+        for item in self.__items:
+            if isinstance(item, str):
+                line = self.indentString * indentLevel + item
+                yield (line if line and not line.isspace() else "") + "\n"
+            else:
+                yield from item.to_lines(indentLevel)
