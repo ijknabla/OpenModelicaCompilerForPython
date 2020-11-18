@@ -62,21 +62,6 @@ def find_openmodelica_zmq_port_filepath(
     return candidates[0]
 
 
-def cast_scalar_value(
-    name: str,
-    value: typing.Any,
-    class_: typing.Type,
-    class_restrictions: typing.Tuple[typing.Type, ...],
-) -> typing.Any:
-    if class_restrictions:
-        if not isinstance(value, class_restrictions):
-            raise TypeError(
-                f"{name!r} must be an instance of {class_restrictions}"
-                f", got {value!r}: {type(value)!r}"
-            )
-    return class_(value)
-
-
 def sizes_to_str(
     sizes: typing.Tuple[typing.Optional[int], ...]
 ) -> str:
@@ -149,12 +134,15 @@ def cast_value(
             )
 
     if not component.dimensions:  # scalar
-        return cast_scalar_value(
-            name=name,
-            value=value,
-            class_=component.class_,
-            class_restrictions=get_class_restrictions(component),
-        )
+        class_restrictions = get_class_restrictions(component)
+        if class_restrictions:
+            if not isinstance(value, class_restrictions):
+                raise TypeError(
+                    f"{name!r} must be an instance of {class_restrictions}"
+                    f", got {value!r}: {type(value)!r}"
+                )
+        return component.class_(value)
+
     else:  # array
         return cast_array_value(
             name=name,
