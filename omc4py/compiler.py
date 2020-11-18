@@ -62,59 +62,6 @@ def find_openmodelica_zmq_port_filepath(
     return candidates[0]
 
 
-def sizes_to_str(
-    sizes: typing.Tuple[typing.Optional[int], ...]
-) -> str:
-    return (
-        "{"
-        + ", ".join(
-            str(size) if size is not None else ":"
-            for size in sizes
-        )
-        + "}"
-    )
-
-
-def cast_array_value(
-    name: str,
-    value: typing.Any,
-    class_: typing.Type,
-    class_restrictions: typing.Tuple[typing.Type, ...],
-    sizes: typing.Tuple[typing.Optional[int], ...],
-) -> numpy.ndarray:
-    object_array = numpy.array(value, dtype=object)
-
-    same_n_dimensions = (len(sizes) == object_array.ndim)
-    dimensions_are_correct = [
-        True if expected is None else expected == actual
-        for expected, actual in zip(sizes, object_array.shape)
-    ]
-
-    if not(same_n_dimensions and all(dimensions_are_correct)):
-        raise ValueError(
-            f"Shape of the array must be {sizes_to_str(sizes)}, "
-            f"got {sizes_to_str(object_array.shape)}"
-        )
-
-    if class_restrictions:
-        isinstance_vectorized = numpy.vectorize(
-            lambda cls: isinstance(cls, class_restrictions),
-            otypes=[numpy.dtype(bool)],
-        )
-        isinstance_mask = isinstance_vectorized(
-            object_array
-        )
-        if not numpy.all(isinstance_mask):
-            raise TypeError(
-                f"All items of the array {name!r} "
-                f"must be instances of {class_restrictions}"
-            )
-
-    class_vectorized = numpy.vectorize(
-        class_, otypes=[numpy.dtype(class_)])
-    return class_vectorized(object_array)
-
-
 def cast_value(
     component: classes.Component,
     name: str,
@@ -145,12 +92,65 @@ def cast_value(
 
     else:  # array
         return cast_array_value(
-            name=name,
-            value=value,
-            class_=component.class_,
-            class_restrictions=get_class_restrictions(component),
-            sizes=component.dimensions,
+            component,
+            name,
+            value,
         )
+
+
+def cast_array_value(
+    component: classes.Component,
+    name: str,
+    value: typing.Any,
+) -> numpy.ndarray:
+    object_array = numpy.array(value, dtype=object)
+
+    same_n_dimensions = (len(component.dimensions) == object_array.ndim)
+    dimensions_are_correct = [
+        True if expected is None else expected == actual
+        for expected, actual in zip(component.dimensions, object_array.shape)
+    ]
+
+    if not(same_n_dimensions and all(dimensions_are_correct)):
+        raise ValueError(
+            "Shape of the array "
+            f"must be {sizes_to_str(component.dimensions)}, "
+            f"got {sizes_to_str(object_array.shape)}"
+        )
+
+    class_restrictions = get_class_restrictions(component)
+    if class_restrictions:
+        isinstance_vectorized = numpy.vectorize(
+            lambda cls: isinstance(cls, class_restrictions),
+            otypes=[numpy.dtype(bool)],
+        )
+        isinstance_mask = isinstance_vectorized(
+            object_array
+        )
+        if not numpy.all(isinstance_mask):
+            raise TypeError(
+                f"All items of the array {name!r} "
+                f"must be instances of {class_restrictions}"
+            )
+
+    class_vectorized = numpy.vectorize(
+        component.class_,
+        otypes=[numpy.dtype(component.class_)]
+    )
+    return class_vectorized(object_array)
+
+
+def sizes_to_str(
+    sizes: typing.Tuple[typing.Optional[int], ...]
+) -> str:
+    return (
+        "{"
+        + ", ".join(
+            str(size) if size is not None else ":"
+            for size in sizes
+        )
+        + "}"
+    )
 
 
 def get_class_restrictions(
