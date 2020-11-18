@@ -49,39 +49,19 @@ class OMCSessionBootstrap(
         recursive: typing.Optional[bool] = None,
         qualified: typing.Optional[bool] = None,
     ) -> typing.List[TypeName]:
-        # Check arguments
-        class___internal__ = cast_value(
-            "class_", class_,
-            optional=True,
-            class_=TypeName,
-            class_restrictions=(),
-            sizes=(),
+        __result = self.__omc__.call_function(
+            funcName="getClassNames",
+            inputArguments=[
+                (Component(TypeName), "class_", class_, "optional"),
+                (Component(Boolean), "recursive", recursive, "optional"),
+                (Component(Boolean), "qualified", qualified, "optional"),
+            ],
+            outputArguments=[
+                (Component(TypeName)[:], "classNames"),
+            ],
         )
-        recursive__internal__ = cast_value(
-            "recursive", recursive,
-            optional=True,
-            class_=Boolean,
-            class_restrictions=(Boolean,),
-            sizes=(),
-        )
-        qualified__internal__ = cast_value(
-            "qualified", qualified,
-            optional=True,
-            class_=Boolean,
-            class_restrictions=(Boolean,),
-            sizes=(),
-        )
-
-        # Call function
-        return self.__omc_call__(
-            "getClassNames",
-            kwrds={
-                VariableName("class_"): class___internal__,
-                VariableName("recursive"): recursive__internal__,
-                VariableName("qualified"): qualified__internal__,
-            },
-            parser=parse_OMCValue,
-        )
+        self.__omc_check__()
+        return list(__result)
 
     def getClassRestriction(
         self,
