@@ -87,7 +87,17 @@ class AbstractOMCInteractive(
     def evaluate(
         self,
         expression: str,
-    ) -> str: ...
+    ) -> str:
+        ...
+
+    # @abc.abstractmethod
+    def call_function(
+        self,
+        funcName: str,
+        inputArguments: typing.Sequence[InputArgument],
+        outputArguments: typing.Sequence[OutputArgument],
+    ):
+        ...
 
     def __enter__(
         self,
