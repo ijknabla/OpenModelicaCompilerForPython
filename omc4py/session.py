@@ -15,7 +15,6 @@ from .parser import (
     ComponentTuple,
     parse_components,
 )
-from .string import unquote_modelica_string
 from .types import (
     String,
     TypeName,
