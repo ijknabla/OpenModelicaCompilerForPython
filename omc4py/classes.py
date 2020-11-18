@@ -11,6 +11,18 @@ from . import (
 
 Dimensions = typing.Tuple[typing.Optional[int], ...]
 
+REQUIRED = typing_extensions.Literal["required"]
+OPTIONAL = typing_extensions.Literal["optional"]
+REQUIRED_or_OPTIONAL = typing.Union[REQUIRED, OPTIONAL]
+
+InputArgument = typing.Tuple[
+    "Component", str,
+    typing.Any, REQUIRED_or_OPTIONAL
+]
+OutputArgument = typing.Tuple[
+    "Component", str
+]
+
 
 class Component(
 ):
