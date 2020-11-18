@@ -114,8 +114,8 @@ def cast_array_value(
     if not(same_n_dimensions and all(dimensions_are_correct)):
         raise ValueError(
             "Shape of the array "
-            f"must be {sizes_to_str(component.dimensions)}, "
-            f"got {sizes_to_str(object_array.shape)}"
+            f"must be {dimensions_to_str(component.dimensions)}, "
+            f"got {dimensions_to_str(object_array.shape)}"
         )
 
     class_restrictions = get_class_restrictions(component)
@@ -140,8 +140,8 @@ def cast_array_value(
     return class_vectorized(object_array)
 
 
-def sizes_to_str(
-    sizes: typing.Tuple[typing.Optional[int], ...]
+def dimensions_to_str(
+    sizes: classes.Dimensions,
 ) -> str:
     return (
         "{"
