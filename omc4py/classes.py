@@ -338,4 +338,24 @@ class AbstractOMCSession(
     def __omc_check__(self) -> None: ...
 
 
+# Meta classes for modelica-like class
+
+
+class SupportsModelicaName(
+    typing_extensions.Protocol,
+):
+    __modelica_name__: TypeName
+
+
+def modelica_name(
+    name: str
+):
+    def decorator(
+        obj: SupportsModelicaName
+    ) -> SupportsModelicaName:
+        obj.__modelica_name__ = TypeName(name)
+        return obj
+    return decorator
+
+
 from . import parser  # noqa: E402
