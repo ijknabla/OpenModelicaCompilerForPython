@@ -57,6 +57,28 @@ class ClassNameAndDimensions(
 
         return cls(className, dimensions)
 
+    @property
+    def component_literal(
+        self,
+    ) -> str:
+        if not self.dimensions:
+            s_dimensions = ''
+        else:
+            s_dimensions = "[{}]".format(
+                ','.join(
+                    str(dimension) if dimension is not None else ':'
+                    for dimension in self.dimensions
+                )
+            )
+
+        return f"Component({self.className}){s_dimensions}"
+
+
+def get_component_literal(
+    component: etree._Element,
+):
+    return ClassNameAndDimensions.from_component(component).component_literal
+
 
 def is_supported_element(
     element: etree._Element,
@@ -237,6 +259,41 @@ class ModelicaPackage(
             return CommentOut(code)
 
 
+class ModelicaRecord(
+    AbstractModelicaClass,
+):
+    def to_code(
+        self,
+    ) -> AbstractCode:
+        contents_code = Code(sep=empty_line)
+        code = Code(
+            self.generate_class_header("ModelicaRecord"),
+            CodeWithIndent(
+                self.generate___doc__(),
+                contents_code,
+            )
+        )
+
+        for element in self.element.xpath('./components/elements/*'):
+            name = element.attrib["name"]
+            contents_code.append(
+                Code(
+                    "@element",
+                    f"def {name}(cls):",
+                    CodeWithIndent(
+                        f"return {get_component_literal(element)}"
+                    )
+                )
+            )
+
+        contents_code.extend(self.generate_class_codes())
+
+        if is_supported_element(self.element):
+            return code
+        else:
+            return CommentOut(code)
+
+
 class GenericModelicaClass(
     AbstractModelicaClass,
 ):
@@ -275,9 +332,18 @@ def generate_import_statements(
     return Code(
         "from omc4py.classes import (",
         CodeWithIndent(
+            "Boolean,",
+            "Component,",
+            "Integer,",
             "ModelicaEnumeration,",
             "ModelicaPackage,",
+            "ModelicaRecord,",
+            "Real,",
+            "String,",
+            "TypeName,",
+            "VariableName,",
             "alias,",
+            "element,",
             "enum,",
             "modelica_name,",
         ),
@@ -310,4 +376,6 @@ def generate_modelica_class(
         return ModelicaEnumeration(element)
     elif element.tag == "package":
         return ModelicaPackage(element)
+    elif element.tag == "record":
+        return ModelicaRecord(element)
     return GenericModelicaClass(element)
