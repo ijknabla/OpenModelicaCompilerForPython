@@ -15,6 +15,8 @@ import numpy  # type: ignore
 import typing
 import typing_extensions
 
+from .string import to_omc_literal
+
 
 # Type hints
 
@@ -31,6 +33,8 @@ InputArgument = typing.Tuple[
 OutputArgument = typing.Tuple[
     "Component", str
 ]
+
+KT = typing.TypeVar("KT")
 
 
 # Primitive classes {Real, Integer, Boolean, String}
@@ -229,6 +233,22 @@ class TypeName(
         other: typing.Union[str, VariableName, "TypeName"]
     ):
         return type(self)(self, other)
+
+
+def split_dict(
+    dictionary: typing.Dict[KT, typing.Any],
+    condition: typing.Callable[[typing.Any], bool]
+) -> typing.Tuple[
+    typing.Dict[KT, typing.Any],
+    typing.Dict[KT, typing.Any],
+]:
+    yes, no = {}, {}
+    for k, v in dictionary.items():
+        if condition(v):
+            yes[k] = v
+        else:
+            no[k] = v
+    return yes, no
 
 
 class Component(
@@ -483,6 +503,93 @@ class ModelicaPackageMeta(
     ...
 
 
+class ModelicaRecordMeta(
+    ModelicaLongClassMeta,
+):
+    def __new__(
+        mtcls, name, bases, namespace,
+    ):
+        element_definitions, actual_namespace = split_dict(
+            namespace,
+            lambda obj: isinstance(obj, element),
+        )
+
+        cls = super().__new__(
+            mtcls,
+            name, bases, actual_namespace,
+        )
+
+        elements: typing.Dict[str, Component]
+
+        def newfunc(
+            cls: typing.Type["ModelicaRecord"],
+            obj
+        ) -> "ModelicaRecord":
+            nonlocal elements
+            elements = {
+                name: definition.get_component(cls)
+                for name, definition in element_definitions.items()
+            }
+
+            if isinstance(obj, cls):
+                return obj
+
+            self = super(ModelicaRecord, cls).__new__(cls)
+
+            if isinstance(obj, ModelicaRecord):
+                self.__dict = obj.__as_dict__()
+            else:
+                self.__dict = dict(obj)
+
+            keys = self.__dict.keys()
+            if elements.keys() - keys:
+                raise ValueError(
+                    f'Missing keys {elements.keys() - keys}'
+                )
+            elif keys - elements.keys():
+                raise ValueError(
+                    f'Unexpected keys {keys - elements.keys()}'
+                )
+
+            for key, value in self.__dict.items():
+                self.__dict[key] = compiler.cast_value(
+                    elements[key], key, value
+                )
+
+            return self
+
+        def itemsfunc(
+            self: "ModelicaRecord",
+        ) -> typing.Iterator[typing.Tuple[str, typing.Any]]:
+            for key, value in self.__dict.items():
+                yield key, value
+
+        cls.__new__ = newfunc
+        cls.__items__ = itemsfunc
+
+        def get_property(
+            key: str,
+        ) -> property:
+            def getter(
+                self: ModelicaRecord,
+            ) -> typing.Any:
+                return self.__dict[key]
+
+            def setter(
+                self: ModelicaRecord,
+                value
+            ) -> None:
+                raise AttributeError(
+                    f"Can't set attribute {key!r}"
+                )
+            return property(getter, setter)
+
+        for key in element_definitions.keys():
+            setattr(cls, key, get_property(key))
+
+        return cls
+
+
 # decorators for modelica-like class definition
 
 def modelica_name(
@@ -521,6 +628,32 @@ class alias(
             return modelica_class
 
 
+class element(
+):
+    def __init__(
+        self,
+        classmethod_like: typing.Callable,
+    ):
+        self.__func__ = classmethod_like
+
+    def get_component(
+        self,
+        cls: ModelicaRecordMeta,
+    ):
+        if not isinstance(cls, ModelicaRecordMeta):
+            raise TypeError(
+                "@element is only available in ModelicaRecord definition"
+            )
+
+        component = self.__func__(cls)
+        if not isinstance(component, Component):
+            raise TypeError(
+                "@element must return Component, "
+                f"got {component}: {type(component)}"
+            )
+        return component
+
+
 # base classes for modelica-like class
 
 class ModelicaEnumeration(
@@ -548,4 +681,45 @@ class ModelicaPackage(
     ...
 
 
+class ModelicaRecord(
+    metaclass=ModelicaRecordMeta,
+):
+    __modelica_name__: typing.ClassVar[TypeName]
+
+    __items__: typing.Callable[
+        ["ModelicaRecord"],
+        typing.Iterator[typing.Tuple[str, typing.Any]],
+    ]
+
+    def __as_dict__(
+        self,
+    ) -> typing.Dict[str, typing.Any]:
+        return dict(self.__items__())
+
+    def __repr__(
+        self
+    ) -> str:
+        return f"{type(self).__name__}({self.__as_dict__()})"
+
+    def __str__(
+        self,
+    ) -> str:
+        s_elements = ", ".join(
+            f"{key} = {to_omc_literal(value)}"
+            for key, value in self.__items__()
+        )
+
+        def words():
+            yield f"{self.__modelica_name__}"
+            if s_elements:
+                yield s_elements
+            yield "end"
+            yield f"{self.__modelica_name__};"
+
+        return " ".join(words())
+
+    __to_omc_literal__ = __str__
+
+
+from . import compiler  # noqa: E402
 from . import parser  # noqa: E402
