@@ -113,15 +113,14 @@ class TypeName(
 
     __parts: typing.Tuple[str, ...]
 
-    def __new__(cls, *parts):
-        if len(parts) == 1:
-            part, = parts
+    def __new__(cls, part, *parts):
+        if not parts:
             if isinstance(part, TypeName):
                 return part
 
         return cls.__from_valid_parts_no_check__(
             cls.__checked_parts(
-                parts
+                (part, *parts)
             )
         )
 
@@ -135,10 +134,10 @@ class TypeName(
     @classmethod
     def __from_valid_parts_no_check__(
         cls,
-        parts: typing.Iterable[typing.Union[str, VariableName]],
+        parts: typing.Iterable[str],
     ):
         typeName = object.__new__(TypeName)
-        typeName._TypeName__parts = tuple(map(str, parts))
+        typeName.__parts = tuple(parts)
         return typeName
 
     @property
@@ -181,14 +180,17 @@ class TypeName(
     ) -> typing.Iterator[typing.Union[str, VariableName]]:
 
         def not_checked_parts(
-        ) -> typing.Iterator[typing.Union[str, VariableName]]:
+        ) -> typing.Iterator[str]:
             for obj in objs:
                 if isinstance(obj, TypeName):
                     yield from obj.parts
                 elif isinstance(obj, VariableName):
-                    yield obj
-                else:
-                    yield from cls.from_str(str(obj)).parts
+                    yield str(obj)
+                elif isinstance(obj, str):
+                    if obj == ".":
+                        yield obj
+                    else:
+                        yield from cls.from_str(obj).parts
 
         for i, part in enumerate(
             not_checked_parts()
