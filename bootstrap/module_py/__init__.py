@@ -114,6 +114,19 @@ class AbstractModelicaClass(
         parent = self[className.parent]
         parent.children[str(className.last_identifier)] = class_
 
+    def generate_class_header(
+        self,
+        base_class_name: str
+    ) -> Code:
+        return Code(
+            f"@modelica_name({str(self.className)!r})",
+            f"class {self.className.last_identifier}(",
+            CodeWithIndent(
+                f"{base_class_name},",
+            ),
+            "):"
+        )
+
     def generate_class_codes(
         self,
     ) -> typing.Iterator[AbstractCode]:
@@ -134,8 +147,7 @@ class GenericModelicaClass(
         self
     ) -> AbstractCode:
         code = Code(
-            f"class {self.className.last_identifier}(",
-            "):",
+            self.generate_class_header("object"),
             CodeWithIndent(
                 "...",
                 *self.generate_class_codes(),
@@ -153,9 +165,22 @@ def generate_module_py(
 ) -> Code:
     return Code(
         empty_line,
+        generate_import_statements(),
+        empty_line * 2,
         generate_nested_modelica_class(
             omc_interface_xml.xpath('//*[@id]')
         ).to_code(),
+    )
+
+
+def generate_import_statements(
+) -> Code:
+    return Code(
+        "from omc4py.classes import (",
+        CodeWithIndent(
+            "modelica_name,",
+        ),
+        ")",
     )
 
 
