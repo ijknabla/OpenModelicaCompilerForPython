@@ -368,6 +368,115 @@ class ModelicaEnumerationMeta(
             return super().__call__(value)
 
 
+class ModelicaLongClassMeta(
+    ModelicaClassMeta,
+    type,
+):
+    # BoundModelicaLongClassMeta will be assigned
+    # after BoundModelicaLongClassMeta is defined.
+    __bound_class__: typing.Type["BoundModelicaLongClassMeta"]
+
+    __bind_session: typing.Any
+
+    def __new__(
+        mtcls,
+        name, bases, namespace,
+    ):
+        cls = typing.cast(
+            ModelicaLongClassMeta,
+            super().__new__(
+                mtcls,
+                name, bases, namespace,
+            ),
+        )
+
+        def bind_session(
+            session: AbstractOMCSession,
+        ) -> "BoundModelicaLongClassMeta":
+            bound_cls = typing.cast(
+                BoundModelicaLongClassMeta,
+                type.__new__(
+                    cls.__bound_class__,
+                    name, (BoundModelicaLongClass,), namespace,
+                ),
+            )
+            bound_cls.__modelica_name__ = cls.__modelica_name__
+            bound_cls.__unbound_class__ = ModelicaLongClassReference(cls)
+            bound_cls.__session__ = session
+            return bound_cls
+
+        cls.__bind_session = bind_session
+
+        return cls
+
+    if typing.TYPE_CHECKING:
+        @classmethod
+        def __bind_session__(cls, session: AbstractOMCSession) \
+            -> "BoundModelicaLongClassMeta": ...
+    else:
+        def __bind_session__(
+            cls,
+            session: AbstractOMCSession,
+        ) -> "BoundModelicaLongClassMeta":
+            return cls.__bind_session(session)
+
+    def __get__(
+        cls,
+        obj,
+        objType=None,
+    ):
+        # session: AbstractOMCSession
+        # session.{className}
+        # >>> {class bound to session}
+        if isinstance(obj, AbstractOMCSession):
+            return cls.__bind_session__(obj)
+
+        # boundClass: BoundModelicaLongClassMeta
+        # boundClass.{class}
+        # >>> {class bound to boundClass.__session__}
+        if (
+            obj is None
+            and objType is not None
+            and isinstance(objType, BoundModelicaLongClassMeta)
+        ):
+            return cls.__bind_session__(
+                objType.__session__
+            )
+
+        return cls
+
+    def __set__(cls, obj, value):
+        raise AttributeError(
+            f"can't set attribute {cls.__name__!r} of {obj!r}"
+        )
+
+
+class ModelicaLongClassReference(
+    typing.NamedTuple
+):
+    value: ModelicaLongClassMeta
+
+
+class BoundModelicaLongClassMeta(
+    ModelicaClassMeta,
+    type,
+):
+    __unbound_class__: ModelicaLongClassReference
+    __session__: AbstractOMCSession
+
+    @property
+    def __call__(cls):
+        unbound_class = cls.__unbound_class__.value
+
+        @functools.wraps(unbound_class.__call__)
+        def wrapped(*args, **kwrds):
+            return unbound_class(*args, **kwrds)
+        return wrapped
+
+
+ModelicaLongClassMeta.__bound_class__ = BoundModelicaLongClassMeta
+
+
 # decorators for modelica-like class definition
 
 def modelica_name(
@@ -419,6 +528,12 @@ class ModelicaEnumeration(
         return str(self.__modelica_name__/self.name)
 
     __to_omc_literal__ = __str__
+
+
+class BoundModelicaLongClass(
+    metaclass=BoundModelicaLongClassMeta,
+):
+    ...
 
 
 from . import parser  # noqa: E402
