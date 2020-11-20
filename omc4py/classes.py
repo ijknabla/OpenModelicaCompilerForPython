@@ -138,7 +138,7 @@ class TypeName(
         parts: typing.Iterable[typing.Union[str, VariableName]],
     ):
         typeName = object.__new__(TypeName)
-        typeName._TypeName__parts = tuple(map(str, parts))
+        typeName.__parts = tuple(map(str, parts))
         return typeName
 
     @property
