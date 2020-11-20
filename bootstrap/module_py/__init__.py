@@ -1,6 +1,7 @@
 
 import abc
 import collections
+import keyword
 from lxml import etree  # type: ignore
 import typing
 
@@ -15,6 +16,7 @@ from .code import (
 
 from omc4py.classes import (
     Dimensions,
+    REQUIRED_or_OPTIONAL,
     TypeName,
     VariableName,
 )
@@ -294,6 +296,127 @@ class ModelicaRecord(
             return CommentOut(code)
 
 
+class InputArgument(
+    typing.NamedTuple
+):
+    component_literal: str
+    modelica_name: str
+    required: REQUIRED_or_OPTIONAL
+
+    @property
+    def py_name(
+        self,
+    ) -> str:
+        if not keyword.iskeyword(self.modelica_name):
+            return f"{self.modelica_name}"
+        else:
+            return f"{self.modelica_name}_"
+
+
+class ModelicaFunction(
+    AbstractModelicaClass,
+):
+    def to_code(
+        self
+    ) -> AbstractCode:
+        external_code = Code()
+        contents_code = Code(external_code, sep=empty_line)
+        code = Code(
+            self.generate_class_header("ModelicaFunction"),
+            CodeWithIndent(
+                self.generate___doc__(),
+                contents_code,
+            )
+        )
+
+        inputArguments = [
+            InputArgument(
+                component_literal=get_component_literal(argument),
+                modelica_name=argument.attrib["name"],
+                required=(
+                    "optional"
+                    if argument.attrib["hasDefault"] == "true"
+                    else "required"
+                ),
+            )
+            for argument in self.element.xpath(
+                './components/arguments/*[@inputOutput="input"]'
+            )
+        ]
+
+        arguments_code = Code()
+        execution_code = Code()
+        external_code.extend(
+            [
+                "@external",
+                "def _(",
+                CodeWithIndent(arguments_code),
+                "):",
+                CodeWithIndent(execution_code)
+            ]
+        )
+
+        arguments_code.append("__cls,")
+        arguments_code.append("__session: AbstractOMCSession,")
+        for argument in sorted(
+            inputArguments,
+            key=lambda argument: 0 if argument.required == "required" else 1
+        ):
+            if argument.required == "required":
+                s_default = ""
+            else:
+                s_default = "=None"
+            arguments_code.append(
+                f"{argument.py_name}{s_default},"
+            )
+
+        if self.className.parent == TypeName("OpenModelica.Scripting"):
+            funcName = str(self.className.last_identifier)
+        else:
+            funcName = str(self.className)
+
+        execution_code.extend([
+            "return __session.__omc__.call_function(",
+            CodeWithIndent(
+                f"funcName={funcName!r},",
+                "inputArguments=[",
+                CodeWithIndent(
+                    *(
+                        "("
+                        f"{argument.component_literal},"
+                        f"{argument.modelica_name!r},"
+                        f"{argument.py_name},"
+                        f"{argument.required!r}"
+                        "),"
+                        for argument in inputArguments
+                    )
+                ),
+                "],",
+                "outputArguments=[",
+                CodeWithIndent(
+                    *(
+                        "("
+                        f"{get_component_literal(argument)},"
+                        f'{argument.attrib["name"]!r}'
+                        ")"
+                        for argument in self.element.xpath(
+                            './components/arguments/*[@inputOutput="output"]'
+                        )
+                    )
+                ),
+                "],",
+            ),
+            ")",
+        ])
+
+        contents_code.extend(self.generate_class_codes())
+
+        if is_supported_element(self.element):
+            return code
+        else:
+            return CommentOut(code)
+
+
 class GenericModelicaClass(
     AbstractModelicaClass,
 ):
@@ -332,10 +455,12 @@ def generate_import_statements(
     return Code(
         "from omc4py.classes import (",
         CodeWithIndent(
+            "AbstractOMCSession,",
             "Boolean,",
             "Component,",
             "Integer,",
             "ModelicaEnumeration,",
+            "ModelicaFunction,",
             "ModelicaPackage,",
             "ModelicaRecord,",
             "Real,",
@@ -345,6 +470,7 @@ def generate_import_statements(
             "alias,",
             "element,",
             "enum,",
+            "external,",
             "modelica_name,",
         ),
         ")",
@@ -378,4 +504,6 @@ def generate_modelica_class(
         return ModelicaPackage(element)
     elif element.tag == "record":
         return ModelicaRecord(element)
+    elif element.tag == "function":
+        return ModelicaFunction(element)
     return GenericModelicaClass(element)
