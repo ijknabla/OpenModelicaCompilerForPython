@@ -15,7 +15,7 @@ from .parser import (
     ComponentTuple,
     parse_components,
 )
-from .types import (
+from .classes import (
     String,
     TypeName,
 )

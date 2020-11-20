@@ -31,7 +31,7 @@ OutputArgument = typing.Tuple[
 ]
 
 
-# Primitive types {Real, Integer, Boolean, String}
+# Primitive classes {Real, Integer, Boolean, String}
 
 if typing.TYPE_CHECKING:
     Real: typing.Type[float]
@@ -45,7 +45,7 @@ else:
     String = numpy.str
 
 
-# $Code types OpenModelica.$Code.{VariableName, TypeName}
+# $Code classes OpenModelica.$Code.{VariableName, TypeName}
 
 class VariableName(
 ):

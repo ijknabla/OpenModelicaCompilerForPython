@@ -10,7 +10,7 @@ import pkg_resources
 import tqdm  # type: ignore
 import typing
 
-from omc4py.types import (
+from omc4py.classes import (
     TypeName,
 )
 
