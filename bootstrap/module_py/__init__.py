@@ -127,6 +127,28 @@ class AbstractModelicaClass(
             "):"
         )
 
+    def generate___doc__(
+        self,
+    ) -> Code:
+        code = self.element.find("code")
+        if code is None:
+            return Code()
+
+        if not code.text:
+            content = ""
+        else:
+            content = "\n".join([
+                '```modelica',
+                code.text.replace('\\', r'\\'),
+                '```',
+            ])
+
+        return Code(
+            '"""',
+            CodeIgnoringIndent(content),
+            '"""',
+        )
+
     def generate_class_codes(
         self,
     ) -> typing.Iterator[AbstractCode]:
@@ -154,6 +176,39 @@ class ModelicaAlias(
                 f'return {self.element.attrib["ref"]}'
             )
         )
+
+        if is_supported_element(self.element):
+            return code
+        else:
+            return CommentOut(code)
+
+
+class ModelicaEnumeration(
+    AbstractModelicaClassHasCode,
+):
+    def to_code(
+        self,
+    ) -> AbstractCode:
+        enumerators_code = Code()
+        code = Code(
+            self.generate_class_header("ModelicaEnumeration"),
+            CodeWithIndent(
+                self.generate___doc__(),
+                enumerators_code,
+            )
+        )
+
+        for enumerator in self.element.xpath('./components/enumerators/*'):
+            name = enumerator.attrib["name"]
+            comment = enumerator.attrib["comment"]
+            enumerators_code.append(
+                f"{name} = enum.auto()"
+                + (
+                    f"  # {comment}"
+                    if comment
+                    else ""
+                )
+            )
 
         if is_supported_element(self.element):
             return code
@@ -200,6 +255,7 @@ def generate_import_statements(
         "from omc4py.classes import (",
         CodeWithIndent(
             "alias,",
+            "enum,",
             "modelica_name,",
         ),
         ")",
@@ -227,4 +283,6 @@ def generate_modelica_class(
 ) -> AbstractModelicaClass:
     if "ref" in element.attrib:
         return ModelicaAlias(element)
+    elif element.tag == "type" and element.xpath('./components/enumerators'):
+        return ModelicaEnumeration(element)
     return GenericModelicaClass(element)
