@@ -217,6 +217,26 @@ class ModelicaEnumeration(
             return CommentOut(code)
 
 
+class ModelicaPackage(
+    AbstractModelicaClass
+):
+    def to_code(
+        self,
+    ) -> AbstractCode:
+        code = Code(
+            self.generate_class_header("ModelicaPackage"),
+            CodeWithIndent(
+                *self.generate_class_codes(),
+                sep=empty_line,
+            )
+        )
+
+        if is_supported_element(self.element):
+            return code
+        else:
+            return CommentOut(code)
+
+
 class GenericModelicaClass(
     AbstractModelicaClass,
 ):
@@ -256,6 +276,7 @@ def generate_import_statements(
         "from omc4py.classes import (",
         CodeWithIndent(
             "ModelicaEnumeration,",
+            "ModelicaPackage,",
             "alias,",
             "enum,",
             "modelica_name,",
@@ -287,4 +308,6 @@ def generate_modelica_class(
         return ModelicaAlias(element)
     elif element.tag == "type" and element.xpath('./components/enumerators'):
         return ModelicaEnumeration(element)
+    elif element.tag == "package":
+        return ModelicaPackage(element)
     return GenericModelicaClass(element)
