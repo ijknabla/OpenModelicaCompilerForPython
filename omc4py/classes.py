@@ -353,11 +353,12 @@ def modelica_name(
     def decorator(
         obj: ModelicaClassMeta
     ) -> ModelicaClassMeta:
-        if not isinstance(obj, ModelicaClassMeta):
-            raise TypeError(
-                "@modelica_name can only decorate ModelicaClassMeta, "
-                f"got {obj}: {type(obj)}"
-            )
+        # # TODO: restore after module code generation implemented
+        # if not isinstance(obj, ModelicaClassMeta):
+        #     raise TypeError(
+        #         "@modelica_name can only decorate ModelicaClassMeta, "
+        #         f"got {obj}: {type(obj)}"
+        #     )
         obj.__modelica_name__ = TypeName(name)
         return obj
     return decorator
