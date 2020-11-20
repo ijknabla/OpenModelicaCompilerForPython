@@ -139,7 +139,7 @@ class EmptyLines(
     def to_lines(
         self,
         indentLevel: int = 0
-    ):
+    ) -> typing.Iterator[str]:
         yield from ["\n"] * self.__size
 
     def __mul__(
@@ -206,7 +206,7 @@ class Code(
     def to_lines(
         self,
         indentLevel: int = 0,
-    ):
+    ) -> typing.Iterator[str]:
         currentIndent = indentLevel
         for item in self.items():
             if isinstance(item, AbstractCode):
@@ -222,7 +222,7 @@ class CodeWithIndent(
     def to_lines(
         self,
         indentLevel: int = 0,
-    ):
+    ) -> typing.Iterator[str]:
         currentIndent = indentLevel + 1
         for item in self.items():
             if isinstance(item, AbstractCode):
@@ -238,7 +238,7 @@ class CodeIgnoringIndent(
     def to_lines(
         self,
         indentLevel: int = 0,
-    ):
+    ) -> typing.Iterator[str]:
         currentIndent = 0
         for item in self.items():
             if isinstance(item, AbstractCode):
