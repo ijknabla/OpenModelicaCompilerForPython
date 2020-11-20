@@ -6,9 +6,11 @@ __all__ = (
     "String",
     "TypeName",
     "VariableName",
+    "enum",
 )
 
 import abc
+import enum
 import numpy  # type: ignore
 import typing
 import typing_extensions
@@ -345,6 +347,27 @@ class ModelicaClassMeta(
     __modelica_name__: TypeName
 
 
+class ModelicaEnumerationMeta(
+    ModelicaClassMeta,
+    enum.EnumMeta,
+):
+    def __call__(
+        cls,
+        value,
+    ):
+        if isinstance(value, TypeName):
+            if not value.parent == cls.__modelica_name__:
+                raise KeyError(
+                    f"value: TypeName must be {cls.__modelica_name__}.* "
+                    f"got {value!s}"
+                )
+            return cls(str(value.last_identifier))
+        elif isinstance(value, str):
+            return cls[value]
+        else:
+            return super().__call__(value)
+
+
 # decorators for modelica-like class definition
 
 def modelica_name(
@@ -381,6 +404,21 @@ class alias(
             return modelica_class.__get__(obj, objType)
         else:
             return modelica_class
+
+
+# base classes for modelica-like class
+
+class ModelicaEnumeration(
+    Integer,
+    enum.Enum,
+    metaclass=ModelicaEnumerationMeta,
+):
+    __modelica_name__: typing.ClassVar[TypeName]
+
+    def __str__(self) -> str:
+        return str(self.__modelica_name__/self.name)
+
+    __to_omc_literal__ = __str__
 
 
 from . import parser  # noqa: E402
