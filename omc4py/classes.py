@@ -477,6 +477,12 @@ class BoundModelicaLongClassMeta(
 ModelicaLongClassMeta.__bound_class__ = BoundModelicaLongClassMeta
 
 
+class ModelicaPackageMeta(
+    ModelicaLongClassMeta,
+):
+    ...
+
+
 # decorators for modelica-like class definition
 
 def modelica_name(
@@ -532,6 +538,12 @@ class ModelicaEnumeration(
 
 class BoundModelicaLongClass(
     metaclass=BoundModelicaLongClassMeta,
+):
+    ...
+
+
+class ModelicaPackage(
+    metaclass=ModelicaPackageMeta,
 ):
     ...
 
