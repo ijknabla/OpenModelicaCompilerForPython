@@ -340,19 +340,24 @@ class AbstractOMCSession(
 
 # Meta classes for modelica-like class
 
-
-class SupportsModelicaName(
-    typing_extensions.Protocol,
+class ModelicaClassMeta(
 ):
     __modelica_name__: TypeName
 
+
+# decorators for modelica-like class definition
 
 def modelica_name(
     name: str
 ):
     def decorator(
-        obj: SupportsModelicaName
-    ) -> SupportsModelicaName:
+        obj: ModelicaClassMeta
+    ) -> ModelicaClassMeta:
+        if not isinstance(obj, ModelicaClassMeta):
+            raise TypeError(
+                "@modelica_name can only decorate ModelicaClassMeta, "
+                f"got {obj}: {type(obj)}"
+            )
         obj.__modelica_name__ = TypeName(name)
         return obj
     return decorator
