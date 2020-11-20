@@ -30,25 +30,22 @@ def generate_omc_interface_xml(
 
     root = generate_root_element(session)
 
-    # Add <package id="OpenModelica"/> to root.classes
-    package_OpenModelica = etree.SubElement(
-        root.find("classes"),
-        "package",
-        {"id": "OpenModelica"},
-    )
-    etree.SubElement(
-        package_OpenModelica,
-        "classes"
-    )
+    OpenModelica = TypeName("OpenModelica")
 
-    classNames = session.getClassNames(
-        TypeName("OpenModelica.Scripting"),
-        recursive=True,
-    )
+    classNames = [
+        OpenModelica,
+        *session.getClassNames(
+            OpenModelica/"Scripting",
+            recursive=True
+        ),
+    ]
 
     for className in tqdm.tqdm(classNames):
-        assert(root.xpath(f'//*[@id="{className.parent!s}"]'))
-        generate_class_element(session, package_OpenModelica, className)
+        assert(
+            className == OpenModelica
+            or root.xpath(f'//*[@id="{className.parent!s}"]')
+        )
+        generate_class_element(session, root, className)
 
     return etree.ElementTree(root)
 
