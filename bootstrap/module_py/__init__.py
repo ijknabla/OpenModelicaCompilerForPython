@@ -8,12 +8,73 @@ from .code import (
     AbstractCode,
     Code,
     CodeWithIndent,
+    CommentOut,
     empty_line,
 )
 
 from omc4py.classes import (
-    TypeName
+    Dimensions,
+    TypeName,
+    VariableName,
 )
+
+
+class ClassNameAndDimensions(
+    typing.NamedTuple,
+):
+    className: TypeName
+    dimensions: Dimensions
+
+    @classmethod
+    def from_component(
+        cls,
+        component: etree._Element,
+    ) -> "ClassNameAndDimensions":
+        className = TypeName(component.attrib["className"])
+
+        def dimension_generator(
+        ) -> typing.Iterator[typing.Optional[int]]:
+            for dimension in component.xpath('./dimensions/*'):
+                try:
+                    yield int(dimension.attrib["size"])
+                except ValueError:
+                    yield None
+        dimensions: Dimensions = tuple(dimension_generator())
+
+        # Convert intrinsic types
+        if className.last_identifier == VariableName("TypeName"):
+            className = TypeName("TypeName")
+        elif className.last_identifier == VariableName("VariableName"):
+            className = TypeName("VariableName")
+        elif className.last_identifier == VariableName("VariableNames"):
+            if dimensions:
+                raise ValueError(
+                    "VariableNames must be scalar"
+                )
+            className = TypeName("VariableName")
+            dimensions = (None,)
+
+        return cls(className, dimensions)
+
+
+def is_supported_element(
+    element: etree._Element,
+) -> bool:
+    if "ref" in element.attrib:
+        ref = element.attrib["ref"]
+        target, = element.xpath(f'//*[@id="{ref}"]')
+        return is_supported_element(target)
+    elif element.tag == "function":
+        for classNameAndDimensions in map(
+            ClassNameAndDimensions.from_component,
+            element.xpath('./components/arguments/*'),
+        ):
+            if "$" in str(classNameAndDimensions.className):
+                return False
+        else:
+            return True
+    else:
+        return True
 
 
 class AbstractModelicaClass(
@@ -72,7 +133,7 @@ class GenericModelicaClass(
     def to_code(
         self
     ) -> AbstractCode:
-        return Code(
+        code = Code(
             f"class {self.className.last_identifier}(",
             "):",
             CodeWithIndent(
@@ -81,6 +142,10 @@ class GenericModelicaClass(
                 sep=empty_line,
             ),
         )
+        if is_supported_element(self.element):
+            return code
+        else:
+            return CommentOut(code)
 
 
 def generate_module_py(
