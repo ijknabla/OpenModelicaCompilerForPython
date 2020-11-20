@@ -113,15 +113,14 @@ class TypeName(
 
     __parts: typing.Tuple[str, ...]
 
-    def __new__(cls, *parts):
-        if len(parts) == 1:
-            part, = parts
+    def __new__(cls, part, *parts):
+        if not parts:
             if isinstance(part, TypeName):
                 return part
 
         return cls.__from_valid_parts_no_check__(
             cls.__checked_parts(
-                parts
+                (part, *parts)
             )
         )
 
