@@ -364,4 +364,23 @@ def modelica_name(
     return decorator
 
 
+class alias(
+    ModelicaClassMeta,
+):
+    def __init__(
+        self,
+        classmethod_like: typing.Callable,
+    ):
+        self.__func__ = classmethod_like
+
+    def __get__(self, obj, objType):
+        modelica_class = self.__func__(
+            objType
+        )
+        if hasattr(modelica_class, "__get__"):
+            return modelica_class.__get__(obj, objType)
+        else:
+            return modelica_class
+
+
 from . import parser  # noqa: E402
