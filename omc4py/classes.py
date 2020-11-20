@@ -11,6 +11,7 @@ __all__ = (
 
 import abc
 import enum
+import functools
 import numpy  # type: ignore
 import typing
 import typing_extensions
@@ -590,6 +591,61 @@ class ModelicaRecordMeta(
         return cls
 
 
+class ModelicaFunctionMeta(
+    ModelicaLongClassMeta,
+):
+    def __new__(
+        mtcls,
+        name, bases, namespace,
+    ):
+        if not bases:
+            return super().__new__(
+                mtcls,
+                name, (), namespace,
+            )
+
+        external_dict, actual_namespace = split_dict(
+            namespace,
+            lambda obj: isinstance(obj, external),
+        )
+
+        if not external_dict:
+            raise TypeError(
+                f"ModelicaFunction {name!r} "
+                f"does not define @external"
+            )
+        elif 1 < len(external_dict):
+            raise TypeError(
+                f"ModelicaFunction {name!r} "
+                f"duplicate @external definition"
+            )
+        external_definition: external
+        external_definition, = external_dict.values()
+
+        unbound_metaclass = type(
+            f"Unbound_{name}Meta",
+            (ModelicaFunctionMeta,),
+            {"__call__": external_definition.unbound_implementation},
+        )
+
+        bound_metaclass = type(
+            f"Bound_{name}Meta",
+            (BoundModelicaLongClassMeta,),
+            {"__call__": external_definition.bound_implementation},
+        )
+
+        cls = typing.cast(
+            ModelicaFunctionMeta,
+            super().__new__(
+                unbound_metaclass,
+                name, bases, actual_namespace,
+            ),
+        )
+        cls.__bound_class__ = bound_metaclass
+
+        return cls
+
+
 # decorators for modelica-like class definition
 
 def modelica_name(
@@ -652,6 +708,40 @@ class element(
                 f"got {component}: {type(component)}"
             )
         return component
+
+
+class external(
+):
+    def __init__(
+        self,
+        classmethod_like: typing.Callable,
+    ):
+        self.__func__ = classmethod_like
+
+    @property
+    def unbound_implementation(
+        self
+    ):
+        @functools.wraps(self.__func__)
+        def implementation(
+            cls: ModelicaFunctionMeta,
+            session: AbstractOMCSession,
+            *args, **kwrds,
+        ):
+            return self.__func__(cls, session, *args, **kwrds)
+        return implementation
+
+    @property
+    def bound_implementation(
+        self,
+    ):
+        @functools.wraps(functools.partial(self.__func__, None))
+        def implementation(
+            cls: BoundModelicaLongClassMeta,
+            *args, **kwrds,
+        ):
+            return self.__func__(cls, cls.__session__, *args, **kwrds)
+        return implementation
 
 
 # base classes for modelica-like class
@@ -719,6 +809,12 @@ class ModelicaRecord(
         return " ".join(words())
 
     __to_omc_literal__ = __str__
+
+
+class ModelicaFunction(
+    metaclass=ModelicaFunctionMeta,
+):
+    ...
 
 
 from . import compiler  # noqa: E402
