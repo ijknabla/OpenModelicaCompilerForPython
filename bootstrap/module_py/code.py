@@ -246,3 +246,27 @@ class CodeIgnoringIndent(
             elif isinstance(item, str):
                 line = self.indentString * currentIndent + item
                 yield (line if line and not line.isspace() else "") + "\n"
+
+
+class CommentOut(
+    Code,
+):
+    def to_lines(
+        self,
+        indentLevel: int = 0,
+    ) -> typing.Iterator[str]:
+        comment_base = self.indentString * indentLevel + "#"
+
+        def lines(
+        ) -> typing.Iterator[str]:
+            for item in self.items():
+                if isinstance(item, AbstractCode):
+                    yield from item.to_lines(0)
+                elif isinstance(item, str):
+                    yield item
+
+        for line in lines():
+            if not line or line.isspace():
+                yield f"{comment_base}"
+            else:
+                yield f"{comment_base} {line}"
