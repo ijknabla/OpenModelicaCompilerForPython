@@ -16,7 +16,6 @@ from . import (
     classes,
     parser,
     string,
-    classes,
 )
 
 
