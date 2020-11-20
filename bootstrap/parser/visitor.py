@@ -14,7 +14,7 @@ from omc4py.parser.visitor import (
     getitem_with_default,
 )
 
-from omc4py.types import (
+from omc4py.classes import (
     TypeName,
     VariableName,
 )

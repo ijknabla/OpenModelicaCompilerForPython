@@ -5,7 +5,7 @@ import numpy  # type: ignore
 import operator
 import typing
 
-from omc4py.types import (
+from omc4py.classes import (
     Integer,
     Real,
     TypeName,

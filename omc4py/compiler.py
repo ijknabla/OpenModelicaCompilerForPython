@@ -16,7 +16,7 @@ from . import (
     classes,
     parser,
     string,
-    types,
+    classes,
 )
 
 
@@ -156,18 +156,18 @@ def dimensions_to_str(
 def get_class_restrictions(
     component: classes.Component,
 ) -> typing.Tuple[typing.Type, ...]:
-    if component.class_ is types.Real:
-        return (types.Real, float)
-    elif component.class_ is types.Integer:
-        return (types.Integer, int)
-    elif component.class_ is types.Boolean:
-        return (types.Boolean, bool)
-    elif component.class_ is types.String:
-        return (types.String, str)
-    elif component.class_ is types.TypeName:
-        return (types.TypeName, str)
-    elif component.class_ is types.VariableName:
-        return (types.VariableName, str)
+    if component.class_ is classes.Real:
+        return (classes.Real, float)
+    elif component.class_ is classes.Integer:
+        return (classes.Integer, int)
+    elif component.class_ is classes.Boolean:
+        return (classes.Boolean, bool)
+    elif component.class_ is classes.String:
+        return (classes.String, str)
+    elif component.class_ is classes.TypeName:
+        return (classes.TypeName, str)
+    elif component.class_ is classes.VariableName:
+        return (classes.VariableName, str)
     else:
         return ()
 

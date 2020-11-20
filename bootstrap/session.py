@@ -8,7 +8,7 @@ from omc4py.classes import (
 from omc4py.session import (
     OMCSessionMinimal,
 )
-from omc4py.types import (
+from omc4py.classes import (
     Boolean,
     String,
     TypeName,
