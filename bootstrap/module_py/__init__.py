@@ -140,6 +140,27 @@ class AbstractModelicaClass(
         return NotImplemented
 
 
+class ModelicaAlias(
+    AbstractModelicaClass,
+):
+    def to_code(
+        self,
+    ) -> AbstractCode:
+        code = Code(
+            f"@modelica_name({str(self.className)!r})",
+            "@alias",
+            f"def {self.className.last_identifier}(cls):",
+            CodeWithIndent(
+                f'return {self.element.attrib["ref"]}'
+            )
+        )
+
+        if is_supported_element(self.element):
+            return code
+        else:
+            return CommentOut(code)
+
+
 class GenericModelicaClass(
     AbstractModelicaClass,
 ):
@@ -178,6 +199,7 @@ def generate_import_statements(
     return Code(
         "from omc4py.classes import (",
         CodeWithIndent(
+            "alias,",
             "modelica_name,",
         ),
         ")",
@@ -203,4 +225,6 @@ def generate_nested_modelica_class(
 def generate_modelica_class(
     element: etree._Element,
 ) -> AbstractModelicaClass:
+    if "ref" in element.attrib:
+        return ModelicaAlias(element)
     return GenericModelicaClass(element)
