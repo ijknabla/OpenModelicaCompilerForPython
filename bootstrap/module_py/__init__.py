@@ -7,6 +7,7 @@ import typing
 from .code import (
     AbstractCode,
     Code,
+    CodeIgnoringIndent,
     CodeWithIndent,
     CommentOut,
     empty_line,
@@ -184,7 +185,7 @@ class ModelicaAlias(
 
 
 class ModelicaEnumeration(
-    AbstractModelicaClassHasCode,
+    AbstractModelicaClass,
 ):
     def to_code(
         self,
@@ -254,6 +255,7 @@ def generate_import_statements(
     return Code(
         "from omc4py.classes import (",
         CodeWithIndent(
+            "ModelicaEnumeration,",
             "alias,",
             "enum,",
             "modelica_name,",
