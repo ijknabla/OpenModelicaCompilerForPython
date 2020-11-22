@@ -427,6 +427,10 @@ def generate_module_py(
         generate_nested_modelica_class(
             omc_interface_xml.xpath('//*[@id]')
         ).to_code(),
+        empty_line * 2,
+        generate_session_class(
+            omc_interface_xml,
+        ),
     )
 
 
@@ -454,6 +458,8 @@ def generate_import_statements(
             "modelica_name,",
         ),
         ")",
+        empty_line,
+        "from omc4py.session import OMCSessionMinimal"
     )
 
 
@@ -490,3 +496,39 @@ def generate_modelica_class(
         raise NotImplementedError(
             f"code generation for <{element.tag}/> is not defined"
         )
+
+
+def generate_session_class(
+    omc_interface_xml: etree._ElementTree,
+) -> Code:
+    elements_code = Code()
+    code = Code(
+        "class OMCSession(",
+        CodeWithIndent(
+            "OMCSessionMinimal,",
+        ),
+        "):",
+        CodeWithIndent(
+            elements_code
+        )
+    )
+
+    elements_code.append("OpenModelica = OpenModelica")
+    OpenModelica_Scripting, = omc_interface_xml.xpath(
+        '//*[@id="OpenModelica.Scripting"]'
+    )
+    for modelica_class in OpenModelica_Scripting.xpath('./classes/*'):
+        if modelica_class.tag == "package":
+            continue
+
+        className = TypeName(modelica_class.attrib["id"])
+        if is_supported_element(modelica_class):
+            elements_code.append(
+                f"{className.last_identifier} = {className}"
+            )
+        else:
+            elements_code.append(
+                f"# {className.last_identifier} = {className}"
+            )
+
+    return code
