@@ -417,26 +417,6 @@ class ModelicaFunction(
             return CommentOut(code)
 
 
-class GenericModelicaClass(
-    AbstractModelicaClass,
-):
-    def to_code(
-        self
-    ) -> AbstractCode:
-        code = Code(
-            self.generate_class_header("object"),
-            CodeWithIndent(
-                "...",
-                *self.generate_class_codes(),
-                sep=empty_line,
-            ),
-        )
-        if is_supported_element(self.element):
-            return code
-        else:
-            return CommentOut(code)
-
-
 def generate_module_py(
     omc_interface_xml: etree._ElementTree,
 ) -> Code:
@@ -506,4 +486,7 @@ def generate_modelica_class(
         return ModelicaRecord(element)
     elif element.tag == "function":
         return ModelicaFunction(element)
-    return GenericModelicaClass(element)
+    else:
+        raise NotImplementedError(
+            f"code generation for <{element.tag}/> is not defined"
+        )
