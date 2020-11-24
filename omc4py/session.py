@@ -143,7 +143,7 @@ class OMCSessionMinimal(
         self,
     ) -> typing.Tuple[int, int, int]:
         versionMatch = re.search(
-            r"v(?P<major>\d+)\.(?P<minor>\d+)\.(?P<build>\d+)",
+            r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<build>\d+)",
             self.getVersion(),
         )
         if versionMatch is None:
