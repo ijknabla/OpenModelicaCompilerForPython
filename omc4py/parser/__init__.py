@@ -98,5 +98,14 @@ def parse_OMCValue(
 ):
     return arpeggio.visit_parse_tree(
         get_omc_value_parser().parse(literal),
-        visitor.OMCValueVisitor()
+        visitor.OMCValueVisitor(),
+    )
+
+
+def parse_OMCValue__v_1_13(
+    literal: str
+):
+    return arpeggio.visit_parse_tree(
+        get_omc_value_parser().parse(literal),
+        visitor.OMCValueVisitor__v_1_13(),
     )

@@ -13,6 +13,13 @@ class OMCException(
     ...
 
 
+class OMCNotification(
+    OMCException,
+    Warning,
+):
+    ...
+
+
 class OMCWarning(
     OMCException,
     Warning,

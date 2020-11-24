@@ -10,14 +10,13 @@ from omc4py import (
 from .classes import (
     AbstractOMCSession,
     Component,
+    String,
+    TypeName,
 )
 from .parser import (
     ComponentTuple,
+    parse_OMCValue,
     parse_components,
-)
-from .classes import (
-    String,
-    TypeName,
 )
 
 
@@ -33,6 +32,34 @@ class OMCSessionBase(
         )
         self.__omc_check__()
         return __result
+
+
+class OMCSessionBase__v_1_13(
+    OMCSessionBase,
+):
+    def __omc_check__(
+        self,
+    ):
+        for messageString in self.getMessagesStringInternal(unique=True):
+            message = str(messageString.message)
+            kind = messageString.kind.name
+            py_message = f"{kind!s}: {message!r}"
+            level = messageString.level.name
+
+            if level == "notification":
+                warnings.warn(
+                    exception.OMCNotification(py_message)
+                )
+            elif level == "warning":
+                warnings.warn(
+                    exception.OMCWarning(py_message)
+                )
+            elif level == "error":
+                raise exception.OMCError(py_message)
+            else:
+                raise exception.OMCRuntimeError(
+                    f"Unexpected message level, got {level}"
+                )
 
 
 omc_error_pattern = re.compile(
@@ -93,6 +120,7 @@ class OMCSessionMinimal(
             outputArguments=[
                 (Component(String), "errorString")
             ],
+            parser=parse_OMCValue,
         )
         return str(__result)
 
@@ -105,7 +133,8 @@ class OMCSessionMinimal(
             ],
             outputArguments=[
                 (Component(String), "version"),
-            ]
+            ],
+            parser=parse_OMCValue,
         )
         self.__omc_check__()
         return str(__result)

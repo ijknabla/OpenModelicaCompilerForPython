@@ -14,7 +14,6 @@ import zmq  # type: ignore
 
 from . import (
     classes,
-    parser,
     string,
 )
 
@@ -328,6 +327,7 @@ class OMCInteractive(
         funcName: str,
         inputArguments: typing.Sequence[classes.InputArgument],
         outputArguments: typing.Sequence[classes.OutputArgument],
+        parser: classes.Parser,
     ) -> typing.Any:
         def arguments() -> typing.Iterator[str]:
             to_keyword_argument = False
@@ -358,7 +358,7 @@ class OMCInteractive(
                 )
             return
 
-        result_value = parser.parse_OMCValue(result_literal)
+        result_value = parser(result_literal)
 
         if len(outputArguments) == 1:
             (component, name,), = outputArguments
