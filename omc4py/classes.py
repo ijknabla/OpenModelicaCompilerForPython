@@ -35,6 +35,8 @@ OutputArgument = typing.Tuple[
     "Component", str
 ]
 
+Parser = typing.Callable[[str], typing.Any]
+
 KT = typing.TypeVar("KT")
 
 
@@ -330,6 +332,7 @@ class AbstractOMCInteractive(
         funcName: str,
         inputArguments: typing.Sequence[InputArgument],
         outputArguments: typing.Sequence[OutputArgument],
+        parser: Parser,
     ):
         ...
 

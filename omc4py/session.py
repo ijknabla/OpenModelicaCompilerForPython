@@ -10,14 +10,13 @@ from omc4py import (
 from .classes import (
     AbstractOMCSession,
     Component,
+    String,
+    TypeName,
 )
 from .parser import (
     ComponentTuple,
+    parse_OMCValue,
     parse_components,
-)
-from .classes import (
-    String,
-    TypeName,
 )
 
 
@@ -93,6 +92,7 @@ class OMCSessionMinimal(
             outputArguments=[
                 (Component(String), "errorString")
             ],
+            parser=parse_OMCValue,
         )
         return str(__result)
 
@@ -105,7 +105,8 @@ class OMCSessionMinimal(
             ],
             outputArguments=[
                 (Component(String), "version"),
-            ]
+            ],
+            parser=parse_OMCValue,
         )
         self.__omc_check__()
         return str(__result)

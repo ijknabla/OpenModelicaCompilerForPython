@@ -3,15 +3,16 @@ import enum
 import typing
 
 from omc4py.classes import (
+    Boolean,
     Component,
+    String,
+    TypeName,
 )
 from omc4py.session import (
     OMCSessionMinimal,
 )
-from omc4py.classes import (
-    Boolean,
-    String,
-    TypeName,
+from omc4py.parser import (
+    parse_OMCValue,
 )
 
 
@@ -42,7 +43,8 @@ class OMCSessionBootstrap(
             ],
             outputArguments=[
                 (Component(String), "contents"),
-            ]
+            ],
+            parser=parse_OMCValue,
         )
         self.__omc_check__()
         return str(__result)
@@ -63,6 +65,7 @@ class OMCSessionBootstrap(
             outputArguments=[
                 (Component(TypeName)[:], "classNames"),
             ],
+            parser=parse_OMCValue,
         )
         self.__omc_check__()
         return list(__result)
@@ -79,6 +82,7 @@ class OMCSessionBootstrap(
             outputArguments=[
                 (Component(String), "restriction"),
             ],
+            parser=parse_OMCValue,
         )
         self.__omc_check__()
         return str(__result)
