@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
+from pathlib import Path
 from setuptools import setup, find_packages
+
 
 setup(
     name="OpenModelicaCompiler",
     version="0.0.0a1",
-    description="OpenModelica compiler (omc)  interface for Python3.x based on  OMPython",
+    description="OpenModelica compiler (omc) interface for Python>=3.6",
+    long_description=(Path(__file__).parent/"README.md").read_text(),
+    long_description_content_type="text/markdown",
     author="ijknabla",
     author_email="ijknabla@gmail.com",
     license="OSMC-PL 1.2",
