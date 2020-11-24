@@ -383,7 +383,9 @@ class ModelicaEnumerationMeta(
         value,
     ):
         if isinstance(value, TypeName):
-            if not value.parent == cls.__modelica_name__:
+            valueClassName = value.parent
+            expectedClassName = cls.__modelica_name__
+            if valueClassName.as_absolute() != expectedClassName.as_absolute():
                 raise KeyError(
                     f"value: TypeName must be {cls.__modelica_name__}.* "
                     f"got {value!s}"
