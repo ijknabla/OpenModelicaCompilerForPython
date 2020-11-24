@@ -19,6 +19,8 @@ from omc4py.classes import (
     modelica_name,
 )
 
+from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
+
 from omc4py.session import OMCSessionMinimal
 
 
@@ -155,6 +157,7 @@ end readableTime;
                             outputArguments=[
                                 (Component(String),'str'),
                             ],
+                            parser=parse_OMCValue,
                         )
 
                 @modelica_name('OpenModelica.Scripting.Internal.Time.timerTick')
@@ -181,6 +184,7 @@ end timerTick;
                             ],
                             outputArguments=[
                             ],
+                            parser=parse_OMCValue,
                         )
 
                 @modelica_name('OpenModelica.Scripting.Internal.Time.timerTock')
@@ -209,6 +213,7 @@ end timerTock;
                             outputArguments=[
                                 (Component(Real),'elapsed'),
                             ],
+                            parser=parse_OMCValue,
                         )
 
                 @modelica_name('OpenModelica.Scripting.Internal.Time.timerClear')
@@ -235,6 +240,7 @@ end timerClear;
                             ],
                             outputArguments=[
                             ],
+                            parser=parse_OMCValue,
                         )
 
             @modelica_name('OpenModelica.Scripting.Internal.FileType')
@@ -277,6 +283,7 @@ end stat;
                         outputArguments=[
                             (Component(OpenModelica.Scripting.Internal.FileType),'fileType'),
                         ],
+                        parser=parse_OMCValue,
                     )
 
         @modelica_name('OpenModelica.Scripting.checkSettings')
@@ -302,6 +309,7 @@ end checkSettings;
                     outputArguments=[
                         (Component(OpenModelica.Scripting.CheckSettingsResult),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadFile')
@@ -336,6 +344,7 @@ end loadFile;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadFiles')
@@ -370,6 +379,7 @@ end loadFiles;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadEncryptedPackage')
@@ -401,6 +411,7 @@ end loadEncryptedPackage;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.reloadClass')
@@ -432,6 +443,7 @@ end reloadClass;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadString')
@@ -469,6 +481,7 @@ end loadString;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.parseString')
@@ -500,6 +513,7 @@ end parseString;
                     outputArguments=[
                         (Component(TypeName)[:],'names'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.parseFile')
@@ -531,6 +545,7 @@ end parseFile;
                     outputArguments=[
                         (Component(TypeName)[:],'names'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadFileInteractiveQualified')
@@ -562,6 +577,7 @@ end loadFileInteractiveQualified;
                     outputArguments=[
                         (Component(TypeName)[:],'names'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadFileInteractive')
@@ -593,6 +609,7 @@ end loadFileInteractive;
                     outputArguments=[
                         (Component(TypeName)[:],'names'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.system')
@@ -624,6 +641,7 @@ end system;
                     outputArguments=[
                         (Component(Integer),'retval'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.system_parallel')
@@ -655,6 +673,7 @@ end system_parallel;
                     outputArguments=[
                         (Component(Integer)[:],'retval'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.saveAll')
@@ -683,6 +702,7 @@ end saveAll;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.help')
@@ -711,6 +731,7 @@ end help;
                     outputArguments=[
                         (Component(String),'helpText'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.clear')
@@ -736,6 +757,7 @@ end clear;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.clearProgram')
@@ -761,6 +783,7 @@ end clearProgram;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.clearVariables')
@@ -786,6 +809,7 @@ end clearVariables;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.generateHeader')
@@ -814,6 +838,7 @@ end generateHeader;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.generateSeparateCode')
@@ -845,6 +870,7 @@ end generateSeparateCode;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.generateSeparateCodeDependencies')
@@ -873,6 +899,7 @@ end generateSeparateCodeDependencies;
                     outputArguments=[
                         (Component(String)[:],'dependencies'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile')
@@ -907,6 +934,7 @@ end generateSeparateCodeDependenciesMakefile;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getLinker')
@@ -932,6 +960,7 @@ end getLinker;
                     outputArguments=[
                         (Component(String),'linker'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setLinker')
@@ -960,6 +989,7 @@ end setLinker;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getLinkerFlags')
@@ -985,6 +1015,7 @@ end getLinkerFlags;
                     outputArguments=[
                         (Component(String),'linkerFlags'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setLinkerFlags')
@@ -1013,6 +1044,7 @@ end setLinkerFlags;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getCompiler')
@@ -1038,6 +1070,7 @@ end getCompiler;
                     outputArguments=[
                         (Component(String),'compiler'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCompiler')
@@ -1066,6 +1099,7 @@ end setCompiler;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCFlags')
@@ -1094,6 +1128,7 @@ end setCFlags;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getCFlags')
@@ -1119,6 +1154,7 @@ end getCFlags;
                     outputArguments=[
                         (Component(String),'outString'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getCXXCompiler')
@@ -1144,6 +1180,7 @@ end getCXXCompiler;
                     outputArguments=[
                         (Component(String),'compiler'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCXXCompiler')
@@ -1172,6 +1209,7 @@ end setCXXCompiler;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.verifyCompiler')
@@ -1197,6 +1235,7 @@ end verifyCompiler;
                     outputArguments=[
                         (Component(Boolean),'compilerWorks'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCompilerPath')
@@ -1225,6 +1264,7 @@ end setCompilerPath;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getCompileCommand')
@@ -1250,6 +1290,7 @@ end getCompileCommand;
                     outputArguments=[
                         (Component(String),'compileCommand'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCompileCommand')
@@ -1278,6 +1319,7 @@ end setCompileCommand;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setPlotCommand')
@@ -1306,6 +1348,7 @@ end setPlotCommand;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getSettings')
@@ -1331,6 +1374,7 @@ end getSettings;
                     outputArguments=[
                         (Component(String),'settings'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setTempDirectoryPath')
@@ -1359,6 +1403,7 @@ end setTempDirectoryPath;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getTempDirectoryPath')
@@ -1384,6 +1429,7 @@ end getTempDirectoryPath;
                     outputArguments=[
                         (Component(String),'tempDirectoryPath'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getEnvironmentVar')
@@ -1412,6 +1458,7 @@ end getEnvironmentVar;
                     outputArguments=[
                         (Component(String),'value'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setEnvironmentVar')
@@ -1443,6 +1490,7 @@ end setEnvironmentVar;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.appendEnvironmentVar')
@@ -1474,6 +1522,7 @@ end appendEnvironmentVar;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setInstallationDirectoryPath')
@@ -1502,6 +1551,7 @@ end setInstallationDirectoryPath;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getInstallationDirectoryPath')
@@ -1527,6 +1577,7 @@ end getInstallationDirectoryPath;
                     outputArguments=[
                         (Component(String),'installationDirectoryPath'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setModelicaPath')
@@ -1555,6 +1606,7 @@ end setModelicaPath;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getModelicaPath')
@@ -1580,6 +1632,7 @@ end getModelicaPath;
                     outputArguments=[
                         (Component(String),'modelicaPath'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCompilerFlags')
@@ -1608,6 +1661,7 @@ end setCompilerFlags;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setDebugFlags')
@@ -1636,6 +1690,7 @@ end setDebugFlags;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.clearDebugFlags')
@@ -1661,6 +1716,7 @@ end clearDebugFlags;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setPreOptModules')
@@ -1689,6 +1745,7 @@ end setPreOptModules;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCheapMatchingAlgorithm')
@@ -1717,6 +1774,7 @@ end setCheapMatchingAlgorithm;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getMatchingAlgorithm')
@@ -1742,6 +1800,7 @@ end getMatchingAlgorithm;
                     outputArguments=[
                         (Component(String),'selected'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAvailableMatchingAlgorithms')
@@ -1769,6 +1828,7 @@ end getAvailableMatchingAlgorithms;
                         (Component(String)[:],'allChoices'),
                         (Component(String)[:],'allComments'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setMatchingAlgorithm')
@@ -1797,6 +1857,7 @@ end setMatchingAlgorithm;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getIndexReductionMethod')
@@ -1822,6 +1883,7 @@ end getIndexReductionMethod;
                     outputArguments=[
                         (Component(String),'selected'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAvailableIndexReductionMethods')
@@ -1849,6 +1911,7 @@ end getAvailableIndexReductionMethods;
                         (Component(String)[:],'allChoices'),
                         (Component(String)[:],'allComments'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setIndexReductionMethod')
@@ -1877,6 +1940,7 @@ end setIndexReductionMethod;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setPostOptModules')
@@ -1905,6 +1969,7 @@ end setPostOptModules;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getTearingMethod')
@@ -1930,6 +1995,7 @@ end getTearingMethod;
                     outputArguments=[
                         (Component(String),'selected'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAvailableTearingMethods')
@@ -1957,6 +2023,7 @@ end getAvailableTearingMethods;
                         (Component(String)[:],'allChoices'),
                         (Component(String)[:],'allComments'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setTearingMethod')
@@ -1985,6 +2052,7 @@ end setTearingMethod;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setCommandLineOptions')
@@ -2013,6 +2081,7 @@ end setCommandLineOptions;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getCommandLineOptions')
@@ -2038,6 +2107,7 @@ end getCommandLineOptions;
                     outputArguments=[
                         (Component(String)[:],'flags'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getConfigFlagValidOptions')
@@ -2070,6 +2140,7 @@ end getConfigFlagValidOptions;
                         (Component(String),'mainDescription'),
                         (Component(String)[:],'descriptions'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.clearCommandLineOptions')
@@ -2095,6 +2166,7 @@ end clearCommandLineOptions;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getVersion')
@@ -2123,6 +2195,7 @@ end getVersion;
                     outputArguments=[
                         (Component(String),'version'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.regularFileExists')
@@ -2151,6 +2224,7 @@ end regularFileExists;
                     outputArguments=[
                         (Component(Boolean),'exists'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.directoryExists')
@@ -2179,6 +2253,7 @@ end directoryExists;
                     outputArguments=[
                         (Component(Boolean),'exists'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.stat')
@@ -2211,6 +2286,7 @@ end stat;
                         (Component(Real),'fileSize'),
                         (Component(Real),'mtime'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.readFile')
@@ -2239,6 +2315,7 @@ end readFile;
                     outputArguments=[
                         (Component(String),'contents'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.writeFile')
@@ -2273,6 +2350,7 @@ end writeFile;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.compareFilesAndMove')
@@ -2304,6 +2382,7 @@ end compareFilesAndMove;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.compareFiles')
@@ -2335,6 +2414,7 @@ end compareFiles;
                     outputArguments=[
                         (Component(Boolean),'isEqual'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.alarm')
@@ -2363,6 +2443,7 @@ end alarm;
                     outputArguments=[
                         (Component(Integer),'previousSeconds'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.regex')
@@ -2405,6 +2486,7 @@ end regex;
                         (Component(Integer),'numMatches'),
                         (Component(String)[:],'matchedSubstrings'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.regexBool')
@@ -2442,6 +2524,7 @@ end regexBool;
                     outputArguments=[
                         (Component(Boolean),'matches'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.testsuiteFriendlyName')
@@ -2470,6 +2553,7 @@ end testsuiteFriendlyName;
                     outputArguments=[
                         (Component(String),'fixed'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.readFileNoNumeric')
@@ -2498,6 +2582,7 @@ end readFileNoNumeric;
                     outputArguments=[
                         (Component(String),'contents'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getErrorString')
@@ -2526,6 +2611,7 @@ end getErrorString;
                     outputArguments=[
                         (Component(String),'errorString'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getMessagesString')
@@ -2551,6 +2637,7 @@ end getMessagesString;
                     outputArguments=[
                         (Component(String),'messagesString'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.SourceInfo')
@@ -2687,6 +2774,7 @@ end getMessagesStringInternal;
                     outputArguments=[
                         (Component(OpenModelica.Scripting.ErrorMessage)[:],'messagesString'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.countMessages')
@@ -2716,6 +2804,7 @@ end countMessages;
                         (Component(Integer),'numErrors'),
                         (Component(Integer),'numWarnings'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.clearMessages')
@@ -2741,6 +2830,7 @@ end clearMessages;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.runScript')
@@ -2769,6 +2859,7 @@ end runScript;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.echo')
@@ -2797,6 +2888,7 @@ end echo;
                     outputArguments=[
                         (Component(Boolean),'newEcho'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getClassesInModelicaPath')
@@ -2822,6 +2914,7 @@ end getClassesInModelicaPath;
                     outputArguments=[
                         (Component(String),'classesInModelicaPath'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAnnotationVersion')
@@ -2847,6 +2940,7 @@ end getAnnotationVersion;
                     outputArguments=[
                         (Component(String),'annotationVersion'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setAnnotationVersion')
@@ -2875,6 +2969,7 @@ end setAnnotationVersion;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNoSimplify')
@@ -2900,6 +2995,7 @@ end getNoSimplify;
                     outputArguments=[
                         (Component(Boolean),'noSimplify'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setNoSimplify')
@@ -2928,6 +3024,7 @@ end setNoSimplify;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getVectorizationLimit')
@@ -2953,6 +3050,7 @@ end getVectorizationLimit;
                     outputArguments=[
                         (Component(Integer),'vectorizationLimit'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setVectorizationLimit')
@@ -2981,6 +3079,7 @@ end setVectorizationLimit;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getDefaultOpenCLDevice')
@@ -3006,6 +3105,7 @@ end getDefaultOpenCLDevice;
                     outputArguments=[
                         (Component(Integer),'defdevid'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setDefaultOpenCLDevice')
@@ -3034,6 +3134,7 @@ end setDefaultOpenCLDevice;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setShowAnnotations')
@@ -3062,6 +3163,7 @@ end setShowAnnotations;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getShowAnnotations')
@@ -3087,6 +3189,7 @@ end getShowAnnotations;
                     outputArguments=[
                         (Component(Boolean),'show'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setOrderConnections')
@@ -3115,6 +3218,7 @@ end setOrderConnections;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getOrderConnections')
@@ -3140,6 +3244,7 @@ end getOrderConnections;
                     outputArguments=[
                         (Component(Boolean),'orderConnections'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setLanguageStandard')
@@ -3168,6 +3273,7 @@ end setLanguageStandard;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getLanguageStandard')
@@ -3193,6 +3299,7 @@ end getLanguageStandard;
                     outputArguments=[
                         (Component(String),'outVersion'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAstAsCorbaString')
@@ -3221,6 +3328,7 @@ end getAstAsCorbaString;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.cd')
@@ -3249,6 +3357,7 @@ end cd;
                     outputArguments=[
                         (Component(String),'workingDirectory'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.mkdir')
@@ -3277,6 +3386,7 @@ end mkdir;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.copy')
@@ -3308,6 +3418,7 @@ end copy;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.remove')
@@ -3336,6 +3447,7 @@ end remove;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.checkModel')
@@ -3364,6 +3476,7 @@ end checkModel;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.checkAllModelsRecursive')
@@ -3395,6 +3508,7 @@ end checkAllModelsRecursive;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.typeOf')
@@ -3423,6 +3537,7 @@ end typeOf;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.instantiateModel')
@@ -3451,6 +3566,7 @@ end instantiateModel;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.buildOpenTURNSInterface')
@@ -3485,6 +3601,7 @@ end buildOpenTURNSInterface;
                     outputArguments=[
                         (Component(String),'outPythonScript'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.runOpenTURNSPythonScript')
@@ -3513,6 +3630,7 @@ end runOpenTURNSPythonScript;
                     outputArguments=[
                         (Component(String),'logOutputFile'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.generateCode')
@@ -3541,6 +3659,7 @@ end generateCode;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadModel')
@@ -3581,6 +3700,7 @@ end loadModel;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.deleteFile')
@@ -3609,6 +3729,7 @@ end deleteFile;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.saveModel')
@@ -3640,6 +3761,7 @@ end saveModel;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.saveTotalModel')
@@ -3677,6 +3799,7 @@ end saveTotalModel;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.save')
@@ -3705,6 +3828,7 @@ end save;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.saveTotalSCode')
@@ -3738,6 +3862,7 @@ end translateGraphics;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         # @modelica_name('OpenModelica.Scripting.codeToString')
@@ -3766,6 +3891,7 @@ end translateGraphics;
         #             outputArguments=[
         #                 (Component(String),'string'),
         #             ],
+        #             parser=parse_OMCValue,
         #         )
 
         @modelica_name('OpenModelica.Scripting.dumpXMLDAE')
@@ -3817,6 +3943,7 @@ end dumpXMLDAE;
                         (Component(Boolean),'success'),
                         (Component(String),'xmlfileName'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.convertUnits')
@@ -3852,6 +3979,7 @@ end convertUnits;
                         (Component(Real),'scaleFactor'),
                         (Component(Real),'offset'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getDerivedUnits')
@@ -3880,6 +4008,7 @@ end getDerivedUnits;
                     outputArguments=[
                         (Component(String)[:],'derivedUnits'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.listVariables')
@@ -3905,6 +4034,7 @@ end listVariables;
                     outputArguments=[
                         (Component(TypeName)[:],'variables'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.strtok')
@@ -3936,6 +4066,7 @@ end strtok;
                     outputArguments=[
                         (Component(String)[:],'strings'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.stringSplit')
@@ -3967,6 +4098,7 @@ end stringSplit;
                     outputArguments=[
                         (Component(String)[:],'strings'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.stringReplace')
@@ -4001,6 +4133,7 @@ end stringReplace;
                     outputArguments=[
                         (Component(String),'res'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.escapeXML')
@@ -4029,6 +4162,7 @@ end escapeXML;
                     outputArguments=[
                         (Component(String),'outStr'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.ExportKind')
@@ -4080,6 +4214,7 @@ end list;
                     outputArguments=[
                         (Component(String),'contents'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.listFile')
@@ -4108,6 +4243,7 @@ end listFile;
                     outputArguments=[
                         (Component(String),'contents'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.DiffFormat')
@@ -4154,6 +4290,7 @@ end diffModelicaFileListings;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.exportToFigaro')
@@ -4197,6 +4334,7 @@ end exportToFigaro;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.inferBindings')
@@ -4225,6 +4363,7 @@ end inferBindings;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.generateVerificationScenarios')
@@ -4253,6 +4392,7 @@ end generateVerificationScenarios;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.rewriteBlockCall')
@@ -4284,6 +4424,7 @@ end rewriteBlockCall;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.realpath')
@@ -4312,6 +4453,7 @@ end realpath;
                     outputArguments=[
                         (Component(String),'fullName'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.uriToFilename')
@@ -4340,6 +4482,7 @@ end uriToFilename;
                     outputArguments=[
                         (Component(String),'filename'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getLoadedLibraries')
@@ -4365,6 +4508,7 @@ end getLoadedLibraries;
                     outputArguments=[
                         (Component(String)[:,2],'libraries'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.LinearSystemSolver')
@@ -4416,6 +4560,7 @@ end solveLinearSystem;
                         (Component(Real)[:],'X'),
                         (Component(Integer),'info'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.StandardStream')
@@ -4460,6 +4605,7 @@ end reopenStandardStream;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.importFMU')
@@ -4506,6 +4652,7 @@ end importFMU;
                     outputArguments=[
                         (Component(String),'generatedFileName'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.importFMUModelDescription')
@@ -4552,6 +4699,7 @@ end importFMUModelDescription;
                     outputArguments=[
                         (Component(String),'generatedFileName'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.translateModelFMU')
@@ -4592,6 +4740,7 @@ end translateModelFMU;
                     outputArguments=[
                         (Component(String),'generatedFileName'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.buildModelFMU')
@@ -4635,6 +4784,7 @@ end buildModelFMU;
                     outputArguments=[
                         (Component(String),'generatedFileName'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.buildEncryptedPackage')
@@ -4665,6 +4815,7 @@ end buildEncryptedPackage;
                         (Component(Boolean),'success'),
                         (Component(String),'commandOutput'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.simulate')
@@ -4739,6 +4890,7 @@ end simulate;
                     outputArguments=[
                         (Component(OpenModelica.Scripting.simulate.SimulationResult),'simulationResults'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
             @modelica_name('OpenModelica.Scripting.simulate.SimulationResult')
@@ -4860,6 +5012,7 @@ end buildModel;
                     outputArguments=[
                         (Component(String)[2],'buildModelResults'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.buildLabel')
@@ -4921,6 +5074,7 @@ end buildLabel;
                     outputArguments=[
                         (Component(String)[2],'buildModelResults'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.reduceTerms')
@@ -4985,6 +5139,7 @@ end reduceTerms;
                     outputArguments=[
                         (Component(String)[2],'buildModelResults'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.moveClass')
@@ -5016,6 +5171,7 @@ end moveClass;
                     outputArguments=[
                         (Component(Boolean),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.moveClassToTop')
@@ -5044,6 +5200,7 @@ end moveClassToTop;
                     outputArguments=[
                         (Component(Boolean),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.moveClassToBottom')
@@ -5072,6 +5229,7 @@ end moveClassToBottom;
                     outputArguments=[
                         (Component(Boolean),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.copyClass')
@@ -5106,6 +5264,7 @@ end copyClass;
                     outputArguments=[
                         (Component(Boolean),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.linearize')
@@ -5176,6 +5335,7 @@ end linearize;
                     outputArguments=[
                         (Component(String),'linearizationResult'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.optimize')
@@ -5246,6 +5406,7 @@ end optimize;
                     outputArguments=[
                         (Component(String),'optimizationResults'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getSourceFile')
@@ -5274,6 +5435,7 @@ end getSourceFile;
                     outputArguments=[
                         (Component(String),'filename'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setSourceFile')
@@ -5305,6 +5467,7 @@ end setSourceFile;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isShortDefinition')
@@ -5333,6 +5496,7 @@ end isShortDefinition;
                     outputArguments=[
                         (Component(Boolean),'isShortCls'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setClassComment')
@@ -5364,6 +5528,7 @@ end setClassComment;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getClassNames')
@@ -5410,6 +5575,7 @@ end getClassNames;
                     outputArguments=[
                         (Component(TypeName)[:],'classNames'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getUsedClassNames')
@@ -5438,6 +5604,7 @@ end getUsedClassNames;
                     outputArguments=[
                         (Component(TypeName)[:],'classNames'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getPackages')
@@ -5466,6 +5633,7 @@ end getPackages;
                     outputArguments=[
                         (Component(TypeName)[:],'classNames'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.basePlotFunction')
@@ -5530,6 +5698,7 @@ end basePlotFunction;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.plot')
@@ -5606,6 +5775,7 @@ end plot;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.plotAll')
@@ -5679,6 +5849,7 @@ end plotAll;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.plotParametric')
@@ -5758,6 +5929,7 @@ end plotParametric;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.readSimulationResult')
@@ -5792,6 +5964,7 @@ end readSimulationResult;
                     outputArguments=[
                         (Component(Real)[:,:],'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.readSimulationResultSize')
@@ -5820,6 +5993,7 @@ end readSimulationResultSize;
                     outputArguments=[
                         (Component(Integer),'sz'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.readSimulationResultVars')
@@ -5854,6 +6028,7 @@ end readSimulationResultVars;
                     outputArguments=[
                         (Component(String)[:],'vars'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.filterSimulationResults')
@@ -5894,6 +6069,7 @@ end filterSimulationResults;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.compareSimulationResults')
@@ -5937,6 +6113,7 @@ end compareSimulationResults;
                     outputArguments=[
                         (Component(String)[:],'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.deltaSimulationResults')
@@ -5974,6 +6151,7 @@ end deltaSimulationResults;
                     outputArguments=[
                         (Component(Real),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.diffSimulationResults')
@@ -6025,6 +6203,7 @@ end diffSimulationResults;
                         (Component(Boolean),'success'),
                         (Component(String)[:],'failVars'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.diffSimulationResultsHtml')
@@ -6068,6 +6247,7 @@ end diffSimulationResultsHtml;
                     outputArguments=[
                         (Component(String),'html'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.checkTaskGraph')
@@ -6099,6 +6279,7 @@ end checkTaskGraph;
                     outputArguments=[
                         (Component(String)[:],'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.checkCodeGraph')
@@ -6130,6 +6311,7 @@ end checkCodeGraph;
                     outputArguments=[
                         (Component(String)[:],'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.val')
@@ -6164,6 +6346,7 @@ end val;
                     outputArguments=[
                         (Component(Real),'valAtTime'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.closeSimulationResultFile')
@@ -6189,6 +6372,7 @@ end closeSimulationResultFile;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         # @modelica_name('OpenModelica.Scripting.addClassAnnotation')
@@ -6220,6 +6404,7 @@ end closeSimulationResultFile;
         #             outputArguments=[
         #                 (Component(Boolean),'bool'),
         #             ],
+        #             parser=parse_OMCValue,
         #         )
 
         @modelica_name('OpenModelica.Scripting.getParameterNames')
@@ -6248,6 +6433,7 @@ end getParameterNames;
                     outputArguments=[
                         (Component(String)[:],'parameters'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getParameterValue')
@@ -6279,6 +6465,7 @@ end getParameterValue;
                     outputArguments=[
                         (Component(String),'parameterValue'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getComponentModifierNames')
@@ -6310,6 +6497,7 @@ end getComponentModifierNames;
                     outputArguments=[
                         (Component(String)[:],'modifiers'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getComponentModifierValue')
@@ -6341,6 +6529,7 @@ end getComponentModifierValue;
                     outputArguments=[
                         (Component(String),'value'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getComponentModifierValues')
@@ -6372,6 +6561,7 @@ end getComponentModifierValues;
                     outputArguments=[
                         (Component(String),'value'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getInstantiatedParametersAndValues')
@@ -6400,6 +6590,7 @@ end getInstantiatedParametersAndValues;
                     outputArguments=[
                         (Component(String)[:],'values'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.removeComponentModifiers')
@@ -6434,6 +6625,7 @@ end removeComponentModifiers;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.removeExtendsModifiers')
@@ -6468,6 +6660,7 @@ end removeExtendsModifiers;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getConnectionCount')
@@ -6496,6 +6689,7 @@ end getConnectionCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthConnection')
@@ -6527,6 +6721,7 @@ end getNthConnection;
                     outputArguments=[
                         (Component(String)[:],'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAlgorithmCount')
@@ -6555,6 +6750,7 @@ end getAlgorithmCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthAlgorithm')
@@ -6586,6 +6782,7 @@ end getNthAlgorithm;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getInitialAlgorithmCount')
@@ -6614,6 +6811,7 @@ end getInitialAlgorithmCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthInitialAlgorithm')
@@ -6645,6 +6843,7 @@ end getNthInitialAlgorithm;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAlgorithmItemsCount')
@@ -6673,6 +6872,7 @@ end getAlgorithmItemsCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthAlgorithmItem')
@@ -6704,6 +6904,7 @@ end getNthAlgorithmItem;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getInitialAlgorithmItemsCount')
@@ -6732,6 +6933,7 @@ end getInitialAlgorithmItemsCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthInitialAlgorithmItem')
@@ -6763,6 +6965,7 @@ end getNthInitialAlgorithmItem;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getEquationCount')
@@ -6791,6 +6994,7 @@ end getEquationCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthEquation')
@@ -6822,6 +7026,7 @@ end getNthEquation;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getInitialEquationCount')
@@ -6850,6 +7055,7 @@ end getInitialEquationCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthInitialEquation')
@@ -6881,6 +7087,7 @@ end getNthInitialEquation;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getEquationItemsCount')
@@ -6909,6 +7116,7 @@ end getEquationItemsCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthEquationItem')
@@ -6940,6 +7148,7 @@ end getNthEquationItem;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getInitialEquationItemsCount')
@@ -6968,6 +7177,7 @@ end getInitialEquationItemsCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthInitialEquationItem')
@@ -6999,6 +7209,7 @@ end getNthInitialEquationItem;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAnnotationCount')
@@ -7027,6 +7238,7 @@ end getAnnotationCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthAnnotationString')
@@ -7058,6 +7270,7 @@ end getNthAnnotationString;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getImportCount')
@@ -7086,6 +7299,7 @@ end getImportCount;
                     outputArguments=[
                         (Component(Integer),'count'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getNthImport')
@@ -7117,6 +7331,7 @@ end getNthImport;
                     outputArguments=[
                         (Component(String)[3],'out'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.iconv')
@@ -7151,6 +7366,7 @@ end iconv;
                     outputArguments=[
                         (Component(String),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getDocumentationAnnotation')
@@ -7179,6 +7395,7 @@ end getDocumentationAnnotation;
                     outputArguments=[
                         (Component(String)[3],'out'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setDocumentationAnnotation')
@@ -7213,6 +7430,7 @@ end setDocumentationAnnotation;
                     outputArguments=[
                         (Component(Boolean),'bool'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getTimeStamp')
@@ -7243,6 +7461,7 @@ end getTimeStamp;
                         (Component(Real),'timeStamp'),
                         (Component(String),'timeStampAsString'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.stringTypeName')
@@ -7271,6 +7490,7 @@ end stringTypeName;
                     outputArguments=[
                         (Component(TypeName),'cl'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.stringVariableName')
@@ -7299,6 +7519,7 @@ end stringVariableName;
                     outputArguments=[
                         (Component(VariableName),'cl'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.typeNameString')
@@ -7327,6 +7548,7 @@ end typeNameString;
                     outputArguments=[
                         (Component(String),'out'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.typeNameStrings')
@@ -7355,6 +7577,7 @@ end typeNameStrings;
                     outputArguments=[
                         (Component(String)[:],'out'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getClassComment')
@@ -7383,6 +7606,7 @@ end getClassComment;
                     outputArguments=[
                         (Component(String),'comment'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.dirname')
@@ -7411,6 +7635,7 @@ end dirname;
                     outputArguments=[
                         (Component(String),'dirname'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.basename')
@@ -7439,6 +7664,7 @@ end basename;
                     outputArguments=[
                         (Component(String),'basename'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getClassRestriction')
@@ -7467,6 +7693,7 @@ end getClassRestriction;
                     outputArguments=[
                         (Component(String),'restriction'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isType')
@@ -7495,6 +7722,7 @@ end isType;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isPackage')
@@ -7523,6 +7751,7 @@ end isPackage;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isClass')
@@ -7551,6 +7780,7 @@ end isClass;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isRecord')
@@ -7579,6 +7809,7 @@ end isRecord;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isBlock')
@@ -7607,6 +7838,7 @@ end isBlock;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isFunction')
@@ -7635,6 +7867,7 @@ end isFunction;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isPartial')
@@ -7663,6 +7896,7 @@ end isPartial;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isModel')
@@ -7691,6 +7925,7 @@ end isModel;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isConnector')
@@ -7719,6 +7954,7 @@ end isConnector;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isOptimization')
@@ -7747,6 +7983,7 @@ end isOptimization;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isEnumeration')
@@ -7775,6 +8012,7 @@ end isEnumeration;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isOperator')
@@ -7803,6 +8041,7 @@ end isOperator;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isOperatorRecord')
@@ -7831,6 +8070,7 @@ end isOperatorRecord;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isOperatorFunction')
@@ -7859,6 +8099,7 @@ end isOperatorFunction;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.isProtectedClass')
@@ -7890,6 +8131,7 @@ end isProtectedClass;
                     outputArguments=[
                         (Component(Boolean),'b'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getBuiltinType')
@@ -7918,6 +8160,7 @@ end getBuiltinType;
                     outputArguments=[
                         (Component(String),'name'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.setInitXmlStartValue')
@@ -7955,6 +8198,7 @@ end setInitXmlStartValue;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.ngspicetoModelica')
@@ -7983,6 +8227,7 @@ end ngspicetoModelica;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getInheritedClasses')
@@ -8011,6 +8256,7 @@ end getInheritedClasses;
                     outputArguments=[
                         (Component(TypeName)[:],'inheritedClasses'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getComponentsTest')
@@ -8055,6 +8301,7 @@ end getComponentsTest;
                     outputArguments=[
                         (Component(OpenModelica.Scripting.getComponentsTest.Component)[:],'components'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
             @modelica_name('OpenModelica.Scripting.getComponentsTest.Component')
@@ -8154,6 +8401,7 @@ end isExperiment;
                     outputArguments=[
                         (Component(Boolean),'res'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getSimulationOptions')
@@ -8205,6 +8453,7 @@ end getSimulationOptions;
                         (Component(Integer),'numberOfIntervals'),
                         (Component(Real),'interval'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAnnotationNamedModifiers')
@@ -8236,6 +8485,7 @@ end getAnnotationNamedModifiers;
                     outputArguments=[
                         (Component(String)[:],'modifiernamelist'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAnnotationModifierValue')
@@ -8270,6 +8520,7 @@ end getAnnotationModifierValue;
                     outputArguments=[
                         (Component(String),'modifiernamevalue'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.classAnnotationExists')
@@ -8301,6 +8552,7 @@ end classAnnotationExists;
                     outputArguments=[
                         (Component(Boolean),'exists'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getBooleanClassAnnotation')
@@ -8332,6 +8584,7 @@ end getBooleanClassAnnotation;
                     outputArguments=[
                         (Component(Boolean),'value'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.extendsFrom')
@@ -8363,6 +8616,7 @@ end extendsFrom;
                     outputArguments=[
                         (Component(Boolean),'res'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.loadModelica3D')
@@ -8391,6 +8645,7 @@ end loadModelica3D;
                     outputArguments=[
                         (Component(Boolean),'status'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.searchClassNames')
@@ -8422,6 +8677,7 @@ end searchClassNames;
                     outputArguments=[
                         (Component(TypeName)[:],'classNames'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getAvailableLibraries')
@@ -8447,6 +8703,7 @@ end getAvailableLibraries;
                     outputArguments=[
                         (Component(String)[:],'libraries'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getUses')
@@ -8475,6 +8732,7 @@ end getUses;
                     outputArguments=[
                         (Component(String)[:,:],'uses'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getDerivedClassModifierNames')
@@ -8503,6 +8761,7 @@ end getDerivedClassModifierNames;
                     outputArguments=[
                         (Component(String)[:],'modifierNames'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getDerivedClassModifierValue')
@@ -8534,6 +8793,7 @@ end getDerivedClassModifierValue;
                     outputArguments=[
                         (Component(String),'modifierValue'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.generateEntryPoint')
@@ -8566,6 +8826,7 @@ end generateEntryPoint;
                     ],
                     outputArguments=[
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.numProcessors')
@@ -8591,6 +8852,7 @@ end numProcessors;
                     outputArguments=[
                         (Component(Integer),'result'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.runScriptParallel')
@@ -8625,6 +8887,7 @@ end runScriptParallel;
                     outputArguments=[
                         (Component(Boolean)[:],'results'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.exit')
@@ -8651,6 +8914,7 @@ end exit;
                     ],
                     outputArguments=[
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.threadWorkFailed')
@@ -8670,6 +8934,7 @@ end exit;
                     ],
                     outputArguments=[
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getMemorySize')
@@ -8695,6 +8960,7 @@ end getMemorySize;
                     outputArguments=[
                         (Component(Real),'memory'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.GC_gcollect_and_unmap')
@@ -8714,6 +8980,7 @@ end getMemorySize;
                     ],
                     outputArguments=[
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.GC_expand_hp')
@@ -8742,6 +9009,7 @@ end GC_expand_hp;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.GC_set_max_heap_size')
@@ -8770,6 +9038,7 @@ end GC_set_max_heap_size;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.GC_PROFSTATS')
@@ -8855,6 +9124,7 @@ end GC_get_prof_stats;
                     outputArguments=[
                         (Component(OpenModelica.Scripting.GC_PROFSTATS),'gcStats'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.checkInterfaceOfPackages')
@@ -8886,6 +9156,7 @@ end checkInterfaceOfPackages;
                     outputArguments=[
                         (Component(Boolean),'success'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.sortStrings')
@@ -8914,6 +9185,7 @@ end sortStrings;
                     outputArguments=[
                         (Component(String)[:],'sorted'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getClassInformation')
@@ -8970,6 +9242,7 @@ end getClassInformation;
                         (Component(Boolean),'state'),
                         (Component(String),'access'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.getTransitions')
@@ -8998,6 +9271,7 @@ end getTransitions;
                     outputArguments=[
                         (Component(String)[:,:],'transitions'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         # @modelica_name('OpenModelica.Scripting.addTransition')
@@ -9050,6 +9324,7 @@ end getTransitions;
         #             outputArguments=[
         #                 (Component(Boolean),'bool'),
         #             ],
+        #             parser=parse_OMCValue,
         #         )
 
         @modelica_name('OpenModelica.Scripting.deleteTransition')
@@ -9099,6 +9374,7 @@ end deleteTransition;
                     outputArguments=[
                         (Component(Boolean),'bool'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         # @modelica_name('OpenModelica.Scripting.updateTransition')
@@ -9166,6 +9442,7 @@ end deleteTransition;
         #             outputArguments=[
         #                 (Component(Boolean),'bool'),
         #             ],
+        #             parser=parse_OMCValue,
         #         )
 
         @modelica_name('OpenModelica.Scripting.getInitialStates')
@@ -9194,6 +9471,7 @@ end getInitialStates;
                     outputArguments=[
                         (Component(String)[:,:],'initialStates'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         # @modelica_name('OpenModelica.Scripting.addInitialState')
@@ -9228,6 +9506,7 @@ end getInitialStates;
         #             outputArguments=[
         #                 (Component(Boolean),'bool'),
         #             ],
+        #             parser=parse_OMCValue,
         #         )
 
         @modelica_name('OpenModelica.Scripting.deleteInitialState')
@@ -9259,6 +9538,7 @@ end deleteInitialState;
                     outputArguments=[
                         (Component(Boolean),'bool'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         # @modelica_name('OpenModelica.Scripting.updateInitialState')
@@ -9293,6 +9573,7 @@ end deleteInitialState;
         #             outputArguments=[
         #                 (Component(Boolean),'bool'),
         #             ],
+        #             parser=parse_OMCValue,
         #         )
 
         @modelica_name('OpenModelica.Scripting.generateScriptingAPI')
@@ -9330,6 +9611,7 @@ end generateScriptingAPI;
                         (Component(String),'qtFile'),
                         (Component(String),'qtHeader'),
                     ],
+                    parser=parse_OMCValue,
                 )
 
         @modelica_name('OpenModelica.Scripting.Experimental')
@@ -9365,6 +9647,7 @@ end relocateFunctions;
                         outputArguments=[
                             (Component(Boolean),'success'),
                         ],
+                        parser=parse_OMCValue,
                     )
 
 
