@@ -14,7 +14,7 @@ with open_session() as session:
 
 If `open_session()` cannot find the executable of omc,  
 One solution is to add destination of omc executable to the environ `PATH`.  
-Another solution is to specify omc executable path by argument of open_session.
+Another solution is to specify omc executable path by argument of `open_session(${path_to_omc})`.
 
 ```
 # open/close different version sessions
