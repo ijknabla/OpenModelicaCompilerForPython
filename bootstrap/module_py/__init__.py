@@ -462,7 +462,7 @@ def generate_import_statements(
         empty_line,
         "from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue",
         empty_line,
-        "from omc4py.session import OMCSessionMinimal"
+        "from omc4py.session import OMCSessionBase__v_1_13 as OMCSessionBase"
     )
 
 
@@ -508,7 +508,7 @@ def generate_session_class(
     code = Code(
         "class OMCSession(",
         CodeWithIndent(
-            "OMCSessionMinimal,",
+            "OMCSessionBase,",
         ),
         "):",
         CodeWithIndent(
