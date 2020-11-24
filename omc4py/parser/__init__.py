@@ -8,6 +8,7 @@ __all__ = (
 )
 
 import arpeggio  # type: ignore
+import functools
 import typing
 
 from omc4py.classes import TypeName
@@ -20,11 +21,25 @@ from . import (
 from .visitor import ComponentTuple
 
 
-with syntax.omc_dialect_context:
-    IDENT_parser = arpeggio.ParserPython(
+def omc_parser_getter(
+    fget: typing.Callable[[], arpeggio.Parser]
+) -> typing.Callable[[], arpeggio.Parser]:
+    @functools.lru_cache(1)
+    @functools.wraps(fget)
+    def wrapped():
+        with syntax.omc_dialect_context:
+            return fget()
+    return wrapped
+
+
+@omc_parser_getter
+def get_IDENT_parser() -> arpeggio.Parser:
+    return arpeggio.ParserPython(
         syntax.IDENT_withEOF,
     )
 
+
+with syntax.omc_dialect_context:
     type_specifier_parser = arpeggio.ParserPython(
         syntax.type_specifier_withEOF,
     )
@@ -47,7 +62,7 @@ def is_valid_identifier(
     ident: str
 ) -> bool:
     try:
-        IDENT_parser.parse(ident)
+        get_IDENT_parser().parse(ident)
         return True
     except arpeggio.NoMatch:
         return False
