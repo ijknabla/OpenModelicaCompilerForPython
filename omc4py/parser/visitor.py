@@ -186,6 +186,24 @@ class OMCValueVisitor(
     pass
 
 
+class OMCValueVisitor__v_1_13(
+    OMCValueVisitor
+):
+    def visit_omc_record_literal(
+        self, node, children
+    ) -> typing.Dict[str, typing.Any]:
+        className, _ = children.type_specifier
+        record = super().visit_omc_record_literal(node, children)
+
+        if (
+            className == TypeName("OpenModelica.Scripting.SourceInfo")
+            and "filename" in record and "fileName" not in record
+        ):
+            record["fileName"] = record.pop("filename")
+
+        return record
+
+
 class ComponentTuple(
     typing.NamedTuple,
 ):
