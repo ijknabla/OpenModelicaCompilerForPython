@@ -4,7 +4,6 @@ OpenModelica compiler (omc) interface for Python>=3.6
 ## What's this?
 
 When omc4py.open_session() is called in with-statement, it returns session instance bound to omc executable.
-
 ```python3
 from omc4py import open_session
 
@@ -32,6 +31,8 @@ with open_session(
     ...
 ```
 
+- - -
+
 All methods of session are function in `OpenModelica.Scripting.*`. If you want to know accurate signature, read `help(session)` or [UserGuide for OpenModelica Scripting API](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
 
 ```python3
@@ -57,9 +58,9 @@ with open_session() as session:
     print(session.OpenModelica.Scripting.Internal.stat(__file__))
 ```
 
+- - -
+
 All types of arguments for function call checked by session.
-
-
 ```python3
 # "sortString" only take one sequence of string as argument
 from omc4py import open_session
