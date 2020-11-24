@@ -156,6 +156,12 @@ class TypeName(
     @property
     def is_absolute(self) -> bool: return str(self.parts[0]) == "."
 
+    def as_absolute(self):
+        if self.is_absolute:
+            return self
+        else:
+            return TypeName(".", self)
+
     @property
     def last_identifier(
         self,
