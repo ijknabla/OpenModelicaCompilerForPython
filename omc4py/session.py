@@ -138,3 +138,19 @@ class OMCSessionMinimal(
         )
         self.__omc_check__()
         return str(__result)
+
+    def getVersionTuple(
+        self,
+    ) -> typing.Tuple[int, int, int]:
+        versionMatch = re.search(
+            r"v(?P<major>\d+)\.(?P<minor>\d+)\.(?P<build>\d+)",
+            self.getVersion(),
+        )
+        if versionMatch is None:
+            raise ValueError("Can't parse version string")
+
+        return (
+            int(versionMatch.group("major")),
+            int(versionMatch.group("minor")),
+            int(versionMatch.group("build")),
+        )
