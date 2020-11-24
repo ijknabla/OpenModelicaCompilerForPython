@@ -7,10 +7,10 @@ __all__ = (
 import functools
 from lxml import etree  # type: ignore
 import pkg_resources
-import tqdm
+import tqdm  # type: ignore
 import typing
 
-from omc4py.types import (
+from omc4py.classes import (
     TypeName,
 )
 
@@ -30,13 +30,21 @@ def generate_omc_interface_xml(
 
     root = generate_root_element(session)
 
-    classNames = session.getClassNames(
-        TypeName("OpenModelica.Scripting"),
-        recursive=True,
-    )
+    OpenModelica = TypeName("OpenModelica")
 
-    for i, className in enumerate(tqdm.tqdm(classNames)):
-        assert(i == 0 or className.parent in classNames[:i])
+    classNames = [
+        OpenModelica,
+        *session.getClassNames(
+            OpenModelica/"Scripting",
+            recursive=True
+        ),
+    ]
+
+    for className in tqdm.tqdm(classNames):
+        assert(
+            className == OpenModelica
+            or root.xpath(f'//*[@id="{className.parent!s}"]')
+        )
         generate_class_element(session, root, className)
 
     return etree.ElementTree(root)

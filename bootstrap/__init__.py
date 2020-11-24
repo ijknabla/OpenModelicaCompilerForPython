@@ -2,9 +2,8 @@
 import argparse
 import contextlib
 import enum
-import inquirer
+import inquirer  # type: ignore
 from lxml import etree  # type: ignore
-import os
 from pathlib import Path
 import shutil
 import sys
@@ -14,7 +13,7 @@ import omc4py.compiler
 
 from . import (
     interface_xml,
-    generate,
+    module_py,
     session,
 )
 
@@ -40,7 +39,7 @@ def generate_omc_interface(
     outputFormat: OutputFormat,
 ):
     if inputType is InputType.executable:
-        with omc4py.compiler.InteractiveOMC.open(inputPath) as omc:
+        with omc4py.compiler.OMCInteractive.open(inputPath) as omc:
             omc_interface_xml = interface_xml.generate_omc_interface_xml(
                 session.OMCSessionBootstrap(omc)
             )
@@ -50,7 +49,7 @@ def generate_omc_interface(
     interface_xml.validate_omc_interface_xml(omc_interface_xml)
 
     if outputFormat is OutputFormat.module:
-        module_code = generate.create_module(omc_interface_xml)
+        module_code = module_py.generate_module_py(omc_interface_xml)
         module_code.bdump(outputFile)
     else:  # outputFormat is OutputFormat.xml:
         omc_interface_xml.write(

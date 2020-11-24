@@ -13,7 +13,7 @@ from omc4py.parser import (
     parse_components,
     stored_definition_parser,
 )
-from omc4py.types import (
+from omc4py.classes import (
     TypeName,
     VariableName,
 )

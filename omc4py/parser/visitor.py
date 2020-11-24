@@ -5,8 +5,7 @@ import numpy  # type: ignore
 import operator
 import typing
 
-from omc4py.types import (
-    Component,
+from omc4py.classes import (
     Integer,
     Real,
     TypeName,
@@ -187,6 +186,23 @@ class OMCValueVisitor(
     pass
 
 
+class ComponentTuple(
+    typing.NamedTuple,
+):
+    className: TypeName
+    name: VariableName
+    comment: str
+    protected: str
+    isFinal: bool
+    isFlow: bool
+    isStream: bool
+    isReplaceable: bool
+    variability: str
+    innerOuter: str
+    inputOutput: str
+    dimensions: typing.Tuple[str, ...]
+
+
 class ComponentArrayVisitor(
     BooleanVisitor,
     StringVisitor,
@@ -211,7 +227,7 @@ class ComponentArrayVisitor(
         )
 
     def visit_omc_component_list(self, node, children):
-        return children.omc_component
+        return list(children.omc_component)
 
     def visit_omc_component(self, node, children):
         className, = children.type_specifier
@@ -222,7 +238,7 @@ class ComponentArrayVisitor(
         isFinal, isFlow, isStream, isReplaceable, = children.boolean
         dimensions, = children.omc_dimensions
 
-        return Component(
+        return ComponentTuple(
             className=className,
             name=name,
             comment=comment,

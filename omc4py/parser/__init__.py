@@ -1,5 +1,6 @@
 
 __all__ = (
+    "ComponentTuple",
     "is_valid_identifier",
     "parse_OMCValue",
     "parse_typeName",
@@ -7,13 +8,16 @@ __all__ = (
 )
 
 import arpeggio  # type: ignore
+import typing
 
-from omc4py.types import TypeName
+from omc4py.classes import TypeName
 
 from . import (
     syntax,
     visitor,
 )
+
+from .visitor import ComponentTuple
 
 
 with syntax.omc_dialect_context:
@@ -65,7 +69,7 @@ def parse_typeName(
 
 def parse_components(
     literal: str
-):
+) -> typing.List[ComponentTuple]:
     return arpeggio.visit_parse_tree(
         omc_record_array_parser.parse(literal),
         visitor.ComponentArrayVisitor(source=literal),

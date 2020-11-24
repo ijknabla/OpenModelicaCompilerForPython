@@ -1,9 +1,9 @@
 
 import atexit
 import logging
+import numpy  # type: ignore
 import os
 from pathlib import Path
-import re
 import shutil
 import subprocess
 import tempfile
@@ -13,19 +13,13 @@ import uuid
 import zmq  # type: ignore
 
 from . import (
-    abstract,
-    exception,
+    classes,
+    parser,
     string,
 )
 
 
 logger = logging.getLogger(__name__)
-
-
-omc_error_pattern = re.compile(
-    r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
-)
-
 
 StrOrPathLike = typing.Union[str, os.PathLike]
 
@@ -67,15 +61,125 @@ def find_openmodelica_zmq_port_filepath(
     return candidates[0]
 
 
-class InteractiveOMC(
-    abstract.AbstractInteractiveOMC,
+def cast_value(
+    component: classes.Component,
+    name: str,
+    value: typing.Any,
+    required: classes.REQUIRED_or_OPTIONAL = "required",
+) -> typing.Any:
+    if value is None:
+        if required == "required":
+            raise ValueError(
+                f"{name!r} must not be None"
+            )
+        if required == "optional":
+            return None
+        else:
+            raise ValueError(
+                f"required must be (required|optional) got {required!r}"
+            )
+
+    if not component.dimensions:  # scalar
+        class_restrictions = get_class_restrictions(component)
+        if class_restrictions:
+            if not isinstance(value, class_restrictions):
+                raise TypeError(
+                    f"{name!r} must be an instance of {class_restrictions}"
+                    f", got {value!r}: {type(value)!r}"
+                )
+        return component.class_(value)
+
+    else:  # array
+        return cast_array_value(
+            component,
+            name,
+            value,
+        )
+
+
+def cast_array_value(
+    component: classes.Component,
+    name: str,
+    value: typing.Any,
+) -> numpy.ndarray:
+    object_array = numpy.array(value, dtype=object)
+
+    same_n_dimensions = (len(component.dimensions) == object_array.ndim)
+    dimensions_are_correct = [
+        True if expected is None else expected == actual
+        for expected, actual in zip(component.dimensions, object_array.shape)
+    ]
+
+    if not(same_n_dimensions and all(dimensions_are_correct)):
+        raise ValueError(
+            "Shape of the array "
+            f"must be {dimensions_to_str(component.dimensions)}, "
+            f"got {dimensions_to_str(object_array.shape)}"
+        )
+
+    class_restrictions = get_class_restrictions(component)
+    if class_restrictions:
+        isinstance_vectorized = numpy.vectorize(
+            lambda cls: isinstance(cls, class_restrictions),
+            otypes=[numpy.dtype(bool)],
+        )
+        isinstance_mask = isinstance_vectorized(
+            object_array
+        )
+        if not numpy.all(isinstance_mask):
+            raise TypeError(
+                f"All items of the array {name!r} "
+                f"must be instances of {class_restrictions}"
+            )
+
+    class_vectorized = numpy.vectorize(
+        component.class_,
+        otypes=[numpy.dtype(component.class_)]
+    )
+    return class_vectorized(object_array)
+
+
+def dimensions_to_str(
+    sizes: classes.Dimensions,
+) -> str:
+    return (
+        "{"
+        + ", ".join(
+            str(size) if size is not None else ":"
+            for size in sizes
+        )
+        + "}"
+    )
+
+
+def get_class_restrictions(
+    component: classes.Component,
+) -> typing.Tuple[typing.Type, ...]:
+    if component.class_ is classes.Real:
+        return (classes.Real, float)
+    elif component.class_ is classes.Integer:
+        return (classes.Integer, int)
+    elif component.class_ is classes.Boolean:
+        return (classes.Boolean, bool)
+    elif component.class_ is classes.String:
+        return (classes.String, str)
+    elif component.class_ is classes.TypeName:
+        return (classes.TypeName, str)
+    elif component.class_ is classes.VariableName:
+        return (classes.VariableName, str)
+    else:
+        return ()
+
+
+class OMCInteractive(
+    classes.AbstractOMCInteractive,
 ):
     __slots__ = (
         "__socket",
         "__process",
     )
 
-    __instances: typing_extensions.Final[typing.Set["InteractiveOMC"]] \
+    __instances: typing_extensions.Final[typing.Set["OMCInteractive"]] \
         = set()
 
     __socket: zmq.Socket
@@ -104,7 +208,7 @@ class InteractiveOMC(
     def open(
         cls,
         omc_command: typing.Optional[StrOrPathLike] = None,
-    ) -> "InteractiveOMC":
+    ) -> "OMCInteractive":
         if omc_command is None:
             omc_command = "omc"
 
@@ -219,30 +323,53 @@ class InteractiveOMC(
         )
         return result
 
-    def find_error(
-        self
-    ) -> typing.Optional[exception.OMCException]:
-        error_message = string.unquote_modelica_string(
-            self.evaluate("getErrorString()").rstrip()
-        )
-        if not error_message or error_message.isspace():
-            return None
+    def call_function(
+        self,
+        funcName: str,
+        inputArguments: typing.Sequence[classes.InputArgument],
+        outputArguments: typing.Sequence[classes.OutputArgument],
+    ) -> typing.Any:
+        def arguments() -> typing.Iterator[str]:
+            to_keyword_argument = False
+            for component, name, value, required in inputArguments:
+                to_keyword_argument |= (required == "optional")
 
-        matched = omc_error_pattern.match(
-            error_message
-        )
-        if not matched:
-            raise exception.OMCRuntimeError(
-                f"Unexpected error message format: {error_message!r}"
+                value = cast_value(component, name, value, required)
+                if value is None:
+                    continue
+
+                literal = string.to_omc_literal(value)
+                if to_keyword_argument:
+                    yield f"{name!s} = {literal!s}"
+                else:
+                    yield f"{literal!s}"
+
+        result_literal = self.evaluate(
+            "{funcName}({argument_list})".format(
+                funcName=funcName,
+                argument_list=", ".join(arguments())
             )
-        # info = matched.group("info")
-        kind = matched.group("kind")
-        # message = matched.group("message")
+        )
 
-        if kind == "Error":
-            return exception.OMCError(error_message)
+        if not outputArguments:
+            if result_literal and not result_literal.isspace():
+                raise ValueError(
+                    f"Unexpected result, got {result_literal!r}"
+                )
+            return
+
+        result_value = parser.parse_OMCValue(result_literal)
+
+        if len(outputArguments) == 1:
+            (component, name,), = outputArguments
+            return cast_value(component, name, result_value)
         else:
-            return exception.OMCWarning(error_message)
+            return tuple(
+                cast_value(component, name, value)
+                for (component, name), value in zip(
+                    outputArguments, result_value
+                )
+            )
 
 
-atexit.register(InteractiveOMC.close_all)
+atexit.register(OMCInteractive.close_all)

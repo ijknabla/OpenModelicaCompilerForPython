@@ -31,3 +31,20 @@ __license__ = '''
  *
  */
 '''
+
+from contextlib import contextmanager
+import typing
+
+from . import (
+    classes,
+    compiler,
+)
+
+
+@contextmanager
+def open_session(
+    omc_command: typing.Optional[compiler.StrOrPathLike] = None,
+) -> typing.Iterator[classes.AbstractOMCSession]:
+    with compiler.OMCInteractive.open(omc_command) as omc:
+        from . import v_1_13
+        yield v_1_13.OMCSession(omc)
