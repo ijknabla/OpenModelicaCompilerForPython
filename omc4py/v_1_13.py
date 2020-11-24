@@ -21,7 +21,7 @@ from omc4py.classes import (
 
 from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
 
-from omc4py.session import OMCSessionMinimal
+from omc4py.session import OMCSessionBase__v_1_13 as OMCSessionBase
 
 
 @modelica_name('OpenModelica')
@@ -9652,7 +9652,7 @@ end relocateFunctions;
 
 
 class OMCSession(
-    OMCSessionMinimal,
+    OMCSessionBase,
 ):
     OpenModelica = OpenModelica
     CheckSettingsResult = OpenModelica.Scripting.CheckSettingsResult
