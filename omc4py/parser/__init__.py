@@ -60,13 +60,6 @@ def get_omc_value_parser() -> arpeggio.Parser:
     )
 
 
-with syntax.omc_dialect_context:
-    stored_definition_parser = arpeggio.ParserPython(
-        syntax.stored_definition_withEOF,
-        syntax.std.CPP_STYLE_COMMENT,
-    )
-
-
 def is_valid_identifier(
     ident: str
 ) -> bool:
