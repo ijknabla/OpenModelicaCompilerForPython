@@ -34,6 +34,34 @@ class OMCSessionBase(
         return __result
 
 
+class OMCSessionBase__v_1_13(
+    OMCSessionBase,
+):
+    def __omc_check__(
+        self,
+    ):
+        for messageString in self.getMessagesStringInternal(unique=True):
+            message = str(messageString.message)
+            kind = messageString.kind.name
+            py_message = f"{kind!s}: {message!r}"
+            level = messageString.level.name
+
+            if level == "notification":
+                warnings.warn(
+                    exception.OMCNotification(py_message)
+                )
+            elif level == "warning":
+                warnings.warn(
+                    exception.OMCWarning(py_message)
+                )
+            elif level == "error":
+                raise exception.OMCError(py_message)
+            else:
+                raise exception.OMCRuntimeError(
+                    f"Unexpected message level, got {level}"
+                )
+
+
 omc_error_pattern = re.compile(
     r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
 )
