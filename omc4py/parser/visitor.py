@@ -156,7 +156,7 @@ class OMCRecordVisitor(
         node,
         children,
     ) -> typing.Tuple[str, typing.Any]:
-        key = children.IDENT[0]
+        key = str(children.IDENT[0])
         value = children.omc_value[0]
         return key, value
 
