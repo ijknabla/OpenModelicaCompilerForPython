@@ -398,7 +398,7 @@ class ModelicaFunction(
                         "("
                         f"{get_component_literal(argument)},"
                         f'{argument.attrib["name"]!r}'
-                        ")"
+                        "),"
                         for argument in self.element.xpath(
                             './components/arguments/*[@inputOutput="output"]'
                         )
