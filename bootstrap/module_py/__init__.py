@@ -405,6 +405,7 @@ class ModelicaFunction(
                     )
                 ),
                 "],",
+                "parser=parse_OMCValue,",
             ),
             ")",
         ])
@@ -458,6 +459,8 @@ def generate_import_statements(
             "modelica_name,",
         ),
         ")",
+        empty_line,
+        "from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue",
         empty_line,
         "from omc4py.session import OMCSessionMinimal"
     )
