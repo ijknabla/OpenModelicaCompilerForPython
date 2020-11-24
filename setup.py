@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="OpenModelicaCompiler",
-    version="0.0.0a1",
+    version="0.0.0a2",
     description="OpenModelica compiler (omc) interface for Python>=3.6",
     long_description=(Path(__file__).parent/"README.md").read_text(),
     long_description_content_type="text/markdown",
