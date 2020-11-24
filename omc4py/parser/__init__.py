@@ -39,22 +39,31 @@ def get_IDENT_parser() -> arpeggio.Parser:
     )
 
 
-with syntax.omc_dialect_context:
-    type_specifier_parser = arpeggio.ParserPython(
+@omc_parser_getter
+def get_type_specifier_parser() -> arpeggio.Parser:
+    return arpeggio.ParserPython(
         syntax.type_specifier_withEOF,
     )
 
-    stored_definition_parser = arpeggio.ParserPython(
-        syntax.stored_definition_withEOF,
-        syntax.std.CPP_STYLE_COMMENT,
-    )
 
-    omc_record_array_parser = arpeggio.ParserPython(
+@omc_parser_getter
+def get_omc_record_array_parser() -> arpeggio.Parser:
+    return arpeggio.ParserPython(
         syntax.omc_component_array_withEOF,
     )
 
-    omc_value_parser = arpeggio.ParserPython(
+
+@omc_parser_getter
+def get_omc_value_parser() -> arpeggio.Parser:
+    return arpeggio.ParserPython(
         syntax.omc_value_withEOF,
+    )
+
+
+with syntax.omc_dialect_context:
+    stored_definition_parser = arpeggio.ParserPython(
+        syntax.stored_definition_withEOF,
+        syntax.std.CPP_STYLE_COMMENT,
     )
 
 
@@ -73,7 +82,7 @@ def parse_typeName(
 ) -> TypeName:
     try:
         return arpeggio.visit_parse_tree(
-            type_specifier_parser.parse(
+            get_type_specifier_parser().parse(
                 type_specifier,
             ),
             visitor.TypeSpecifierVisitor()
@@ -86,7 +95,7 @@ def parse_components(
     literal: str
 ) -> typing.List[ComponentTuple]:
     return arpeggio.visit_parse_tree(
-        omc_record_array_parser.parse(literal),
+        get_omc_record_array_parser().parse(literal),
         visitor.ComponentArrayVisitor(source=literal),
     )
 
@@ -95,6 +104,6 @@ def parse_OMCValue(
     literal: str
 ):
     return arpeggio.visit_parse_tree(
-        omc_value_parser.parse(literal),
+        get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor()
     )
