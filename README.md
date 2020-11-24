@@ -1,5 +1,5 @@
 # OpenModelicaCompilerForPython
-OpenModelica compiler (omc) interface for Python
+OpenModelica compiler (omc) interface for Python>=3.6
 
 ## What's this?
 

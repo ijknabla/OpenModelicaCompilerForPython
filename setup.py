@@ -2,10 +2,16 @@
 
 from setuptools import setup, find_packages
 
+
 setup(
     name="OpenModelicaCompiler",
     version="0.0.0a1",
-    description="OpenModelica compiler (omc)  interface for Python3.x based on  OMPython",
+    description="OpenModelica compiler (omc) interface for Python>=3.6",
+    long_description="""
+OpenModelica compiler (omc) interface for Python>=3.6
+
+[Document avaliable in github](https://github.com/ijknabla/OpenModelicaCompilerForPython)
+""",
     author="ijknabla",
     author_email="ijknabla@gmail.com",
     license="OSMC-PL 1.2",
