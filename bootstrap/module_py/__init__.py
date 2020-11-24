@@ -356,8 +356,8 @@ class ModelicaFunction(
             ]
         )
 
-        arguments_code.append("__cls,")
-        arguments_code.append("__session: AbstractOMCSession,")
+        arguments_code.append("_cls_,")
+        arguments_code.append("_session_: AbstractOMCSession,")
         for argument in sorted(
             inputArguments,
             key=lambda argument: 0 if argument.required == "required" else 1
@@ -376,7 +376,7 @@ class ModelicaFunction(
             funcName = str(self.className)
 
         execution_code.extend([
-            "return __session.__omc__.call_function(",
+            "return _session_.__omc__.call_function(",
             CodeWithIndent(
                 f"funcName={funcName!r},",
                 "inputArguments=[",
