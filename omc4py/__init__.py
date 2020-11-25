@@ -63,20 +63,41 @@ def open_session(
             yield v_1_16.OMCSession(omc)
 
 
-def open_session2(
-    omc_command: typing.Optional[compiler.StrOrPathLike] = None,
-) -> classes.AbstractOMCSession:
-    omc = compiler.OMCInteractive.open(omc_command)
+def __select_session_type(
+    omc: classes.AbstractOMCInteractive,
+) -> typing.Type[classes.AbstractOMCSession]:
     version = session.OMCSessionMinimal(omc).getVersionTuple()
     if version[:2] <= (1, 13):
         from . import v_1_13
-        return v_1_13.OMCSession(omc)
+        return v_1_13.OMCSession
     elif version[:2] == (1, 14):
         from . import v_1_14
-        return v_1_14.OMCSession(omc)
+        return v_1_14.OMCSession
     elif version[:2] == (1, 15):
         from . import v_1_15
-        return v_1_15.OMCSession(omc)
+        return v_1_15.OMCSession
     else:  # version[:2] >= (1, 16):
         from . import v_1_16
-        return v_1_16.OMCSession(omc)
+        return v_1_16.OMCSession
+
+
+def open_session2(
+    omc_command: typing.Optional[compiler.StrOrPathLike] = None,
+    *,
+    session_type: typing.Optional[
+        typing.Type[classes.AbstractOMCSession]
+    ] = None,
+) -> classes.AbstractOMCSession:
+    omc = compiler.OMCInteractive.open(omc_command)
+
+    if session_type is None:
+        session_type = __select_session_type(omc)
+    else:
+        if not issubclass(session_type, classes.AbstractOMCSession):
+            raise TypeError(
+                "session_type must be "
+                f"subclass of {classes.AbstractOMCSession}, "
+                f"got {session_type}"
+            )
+
+    return session_type(omc)
