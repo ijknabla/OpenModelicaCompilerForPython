@@ -14,6 +14,7 @@ import zmq  # type: ignore
 
 from . import (
     classes,
+    exception,
     string,
 )
 
@@ -248,7 +249,10 @@ class OMCInteractive(
                 )
             return
 
-        result_value = parser(result_literal)
+        try:
+            result_value = parser(result_literal)
+        except Exception:
+            raise exception.OMCError(result_literal)
 
         if len(outputArguments) == 1:
             (component, name,), = outputArguments
