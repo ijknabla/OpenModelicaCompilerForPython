@@ -61,3 +61,22 @@ def open_session(
         elif version[:2] >= (1, 16):
             from . import v_1_16
             yield v_1_16.OMCSession(omc)
+
+
+def open_session2(
+    omc_command: typing.Optional[compiler.StrOrPathLike] = None,
+) -> classes.AbstractOMCSession:
+    omc = compiler.OMCInteractive.open(omc_command)
+    version = session.OMCSessionMinimal(omc).getVersionTuple()
+    if version[:2] <= (1, 13):
+        from . import v_1_13
+        return v_1_13.OMCSession(omc)
+    elif version[:2] == (1, 14):
+        from . import v_1_14
+        return v_1_14.OMCSession(omc)
+    elif version[:2] == (1, 15):
+        from . import v_1_15
+        return v_1_15.OMCSession(omc)
+    else:  # version[:2] >= (1, 16):
+        from . import v_1_16
+        return v_1_16.OMCSession(omc)
