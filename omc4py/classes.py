@@ -156,7 +156,7 @@ class TypeName(
         return self.__parts
 
     @property
-    def is_absolute(self) -> bool: return str(self.parts[0]) == "."
+    def is_absolute(self) -> bool: return bool(self.parts) and self.parts[0] == "."
 
     def as_absolute(self):
         if self.is_absolute:
@@ -258,59 +258,6 @@ def split_dict(
         else:
             no[k] = v
     return yes, no
-
-
-class Component(
-):
-    class_: typing.Type
-    dimensions: Dimensions
-
-    def __init__(
-        self,
-        class_: typing.Type,
-        dimensions: typing.Optional[Dimensions] = None,
-    ):
-        self.class_ = class_
-        if dimensions is None:
-            self.dimensions = ()
-        else:
-            self.dimensions = dimensions
-
-    def __getitem__(
-        self, index,
-    ) -> "Component":
-        if not isinstance(index, tuple):
-            return self[(index,)]
-
-        def dimensions_generator(
-        ) -> typing.Iterator[typing.Optional[int]]:
-            for idim, dimension in enumerate(index):
-                if isinstance(dimension, int):
-                    if dimension < 0:
-                        raise ValueError(
-                            f'dimension #{idim}: int must be positive, '
-                            f'got {dimension!r}'
-                        )
-                    else:
-                        yield dimension
-                elif isinstance(dimension, slice):
-                    start = dimension.start
-                    stop = dimension.stop
-                    step = dimension.step
-                    if not (start is None and stop is None and step is None):
-                        raise ValueError(
-                            f"dimension #{idim}: slice must be ':', "
-                            f'got {start!s}:{stop!s}:{step!s}'
-                        )
-                    else:
-                        yield None
-                else:
-                    raise TypeError(
-                        f"dimension #{idim} must be int or slice, "
-                        f"got {dimension!r}: {type(dimension)}"
-                    )
-
-        return Component(self.class_, tuple(dimensions_generator()))
 
 
 class AbstractOMCInteractive(
@@ -564,9 +511,8 @@ class ModelicaRecordMeta(
                 )
 
             for key, value in self.__dict.items():
-                self.__dict[key] = compiler.cast_value(
-                    elements[key], key, value
-                )
+                component = typing.cast(Component, elements[key])
+                self.__dict[key] = component.cast(key, value)
 
             return self
 
@@ -655,6 +601,156 @@ class ModelicaFunctionMeta(
         cls.__bound_class__ = bound_metaclass
 
         return cls
+
+
+# declaration class for modelica-like class definition
+
+class Component(
+):
+    class_: typing.Type
+    dimensions: Dimensions
+
+    def __init__(
+        self,
+        class_: typing.Type,
+        dimensions: typing.Optional[Dimensions] = None,
+    ):
+        self.class_ = class_
+        if dimensions is None:
+            self.dimensions = ()
+        else:
+            self.dimensions = dimensions
+
+    def __getitem__(
+        self, index,
+    ) -> "Component":
+        if not isinstance(index, tuple):
+            return self[(index,)]
+
+        def dimensions_generator(
+        ) -> typing.Iterator[typing.Optional[int]]:
+            for idim, dimension in enumerate(index):
+                if isinstance(dimension, int):
+                    if dimension < 0:
+                        raise ValueError(
+                            f'dimension #{idim}: int must be positive, '
+                            f'got {dimension!r}'
+                        )
+                    else:
+                        yield dimension
+                elif isinstance(dimension, slice):
+                    start = dimension.start
+                    stop = dimension.stop
+                    step = dimension.step
+                    if not (start is None and stop is None and step is None):
+                        raise ValueError(
+                            f"dimension #{idim}: slice must be ':', "
+                            f'got {start!s}:{stop!s}:{step!s}'
+                        )
+                    else:
+                        yield None
+                else:
+                    raise TypeError(
+                        f"dimension #{idim} must be int or slice, "
+                        f"got {dimension!r}: {type(dimension)}"
+                    )
+
+        return Component(self.class_, tuple(dimensions_generator()))
+
+    @property
+    def ndim(self) -> int: return len(self.dimensions)
+
+    @property
+    def is_scalar(self) -> bool: return self.ndim == 0
+
+    @property
+    def is_array(self) -> bool: return not self.is_scalar
+
+    @property
+    def class_restrictions(
+        self,
+    ) -> typing.Tuple[typing.Type, ...]:
+        if self.class_ is Real:
+            return tuple({Real, float})
+        elif self.class_ is Integer:
+            return tuple({Integer, int})
+        elif self.class_ is Boolean:
+            return tuple({Boolean, bool})
+        elif self.class_ is String:
+            return tuple({String, str})
+        elif self.class_ is TypeName:
+            return tuple({TypeName, str})
+        elif self.class_ is VariableName:
+            return tuple({VariableName, str})
+        else:
+            return ()
+
+    @staticmethod
+    def dimensions_to_str(
+        dimensions: Dimensions,
+    ) -> str:
+        if not dimensions:
+            return "<scalar>"
+        else:
+            return "[{}]".format(
+                ",".join(str(d) if d is not None else ':' for d in dimensions)
+            )
+
+    def cast(
+        self,
+        name: str,
+        value: typing.Any,
+        required: REQUIRED_or_OPTIONAL = "required",
+    ) -> typing.Any:
+        if value is None:
+            if required == "required":
+                raise ValueError(
+                    f"required value {name!r} is None"
+                )
+            if required == "optional":
+                return None
+            else:
+                raise ValueError(
+                    f"required must be (required|optional) got {required!r}"
+                )
+
+        value_array = numpy.array(value, dtype=object)
+
+        same_n_dimensions = (self.ndim == value_array.ndim)
+        dimensions_are_correct = [
+            True if expected is None else expected == actual
+            for expected, actual in zip(self.dimensions, value_array.shape)
+        ]
+
+        if not(same_n_dimensions and all(dimensions_are_correct)):
+            raise ValueError(
+                f"Dimensions of {name!r} "
+                f"must be {self.dimensions_to_str(self.dimensions)}, "
+                f"got {self.dimensions_to_str(value_array.shape)}"
+            )
+
+        if self.class_restrictions:
+            isinstance_vectorized = numpy.vectorize(
+                lambda cls: isinstance(cls, self.class_restrictions),
+                otypes=[numpy.dtype(bool)],
+            )
+            isinstance_mask = isinstance_vectorized(
+                value_array
+            )
+            if not numpy.all(isinstance_mask):
+                raise TypeError(
+                    f"{name!r} or all items of {name!r}"
+                    f"must be instances of {self.class_restrictions}"
+                )
+
+        if self.is_scalar:
+            return self.class_(value)
+        else:
+            class_vectorized = numpy.vectorize(
+                self.class_,
+                otypes=[numpy.dtype(self.class_)]
+            )
+            return class_vectorized(value_array)
 
 
 # decorators for modelica-like class definition
@@ -827,5 +923,4 @@ class ModelicaFunction(
     ...
 
 
-from . import compiler  # noqa: E402
 from . import parser  # noqa: E402
