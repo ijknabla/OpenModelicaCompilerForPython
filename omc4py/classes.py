@@ -512,7 +512,7 @@ class ModelicaRecordMeta(
 
             for key, value in self.__dict.items():
                 component = typing.cast(Component, elements[key])
-                self.__dict[key] = component.cast_value(key, value)
+                self.__dict[key] = component.cast(key, value)
 
             return self
 
@@ -696,7 +696,7 @@ class Component(
                 ",".join(str(d) if d is not None else ':' for d in dimensions)
             )
 
-    def cast_value(
+    def cast(
         self,
         name: str,
         value: typing.Any,

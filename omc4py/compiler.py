@@ -224,7 +224,7 @@ class OMCInteractive(
             for component, name, value, required in inputArguments:
                 to_keyword_argument |= (required == "optional")
 
-                value = component.cast_value(name, value, required)
+                value = component.cast(name, value, required)
                 if value is None:
                     continue
 
@@ -252,10 +252,10 @@ class OMCInteractive(
 
         if len(outputArguments) == 1:
             (component, name,), = outputArguments
-            return component.cast_value(name, result_value)
+            return component.cast(name, result_value)
         else:
             return tuple(
-                component.cast_value(name, value)
+                component.cast(name, value)
                 for (component, name), value in zip(
                     outputArguments, result_value
                 )
