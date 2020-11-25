@@ -312,6 +312,25 @@ class Component(
 
         return Component(self.class_, tuple(dimensions_generator()))
 
+    @property
+    def class_restrictions(
+        self,
+    ) -> typing.Tuple[typing.Type, ...]:
+        if self.class_ is Real:
+            return tuple({Real, float})
+        elif self.class_ is Integer:
+            return tuple({Integer, int})
+        elif self.class_ is Boolean:
+            return tuple({Boolean, bool})
+        elif self.class_ is String:
+            return tuple({String, str})
+        elif self.class_ is TypeName:
+            return tuple({TypeName, str})
+        elif self.class_ is VariableName:
+            return tuple({VariableName, str})
+        else:
+            return ()
+
 
 class AbstractOMCInteractive(
     abc.ABC

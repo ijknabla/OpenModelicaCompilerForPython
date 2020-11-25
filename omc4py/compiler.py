@@ -79,7 +79,7 @@ def cast_value(
             )
 
     if not component.dimensions:  # scalar
-        class_restrictions = get_class_restrictions(component)
+        class_restrictions = component.class_restrictions
         if class_restrictions:
             if not isinstance(value, class_restrictions):
                 raise TypeError(
@@ -116,7 +116,7 @@ def cast_array_value(
             f"got {dimensions_to_str(object_array.shape)}"
         )
 
-    class_restrictions = get_class_restrictions(component)
+    class_restrictions = component.class_restrictions
     if class_restrictions:
         isinstance_vectorized = numpy.vectorize(
             lambda cls: isinstance(cls, class_restrictions),
@@ -149,25 +149,6 @@ def dimensions_to_str(
         )
         + "}"
     )
-
-
-def get_class_restrictions(
-    component: classes.Component,
-) -> typing.Tuple[typing.Type, ...]:
-    if component.class_ is classes.Real:
-        return (classes.Real, float)
-    elif component.class_ is classes.Integer:
-        return (classes.Integer, int)
-    elif component.class_ is classes.Boolean:
-        return (classes.Boolean, bool)
-    elif component.class_ is classes.String:
-        return (classes.String, str)
-    elif component.class_ is classes.TypeName:
-        return (classes.TypeName, str)
-    elif component.class_ is classes.VariableName:
-        return (classes.VariableName, str)
-    else:
-        return ()
 
 
 class OMCInteractive(
