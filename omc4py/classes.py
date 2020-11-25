@@ -260,172 +260,6 @@ def split_dict(
     return yes, no
 
 
-class Component(
-):
-    class_: typing.Type
-    dimensions: Dimensions
-
-    def __init__(
-        self,
-        class_: typing.Type,
-        dimensions: typing.Optional[Dimensions] = None,
-    ):
-        self.class_ = class_
-        if dimensions is None:
-            self.dimensions = ()
-        else:
-            self.dimensions = dimensions
-
-    def __getitem__(
-        self, index,
-    ) -> "Component":
-        if not isinstance(index, tuple):
-            return self[(index,)]
-
-        def dimensions_generator(
-        ) -> typing.Iterator[typing.Optional[int]]:
-            for idim, dimension in enumerate(index):
-                if isinstance(dimension, int):
-                    if dimension < 0:
-                        raise ValueError(
-                            f'dimension #{idim}: int must be positive, '
-                            f'got {dimension!r}'
-                        )
-                    else:
-                        yield dimension
-                elif isinstance(dimension, slice):
-                    start = dimension.start
-                    stop = dimension.stop
-                    step = dimension.step
-                    if not (start is None and stop is None and step is None):
-                        raise ValueError(
-                            f"dimension #{idim}: slice must be ':', "
-                            f'got {start!s}:{stop!s}:{step!s}'
-                        )
-                    else:
-                        yield None
-                else:
-                    raise TypeError(
-                        f"dimension #{idim} must be int or slice, "
-                        f"got {dimension!r}: {type(dimension)}"
-                    )
-
-        return Component(self.class_, tuple(dimensions_generator()))
-
-    @property
-    def is_array(self) -> bool: return bool(self.dimensions)
-
-    @property
-    def is_scalar(self) -> bool: return not self.is_array
-
-    @property
-    def class_restrictions(
-        self,
-    ) -> typing.Tuple[typing.Type, ...]:
-        if self.class_ is Real:
-            return tuple({Real, float})
-        elif self.class_ is Integer:
-            return tuple({Integer, int})
-        elif self.class_ is Boolean:
-            return tuple({Boolean, bool})
-        elif self.class_ is String:
-            return tuple({String, str})
-        elif self.class_ is TypeName:
-            return tuple({TypeName, str})
-        elif self.class_ is VariableName:
-            return tuple({VariableName, str})
-        else:
-            return ()
-
-    def cast_value(
-        self,
-        name: str,
-        value: typing.Any,
-        required: REQUIRED_or_OPTIONAL = "required",
-    ) -> typing.Any:
-        if value is None:
-            if required == "required":
-                raise ValueError(
-                    f"{name!r} must not be None"
-                )
-            if required == "optional":
-                return None
-            else:
-                raise ValueError(
-                    f"required must be (required|optional) got {required!r}"
-                )
-
-        if self.is_scalar:
-            class_restrictions = self.class_restrictions
-            if class_restrictions:
-                if not isinstance(value, class_restrictions):
-                    raise TypeError(
-                        f"{name!r} must be an instance of {class_restrictions}"
-                        f", got {value!r}: {type(value)!r}"
-                    )
-            return self.class_(value)
-
-        else:  # array
-            return self.__cast_array_value(
-                name,
-                value,
-            )
-
-    def __cast_array_value(
-        self,
-        name: str,
-        value: typing.Any,
-    ) -> numpy.ndarray:
-        object_array = numpy.array(value, dtype=object)
-
-        same_n_dimensions = (len(self.dimensions) == object_array.ndim)
-        dimensions_are_correct = [
-            True if expected is None else expected == actual
-            for expected, actual in zip(self.dimensions, object_array.shape)
-        ]
-
-        if not(same_n_dimensions and all(dimensions_are_correct)):
-            raise ValueError(
-                "Shape of the array "
-                f"must be {self.dimensions_to_str(self.dimensions)}, "
-                f"got {self.dimensions_to_str(object_array.shape)}"
-            )
-
-        class_restrictions = self.class_restrictions
-        if class_restrictions:
-            isinstance_vectorized = numpy.vectorize(
-                lambda cls: isinstance(cls, class_restrictions),
-                otypes=[numpy.dtype(bool)],
-            )
-            isinstance_mask = isinstance_vectorized(
-                object_array
-            )
-            if not numpy.all(isinstance_mask):
-                raise TypeError(
-                    f"All items of the array {name!r} "
-                    f"must be instances of {class_restrictions}"
-                )
-
-        class_vectorized = numpy.vectorize(
-            self.class_,
-            otypes=[numpy.dtype(self.class_)]
-        )
-        return class_vectorized(object_array)
-
-    @staticmethod
-    def dimensions_to_str(
-        sizes: Dimensions,
-    ) -> str:
-        return (
-            "{"
-            + ", ".join(
-                str(size) if size is not None else ":"
-                for size in sizes
-            )
-            + "}"
-        )
-
-
 class AbstractOMCInteractive(
     abc.ABC
 ):
@@ -767,6 +601,174 @@ class ModelicaFunctionMeta(
         cls.__bound_class__ = bound_metaclass
 
         return cls
+
+
+# declaration class for modelica-like class definition
+
+class Component(
+):
+    class_: typing.Type
+    dimensions: Dimensions
+
+    def __init__(
+        self,
+        class_: typing.Type,
+        dimensions: typing.Optional[Dimensions] = None,
+    ):
+        self.class_ = class_
+        if dimensions is None:
+            self.dimensions = ()
+        else:
+            self.dimensions = dimensions
+
+    def __getitem__(
+        self, index,
+    ) -> "Component":
+        if not isinstance(index, tuple):
+            return self[(index,)]
+
+        def dimensions_generator(
+        ) -> typing.Iterator[typing.Optional[int]]:
+            for idim, dimension in enumerate(index):
+                if isinstance(dimension, int):
+                    if dimension < 0:
+                        raise ValueError(
+                            f'dimension #{idim}: int must be positive, '
+                            f'got {dimension!r}'
+                        )
+                    else:
+                        yield dimension
+                elif isinstance(dimension, slice):
+                    start = dimension.start
+                    stop = dimension.stop
+                    step = dimension.step
+                    if not (start is None and stop is None and step is None):
+                        raise ValueError(
+                            f"dimension #{idim}: slice must be ':', "
+                            f'got {start!s}:{stop!s}:{step!s}'
+                        )
+                    else:
+                        yield None
+                else:
+                    raise TypeError(
+                        f"dimension #{idim} must be int or slice, "
+                        f"got {dimension!r}: {type(dimension)}"
+                    )
+
+        return Component(self.class_, tuple(dimensions_generator()))
+
+    @property
+    def is_array(self) -> bool: return bool(self.dimensions)
+
+    @property
+    def is_scalar(self) -> bool: return not self.is_array
+
+    @property
+    def class_restrictions(
+        self,
+    ) -> typing.Tuple[typing.Type, ...]:
+        if self.class_ is Real:
+            return tuple({Real, float})
+        elif self.class_ is Integer:
+            return tuple({Integer, int})
+        elif self.class_ is Boolean:
+            return tuple({Boolean, bool})
+        elif self.class_ is String:
+            return tuple({String, str})
+        elif self.class_ is TypeName:
+            return tuple({TypeName, str})
+        elif self.class_ is VariableName:
+            return tuple({VariableName, str})
+        else:
+            return ()
+
+    def cast_value(
+        self,
+        name: str,
+        value: typing.Any,
+        required: REQUIRED_or_OPTIONAL = "required",
+    ) -> typing.Any:
+        if value is None:
+            if required == "required":
+                raise ValueError(
+                    f"{name!r} must not be None"
+                )
+            if required == "optional":
+                return None
+            else:
+                raise ValueError(
+                    f"required must be (required|optional) got {required!r}"
+                )
+
+        if self.is_scalar:
+            class_restrictions = self.class_restrictions
+            if class_restrictions:
+                if not isinstance(value, class_restrictions):
+                    raise TypeError(
+                        f"{name!r} must be an instance of {class_restrictions}"
+                        f", got {value!r}: {type(value)!r}"
+                    )
+            return self.class_(value)
+
+        else:  # array
+            return self.__cast_array_value(
+                name,
+                value,
+            )
+
+    def __cast_array_value(
+        self,
+        name: str,
+        value: typing.Any,
+    ) -> numpy.ndarray:
+        object_array = numpy.array(value, dtype=object)
+
+        same_n_dimensions = (len(self.dimensions) == object_array.ndim)
+        dimensions_are_correct = [
+            True if expected is None else expected == actual
+            for expected, actual in zip(self.dimensions, object_array.shape)
+        ]
+
+        if not(same_n_dimensions and all(dimensions_are_correct)):
+            raise ValueError(
+                "Shape of the array "
+                f"must be {self.dimensions_to_str(self.dimensions)}, "
+                f"got {self.dimensions_to_str(object_array.shape)}"
+            )
+
+        class_restrictions = self.class_restrictions
+        if class_restrictions:
+            isinstance_vectorized = numpy.vectorize(
+                lambda cls: isinstance(cls, class_restrictions),
+                otypes=[numpy.dtype(bool)],
+            )
+            isinstance_mask = isinstance_vectorized(
+                object_array
+            )
+            if not numpy.all(isinstance_mask):
+                raise TypeError(
+                    f"All items of the array {name!r} "
+                    f"must be instances of {class_restrictions}"
+                )
+
+        class_vectorized = numpy.vectorize(
+            self.class_,
+            otypes=[numpy.dtype(self.class_)]
+        )
+        return class_vectorized(object_array)
+
+    @staticmethod
+    def dimensions_to_str(
+        sizes: Dimensions,
+    ) -> str:
+        return (
+            "{"
+            + ", ".join(
+                str(size) if size is not None else ":"
+                for size in sizes
+            )
+            + "}"
+        )
 
 
 # decorators for modelica-like class definition
