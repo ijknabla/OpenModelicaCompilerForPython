@@ -32,7 +32,6 @@ __license__ = '''
  */
 '''
 
-from contextlib import contextmanager
 import typing
 
 from . import (
@@ -42,46 +41,7 @@ from . import (
 )
 
 
-@contextmanager
 def open_session(
-    omc_command: typing.Optional[compiler.StrOrPathLike] = None,
-) -> typing.Iterator[classes.AbstractOMCSession]:
-    with compiler.OMCInteractive.open(omc_command) as omc:
-        sessionMinimal = session.OMCSessionMinimal(omc)
-        version = sessionMinimal.getVersionTuple()
-        if version[:2] <= (1, 13):
-            from . import v_1_13
-            yield v_1_13.OMCSession(omc)
-        elif version[:2] == (1, 14):
-            from . import v_1_14
-            yield v_1_14.OMCSession(omc)
-        elif version[:2] == (1, 15):
-            from . import v_1_15
-            yield v_1_15.OMCSession(omc)
-        elif version[:2] >= (1, 16):
-            from . import v_1_16
-            yield v_1_16.OMCSession(omc)
-
-
-def __select_session_type(
-    omc: classes.AbstractOMCInteractive,
-) -> typing.Type[classes.AbstractOMCSession]:
-    version = session.OMCSessionMinimal(omc).getVersionTuple()
-    if version[:2] <= (1, 13):
-        from . import v_1_13
-        return v_1_13.OMCSession
-    elif version[:2] == (1, 14):
-        from . import v_1_14
-        return v_1_14.OMCSession
-    elif version[:2] == (1, 15):
-        from . import v_1_15
-        return v_1_15.OMCSession
-    else:  # version[:2] >= (1, 16):
-        from . import v_1_16
-        return v_1_16.OMCSession
-
-
-def open_session2(
     omc_command: typing.Optional[compiler.StrOrPathLike] = None,
     *,
     session_type: typing.Optional[
@@ -101,3 +61,21 @@ def open_session2(
             )
 
     return session_type(omc)
+
+
+def __select_session_type(
+    omc: classes.AbstractOMCInteractive,
+) -> typing.Type[classes.AbstractOMCSession]:
+    version = session.OMCSessionMinimal(omc).getVersionTuple()
+    if version[:2] <= (1, 13):
+        from . import v_1_13
+        return v_1_13.OMCSession
+    elif version[:2] == (1, 14):
+        from . import v_1_14
+        return v_1_14.OMCSession
+    elif version[:2] == (1, 15):
+        from . import v_1_15
+        return v_1_15.OMCSession
+    else:  # version[:2] >= (1, 16):
+        from . import v_1_16
+        return v_1_16.OMCSession
