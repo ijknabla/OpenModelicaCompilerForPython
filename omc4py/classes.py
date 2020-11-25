@@ -290,9 +290,7 @@ class AbstractOMCInteractive(
 
     def __exit__(
         self,
-        exc_type,
-        exc_value,
-        traceback,
+        exc_type, exc_value, traceback,
     ) -> typing_extensions.Literal[False]:
         self.close()
         return False
@@ -315,6 +313,18 @@ class AbstractOMCSession(
 
     @abc.abstractmethod
     def __omc_check__(self) -> None: ...
+
+    def __enter__(self) -> "AbstractOMCSession": return self
+
+    def __close__(self):
+        self.__omc__.close()
+
+    def __exit__(
+        self,
+        exc_type, exc_value, traceback,
+    ) -> typing_extensions.Literal[False]:
+        self.__close__()
+        return False
 
 
 # Meta classes for modelica-like class
