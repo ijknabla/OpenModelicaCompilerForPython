@@ -50,17 +50,22 @@ def open_session(
 ) -> classes.AbstractOMCSession:
     omc = compiler.OMCInteractive.open(omc_command)
 
-    if session_type is None:
-        session_type = __select_session_type(omc)
-    else:
-        if not issubclass(session_type, classes.AbstractOMCSession):
-            raise TypeError(
-                "session_type must be "
-                f"subclass of {classes.AbstractOMCSession}, "
-                f"got {session_type}"
-            )
+    try:
+        if session_type is None:
+            session_type = __select_session_type(omc)
+        else:
+            if not issubclass(session_type, classes.AbstractOMCSession):
+                raise TypeError(
+                    "session_type must be "
+                    f"subclass of {classes.AbstractOMCSession}, "
+                    f"got {session_type}"
+                )
 
-    return session_type(omc)
+        return session_type(omc)
+
+    except Exception:
+        omc.close()
+        raise
 
 
 def __select_session_type(
