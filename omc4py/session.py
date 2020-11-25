@@ -31,14 +31,14 @@ class OMCSessionBase(
         __result = parse_components(
             self.__omc__.evaluate(f"getComponents({TypeName(name)})")
         )
-        self.__omc_check__()
+        self.__check__()
         return __result
 
 
 class OMCSessionBase__v_1_13(
     OMCSessionBase,
 ):
-    def __omc_check__(
+    def __check__(
         self,
     ):
         for messageString in self.getMessagesStringInternal(unique=True):
@@ -96,7 +96,7 @@ def parse_OMCError(
 class OMCSessionMinimal(
     OMCSessionBase,
 ):
-    def __omc_check__(
+    def __check__(
         self,
     ) -> None:
         for errorString in self.getErrorString().splitlines():
@@ -135,7 +135,7 @@ class OMCSessionMinimal(
             ],
             parser=parse_OMCValue,
         )
-        self.__omc_check__()
+        self.__check__()
         return str(__result)
 
     def getVersionTuple(

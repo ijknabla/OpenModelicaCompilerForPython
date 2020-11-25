@@ -46,7 +46,7 @@ class OMCSessionBootstrap(
             ],
             parser=parse_OMCValue,
         )
-        self.__omc_check__()
+        self.__check__()
         return str(__result)
 
     def getClassNames(
@@ -67,7 +67,7 @@ class OMCSessionBootstrap(
             ],
             parser=parse_OMCValue,
         )
-        self.__omc_check__()
+        self.__check__()
         return list(__result)
 
     def getClassRestriction(
@@ -84,7 +84,7 @@ class OMCSessionBootstrap(
             ],
             parser=parse_OMCValue,
         )
-        self.__omc_check__()
+        self.__check__()
         return str(__result)
 
     class RestrictionEnum(

@@ -312,7 +312,7 @@ class AbstractOMCSession(
         return self.__omc
 
     @abc.abstractmethod
-    def __omc_check__(self) -> None: ...
+    def __check__(self) -> None: ...
 
     def __enter__(self) -> "AbstractOMCSession": return self
 
