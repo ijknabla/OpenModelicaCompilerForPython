@@ -60,97 +60,6 @@ def find_openmodelica_zmq_port_filepath(
     return candidates[0]
 
 
-def cast_value(
-    component: classes.Component,
-    name: str,
-    value: typing.Any,
-    required: classes.REQUIRED_or_OPTIONAL = "required",
-) -> typing.Any:
-    if value is None:
-        if required == "required":
-            raise ValueError(
-                f"{name!r} must not be None"
-            )
-        if required == "optional":
-            return None
-        else:
-            raise ValueError(
-                f"required must be (required|optional) got {required!r}"
-            )
-
-    if not component.dimensions:  # scalar
-        class_restrictions = component.class_restrictions
-        if class_restrictions:
-            if not isinstance(value, class_restrictions):
-                raise TypeError(
-                    f"{name!r} must be an instance of {class_restrictions}"
-                    f", got {value!r}: {type(value)!r}"
-                )
-        return component.class_(value)
-
-    else:  # array
-        return cast_array_value(
-            component,
-            name,
-            value,
-        )
-
-
-def cast_array_value(
-    component: classes.Component,
-    name: str,
-    value: typing.Any,
-) -> numpy.ndarray:
-    object_array = numpy.array(value, dtype=object)
-
-    same_n_dimensions = (len(component.dimensions) == object_array.ndim)
-    dimensions_are_correct = [
-        True if expected is None else expected == actual
-        for expected, actual in zip(component.dimensions, object_array.shape)
-    ]
-
-    if not(same_n_dimensions and all(dimensions_are_correct)):
-        raise ValueError(
-            "Shape of the array "
-            f"must be {dimensions_to_str(component.dimensions)}, "
-            f"got {dimensions_to_str(object_array.shape)}"
-        )
-
-    class_restrictions = component.class_restrictions
-    if class_restrictions:
-        isinstance_vectorized = numpy.vectorize(
-            lambda cls: isinstance(cls, class_restrictions),
-            otypes=[numpy.dtype(bool)],
-        )
-        isinstance_mask = isinstance_vectorized(
-            object_array
-        )
-        if not numpy.all(isinstance_mask):
-            raise TypeError(
-                f"All items of the array {name!r} "
-                f"must be instances of {class_restrictions}"
-            )
-
-    class_vectorized = numpy.vectorize(
-        component.class_,
-        otypes=[numpy.dtype(component.class_)]
-    )
-    return class_vectorized(object_array)
-
-
-def dimensions_to_str(
-    sizes: classes.Dimensions,
-) -> str:
-    return (
-        "{"
-        + ", ".join(
-            str(size) if size is not None else ":"
-            for size in sizes
-        )
-        + "}"
-    )
-
-
 class OMCInteractive(
     classes.AbstractOMCInteractive,
 ):
@@ -315,7 +224,7 @@ class OMCInteractive(
             for component, name, value, required in inputArguments:
                 to_keyword_argument |= (required == "optional")
 
-                value = cast_value(component, name, value, required)
+                value = component.cast_value(name, value, required)
                 if value is None:
                     continue
 
@@ -343,10 +252,10 @@ class OMCInteractive(
 
         if len(outputArguments) == 1:
             (component, name,), = outputArguments
-            return cast_value(component, name, result_value)
+            return component.cast_value(name, result_value)
         else:
             return tuple(
-                cast_value(component, name, value)
+                component.cast_value(name, value)
                 for (component, name), value in zip(
                     outputArguments, result_value
                 )
