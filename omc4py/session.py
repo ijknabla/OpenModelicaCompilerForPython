@@ -1,4 +1,5 @@
 
+import functools
 import re
 import typing
 import warnings
@@ -30,14 +31,14 @@ class OMCSessionBase(
         __result = parse_components(
             self.__omc__.evaluate(f"getComponents({TypeName(name)})")
         )
-        self.__omc_check__()
+        self.__check__()
         return __result
 
 
 class OMCSessionBase__v_1_13(
     OMCSessionBase,
 ):
-    def __omc_check__(
+    def __check__(
         self,
     ):
         for messageString in self.getMessagesStringInternal(unique=True):
@@ -62,9 +63,11 @@ class OMCSessionBase__v_1_13(
                 )
 
 
-omc_error_pattern = re.compile(
-    r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
-)
+@functools.lru_cache(1)
+def get_omc_error_regex():
+    return re.compile(
+        r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
+    )
 
 
 def parse_OMCError(
@@ -73,7 +76,7 @@ def parse_OMCError(
     if not error_string or error_string.isspace():
         return None
 
-    matched = omc_error_pattern.match(
+    matched = get_omc_error_regex().match(
         error_string
     )
     if not matched:
@@ -84,7 +87,7 @@ def parse_OMCError(
     kind = matched.group("kind")
     # message = matched.group("message")
 
-    if kind == "Error":
+    if kind.lower() == "error":
         return exception.OMCError(error_string)
     else:
         return exception.OMCWarning(error_string)
@@ -93,22 +96,18 @@ def parse_OMCError(
 class OMCSessionMinimal(
     OMCSessionBase,
 ):
-    def __omc_check__(
+    def __check__(
         self,
     ) -> None:
-        error_optional = parse_OMCError(self.getErrorString())
-        error: exception.OMCException
-        if error_optional is None:
-            return
-        else:
-            error = error_optional
+        for errorString in self.getErrorString().splitlines():
+            error = parse_OMCError(errorString)
+            if error is None:
+                return
 
-        if isinstance(error, Warning):
-            warnings.warn(error)
-        else:
-            raise error
-
-        self.__omc_check__()
+            if isinstance(error, Warning):
+                warnings.warn(error)
+            else:
+                raise error
 
     def getErrorString(
         self,
@@ -136,7 +135,7 @@ class OMCSessionMinimal(
             ],
             parser=parse_OMCValue,
         )
-        self.__omc_check__()
+        self.__check__()
         return str(__result)
 
     def getVersionTuple(

@@ -1,7 +1,6 @@
 
 import atexit
 import logging
-import numpy  # type: ignore
 import os
 from pathlib import Path
 import shutil
@@ -241,19 +240,35 @@ class OMCInteractive(
             )
         )
 
-        if not outputArguments:
-            if result_literal and not result_literal.isspace():
+        if not result_literal or result_literal.isspace():
+            if outputArguments:
                 raise ValueError(
-                    f"Unexpected result, got {result_literal!r}"
+                    f"Unexpected empty result, got {result_literal!r}"
                 )
-            return
+            else:
+                return None
 
-        result_value = parser(result_literal)
+        try:
+            result_value = parser(result_literal)
+        except Exception:
+            raise ValueError(
+                f"Failed to parse {result_literal!r}"
+            ) from None
 
+        if len(outputArguments) == 0:
+            raise ValueError(
+                "There is no output variable in the function, "
+                f"but omc returns {result_value!r}"
+            )
         if len(outputArguments) == 1:
             (component, name,), = outputArguments
             return component.cast(name, result_value)
         else:
+            if len(result_value) != len(outputArguments):
+                raise ValueError(
+                    f"Size of result must be [{len(outputArguments)}], "
+                    f"got {result_value!r} size is [{len(result_value)}]"
+                )
             return tuple(
                 component.cast(name, value)
                 for (component, name), value in zip(

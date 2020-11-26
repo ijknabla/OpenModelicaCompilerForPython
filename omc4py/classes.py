@@ -312,7 +312,7 @@ class AbstractOMCSession(
         return self.__omc
 
     @abc.abstractmethod
-    def __omc_check__(self) -> None: ...
+    def __check__(self) -> None: ...
 
     def __enter__(self) -> "AbstractOMCSession": return self
 
@@ -715,13 +715,13 @@ class Component(
         if value is None:
             if required == "required":
                 raise ValueError(
-                    f"required value {name!r} is None"
+                    f"Required value {name!r} is None"
                 )
             if required == "optional":
                 return None
             else:
                 raise ValueError(
-                    f"required must be (required|optional) got {required!r}"
+                    f"'required' must be (required|optional) got {required!r}"
                 )
 
         value_array = numpy.array(value, dtype=object)
@@ -748,10 +748,16 @@ class Component(
                 value_array
             )
             if not numpy.all(isinstance_mask):
-                raise TypeError(
-                    f"{name!r} or all items of {name!r}"
-                    f"must be instances of {self.class_restrictions}"
-                )
+                if self.is_scalar:
+                    raise TypeError(
+                        f"{name!r} "
+                        f"must be instance of {self.class_restrictions}"
+                    )
+                else:
+                    raise TypeError(
+                        f"All items of {name!r} "
+                        f"must be instances of {self.class_restrictions}"
+                    )
 
         if self.is_scalar:
             return self.class_(value)
