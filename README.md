@@ -22,41 +22,43 @@ $ python3 -m pip install OpenModelicaCompiler
 ```python3
 #!/usr/bin/env python3
 import omc4py
-session = omc4py.open_session()
-print(session.getVersion())
+
+with omc4py.open_session() as session:
+    print(session.getVersion())
 ```
 
 ### More usage about `open_session(...)`
 
-When omc4py.open_session() is called in with-statement, it returns session instance bound to omc executable.
+If `omc4py.open_session` cannot find omc, such as if you have not added OpenModelica to your _PATH_ environment variable, you can specify a valid omc command name or omc executable path by `str`.
+
 ```python3
-from omc4py import open_session
+import omc4py
 
-with open_session() as session:
-    ...
-```
-
-If `open_session()` cannot find the executable of omc,  
-One solution is to add destination of omc executable to the environ `PATH`.  
-Another solution is to specify omc executable path by argument of `open_session(${path_to_omc})`.
-
-```
-# open/close different version sessions
-from omc4py import open_session
-
-with open_session(
-    "C:/Program Files/OpenModelica1.14.0-64bit/bin/omc.exe"
+with omc4py.open_session(
+    "C:/OpenModelica1.13.0-64bit/bin/omc.exe"
 ) as session:
-    ...
-
-
-with open_session(
-    "C:/Program Files/OpenModelica1.14.1-64bit/bin/omc.exe"
-) as session:
-    ...
+    print(session.getVersion())
 ```
 
-- - -
+It is also possible to launch multiple versions of omc at the same time by explicitly specifying omc.
+
+```
+from contextlib import ExitStack
+import omc4py
+
+with ExitStack() as stack:
+    session_13 = stack.enter_context(
+        omc4py.open_session("C:/OpenModelica1.13.0-64bit/bin/omc.exe")
+    )
+    session_14 = stack.enter_context(
+        omc4py.open_session("C:/Program Files/OpenModelica1.14.0-64bit/bin/omc.exe")
+    )
+
+    print("v1.13.0:", session_13.getVersion())
+    print("v1.14.0:", session_14.getVersion())
+```
+
+### About session API
 
 All methods of session are function in `OpenModelica.Scripting.*`. If you want to know accurate signature, read `help(session)` or [UserGuide for OpenModelica Scripting API](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
 
