@@ -1,7 +1,6 @@
 
 import atexit
 import logging
-import numpy  # type: ignore
 import os
 from pathlib import Path
 import shutil
@@ -14,7 +13,6 @@ import zmq  # type: ignore
 
 from . import (
     classes,
-    exception,
     string,
 )
 
@@ -242,9 +240,9 @@ class OMCInteractive(
             )
         )
 
-        if (not result_literal or result_literal.isspace():
+        if not result_literal or result_literal.isspace():
             if outputArguments:
-                raise exception.OMCRuntimeError(
+                raise ValueError(
                     f"Unexpected empty result, got {result_literal!r}"
                 )
             else:
@@ -253,12 +251,12 @@ class OMCInteractive(
         try:
             result_value = parser(result_literal)
         except Exception:
-            raise exception.OMCRuntimeError(
+            raise ValueError(
                 f"Failed to parse {result_literal!r}"
             ) from None
 
         if len(outputArguments) == 0:
-            raise exception.OMCRuntimeError(
+            raise ValueError(
                 "There is no output variable in the function, "
                 f"but omc returns {result_value!r}"
             )
@@ -267,9 +265,9 @@ class OMCInteractive(
             return component.cast(name, result_value)
         else:
             if len(result_value) != len(outputArguments):
-                raise exception.OMCRuntimeError(
+                raise ValueError(
                     f"Size of result must be [{len(outputArguments)}], "
-                    f"got {result_value!r} size=[{len(result_value)}]"
+                    f"got {result_value!r} size is [{len(result_value)}]"
                 )
             return tuple(
                 component.cast(name, value)
