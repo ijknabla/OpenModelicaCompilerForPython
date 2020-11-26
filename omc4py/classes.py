@@ -50,8 +50,8 @@ if typing.TYPE_CHECKING:
 else:
     Real = numpy.double
     Integer = numpy.intc
-    Boolean = numpy.bool
-    String = numpy.str
+    Boolean = numpy.bool_
+    String = numpy.str_
 
 
 # $Code classes OpenModelica.$Code.{VariableName, TypeName}

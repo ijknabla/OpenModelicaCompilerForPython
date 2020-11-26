@@ -70,11 +70,14 @@ def to_omc_literal(
 ) -> str:
     if hasattr(obj, "__to_omc_literal__"):
         return obj.__to_omc_literal__()
-    elif isinstance(obj, (bool, numpy.bool_)):
+    elif isinstance(obj, (classes.Boolean, bool)):
         return "true" if obj else "false"
-    elif isinstance(obj, (str, numpy.str_)):
+    elif isinstance(obj, (classes.String, str)):
         return '"' + escape_py_string(obj) + '"'
     elif isinstance(obj, (typing.Sequence, numpy.ndarray)):
         return "{" + ", ".join(map(to_omc_literal, obj)) + "}"
     else:
         return str(obj)
+
+
+from . import classes  # noqa: E402

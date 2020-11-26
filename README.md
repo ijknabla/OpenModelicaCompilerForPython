@@ -42,7 +42,7 @@ with omc4py.open_session(
 
 It is also possible to launch multiple versions of omc at the same time by explicitly specifying omc.
 
-```
+```python3
 from contextlib import ExitStack
 import omc4py
 
