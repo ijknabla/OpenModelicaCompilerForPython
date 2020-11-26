@@ -1,7 +1,32 @@
 # OpenModelicaCompilerForPython
 OpenModelica compiler (omc) interface for Python>=3.6
 
-## What's this?
+## Quick tour
+
+### Setup
+
+Check OpenModelica install on your system.  
+[https://openmodelica.org/](https://openmodelica.org/)
+
+```bash
+$ omc --version
+```
+
+Install _OpenModelicaCompiler_ with pip.
+```
+$ python3 -m pip install OpenModelicaCompiler
+```
+
+`omc4py` is acutual package name. `omc4py.open_session()` will return session object which interfaces to omc.
+
+```python3
+#!/usr/bin/env python3
+import omc4py
+session = omc4py.open_session()
+print(session.getVersion())
+```
+
+### More usage about `open_session(...)`
 
 When omc4py.open_session() is called in with-statement, it returns session instance bound to omc executable.
 ```python3
