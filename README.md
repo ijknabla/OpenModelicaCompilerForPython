@@ -58,6 +58,39 @@ with ExitStack() as stack:
     print("v1.14.0:", session_14.getVersion())
 ```
 
+As shown above, __It is recommended to call `omc4py.open_session` via with-statement__ for secure resource handling.
+
+But, sometimes you want to use session object interactively, (like _OMShell_) `omc4py` manages omc processes created in current python interpreter, and ensure to close at exit interpreter.
+
+```python3
+>>> from omc4py import *
+>>> session = open_session()
+>>> session.loadString("""
+... package A
+...     package B
+...             package C
+...             end C;
+...     end B;
+... end A;
+... """)
+True
+>>> list(session.getClassNames("A", recursive=True))
+[TypeName('A'), TypeName('A.B'), TypeName('A.B.C')]
+>>>
+>>>
+>>> exit()  # session will be closed internally
+```
+
+Besides, session object has `__close__` method to explicitly close session.
+
+```python3
+>>> from omc4py import *
+>>> session = open_session()
+>>> session.__close__()
+>>>
+>>> exit()
+```
+
 ### About session API
 
 All methods of session are function in `OpenModelica.Scripting.*`. If you want to know accurate signature, read `help(session)` or [UserGuide for OpenModelica Scripting API](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
