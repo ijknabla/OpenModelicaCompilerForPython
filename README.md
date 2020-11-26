@@ -93,22 +93,21 @@ Besides, session object has `__close__` method to explicitly close session.
 
 ### About session API
 
-All methods of session are function in `OpenModelica.Scripting.*`. If you want to know accurate signature, read `help(session)` or [UserGuide for OpenModelica Scripting API](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
+All methods of session as same as modelica-functions in _OpenModelica.Scripting.*_ in terms of argument types and return value types. If you want to know accurate signature, read `help(session)` or Scripting API section of OpenModelica UserGuide.
 
-```python3
-# Show current omc version
-from omc4py import open_session
+- [UserGuide for OpenModelica Scripting API (v1.14)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.14/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.15)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.15/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.16)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.16/scripting_api.html)
 
-with open_session() as session:
-    print(session.getVersion())
-```
+- [UserGuide for OpenModelica Scripting API (latest)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
 
-Features in:
 
-- `OpenModelica.Scripting.Internal`
-- `OpenModelica.Scripting.Experimental`
+[Documentation in OpenModelica build server](https://build.openmodelica.org/Documentation/OpenModelica.Scripting.html) shows exhaustive information about _OpenModelica.Scripting_. You will find sub-packages not explained user guide.
 
-available from absolute reference
+- _OpenModelica.Scripting.Internal.*_
+- _OpenModelica.Scripting.Experimental.*_
+
+They are available from absolute reference
 
 ```python3
 # Call "stat" in "OpenModelica.Scripting.Internal"
@@ -120,21 +119,63 @@ with open_session() as session:
 
 - - -
 
-All types of arguments for function call checked by session.
+Let me show my favorite API(s)
+
+#### `loadModel`
+
+Load library and returns True if success. You can specify versions by second argument
+
 ```python3
-# "sortString" only take one sequence of string as argument
-from omc4py import open_session
+import omc4py
 
-with open_session() as session:
-    session.sortStrings(
-        ["a", "b", "0", "1e5"]
-    )  # OK
+with omc4py.open_session() as session:
+    assert(session.loadModel("Modelica"))  # load MSL
+```
 
-    # session.sortStrings(
-    #     ["a", "b", 0, "1e5"]
-    # )  # NG
+```python3
+import omc4py
 
-    # session.sortStrings(
-    #     ["a", "b", "0", 1e5]
-    # )  # NG
+with omc4py.open_session() as session:
+    assert(session.loadModel("Modelica", ["3.2.3"]))  # load MSL 3.2.3
+```
+
+#### `getClassNames`
+
+Returns array of class names in the given class
+
+```python3
+import omc4py
+
+with omc4py.open_session() as session:
+    assert(session.loadModel("Modelica"))
+    for className in session.getClassNames("Modelica"):
+        print(className)
+```
+
+By default, `getClassNames()` only returns "sub" classes. If you want to know all classes belongs to the class set `recursive=True`.
+
+```python3
+import omc4py
+
+with omc4py.open_session() as session:
+    assert(session.loadModel("Modelica"))
+    for className in session.getClassNames("Modelica", recursive=True):
+        print(className)  # many class names will be printed
+```
+
+#### `getComponents`
+
+Returns array of component (variable, parameter, constant, ...etc) profiles
+
+```python3
+import omc4py
+
+with omc4py.open_session() as session:
+    assert(session.loadModel("Modelica", ["3.2.3"]))
+    for component in session.getComponents("Modelica.Constants"):
+        print(
+            f"{component.className.last_identifier!s:<20}"
+            f"{component.name!s:<15}"
+            f"{component.comment!r}"
+        )
 ```
