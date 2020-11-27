@@ -11,6 +11,7 @@ __all__ = (
 
 import abc
 import enum
+import itertools
 import functools
 import numpy  # type: ignore
 import typing
@@ -191,24 +192,27 @@ class TypeName(
     @classmethod
     def __checked_parts(
         cls,
-        objs: typing.Iterable,
+        parts: typing.Iterable,
     ) -> typing.Iterator[typing.Union[str, VariableName]]:
-
-        def not_checked_parts(
+        def split_part(
+            part
         ) -> typing.Iterator[str]:
-            for obj in objs:
-                if isinstance(obj, TypeName):
-                    yield from obj.parts
-                elif isinstance(obj, VariableName):
-                    yield str(obj)
-                elif isinstance(obj, str):
-                    if obj == ".":
-                        yield obj
-                    else:
-                        yield from cls.from_str(obj).parts
+            if isinstance(part, TypeName):
+                yield from part.parts
+            elif isinstance(part, VariableName):
+                yield str(part)
+            elif isinstance(part, str):
+                if part == ".":
+                    yield part
+                else:
+                    yield from split_part(cls.from_str(part))
+            else:
+                raise TypeError(
+                    f"Unexpected part, got {part}: {type(part)}"
+                )
 
         for i, part in enumerate(
-            not_checked_parts()
+            itertools.chain(*map(split_part, parts))
         ):
             if part == "." and not i == 0:
                 raise ValueError(
