@@ -31,7 +31,11 @@ REQUIRED_or_OPTIONAL = typing.Union[REQUIRED, OPTIONAL]
 VariableNameLike = typing.Union[
     "TypeName",
     "VariableName",
-    "str"
+    str,
+]
+
+TypeNameLike = typing.Union[
+    VariableNameLike,
 ]
 
 InputArgument = typing.Tuple[
@@ -151,7 +155,7 @@ class TypeName(
 
     @staticmethod
     def __split_parts(
-        parts,
+        parts: typing.Iterable[TypeNameLike],
     ) -> typing.Iterator[str]:
         for i, part in enumerate(
             itertools.chain(*map(TypeName.__split_part, parts))
@@ -164,7 +168,7 @@ class TypeName(
 
     @staticmethod
     def __split_part(
-        part,
+        part: TypeNameLike,
     ) -> typing.Iterator[str]:
         if isinstance(part, TypeName):
             yield from part.parts
@@ -692,7 +696,7 @@ class Component(
         elif self.class_ is String:
             return tuple({String, str})
         elif self.class_ is TypeName:
-            return tuple({TypeName, str})
+            return tuple({TypeName, VariableName, str})  # TypeNameLike
         elif self.class_ is VariableName:
             return tuple({TypeName, VariableName, str})  # VariableNameLike
         else:
