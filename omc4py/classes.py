@@ -128,11 +128,10 @@ class TypeName(
             if isinstance(part, TypeName):
                 return part
 
-        return cls.__from_valid_parts_no_check__(
-            cls.__split_parts(
-                (part, *parts)
-            )
-        )
+        self = super().__new__(TypeName)
+        self.__parts = tuple(cls.__split_parts((part, *parts)))
+
+        return self
 
     @staticmethod
     def __split_parts(
@@ -164,15 +163,6 @@ class TypeName(
             raise TypeError(
                 f"Unexpected part, got {part}: {type(part)}"
             )
-
-    @classmethod
-    def __from_valid_parts_no_check__(
-        cls,
-        parts: typing.Iterable[str],
-    ):
-        typeName = object.__new__(TypeName)
-        typeName.__parts = tuple(parts)
-        return typeName
 
     @property
     def parts(
