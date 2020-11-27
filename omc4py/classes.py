@@ -129,7 +129,7 @@ class TypeName(
                 return part
 
         return cls.__from_valid_parts_no_check__(
-            cls.__checked_parts(
+            cls.__split_parts(
                 (part, *parts)
             )
         )
@@ -182,30 +182,30 @@ class TypeName(
         else:
             return self
 
-    @classmethod
-    def __checked_parts(
-        cls,
-        parts: typing.Iterable,
-    ) -> typing.Iterator[typing.Union[str, VariableName]]:
-        def split_part(
-            part
-        ) -> typing.Iterator[str]:
-            if isinstance(part, TypeName):
-                yield from part.parts
-            elif isinstance(part, VariableName):
-                yield str(part)
-            elif isinstance(part, str):
-                if part == ".":
-                    yield part
-                else:
-                    yield from parser.parse_typeName(part).parts
+    @staticmethod
+    def __split_part(
+        part,
+    ) -> typing.Iterator[str]:
+        if isinstance(part, TypeName):
+            yield from part.parts
+        elif isinstance(part, VariableName):
+            yield str(part)
+        elif isinstance(part, str):
+            if part == ".":
+                yield part
             else:
-                raise TypeError(
-                    f"Unexpected part, got {part}: {type(part)}"
-                )
+                yield from parser.parse_typeName(part).parts
+        else:
+            raise TypeError(
+                f"Unexpected part, got {part}: {type(part)}"
+            )
 
+    @staticmethod
+    def __split_parts(
+        parts,
+    ) -> typing.Iterator[str]:
         for i, part in enumerate(
-            itertools.chain(*map(split_part, parts))
+            itertools.chain(*map(TypeName.__split_part, parts))
         ):
             if part == "." and not i == 0:
                 raise ValueError(
