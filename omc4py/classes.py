@@ -134,6 +134,37 @@ class TypeName(
             )
         )
 
+    @staticmethod
+    def __split_parts(
+        parts,
+    ) -> typing.Iterator[str]:
+        for i, part in enumerate(
+            itertools.chain(*map(TypeName.__split_part, parts))
+        ):
+            if part == "." and not i == 0:
+                raise ValueError(
+                    f"parts[{i}] is invalid, got {part!r}"
+                )
+            yield part
+
+    @staticmethod
+    def __split_part(
+        part,
+    ) -> typing.Iterator[str]:
+        if isinstance(part, TypeName):
+            yield from part.parts
+        elif isinstance(part, VariableName):
+            yield str(part)
+        elif isinstance(part, str):
+            if part == ".":
+                yield part
+            else:
+                yield from parser.parse_typeName(part).parts
+        else:
+            raise TypeError(
+                f"Unexpected part, got {part}: {type(part)}"
+            )
+
     @classmethod
     def __from_valid_parts_no_check__(
         cls,
@@ -181,37 +212,6 @@ class TypeName(
             return parent
         else:
             return self
-
-    @staticmethod
-    def __split_part(
-        part,
-    ) -> typing.Iterator[str]:
-        if isinstance(part, TypeName):
-            yield from part.parts
-        elif isinstance(part, VariableName):
-            yield str(part)
-        elif isinstance(part, str):
-            if part == ".":
-                yield part
-            else:
-                yield from parser.parse_typeName(part).parts
-        else:
-            raise TypeError(
-                f"Unexpected part, got {part}: {type(part)}"
-            )
-
-    @staticmethod
-    def __split_parts(
-        parts,
-    ) -> typing.Iterator[str]:
-        for i, part in enumerate(
-            itertools.chain(*map(TypeName.__split_part, parts))
-        ):
-            if part == "." and not i == 0:
-                raise ValueError(
-                    f"parts[{i}] is invalid, got {part!r}"
-                )
-            yield part
 
     def __hash__(self):
         return hash(self.parts)
