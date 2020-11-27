@@ -135,13 +135,6 @@ class TypeName(
         )
 
     @classmethod
-    def from_str(
-        cls,
-        s: str
-    ) -> "TypeName":
-        return parser.parse_typeName(s)
-
-    @classmethod
     def __from_valid_parts_no_check__(
         cls,
         parts: typing.Iterable[str],
@@ -205,7 +198,7 @@ class TypeName(
                 if part == ".":
                     yield part
                 else:
-                    yield from split_part(cls.from_str(part))
+                    yield from parser.parse_typeName(part).parts
             else:
                 raise TypeError(
                     f"Unexpected part, got {part}: {type(part)}"
