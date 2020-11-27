@@ -28,6 +28,12 @@ REQUIRED = typing_extensions.Literal["required"]
 OPTIONAL = typing_extensions.Literal["optional"]
 REQUIRED_or_OPTIONAL = typing.Union[REQUIRED, OPTIONAL]
 
+VariableNameLike = typing.Union[
+    "TypeName",
+    "VariableName",
+    "str"
+]
+
 InputArgument = typing.Tuple[
     "Component", str,
     typing.Any, REQUIRED_or_OPTIONAL
@@ -65,19 +71,29 @@ class VariableName(
 
     def __new__(
         cls,
-        obj,
+        obj: VariableNameLike,
     ):
         if isinstance(obj, VariableName):
             return obj
 
-        obj_str = str(obj)
-        if not parser.is_valid_identifier(obj_str):
+        identifier: str
+        if isinstance(obj, TypeName):
+            identifier = to_omc_literal(obj)
+        elif isinstance(obj, str):
+            identifier = obj
+        else:
+            raise TypeError(
+                "obj must be TypeName, VariableName or str, "
+                f"got {obj!r}: {type(obj)}"
+            )
+
+        if not parser.is_valid_identifier(identifier):
             raise ValueError(
-                f"Invalid modelica identifier, got {obj_str!r}"
+                f"Invalid modelica identifier, got {identifier!r}"
             )
 
         return cls.__from_valid_identifier_no_check__(
-            obj_str
+            identifier
         )
 
     @classmethod
@@ -678,7 +694,7 @@ class Component(
         elif self.class_ is TypeName:
             return tuple({TypeName, str})
         elif self.class_ is VariableName:
-            return tuple({VariableName, str})
+            return tuple({TypeName, VariableName, str})  # VariableNameLike
         else:
             return ()
 
