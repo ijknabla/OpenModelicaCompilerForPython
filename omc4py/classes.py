@@ -882,8 +882,11 @@ class ModelicaEnumeration(
 ):
     __modelica_name__: typing.ClassVar[TypeName]
 
+    def __as_typeName__(self) -> TypeName:
+        return self.__modelica_name__/self.name
+
     def __str__(self) -> str:
-        return str(self.__modelica_name__/self.name)
+        return str(self.__as_typeName__())
 
     __to_omc_literal__ = __str__
 
