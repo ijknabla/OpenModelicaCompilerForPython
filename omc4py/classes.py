@@ -149,7 +149,7 @@ def _VariableName_from_valid_identifier_no_check(
     cls: typing.Type[VariableName],
     identifier: str,
 ) -> VariableName:
-    variableName = super(cls, VariableName).__new__(cls)
+    variableName = super(cls, VariableName).__new__(cls)  # type: ignore
     variableName._VariableName__str = identifier
     return variableName
 
