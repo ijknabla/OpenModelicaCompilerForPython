@@ -149,7 +149,7 @@ def _VariableName_from_valid_identifier_no_check(
     cls: typing.Type[VariableName],
     identifier: str,
 ) -> VariableName:
-    variableName = super(cls, VariableName).__new__(cls)
+    variableName = super(cls, VariableName).__new__(cls)  # type: ignore
     variableName._VariableName__str = identifier
     return variableName
 
@@ -228,7 +228,8 @@ class TypeName(
         return self.__parts
 
     @property
-    def is_absolute(self) -> bool: return bool(self.parts) and self.parts[0] == "."
+    def is_absolute(self) -> bool:
+        return bool(self.parts) and self.parts[0] == "."
 
     def as_absolute(self):
         if self.is_absolute:
@@ -247,8 +248,8 @@ class TypeName(
         self,
     ) -> typing.Iterator["TypeName"]:
         for end in reversed(range(1, len(self.parts))):
-            yield self.__from_valid_parts_no_check__(
-                self.parts[:end],
+            yield TypeName(
+                *self.parts[:end],
             )
 
     @property

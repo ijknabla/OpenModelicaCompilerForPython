@@ -1,4 +1,5 @@
 
+import abc
 import functools
 import re
 import typing
@@ -38,6 +39,13 @@ class OMCSessionBase(
 class OMCSessionBase__v_1_13(
     OMCSessionBase,
 ):
+    @abc.abstractmethod
+    def getMessagesStringInternal(
+        self,
+        unique: bool,
+    ) -> typing.Iterable:
+        ...
+
     def __check__(
         self,
     ):
