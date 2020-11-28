@@ -154,6 +154,15 @@ class VariableName(
     __to_omc_literal__ = __str__
 
 
+def _VariableName_from_valid_identifier_no_check(
+    cls: typing.Type[VariableName],
+    identifier: str,
+) -> VariableName:
+    variableName = super(cls, VariableName).__new__(cls)
+    variableName._VariableName__str = identifier
+    return variableName
+
+
 class VariableNameVisitor(
     arpeggio.PTNodeVisitor,
 ):
