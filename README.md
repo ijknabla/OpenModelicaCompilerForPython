@@ -110,11 +110,20 @@ All methods of session as same as modelica-functions in _OpenModelica.Scripting.
 They are available from absolute reference
 
 ```python3
-# Call "stat" in "OpenModelica.Scripting.Internal"
+# Example for "timerTick" and "timerTock"
+# in "OpenModelica.Scripting.Internal.Time"
 from omc4py import open_session
+from time import sleep
+
+timer_index: int = 1
 
 with open_session() as session:
-    print(session.OpenModelica.Scripting.Internal.stat(__file__))
+    session.OpenModelica.Scripting.Internal.Time.timerTick(timer_index)
+
+    sleep(0.1)
+
+    # show elapsed time from last timerTick
+    print(session.OpenModelica.Scripting.Internal.Time.timerTock(timer_index))
 ```
 
 - - -
