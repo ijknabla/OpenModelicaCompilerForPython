@@ -44,7 +44,7 @@ def getitem_with_default(
             raise
 
 
-class TypeSpecifierVisitor(
+class VariableNameVisitor(
     arpeggio.PTNodeVisitor,
 ):
     def visit_IDENT(
@@ -56,6 +56,10 @@ class TypeSpecifierVisitor(
             node.value
         )
 
+
+class TypeSpecifierVisitor(
+    VariableNameVisitor,
+):
     def visit_name(
         self,
         node,
