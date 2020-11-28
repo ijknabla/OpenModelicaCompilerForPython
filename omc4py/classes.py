@@ -56,10 +56,10 @@ KT = typing.TypeVar("KT")
 # Primitive classes {Real, Integer, Boolean, String}
 
 if typing.TYPE_CHECKING:
-    Real: typing.Type[float]
-    Integer: typing.Type[int]
-    Boolean: typing.Type[bool]
-    String: typing.Type[str]
+    Real = float
+    Integer = int
+    Boolean = bool
+    String = str
 else:
     Real = numpy.double
     Integer = numpy.intc
@@ -694,22 +694,22 @@ class Component(
         self,
     ) -> typing.Tuple[typing.Type, ...]:
         if self.class_ is Real:
-            return tuple({Real, float})
+            return (Real, float)
         elif self.class_ is Integer:
-            return tuple({Integer, int})
+            return (Integer, int)
         elif self.class_ is Boolean:
-            return tuple({Boolean, bool})
+            return (Boolean, bool)
         elif self.class_ is String:
-            return tuple({String, str})
+            return (String, str)
         elif self.class_ is TypeName:
-            return tuple({
+            return (  # TypeNameLike
                 ModelicaClassMeta, ModelicaEnumeration,
                 TypeName, VariableName, str,
-            })  # TypeNameLike
+            )
         elif self.class_ is VariableName:
-            return tuple({
+            return (  # VariableNameLike
                 TypeName, VariableName, str,
-            })  # VariableNameLike
+            )
         else:
             return ()
 
