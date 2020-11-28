@@ -1,12 +1,28 @@
 
 __all__ = (
-    "Boolean",
-    "Integer",
+    # Primitive types
     "Real",
+    "Integer",
     "String",
-    "TypeName",
+    "Boolean",
+    # $Code types
     "VariableName",
+    "TypeName",
+    # compiler & session class
+    "AbstractOMCInteractive",
+    "AbstractOMCSession",
+    # modelica class
+    "ModelicaEnumeration",
+    "ModelicaPackage",
+    "ModelicaRecord",
+    "ModelicaFunction",
+    # for modelica class definition
+    "Component",
+    "alias",
+    "element",
     "enum",
+    "external",
+    "modelica_name",
 )
 
 import abc
