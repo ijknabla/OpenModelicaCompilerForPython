@@ -115,18 +115,9 @@ class VariableName(
                 f"Invalid modelica identifier, got {identifier!r}"
             )
 
-        return cls.__from_valid_identifier_no_check__(
-            identifier
+        return _VariableName_from_valid_identifier_no_check(
+            cls, identifier
         )
-
-    @classmethod
-    def __from_valid_identifier_no_check__(
-        cls,
-        identifier: str
-    ) -> "VariableName":
-        variableName = object.__new__(cls)
-        variableName.__str = identifier
-        return variableName
 
     def __eq__(
         self, other,
@@ -171,8 +162,9 @@ class VariableNameVisitor(
         node,
         children,
     ) -> VariableName:
-        return VariableName.__from_valid_identifier_no_check__(
-            node.value
+        return _VariableName_from_valid_identifier_no_check(
+            VariableName,
+            str(node.value)
         )
 
 
