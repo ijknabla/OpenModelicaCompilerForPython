@@ -35,6 +35,8 @@ VariableNameLike = typing.Union[
 ]
 
 TypeNameLike = typing.Union[
+    "ModelicaClassMeta",
+    "ModelicaEnumeration",
     VariableNameLike,
 ]
 
@@ -170,7 +172,11 @@ class TypeName(
     def __split_part(
         part: TypeNameLike,
     ) -> typing.Iterator[str]:
-        if isinstance(part, TypeName):
+        if isinstance(part, ModelicaClassMeta):
+            yield from part.__modelica_name__.parts
+        elif isinstance(part, ModelicaEnumeration):
+            yield from part.__as_typeName__().parts
+        elif isinstance(part, TypeName):
             yield from part.parts
         elif isinstance(part, VariableName):
             yield str(part)
@@ -696,9 +702,14 @@ class Component(
         elif self.class_ is String:
             return tuple({String, str})
         elif self.class_ is TypeName:
-            return tuple({TypeName, VariableName, str})  # TypeNameLike
+            return tuple({
+                ModelicaClassMeta, ModelicaEnumeration,
+                TypeName, VariableName, str,
+            })  # TypeNameLike
         elif self.class_ is VariableName:
-            return tuple({TypeName, VariableName, str})  # VariableNameLike
+            return tuple({
+                TypeName, VariableName, str,
+            })  # VariableNameLike
         else:
             return ()
 
