@@ -26,6 +26,7 @@ __all__ = (
 )
 
 import abc
+import arpeggio  # type: ignore
 import enum
 import itertools
 import functools
@@ -114,18 +115,9 @@ class VariableName(
                 f"Invalid modelica identifier, got {identifier!r}"
             )
 
-        return cls.__from_valid_identifier_no_check__(
-            identifier
+        return _VariableName_from_valid_identifier_no_check(
+            cls, identifier
         )
-
-    @classmethod
-    def __from_valid_identifier_no_check__(
-        cls,
-        identifier: str
-    ) -> "VariableName":
-        variableName = object.__new__(cls)
-        variableName.__str = identifier
-        return variableName
 
     def __eq__(
         self, other,
@@ -151,6 +143,29 @@ class VariableName(
         return f"{type(self).__name__}({str(self)!r})"
 
     __to_omc_literal__ = __str__
+
+
+def _VariableName_from_valid_identifier_no_check(
+    cls: typing.Type[VariableName],
+    identifier: str,
+) -> VariableName:
+    variableName = super(cls, VariableName).__new__(cls)
+    variableName._VariableName__str = identifier
+    return variableName
+
+
+class VariableNameVisitor(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_IDENT(
+        self,
+        node,
+        children,
+    ) -> VariableName:
+        return _VariableName_from_valid_identifier_no_check(
+            VariableName,
+            str(node.value)
+        )
 
 
 class TypeName(
