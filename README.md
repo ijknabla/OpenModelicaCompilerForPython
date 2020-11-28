@@ -130,29 +130,24 @@ with open_session() as session:
 
 <!--
 @startuml
-class Exception
-class Warning
-
 namespace omc4py.exception {
-    class OMCException
-    class OMCNotification
-    class OMCWarning
-    class OMCError
-
     OMCException <-- OMCNotification
     OMCException <-- OMCWarning
     OMCException <-- OMCError
+    OMCException <-- OMCRuntimeError
 }
-
 
 Exception <-- omc4py.exception.OMCException
 
-Exception <-- Warning
+Exception <-ri- Warning
 Warning <-- omc4py.exception.OMCNotification
 Warning <-- omc4py.exception.OMCWarning
+
+Exception <-ri- RuntimeError
+RuntimeError <-- omc4py.exception.OMCRuntimeError
 @enduml
 -->
-![class diagram of omc4py.exception](http://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKhEIImkLd2jI4ujACdCpuFomnEByZBpqhcuyX9pKuiB4fDJ5V9paqqAAlLIOIeLghaKW02Ytj_N6Mu4gh1VVabcMcPo8gOCr0uqKugAyekuG68ePYhOwEgYcuPJ4S9WJ7c47RLSN5meKXW-r4FMZAuOPWcKncu0cei9AeO7kqDgNWemTW00)
+![class diagram of omc4py.exception](http://www.plantuml.com/plantuml/svg/SoWkIImgAStDuSfBp4qjBaXCJbN8pqqsAQZKIwr8JYqeoSpFKwZcKW02VrzdLxYGZQukIC0lloGpBJCv4II6Kr5uOb5UPbuwJddNegBy8fooGQLv9PcvgH15jLnSA0emtAg7R0Igug9CNGMOKw0qTYFG_4LGCLGUqpOKfoDpS1g5eiCXDIy563C0)
 
 Some Scripting API set error internal (not raise direct)
 
