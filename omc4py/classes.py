@@ -11,6 +11,7 @@ __all__ = (
 
 import abc
 import enum
+import itertools
 import functools
 import numpy  # type: ignore
 import typing
@@ -26,6 +27,18 @@ Dimensions = typing.Tuple[typing.Optional[int], ...]
 REQUIRED = typing_extensions.Literal["required"]
 OPTIONAL = typing_extensions.Literal["optional"]
 REQUIRED_or_OPTIONAL = typing.Union[REQUIRED, OPTIONAL]
+
+VariableNameLike = typing.Union[
+    "TypeName",
+    "VariableName",
+    str,
+]
+
+TypeNameLike = typing.Union[
+    "ModelicaClassMeta",
+    "ModelicaEnumeration",
+    VariableNameLike,
+]
 
 InputArgument = typing.Tuple[
     "Component", str,
@@ -64,19 +77,29 @@ class VariableName(
 
     def __new__(
         cls,
-        obj,
+        obj: VariableNameLike,
     ):
         if isinstance(obj, VariableName):
             return obj
 
-        obj_str = str(obj)
-        if not parser.is_valid_identifier(obj_str):
+        identifier: str
+        if isinstance(obj, TypeName):
+            identifier = to_omc_literal(obj)
+        elif isinstance(obj, str):
+            identifier = obj
+        else:
+            raise TypeError(
+                "obj must be TypeName, VariableName or str, "
+                f"got {obj!r}: {type(obj)}"
+            )
+
+        if not parser.is_valid_identifier(identifier):
             raise ValueError(
-                f"Invalid modelica identifier, got {obj_str!r}"
+                f"Invalid modelica identifier, got {identifier!r}"
             )
 
         return cls.__from_valid_identifier_no_check__(
-            obj_str
+            identifier
         )
 
     @classmethod
@@ -127,27 +150,45 @@ class TypeName(
             if isinstance(part, TypeName):
                 return part
 
-        return cls.__from_valid_parts_no_check__(
-            cls.__checked_parts(
-                (part, *parts)
+        self = super().__new__(TypeName)
+        self.__parts = tuple(cls.__split_parts((part, *parts)))
+
+        return self
+
+    @staticmethod
+    def __split_parts(
+        parts: typing.Iterable[TypeNameLike],
+    ) -> typing.Iterator[str]:
+        for i, part in enumerate(
+            itertools.chain(*map(TypeName.__split_part, parts))
+        ):
+            if part == "." and not i == 0:
+                raise ValueError(
+                    f"parts[{i}] is invalid, got {part!r}"
+                )
+            yield part
+
+    @staticmethod
+    def __split_part(
+        part: TypeNameLike,
+    ) -> typing.Iterator[str]:
+        if isinstance(part, ModelicaClassMeta):
+            yield from part.__modelica_name__.parts
+        elif isinstance(part, ModelicaEnumeration):
+            yield from part.__as_typeName__().parts
+        elif isinstance(part, TypeName):
+            yield from part.parts
+        elif isinstance(part, VariableName):
+            yield str(part)
+        elif isinstance(part, str):
+            if part == ".":
+                yield part
+            else:
+                yield from parser.parse_typeName(part).parts
+        else:
+            raise TypeError(
+                f"Unexpected part, got {part}: {type(part)}"
             )
-        )
-
-    @classmethod
-    def from_str(
-        cls,
-        s: str
-    ) -> "TypeName":
-        return parser.parse_typeName(s)
-
-    @classmethod
-    def __from_valid_parts_no_check__(
-        cls,
-        parts: typing.Iterable[str],
-    ):
-        typeName = object.__new__(TypeName)
-        typeName.__parts = tuple(parts)
-        return typeName
 
     @property
     def parts(
@@ -187,34 +228,6 @@ class TypeName(
             return parent
         else:
             return self
-
-    @classmethod
-    def __checked_parts(
-        cls,
-        objs: typing.Iterable,
-    ) -> typing.Iterator[typing.Union[str, VariableName]]:
-
-        def not_checked_parts(
-        ) -> typing.Iterator[str]:
-            for obj in objs:
-                if isinstance(obj, TypeName):
-                    yield from obj.parts
-                elif isinstance(obj, VariableName):
-                    yield str(obj)
-                elif isinstance(obj, str):
-                    if obj == ".":
-                        yield obj
-                    else:
-                        yield from cls.from_str(obj).parts
-
-        for i, part in enumerate(
-            not_checked_parts()
-        ):
-            if part == "." and not i == 0:
-                raise ValueError(
-                    f"parts[{i}] is invalid, got {part!r}"
-                )
-            yield part
 
     def __hash__(self):
         return hash(self.parts)
@@ -689,9 +702,14 @@ class Component(
         elif self.class_ is String:
             return tuple({String, str})
         elif self.class_ is TypeName:
-            return tuple({TypeName, str})
+            return tuple({
+                ModelicaClassMeta, ModelicaEnumeration,
+                TypeName, VariableName, str,
+            })  # TypeNameLike
         elif self.class_ is VariableName:
-            return tuple({VariableName, str})
+            return tuple({
+                TypeName, VariableName, str,
+            })  # VariableNameLike
         else:
             return ()
 
@@ -875,8 +893,11 @@ class ModelicaEnumeration(
 ):
     __modelica_name__: typing.ClassVar[TypeName]
 
+    def __as_typeName__(self) -> TypeName:
+        return self.__modelica_name__/self.name
+
     def __str__(self) -> str:
-        return str(self.__modelica_name__/self.name)
+        return str(self.__as_typeName__())
 
     __to_omc_literal__ = __str__
 
