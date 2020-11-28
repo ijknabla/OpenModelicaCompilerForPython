@@ -38,6 +38,8 @@ class OMCSessionBase(
 class OMCSessionBase__v_1_13(
     OMCSessionBase,
 ):
+    getMessagesStringInternal: typing.Callable
+
     def __check__(
         self,
     ):
