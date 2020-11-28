@@ -228,7 +228,8 @@ class TypeName(
         return self.__parts
 
     @property
-    def is_absolute(self) -> bool: return bool(self.parts) and self.parts[0] == "."
+    def is_absolute(self) -> bool:
+        return bool(self.parts) and self.parts[0] == "."
 
     def as_absolute(self):
         if self.is_absolute:
