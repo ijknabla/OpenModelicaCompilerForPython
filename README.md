@@ -126,11 +126,9 @@ with open_session() as session:
     print(session.OpenModelica.Scripting.Internal.Time.timerTock(timer_index))
 ```
 
-- - -
+#### Typical API
 
-Let me show my favorite API(s)
-
-#### `loadModel`
+##### `loadModel`
 
 Load library and returns True if success. You can specify versions by second argument
 
@@ -148,7 +146,7 @@ with omc4py.open_session() as session:
     assert(session.loadModel("Modelica", ["3.2.3"]))  # load MSL 3.2.3
 ```
 
-#### `getClassNames`
+##### `getClassNames`
 
 Returns array of class names in the given class
 
@@ -172,7 +170,7 @@ with omc4py.open_session() as session:
         print(className)  # many class names will be printed
 ```
 
-#### `getComponents`
+##### `getComponents`
 
 Returns array of component (variable, parameter, constant, ...etc) profiles
 
