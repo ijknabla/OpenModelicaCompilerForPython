@@ -126,6 +126,36 @@ with open_session() as session:
     print(session.OpenModelica.Scripting.Internal.Time.timerTock(timer_index))
 ```
 
+#### Error
+
+<!--
+@startuml
+class Exception
+class Warning
+
+namespace omc4py.exception {
+    class OMCException
+    class OMCNotification
+    class OMCWarning
+    class OMCError
+
+    OMCException <-- OMCNotification
+    OMCException <-- OMCWarning
+    OMCException <-- OMCError
+}
+
+
+Exception <-- omc4py.exception.OMCException
+
+Exception <-- Warning
+Warning <-- omc4py.exception.OMCNotification
+Warning <-- omc4py.exception.OMCWarning
+@enduml
+-->
+![class diagram of omc4py.exception](http://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKhEIImkLd2jI4ujACdCpuFomnEByZBpqhcuyX9pKuiB4fDJ5V9paqqAAlLIOIeLghaKW02Ytj_N6Mu4gh1VVabcMcPo8gOCr0uqKugAyekuG68ePYhOwEgYcuPJ4S9WJ7c47RLSN5meKXW-r4FMZAuOPWcKncu0cei9AeO7kqDgNWemTW00)
+
+Some Scripting API set error internal (not raise direct)
+
 #### Typical API
 
 ##### `loadModel`
