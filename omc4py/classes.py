@@ -924,6 +924,9 @@ class ModelicaEnumeration(
 ):
     __modelica_name__: typing.ClassVar[TypeName]
 
+    def _generate_next_value_(name, start, count, last_values):
+        return Integer(count + 1)
+
     def __as_typeName__(self) -> TypeName:
         return self.__modelica_name__/self.name
 
