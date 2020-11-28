@@ -919,7 +919,6 @@ class external(
 # base classes for modelica-like class
 
 class ModelicaEnumeration(
-    Integer,
     enum.Enum,
     metaclass=ModelicaEnumerationMeta,
 ):
