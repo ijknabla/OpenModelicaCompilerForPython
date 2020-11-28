@@ -56,10 +56,10 @@ KT = typing.TypeVar("KT")
 # Primitive classes {Real, Integer, Boolean, String}
 
 if typing.TYPE_CHECKING:
-    Real: typing.Type[float]
-    Integer: typing.Type[int]
-    Boolean: typing.Type[bool]
-    String: typing.Type[str]
+    Real = float
+    Integer = int
+    Boolean = bool
+    String = str
 else:
     Real = numpy.double
     Integer = numpy.intc
