@@ -57,6 +57,11 @@ TypeNameLike = typing.Union[
     VariableNameLike,
 ]
 
+EnumerationLike = typing.Union[
+    "ModelicaEnumerationMeta",
+    "TypeName",
+]
+
 InputArgument = typing.Tuple[
     "Component", str,
     typing.Any, REQUIRED_or_OPTIONAL
@@ -395,9 +400,7 @@ class ModelicaEnumerationMeta(
                     f"value: TypeName must be {cls.__modelica_name__}.* "
                     f"got {value!s}"
                 )
-            return cls(str(value.last_identifier))
-        elif isinstance(value, str):
-            return cls[value]
+            return cls[str(value.last_identifier)]
         else:
             return super().__call__(value)
 
@@ -742,6 +745,10 @@ class Component(
             return (  # VariableNameLike
                 TypeName, VariableName, str,
             )
+        elif issubclass(self.class_, ModelicaEnumeration):
+            return (  # EnumerationLike
+                self.class_, TypeName,
+            )
         else:
             return ()
 
@@ -919,11 +926,13 @@ class external(
 # base classes for modelica-like class
 
 class ModelicaEnumeration(
-    Integer,
     enum.Enum,
     metaclass=ModelicaEnumerationMeta,
 ):
     __modelica_name__: typing.ClassVar[TypeName]
+
+    def _generate_next_value_(name, start, count, last_values):
+        return Integer(count + 1)
 
     def __as_typeName__(self) -> TypeName:
         return self.__modelica_name__/self.name
