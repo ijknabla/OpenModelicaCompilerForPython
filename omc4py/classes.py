@@ -248,8 +248,8 @@ class TypeName(
         self,
     ) -> typing.Iterator["TypeName"]:
         for end in reversed(range(1, len(self.parts))):
-            yield self.__from_valid_parts_no_check__(
-                self.parts[:end],
+            yield TypeName(
+                *self.parts[:end],
             )
 
     @property
