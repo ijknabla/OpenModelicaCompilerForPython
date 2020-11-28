@@ -26,6 +26,7 @@ __all__ = (
 )
 
 import abc
+import arpeggio  # type: ignore
 import enum
 import itertools
 import functools
@@ -151,6 +152,19 @@ class VariableName(
         return f"{type(self).__name__}({str(self)!r})"
 
     __to_omc_literal__ = __str__
+
+
+class VariableNameVisitor(
+    arpeggio.PTNodeVisitor,
+):
+    def visit_IDENT(
+        self,
+        node,
+        children,
+    ) -> VariableName:
+        return VariableName.__from_valid_identifier_no_check__(
+            node.value
+        )
 
 
 class TypeName(

@@ -10,6 +10,7 @@ from omc4py.classes import (
     Real,
     TypeName,
     VariableName,
+    VariableNameVisitor,
 )
 
 from omc4py import string
@@ -42,19 +43,6 @@ def getitem_with_default(
             return default
         else:
             raise
-
-
-class VariableNameVisitor(
-    arpeggio.PTNodeVisitor,
-):
-    def visit_IDENT(
-        self,
-        node,
-        children,
-    ) -> VariableName:
-        return VariableName.__from_valid_identifier_no_check__(
-            node.value
-        )
 
 
 class TypeSpecifierVisitor(
