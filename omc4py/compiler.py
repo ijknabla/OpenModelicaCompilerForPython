@@ -240,13 +240,9 @@ class OMCInteractive(
             )
         )
 
+        # return None if result_literal == "\n"
         if not result_literal or result_literal.isspace():
-            if outputArguments:
-                raise ValueError(
-                    f"Unexpected empty result, got {result_literal!r}"
-                )
-            else:
-                return None
+            return None
 
         try:
             result_value = parser(result_literal)
@@ -260,7 +256,7 @@ class OMCInteractive(
                 "There is no output variable in the function, "
                 f"but omc returns {result_value!r}"
             )
-        if len(outputArguments) == 1:
+        elif len(outputArguments) == 1:
             (component, name,), = outputArguments
             return component.cast(name, result_value)
         else:
