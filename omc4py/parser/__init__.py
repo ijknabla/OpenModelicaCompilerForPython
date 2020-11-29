@@ -138,7 +138,11 @@ def parse_OMCError(
     level = matched.group("level").lower()
     # message = matched.group("message")
 
-    if level == "error":
-        return exception.OMCError(error_string)
-    else:
+    if level == "notification":
+        return exception.OMCNotification(error_string)
+    elif level == "warning":
         return exception.OMCWarning(error_string)
+    elif level == "error":
+        return exception.OMCError(error_string)
+    else:  # Not-implemented now, but valid level (for future)
+        return exception.OMCError(error_string)
