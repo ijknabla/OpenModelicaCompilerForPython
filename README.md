@@ -220,17 +220,21 @@ RuntimeError <-- omc4py.exception.OMCRuntimeError
 We are not sure about whole OpenModelica's exception handling policy.
 Through `omc4py` project, We found that there are 4 situation for expection caused by function calls.
 
-- Function returns "\n" instead of valid value (no exception info)
-- Function returns formatted error message (contains sourceInfo, level, kind) instead of valid value
-- Function returns unformatted error message (typically, startswith "* Error") instead of valid value
-- Function returns valid value and set exception messages internally
+omc behavior
 
-In `omc4py`...  
-1st case, function returns `None` instead of valid result (no exception will be sent).  
-2nd and 3rd case, function send `OMCNotification`, `OMCWarning` or `OMCError`.  
-4th case, function do not send any exception. You can check exceptions explicitly by `session.__check__()`
+1. Function returns "\n" instead of valid value (no exception info)
+1. Function returns formatted error messages (contains sourceInfo, level, kind, message) instead of valid value
+1. Function returns unformatted error message (typically, startswith "* Error") instead of valid value
+1. Function returns valid value and set exception messages internally
 
-Noramally, 4th case seems to be _notification_ or _warning_. If you want to be sure to check for exceptions, call `session.__check__()` before exit doubtful context.
+`omc4py` behavior
+
+1) function returns `None` instead of valid result (no exception will be sent)
+1) function send `OMCNotification` or `OMCWarning`, or raise `OMCError`
+1) function raise `OMCRuntimeError` with the message returned by the omc
+1) function returns valid value. You can check exceptions explicitly by `session.__check__()`
+
+Normally, 4th case seems to be _notification_ or _warning_. If you want to be sure to check for exceptions, call `session.__check__()` before exit doubtful context.
 
 ```python3
 from omc4py import open_session
