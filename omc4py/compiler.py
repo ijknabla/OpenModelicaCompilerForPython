@@ -9,12 +9,15 @@ import tempfile
 import typing
 import typing_extensions
 import uuid
+import warnings
 import zmq  # type: ignore
 
 from . import (
     classes,
     string,
 )
+
+from .parser import parse_OMCExceptions
 
 
 logger = logging.getLogger(__name__)
@@ -247,9 +250,11 @@ class OMCInteractive(
         try:
             result_value = parser(result_literal)
         except Exception:
-            raise ValueError(
-                f"Failed to parse {result_literal!r}"
-            ) from None
+            for exc in parse_OMCExceptions(result_literal):
+                if isinstance(exc, Warning):
+                    warnings.warn(exc)
+                else:
+                    raise exc from None
 
         if len(outputArguments) == 0:
             raise ValueError(
