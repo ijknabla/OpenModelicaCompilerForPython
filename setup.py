@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="OpenModelicaCompiler",
-    version="0.0.0",
+    version="0.0.1",
     description="OpenModelica compiler (omc) interface for Python>=3.6",
     long_description=(Path(__file__).parent/"README.md").read_text(),
     long_description_content_type="text/markdown",
@@ -26,6 +26,10 @@ setup(
     packages=[
         "omc4py",
         "omc4py.parser",
+        "omc4py.v_1_13",
+        "omc4py.v_1_14",
+        "omc4py.v_1_15",
+        "omc4py.v_1_16",
     ],
     install_requires=[
         "ModelicaLanguage==0.0.0a6",  # fix to current alpha version
