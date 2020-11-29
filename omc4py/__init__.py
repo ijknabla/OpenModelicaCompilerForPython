@@ -32,4 +32,8 @@ __license__ = '''
  */
 '''
 
+__all__ = (
+    "open_session",
+)
+
 from .session import open_session
