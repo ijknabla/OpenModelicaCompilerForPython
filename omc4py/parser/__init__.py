@@ -66,7 +66,7 @@ def get_omc_value_parser() -> arpeggio.Parser:
 @functools.lru_cache(1)
 def get_omc_error_regex():
     return re.compile(
-        r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
+        r"(\[(?P<info>[^]]*)\]\s+)?(?P<level>\w+):\s+(?P<message>.*)"
     )
 
 
@@ -135,10 +135,10 @@ def parse_OMCError(
             f"Unexpected error message format: {error_string!r}"
         )
     # info = matched.group("info")
-    kind = matched.group("kind")
+    level = matched.group("level").lower()
     # message = matched.group("message")
 
-    if kind.lower() == "error":
+    if level == "error":
         return exception.OMCError(error_string)
     else:
         return exception.OMCWarning(error_string)
