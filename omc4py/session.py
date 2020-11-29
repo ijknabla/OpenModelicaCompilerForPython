@@ -16,7 +16,7 @@ from .classes import (
 )
 from .parser import (
     ComponentTuple,
-    parse_OMCError,
+    parse_OMCExceptions,
     parse_OMCValue,
     parse_components,
 )
@@ -77,15 +77,11 @@ class OMCSessionMinimal(
     def __check__(
         self,
     ) -> None:
-        for errorString in self.getErrorString().splitlines():
-            error = parse_OMCError(errorString)
-            if error is None:
-                return
-
-            if isinstance(error, Warning):
-                warnings.warn(error)
+        for exc in parse_OMCExceptions(self.getErrorString()):
+            if isinstance(exc, Warning):
+                warnings.warn(exc)
             else:
-                raise error
+                raise exc
 
     def getErrorString(
         self,
