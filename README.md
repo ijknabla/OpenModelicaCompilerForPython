@@ -95,7 +95,9 @@ Besides, session object has `__close__` method to explicitly close session.
 
 ### About session API
 
-All methods of session as same as modelica-functions in _OpenModelica.Scripting.*_ in terms of argument types and return value types. If you want to know accurate signature, read `help(session)` or Scripting API section of OpenModelica UserGuide.
+All session methods are _OpenModelica.Scripting.*_ functions. The names and types of arguments and return values are the same as the original modelica function, and session internally converts between the python class and the modelica class.
+
+If you want to know more about each session method, you can display it with the `help ()` function.
 
 - [UserGuide for OpenModelica Scripting API (v1.14)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.14/scripting_api.html)
 - [UserGuide for OpenModelica Scripting API (v1.15)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.15/scripting_api.html)
