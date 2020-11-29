@@ -9,13 +9,14 @@ import shutil
 import sys
 import typing
 
-import omc4py.compiler
+from omc4py.session import open_session
 
 from . import (
     interface_xml,
     module_py,
-    session,
 )
+
+from .session import OMCSessionBootstrap
 
 
 class InputType(
@@ -39,9 +40,11 @@ def generate_omc_interface(
     outputFormat: OutputFormat,
 ):
     if inputType is InputType.executable:
-        with omc4py.compiler.OMCInteractive.open(inputPath) as omc:
+        with open_session(
+            inputPath, session_type=OMCSessionBootstrap,
+        ) as session:
             omc_interface_xml = interface_xml.generate_omc_interface_xml(
-                session.OMCSessionBootstrap(omc)
+                typing.cast(OMCSessionBootstrap, session)
             )
     else:  # inputType is InputType.xml:
         omc_interface_xml = etree.parse(str(inputPath))
