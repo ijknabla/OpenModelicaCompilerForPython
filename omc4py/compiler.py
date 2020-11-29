@@ -9,12 +9,15 @@ import tempfile
 import typing
 import typing_extensions
 import uuid
+import warnings
 import zmq  # type: ignore
 
 from . import (
     classes,
     string,
 )
+
+from .parser import parse_OMCExceptions
 
 
 logger = logging.getLogger(__name__)
@@ -240,27 +243,25 @@ class OMCInteractive(
             )
         )
 
+        # return None if result_literal == "\n"
         if not result_literal or result_literal.isspace():
-            if outputArguments:
-                raise ValueError(
-                    f"Unexpected empty result, got {result_literal!r}"
-                )
-            else:
-                return None
+            return None
 
         try:
             result_value = parser(result_literal)
         except Exception:
-            raise ValueError(
-                f"Failed to parse {result_literal!r}"
-            ) from None
+            for exc in parse_OMCExceptions(result_literal):
+                if isinstance(exc, Warning):
+                    warnings.warn(exc)
+                else:
+                    raise exc from None
 
         if len(outputArguments) == 0:
             raise ValueError(
                 "There is no output variable in the function, "
                 f"but omc returns {result_value!r}"
             )
-        if len(outputArguments) == 1:
+        elif len(outputArguments) == 1:
             (component, name,), = outputArguments
             return component.cast(name, result_value)
         else:

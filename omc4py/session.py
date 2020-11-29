@@ -1,6 +1,5 @@
 
 import abc
-import functools
 import re
 import typing
 import warnings
@@ -17,6 +16,7 @@ from .classes import (
 )
 from .parser import (
     ComponentTuple,
+    parse_OMCExceptions,
     parse_OMCValue,
     parse_components,
 )
@@ -71,51 +71,17 @@ class OMCSessionBase__v_1_13(
                 )
 
 
-@functools.lru_cache(1)
-def get_omc_error_regex():
-    return re.compile(
-        r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
-    )
-
-
-def parse_OMCError(
-    error_string: str,
-) -> typing.Optional[exception.OMCException]:
-    if not error_string or error_string.isspace():
-        return None
-
-    matched = get_omc_error_regex().match(
-        error_string
-    )
-    if not matched:
-        raise exception.OMCRuntimeError(
-            f"Unexpected error message format: {error_string!r}"
-        )
-    # info = matched.group("info")
-    kind = matched.group("kind")
-    # message = matched.group("message")
-
-    if kind.lower() == "error":
-        return exception.OMCError(error_string)
-    else:
-        return exception.OMCWarning(error_string)
-
-
 class OMCSessionMinimal(
     OMCSessionBase,
 ):
     def __check__(
         self,
     ) -> None:
-        for errorString in self.getErrorString().splitlines():
-            error = parse_OMCError(errorString)
-            if error is None:
-                return
-
-            if isinstance(error, Warning):
-                warnings.warn(error)
+        for exc in parse_OMCExceptions(self.getErrorString()):
+            if isinstance(exc, Warning):
+                warnings.warn(exc)
             else:
-                raise error
+                raise exc
 
     def getErrorString(
         self,

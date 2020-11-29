@@ -2,6 +2,7 @@
 __all__ = (
     "ComponentTuple",
     "is_valid_identifier",
+    "parse_OMCExceptions",
     "parse_OMCValue",
     "parse_typeName",
     "parse_components",
@@ -9,9 +10,11 @@ __all__ = (
 
 import arpeggio  # type: ignore
 import functools
+import re
 import typing
 
-from omc4py.classes import TypeName
+from ..classes import TypeName
+from .. import exception
 
 from . import (
     syntax,
@@ -57,6 +60,18 @@ def get_omc_record_array_parser() -> arpeggio.Parser:
 def get_omc_value_parser() -> arpeggio.Parser:
     return arpeggio.ParserPython(
         syntax.omc_value_withEOF,
+    )
+
+
+@functools.lru_cache(1)
+def get_omc_exception_regex():
+    return re.compile(
+        (
+            r"(\[(?P<info>[^]]*)\]\s+)?"
+            r"(?P<level>\w+):\s+"
+            r"(?P<message>((?!$).)*)$"
+        ),
+        re.MULTILINE,
     )
 
 
@@ -109,3 +124,20 @@ def parse_OMCValue__v_1_13(
         get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor__v_1_13(),
     )
+
+
+def parse_OMCExceptions(
+    error_string: str,
+) -> typing.Iterator[exception.OMCException]:
+    for matched in get_omc_exception_regex().finditer(error_string):
+        level = matched.group("level").lower()
+        message = matched.group("message")
+
+        if level == "notification":
+            yield exception.OMCNotification(message)
+        elif level == "warning":
+            yield exception.OMCWarning(message)
+        elif level == "error":
+            yield exception.OMCError(message)
+        else:  # Not-implemented now, but valid level (for future)
+            yield exception.OMCError(message)
