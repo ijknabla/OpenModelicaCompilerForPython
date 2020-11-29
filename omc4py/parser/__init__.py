@@ -2,7 +2,7 @@
 __all__ = (
     "ComponentTuple",
     "is_valid_identifier",
-    "parse_OMCError",
+    "parse_OMCExceptions",
     "parse_OMCValue",
     "parse_typeName",
     "parse_components",
@@ -124,33 +124,6 @@ def parse_OMCValue__v_1_13(
         get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor__v_1_13(),
     )
-
-
-def parse_OMCError(
-    error_string: str,
-) -> typing.Optional[exception.OMCException]:
-    if not error_string or error_string.isspace():
-        return None
-
-    matched = get_omc_error_regex().match(
-        error_string
-    )
-    if not matched:
-        raise exception.OMCRuntimeError(
-            f"Unexpected error message format: {error_string!r}"
-        )
-    # info = matched.group("info")
-    level = matched.group("level").lower()
-    message = matched.group("message")
-
-    if level == "notification":
-        return exception.OMCNotification(message)
-    elif level == "warning":
-        return exception.OMCWarning(message)
-    elif level == "error":
-        return exception.OMCError(message)
-    else:  # Not-implemented now, but valid level (for future)
-        return exception.OMCError(message)
 
 
 def parse_OMCExceptions(
