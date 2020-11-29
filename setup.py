@@ -18,6 +18,9 @@ setup(
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Physics",
+        "Topic :: Software Development :: User Interfaces",
     ],
     url="https://github.com/ijknabla/OpenModelicaCompilerForPython",
     packages=[
