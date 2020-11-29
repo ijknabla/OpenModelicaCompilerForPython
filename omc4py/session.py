@@ -4,22 +4,74 @@ import re
 import typing
 import warnings
 
-from omc4py import (
+from . import (
     exception,
+    compiler,
 )
 
 from .classes import (
+    AbstractOMCInteractive,
     AbstractOMCSession,
     Component,
     String,
     TypeName,
 )
+
 from .parser import (
     ComponentTuple,
     parse_OMCExceptions,
     parse_OMCValue,
     parse_components,
 )
+
+
+def __select_session_type(
+    omc: AbstractOMCInteractive,
+) -> typing.Type[AbstractOMCSession]:
+    """
+Session class selector.
+Update this after new omc version supported!!!
+    """
+    version = OMCSessionMinimal(omc).getVersionTuple()
+    if version[:2] <= (1, 13):
+        from . import v_1_13
+        return v_1_13.OMCSession
+    elif version[:2] == (1, 14):
+        from . import v_1_14
+        return v_1_14.OMCSession
+    elif version[:2] == (1, 15):
+        from . import v_1_15
+        return v_1_15.OMCSession
+    else:  # version[:2] >= (1, 16):
+        from . import v_1_16
+        return v_1_16.OMCSession
+
+
+def open_session(
+    omc_command: typing.Optional[compiler.StrOrPathLike] = None,
+    *,
+    session_type: typing.Optional[
+        typing.Type[AbstractOMCSession]
+    ] = None,
+) -> AbstractOMCSession:
+    omc = compiler.OMCInteractive.open(omc_command)
+
+    try:
+        if session_type is None:
+            session_type = __select_session_type(omc)
+        else:
+            if not issubclass(session_type, AbstractOMCSession):
+                raise TypeError(
+                    "session_type must be "
+                    f"subclass of {AbstractOMCSession}, "
+                    f"got {session_type}"
+                )
+
+        return session_type(omc)
+
+    except Exception:
+        omc.close()
+        raise
 
 
 class OMCSessionBase(
