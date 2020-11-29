@@ -5,14 +5,16 @@ OpenModelica compiler (omc) interface for Python>=3.6
 
 ### Setup
 
-Check OpenModelica install on your system.  
-[https://openmodelica.org/](https://openmodelica.org/)
+Make sure that OpenModelica is installed on your system.
 
 ```bash
 $ omc --version
 ```
 
-Install _OpenModelicaCompiler_ with pip.
+OpenModelica official page [https://openmodelica.org/](https://openmodelica.org/)
+
+Install OpenModelicaCompiler with pip.
+
 ```
 $ python3 -m pip install OpenModelicaCompiler
 ```
