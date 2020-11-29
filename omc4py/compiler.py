@@ -14,6 +14,7 @@ import zmq  # type: ignore
 
 from . import (
     classes,
+    exception,
     string,
 )
 
@@ -250,11 +251,19 @@ class OMCInteractive(
         try:
             result_value = parser(result_literal)
         except Exception:
-            for exc in parse_OMCExceptions(result_literal):
-                if isinstance(exc, Warning):
-                    warnings.warn(exc)
+            excs = list(parse_OMCExceptions(result_literal))
+            if not excs:
+                raise exception.OMCRuntimeError(
+                    result_literal
+                )
+            else:
+                for exc in excs:
+                    if isinstance(exc, Warning):
+                        warnings.warn(exc)
+                    else:
+                        raise exc from None
                 else:
-                    raise exc from None
+                    return
 
         if len(outputArguments) == 0:
             raise ValueError(
