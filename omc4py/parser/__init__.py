@@ -2,6 +2,7 @@
 __all__ = (
     "ComponentTuple",
     "is_valid_identifier",
+    "parse_OMCError",
     "parse_OMCValue",
     "parse_typeName",
     "parse_components",
@@ -9,9 +10,11 @@ __all__ = (
 
 import arpeggio  # type: ignore
 import functools
+import re
 import typing
 
-from omc4py.classes import TypeName
+from ..classes import TypeName
+from .. import exception
 
 from . import (
     syntax,
@@ -57,6 +60,13 @@ def get_omc_record_array_parser() -> arpeggio.Parser:
 def get_omc_value_parser() -> arpeggio.Parser:
     return arpeggio.ParserPython(
         syntax.omc_value_withEOF,
+    )
+
+
+@functools.lru_cache(1)
+def get_omc_error_regex():
+    return re.compile(
+        r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
     )
 
 
@@ -109,3 +119,26 @@ def parse_OMCValue__v_1_13(
         get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor__v_1_13(),
     )
+
+
+def parse_OMCError(
+    error_string: str,
+) -> typing.Optional[exception.OMCException]:
+    if not error_string or error_string.isspace():
+        return None
+
+    matched = get_omc_error_regex().match(
+        error_string
+    )
+    if not matched:
+        raise exception.OMCRuntimeError(
+            f"Unexpected error message format: {error_string!r}"
+        )
+    # info = matched.group("info")
+    kind = matched.group("kind")
+    # message = matched.group("message")
+
+    if kind.lower() == "error":
+        return exception.OMCError(error_string)
+    else:
+        return exception.OMCWarning(error_string)

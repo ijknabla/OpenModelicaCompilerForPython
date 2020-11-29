@@ -1,6 +1,5 @@
 
 import abc
-import functools
 import re
 import typing
 import warnings
@@ -17,6 +16,7 @@ from .classes import (
 )
 from .parser import (
     ComponentTuple,
+    parse_OMCError,
     parse_OMCValue,
     parse_components,
 )
@@ -69,36 +69,6 @@ class OMCSessionBase__v_1_13(
                 raise exception.OMCRuntimeError(
                     f"Unexpected message level, got {level}"
                 )
-
-
-@functools.lru_cache(1)
-def get_omc_error_regex():
-    return re.compile(
-        r"(\[(?P<info>[^]]*)\]\s+)?(?P<kind>\w+):\s+(?P<message>.*)"
-    )
-
-
-def parse_OMCError(
-    error_string: str,
-) -> typing.Optional[exception.OMCException]:
-    if not error_string or error_string.isspace():
-        return None
-
-    matched = get_omc_error_regex().match(
-        error_string
-    )
-    if not matched:
-        raise exception.OMCRuntimeError(
-            f"Unexpected error message format: {error_string!r}"
-        )
-    # info = matched.group("info")
-    kind = matched.group("kind")
-    # message = matched.group("message")
-
-    if kind.lower() == "error":
-        return exception.OMCError(error_string)
-    else:
-        return exception.OMCWarning(error_string)
 
 
 class OMCSessionMinimal(
