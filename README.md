@@ -15,7 +15,7 @@ OpenModelica official page [https://openmodelica.org/](https://openmodelica.org/
 
 Install OpenModelicaCompiler with pip.
 
-```
+```bash
 $ python3 -m pip install OpenModelicaCompiler
 ```
 
