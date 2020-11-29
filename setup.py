@@ -6,7 +6,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="OpenModelicaCompiler",
-    version="0.0.0a2",
+    version="0.0.0",
     description="OpenModelica compiler (omc) interface for Python>=3.6",
     long_description=(Path(__file__).parent/"README.md").read_text(),
     long_description_content_type="text/markdown",
@@ -14,10 +14,13 @@ setup(
     author_email="ijknabla@gmail.com",
     license="OSMC-PL 1.2",
     classifiers=[
-        "Development Status :: 3 - Alpha",
+        "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3 :: Only",
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.6",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Physics",
+        "Topic :: Software Development :: User Interfaces",
     ],
     url="https://github.com/ijknabla/OpenModelicaCompilerForPython",
     packages=[
