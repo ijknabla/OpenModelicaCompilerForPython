@@ -66,7 +66,8 @@ def get_omc_value_parser() -> arpeggio.Parser:
 @functools.lru_cache(1)
 def get_omc_error_regex():
     return re.compile(
-        r"(\[(?P<info>[^]]*)\]\s+)?(?P<level>\w+):\s+(?P<message>.*)"
+        r"(\[(?P<info>[^]]*)\]\s+)?(?P<level>\w+):\s+(?P<message>((?!$).)*)$",
+        re.MULTILINE,
     )
 
 
