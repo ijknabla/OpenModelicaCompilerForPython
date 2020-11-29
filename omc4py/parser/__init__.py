@@ -151,3 +151,20 @@ def parse_OMCError(
         return exception.OMCError(message)
     else:  # Not-implemented now, but valid level (for future)
         return exception.OMCError(message)
+
+
+def parse_OMCExceptions(
+    error_string: str,
+) -> typing.Iterator[exception.OMCException]:
+    for matched in get_omc_error_regex().finditer(error_string):
+        level = matched.group("level").lower()
+        message = matched.group("message")
+
+        if level == "notification":
+            yield exception.OMCNotification(message)
+        elif level == "warning":
+            yield exception.OMCWarning(message)
+        elif level == "error":
+            yield exception.OMCError(message)
+        else:  # Not-implemented now, but valid level (for future)
+            yield exception.OMCError(message)
