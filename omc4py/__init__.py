@@ -34,6 +34,20 @@ __license__ = '''
 
 __all__ = (
     "open_session",
+    "Real",
+    "Integer",
+    "Boolean",
+    "String",
+    "VariableName",
+    "TypeName",
 )
 
+from .classes import (
+    Boolean,
+    Integer,
+    Real,
+    String,
+    TypeName,
+    VariableName,
+)
 from .session import open_session
