@@ -42,7 +42,7 @@ with omc4py.open_session(
     print(session.getVersion())
 ```
 
-It is also possible to launch multiple versions of omc at the same time by explicitly specifying omc.
+It is also possible to open multiple sessions with different versions of omc at the same time by explicitly specifying omc.
 
 ```python3
 from contextlib import ExitStack
@@ -60,9 +60,9 @@ with ExitStack() as stack:
     print("v1.14.0:", session_14.getVersion())
 ```
 
-As shown above, __It is recommended to call `omc4py.open_session` via with-statement__ for secure resource handling.
+As shown above, __it is recommended to ensure that session is closed by calling `omc4py.open_session()` via with-statement__.
 
-But, sometimes you want to use session object interactively, (like _OMShell_) `omc4py` manages omc processes created in current python interpreter, and ensure to close at exit interpreter.
+However, sometimes you want to use session interactively, like OMShell. `omc4py` closes all unclosed sessions when exiting the python interpreter.
 
 ```python3
 >>> from omc4py import *
