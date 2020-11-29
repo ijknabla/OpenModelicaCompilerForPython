@@ -64,7 +64,7 @@ def get_omc_value_parser() -> arpeggio.Parser:
 
 
 @functools.lru_cache(1)
-def get_omc_error_regex():
+def get_omc_exception_regex():
     return re.compile(
         (
             r"(\[(?P<info>[^]]*)\]\s+)?"
@@ -129,7 +129,7 @@ def parse_OMCValue__v_1_13(
 def parse_OMCExceptions(
     error_string: str,
 ) -> typing.Iterator[exception.OMCException]:
-    for matched in get_omc_error_regex().finditer(error_string):
+    for matched in get_omc_exception_regex().finditer(error_string):
         level = matched.group("level").lower()
         message = matched.group("message")
 
