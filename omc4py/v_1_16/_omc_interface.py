@@ -4659,7 +4659,7 @@ end getLoadedLibraries;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String)[:,2], 'libraries'),
+                        (Component(String)[:, 2], 'libraries'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4704,7 +4704,7 @@ end solveLinearSystem;
                 return _session_.__omc__.call_function(
                     funcName='solveLinearSystem',
                     inputArguments=[
-                        (Component(Real)[:,:], 'A', A, 'required'),
+                        (Component(Real)[:, :], 'A', A, 'required'),
                         (Component(Real)[:], 'B', B, 'required'),
                         (Component(OpenModelica.Scripting.LinearSystemSolver), 'solver', solver, 'optional'),
                         (Component(Integer)[:], 'isInt', isInt, 'optional'),
@@ -6157,7 +6157,7 @@ end readSimulationResult;
                         (Component(Integer), 'size', size, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Real)[:,:], 'result'),
+                        (Component(Real)[:, :], 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9326,7 +9326,7 @@ end getUses;
                         (Component(TypeName), 'pack', pack, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:,:], 'uses'),
+                        (Component(String)[:, :], 'uses'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9778,7 +9778,7 @@ end checkInterfaceOfPackages;
                     funcName='checkInterfaceOfPackages',
                     inputArguments=[
                         (Component(TypeName), 'cl', cl, 'required'),
-                        (Component(String)[:,:], 'dependencyMatrix', dependencyMatrix, 'required'),
+                        (Component(String)[:, :], 'dependencyMatrix', dependencyMatrix, 'required'),
                     ],
                     outputArguments=[
                         (Component(Boolean), 'success'),
@@ -9896,7 +9896,7 @@ end getTransitions;
                         (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:,:], 'transitions'),
+                        (Component(String)[:, :], 'transitions'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -10096,7 +10096,7 @@ end getInitialStates;
                         (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:,:], 'initialStates'),
+                        (Component(String)[:, :], 'initialStates'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -12901,7 +12901,7 @@ end relocateFunctions;
                         funcName='OpenModelica.Scripting.Experimental.relocateFunctions',
                         inputArguments=[
                             (Component(String), 'fileName', fileName, 'required'),
-                            (Component(String)[:,2], 'names', names, 'required'),
+                            (Component(String)[:, 2], 'names', names, 'required'),
                         ],
                         outputArguments=[
                             (Component(Boolean), 'success'),
