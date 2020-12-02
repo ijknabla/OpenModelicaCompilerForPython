@@ -156,6 +156,14 @@ class OMCSessionMinimal(
             else:
                 raise exc
 
+    def getComponents(
+        self,
+        name: TypeName
+    ) -> typing.Optional[typing.List[ComponentTuple]]:
+        result = super().getComponents(name)
+        self.__check__()
+        return result
+
     def getErrorString(
         self,
     ) -> str:
