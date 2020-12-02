@@ -89,17 +89,30 @@ def is_supported_element(
         ref = element.attrib["ref"]
         target, = element.xpath(f'//*[@id="{ref}"]')
         return is_supported_element(target)
-    elif element.tag == "function":
-        for classNameAndDimensions in map(
-            ClassNameAndDimensions.from_component,
-            element.xpath('./components/arguments/*'),
-        ):
-            if "$" in str(classNameAndDimensions.className):
-                return False
-        else:
-            return True
-    else:
-        return True
+
+    if element.tag in {"function", "record"}:
+        def valid_component(
+            component: etree._Element,
+        ) -> bool:
+            className, _ = ClassNameAndDimensions.from_component(
+                component
+            )
+            if className in {
+                TypeName("Real"),
+                TypeName("Integer"),
+                TypeName("Boolean"),
+                TypeName("String"),
+                TypeName("VariableName"),
+                TypeName("TypeName"),
+            }:
+                return True
+
+            class_ = element.xpath(f'//*[@id="{className!s}"]')
+            return bool(class_) and is_supported_element(class_[0])
+
+        return all(map(valid_component, element.xpath("./components/*/*")))
+
+    return True
 
 
 class AbstractModelicaClass(
