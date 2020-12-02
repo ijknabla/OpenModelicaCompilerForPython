@@ -67,7 +67,7 @@ class ClassNameAndDimensions(
             s_dimensions = ''
         else:
             s_dimensions = "[{}]".format(
-                ','.join(
+                ', '.join(
                     str(dimension) if dimension is not None else ':'
                     for dimension in self.dimensions
                 )
