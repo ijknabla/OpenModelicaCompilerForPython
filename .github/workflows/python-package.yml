@@ -32,4 +32,4 @@ jobs:
       run: |
         # Stop build if flake8 find error
         # - The GitHub editor is 127 chars wide
-        flake8 . --verbose --per-file-ignores omc4py/*/_omc_interface.py:E501 --count --max-complexity=14 --max-line-length=127 --show-source --statistics
+        flake8 . --verbose --count --max-complexity=14 --max-line-length=127 --show-source --statistics
