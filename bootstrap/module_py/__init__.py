@@ -67,7 +67,7 @@ class ClassNameAndDimensions(
             s_dimensions = ''
         else:
             s_dimensions = "[{}]".format(
-                ','.join(
+                ', '.join(
                     str(dimension) if dimension is not None else ':'
                     for dimension in self.dimensions
                 )
@@ -396,9 +396,9 @@ class ModelicaFunction(
                 CodeWithIndent(
                     *(
                         "("
-                        f"{argument.component_literal},"
-                        f"{argument.modelica_name!r},"
-                        f"{argument.py_name},"
+                        f"{argument.component_literal}, "
+                        f"{argument.modelica_name!r}, "
+                        f"{argument.py_name}, "
                         f"{argument.required!r}"
                         "),"
                         for argument in inputArguments
@@ -409,7 +409,7 @@ class ModelicaFunction(
                 CodeWithIndent(
                     *(
                         "("
-                        f"{get_component_literal(argument)},"
+                        f"{get_component_literal(argument)}, "
                         f'{argument.attrib["name"]!r}'
                         "),"
                         for argument in self.element.xpath(

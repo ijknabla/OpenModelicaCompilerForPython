@@ -143,7 +143,9 @@ def open_by_output_args(
                     [
                         inquirer.Confirm(
                             "overwrite",
-                            message=f"Do you want to overwrite {output_str!r}?",
+                            message=(
+                                f"Do you want to overwrite {output_str!r}?"
+                            ),
                         )
                     ]
                 )
