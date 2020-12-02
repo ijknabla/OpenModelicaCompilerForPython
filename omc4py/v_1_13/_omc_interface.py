@@ -152,10 +152,10 @@ end readableTime;
                         return _session_.__omc__.call_function(
                             funcName='OpenModelica.Scripting.Internal.Time.readableTime',
                             inputArguments=[
-                                (Component(Real),'sec',sec,'required'),
+                                (Component(Real), 'sec', sec, 'required'),
                             ],
                             outputArguments=[
-                                (Component(String),'str'),
+                                (Component(String), 'str'),
                             ],
                             parser=parse_OMCValue,
                         )
@@ -180,7 +180,7 @@ end timerTick;
                         return _session_.__omc__.call_function(
                             funcName='OpenModelica.Scripting.Internal.Time.timerTick',
                             inputArguments=[
-                                (Component(Integer),'index',index,'required'),
+                                (Component(Integer), 'index', index, 'required'),
                             ],
                             outputArguments=[
                             ],
@@ -208,10 +208,10 @@ end timerTock;
                         return _session_.__omc__.call_function(
                             funcName='OpenModelica.Scripting.Internal.Time.timerTock',
                             inputArguments=[
-                                (Component(Integer),'index',index,'required'),
+                                (Component(Integer), 'index', index, 'required'),
                             ],
                             outputArguments=[
-                                (Component(Real),'elapsed'),
+                                (Component(Real), 'elapsed'),
                             ],
                             parser=parse_OMCValue,
                         )
@@ -236,7 +236,7 @@ end timerClear;
                         return _session_.__omc__.call_function(
                             funcName='OpenModelica.Scripting.Internal.Time.timerClear',
                             inputArguments=[
-                                (Component(Integer),'index',index,'required'),
+                                (Component(Integer), 'index', index, 'required'),
                             ],
                             outputArguments=[
                             ],
@@ -278,10 +278,10 @@ end stat;
                     return _session_.__omc__.call_function(
                         funcName='OpenModelica.Scripting.Internal.stat',
                         inputArguments=[
-                            (Component(String),'name',name,'required'),
+                            (Component(String), 'name', name, 'required'),
                         ],
                         outputArguments=[
-                            (Component(OpenModelica.Scripting.Internal.FileType),'fileType'),
+                            (Component(OpenModelica.Scripting.Internal.FileType), 'fileType'),
                         ],
                         parser=parse_OMCValue,
                     )
@@ -307,7 +307,7 @@ end checkSettings;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(OpenModelica.Scripting.CheckSettingsResult),'result'),
+                        (Component(OpenModelica.Scripting.CheckSettingsResult), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -337,12 +337,12 @@ end loadFile;
                 return _session_.__omc__.call_function(
                     funcName='loadFile',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(String),'encoding',encoding,'optional'),
-                        (Component(Boolean),'uses',uses,'optional'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(String), 'encoding', encoding, 'optional'),
+                        (Component(Boolean), 'uses', uses, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -372,12 +372,12 @@ end loadFiles;
                 return _session_.__omc__.call_function(
                     funcName='loadFiles',
                     inputArguments=[
-                        (Component(String)[:],'fileNames',fileNames,'required'),
-                        (Component(String),'encoding',encoding,'optional'),
-                        (Component(Integer),'numThreads',numThreads,'optional'),
+                        (Component(String)[:], 'fileNames', fileNames, 'required'),
+                        (Component(String), 'encoding', encoding, 'optional'),
+                        (Component(Integer), 'numThreads', numThreads, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -405,11 +405,11 @@ end loadEncryptedPackage;
                 return _session_.__omc__.call_function(
                     funcName='loadEncryptedPackage',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(String),'workdir',workdir,'optional'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(String), 'workdir', workdir, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -437,11 +437,11 @@ end reloadClass;
                 return _session_.__omc__.call_function(
                     funcName='reloadClass',
                     inputArguments=[
-                        (Component(TypeName),'name',name,'required'),
-                        (Component(String),'encoding',encoding,'optional'),
+                        (Component(TypeName), 'name', name, 'required'),
+                        (Component(String), 'encoding', encoding, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -473,13 +473,13 @@ end loadString;
                 return _session_.__omc__.call_function(
                     funcName='loadString',
                     inputArguments=[
-                        (Component(String),'data',data,'required'),
-                        (Component(String),'filename',filename,'optional'),
-                        (Component(String),'encoding',encoding,'optional'),
-                        (Component(Boolean),'merge',merge,'optional'),
+                        (Component(String), 'data', data, 'required'),
+                        (Component(String), 'filename', filename, 'optional'),
+                        (Component(String), 'encoding', encoding, 'optional'),
+                        (Component(Boolean), 'merge', merge, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -507,11 +507,11 @@ end parseString;
                 return _session_.__omc__.call_function(
                     funcName='parseString',
                     inputArguments=[
-                        (Component(String),'data',data,'required'),
-                        (Component(String),'filename',filename,'optional'),
+                        (Component(String), 'data', data, 'required'),
+                        (Component(String), 'filename', filename, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'names'),
+                        (Component(TypeName)[:], 'names'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -539,11 +539,11 @@ end parseFile;
                 return _session_.__omc__.call_function(
                     funcName='parseFile',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'encoding',encoding,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'encoding', encoding, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'names'),
+                        (Component(TypeName)[:], 'names'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -571,11 +571,11 @@ end loadFileInteractiveQualified;
                 return _session_.__omc__.call_function(
                     funcName='loadFileInteractiveQualified',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'encoding',encoding,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'encoding', encoding, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'names'),
+                        (Component(TypeName)[:], 'names'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -603,11 +603,11 @@ end loadFileInteractive;
                 return _session_.__omc__.call_function(
                     funcName='loadFileInteractive',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'encoding',encoding,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'encoding', encoding, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'names'),
+                        (Component(TypeName)[:], 'names'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -635,11 +635,11 @@ end system;
                 return _session_.__omc__.call_function(
                     funcName='system',
                     inputArguments=[
-                        (Component(String),'callStr',callStr,'required'),
-                        (Component(String),'outputFile',outputFile,'optional'),
+                        (Component(String), 'callStr', callStr, 'required'),
+                        (Component(String), 'outputFile', outputFile, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'retval'),
+                        (Component(Integer), 'retval'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -667,11 +667,11 @@ end system_parallel;
                 return _session_.__omc__.call_function(
                     funcName='system_parallel',
                     inputArguments=[
-                        (Component(String)[:],'callStr',callStr,'required'),
-                        (Component(Integer),'numThreads',numThreads,'optional'),
+                        (Component(String)[:], 'callStr', callStr, 'required'),
+                        (Component(Integer), 'numThreads', numThreads, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Integer)[:],'retval'),
+                        (Component(Integer)[:], 'retval'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -697,10 +697,10 @@ end saveAll;
                 return _session_.__omc__.call_function(
                     funcName='saveAll',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -726,10 +726,10 @@ end help;
                 return _session_.__omc__.call_function(
                     funcName='help',
                     inputArguments=[
-                        (Component(String),'topic',topic,'optional'),
+                        (Component(String), 'topic', topic, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'helpText'),
+                        (Component(String), 'helpText'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -755,7 +755,7 @@ end clear;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -781,7 +781,7 @@ end clearProgram;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -807,7 +807,7 @@ end clearVariables;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -833,10 +833,10 @@ end generateHeader;
                 return _session_.__omc__.call_function(
                     funcName='generateHeader',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -864,11 +864,11 @@ end generateSeparateCode;
                 return _session_.__omc__.call_function(
                     funcName='generateSeparateCode',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Boolean),'cleanCache',cleanCache,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Boolean), 'cleanCache', cleanCache, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -894,10 +894,10 @@ end generateSeparateCodeDependencies;
                 return _session_.__omc__.call_function(
                     funcName='generateSeparateCodeDependencies',
                     inputArguments=[
-                        (Component(String),'stampSuffix',stampSuffix,'optional'),
+                        (Component(String), 'stampSuffix', stampSuffix, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'dependencies'),
+                        (Component(String)[:], 'dependencies'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -927,12 +927,12 @@ end generateSeparateCodeDependenciesMakefile;
                 return _session_.__omc__.call_function(
                     funcName='generateSeparateCodeDependenciesMakefile',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'directory',directory,'optional'),
-                        (Component(String),'suffix',suffix,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'directory', directory, 'optional'),
+                        (Component(String), 'suffix', suffix, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -958,7 +958,7 @@ end getLinker;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'linker'),
+                        (Component(String), 'linker'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -984,10 +984,10 @@ end setLinker;
                 return _session_.__omc__.call_function(
                     funcName='setLinker',
                     inputArguments=[
-                        (Component(String),'linker',linker,'required'),
+                        (Component(String), 'linker', linker, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1013,7 +1013,7 @@ end getLinkerFlags;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'linkerFlags'),
+                        (Component(String), 'linkerFlags'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1039,10 +1039,10 @@ end setLinkerFlags;
                 return _session_.__omc__.call_function(
                     funcName='setLinkerFlags',
                     inputArguments=[
-                        (Component(String),'linkerFlags',linkerFlags,'required'),
+                        (Component(String), 'linkerFlags', linkerFlags, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1068,7 +1068,7 @@ end getCompiler;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'compiler'),
+                        (Component(String), 'compiler'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1094,10 +1094,10 @@ end setCompiler;
                 return _session_.__omc__.call_function(
                     funcName='setCompiler',
                     inputArguments=[
-                        (Component(String),'compiler',compiler,'required'),
+                        (Component(String), 'compiler', compiler, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1123,10 +1123,10 @@ end setCFlags;
                 return _session_.__omc__.call_function(
                     funcName='setCFlags',
                     inputArguments=[
-                        (Component(String),'inString',inString,'required'),
+                        (Component(String), 'inString', inString, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1152,7 +1152,7 @@ end getCFlags;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'outString'),
+                        (Component(String), 'outString'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1178,7 +1178,7 @@ end getCXXCompiler;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'compiler'),
+                        (Component(String), 'compiler'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1204,10 +1204,10 @@ end setCXXCompiler;
                 return _session_.__omc__.call_function(
                     funcName='setCXXCompiler',
                     inputArguments=[
-                        (Component(String),'compiler',compiler,'required'),
+                        (Component(String), 'compiler', compiler, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1233,7 +1233,7 @@ end verifyCompiler;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'compilerWorks'),
+                        (Component(Boolean), 'compilerWorks'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1259,10 +1259,10 @@ end setCompilerPath;
                 return _session_.__omc__.call_function(
                     funcName='setCompilerPath',
                     inputArguments=[
-                        (Component(String),'compilerPath',compilerPath,'required'),
+                        (Component(String), 'compilerPath', compilerPath, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1288,7 +1288,7 @@ end getCompileCommand;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'compileCommand'),
+                        (Component(String), 'compileCommand'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1314,10 +1314,10 @@ end setCompileCommand;
                 return _session_.__omc__.call_function(
                     funcName='setCompileCommand',
                     inputArguments=[
-                        (Component(String),'compileCommand',compileCommand,'required'),
+                        (Component(String), 'compileCommand', compileCommand, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1343,10 +1343,10 @@ end setPlotCommand;
                 return _session_.__omc__.call_function(
                     funcName='setPlotCommand',
                     inputArguments=[
-                        (Component(String),'plotCommand',plotCommand,'required'),
+                        (Component(String), 'plotCommand', plotCommand, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1372,7 +1372,7 @@ end getSettings;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'settings'),
+                        (Component(String), 'settings'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1398,10 +1398,10 @@ end setTempDirectoryPath;
                 return _session_.__omc__.call_function(
                     funcName='setTempDirectoryPath',
                     inputArguments=[
-                        (Component(String),'tempDirectoryPath',tempDirectoryPath,'required'),
+                        (Component(String), 'tempDirectoryPath', tempDirectoryPath, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1427,7 +1427,7 @@ end getTempDirectoryPath;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'tempDirectoryPath'),
+                        (Component(String), 'tempDirectoryPath'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1453,10 +1453,10 @@ end getEnvironmentVar;
                 return _session_.__omc__.call_function(
                     funcName='getEnvironmentVar',
                     inputArguments=[
-                        (Component(String),'var',var,'required'),
+                        (Component(String), 'var', var, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'value'),
+                        (Component(String), 'value'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1484,11 +1484,11 @@ end setEnvironmentVar;
                 return _session_.__omc__.call_function(
                     funcName='setEnvironmentVar',
                     inputArguments=[
-                        (Component(String),'var',var,'required'),
-                        (Component(String),'value',value,'required'),
+                        (Component(String), 'var', var, 'required'),
+                        (Component(String), 'value', value, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1516,11 +1516,11 @@ end appendEnvironmentVar;
                 return _session_.__omc__.call_function(
                     funcName='appendEnvironmentVar',
                     inputArguments=[
-                        (Component(String),'var',var,'required'),
-                        (Component(String),'value',value,'required'),
+                        (Component(String), 'var', var, 'required'),
+                        (Component(String), 'value', value, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1546,10 +1546,10 @@ end setInstallationDirectoryPath;
                 return _session_.__omc__.call_function(
                     funcName='setInstallationDirectoryPath',
                     inputArguments=[
-                        (Component(String),'installationDirectoryPath',installationDirectoryPath,'required'),
+                        (Component(String), 'installationDirectoryPath', installationDirectoryPath, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1575,7 +1575,7 @@ end getInstallationDirectoryPath;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'installationDirectoryPath'),
+                        (Component(String), 'installationDirectoryPath'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1601,10 +1601,10 @@ end setModelicaPath;
                 return _session_.__omc__.call_function(
                     funcName='setModelicaPath',
                     inputArguments=[
-                        (Component(String),'modelicaPath',modelicaPath,'required'),
+                        (Component(String), 'modelicaPath', modelicaPath, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1630,7 +1630,7 @@ end getModelicaPath;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'modelicaPath'),
+                        (Component(String), 'modelicaPath'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1656,10 +1656,10 @@ end setCompilerFlags;
                 return _session_.__omc__.call_function(
                     funcName='setCompilerFlags',
                     inputArguments=[
-                        (Component(String),'compilerFlags',compilerFlags,'required'),
+                        (Component(String), 'compilerFlags', compilerFlags, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1685,10 +1685,10 @@ end setDebugFlags;
                 return _session_.__omc__.call_function(
                     funcName='setDebugFlags',
                     inputArguments=[
-                        (Component(String),'debugFlags',debugFlags,'required'),
+                        (Component(String), 'debugFlags', debugFlags, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1714,7 +1714,7 @@ end clearDebugFlags;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1740,10 +1740,10 @@ end setPreOptModules;
                 return _session_.__omc__.call_function(
                     funcName='setPreOptModules',
                     inputArguments=[
-                        (Component(String),'modules',modules,'required'),
+                        (Component(String), 'modules', modules, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1769,10 +1769,10 @@ end setCheapMatchingAlgorithm;
                 return _session_.__omc__.call_function(
                     funcName='setCheapMatchingAlgorithm',
                     inputArguments=[
-                        (Component(Integer),'matchingAlgorithm',matchingAlgorithm,'required'),
+                        (Component(Integer), 'matchingAlgorithm', matchingAlgorithm, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1798,7 +1798,7 @@ end getMatchingAlgorithm;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'selected'),
+                        (Component(String), 'selected'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1825,8 +1825,8 @@ end getAvailableMatchingAlgorithms;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String)[:],'allChoices'),
-                        (Component(String)[:],'allComments'),
+                        (Component(String)[:], 'allChoices'),
+                        (Component(String)[:], 'allComments'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1852,10 +1852,10 @@ end setMatchingAlgorithm;
                 return _session_.__omc__.call_function(
                     funcName='setMatchingAlgorithm',
                     inputArguments=[
-                        (Component(String),'matchingAlgorithm',matchingAlgorithm,'required'),
+                        (Component(String), 'matchingAlgorithm', matchingAlgorithm, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1881,7 +1881,7 @@ end getIndexReductionMethod;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'selected'),
+                        (Component(String), 'selected'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1908,8 +1908,8 @@ end getAvailableIndexReductionMethods;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String)[:],'allChoices'),
-                        (Component(String)[:],'allComments'),
+                        (Component(String)[:], 'allChoices'),
+                        (Component(String)[:], 'allComments'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1935,10 +1935,10 @@ end setIndexReductionMethod;
                 return _session_.__omc__.call_function(
                     funcName='setIndexReductionMethod',
                     inputArguments=[
-                        (Component(String),'method',method,'required'),
+                        (Component(String), 'method', method, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1964,10 +1964,10 @@ end setPostOptModules;
                 return _session_.__omc__.call_function(
                     funcName='setPostOptModules',
                     inputArguments=[
-                        (Component(String),'modules',modules,'required'),
+                        (Component(String), 'modules', modules, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -1993,7 +1993,7 @@ end getTearingMethod;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'selected'),
+                        (Component(String), 'selected'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2020,8 +2020,8 @@ end getAvailableTearingMethods;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String)[:],'allChoices'),
-                        (Component(String)[:],'allComments'),
+                        (Component(String)[:], 'allChoices'),
+                        (Component(String)[:], 'allComments'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2047,10 +2047,10 @@ end setTearingMethod;
                 return _session_.__omc__.call_function(
                     funcName='setTearingMethod',
                     inputArguments=[
-                        (Component(String),'tearingMethod',tearingMethod,'required'),
+                        (Component(String), 'tearingMethod', tearingMethod, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2076,10 +2076,10 @@ end setCommandLineOptions;
                 return _session_.__omc__.call_function(
                     funcName='setCommandLineOptions',
                     inputArguments=[
-                        (Component(String),'option',option,'required'),
+                        (Component(String), 'option', option, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2105,7 +2105,7 @@ end getCommandLineOptions;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String)[:],'flags'),
+                        (Component(String)[:], 'flags'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2133,12 +2133,12 @@ end getConfigFlagValidOptions;
                 return _session_.__omc__.call_function(
                     funcName='getConfigFlagValidOptions',
                     inputArguments=[
-                        (Component(String),'flag',flag,'required'),
+                        (Component(String), 'flag', flag, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'validOptions'),
-                        (Component(String),'mainDescription'),
-                        (Component(String)[:],'descriptions'),
+                        (Component(String)[:], 'validOptions'),
+                        (Component(String), 'mainDescription'),
+                        (Component(String)[:], 'descriptions'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2164,7 +2164,7 @@ end clearCommandLineOptions;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2190,10 +2190,10 @@ end getVersion;
                 return _session_.__omc__.call_function(
                     funcName='getVersion',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'optional'),
+                        (Component(TypeName), 'cl', cl, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'version'),
+                        (Component(String), 'version'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2219,10 +2219,10 @@ end regularFileExists;
                 return _session_.__omc__.call_function(
                     funcName='regularFileExists',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'exists'),
+                        (Component(Boolean), 'exists'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2248,10 +2248,10 @@ end directoryExists;
                 return _session_.__omc__.call_function(
                     funcName='directoryExists',
                     inputArguments=[
-                        (Component(String),'dirName',dirName,'required'),
+                        (Component(String), 'dirName', dirName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'exists'),
+                        (Component(Boolean), 'exists'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2279,12 +2279,12 @@ end stat;
                 return _session_.__omc__.call_function(
                     funcName='stat',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
-                        (Component(Real),'fileSize'),
-                        (Component(Real),'mtime'),
+                        (Component(Boolean), 'success'),
+                        (Component(Real), 'fileSize'),
+                        (Component(Real), 'mtime'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2310,10 +2310,10 @@ end readFile;
                 return _session_.__omc__.call_function(
                     funcName='readFile',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'contents'),
+                        (Component(String), 'contents'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2343,12 +2343,12 @@ end writeFile;
                 return _session_.__omc__.call_function(
                     funcName='writeFile',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(String),'data',data,'required'),
-                        (Component(Boolean),'append',append,'optional'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(String), 'data', data, 'required'),
+                        (Component(Boolean), 'append', append, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2376,11 +2376,11 @@ end compareFilesAndMove;
                 return _session_.__omc__.call_function(
                     funcName='compareFilesAndMove',
                     inputArguments=[
-                        (Component(String),'newFile',newFile,'required'),
-                        (Component(String),'oldFile',oldFile,'required'),
+                        (Component(String), 'newFile', newFile, 'required'),
+                        (Component(String), 'oldFile', oldFile, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2408,11 +2408,11 @@ end compareFiles;
                 return _session_.__omc__.call_function(
                     funcName='compareFiles',
                     inputArguments=[
-                        (Component(String),'file1',file1,'required'),
-                        (Component(String),'file2',file2,'required'),
+                        (Component(String), 'file1', file1, 'required'),
+                        (Component(String), 'file2', file2, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'isEqual'),
+                        (Component(Boolean), 'isEqual'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2438,10 +2438,10 @@ end alarm;
                 return _session_.__omc__.call_function(
                     funcName='alarm',
                     inputArguments=[
-                        (Component(Integer),'seconds',seconds,'required'),
+                        (Component(Integer), 'seconds', seconds, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'previousSeconds'),
+                        (Component(Integer), 'previousSeconds'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2476,15 +2476,15 @@ end regex;
                 return _session_.__omc__.call_function(
                     funcName='regex',
                     inputArguments=[
-                        (Component(String),'str',str,'required'),
-                        (Component(String),'re',re,'required'),
-                        (Component(Integer),'maxMatches',maxMatches,'optional'),
-                        (Component(Boolean),'extended',extended,'optional'),
-                        (Component(Boolean),'caseInsensitive',caseInsensitive,'optional'),
+                        (Component(String), 'str', str, 'required'),
+                        (Component(String), 're', re, 'required'),
+                        (Component(Integer), 'maxMatches', maxMatches, 'optional'),
+                        (Component(Boolean), 'extended', extended, 'optional'),
+                        (Component(Boolean), 'caseInsensitive', caseInsensitive, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'numMatches'),
-                        (Component(String)[:],'matchedSubstrings'),
+                        (Component(Integer), 'numMatches'),
+                        (Component(String)[:], 'matchedSubstrings'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2516,13 +2516,13 @@ end regexBool;
                 return _session_.__omc__.call_function(
                     funcName='regexBool',
                     inputArguments=[
-                        (Component(String),'str',str,'required'),
-                        (Component(String),'re',re,'required'),
-                        (Component(Boolean),'extended',extended,'optional'),
-                        (Component(Boolean),'caseInsensitive',caseInsensitive,'optional'),
+                        (Component(String), 'str', str, 'required'),
+                        (Component(String), 're', re, 'required'),
+                        (Component(Boolean), 'extended', extended, 'optional'),
+                        (Component(Boolean), 'caseInsensitive', caseInsensitive, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'matches'),
+                        (Component(Boolean), 'matches'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2548,10 +2548,10 @@ end testsuiteFriendlyName;
                 return _session_.__omc__.call_function(
                     funcName='testsuiteFriendlyName',
                     inputArguments=[
-                        (Component(String),'path',path,'required'),
+                        (Component(String), 'path', path, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'fixed'),
+                        (Component(String), 'fixed'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2577,10 +2577,10 @@ end readFileNoNumeric;
                 return _session_.__omc__.call_function(
                     funcName='readFileNoNumeric',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'contents'),
+                        (Component(String), 'contents'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2606,10 +2606,10 @@ end getErrorString;
                 return _session_.__omc__.call_function(
                     funcName='getErrorString',
                     inputArguments=[
-                        (Component(Boolean),'warningsAsErrors',warningsAsErrors,'optional'),
+                        (Component(Boolean), 'warningsAsErrors', warningsAsErrors, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'errorString'),
+                        (Component(String), 'errorString'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2635,7 +2635,7 @@ end getMessagesString;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'messagesString'),
+                        (Component(String), 'messagesString'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2769,10 +2769,10 @@ end getMessagesStringInternal;
                 return _session_.__omc__.call_function(
                     funcName='getMessagesStringInternal',
                     inputArguments=[
-                        (Component(Boolean),'unique',unique,'optional'),
+                        (Component(Boolean), 'unique', unique, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(OpenModelica.Scripting.ErrorMessage)[:],'messagesString'),
+                        (Component(OpenModelica.Scripting.ErrorMessage)[:], 'messagesString'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2800,9 +2800,9 @@ end countMessages;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Integer),'numMessages'),
-                        (Component(Integer),'numErrors'),
-                        (Component(Integer),'numWarnings'),
+                        (Component(Integer), 'numMessages'),
+                        (Component(Integer), 'numErrors'),
+                        (Component(Integer), 'numWarnings'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2828,7 +2828,7 @@ end clearMessages;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2854,10 +2854,10 @@ end runScript;
                 return _session_.__omc__.call_function(
                     funcName='runScript',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2883,10 +2883,10 @@ end echo;
                 return _session_.__omc__.call_function(
                     funcName='echo',
                     inputArguments=[
-                        (Component(Boolean),'setEcho',setEcho,'required'),
+                        (Component(Boolean), 'setEcho', setEcho, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'newEcho'),
+                        (Component(Boolean), 'newEcho'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2912,7 +2912,7 @@ end getClassesInModelicaPath;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'classesInModelicaPath'),
+                        (Component(String), 'classesInModelicaPath'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2938,7 +2938,7 @@ end getAnnotationVersion;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'annotationVersion'),
+                        (Component(String), 'annotationVersion'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2964,10 +2964,10 @@ end setAnnotationVersion;
                 return _session_.__omc__.call_function(
                     funcName='setAnnotationVersion',
                     inputArguments=[
-                        (Component(String),'annotationVersion',annotationVersion,'required'),
+                        (Component(String), 'annotationVersion', annotationVersion, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -2993,7 +2993,7 @@ end getNoSimplify;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'noSimplify'),
+                        (Component(Boolean), 'noSimplify'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3019,10 +3019,10 @@ end setNoSimplify;
                 return _session_.__omc__.call_function(
                     funcName='setNoSimplify',
                     inputArguments=[
-                        (Component(Boolean),'noSimplify',noSimplify,'required'),
+                        (Component(Boolean), 'noSimplify', noSimplify, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3048,7 +3048,7 @@ end getVectorizationLimit;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Integer),'vectorizationLimit'),
+                        (Component(Integer), 'vectorizationLimit'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3074,10 +3074,10 @@ end setVectorizationLimit;
                 return _session_.__omc__.call_function(
                     funcName='setVectorizationLimit',
                     inputArguments=[
-                        (Component(Integer),'vectorizationLimit',vectorizationLimit,'required'),
+                        (Component(Integer), 'vectorizationLimit', vectorizationLimit, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3103,7 +3103,7 @@ end getDefaultOpenCLDevice;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Integer),'defdevid'),
+                        (Component(Integer), 'defdevid'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3129,10 +3129,10 @@ end setDefaultOpenCLDevice;
                 return _session_.__omc__.call_function(
                     funcName='setDefaultOpenCLDevice',
                     inputArguments=[
-                        (Component(Integer),'defdevid',defdevid,'required'),
+                        (Component(Integer), 'defdevid', defdevid, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3158,10 +3158,10 @@ end setShowAnnotations;
                 return _session_.__omc__.call_function(
                     funcName='setShowAnnotations',
                     inputArguments=[
-                        (Component(Boolean),'show',show,'required'),
+                        (Component(Boolean), 'show', show, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3187,7 +3187,7 @@ end getShowAnnotations;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'show'),
+                        (Component(Boolean), 'show'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3213,10 +3213,10 @@ end setOrderConnections;
                 return _session_.__omc__.call_function(
                     funcName='setOrderConnections',
                     inputArguments=[
-                        (Component(Boolean),'orderConnections',orderConnections,'required'),
+                        (Component(Boolean), 'orderConnections', orderConnections, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3242,7 +3242,7 @@ end getOrderConnections;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'orderConnections'),
+                        (Component(Boolean), 'orderConnections'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3268,10 +3268,10 @@ end setLanguageStandard;
                 return _session_.__omc__.call_function(
                     funcName='setLanguageStandard',
                     inputArguments=[
-                        (Component(String),'inVersion',inVersion,'required'),
+                        (Component(String), 'inVersion', inVersion, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3297,7 +3297,7 @@ end getLanguageStandard;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String),'outVersion'),
+                        (Component(String), 'outVersion'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3323,10 +3323,10 @@ end getAstAsCorbaString;
                 return _session_.__omc__.call_function(
                     funcName='getAstAsCorbaString',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'optional'),
+                        (Component(String), 'fileName', fileName, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3352,10 +3352,10 @@ end cd;
                 return _session_.__omc__.call_function(
                     funcName='cd',
                     inputArguments=[
-                        (Component(String),'newWorkingDirectory',newWorkingDirectory,'optional'),
+                        (Component(String), 'newWorkingDirectory', newWorkingDirectory, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'workingDirectory'),
+                        (Component(String), 'workingDirectory'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3381,10 +3381,10 @@ end mkdir;
                 return _session_.__omc__.call_function(
                     funcName='mkdir',
                     inputArguments=[
-                        (Component(String),'newDirectory',newDirectory,'required'),
+                        (Component(String), 'newDirectory', newDirectory, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3412,11 +3412,11 @@ end copy;
                 return _session_.__omc__.call_function(
                     funcName='copy',
                     inputArguments=[
-                        (Component(String),'source',source,'required'),
-                        (Component(String),'destination',destination,'required'),
+                        (Component(String), 'source', source, 'required'),
+                        (Component(String), 'destination', destination, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3442,10 +3442,10 @@ end remove;
                 return _session_.__omc__.call_function(
                     funcName='remove',
                     inputArguments=[
-                        (Component(String),'path',path,'required'),
+                        (Component(String), 'path', path, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3471,10 +3471,10 @@ end checkModel;
                 return _session_.__omc__.call_function(
                     funcName='checkModel',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3502,11 +3502,11 @@ end checkAllModelsRecursive;
                 return _session_.__omc__.call_function(
                     funcName='checkAllModelsRecursive',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Boolean),'checkProtected',checkProtected,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Boolean), 'checkProtected', checkProtected, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3532,10 +3532,10 @@ end typeOf;
                 return _session_.__omc__.call_function(
                     funcName='typeOf',
                     inputArguments=[
-                        (Component(VariableName),'variableName',variableName,'required'),
+                        (Component(VariableName), 'variableName', variableName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3561,10 +3561,10 @@ end instantiateModel;
                 return _session_.__omc__.call_function(
                     funcName='instantiateModel',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3594,12 +3594,12 @@ end buildOpenTURNSInterface;
                 return _session_.__omc__.call_function(
                     funcName='buildOpenTURNSInterface',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(String),'pythonTemplateFile',pythonTemplateFile,'required'),
-                        (Component(Boolean),'showFlatModelica',showFlatModelica,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'pythonTemplateFile', pythonTemplateFile, 'required'),
+                        (Component(Boolean), 'showFlatModelica', showFlatModelica, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'outPythonScript'),
+                        (Component(String), 'outPythonScript'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3625,10 +3625,10 @@ end runOpenTURNSPythonScript;
                 return _session_.__omc__.call_function(
                     funcName='runOpenTURNSPythonScript',
                     inputArguments=[
-                        (Component(String),'pythonScriptFile',pythonScriptFile,'required'),
+                        (Component(String), 'pythonScriptFile', pythonScriptFile, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'logOutputFile'),
+                        (Component(String), 'logOutputFile'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3654,10 +3654,10 @@ end generateCode;
                 return _session_.__omc__.call_function(
                     funcName='generateCode',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3691,14 +3691,14 @@ end loadModel;
                 return _session_.__omc__.call_function(
                     funcName='loadModel',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(String)[:],'priorityVersion',priorityVersion,'optional'),
-                        (Component(Boolean),'notify',notify,'optional'),
-                        (Component(String),'languageStandard',languageStandard,'optional'),
-                        (Component(Boolean),'requireExactVersion',requireExactVersion,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String)[:], 'priorityVersion', priorityVersion, 'optional'),
+                        (Component(Boolean), 'notify', notify, 'optional'),
+                        (Component(String), 'languageStandard', languageStandard, 'optional'),
+                        (Component(Boolean), 'requireExactVersion', requireExactVersion, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3724,10 +3724,10 @@ end deleteFile;
                 return _session_.__omc__.call_function(
                     funcName='deleteFile',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3755,11 +3755,11 @@ end saveModel;
                 return _session_.__omc__.call_function(
                     funcName='saveModel',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3791,13 +3791,13 @@ end saveTotalModel;
                 return _session_.__omc__.call_function(
                     funcName='saveTotalModel',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Boolean),'stripAnnotations',stripAnnotations,'optional'),
-                        (Component(Boolean),'stripComments',stripComments,'optional'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Boolean), 'stripAnnotations', stripAnnotations, 'optional'),
+                        (Component(Boolean), 'stripComments', stripComments, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3823,10 +3823,10 @@ end save;
                 return _session_.__omc__.call_function(
                     funcName='save',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3857,10 +3857,10 @@ end translateGraphics;
                 return _session_.__omc__.call_function(
                     funcName='translateGraphics',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3886,10 +3886,10 @@ end translateGraphics;
         #         return _session_.__omc__.call_function(
         #             funcName='codeToString',
         #             inputArguments=[
-        #                 (Component(OpenModelica.$Code),'className',className,'required'),
+        #                 (Component(OpenModelica.$Code), 'className', className, 'required'),
         #             ],
         #             outputArguments=[
-        #                 (Component(String),'string'),
+        #                 (Component(String), 'string'),
         #             ],
         #             parser=parse_OMCValue,
         #         )
@@ -3930,18 +3930,18 @@ end dumpXMLDAE;
                 return _session_.__omc__.call_function(
                     funcName='dumpXMLDAE',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(String),'translationLevel',translationLevel,'optional'),
-                        (Component(Boolean),'addOriginalIncidenceMatrix',addOriginalIncidenceMatrix,'optional'),
-                        (Component(Boolean),'addSolvingInfo',addSolvingInfo,'optional'),
-                        (Component(Boolean),'addMathMLCode',addMathMLCode,'optional'),
-                        (Component(Boolean),'dumpResiduals',dumpResiduals,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(String),'rewriteRulesFile',rewriteRulesFile,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'translationLevel', translationLevel, 'optional'),
+                        (Component(Boolean), 'addOriginalIncidenceMatrix', addOriginalIncidenceMatrix, 'optional'),
+                        (Component(Boolean), 'addSolvingInfo', addSolvingInfo, 'optional'),
+                        (Component(Boolean), 'addMathMLCode', addMathMLCode, 'optional'),
+                        (Component(Boolean), 'dumpResiduals', dumpResiduals, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(String), 'rewriteRulesFile', rewriteRulesFile, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
-                        (Component(String),'xmlfileName'),
+                        (Component(Boolean), 'success'),
+                        (Component(String), 'xmlfileName'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -3971,13 +3971,13 @@ end convertUnits;
                 return _session_.__omc__.call_function(
                     funcName='convertUnits',
                     inputArguments=[
-                        (Component(String),'s1',s1,'required'),
-                        (Component(String),'s2',s2,'required'),
+                        (Component(String), 's1', s1, 'required'),
+                        (Component(String), 's2', s2, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'unitsCompatible'),
-                        (Component(Real),'scaleFactor'),
-                        (Component(Real),'offset'),
+                        (Component(Boolean), 'unitsCompatible'),
+                        (Component(Real), 'scaleFactor'),
+                        (Component(Real), 'offset'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4003,10 +4003,10 @@ end getDerivedUnits;
                 return _session_.__omc__.call_function(
                     funcName='getDerivedUnits',
                     inputArguments=[
-                        (Component(String),'baseUnit',baseUnit,'required'),
+                        (Component(String), 'baseUnit', baseUnit, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'derivedUnits'),
+                        (Component(String)[:], 'derivedUnits'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4032,7 +4032,7 @@ end listVariables;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'variables'),
+                        (Component(TypeName)[:], 'variables'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4060,11 +4060,11 @@ end strtok;
                 return _session_.__omc__.call_function(
                     funcName='strtok',
                     inputArguments=[
-                        (Component(String),'string',string,'required'),
-                        (Component(String),'token',token,'required'),
+                        (Component(String), 'string', string, 'required'),
+                        (Component(String), 'token', token, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'strings'),
+                        (Component(String)[:], 'strings'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4092,11 +4092,11 @@ end stringSplit;
                 return _session_.__omc__.call_function(
                     funcName='stringSplit',
                     inputArguments=[
-                        (Component(String),'string',string,'required'),
-                        (Component(String),'token',token,'required'),
+                        (Component(String), 'string', string, 'required'),
+                        (Component(String), 'token', token, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'strings'),
+                        (Component(String)[:], 'strings'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4126,12 +4126,12 @@ end stringReplace;
                 return _session_.__omc__.call_function(
                     funcName='stringReplace',
                     inputArguments=[
-                        (Component(String),'str',str,'required'),
-                        (Component(String),'source',source,'required'),
-                        (Component(String),'target',target,'required'),
+                        (Component(String), 'str', str, 'required'),
+                        (Component(String), 'source', source, 'required'),
+                        (Component(String), 'target', target, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'res'),
+                        (Component(String), 'res'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4157,10 +4157,10 @@ end escapeXML;
                 return _session_.__omc__.call_function(
                     funcName='escapeXML',
                     inputArguments=[
-                        (Component(String),'inStr',inStr,'required'),
+                        (Component(String), 'inStr', inStr, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'outStr'),
+                        (Component(String), 'outStr'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4206,13 +4206,13 @@ end list;
                 return _session_.__omc__.call_function(
                     funcName='list',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'optional'),
-                        (Component(Boolean),'interfaceOnly',interfaceOnly,'optional'),
-                        (Component(Boolean),'shortOnly',shortOnly,'optional'),
-                        (Component(OpenModelica.Scripting.ExportKind),'exportKind',exportKind,'optional'),
+                        (Component(TypeName), 'class_', class_, 'optional'),
+                        (Component(Boolean), 'interfaceOnly', interfaceOnly, 'optional'),
+                        (Component(Boolean), 'shortOnly', shortOnly, 'optional'),
+                        (Component(OpenModelica.Scripting.ExportKind), 'exportKind', exportKind, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'contents'),
+                        (Component(String), 'contents'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4238,10 +4238,10 @@ end listFile;
                 return _session_.__omc__.call_function(
                     funcName='listFile',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'contents'),
+                        (Component(String), 'contents'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4283,12 +4283,12 @@ end diffModelicaFileListings;
                 return _session_.__omc__.call_function(
                     funcName='diffModelicaFileListings',
                     inputArguments=[
-                        (Component(String),'before',before,'required'),
-                        (Component(String),'after',after,'required'),
-                        (Component(OpenModelica.Scripting.DiffFormat),'diffFormat',diffFormat,'optional'),
+                        (Component(String), 'before', before, 'required'),
+                        (Component(String), 'after', after, 'required'),
+                        (Component(OpenModelica.Scripting.DiffFormat), 'diffFormat', diffFormat, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4324,15 +4324,15 @@ end exportToFigaro;
                 return _session_.__omc__.call_function(
                     funcName='exportToFigaro',
                     inputArguments=[
-                        (Component(TypeName),'path',path,'required'),
-                        (Component(String),'directory',directory,'optional'),
-                        (Component(String),'database',database,'required'),
-                        (Component(String),'mode',mode,'required'),
-                        (Component(String),'options',options,'required'),
-                        (Component(String),'processor',processor,'required'),
+                        (Component(TypeName), 'path', path, 'required'),
+                        (Component(String), 'directory', directory, 'optional'),
+                        (Component(String), 'database', database, 'required'),
+                        (Component(String), 'mode', mode, 'required'),
+                        (Component(String), 'options', options, 'required'),
+                        (Component(String), 'processor', processor, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4358,10 +4358,10 @@ end inferBindings;
                 return _session_.__omc__.call_function(
                     funcName='inferBindings',
                     inputArguments=[
-                        (Component(TypeName),'path',path,'required'),
+                        (Component(TypeName), 'path', path, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4387,10 +4387,10 @@ end generateVerificationScenarios;
                 return _session_.__omc__.call_function(
                     funcName='generateVerificationScenarios',
                     inputArguments=[
-                        (Component(TypeName),'path',path,'required'),
+                        (Component(TypeName), 'path', path, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4418,11 +4418,11 @@ end rewriteBlockCall;
                 return _session_.__omc__.call_function(
                     funcName='rewriteBlockCall',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(TypeName),'inDefs',inDefs,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'inDefs', inDefs, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4448,10 +4448,10 @@ end realpath;
                 return _session_.__omc__.call_function(
                     funcName='realpath',
                     inputArguments=[
-                        (Component(String),'name',name,'required'),
+                        (Component(String), 'name', name, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'fullName'),
+                        (Component(String), 'fullName'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4477,10 +4477,10 @@ end uriToFilename;
                 return _session_.__omc__.call_function(
                     funcName='uriToFilename',
                     inputArguments=[
-                        (Component(String),'uri',uri,'required'),
+                        (Component(String), 'uri', uri, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'filename'),
+                        (Component(String), 'filename'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4506,7 +4506,7 @@ end getLoadedLibraries;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String)[:,2],'libraries'),
+                        (Component(String)[:,2], 'libraries'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4551,14 +4551,14 @@ end solveLinearSystem;
                 return _session_.__omc__.call_function(
                     funcName='solveLinearSystem',
                     inputArguments=[
-                        (Component(Real)[:,:],'A',A,'required'),
-                        (Component(Real)[:],'B',B,'required'),
-                        (Component(OpenModelica.Scripting.LinearSystemSolver),'solver',solver,'optional'),
-                        (Component(Integer)[:],'isInt',isInt,'optional'),
+                        (Component(Real)[:,:], 'A', A, 'required'),
+                        (Component(Real)[:], 'B', B, 'required'),
+                        (Component(OpenModelica.Scripting.LinearSystemSolver), 'solver', solver, 'optional'),
+                        (Component(Integer)[:], 'isInt', isInt, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Real)[:],'X'),
-                        (Component(Integer),'info'),
+                        (Component(Real)[:], 'X'),
+                        (Component(Integer), 'info'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4599,11 +4599,11 @@ end reopenStandardStream;
                 return _session_.__omc__.call_function(
                     funcName='reopenStandardStream',
                     inputArguments=[
-                        (Component(OpenModelica.Scripting.StandardStream),'_stream',_stream,'required'),
-                        (Component(String),'filename',filename,'required'),
+                        (Component(OpenModelica.Scripting.StandardStream), '_stream', _stream, 'required'),
+                        (Component(String), 'filename', filename, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4641,16 +4641,16 @@ end importFMU;
                 return _session_.__omc__.call_function(
                     funcName='importFMU',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'workdir',workdir,'optional'),
-                        (Component(Integer),'loglevel',loglevel,'optional'),
-                        (Component(Boolean),'fullPath',fullPath,'optional'),
-                        (Component(Boolean),'debugLogging',debugLogging,'optional'),
-                        (Component(Boolean),'generateInputConnectors',generateInputConnectors,'optional'),
-                        (Component(Boolean),'generateOutputConnectors',generateOutputConnectors,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'workdir', workdir, 'optional'),
+                        (Component(Integer), 'loglevel', loglevel, 'optional'),
+                        (Component(Boolean), 'fullPath', fullPath, 'optional'),
+                        (Component(Boolean), 'debugLogging', debugLogging, 'optional'),
+                        (Component(Boolean), 'generateInputConnectors', generateInputConnectors, 'optional'),
+                        (Component(Boolean), 'generateOutputConnectors', generateOutputConnectors, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'generatedFileName'),
+                        (Component(String), 'generatedFileName'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4688,16 +4688,16 @@ end importFMUModelDescription;
                 return _session_.__omc__.call_function(
                     funcName='importFMUModelDescription',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'workdir',workdir,'optional'),
-                        (Component(Integer),'loglevel',loglevel,'optional'),
-                        (Component(Boolean),'fullPath',fullPath,'optional'),
-                        (Component(Boolean),'debugLogging',debugLogging,'optional'),
-                        (Component(Boolean),'generateInputConnectors',generateInputConnectors,'optional'),
-                        (Component(Boolean),'generateOutputConnectors',generateOutputConnectors,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'workdir', workdir, 'optional'),
+                        (Component(Integer), 'loglevel', loglevel, 'optional'),
+                        (Component(Boolean), 'fullPath', fullPath, 'optional'),
+                        (Component(Boolean), 'debugLogging', debugLogging, 'optional'),
+                        (Component(Boolean), 'generateInputConnectors', generateInputConnectors, 'optional'),
+                        (Component(Boolean), 'generateOutputConnectors', generateOutputConnectors, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'generatedFileName'),
+                        (Component(String), 'generatedFileName'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4731,14 +4731,14 @@ end translateModelFMU;
                 return _session_.__omc__.call_function(
                     funcName='translateModelFMU',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(String),'version',version,'optional'),
-                        (Component(String),'fmuType',fmuType,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(Boolean),'includeResources',includeResources,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'version', version, 'optional'),
+                        (Component(String), 'fmuType', fmuType, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(Boolean), 'includeResources', includeResources, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'generatedFileName'),
+                        (Component(String), 'generatedFileName'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4774,15 +4774,15 @@ end buildModelFMU;
                 return _session_.__omc__.call_function(
                     funcName='buildModelFMU',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(String),'version',version,'optional'),
-                        (Component(String),'fmuType',fmuType,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(String)[:],'platforms',platforms,'optional'),
-                        (Component(Boolean),'includeResources',includeResources,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'version', version, 'optional'),
+                        (Component(String), 'fmuType', fmuType, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(String)[:], 'platforms', platforms, 'optional'),
+                        (Component(Boolean), 'includeResources', includeResources, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'generatedFileName'),
+                        (Component(String), 'generatedFileName'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4809,11 +4809,11 @@ end buildEncryptedPackage;
                 return _session_.__omc__.call_function(
                     funcName='buildEncryptedPackage',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
-                        (Component(String),'commandOutput'),
+                        (Component(Boolean), 'success'),
+                        (Component(String), 'commandOutput'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4874,21 +4874,21 @@ end simulate;
                 return _session_.__omc__.call_function(
                     funcName='simulate',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Real),'startTime',startTime,'optional'),
-                        (Component(Real),'stopTime',stopTime,'optional'),
-                        (Component(Real),'numberOfIntervals',numberOfIntervals,'optional'),
-                        (Component(Real),'tolerance',tolerance,'optional'),
-                        (Component(String),'method',method,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(String),'options',options,'optional'),
-                        (Component(String),'outputFormat',outputFormat,'optional'),
-                        (Component(String),'variableFilter',variableFilter,'optional'),
-                        (Component(String),'cflags',cflags,'optional'),
-                        (Component(String),'simflags',simflags,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Real), 'startTime', startTime, 'optional'),
+                        (Component(Real), 'stopTime', stopTime, 'optional'),
+                        (Component(Real), 'numberOfIntervals', numberOfIntervals, 'optional'),
+                        (Component(Real), 'tolerance', tolerance, 'optional'),
+                        (Component(String), 'method', method, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(String), 'options', options, 'optional'),
+                        (Component(String), 'outputFormat', outputFormat, 'optional'),
+                        (Component(String), 'variableFilter', variableFilter, 'optional'),
+                        (Component(String), 'cflags', cflags, 'optional'),
+                        (Component(String), 'simflags', simflags, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(OpenModelica.Scripting.simulate.SimulationResult),'simulationResults'),
+                        (Component(OpenModelica.Scripting.simulate.SimulationResult), 'simulationResults'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -4996,21 +4996,21 @@ end buildModel;
                 return _session_.__omc__.call_function(
                     funcName='buildModel',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Real),'startTime',startTime,'optional'),
-                        (Component(Real),'stopTime',stopTime,'optional'),
-                        (Component(Real),'numberOfIntervals',numberOfIntervals,'optional'),
-                        (Component(Real),'tolerance',tolerance,'optional'),
-                        (Component(String),'method',method,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(String),'options',options,'optional'),
-                        (Component(String),'outputFormat',outputFormat,'optional'),
-                        (Component(String),'variableFilter',variableFilter,'optional'),
-                        (Component(String),'cflags',cflags,'optional'),
-                        (Component(String),'simflags',simflags,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Real), 'startTime', startTime, 'optional'),
+                        (Component(Real), 'stopTime', stopTime, 'optional'),
+                        (Component(Real), 'numberOfIntervals', numberOfIntervals, 'optional'),
+                        (Component(Real), 'tolerance', tolerance, 'optional'),
+                        (Component(String), 'method', method, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(String), 'options', options, 'optional'),
+                        (Component(String), 'outputFormat', outputFormat, 'optional'),
+                        (Component(String), 'variableFilter', variableFilter, 'optional'),
+                        (Component(String), 'cflags', cflags, 'optional'),
+                        (Component(String), 'simflags', simflags, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String)[2],'buildModelResults'),
+                        (Component(String)[2], 'buildModelResults'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5058,21 +5058,21 @@ end buildLabel;
                 return _session_.__omc__.call_function(
                     funcName='buildLabel',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Real),'startTime',startTime,'optional'),
-                        (Component(Real),'stopTime',stopTime,'optional'),
-                        (Component(Integer),'numberOfIntervals',numberOfIntervals,'optional'),
-                        (Component(Real),'tolerance',tolerance,'optional'),
-                        (Component(String),'method',method,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(String),'options',options,'optional'),
-                        (Component(String),'outputFormat',outputFormat,'optional'),
-                        (Component(String),'variableFilter',variableFilter,'optional'),
-                        (Component(String),'cflags',cflags,'optional'),
-                        (Component(String),'simflags',simflags,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Real), 'startTime', startTime, 'optional'),
+                        (Component(Real), 'stopTime', stopTime, 'optional'),
+                        (Component(Integer), 'numberOfIntervals', numberOfIntervals, 'optional'),
+                        (Component(Real), 'tolerance', tolerance, 'optional'),
+                        (Component(String), 'method', method, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(String), 'options', options, 'optional'),
+                        (Component(String), 'outputFormat', outputFormat, 'optional'),
+                        (Component(String), 'variableFilter', variableFilter, 'optional'),
+                        (Component(String), 'cflags', cflags, 'optional'),
+                        (Component(String), 'simflags', simflags, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String)[2],'buildModelResults'),
+                        (Component(String)[2], 'buildModelResults'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5122,22 +5122,22 @@ end reduceTerms;
                 return _session_.__omc__.call_function(
                     funcName='reduceTerms',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Real),'startTime',startTime,'optional'),
-                        (Component(Real),'stopTime',stopTime,'optional'),
-                        (Component(Integer),'numberOfIntervals',numberOfIntervals,'optional'),
-                        (Component(Real),'tolerance',tolerance,'optional'),
-                        (Component(String),'method',method,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(String),'options',options,'optional'),
-                        (Component(String),'outputFormat',outputFormat,'optional'),
-                        (Component(String),'variableFilter',variableFilter,'optional'),
-                        (Component(String),'cflags',cflags,'optional'),
-                        (Component(String),'simflags',simflags,'optional'),
-                        (Component(String),'labelstoCancel',labelstoCancel,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Real), 'startTime', startTime, 'optional'),
+                        (Component(Real), 'stopTime', stopTime, 'optional'),
+                        (Component(Integer), 'numberOfIntervals', numberOfIntervals, 'optional'),
+                        (Component(Real), 'tolerance', tolerance, 'optional'),
+                        (Component(String), 'method', method, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(String), 'options', options, 'optional'),
+                        (Component(String), 'outputFormat', outputFormat, 'optional'),
+                        (Component(String), 'variableFilter', variableFilter, 'optional'),
+                        (Component(String), 'cflags', cflags, 'optional'),
+                        (Component(String), 'simflags', simflags, 'optional'),
+                        (Component(String), 'labelstoCancel', labelstoCancel, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String)[2],'buildModelResults'),
+                        (Component(String)[2], 'buildModelResults'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5165,11 +5165,11 @@ end moveClass;
                 return _session_.__omc__.call_function(
                     funcName='moveClass',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Integer),'offset',offset,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Integer), 'offset', offset, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'result'),
+                        (Component(Boolean), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5195,10 +5195,10 @@ end moveClassToTop;
                 return _session_.__omc__.call_function(
                     funcName='moveClassToTop',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'result'),
+                        (Component(Boolean), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5224,10 +5224,10 @@ end moveClassToBottom;
                 return _session_.__omc__.call_function(
                     funcName='moveClassToBottom',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'result'),
+                        (Component(Boolean), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5257,12 +5257,12 @@ end copyClass;
                 return _session_.__omc__.call_function(
                     funcName='copyClass',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(String),'newClassName',newClassName,'required'),
-                        (Component(TypeName),'withIn',withIn,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'newClassName', newClassName, 'required'),
+                        (Component(TypeName), 'withIn', withIn, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'result'),
+                        (Component(Boolean), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5316,24 +5316,24 @@ end linearize;
                 return _session_.__omc__.call_function(
                     funcName='linearize',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Real),'startTime',startTime,'optional'),
-                        (Component(Real),'stopTime',stopTime,'optional'),
-                        (Component(Real),'numberOfIntervals',numberOfIntervals,'optional'),
-                        (Component(Real),'stepSize',stepSize,'optional'),
-                        (Component(Real),'tolerance',tolerance,'optional'),
-                        (Component(String),'method',method,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(Boolean),'storeInTemp',storeInTemp,'optional'),
-                        (Component(Boolean),'noClean',noClean,'optional'),
-                        (Component(String),'options',options,'optional'),
-                        (Component(String),'outputFormat',outputFormat,'optional'),
-                        (Component(String),'variableFilter',variableFilter,'optional'),
-                        (Component(String),'cflags',cflags,'optional'),
-                        (Component(String),'simflags',simflags,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Real), 'startTime', startTime, 'optional'),
+                        (Component(Real), 'stopTime', stopTime, 'optional'),
+                        (Component(Real), 'numberOfIntervals', numberOfIntervals, 'optional'),
+                        (Component(Real), 'stepSize', stepSize, 'optional'),
+                        (Component(Real), 'tolerance', tolerance, 'optional'),
+                        (Component(String), 'method', method, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(Boolean), 'storeInTemp', storeInTemp, 'optional'),
+                        (Component(Boolean), 'noClean', noClean, 'optional'),
+                        (Component(String), 'options', options, 'optional'),
+                        (Component(String), 'outputFormat', outputFormat, 'optional'),
+                        (Component(String), 'variableFilter', variableFilter, 'optional'),
+                        (Component(String), 'cflags', cflags, 'optional'),
+                        (Component(String), 'simflags', simflags, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'linearizationResult'),
+                        (Component(String), 'linearizationResult'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5387,24 +5387,24 @@ end optimize;
                 return _session_.__omc__.call_function(
                     funcName='optimize',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Real),'startTime',startTime,'optional'),
-                        (Component(Real),'stopTime',stopTime,'optional'),
-                        (Component(Real),'numberOfIntervals',numberOfIntervals,'optional'),
-                        (Component(Real),'stepSize',stepSize,'optional'),
-                        (Component(Real),'tolerance',tolerance,'optional'),
-                        (Component(String),'method',method,'optional'),
-                        (Component(String),'fileNamePrefix',fileNamePrefix,'optional'),
-                        (Component(Boolean),'storeInTemp',storeInTemp,'optional'),
-                        (Component(Boolean),'noClean',noClean,'optional'),
-                        (Component(String),'options',options,'optional'),
-                        (Component(String),'outputFormat',outputFormat,'optional'),
-                        (Component(String),'variableFilter',variableFilter,'optional'),
-                        (Component(String),'cflags',cflags,'optional'),
-                        (Component(String),'simflags',simflags,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Real), 'startTime', startTime, 'optional'),
+                        (Component(Real), 'stopTime', stopTime, 'optional'),
+                        (Component(Real), 'numberOfIntervals', numberOfIntervals, 'optional'),
+                        (Component(Real), 'stepSize', stepSize, 'optional'),
+                        (Component(Real), 'tolerance', tolerance, 'optional'),
+                        (Component(String), 'method', method, 'optional'),
+                        (Component(String), 'fileNamePrefix', fileNamePrefix, 'optional'),
+                        (Component(Boolean), 'storeInTemp', storeInTemp, 'optional'),
+                        (Component(Boolean), 'noClean', noClean, 'optional'),
+                        (Component(String), 'options', options, 'optional'),
+                        (Component(String), 'outputFormat', outputFormat, 'optional'),
+                        (Component(String), 'variableFilter', variableFilter, 'optional'),
+                        (Component(String), 'cflags', cflags, 'optional'),
+                        (Component(String), 'simflags', simflags, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'optimizationResults'),
+                        (Component(String), 'optimizationResults'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5430,10 +5430,10 @@ end getSourceFile;
                 return _session_.__omc__.call_function(
                     funcName='getSourceFile',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'filename'),
+                        (Component(String), 'filename'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5461,11 +5461,11 @@ end setSourceFile;
                 return _session_.__omc__.call_function(
                     funcName='setSourceFile',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(String),'filename',filename,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(String), 'filename', filename, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5491,10 +5491,10 @@ end isShortDefinition;
                 return _session_.__omc__.call_function(
                     funcName='isShortDefinition',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'isShortCls'),
+                        (Component(Boolean), 'isShortCls'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5522,11 +5522,11 @@ end setClassComment;
                 return _session_.__omc__.call_function(
                     funcName='setClassComment',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(String),'filename',filename,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(String), 'filename', filename, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5564,16 +5564,16 @@ end getClassNames;
                 return _session_.__omc__.call_function(
                     funcName='getClassNames',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'optional'),
-                        (Component(Boolean),'recursive',recursive,'optional'),
-                        (Component(Boolean),'qualified',qualified,'optional'),
-                        (Component(Boolean),'sort',sort,'optional'),
-                        (Component(Boolean),'builtin',builtin,'optional'),
-                        (Component(Boolean),'showProtected',showProtected,'optional'),
-                        (Component(Boolean),'includeConstants',includeConstants,'optional'),
+                        (Component(TypeName), 'class_', class_, 'optional'),
+                        (Component(Boolean), 'recursive', recursive, 'optional'),
+                        (Component(Boolean), 'qualified', qualified, 'optional'),
+                        (Component(Boolean), 'sort', sort, 'optional'),
+                        (Component(Boolean), 'builtin', builtin, 'optional'),
+                        (Component(Boolean), 'showProtected', showProtected, 'optional'),
+                        (Component(Boolean), 'includeConstants', includeConstants, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'classNames'),
+                        (Component(TypeName)[:], 'classNames'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5599,10 +5599,10 @@ end getUsedClassNames;
                 return _session_.__omc__.call_function(
                     funcName='getUsedClassNames',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'classNames'),
+                        (Component(TypeName)[:], 'classNames'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5628,10 +5628,10 @@ end getPackages;
                 return _session_.__omc__.call_function(
                     funcName='getPackages',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'optional'),
+                        (Component(TypeName), 'class_', class_, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'classNames'),
+                        (Component(TypeName)[:], 'classNames'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5682,21 +5682,21 @@ end basePlotFunction;
                 return _session_.__omc__.call_function(
                     funcName='basePlotFunction',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'optional'),
-                        (Component(String),'interpolation',interpolation,'optional'),
-                        (Component(String),'title',title,'optional'),
-                        (Component(Boolean),'legend',legend,'optional'),
-                        (Component(Boolean),'grid',grid,'optional'),
-                        (Component(Boolean),'logX',logX,'optional'),
-                        (Component(Boolean),'logY',logY,'optional'),
-                        (Component(String),'xLabel',xLabel,'optional'),
-                        (Component(String),'yLabel',yLabel,'optional'),
-                        (Component(Boolean),'points',points,'optional'),
-                        (Component(Real)[2],'xRange',xRange,'optional'),
-                        (Component(Real)[2],'yRange',yRange,'optional'),
+                        (Component(String), 'fileName', fileName, 'optional'),
+                        (Component(String), 'interpolation', interpolation, 'optional'),
+                        (Component(String), 'title', title, 'optional'),
+                        (Component(Boolean), 'legend', legend, 'optional'),
+                        (Component(Boolean), 'grid', grid, 'optional'),
+                        (Component(Boolean), 'logX', logX, 'optional'),
+                        (Component(Boolean), 'logY', logY, 'optional'),
+                        (Component(String), 'xLabel', xLabel, 'optional'),
+                        (Component(String), 'yLabel', yLabel, 'optional'),
+                        (Component(Boolean), 'points', points, 'optional'),
+                        (Component(Real)[2], 'xRange', xRange, 'optional'),
+                        (Component(Real)[2], 'yRange', yRange, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5754,26 +5754,26 @@ end plot;
                 return _session_.__omc__.call_function(
                     funcName='plot',
                     inputArguments=[
-                        (Component(VariableName)[:],'vars',vars,'required'),
-                        (Component(Boolean),'externalWindow',externalWindow,'optional'),
-                        (Component(String),'fileName',fileName,'optional'),
-                        (Component(String),'title',title,'optional'),
-                        (Component(String),'grid',grid,'optional'),
-                        (Component(Boolean),'logX',logX,'optional'),
-                        (Component(Boolean),'logY',logY,'optional'),
-                        (Component(String),'xLabel',xLabel,'optional'),
-                        (Component(String),'yLabel',yLabel,'optional'),
-                        (Component(Real)[2],'xRange',xRange,'optional'),
-                        (Component(Real)[2],'yRange',yRange,'optional'),
-                        (Component(Real),'curveWidth',curveWidth,'optional'),
-                        (Component(Integer),'curveStyle',curveStyle,'optional'),
-                        (Component(String),'legendPosition',legendPosition,'optional'),
-                        (Component(String),'footer',footer,'optional'),
-                        (Component(Boolean),'autoScale',autoScale,'optional'),
-                        (Component(Boolean),'forceOMPlot',forceOMPlot,'optional'),
+                        (Component(VariableName)[:], 'vars', vars, 'required'),
+                        (Component(Boolean), 'externalWindow', externalWindow, 'optional'),
+                        (Component(String), 'fileName', fileName, 'optional'),
+                        (Component(String), 'title', title, 'optional'),
+                        (Component(String), 'grid', grid, 'optional'),
+                        (Component(Boolean), 'logX', logX, 'optional'),
+                        (Component(Boolean), 'logY', logY, 'optional'),
+                        (Component(String), 'xLabel', xLabel, 'optional'),
+                        (Component(String), 'yLabel', yLabel, 'optional'),
+                        (Component(Real)[2], 'xRange', xRange, 'optional'),
+                        (Component(Real)[2], 'yRange', yRange, 'optional'),
+                        (Component(Real), 'curveWidth', curveWidth, 'optional'),
+                        (Component(Integer), 'curveStyle', curveStyle, 'optional'),
+                        (Component(String), 'legendPosition', legendPosition, 'optional'),
+                        (Component(String), 'footer', footer, 'optional'),
+                        (Component(Boolean), 'autoScale', autoScale, 'optional'),
+                        (Component(Boolean), 'forceOMPlot', forceOMPlot, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5829,25 +5829,25 @@ end plotAll;
                 return _session_.__omc__.call_function(
                     funcName='plotAll',
                     inputArguments=[
-                        (Component(Boolean),'externalWindow',externalWindow,'optional'),
-                        (Component(String),'fileName',fileName,'optional'),
-                        (Component(String),'title',title,'optional'),
-                        (Component(String),'grid',grid,'optional'),
-                        (Component(Boolean),'logX',logX,'optional'),
-                        (Component(Boolean),'logY',logY,'optional'),
-                        (Component(String),'xLabel',xLabel,'optional'),
-                        (Component(String),'yLabel',yLabel,'optional'),
-                        (Component(Real)[2],'xRange',xRange,'optional'),
-                        (Component(Real)[2],'yRange',yRange,'optional'),
-                        (Component(Real),'curveWidth',curveWidth,'optional'),
-                        (Component(Integer),'curveStyle',curveStyle,'optional'),
-                        (Component(String),'legendPosition',legendPosition,'optional'),
-                        (Component(String),'footer',footer,'optional'),
-                        (Component(Boolean),'autoScale',autoScale,'optional'),
-                        (Component(Boolean),'forceOMPlot',forceOMPlot,'optional'),
+                        (Component(Boolean), 'externalWindow', externalWindow, 'optional'),
+                        (Component(String), 'fileName', fileName, 'optional'),
+                        (Component(String), 'title', title, 'optional'),
+                        (Component(String), 'grid', grid, 'optional'),
+                        (Component(Boolean), 'logX', logX, 'optional'),
+                        (Component(Boolean), 'logY', logY, 'optional'),
+                        (Component(String), 'xLabel', xLabel, 'optional'),
+                        (Component(String), 'yLabel', yLabel, 'optional'),
+                        (Component(Real)[2], 'xRange', xRange, 'optional'),
+                        (Component(Real)[2], 'yRange', yRange, 'optional'),
+                        (Component(Real), 'curveWidth', curveWidth, 'optional'),
+                        (Component(Integer), 'curveStyle', curveStyle, 'optional'),
+                        (Component(String), 'legendPosition', legendPosition, 'optional'),
+                        (Component(String), 'footer', footer, 'optional'),
+                        (Component(Boolean), 'autoScale', autoScale, 'optional'),
+                        (Component(Boolean), 'forceOMPlot', forceOMPlot, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5907,27 +5907,27 @@ end plotParametric;
                 return _session_.__omc__.call_function(
                     funcName='plotParametric',
                     inputArguments=[
-                        (Component(VariableName),'xVariable',xVariable,'required'),
-                        (Component(VariableName),'yVariable',yVariable,'required'),
-                        (Component(Boolean),'externalWindow',externalWindow,'optional'),
-                        (Component(String),'fileName',fileName,'optional'),
-                        (Component(String),'title',title,'optional'),
-                        (Component(String),'grid',grid,'optional'),
-                        (Component(Boolean),'logX',logX,'optional'),
-                        (Component(Boolean),'logY',logY,'optional'),
-                        (Component(String),'xLabel',xLabel,'optional'),
-                        (Component(String),'yLabel',yLabel,'optional'),
-                        (Component(Real)[2],'xRange',xRange,'optional'),
-                        (Component(Real)[2],'yRange',yRange,'optional'),
-                        (Component(Real),'curveWidth',curveWidth,'optional'),
-                        (Component(Integer),'curveStyle',curveStyle,'optional'),
-                        (Component(String),'legendPosition',legendPosition,'optional'),
-                        (Component(String),'footer',footer,'optional'),
-                        (Component(Boolean),'autoScale',autoScale,'optional'),
-                        (Component(Boolean),'forceOMPlot',forceOMPlot,'optional'),
+                        (Component(VariableName), 'xVariable', xVariable, 'required'),
+                        (Component(VariableName), 'yVariable', yVariable, 'required'),
+                        (Component(Boolean), 'externalWindow', externalWindow, 'optional'),
+                        (Component(String), 'fileName', fileName, 'optional'),
+                        (Component(String), 'title', title, 'optional'),
+                        (Component(String), 'grid', grid, 'optional'),
+                        (Component(Boolean), 'logX', logX, 'optional'),
+                        (Component(Boolean), 'logY', logY, 'optional'),
+                        (Component(String), 'xLabel', xLabel, 'optional'),
+                        (Component(String), 'yLabel', yLabel, 'optional'),
+                        (Component(Real)[2], 'xRange', xRange, 'optional'),
+                        (Component(Real)[2], 'yRange', yRange, 'optional'),
+                        (Component(Real), 'curveWidth', curveWidth, 'optional'),
+                        (Component(Integer), 'curveStyle', curveStyle, 'optional'),
+                        (Component(String), 'legendPosition', legendPosition, 'optional'),
+                        (Component(String), 'footer', footer, 'optional'),
+                        (Component(Boolean), 'autoScale', autoScale, 'optional'),
+                        (Component(Boolean), 'forceOMPlot', forceOMPlot, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5957,12 +5957,12 @@ end readSimulationResult;
                 return _session_.__omc__.call_function(
                     funcName='readSimulationResult',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(VariableName)[:],'variables',variables,'required'),
-                        (Component(Integer),'size',size,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(VariableName)[:], 'variables', variables, 'required'),
+                        (Component(Integer), 'size', size, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Real)[:,:],'result'),
+                        (Component(Real)[:,:], 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -5988,10 +5988,10 @@ end readSimulationResultSize;
                 return _session_.__omc__.call_function(
                     funcName='readSimulationResultSize',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'sz'),
+                        (Component(Integer), 'sz'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6021,12 +6021,12 @@ end readSimulationResultVars;
                 return _session_.__omc__.call_function(
                     funcName='readSimulationResultVars',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(Boolean),'readParameters',readParameters,'optional'),
-                        (Component(Boolean),'openmodelicaStyle',openmodelicaStyle,'optional'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(Boolean), 'readParameters', readParameters, 'optional'),
+                        (Component(Boolean), 'openmodelicaStyle', openmodelicaStyle, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'vars'),
+                        (Component(String)[:], 'vars'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6060,14 +6060,14 @@ end filterSimulationResults;
                 return _session_.__omc__.call_function(
                     funcName='filterSimulationResults',
                     inputArguments=[
-                        (Component(String),'inFile',inFile,'required'),
-                        (Component(String),'outFile',outFile,'required'),
-                        (Component(String)[:],'vars',vars,'required'),
-                        (Component(Integer),'numberOfIntervals',numberOfIntervals,'optional'),
-                        (Component(Boolean),'removeDescription',removeDescription,'optional'),
+                        (Component(String), 'inFile', inFile, 'required'),
+                        (Component(String), 'outFile', outFile, 'required'),
+                        (Component(String)[:], 'vars', vars, 'required'),
+                        (Component(Integer), 'numberOfIntervals', numberOfIntervals, 'optional'),
+                        (Component(Boolean), 'removeDescription', removeDescription, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6103,15 +6103,15 @@ end compareSimulationResults;
                 return _session_.__omc__.call_function(
                     funcName='compareSimulationResults',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'reffilename',reffilename,'required'),
-                        (Component(String),'logfilename',logfilename,'required'),
-                        (Component(Real),'relTol',relTol,'optional'),
-                        (Component(Real),'absTol',absTol,'optional'),
-                        (Component(String)[:],'vars',vars,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'reffilename', reffilename, 'required'),
+                        (Component(String), 'logfilename', logfilename, 'required'),
+                        (Component(Real), 'relTol', relTol, 'optional'),
+                        (Component(Real), 'absTol', absTol, 'optional'),
+                        (Component(String)[:], 'vars', vars, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'result'),
+                        (Component(String)[:], 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6143,13 +6143,13 @@ end deltaSimulationResults;
                 return _session_.__omc__.call_function(
                     funcName='deltaSimulationResults',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'reffilename',reffilename,'required'),
-                        (Component(String),'method',method,'required'),
-                        (Component(String)[:],'vars',vars,'optional'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'reffilename', reffilename, 'required'),
+                        (Component(String), 'method', method, 'required'),
+                        (Component(String)[:], 'vars', vars, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Real),'result'),
+                        (Component(Real), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6190,18 +6190,18 @@ end diffSimulationResults;
                 return _session_.__omc__.call_function(
                     funcName='diffSimulationResults',
                     inputArguments=[
-                        (Component(String),'actualFile',actualFile,'required'),
-                        (Component(String),'expectedFile',expectedFile,'required'),
-                        (Component(String),'diffPrefix',diffPrefix,'required'),
-                        (Component(Real),'relTol',relTol,'optional'),
-                        (Component(Real),'relTolDiffMinMax',relTolDiffMinMax,'optional'),
-                        (Component(Real),'rangeDelta',rangeDelta,'optional'),
-                        (Component(String)[:],'vars',vars,'optional'),
-                        (Component(Boolean),'keepEqualResults',keepEqualResults,'optional'),
+                        (Component(String), 'actualFile', actualFile, 'required'),
+                        (Component(String), 'expectedFile', expectedFile, 'required'),
+                        (Component(String), 'diffPrefix', diffPrefix, 'required'),
+                        (Component(Real), 'relTol', relTol, 'optional'),
+                        (Component(Real), 'relTolDiffMinMax', relTolDiffMinMax, 'optional'),
+                        (Component(Real), 'rangeDelta', rangeDelta, 'optional'),
+                        (Component(String)[:], 'vars', vars, 'optional'),
+                        (Component(Boolean), 'keepEqualResults', keepEqualResults, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
-                        (Component(String)[:],'failVars'),
+                        (Component(Boolean), 'success'),
+                        (Component(String)[:], 'failVars'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6237,15 +6237,15 @@ end diffSimulationResultsHtml;
                 return _session_.__omc__.call_function(
                     funcName='diffSimulationResultsHtml',
                     inputArguments=[
-                        (Component(String),'var',var,'required'),
-                        (Component(String),'actualFile',actualFile,'required'),
-                        (Component(String),'expectedFile',expectedFile,'required'),
-                        (Component(Real),'relTol',relTol,'optional'),
-                        (Component(Real),'relTolDiffMinMax',relTolDiffMinMax,'optional'),
-                        (Component(Real),'rangeDelta',rangeDelta,'optional'),
+                        (Component(String), 'var', var, 'required'),
+                        (Component(String), 'actualFile', actualFile, 'required'),
+                        (Component(String), 'expectedFile', expectedFile, 'required'),
+                        (Component(Real), 'relTol', relTol, 'optional'),
+                        (Component(Real), 'relTolDiffMinMax', relTolDiffMinMax, 'optional'),
+                        (Component(Real), 'rangeDelta', rangeDelta, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'html'),
+                        (Component(String), 'html'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6273,11 +6273,11 @@ end checkTaskGraph;
                 return _session_.__omc__.call_function(
                     funcName='checkTaskGraph',
                     inputArguments=[
-                        (Component(String),'filename',filename,'required'),
-                        (Component(String),'reffilename',reffilename,'required'),
+                        (Component(String), 'filename', filename, 'required'),
+                        (Component(String), 'reffilename', reffilename, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'result'),
+                        (Component(String)[:], 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6305,11 +6305,11 @@ end checkCodeGraph;
                 return _session_.__omc__.call_function(
                     funcName='checkCodeGraph',
                     inputArguments=[
-                        (Component(String),'graphfile',graphfile,'required'),
-                        (Component(String),'codefile',codefile,'required'),
+                        (Component(String), 'graphfile', graphfile, 'required'),
+                        (Component(String), 'codefile', codefile, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'result'),
+                        (Component(String)[:], 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6339,12 +6339,12 @@ end val;
                 return _session_.__omc__.call_function(
                     funcName='val',
                     inputArguments=[
-                        (Component(VariableName),'var',var,'required'),
-                        (Component(Real),'timePoint',timePoint,'optional'),
-                        (Component(String),'fileName',fileName,'optional'),
+                        (Component(VariableName), 'var', var, 'required'),
+                        (Component(Real), 'timePoint', timePoint, 'optional'),
+                        (Component(String), 'fileName', fileName, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Real),'valAtTime'),
+                        (Component(Real), 'valAtTime'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6370,7 +6370,7 @@ end closeSimulationResultFile;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6398,11 +6398,11 @@ end closeSimulationResultFile;
         #         return _session_.__omc__.call_function(
         #             funcName='addClassAnnotation',
         #             inputArguments=[
-        #                 (Component(TypeName),'class_',class_,'required'),
-        #                 (Component(OpenModelica.$Code.ExpressionOrModification),'annotate',annotate,'required'),
+        #                 (Component(TypeName), 'class_', class_, 'required'),
+        #                 (Component(OpenModelica.$Code.ExpressionOrModification), 'annotate', annotate, 'required'),
         #             ],
         #             outputArguments=[
-        #                 (Component(Boolean),'bool'),
+        #                 (Component(Boolean), 'bool'),
         #             ],
         #             parser=parse_OMCValue,
         #         )
@@ -6428,10 +6428,10 @@ end getParameterNames;
                 return _session_.__omc__.call_function(
                     funcName='getParameterNames',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'parameters'),
+                        (Component(String)[:], 'parameters'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6459,11 +6459,11 @@ end getParameterValue;
                 return _session_.__omc__.call_function(
                     funcName='getParameterValue',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(String),'parameterName',parameterName,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(String), 'parameterName', parameterName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'parameterValue'),
+                        (Component(String), 'parameterValue'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6491,11 +6491,11 @@ end getComponentModifierNames;
                 return _session_.__omc__.call_function(
                     funcName='getComponentModifierNames',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(String),'componentName',componentName,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(String), 'componentName', componentName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'modifiers'),
+                        (Component(String)[:], 'modifiers'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6523,11 +6523,11 @@ end getComponentModifierValue;
                 return _session_.__omc__.call_function(
                     funcName='getComponentModifierValue',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(TypeName),'modifier',modifier,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(TypeName), 'modifier', modifier, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'value'),
+                        (Component(String), 'value'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6555,11 +6555,11 @@ end getComponentModifierValues;
                 return _session_.__omc__.call_function(
                     funcName='getComponentModifierValues',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(TypeName),'modifier',modifier,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(TypeName), 'modifier', modifier, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'value'),
+                        (Component(String), 'value'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6585,10 +6585,10 @@ end getInstantiatedParametersAndValues;
                 return _session_.__omc__.call_function(
                     funcName='getInstantiatedParametersAndValues',
                     inputArguments=[
-                        (Component(TypeName),'cls',cls,'required'),
+                        (Component(TypeName), 'cls', cls, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'values'),
+                        (Component(String)[:], 'values'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6618,12 +6618,12 @@ end removeComponentModifiers;
                 return _session_.__omc__.call_function(
                     funcName='removeComponentModifiers',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(String),'componentName',componentName,'required'),
-                        (Component(Boolean),'keepRedeclares',keepRedeclares,'optional'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(String), 'componentName', componentName, 'required'),
+                        (Component(Boolean), 'keepRedeclares', keepRedeclares, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6653,12 +6653,12 @@ end removeExtendsModifiers;
                 return _session_.__omc__.call_function(
                     funcName='removeExtendsModifiers',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(TypeName),'baseClassName',baseClassName,'required'),
-                        (Component(Boolean),'keepRedeclares',keepRedeclares,'optional'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'baseClassName', baseClassName, 'required'),
+                        (Component(Boolean), 'keepRedeclares', keepRedeclares, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6684,10 +6684,10 @@ end getConnectionCount;
                 return _session_.__omc__.call_function(
                     funcName='getConnectionCount',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6715,11 +6715,11 @@ end getNthConnection;
                 return _session_.__omc__.call_function(
                     funcName='getNthConnection',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'result'),
+                        (Component(String)[:], 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6745,10 +6745,10 @@ end getAlgorithmCount;
                 return _session_.__omc__.call_function(
                     funcName='getAlgorithmCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6776,11 +6776,11 @@ end getNthAlgorithm;
                 return _session_.__omc__.call_function(
                     funcName='getNthAlgorithm',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6806,10 +6806,10 @@ end getInitialAlgorithmCount;
                 return _session_.__omc__.call_function(
                     funcName='getInitialAlgorithmCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6837,11 +6837,11 @@ end getNthInitialAlgorithm;
                 return _session_.__omc__.call_function(
                     funcName='getNthInitialAlgorithm',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6867,10 +6867,10 @@ end getAlgorithmItemsCount;
                 return _session_.__omc__.call_function(
                     funcName='getAlgorithmItemsCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6898,11 +6898,11 @@ end getNthAlgorithmItem;
                 return _session_.__omc__.call_function(
                     funcName='getNthAlgorithmItem',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6928,10 +6928,10 @@ end getInitialAlgorithmItemsCount;
                 return _session_.__omc__.call_function(
                     funcName='getInitialAlgorithmItemsCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6959,11 +6959,11 @@ end getNthInitialAlgorithmItem;
                 return _session_.__omc__.call_function(
                     funcName='getNthInitialAlgorithmItem',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6989,10 +6989,10 @@ end getEquationCount;
                 return _session_.__omc__.call_function(
                     funcName='getEquationCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7020,11 +7020,11 @@ end getNthEquation;
                 return _session_.__omc__.call_function(
                     funcName='getNthEquation',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7050,10 +7050,10 @@ end getInitialEquationCount;
                 return _session_.__omc__.call_function(
                     funcName='getInitialEquationCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7081,11 +7081,11 @@ end getNthInitialEquation;
                 return _session_.__omc__.call_function(
                     funcName='getNthInitialEquation',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7111,10 +7111,10 @@ end getEquationItemsCount;
                 return _session_.__omc__.call_function(
                     funcName='getEquationItemsCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7142,11 +7142,11 @@ end getNthEquationItem;
                 return _session_.__omc__.call_function(
                     funcName='getNthEquationItem',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7172,10 +7172,10 @@ end getInitialEquationItemsCount;
                 return _session_.__omc__.call_function(
                     funcName='getInitialEquationItemsCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7203,11 +7203,11 @@ end getNthInitialEquationItem;
                 return _session_.__omc__.call_function(
                     funcName='getNthInitialEquationItem',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7233,10 +7233,10 @@ end getAnnotationCount;
                 return _session_.__omc__.call_function(
                     funcName='getAnnotationCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7264,11 +7264,11 @@ end getNthAnnotationString;
                 return _session_.__omc__.call_function(
                     funcName='getNthAnnotationString',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7294,10 +7294,10 @@ end getImportCount;
                 return _session_.__omc__.call_function(
                     funcName='getImportCount',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer),'count'),
+                        (Component(Integer), 'count'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7325,11 +7325,11 @@ end getNthImport;
                 return _session_.__omc__.call_function(
                     funcName='getNthImport',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(Integer),'index',index,'required'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(Integer), 'index', index, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[3],'out'),
+                        (Component(String)[3], 'out'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7359,12 +7359,12 @@ end iconv;
                 return _session_.__omc__.call_function(
                     funcName='iconv',
                     inputArguments=[
-                        (Component(String),'string',string,'required'),
-                        (Component(String),'from',from_,'required'),
-                        (Component(String),'to',to,'optional'),
+                        (Component(String), 'string', string, 'required'),
+                        (Component(String), 'from', from_, 'required'),
+                        (Component(String), 'to', to, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(String),'result'),
+                        (Component(String), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7390,10 +7390,10 @@ end getDocumentationAnnotation;
                 return _session_.__omc__.call_function(
                     funcName='getDocumentationAnnotation',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[3],'out'),
+                        (Component(String)[3], 'out'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7423,12 +7423,12 @@ end setDocumentationAnnotation;
                 return _session_.__omc__.call_function(
                     funcName='setDocumentationAnnotation',
                     inputArguments=[
-                        (Component(TypeName),'class_',class_,'required'),
-                        (Component(String),'info',info,'optional'),
-                        (Component(String),'revisions',revisions,'optional'),
+                        (Component(TypeName), 'class_', class_, 'required'),
+                        (Component(String), 'info', info, 'optional'),
+                        (Component(String), 'revisions', revisions, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'bool'),
+                        (Component(Boolean), 'bool'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7455,11 +7455,11 @@ end getTimeStamp;
                 return _session_.__omc__.call_function(
                     funcName='getTimeStamp',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Real),'timeStamp'),
-                        (Component(String),'timeStampAsString'),
+                        (Component(Real), 'timeStamp'),
+                        (Component(String), 'timeStampAsString'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7485,10 +7485,10 @@ end stringTypeName;
                 return _session_.__omc__.call_function(
                     funcName='stringTypeName',
                     inputArguments=[
-                        (Component(String),'str',str,'required'),
+                        (Component(String), 'str', str, 'required'),
                     ],
                     outputArguments=[
-                        (Component(TypeName),'cl'),
+                        (Component(TypeName), 'cl'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7514,10 +7514,10 @@ end stringVariableName;
                 return _session_.__omc__.call_function(
                     funcName='stringVariableName',
                     inputArguments=[
-                        (Component(String),'str',str,'required'),
+                        (Component(String), 'str', str, 'required'),
                     ],
                     outputArguments=[
-                        (Component(VariableName),'cl'),
+                        (Component(VariableName), 'cl'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7543,10 +7543,10 @@ end typeNameString;
                 return _session_.__omc__.call_function(
                     funcName='typeNameString',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'out'),
+                        (Component(String), 'out'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7572,10 +7572,10 @@ end typeNameStrings;
                 return _session_.__omc__.call_function(
                     funcName='typeNameStrings',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'out'),
+                        (Component(String)[:], 'out'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7601,10 +7601,10 @@ end getClassComment;
                 return _session_.__omc__.call_function(
                     funcName='getClassComment',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'comment'),
+                        (Component(String), 'comment'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7630,10 +7630,10 @@ end dirname;
                 return _session_.__omc__.call_function(
                     funcName='dirname',
                     inputArguments=[
-                        (Component(String),'path',path,'required'),
+                        (Component(String), 'path', path, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'dirname'),
+                        (Component(String), 'dirname'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7659,10 +7659,10 @@ end basename;
                 return _session_.__omc__.call_function(
                     funcName='basename',
                     inputArguments=[
-                        (Component(String),'path',path,'required'),
+                        (Component(String), 'path', path, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'basename'),
+                        (Component(String), 'basename'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7688,10 +7688,10 @@ end getClassRestriction;
                 return _session_.__omc__.call_function(
                     funcName='getClassRestriction',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'restriction'),
+                        (Component(String), 'restriction'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7717,10 +7717,10 @@ end isType;
                 return _session_.__omc__.call_function(
                     funcName='isType',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7746,10 +7746,10 @@ end isPackage;
                 return _session_.__omc__.call_function(
                     funcName='isPackage',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7775,10 +7775,10 @@ end isClass;
                 return _session_.__omc__.call_function(
                     funcName='isClass',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7804,10 +7804,10 @@ end isRecord;
                 return _session_.__omc__.call_function(
                     funcName='isRecord',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7833,10 +7833,10 @@ end isBlock;
                 return _session_.__omc__.call_function(
                     funcName='isBlock',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7862,10 +7862,10 @@ end isFunction;
                 return _session_.__omc__.call_function(
                     funcName='isFunction',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7891,10 +7891,10 @@ end isPartial;
                 return _session_.__omc__.call_function(
                     funcName='isPartial',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7920,10 +7920,10 @@ end isModel;
                 return _session_.__omc__.call_function(
                     funcName='isModel',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7949,10 +7949,10 @@ end isConnector;
                 return _session_.__omc__.call_function(
                     funcName='isConnector',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -7978,10 +7978,10 @@ end isOptimization;
                 return _session_.__omc__.call_function(
                     funcName='isOptimization',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8007,10 +8007,10 @@ end isEnumeration;
                 return _session_.__omc__.call_function(
                     funcName='isEnumeration',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8036,10 +8036,10 @@ end isOperator;
                 return _session_.__omc__.call_function(
                     funcName='isOperator',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8065,10 +8065,10 @@ end isOperatorRecord;
                 return _session_.__omc__.call_function(
                     funcName='isOperatorRecord',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8094,10 +8094,10 @@ end isOperatorFunction;
                 return _session_.__omc__.call_function(
                     funcName='isOperatorFunction',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8125,11 +8125,11 @@ end isProtectedClass;
                 return _session_.__omc__.call_function(
                     funcName='isProtectedClass',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
-                        (Component(String),'c2',c2,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
+                        (Component(String), 'c2', c2, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'b'),
+                        (Component(Boolean), 'b'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8155,10 +8155,10 @@ end getBuiltinType;
                 return _session_.__omc__.call_function(
                     funcName='getBuiltinType',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'name'),
+                        (Component(String), 'name'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8190,13 +8190,13 @@ end setInitXmlStartValue;
                 return _session_.__omc__.call_function(
                     funcName='setInitXmlStartValue',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(String),'variableName',variableName,'required'),
-                        (Component(String),'startValue',startValue,'required'),
-                        (Component(String),'outputFile',outputFile,'required'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(String), 'variableName', variableName, 'required'),
+                        (Component(String), 'startValue', startValue, 'required'),
+                        (Component(String), 'outputFile', outputFile, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8222,10 +8222,10 @@ end ngspicetoModelica;
                 return _session_.__omc__.call_function(
                     funcName='ngspicetoModelica',
                     inputArguments=[
-                        (Component(String),'netlistfileName',netlistfileName,'required'),
+                        (Component(String), 'netlistfileName', netlistfileName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8251,10 +8251,10 @@ end getInheritedClasses;
                 return _session_.__omc__.call_function(
                     funcName='getInheritedClasses',
                     inputArguments=[
-                        (Component(TypeName),'name',name,'required'),
+                        (Component(TypeName), 'name', name, 'required'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'inheritedClasses'),
+                        (Component(TypeName)[:], 'inheritedClasses'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8296,10 +8296,10 @@ end getComponentsTest;
                 return _session_.__omc__.call_function(
                     funcName='getComponentsTest',
                     inputArguments=[
-                        (Component(TypeName),'name',name,'required'),
+                        (Component(TypeName), 'name', name, 'required'),
                     ],
                     outputArguments=[
-                        (Component(OpenModelica.Scripting.getComponentsTest.Component)[:],'components'),
+                        (Component(OpenModelica.Scripting.getComponentsTest.Component)[:], 'components'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8396,10 +8396,10 @@ end isExperiment;
                 return _session_.__omc__.call_function(
                     funcName='isExperiment',
                     inputArguments=[
-                        (Component(TypeName),'name',name,'required'),
+                        (Component(TypeName), 'name', name, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'res'),
+                        (Component(Boolean), 'res'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8439,19 +8439,19 @@ end getSimulationOptions;
                 return _session_.__omc__.call_function(
                     funcName='getSimulationOptions',
                     inputArguments=[
-                        (Component(TypeName),'name',name,'required'),
-                        (Component(Real),'defaultStartTime',defaultStartTime,'optional'),
-                        (Component(Real),'defaultStopTime',defaultStopTime,'optional'),
-                        (Component(Real),'defaultTolerance',defaultTolerance,'optional'),
-                        (Component(Integer),'defaultNumberOfIntervals',defaultNumberOfIntervals,'optional'),
-                        (Component(Real),'defaultInterval',defaultInterval,'optional'),
+                        (Component(TypeName), 'name', name, 'required'),
+                        (Component(Real), 'defaultStartTime', defaultStartTime, 'optional'),
+                        (Component(Real), 'defaultStopTime', defaultStopTime, 'optional'),
+                        (Component(Real), 'defaultTolerance', defaultTolerance, 'optional'),
+                        (Component(Integer), 'defaultNumberOfIntervals', defaultNumberOfIntervals, 'optional'),
+                        (Component(Real), 'defaultInterval', defaultInterval, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Real),'startTime'),
-                        (Component(Real),'stopTime'),
-                        (Component(Real),'tolerance'),
-                        (Component(Integer),'numberOfIntervals'),
-                        (Component(Real),'interval'),
+                        (Component(Real), 'startTime'),
+                        (Component(Real), 'stopTime'),
+                        (Component(Real), 'tolerance'),
+                        (Component(Integer), 'numberOfIntervals'),
+                        (Component(Real), 'interval'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8479,11 +8479,11 @@ end getAnnotationNamedModifiers;
                 return _session_.__omc__.call_function(
                     funcName='getAnnotationNamedModifiers',
                     inputArguments=[
-                        (Component(TypeName),'name',name,'required'),
-                        (Component(String),'vendorannotation',vendorannotation,'required'),
+                        (Component(TypeName), 'name', name, 'required'),
+                        (Component(String), 'vendorannotation', vendorannotation, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'modifiernamelist'),
+                        (Component(String)[:], 'modifiernamelist'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8513,12 +8513,12 @@ end getAnnotationModifierValue;
                 return _session_.__omc__.call_function(
                     funcName='getAnnotationModifierValue',
                     inputArguments=[
-                        (Component(TypeName),'name',name,'required'),
-                        (Component(String),'vendorannotation',vendorannotation,'required'),
-                        (Component(String),'modifiername',modifiername,'required'),
+                        (Component(TypeName), 'name', name, 'required'),
+                        (Component(String), 'vendorannotation', vendorannotation, 'required'),
+                        (Component(String), 'modifiername', modifiername, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'modifiernamevalue'),
+                        (Component(String), 'modifiernamevalue'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8546,11 +8546,11 @@ end classAnnotationExists;
                 return _session_.__omc__.call_function(
                     funcName='classAnnotationExists',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(TypeName),'annotationName',annotationName,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'annotationName', annotationName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'exists'),
+                        (Component(Boolean), 'exists'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8578,11 +8578,11 @@ end getBooleanClassAnnotation;
                 return _session_.__omc__.call_function(
                     funcName='getBooleanClassAnnotation',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(TypeName),'annotationName',annotationName,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'annotationName', annotationName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'value'),
+                        (Component(Boolean), 'value'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8610,11 +8610,11 @@ end extendsFrom;
                 return _session_.__omc__.call_function(
                     funcName='extendsFrom',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(TypeName),'baseClassName',baseClassName,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'baseClassName', baseClassName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'res'),
+                        (Component(Boolean), 'res'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8640,10 +8640,10 @@ end loadModelica3D;
                 return _session_.__omc__.call_function(
                     funcName='loadModelica3D',
                     inputArguments=[
-                        (Component(String),'version',version,'optional'),
+                        (Component(String), 'version', version, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'status'),
+                        (Component(Boolean), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8671,11 +8671,11 @@ end searchClassNames;
                 return _session_.__omc__.call_function(
                     funcName='searchClassNames',
                     inputArguments=[
-                        (Component(String),'searchText',searchText,'required'),
-                        (Component(Boolean),'findInText',findInText,'optional'),
+                        (Component(String), 'searchText', searchText, 'required'),
+                        (Component(Boolean), 'findInText', findInText, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(TypeName)[:],'classNames'),
+                        (Component(TypeName)[:], 'classNames'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8701,7 +8701,7 @@ end getAvailableLibraries;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(String)[:],'libraries'),
+                        (Component(String)[:], 'libraries'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8727,10 +8727,10 @@ end getUses;
                 return _session_.__omc__.call_function(
                     funcName='getUses',
                     inputArguments=[
-                        (Component(TypeName),'pack',pack,'required'),
+                        (Component(TypeName), 'pack', pack, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:,:],'uses'),
+                        (Component(String)[:,:], 'uses'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8756,10 +8756,10 @@ end getDerivedClassModifierNames;
                 return _session_.__omc__.call_function(
                     funcName='getDerivedClassModifierNames',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'modifierNames'),
+                        (Component(String)[:], 'modifierNames'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8787,11 +8787,11 @@ end getDerivedClassModifierValue;
                 return _session_.__omc__.call_function(
                     funcName='getDerivedClassModifierValue',
                     inputArguments=[
-                        (Component(TypeName),'className',className,'required'),
-                        (Component(TypeName),'modifierName',modifierName,'required'),
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'modifierName', modifierName, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'modifierValue'),
+                        (Component(String), 'modifierValue'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8820,9 +8820,9 @@ end generateEntryPoint;
                 return _session_.__omc__.call_function(
                     funcName='generateEntryPoint',
                     inputArguments=[
-                        (Component(String),'fileName',fileName,'required'),
-                        (Component(TypeName),'entryPoint',entryPoint,'required'),
-                        (Component(String),'url',url,'optional'),
+                        (Component(String), 'fileName', fileName, 'required'),
+                        (Component(TypeName), 'entryPoint', entryPoint, 'required'),
+                        (Component(String), 'url', url, 'optional'),
                     ],
                     outputArguments=[
                     ],
@@ -8850,7 +8850,7 @@ end numProcessors;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Integer),'result'),
+                        (Component(Integer), 'result'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8880,12 +8880,12 @@ end runScriptParallel;
                 return _session_.__omc__.call_function(
                     funcName='runScriptParallel',
                     inputArguments=[
-                        (Component(String)[:],'scripts',scripts,'required'),
-                        (Component(Integer),'numThreads',numThreads,'optional'),
-                        (Component(Boolean),'useThreads',useThreads,'optional'),
+                        (Component(String)[:], 'scripts', scripts, 'required'),
+                        (Component(Integer), 'numThreads', numThreads, 'optional'),
+                        (Component(Boolean), 'useThreads', useThreads, 'optional'),
                     ],
                     outputArguments=[
-                        (Component(Boolean)[:],'results'),
+                        (Component(Boolean)[:], 'results'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -8910,7 +8910,7 @@ end exit;
                 return _session_.__omc__.call_function(
                     funcName='exit',
                     inputArguments=[
-                        (Component(Integer),'status',status,'required'),
+                        (Component(Integer), 'status', status, 'required'),
                     ],
                     outputArguments=[
                     ],
@@ -8958,7 +8958,7 @@ end getMemorySize;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(Real),'memory'),
+                        (Component(Real), 'memory'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9004,10 +9004,10 @@ end GC_expand_hp;
                 return _session_.__omc__.call_function(
                     funcName='GC_expand_hp',
                     inputArguments=[
-                        (Component(Integer),'size',size,'required'),
+                        (Component(Integer), 'size', size, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9033,10 +9033,10 @@ end GC_set_max_heap_size;
                 return _session_.__omc__.call_function(
                     funcName='GC_set_max_heap_size',
                     inputArguments=[
-                        (Component(Integer),'size',size,'required'),
+                        (Component(Integer), 'size', size, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9122,7 +9122,7 @@ end GC_get_prof_stats;
                     inputArguments=[
                     ],
                     outputArguments=[
-                        (Component(OpenModelica.Scripting.GC_PROFSTATS),'gcStats'),
+                        (Component(OpenModelica.Scripting.GC_PROFSTATS), 'gcStats'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9150,11 +9150,11 @@ end checkInterfaceOfPackages;
                 return _session_.__omc__.call_function(
                     funcName='checkInterfaceOfPackages',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
-                        (Component(String)[:,:],'dependencyMatrix',dependencyMatrix,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
+                        (Component(String)[:,:], 'dependencyMatrix', dependencyMatrix, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
+                        (Component(Boolean), 'success'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9180,10 +9180,10 @@ end sortStrings;
                 return _session_.__omc__.call_function(
                     funcName='sortStrings',
                     inputArguments=[
-                        (Component(String)[:],'arr',arr,'required'),
+                        (Component(String)[:], 'arr', arr, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:],'sorted'),
+                        (Component(String)[:], 'sorted'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9220,27 +9220,27 @@ end getClassInformation;
                 return _session_.__omc__.call_function(
                     funcName='getClassInformation',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String),'restriction'),
-                        (Component(String),'comment'),
-                        (Component(Boolean),'partialPrefix'),
-                        (Component(Boolean),'finalPrefix'),
-                        (Component(Boolean),'encapsulatedPrefix'),
-                        (Component(String),'fileName'),
-                        (Component(Boolean),'fileReadOnly'),
-                        (Component(Integer),'lineNumberStart'),
-                        (Component(Integer),'columnNumberStart'),
-                        (Component(Integer),'lineNumberEnd'),
-                        (Component(Integer),'columnNumberEnd'),
-                        (Component(String)[:],'dimensions'),
-                        (Component(Boolean),'isProtectedClass'),
-                        (Component(Boolean),'isDocumentationClass'),
-                        (Component(String),'version'),
-                        (Component(String),'preferredView'),
-                        (Component(Boolean),'state'),
-                        (Component(String),'access'),
+                        (Component(String), 'restriction'),
+                        (Component(String), 'comment'),
+                        (Component(Boolean), 'partialPrefix'),
+                        (Component(Boolean), 'finalPrefix'),
+                        (Component(Boolean), 'encapsulatedPrefix'),
+                        (Component(String), 'fileName'),
+                        (Component(Boolean), 'fileReadOnly'),
+                        (Component(Integer), 'lineNumberStart'),
+                        (Component(Integer), 'columnNumberStart'),
+                        (Component(Integer), 'lineNumberEnd'),
+                        (Component(Integer), 'columnNumberEnd'),
+                        (Component(String)[:], 'dimensions'),
+                        (Component(Boolean), 'isProtectedClass'),
+                        (Component(Boolean), 'isDocumentationClass'),
+                        (Component(String), 'version'),
+                        (Component(String), 'preferredView'),
+                        (Component(Boolean), 'state'),
+                        (Component(String), 'access'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9266,10 +9266,10 @@ end getTransitions;
                 return _session_.__omc__.call_function(
                     funcName='getTransitions',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:,:],'transitions'),
+                        (Component(String)[:,:], 'transitions'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9311,18 +9311,18 @@ end getTransitions;
         #         return _session_.__omc__.call_function(
         #             funcName='addTransition',
         #             inputArguments=[
-        #                 (Component(TypeName),'cl',cl,'required'),
-        #                 (Component(String),'from',from_,'required'),
-        #                 (Component(String),'to',to,'required'),
-        #                 (Component(String),'condition',condition,'required'),
-        #                 (Component(Boolean),'immediate',immediate,'optional'),
-        #                 (Component(Boolean),'reset',reset,'optional'),
-        #                 (Component(Boolean),'synchronize',synchronize,'optional'),
-        #                 (Component(Integer),'priority',priority,'optional'),
-        #                 (Component(OpenModelica.$Code.ExpressionOrModification),'annotate',annotate,'required'),
+        #                 (Component(TypeName), 'cl', cl, 'required'),
+        #                 (Component(String), 'from', from_, 'required'),
+        #                 (Component(String), 'to', to, 'required'),
+        #                 (Component(String), 'condition', condition, 'required'),
+        #                 (Component(Boolean), 'immediate', immediate, 'optional'),
+        #                 (Component(Boolean), 'reset', reset, 'optional'),
+        #                 (Component(Boolean), 'synchronize', synchronize, 'optional'),
+        #                 (Component(Integer), 'priority', priority, 'optional'),
+        #                 (Component(OpenModelica.$Code.ExpressionOrModification), 'annotate', annotate, 'required'),
         #             ],
         #             outputArguments=[
-        #                 (Component(Boolean),'bool'),
+        #                 (Component(Boolean), 'bool'),
         #             ],
         #             parser=parse_OMCValue,
         #         )
@@ -9362,17 +9362,17 @@ end deleteTransition;
                 return _session_.__omc__.call_function(
                     funcName='deleteTransition',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
-                        (Component(String),'from',from_,'required'),
-                        (Component(String),'to',to,'required'),
-                        (Component(String),'condition',condition,'required'),
-                        (Component(Boolean),'immediate',immediate,'required'),
-                        (Component(Boolean),'reset',reset,'required'),
-                        (Component(Boolean),'synchronize',synchronize,'required'),
-                        (Component(Integer),'priority',priority,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
+                        (Component(String), 'from', from_, 'required'),
+                        (Component(String), 'to', to, 'required'),
+                        (Component(String), 'condition', condition, 'required'),
+                        (Component(Boolean), 'immediate', immediate, 'required'),
+                        (Component(Boolean), 'reset', reset, 'required'),
+                        (Component(Boolean), 'synchronize', synchronize, 'required'),
+                        (Component(Integer), 'priority', priority, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'bool'),
+                        (Component(Boolean), 'bool'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9424,23 +9424,23 @@ end deleteTransition;
         #         return _session_.__omc__.call_function(
         #             funcName='updateTransition',
         #             inputArguments=[
-        #                 (Component(TypeName),'cl',cl,'required'),
-        #                 (Component(String),'from',from_,'required'),
-        #                 (Component(String),'to',to,'required'),
-        #                 (Component(String),'oldCondition',oldCondition,'required'),
-        #                 (Component(Boolean),'oldImmediate',oldImmediate,'required'),
-        #                 (Component(Boolean),'oldReset',oldReset,'required'),
-        #                 (Component(Boolean),'oldSynchronize',oldSynchronize,'required'),
-        #                 (Component(Integer),'oldPriority',oldPriority,'required'),
-        #                 (Component(String),'newCondition',newCondition,'required'),
-        #                 (Component(Boolean),'newImmediate',newImmediate,'required'),
-        #                 (Component(Boolean),'newReset',newReset,'required'),
-        #                 (Component(Boolean),'newSynchronize',newSynchronize,'required'),
-        #                 (Component(Integer),'newPriority',newPriority,'required'),
-        #                 (Component(OpenModelica.$Code.ExpressionOrModification),'annotate',annotate,'required'),
+        #                 (Component(TypeName), 'cl', cl, 'required'),
+        #                 (Component(String), 'from', from_, 'required'),
+        #                 (Component(String), 'to', to, 'required'),
+        #                 (Component(String), 'oldCondition', oldCondition, 'required'),
+        #                 (Component(Boolean), 'oldImmediate', oldImmediate, 'required'),
+        #                 (Component(Boolean), 'oldReset', oldReset, 'required'),
+        #                 (Component(Boolean), 'oldSynchronize', oldSynchronize, 'required'),
+        #                 (Component(Integer), 'oldPriority', oldPriority, 'required'),
+        #                 (Component(String), 'newCondition', newCondition, 'required'),
+        #                 (Component(Boolean), 'newImmediate', newImmediate, 'required'),
+        #                 (Component(Boolean), 'newReset', newReset, 'required'),
+        #                 (Component(Boolean), 'newSynchronize', newSynchronize, 'required'),
+        #                 (Component(Integer), 'newPriority', newPriority, 'required'),
+        #                 (Component(OpenModelica.$Code.ExpressionOrModification), 'annotate', annotate, 'required'),
         #             ],
         #             outputArguments=[
-        #                 (Component(Boolean),'bool'),
+        #                 (Component(Boolean), 'bool'),
         #             ],
         #             parser=parse_OMCValue,
         #         )
@@ -9466,10 +9466,10 @@ end getInitialStates;
                 return _session_.__omc__.call_function(
                     funcName='getInitialStates',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
                     ],
                     outputArguments=[
-                        (Component(String)[:,:],'initialStates'),
+                        (Component(String)[:,:], 'initialStates'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9499,12 +9499,12 @@ end getInitialStates;
         #         return _session_.__omc__.call_function(
         #             funcName='addInitialState',
         #             inputArguments=[
-        #                 (Component(TypeName),'cl',cl,'required'),
-        #                 (Component(String),'state',state,'required'),
-        #                 (Component(OpenModelica.$Code.ExpressionOrModification),'annotate',annotate,'required'),
+        #                 (Component(TypeName), 'cl', cl, 'required'),
+        #                 (Component(String), 'state', state, 'required'),
+        #                 (Component(OpenModelica.$Code.ExpressionOrModification), 'annotate', annotate, 'required'),
         #             ],
         #             outputArguments=[
-        #                 (Component(Boolean),'bool'),
+        #                 (Component(Boolean), 'bool'),
         #             ],
         #             parser=parse_OMCValue,
         #         )
@@ -9532,11 +9532,11 @@ end deleteInitialState;
                 return _session_.__omc__.call_function(
                     funcName='deleteInitialState',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
-                        (Component(String),'state',state,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
+                        (Component(String), 'state', state, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'bool'),
+                        (Component(Boolean), 'bool'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9566,12 +9566,12 @@ end deleteInitialState;
         #         return _session_.__omc__.call_function(
         #             funcName='updateInitialState',
         #             inputArguments=[
-        #                 (Component(TypeName),'cl',cl,'required'),
-        #                 (Component(String),'state',state,'required'),
-        #                 (Component(OpenModelica.$Code.ExpressionOrModification),'annotate',annotate,'required'),
+        #                 (Component(TypeName), 'cl', cl, 'required'),
+        #                 (Component(String), 'state', state, 'required'),
+        #                 (Component(OpenModelica.$Code.ExpressionOrModification), 'annotate', annotate, 'required'),
         #             ],
         #             outputArguments=[
-        #                 (Component(Boolean),'bool'),
+        #                 (Component(Boolean), 'bool'),
         #             ],
         #             parser=parse_OMCValue,
         #         )
@@ -9602,14 +9602,14 @@ end generateScriptingAPI;
                 return _session_.__omc__.call_function(
                     funcName='generateScriptingAPI',
                     inputArguments=[
-                        (Component(TypeName),'cl',cl,'required'),
-                        (Component(String),'name',name,'required'),
+                        (Component(TypeName), 'cl', cl, 'required'),
+                        (Component(String), 'name', name, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Boolean),'success'),
-                        (Component(String),'moFile'),
-                        (Component(String),'qtFile'),
-                        (Component(String),'qtHeader'),
+                        (Component(Boolean), 'success'),
+                        (Component(String), 'moFile'),
+                        (Component(String), 'qtFile'),
+                        (Component(String), 'qtHeader'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9641,11 +9641,11 @@ end relocateFunctions;
                     return _session_.__omc__.call_function(
                         funcName='OpenModelica.Scripting.Experimental.relocateFunctions',
                         inputArguments=[
-                            (Component(String),'fileName',fileName,'required'),
-                            (Component(String)[:,2],'names',names,'required'),
+                            (Component(String), 'fileName', fileName, 'required'),
+                            (Component(String)[:,2], 'names', names, 'required'),
                         ],
                         outputArguments=[
-                            (Component(Boolean),'success'),
+                            (Component(Boolean), 'success'),
                         ],
                         parser=parse_OMCValue,
                     )
