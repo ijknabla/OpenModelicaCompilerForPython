@@ -11212,40 +11212,40 @@ end oms_getVariableStepSize;
                     parser=parse_OMCValue,
                 )
 
-        @modelica_name('OpenModelica.Scripting.oms_faultInjection')
-        class oms_faultInjection(
-            ModelicaFunction,
-        ):
-            """
-```modelica
-function oms_faultInjection
-  input String signal;
-  input oms_fault_type_enu_t faultType;
-  input Real faultValue;
-  output Integer status;
-end oms_faultInjection;
-```
-            """
-            @external
-            def _(
-                _cls_,
-                _session_: AbstractOMCSession,
-                signal,
-                faultType,
-                faultValue,
-            ):
-                return _session_.__omc__.call_function(
-                    funcName='oms_faultInjection',
-                    inputArguments=[
-                        (Component(String),'signal',signal,'required'),
-                        (Component(oms_fault_type_enu_t),'faultType',faultType,'required'),
-                        (Component(Real),'faultValue',faultValue,'required'),
-                    ],
-                    outputArguments=[
-                        (Component(Integer),'status'),
-                    ],
-                    parser=parse_OMCValue,
-                )
+        # @modelica_name('OpenModelica.Scripting.oms_faultInjection')
+        # class oms_faultInjection(
+        #     ModelicaFunction,
+        # ):
+        #     """
+        # ```modelica
+        # function oms_faultInjection
+        #   input String signal;
+        #   input oms_fault_type_enu_t faultType;
+        #   input Real faultValue;
+        #   output Integer status;
+        # end oms_faultInjection;
+        # ```
+        #     """
+        #     @external
+        #     def _(
+        #         _cls_,
+        #         _session_: AbstractOMCSession,
+        #         signal,
+        #         faultType,
+        #         faultValue,
+        #     ):
+        #         return _session_.__omc__.call_function(
+        #             funcName='oms_faultInjection',
+        #             inputArguments=[
+        #                 (Component(String),'signal',signal,'required'),
+        #                 (Component(oms_fault_type_enu_t),'faultType',faultType,'required'),
+        #                 (Component(Real),'faultValue',faultValue,'required'),
+        #             ],
+        #             outputArguments=[
+        #                 (Component(Integer),'status'),
+        #             ],
+        #             parser=parse_OMCValue,
+        #         )
 
         @modelica_name('OpenModelica.Scripting.oms_importFile')
         class oms_importFile(
@@ -12835,7 +12835,7 @@ class OMCSession(
     oms_getSystemType = OpenModelica.Scripting.oms_getSystemType
     oms_getTolerance = OpenModelica.Scripting.oms_getTolerance
     oms_getVariableStepSize = OpenModelica.Scripting.oms_getVariableStepSize
-    oms_faultInjection = OpenModelica.Scripting.oms_faultInjection
+    # oms_faultInjection = OpenModelica.Scripting.oms_faultInjection
     oms_importFile = OpenModelica.Scripting.oms_importFile
     oms_initialize = OpenModelica.Scripting.oms_initialize
     oms_instantiate = OpenModelica.Scripting.oms_instantiate
