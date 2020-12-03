@@ -9,12 +9,14 @@ import pytest
 def test_open_session():
     with open_session() as session:
         assert session is not None
+        session.__check__()
 
 
 @pytest.fixture
 def session():
     with open_session() as session:
         yield session
+        session.__check__()
 
 
 def test_loadString(
@@ -29,7 +31,6 @@ def test_loadString(
     assert session.isRecord("MyRecord")
     assert session.loadString("function MyFunction end MyFunction;")
     assert session.isFunction("MyFunction")
-    session.__check__()
 
 
 def test_OpenModelica(
