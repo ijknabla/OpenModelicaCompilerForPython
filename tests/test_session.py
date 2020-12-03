@@ -6,6 +6,7 @@ from omc4py import (
 import pytest
 
 
+@pytest.mark.dependency()
 def test_open_session():
     with open_session() as session:
         assert session is not None
@@ -19,6 +20,7 @@ def session():
         session.__check__()
 
 
+@pytest.mark.dependency(depends=["test_open_session"])
 def test_loadString(
     session  # fixture
 ):
@@ -33,6 +35,7 @@ def test_loadString(
     assert session.isFunction("MyFunction")
 
 
+@pytest.mark.dependency(depends=["test_open_session"])
 def test_OpenModelica(
     session  # fixture
 ):
