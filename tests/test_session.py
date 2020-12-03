@@ -1,6 +1,5 @@
 
 from omc4py import (
-    TypeName,
     open_session,
 )
 import pytest
