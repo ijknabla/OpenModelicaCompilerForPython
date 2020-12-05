@@ -7,3 +7,5 @@ ARG OMC_VERSION
 ARG DEBIAN_CODENAME
 
 LABEL maintainer "ijknabla <ijknabla@gmail.com>"
+
+COPY dot_profile /etc/skel/.profile
