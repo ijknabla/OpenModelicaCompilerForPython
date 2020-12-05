@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+
+if [[ ${DOCKER_TAG} =~ omc([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+    OMC_VERSION=${BASH_REMATCH[1]}.${BASH_REMATCH[2]}.${BASH_REMATCH[3]}
+else
+    OMC_VERSION=latest
+fi
+
+if [[ ${DOCKER_TAG} =~ py([0-9]+)\.([0-9]+) ]]; then
+    PY_VERSION=${BASH_REMATCH[1]}.${BASH_REMATCH[2]}
+else
+    PY_VERSION=latest
+fi
+
+if [[ ${DOCKER_TAG} =~ [a-zA-Z]+$ ]]; then
+    DEBIAN_CODENAME=${BASH_REMATCH[0]}
+else
+    DEBIAN_CODENAME=stretch
+fi
+
+if [ -v "$DOCKERFILE_PATH" ]; then
+    DOCKERFILE_PATH_ARG="-f $DOCKERFILE_PATH"
+else
+    DOCKERFILE_PATH_ARG=""
+fi
+
+docker build \
+    --build-arg OMC_VERSION=${OMC_VERSION} \
+    --build-arg PY_VERSION=${PY_VERSION} \
+    --build-arg DEBIAN_CODENAME=${DEBIAN_CODENAME} \
+    ${DOCKERFILE_PATH_ARG} -t $IMAGE_NAME .
