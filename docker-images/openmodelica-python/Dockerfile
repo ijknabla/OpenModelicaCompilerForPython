@@ -9,6 +9,7 @@ ARG DEBIAN_CODENAME
 LABEL maintainer "ijknabla <ijknabla@gmail.com>"
 
 COPY dot_profile /etc/skel/.profile
+RUN mkdir -p /etc/skel/.local/bin
 
 RUN apt-get update \
     && apt-get upgrade -qy \
