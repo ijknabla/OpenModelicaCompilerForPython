@@ -18,6 +18,6 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Docker
-        uses: ./.github/actions/pytest
+        uses: ./.github/actions/pytest-omc1.13.0
         with:
           openmodelica-version: ${{ matrix.openmodelica-version }}
