@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - omc4py/ directory (python package) for main package
 - bootstrap/ directory (python package) for bootstrap of omc4py
 - setup.py file to install omc4py
+- MANIFEST.in file for setup.py
 - README.md file for tutorial
+- TODO.md file for action item management
 ### Security
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
