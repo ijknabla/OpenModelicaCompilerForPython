@@ -13,3 +13,5 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - README.md file for tutorial
 ### Security
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
+
+[0.0.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/releases/tag/v0.0.0
