@@ -56,16 +56,15 @@ with omc4py.open_session(
 It is also possible to open multiple sessions with different versions of omc at the same time by explicitly specifying omc.
 
 ```python3
-from contextlib import ExitStack
 import omc4py
 
-with ExitStack() as stack:
-    session_13 = stack.enter_context(
-        omc4py.open_session("C:/OpenModelica1.13.0-64bit/bin/omc.exe")
-    )
-    session_14 = stack.enter_context(
-        omc4py.open_session("C:/Program Files/OpenModelica1.14.0-64bit/bin/omc.exe")
-    )
+with \
+    omc4py.open_session(
+        "C:/OpenModelica1.13.0-64bit/bin/omc.exe"
+    ) as session_13, \
+    omc4py.open_session(
+        "C:/Program Files/OpenModelica1.14.0-64bit/bin/omc.exe"
+    ) as session_14:
 
     print("v1.13.0:", session_13.getVersion())
     print("v1.14.0:", session_14.getVersion())
