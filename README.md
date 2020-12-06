@@ -1,5 +1,5 @@
 
-![Flake8](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Flake8/badge.svg)
+[![Flake8](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Flake8/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3AFlake8)
 
 ![Pytest (omc1.13.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.0)/badge.svg)
 ![Pytest (omc1.13.2)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.2)/badge.svg)
