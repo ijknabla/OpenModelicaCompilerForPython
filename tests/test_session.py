@@ -1,6 +1,7 @@
 
 from omc4py import (
     TypeName,
+    VariableName,
     open_session,
 )
 import pytest
@@ -122,6 +123,112 @@ type B = enumeration(b);
             TypeName("Test_getClassNames.B"),
         ]
     ).all()
+
+
+@pytest.mark.dependency(depends=["test_open_session"])
+def test_getComponents(
+    session,  # fixture
+):
+    assert session.loadString(
+        """
+class Test_getComponents
+public
+    A a;
+    A a_comment "comment";
+    final A a_final;
+    flow A a_flow;
+    stream A a_stream;
+    replaceable A a_replaceable;
+    discrete A a_discrete;
+    parameter A a_parameter;
+    constant A a_constant;
+    inner A a_inner;
+    outer A a_outer;
+    input A a_input;
+    output A a_output;
+    A[:] a_any;
+    A[:,:] a_any_any;
+    A[:,:,:] a_any_any_any;
+    A[1,2,3] a_1_2_3;
+    A[3,2,1] a_3_2_1;
+protected
+    A a_protected;
+end Test_getComponents;
+        """
+    )
+
+    for component in session.getComponents("Test_getComponents"):
+
+        assert component.className == TypeName("A")
+
+        assert isinstance(component.name, VariableName)
+        assert str(component.name).startswith("a")
+
+        if component.name == VariableName("a_comment"):
+            assert component.comment == "comment"
+        else:
+            assert component.comment == ""
+
+        if component.name == VariableName("a_protected"):
+            assert component.protected == "protected"
+        else:
+            assert component.protected == "public"
+
+        if component.name == VariableName("a_final"):
+            assert component.isFinal
+        else:
+            assert not component.isFinal
+
+        if component.name == VariableName("a_flow"):
+            assert component.isFlow
+        else:
+            assert not component.isFlow
+
+        if component.name == VariableName("a_stream"):
+            assert component.isStream
+        else:
+            assert not component.isStream
+
+        if component.name == VariableName("a_replaceable"):
+            assert component.isReplaceable
+        else:
+            assert not component.isReplaceable
+
+        if component.name == VariableName("a_discrete"):
+            assert component.variability == "discrete"
+        elif component.name == VariableName("a_parameter"):
+            assert component.variability == "parameter"
+        elif component.name == VariableName("a_constant"):
+            assert component.variability == "constant"
+        else:
+            assert component.variability == "unspecified"
+
+        if component.name == VariableName("a_inner"):
+            assert component.innerOuter == "inner"
+        elif component.name == VariableName("a_outer"):
+            assert component.innerOuter == "outer"
+        else:
+            assert component.innerOuter == "none"
+
+        if component.name == VariableName("a_input"):
+            assert component.inputOutput == "input"
+        elif component.name == VariableName("a_output"):
+            assert component.inputOutput == "output"
+        else:
+            assert component.inputOutput == "unspecified"
+
+        if component.name == VariableName("a_any"):
+            assert component.dimensions == (":",)
+        elif component.name == VariableName("a_any_any"):
+            assert component.dimensions == (":", ":",)
+        elif component.name == VariableName("a_any_any_any"):
+            assert component.dimensions == (":", ":", ":",)
+        elif component.name == VariableName("a_1_2_3"):
+            assert component.dimensions == ("1", "2", "3",)
+        elif component.name == VariableName("a_3_2_1"):
+            assert component.dimensions == ("3", "2", "1",)
+        else:
+            assert component.dimensions == ()
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
