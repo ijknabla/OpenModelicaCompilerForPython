@@ -1,5 +1,5 @@
 
-name: Pytest
+name: Pytest omc (1.13.0)
 
 on:
   push:
@@ -8,10 +8,10 @@ on:
     branches: [ master, develop ]
 
 jobs:
-  pytest_job:
+  test:
     runs-on: ubuntu-latest
-    name: A job to run pytest
+
     steps:
       - uses: actions/checkout@v2
       - name: Docker
-        uses: ./.github/actions/pytest
+        uses: ./.github/actions/pytest-omc1.13.0
