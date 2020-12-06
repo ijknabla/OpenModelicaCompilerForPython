@@ -9,7 +9,7 @@
 ![Pytest (omc1.16.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.0)/badge.svg)
 ![Pytest (omc1.16.1)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.1)/badge.svg)
 
-# OpenModelicaCompilerForPython
+# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING)
 OpenModelica compiler (omc) interface for Python>=3.6
 
 ## Change log
