@@ -4,3 +4,7 @@ name: Pytest
 runs:
   using: 'docker'
   image: 'Dockerfile'
+  inputs:
+    openmodelica-version:
+      required: True
+      default: '1.13.0'
