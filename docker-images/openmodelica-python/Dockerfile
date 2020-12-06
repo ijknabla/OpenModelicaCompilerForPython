@@ -20,6 +20,7 @@ RUN apt-get update \
     && apt-get update \
     && apt-get upgrade \
     && apt-get dist-upgrade \
+    && apt-get install -qy sudo \
     && apt-get install --no-install-recommends -qy omc \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
