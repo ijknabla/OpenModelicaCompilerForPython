@@ -12,6 +12,10 @@
 # OpenModelicaCompilerForPython
 OpenModelica compiler (omc) interface for Python>=3.6
 
+## Change log
+
+[See CHANGELOG.md](./CHANGELOG.md)
+
 ## Quick tour
 
 ### Setup
