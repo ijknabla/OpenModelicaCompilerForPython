@@ -1,5 +1,5 @@
 
-name: Pytest
+name: Pytest omc v1.13.0
 
 on:
   push:
@@ -10,14 +10,9 @@ on:
 jobs:
   pytest_job:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        openmodelica-version: ['1.13.0']
 
     name: A job to run pytest
     steps:
       - uses: actions/checkout@v2
       - name: Docker
         uses: ./.github/actions/pytest-omc1.13.0
-        with:
-          openmodelica-version: ${{ matrix.openmodelica-version }}
