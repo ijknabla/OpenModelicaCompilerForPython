@@ -1,5 +1,5 @@
 
-name: Pytest omc (1.13.0)
+name: Pytest (omc1.13.0)
 
 on:
   push:
