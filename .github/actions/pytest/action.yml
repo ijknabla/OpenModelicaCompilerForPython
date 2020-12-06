@@ -1,10 +1,11 @@
 
 name: Pytest
 
+inputs:
+  openmodelica-version:
+    required: True
+    default: '1.13.0'
+
 runs:
   using: 'docker'
   image: 'Dockerfile'
-  inputs:
-    openmodelica-version:
-      required: True
-      default: '1.13.0'
