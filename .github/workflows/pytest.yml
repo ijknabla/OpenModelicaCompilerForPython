@@ -1,0 +1,17 @@
+
+name: Pytest
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  pytest_job:
+    runs-on: ubuntu-latest
+    name: A job to run pytest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker
+        uses: ./.github/actions/pytest
