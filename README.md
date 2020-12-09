@@ -1,6 +1,4 @@
 
-[![Flake8](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Flake8/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3AFlake8)
-
 ![Pytest (omc1.13.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.0)/badge.svg)
 ![Pytest (omc1.13.2)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.2)/badge.svg)
 
@@ -9,7 +7,8 @@
 ![Pytest (omc1.16.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.0)/badge.svg)
 ![Pytest (omc1.16.1)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.1)/badge.svg)
 
-# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING)
+# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING) [![Flake8](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Flake8/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3AFlake8)
+
 OpenModelica compiler (omc) interface for Python>=3.6
 
 ## Change log
