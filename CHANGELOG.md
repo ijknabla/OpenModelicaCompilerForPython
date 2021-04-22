@@ -5,14 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
-### Changed
-- All **/*.py files are formatted according to flake8 diagnostics
 ### Added
 - CHANGELOG.md file for version management
-- setup.cfg file for flake8 linting configuration
 - tests/ directory for testcases using pytest
-- docker-images/ directory for CI
-- .github/ directory for CI by github actions
 ### Removed
 - `omc4py.v_1_14.OMCSession.oms_faultInjection` not available due to a bug in omc 1.14.1
 
