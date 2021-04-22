@@ -13,6 +13,7 @@ OpenModelica compiler (omc) interface for Python>=3.6
 
 [![Pytest (omc1.16.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.0%29%22)
 [![Pytest (omc1.16.1)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.1)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.1%29%22)
+[![Pytest (omc1.16.5)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.5)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.5%29%22)
 
 ## Change log
 
