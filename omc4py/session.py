@@ -42,9 +42,12 @@ Update this after new omc version supported!!!
     elif version[:2] == (1, 15):
         from . import v_1_15
         return v_1_15.OMCSession
-    else:  # version[:2] >= (1, 16):
+    elif version[:2] == (1, 16):
         from . import v_1_16
         return v_1_16.OMCSession
+    else:  # version[:2] >= (1, 17):
+        from . import v_1_17
+        return v_1_17.OMCSession
 
 
 def open_session(
