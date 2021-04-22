@@ -1,5 +1,25 @@
-# OpenModelicaCompilerForPython
+
+# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING) [![Flake8](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Flake8/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3AFlake8)
+
 OpenModelica compiler (omc) interface for Python>=3.6
+
+## Tested omc versions
+
+[![Pytest (omc1.13.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.13.0%29%22)
+[![Pytest (omc1.13.2)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.2)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.13.2%29%22)
+
+[![Pytest (omc1.14.1)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.14.1)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.14.1%29%22)
+[![Pytest (omc1.14.2)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.14.2)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.14.2%29%22)
+
+[![Pytest (omc1.16.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.0%29%22)
+[![Pytest (omc1.16.1)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.1)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.1%29%22)
+[![Pytest (omc1.16.5)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.5)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.5%29%22)
+
+[![Pytest (omc1.17.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.17.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.17.0%29%22)
+
+## Change log
+
+[See CHANGELOG.md](./CHANGELOG.md)
 
 ## Quick tour
 
@@ -45,16 +65,15 @@ with omc4py.open_session(
 It is also possible to open multiple sessions with different versions of omc at the same time by explicitly specifying omc.
 
 ```python3
-from contextlib import ExitStack
 import omc4py
 
-with ExitStack() as stack:
-    session_13 = stack.enter_context(
-        omc4py.open_session("C:/OpenModelica1.13.0-64bit/bin/omc.exe")
-    )
-    session_14 = stack.enter_context(
-        omc4py.open_session("C:/Program Files/OpenModelica1.14.0-64bit/bin/omc.exe")
-    )
+with \
+    omc4py.open_session(
+        "C:/OpenModelica1.13.0-64bit/bin/omc.exe"
+    ) as session_13, \
+    omc4py.open_session(
+        "C:/Program Files/OpenModelica1.14.0-64bit/bin/omc.exe"
+    ) as session_14:
 
     print("v1.13.0:", session_13.getVersion())
     print("v1.14.0:", session_14.getVersion())
@@ -102,6 +121,7 @@ If you want to know more about each session method, you can display it with the 
 - [UserGuide for OpenModelica Scripting API (v1.14)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.14/scripting_api.html)
 - [UserGuide for OpenModelica Scripting API (v1.15)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.15/scripting_api.html)
 - [UserGuide for OpenModelica Scripting API (v1.16)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.16/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.17)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.17/scripting_api.html)
 
 - [UserGuide for OpenModelica Scripting API (latest)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
 

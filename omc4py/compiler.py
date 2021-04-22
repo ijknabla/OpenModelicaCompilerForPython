@@ -255,7 +255,7 @@ class OMCInteractive(
             if not excs:
                 raise exception.OMCRuntimeError(
                     result_literal
-                )
+                ) from None
             else:
                 for exc in excs:
                     if isinstance(exc, Warning):

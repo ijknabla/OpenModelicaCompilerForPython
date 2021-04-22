@@ -1,0 +1,17 @@
+
+name: Pytest (omc1.16.1)
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Docker
+        uses: ./.github/actions/pytest-omc1.16.1

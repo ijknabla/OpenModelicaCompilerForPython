@@ -42,9 +42,12 @@ Update this after new omc version supported!!!
     elif version[:2] == (1, 15):
         from . import v_1_15
         return v_1_15.OMCSession
-    else:  # version[:2] >= (1, 16):
+    elif version[:2] == (1, 16):
         from . import v_1_16
         return v_1_16.OMCSession
+    else:  # version[:2] >= (1, 17):
+        from . import v_1_17
+        return v_1_17.OMCSession
 
 
 def open_session(
@@ -80,12 +83,33 @@ class OMCSessionBase(
     def getComponents(
         self,
         name: TypeName
-    ) -> typing.List[ComponentTuple]:
-        __result = parse_components(
-            self.__omc__.evaluate(f"getComponents({TypeName(name)})")
+    ) -> typing.Optional[typing.List[ComponentTuple]]:
+        result_literal = self.__omc__.evaluate(
+            f"getComponents({TypeName(name)})"
         )
-        self.__check__()
-        return __result
+
+        # return None if result_literal == "\n"
+        if not result_literal or result_literal.isspace():
+            return None
+
+        try:
+            result_value = parse_components(result_literal)
+        except Exception:
+            excs = list(parse_OMCExceptions(result_literal))
+            if not excs:
+                raise exception.OMCRuntimeError(
+                    result_literal
+                ) from None
+            else:
+                for exc in excs:
+                    if isinstance(exc, Warning):
+                        warnings.warn(exc)
+                    else:
+                        raise exc from None
+                else:
+                    return None
+
+        return result_value
 
 
 class OMCSessionBase__v_1_13(
@@ -134,6 +158,14 @@ class OMCSessionMinimal(
                 warnings.warn(exc)
             else:
                 raise exc
+
+    def getComponents(
+        self,
+        name: TypeName
+    ) -> typing.Optional[typing.List[ComponentTuple]]:
+        result = super().getComponents(name)
+        self.__check__()
+        return result
 
     def getErrorString(
         self,

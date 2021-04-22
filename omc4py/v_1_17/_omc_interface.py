@@ -322,6 +322,8 @@ function loadFile
   input String fileName;
   input String encoding = "UTF-8";
   input Boolean uses = true;
+  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
   output Boolean success;
 end loadFile;
 ```
@@ -333,6 +335,8 @@ end loadFile;
                 fileName,
                 encoding=None,
                 uses=None,
+                notify=None,
+                requireExactVersion=None,
             ):
                 return _session_.__omc__.call_function(
                     funcName='loadFile',
@@ -340,6 +344,8 @@ end loadFile;
                         (Component(String), 'fileName', fileName, 'required'),
                         (Component(String), 'encoding', encoding, 'optional'),
                         (Component(Boolean), 'uses', uses, 'optional'),
+                        (Component(Boolean), 'notify', notify, 'optional'),
+                        (Component(Boolean), 'requireExactVersion', requireExactVersion, 'optional'),
                     ],
                     outputArguments=[
                         (Component(Boolean), 'success'),
@@ -357,6 +363,9 @@ function loadFiles
   input String[:] fileNames;
   input String encoding = "UTF-8";
   input Integer numThreads = OpenModelica.Scripting.numProcessors();
+  input Boolean uses = true;
+  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
   output Boolean success;
 end loadFiles;
 ```
@@ -368,6 +377,9 @@ end loadFiles;
                 fileNames,
                 encoding=None,
                 numThreads=None,
+                uses=None,
+                notify=None,
+                requireExactVersion=None,
             ):
                 return _session_.__omc__.call_function(
                     funcName='loadFiles',
@@ -375,6 +387,9 @@ end loadFiles;
                         (Component(String)[:], 'fileNames', fileNames, 'required'),
                         (Component(String), 'encoding', encoding, 'optional'),
                         (Component(Integer), 'numThreads', numThreads, 'optional'),
+                        (Component(Boolean), 'uses', uses, 'optional'),
+                        (Component(Boolean), 'notify', notify, 'optional'),
+                        (Component(Boolean), 'requireExactVersion', requireExactVersion, 'optional'),
                     ],
                     outputArguments=[
                         (Component(Boolean), 'success'),
@@ -423,6 +438,10 @@ end parseEncryptedPackage;
 function loadEncryptedPackage
   input String fileName;
   input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
+  input Boolean skipUnzip = false "Skips the unzip of .mol if true. In that case we expect the files are already extracted e.g., because of parseEncryptedPackage() call.";
+  input Boolean uses = true;
+  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
   output Boolean success;
 end loadEncryptedPackage;
 ```
@@ -433,12 +452,20 @@ end loadEncryptedPackage;
                 _session_: AbstractOMCSession,
                 fileName,
                 workdir=None,
+                skipUnzip=None,
+                uses=None,
+                notify=None,
+                requireExactVersion=None,
             ):
                 return _session_.__omc__.call_function(
                     funcName='loadEncryptedPackage',
                     inputArguments=[
                         (Component(String), 'fileName', fileName, 'required'),
                         (Component(String), 'workdir', workdir, 'optional'),
+                        (Component(Boolean), 'skipUnzip', skipUnzip, 'optional'),
+                        (Component(Boolean), 'uses', uses, 'optional'),
+                        (Component(Boolean), 'notify', notify, 'optional'),
+                        (Component(Boolean), 'requireExactVersion', requireExactVersion, 'optional'),
                     ],
                     outputArguments=[
                         (Component(Boolean), 'success'),
@@ -589,6 +616,9 @@ end parseFile;
 function loadFileInteractiveQualified
   input String filename;
   input String encoding = "UTF-8";
+  input Boolean uses = true;
+  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
   output TypeName names[:];
 end loadFileInteractiveQualified;
 ```
@@ -599,12 +629,18 @@ end loadFileInteractiveQualified;
                 _session_: AbstractOMCSession,
                 filename,
                 encoding=None,
+                uses=None,
+                notify=None,
+                requireExactVersion=None,
             ):
                 return _session_.__omc__.call_function(
                     funcName='loadFileInteractiveQualified',
                     inputArguments=[
                         (Component(String), 'filename', filename, 'required'),
                         (Component(String), 'encoding', encoding, 'optional'),
+                        (Component(Boolean), 'uses', uses, 'optional'),
+                        (Component(Boolean), 'notify', notify, 'optional'),
+                        (Component(Boolean), 'requireExactVersion', requireExactVersion, 'optional'),
                     ],
                     outputArguments=[
                         (Component(TypeName)[:], 'names'),
@@ -2817,9 +2853,10 @@ type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors
         ):
             """
 ```modelica
-type ErrorLevel = enumeration(notification, warning, error);
+type ErrorLevel = enumeration(internal, notification, warning, error);
 ```
             """
+            internal = enum.auto()
             notification = enum.auto()
             warning = enum.auto()
             error = enum.auto()
@@ -4016,7 +4053,7 @@ end translateGraphics;
 function dumpXMLDAE
   input TypeName className;
   input String translationLevel = "flat" "flat, optimiser, backEnd, or stateSpace";
-  input Boolean addOriginalIncidenceMatrix = false;
+  input Boolean addOriginalAdjacencyMatrix = false;
   input Boolean addSolvingInfo = false;
   input Boolean addMathMLCode = false;
   input Boolean dumpResiduals = false;
@@ -4033,7 +4070,7 @@ end dumpXMLDAE;
                 _session_: AbstractOMCSession,
                 className,
                 translationLevel=None,
-                addOriginalIncidenceMatrix=None,
+                addOriginalAdjacencyMatrix=None,
                 addSolvingInfo=None,
                 addMathMLCode=None,
                 dumpResiduals=None,
@@ -4045,7 +4082,7 @@ end dumpXMLDAE;
                     inputArguments=[
                         (Component(TypeName), 'className', className, 'required'),
                         (Component(String), 'translationLevel', translationLevel, 'optional'),
-                        (Component(Boolean), 'addOriginalIncidenceMatrix', addOriginalIncidenceMatrix, 'optional'),
+                        (Component(Boolean), 'addOriginalAdjacencyMatrix', addOriginalAdjacencyMatrix, 'optional'),
                         (Component(Boolean), 'addSolvingInfo', addSolvingInfo, 'optional'),
                         (Component(Boolean), 'addMathMLCode', addMathMLCode, 'optional'),
                         (Component(Boolean), 'dumpResiduals', dumpResiduals, 'optional'),
@@ -5760,8 +5797,8 @@ end getPackages;
             """
 ```modelica
 function getAllSubtypeOf
+  input TypeName className;
   input TypeName parentClass = $Code(AllLoadedClasses);
-  input TypeName class_;
   input Boolean qualified = false;
   input Boolean includePartial = false;
   input Boolean sort = false;
@@ -5773,7 +5810,7 @@ end getAllSubtypeOf;
             def _(
                 _cls_,
                 _session_: AbstractOMCSession,
-                class_,
+                className,
                 parentClass=None,
                 qualified=None,
                 includePartial=None,
@@ -5782,8 +5819,8 @@ end getAllSubtypeOf;
                 return _session_.__omc__.call_function(
                     funcName='getAllSubtypeOf',
                     inputArguments=[
+                        (Component(TypeName), 'className', className, 'required'),
                         (Component(TypeName), 'parentClass', parentClass, 'optional'),
-                        (Component(TypeName), 'class_', class_, 'required'),
                         (Component(Boolean), 'qualified', qualified, 'optional'),
                         (Component(Boolean), 'includePartial', includePartial, 'optional'),
                         (Component(Boolean), 'sort', sort, 'optional'),
@@ -6722,35 +6759,6 @@ end getComponentModifierValues;
                     parser=parse_OMCValue,
                 )
 
-        @modelica_name('OpenModelica.Scripting.getInstantiatedParametersAndValues')
-        class getInstantiatedParametersAndValues(
-            ModelicaFunction,
-        ):
-            """
-```modelica
-function getInstantiatedParametersAndValues
-  input TypeName cls;
-  output String[:] values;
-end getInstantiatedParametersAndValues;
-```
-            """
-            @external
-            def _(
-                _cls_,
-                _session_: AbstractOMCSession,
-                cls,
-            ):
-                return _session_.__omc__.call_function(
-                    funcName='getInstantiatedParametersAndValues',
-                    inputArguments=[
-                        (Component(TypeName), 'cls', cls, 'required'),
-                    ],
-                    outputArguments=[
-                        (Component(String)[:], 'values'),
-                    ],
-                    parser=parse_OMCValue,
-                )
-
         @modelica_name('OpenModelica.Scripting.removeComponentModifiers')
         class removeComponentModifiers(
             ModelicaFunction,
@@ -6782,6 +6790,166 @@ end removeComponentModifiers;
                     ],
                     outputArguments=[
                         (Component(Boolean), 'success'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.getElementModifierNames')
+        class getElementModifierNames(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function getElementModifierNames
+  input TypeName className;
+  input String elementName;
+  output String[:] modifiers;
+end getElementModifierNames;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                className,
+                elementName,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='getElementModifierNames',
+                    inputArguments=[
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'elementName', elementName, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(String)[:], 'modifiers'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.getElementModifierValue')
+        class getElementModifierValue(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function getElementModifierValue
+  input TypeName className;
+  input TypeName modifier;
+  output String value;
+end getElementModifierValue;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                className,
+                modifier,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='getElementModifierValue',
+                    inputArguments=[
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'modifier', modifier, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(String), 'value'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.getElementModifierValues')
+        class getElementModifierValues(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function getElementModifierValues
+  input TypeName className;
+  input TypeName modifier;
+  output String value;
+end getElementModifierValues;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                className,
+                modifier,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='getElementModifierValues',
+                    inputArguments=[
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(TypeName), 'modifier', modifier, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(String), 'value'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.removeElementModifiers')
+        class removeElementModifiers(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function removeElementModifiers
+  input TypeName className;
+  input String componentName;
+  input Boolean keepRedeclares = false;
+  output Boolean success;
+end removeElementModifiers;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                className,
+                componentName,
+                keepRedeclares=None,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='removeElementModifiers',
+                    inputArguments=[
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'componentName', componentName, 'required'),
+                        (Component(Boolean), 'keepRedeclares', keepRedeclares, 'optional'),
+                    ],
+                    outputArguments=[
+                        (Component(Boolean), 'success'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.getInstantiatedParametersAndValues')
+        class getInstantiatedParametersAndValues(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function getInstantiatedParametersAndValues
+  input TypeName cls;
+  output String[:] values;
+end getInstantiatedParametersAndValues;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                cls,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='getInstantiatedParametersAndValues',
+                    inputArguments=[
+                        (Component(TypeName), 'cls', cls, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(String)[:], 'values'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -6858,6 +7026,44 @@ end removeExtendsModifiers;
         #             ],
         #             parser=parse_OMCValue,
         #         )
+
+        @modelica_name('OpenModelica.Scripting.updateConnectionAnnotation')
+        class updateConnectionAnnotation(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function updateConnectionAnnotation
+  input TypeName className;
+  input String from;
+  input String to;
+  input String annotate;
+  output Boolean result;
+end updateConnectionAnnotation;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                className,
+                from_,
+                to,
+                annotate,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='updateConnectionAnnotation',
+                    inputArguments=[
+                        (Component(TypeName), 'className', className, 'required'),
+                        (Component(String), 'from', from_, 'required'),
+                        (Component(String), 'to', to, 'required'),
+                        (Component(String), 'annotate', annotate, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(Boolean), 'result'),
+                    ],
+                    parser=parse_OMCValue,
+                )
 
         @modelica_name('OpenModelica.Scripting.updateConnectionNames')
         class updateConnectionNames(
@@ -8943,6 +9149,96 @@ end getAvailableLibraries;
                     parser=parse_OMCValue,
                 )
 
+        @modelica_name('OpenModelica.Scripting.installPackage')
+        class installPackage(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function installPackage
+  input TypeName pkg;
+  input String version = "";
+  input Boolean exactMatch = false;
+  output Boolean result;
+end installPackage;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                pkg,
+                version=None,
+                exactMatch=None,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='installPackage',
+                    inputArguments=[
+                        (Component(TypeName), 'pkg', pkg, 'required'),
+                        (Component(String), 'version', version, 'optional'),
+                        (Component(Boolean), 'exactMatch', exactMatch, 'optional'),
+                    ],
+                    outputArguments=[
+                        (Component(Boolean), 'result'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.updatePackageIndex')
+        class updatePackageIndex(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function updatePackageIndex
+  output Boolean result;
+end updatePackageIndex;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='updatePackageIndex',
+                    inputArguments=[
+                    ],
+                    outputArguments=[
+                        (Component(Boolean), 'result'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.upgradeInstalledPackages')
+        class upgradeInstalledPackages(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function upgradeInstalledPackages
+  input Boolean installNewestVersions = true;
+  output Boolean result;
+end upgradeInstalledPackages;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                installNewestVersions=None,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='upgradeInstalledPackages',
+                    inputArguments=[
+                        (Component(Boolean), 'installNewestVersions', installNewestVersions, 'optional'),
+                    ],
+                    outputArguments=[
+                        (Component(Boolean), 'result'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
         @modelica_name('OpenModelica.Scripting.getUses')
         class getUses(
             ModelicaFunction,
@@ -8968,6 +9264,37 @@ end getUses;
                     ],
                     outputArguments=[
                         (Component(String)[:, :], 'uses'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.getConversionsFromVersions')
+        class getConversionsFromVersions(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function getConversionsFromVersions
+  input TypeName pack;
+  output String[:] withoutConversion;
+  output String[:] withConversion;
+end getConversionsFromVersions;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                pack,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='getConversionsFromVersions',
+                    inputArguments=[
+                        (Component(TypeName), 'pack', pack, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(String)[:], 'withoutConversion'),
+                        (Component(String)[:], 'withConversion'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -9946,6 +10273,19 @@ type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coars
             oms_tlm_coarse_grained = enum.auto()
             oms_tlm_fine_grained = enum.auto()
 
+        @modelica_name('OpenModelica.Scripting.oms_fault_type')
+        class oms_fault_type(
+            ModelicaEnumeration,
+        ):
+            """
+```modelica
+type oms_fault_type = enumeration(oms_fault_type_bias, oms_fault_type_gain, oms_fault_type_const);
+```
+            """
+            oms_fault_type_bias = enum.auto()
+            oms_fault_type_gain = enum.auto()
+            oms_fault_type_const = enum.auto()
+
         @modelica_name('OpenModelica.Scripting.loadOMSimulator')
         class loadOMSimulator(
             ModelicaFunction,
@@ -10776,6 +11116,7 @@ end oms_export;
 function oms_exportDependencyGraphs
   input String cref;
   input String initialization;
+  input String event;
   input String simulation;
   output Integer status;
 end oms_exportDependencyGraphs;
@@ -10787,6 +11128,7 @@ end oms_exportDependencyGraphs;
                 _session_: AbstractOMCSession,
                 cref,
                 initialization,
+                event,
                 simulation,
             ):
                 return _session_.__omc__.call_function(
@@ -10794,9 +11136,41 @@ end oms_exportDependencyGraphs;
                     inputArguments=[
                         (Component(String), 'cref', cref, 'required'),
                         (Component(String), 'initialization', initialization, 'required'),
+                        (Component(String), 'event', event, 'required'),
                         (Component(String), 'simulation', simulation, 'required'),
                     ],
                     outputArguments=[
+                        (Component(Integer), 'status'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.oms_exportSnapshot')
+        class oms_exportSnapshot(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function oms_exportSnapshot
+  input String cref;
+  output String contents;
+  output Integer status;
+end oms_exportSnapshot;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                cref,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='oms_exportSnapshot',
+                    inputArguments=[
+                        (Component(String), 'cref', cref, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(String), 'contents'),
                         (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
@@ -10810,8 +11184,8 @@ end oms_exportDependencyGraphs;
 ```modelica
 function oms_extractFMIKind
   input String filename;
-  output Integer status;
   output Integer kind;
+  output Integer status;
 end oms_extractFMIKind;
 ```
             """
@@ -10827,8 +11201,8 @@ end oms_extractFMIKind;
                         (Component(String), 'filename', filename, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Integer), 'kind'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -10841,8 +11215,8 @@ end oms_extractFMIKind;
 ```modelica
 function oms_getBoolean
   input String cref;
-  output Integer status;
   output Boolean value;
+  output Integer status;
 end oms_getBoolean;
 ```
             """
@@ -10858,8 +11232,8 @@ end oms_getBoolean;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Boolean), 'value'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -10872,8 +11246,8 @@ end oms_getBoolean;
 ```modelica
 function oms_getFixedStepSize
   input String cref;
-  output Integer status;
   output Real stepSize;
+  output Integer status;
 end oms_getFixedStepSize;
 ```
             """
@@ -10889,8 +11263,8 @@ end oms_getFixedStepSize;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Real), 'stepSize'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -10903,8 +11277,8 @@ end oms_getFixedStepSize;
 ```modelica
 function oms_getInteger
   input String cref;
-  output Integer status;
   input Integer value;
+  output Integer status;
 end oms_getInteger;
 ```
             """
@@ -10935,8 +11309,8 @@ end oms_getInteger;
 ```modelica
 function oms_getModelState
   input String cref;
-  output Integer status;
   output Integer modelState;
+  output Integer status;
 end oms_getModelState;
 ```
             """
@@ -10952,8 +11326,8 @@ end oms_getModelState;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Integer), 'modelState'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -10966,8 +11340,8 @@ end oms_getModelState;
 ```modelica
 function oms_getReal
   input String cref;
-  output Integer status;
   output Real value;
+  output Integer status;
 end oms_getReal;
 ```
             """
@@ -10983,8 +11357,8 @@ end oms_getReal;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Real), 'value'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -10997,8 +11371,8 @@ end oms_getReal;
 ```modelica
 function oms_getSolver
   input String cref;
-  output Integer status;
   output Integer solver;
+  output Integer status;
 end oms_getSolver;
 ```
             """
@@ -11014,8 +11388,8 @@ end oms_getSolver;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Integer), 'solver'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11028,8 +11402,8 @@ end oms_getSolver;
 ```modelica
 function oms_getStartTime
   input String cref;
-  output Integer status;
   output Real startTime;
+  output Integer status;
 end oms_getStartTime;
 ```
             """
@@ -11045,8 +11419,8 @@ end oms_getStartTime;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Real), 'startTime'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11059,8 +11433,8 @@ end oms_getStartTime;
 ```modelica
 function oms_getStopTime
   input String cref;
-  output Integer status;
   output Real stopTime;
+  output Integer status;
 end oms_getStopTime;
 ```
             """
@@ -11076,8 +11450,8 @@ end oms_getStopTime;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Real), 'stopTime'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11090,8 +11464,8 @@ end oms_getStopTime;
 ```modelica
 function oms_getSubModelPath
   input String cref;
-  output Integer status;
   output String path;
+  output Integer status;
 end oms_getSubModelPath;
 ```
             """
@@ -11107,8 +11481,8 @@ end oms_getSubModelPath;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(String), 'path'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11121,8 +11495,8 @@ end oms_getSubModelPath;
 ```modelica
 function oms_getSystemType
   input String cref;
-  output Integer status;
   output Integer type_;
+  output Integer status;
 end oms_getSystemType;
 ```
             """
@@ -11138,8 +11512,8 @@ end oms_getSystemType;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Integer), 'type_'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11152,9 +11526,9 @@ end oms_getSystemType;
 ```modelica
 function oms_getTolerance
   input String cref;
-  output Integer status;
   output Real absoluteTolerance;
   output Real relativeTolerance;
+  output Integer status;
 end oms_getTolerance;
 ```
             """
@@ -11170,9 +11544,9 @@ end oms_getTolerance;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Real), 'absoluteTolerance'),
                         (Component(Real), 'relativeTolerance'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11185,10 +11559,10 @@ end oms_getTolerance;
 ```modelica
 function oms_getVariableStepSize
   input String cref;
-  output Integer status;
   output Real initialStepSize;
   output Real minimumStepSize;
   output Real maximumStepSize;
+  output Integer status;
 end oms_getVariableStepSize;
 ```
             """
@@ -11204,48 +11578,48 @@ end oms_getVariableStepSize;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(Real), 'initialStepSize'),
                         (Component(Real), 'minimumStepSize'),
                         (Component(Real), 'maximumStepSize'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
 
-        # @modelica_name('OpenModelica.Scripting.oms_faultInjection')
-        # class oms_faultInjection(
-        #     ModelicaFunction,
-        # ):
-        #     """
-        # ```modelica
-        # function oms_faultInjection
-        #   input String signal;
-        #   input oms_fault_type_enu_t faultType;
-        #   input Real faultValue;
-        #   output Integer status;
-        # end oms_faultInjection;
-        # ```
-        #     """
-        #     @external
-        #     def _(
-        #         _cls_,
-        #         _session_: AbstractOMCSession,
-        #         signal,
-        #         faultType,
-        #         faultValue,
-        #     ):
-        #         return _session_.__omc__.call_function(
-        #             funcName='oms_faultInjection',
-        #             inputArguments=[
-        #                 (Component(String), 'signal', signal, 'required'),
-        #                 (Component(oms_fault_type_enu_t), 'faultType', faultType, 'required'),
-        #                 (Component(Real), 'faultValue', faultValue, 'required'),
-        #             ],
-        #             outputArguments=[
-        #                 (Component(Integer), 'status'),
-        #             ],
-        #             parser=parse_OMCValue,
-        #         )
+        @modelica_name('OpenModelica.Scripting.oms_faultInjection')
+        class oms_faultInjection(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function oms_faultInjection
+  input String signal;
+  input oms_fault_type faultType;
+  input Real faultValue;
+  output Integer status;
+end oms_faultInjection;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                signal,
+                faultType,
+                faultValue,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='oms_faultInjection',
+                    inputArguments=[
+                        (Component(String), 'signal', signal, 'required'),
+                        (Component(OpenModelica.Scripting.oms_fault_type), 'faultType', faultType, 'required'),
+                        (Component(Real), 'faultValue', faultValue, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(Integer), 'status'),
+                    ],
+                    parser=parse_OMCValue,
+                )
 
         @modelica_name('OpenModelica.Scripting.oms_importFile')
         class oms_importFile(
@@ -11255,8 +11629,8 @@ end oms_getVariableStepSize;
 ```modelica
 function oms_importFile
   input String filename;
-  output Integer status;
   output String cref;
+  output Integer status;
 end oms_importFile;
 ```
             """
@@ -11272,8 +11646,40 @@ end oms_importFile;
                         (Component(String), 'filename', filename, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(String), 'cref'),
+                        (Component(Integer), 'status'),
+                    ],
+                    parser=parse_OMCValue,
+                )
+
+        @modelica_name('OpenModelica.Scripting.oms_importSnapshot')
+        class oms_importSnapshot(
+            ModelicaFunction,
+        ):
+            """
+```modelica
+function oms_importSnapshot
+  input String cref;
+  input String snapshot;
+  output Integer status;
+end oms_importSnapshot;
+```
+            """
+            @external
+            def _(
+                _cls_,
+                _session_: AbstractOMCSession,
+                cref,
+                snapshot,
+            ):
+                return _session_.__omc__.call_function(
+                    funcName='oms_importSnapshot',
+                    inputArguments=[
+                        (Component(String), 'cref', cref, 'required'),
+                        (Component(String), 'snapshot', snapshot, 'required'),
+                    ],
+                    outputArguments=[
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11344,8 +11750,8 @@ end oms_instantiate;
 ```modelica
 function oms_list
   input String cref;
-  output Integer status;
   output String contents;
+  output Integer status;
 end oms_list;
 ```
             """
@@ -11361,8 +11767,8 @@ end oms_list;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(String), 'contents'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11375,8 +11781,8 @@ end oms_list;
 ```modelica
 function oms_listUnconnectedConnectors
   input String cref;
-  output Integer status;
   output String contents;
+  output Integer status;
 end oms_listUnconnectedConnectors;
 ```
             """
@@ -11392,8 +11798,8 @@ end oms_listUnconnectedConnectors;
                         (Component(String), 'cref', cref, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(String), 'contents'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -11467,8 +11873,8 @@ end oms_newModel;
 ```modelica
 function oms_parseModelName
   input String contents;
-  output Integer status;
   output String cref;
+  output Integer status;
 end oms_parseModelName;
 ```
             """
@@ -11484,8 +11890,8 @@ end oms_parseModelName;
                         (Component(String), 'contents', contents, 'required'),
                     ],
                     outputArguments=[
-                        (Component(Integer), 'status'),
                         (Component(String), 'cref'),
+                        (Component(Integer), 'status'),
                     ],
                     parser=parse_OMCValue,
                 )
@@ -12695,10 +13101,15 @@ class OMCSession(
     getComponentModifierNames = OpenModelica.Scripting.getComponentModifierNames
     getComponentModifierValue = OpenModelica.Scripting.getComponentModifierValue
     getComponentModifierValues = OpenModelica.Scripting.getComponentModifierValues
-    getInstantiatedParametersAndValues = OpenModelica.Scripting.getInstantiatedParametersAndValues
     removeComponentModifiers = OpenModelica.Scripting.removeComponentModifiers
+    getElementModifierNames = OpenModelica.Scripting.getElementModifierNames
+    getElementModifierValue = OpenModelica.Scripting.getElementModifierValue
+    getElementModifierValues = OpenModelica.Scripting.getElementModifierValues
+    removeElementModifiers = OpenModelica.Scripting.removeElementModifiers
+    getInstantiatedParametersAndValues = OpenModelica.Scripting.getInstantiatedParametersAndValues
     removeExtendsModifiers = OpenModelica.Scripting.removeExtendsModifiers
     # updateConnection = OpenModelica.Scripting.updateConnection
+    updateConnectionAnnotation = OpenModelica.Scripting.updateConnectionAnnotation
     updateConnectionNames = OpenModelica.Scripting.updateConnectionNames
     getConnectionCount = OpenModelica.Scripting.getConnectionCount
     getNthConnection = OpenModelica.Scripting.getNthConnection
@@ -12764,7 +13175,11 @@ class OMCSession(
     loadModelica3D = OpenModelica.Scripting.loadModelica3D
     searchClassNames = OpenModelica.Scripting.searchClassNames
     getAvailableLibraries = OpenModelica.Scripting.getAvailableLibraries
+    installPackage = OpenModelica.Scripting.installPackage
+    updatePackageIndex = OpenModelica.Scripting.updatePackageIndex
+    upgradeInstalledPackages = OpenModelica.Scripting.upgradeInstalledPackages
     getUses = OpenModelica.Scripting.getUses
+    getConversionsFromVersions = OpenModelica.Scripting.getConversionsFromVersions
     getDerivedClassModifierNames = OpenModelica.Scripting.getDerivedClassModifierNames
     getDerivedClassModifierValue = OpenModelica.Scripting.getDerivedClassModifierValue
     generateEntryPoint = OpenModelica.Scripting.generateEntryPoint
@@ -12796,6 +13211,7 @@ class OMCSession(
     oms_solver = OpenModelica.Scripting.oms_solver
     oms_tlm_domain = OpenModelica.Scripting.oms_tlm_domain
     oms_tlm_interpolation = OpenModelica.Scripting.oms_tlm_interpolation
+    oms_fault_type = OpenModelica.Scripting.oms_fault_type
     loadOMSimulator = OpenModelica.Scripting.loadOMSimulator
     unloadOMSimulator = OpenModelica.Scripting.unloadOMSimulator
     oms_addBus = OpenModelica.Scripting.oms_addBus
@@ -12822,6 +13238,7 @@ class OMCSession(
     oms_deleteConnectorFromTLMBus = OpenModelica.Scripting.oms_deleteConnectorFromTLMBus
     oms_export = OpenModelica.Scripting.oms_export
     oms_exportDependencyGraphs = OpenModelica.Scripting.oms_exportDependencyGraphs
+    oms_exportSnapshot = OpenModelica.Scripting.oms_exportSnapshot
     oms_extractFMIKind = OpenModelica.Scripting.oms_extractFMIKind
     oms_getBoolean = OpenModelica.Scripting.oms_getBoolean
     oms_getFixedStepSize = OpenModelica.Scripting.oms_getFixedStepSize
@@ -12835,8 +13252,9 @@ class OMCSession(
     oms_getSystemType = OpenModelica.Scripting.oms_getSystemType
     oms_getTolerance = OpenModelica.Scripting.oms_getTolerance
     oms_getVariableStepSize = OpenModelica.Scripting.oms_getVariableStepSize
-    # oms_faultInjection = OpenModelica.Scripting.oms_faultInjection
+    oms_faultInjection = OpenModelica.Scripting.oms_faultInjection
     oms_importFile = OpenModelica.Scripting.oms_importFile
+    oms_importSnapshot = OpenModelica.Scripting.oms_importSnapshot
     oms_initialize = OpenModelica.Scripting.oms_initialize
     oms_instantiate = OpenModelica.Scripting.oms_instantiate
     oms_list = OpenModelica.Scripting.oms_list

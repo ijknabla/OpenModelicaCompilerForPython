@@ -1,12 +1,20 @@
 #!/usr/bin/env python3
 
+import builtins
+
 from pathlib import Path
 from setuptools import setup, find_packages
+
+try:
+    builtins.__OMC4PY_SETUP__ = True  # type: ignore
+    from omc4py import __version__ as omc4py_version
+except ImportError:
+    raise
 
 
 setup(
     name="OpenModelicaCompiler",
-    version="0.0.1",
+    version=omc4py_version,
     description="OpenModelica compiler (omc) interface for Python>=3.6",
     long_description=(Path(__file__).parent/"README.md").read_text(),
     long_description_content_type="text/markdown",
@@ -23,14 +31,9 @@ setup(
         "Topic :: Software Development :: User Interfaces",
     ],
     url="https://github.com/ijknabla/OpenModelicaCompilerForPython",
-    packages=[
-        "omc4py",
-        "omc4py.parser",
-        "omc4py.v_1_13",
-        "omc4py.v_1_14",
-        "omc4py.v_1_15",
-        "omc4py.v_1_16",
-    ],
+    packages=find_packages(
+        include=["omc4py*"],
+    ),
     install_requires=[
         "ModelicaLanguage==0.0.0a6",  # fix to current alpha version
         "PyZMQ",
