@@ -1,8 +1,15 @@
 #!/usr/bin/env python3
 
-from omc4py._version import __version__ as omc4py_version
+import builtins
+
 from pathlib import Path
 from setuptools import setup, find_packages
+
+try:
+    builtins.__OMC4PY_SETUP__ = True  # type: ignore
+    from omc4py import __version__ as omc4py_version
+except ImportError:
+    raise
 
 
 setup(

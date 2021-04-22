@@ -32,26 +32,34 @@ __license__ = '''
  */
 '''
 
-from ._version import __version__
+__version__ = "0.1.0"
 
-__all__ = (
-    "__license__",
-    "__version__",
-    "open_session",
-    "Real",
-    "Integer",
-    "Boolean",
-    "String",
-    "VariableName",
-    "TypeName",
-)
+__OMC4PY_SETUP__: bool
+try:
+    __OMC4PY_SETUP__
+except NameError:
+    __OMC4PY_SETUP__ = False
 
-from .classes import (
-    Boolean,
-    Integer,
-    Real,
-    String,
-    TypeName,
-    VariableName,
-)
-from .session import open_session
+
+if not __OMC4PY_SETUP__:
+    __all__ = (
+        "__license__",
+        "__version__",
+        "open_session",
+        "Real",
+        "Integer",
+        "Boolean",
+        "String",
+        "VariableName",
+        "TypeName",
+    )
+
+    from .classes import (
+        Boolean,
+        Integer,
+        Real,
+        String,
+        TypeName,
+        VariableName,
+    )
+    from .session import open_session
