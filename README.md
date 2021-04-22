@@ -121,6 +121,7 @@ If you want to know more about each session method, you can display it with the 
 - [UserGuide for OpenModelica Scripting API (v1.14)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.14/scripting_api.html)
 - [UserGuide for OpenModelica Scripting API (v1.15)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.15/scripting_api.html)
 - [UserGuide for OpenModelica Scripting API (v1.16)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.16/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.17)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.17/scripting_api.html)
 
 - [UserGuide for OpenModelica Scripting API (latest)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
 
