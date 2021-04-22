@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - `omc4py.v_1_17` Support of _OpenModelica 1.17.x_
+- `omc4py.__version__` version string s.t. `"0.1.0"`
 - CHANGELOG.md file for version management
 - tests/ directory for testcases using pytest
 ### Removed
