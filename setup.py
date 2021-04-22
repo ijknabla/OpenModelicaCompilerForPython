@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from omc4py import __version__ as omc4py_version
+from omc4py._version import __version__ as omc4py_version
 from pathlib import Path
 from setuptools import setup, find_packages
 
