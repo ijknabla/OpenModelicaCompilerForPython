@@ -10,6 +10,7 @@ python = "^3.6"
 Arpeggio = ">=1"
 numpy = ">=1.7"
 ModelicaLanguage = "0.0.0a6"
+pyzmq = ">=17.0.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
