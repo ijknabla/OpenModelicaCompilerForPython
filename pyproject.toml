@@ -8,10 +8,10 @@ license = "OSMC-1.2"
 [tool.poetry.dependencies]
 python = "^3.6"
 Arpeggio = ">=1.6"
-numpy = ">=1.7"
+numpy = ">=1.7.0"
 ModelicaLanguage = "0.0.0a6"
 pyzmq = ">=17.0.0"
-typing-extensions = ">=3.7"
+typing-extensions = ">=3.7.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "^6.2.5"
