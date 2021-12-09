@@ -1,4 +1,16 @@
 [[package]]
+name = "arpeggio"
+version = "1.10.2"
+description = "Packrat parser interpreter"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.extras]
+dev = ["wheel", "mkdocs", "mike", "twine"]
+test = ["flake8", "coverage", "coveralls", "pytest"]
+
+[[package]]
 name = "atomicwrites"
 version = "1.4.0"
 description = "Atomic file writes."
@@ -151,9 +163,13 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "c297503666e67dc734e0ffc95b912c7bb491ebd3a6ff0553a31027a13c780a8a"
+content-hash = "33434a94110687837b8a6d57b78261d3393be311ed2b8f83bf73257d85233550"
 
 [metadata.files]
+arpeggio = [
+    {file = "Arpeggio-1.10.2-py2.py3-none-any.whl", hash = "sha256:fed68a1cb7f529cbd4d725597cc811b7506885fcdef17d4cdcf564341a1e210b"},
+    {file = "Arpeggio-1.10.2.tar.gz", hash = "sha256:bfe349f252f82f82d84cb886f1d5081d1a31451e6045275e9f90b65d0daa06f1"},
+]
 atomicwrites = [
     {file = "atomicwrites-1.4.0-py2.py3-none-any.whl", hash = "sha256:6d1784dea7c0c8d4a5172b6c620f40b6e4cbfdf96d783691f2e1302a7b88e197"},
     {file = "atomicwrites-1.4.0.tar.gz", hash = "sha256:ae70396ad1a434f9c7046fd2dd196fc04b12f9e91ffb859164193be8b6168a7a"},
