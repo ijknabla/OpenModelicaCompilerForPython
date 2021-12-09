@@ -66,6 +66,18 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "modelicalanguage"
+version = "0.0.0a6"
+description = "Modelica parser and class representation for Python3.x"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+Arpeggio = "*"
+Numpy = "*"
+
+[[package]]
 name = "numpy"
 version = "1.19.5"
 description = "NumPy is the fundamental package for array computing with Python."
@@ -171,7 +183,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "be5fcf97ca649eb6b6cf128efd58b57d77566b9f1cae72d92a7b60feb149cd90"
+content-hash = "57d66dda6c83917c5ea62b5ac996af773ef0ad00bc53266e85be07e52d198888"
 
 [metadata.files]
 arpeggio = [
@@ -197,6 +209,10 @@ importlib-metadata = [
 iniconfig = [
     {file = "iniconfig-1.1.1-py2.py3-none-any.whl", hash = "sha256:011e24c64b7f47f6ebd835bb12a743f2fbe9a26d4cecaa7f53bc4f35ee9da8b3"},
     {file = "iniconfig-1.1.1.tar.gz", hash = "sha256:bc3af051d7d14b2ee5ef9969666def0cd1a000e121eaea580d4a313df4b37f32"},
+]
+modelicalanguage = [
+    {file = "ModelicaLanguage-0.0.0a6-py3-none-any.whl", hash = "sha256:289b01ce828eb722b6dcbc677efb8583620a9dd00f3e2f0ef660e7ca8bf67a0b"},
+    {file = "ModelicaLanguage-0.0.0a6.tar.gz", hash = "sha256:2c875f5fbc0d625f7a150e555b5a7fbc6d8b173c4cef34f27def50c39a6b5103"},
 ]
 numpy = [
     {file = "numpy-1.19.5-cp36-cp36m-macosx_10_9_x86_64.whl", hash = "sha256:cc6bd4fd593cb261332568485e20a0712883cf631f6f5e8e86a52caa8b2b50ff"},
