@@ -9,6 +9,7 @@ license = "OSMC-1.2"
 python = "^3.6"
 
 [tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
