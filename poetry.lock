@@ -171,7 +171,7 @@ testing = ["pytest (>=4.6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytes
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.6"
-content-hash = "11bb6cf5b776f06c8ca8977e535f9b4f1044e8cfc9435f21c0e5bbf6557d125a"
+content-hash = "be5fcf97ca649eb6b6cf128efd58b57d77566b9f1cae72d92a7b60feb149cd90"
 
 [metadata.files]
 arpeggio = [
