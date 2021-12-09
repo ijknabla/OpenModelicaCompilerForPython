@@ -7,7 +7,7 @@ license = "OSMC-1.2"
 
 [tool.poetry.dependencies]
 python = "^3.6"
-Arpeggio = ">=1"
+Arpeggio = ">=1.6"
 numpy = ">=1.7"
 ModelicaLanguage = "0.0.0a6"
 pyzmq = ">=17.0.0"
