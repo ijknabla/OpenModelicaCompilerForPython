@@ -4,6 +4,7 @@ version = "0.1.0"
 description = "OpenModelica compiler (omc) interface for Python"
 repository = "https://github.com/ijknabla/OpenModelicaCompilerForPython"
 authors = ["ijknabla <ijknabla@gmail.com>"]
+readme = "README.md"
 license = "GPL-3.0, OSMC-PL 1.2 (user's choice)"
 classifiers = [
     "Development Status :: 5 - Production/Stable",
