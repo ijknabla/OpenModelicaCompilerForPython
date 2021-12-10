@@ -4,6 +4,9 @@ version = "0.1.0"
 description = "OpenModelica compiler (omc) interface for Python"
 authors = ["ijknabla <ijknabla@gmail.com>"]
 license = "OSMC-1.2"
+packages = [
+    { include = "omc4py"},
+]
 
 [tool.poetry.dependencies]
 python = "^3.6"
