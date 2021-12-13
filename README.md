@@ -17,6 +17,8 @@ OpenModelica compiler (omc) interface for Python
 
 [![Pytest (omc1.17.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.17.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.17.0%29%22)
 
+[![Pytest (omc1.18.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.18.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.18.0%29%22)
+
 ## Change log
 
 [See CHANGELOG.md](./CHANGELOG.md)
