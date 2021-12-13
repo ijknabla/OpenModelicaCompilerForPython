@@ -5,9 +5,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+- `pyproject.toml` to unify package settings.
 
-### Changed
-- package managent by `poetry`
+### Removed
+- `setup.py`, `setup.cfg`, `requirements.txt` (unified to `pyproject.toml`)
 
 ## [0.1.0] - 2021-04-22
 ### Added
