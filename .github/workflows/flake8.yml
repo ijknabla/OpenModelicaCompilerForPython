@@ -28,7 +28,10 @@ jobs:
         python -m pip install --upgrade pip
         python -m pip install flake8
         python -m pip install ./
+        python -m pip install poetry
+        python -m poetry install
     - name: Lint with flake8
       run: |
         # Stop build if flake8 find error
         flake8 . --verbose --count --show-source --statistics
+        python -m poetry run pflake8 . --verbose --count --show-source --statistics
