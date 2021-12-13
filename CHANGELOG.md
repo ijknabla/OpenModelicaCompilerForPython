@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
 - `pyproject.toml` to unify package settings.
+- `omc4py.v_1_18` support of _OpenModelica 1.18.x_
 
 ### Removed
 - `setup.py`, `setup.cfg`, `requirements.txt` (unified to `pyproject.toml`)
