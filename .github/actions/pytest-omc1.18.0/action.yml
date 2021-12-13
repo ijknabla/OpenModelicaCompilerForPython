@@ -1,0 +1,6 @@
+
+name: Pytest
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'

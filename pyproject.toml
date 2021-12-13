@@ -1,0 +1,48 @@
+[tool.poetry]
+name = "OpenModelicaCompiler"
+version = "0.1.1"
+description = "OpenModelica compiler (omc) interface for Python"
+repository = "https://github.com/ijknabla/OpenModelicaCompilerForPython"
+authors = ["ijknabla <ijknabla@gmail.com>"]
+readme = "README.md"
+license = "GPL-3.0, OSMC-PL 1.2 (user's choice)"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Programming Language :: Python :: 3 :: Only",
+    "Topic :: Scientific/Engineering :: Mathematics",
+    "Topic :: Scientific/Engineering :: Physics",
+    "Topic :: Software Development :: User Interfaces",
+]
+packages = [
+    { include = "omc4py"},
+]
+
+[tool.flake8]
+exclude = ".venv"
+
+# flake8: Allow too-long line in auto-generated modules
+per-file-ignores = "omc4py/*/_omc_interface.py:E501"
+
+# flake8: The current omc4py metaclass is inevitably complicated
+# to express the behavior of the Modelica class.
+max-complexity = 20
+
+[tool.poetry.dependencies]
+python = "^3.6"
+Arpeggio = ">=1.6"
+ModelicaLanguage = "0.0.0a6"
+numpy = ">=1.7.0"
+pyzmq = ">=17.0.0"
+typing-extensions = ">=3.7.2"
+
+[tool.poetry.dev-dependencies]
+inquirer = "^2.8.0"
+lxml = "^4.6.4"
+pytest = "^6.2.5"
+pytest-dependency = "^0.5.1"
+tqdm = "^4.62.3"
+pyproject-flake8 = "^0.0.1-alpha.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
