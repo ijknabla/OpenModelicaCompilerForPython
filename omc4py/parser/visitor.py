@@ -1,9 +1,11 @@
-import arpeggio  # type: ignore
 import enum
-import numpy  # type: ignore
 import operator
 import typing
 
+import arpeggio  # type: ignore
+import numpy  # type: ignore
+
+from omc4py import string
 from omc4py.classes import (
     Integer,
     Real,
@@ -11,8 +13,6 @@ from omc4py.classes import (
     VariableName,
     VariableNameVisitor,
 )
-
-from omc4py import string
 
 
 def flatten_list(lis: list):

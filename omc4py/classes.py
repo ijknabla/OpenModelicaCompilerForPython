@@ -25,16 +25,16 @@ __all__ = (
 )
 
 import abc
-import arpeggio  # type: ignore
 import enum
-import itertools
 import functools
-import numpy  # type: ignore
+import itertools
 import typing
+
+import arpeggio  # type: ignore
+import numpy  # type: ignore
 import typing_extensions
 
 from .string import to_omc_literal
-
 
 # Type hints
 

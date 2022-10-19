@@ -4,15 +4,12 @@ __all__ = (
     "parse_variableHasDefault",
 )
 
-import arpeggio  # type: ignore
 import typing
 
-import omc4py.parser.syntax
+import arpeggio  # type: ignore
 
-from omc4py.classes import (
-    TypeName,
-    VariableName,
-)
+import omc4py.parser.syntax
+from omc4py.classes import TypeName, VariableName
 
 from . import visitor
 

@@ -3,11 +3,7 @@ import re
 import typing
 import warnings
 
-from . import (
-    exception,
-    compiler,
-)
-
+from . import compiler, exception
 from .classes import (
     AbstractOMCInteractive,
     AbstractOMCSession,
@@ -15,12 +11,11 @@ from .classes import (
     String,
     TypeName,
 )
-
 from .parser import (
     ComponentTuple,
+    parse_components,
     parse_OMCExceptions,
     parse_OMCValue,
-    parse_components,
 )
 
 
@@ -31,14 +26,7 @@ def __select_session_type(
     Session class selector.
     Update this after new omc version supported!!!
     """
-    from . import (
-        v_1_13,
-        v_1_14,
-        v_1_15,
-        v_1_16,
-        v_1_17,
-        v_1_18,
-    )
+    from . import v_1_13, v_1_14, v_1_15, v_1_16, v_1_17, v_1_18
 
     version = OMCSessionMinimal(omc).getVersionTuple()
     if version[:2] <= (1, 13):

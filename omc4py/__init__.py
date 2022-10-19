@@ -53,12 +53,5 @@ if not __OMC4PY_SETUP__:
         "TypeName",
     )
 
-    from .classes import (
-        Boolean,
-        Integer,
-        Real,
-        String,
-        TypeName,
-        VariableName,
-    )
+    from .classes import Boolean, Integer, Real, String, TypeName, VariableName
     from .session import open_session

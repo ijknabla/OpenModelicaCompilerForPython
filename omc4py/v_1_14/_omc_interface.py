@@ -17,9 +17,7 @@ from omc4py.classes import (
     external,
     modelica_name,
 )
-
 from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
-
 from omc4py.session import OMCSessionBase__v_1_13 as OMCSessionBase
 
 

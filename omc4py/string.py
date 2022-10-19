@@ -5,10 +5,10 @@ __all__ = (
 )
 
 
-from modelica_language.util import replace_all
-import numpy  # type: ignore
 import typing
 
+import numpy  # type: ignore
+from modelica_language.util import replace_all
 
 modelica_char_escape_map = {
     "\\": r"\\",

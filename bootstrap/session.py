@@ -1,18 +1,9 @@
 import enum
 import typing
 
-from omc4py.classes import (
-    Boolean,
-    Component,
-    String,
-    TypeName,
-)
-from omc4py.session import (
-    OMCSessionMinimal,
-)
-from omc4py.parser import (
-    parse_OMCValue,
-)
+from omc4py.classes import Boolean, Component, String, TypeName
+from omc4py.parser import parse_OMCValue
+from omc4py.session import OMCSessionMinimal
 
 
 class OMCSessionBootstrap(

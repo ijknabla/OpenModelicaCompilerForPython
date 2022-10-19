@@ -6,11 +6,10 @@ __all__ = (
 )
 
 
-import arpeggio  # type: ignore
 import typing
 
+import arpeggio  # type: ignore
 import modelica_language.parsers.syntax as std  # type: ignore
-
 
 _MODELICA_STANDARD_IDENT = std.IDENT
 

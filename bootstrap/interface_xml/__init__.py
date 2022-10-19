@@ -4,23 +4,16 @@ __all__ = (
 )
 
 import functools
-from lxml import etree  # type: ignore
-import pkg_resources
-import tqdm  # type: ignore
 import typing
 
-from omc4py.classes import (
-    TypeName,
-)
+import pkg_resources
+import tqdm  # type: ignore
+from lxml import etree  # type: ignore
 
-from ..session import (
-    OMCSessionBootstrap,
-)
-from ..parser import (
-    parse_alias,
-    parse_enumerators,
-    parse_variableHasDefault,
-)
+from omc4py.classes import TypeName
+
+from ..parser import parse_alias, parse_enumerators, parse_variableHasDefault
+from ..session import OMCSessionBootstrap
 
 
 def generate_omc_interface_xml(

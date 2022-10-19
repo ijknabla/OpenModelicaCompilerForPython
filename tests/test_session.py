@@ -1,9 +1,6 @@
-from omc4py import (
-    TypeName,
-    VariableName,
-    open_session,
-)
 import pytest
+
+from omc4py import TypeName, VariableName, open_session
 
 
 @pytest.mark.dependency()

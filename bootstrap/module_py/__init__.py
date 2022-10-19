@@ -1,8 +1,16 @@
 import abc
 import collections
 import keyword
-from lxml import etree  # type: ignore
 import typing
+
+from lxml import etree  # type: ignore
+
+from omc4py.classes import (
+    Dimensions,
+    REQUIRED_or_OPTIONAL,
+    TypeName,
+    VariableName,
+)
 
 from .code import (
     AbstractCode,
@@ -11,13 +19,6 @@ from .code import (
     CodeWithIndent,
     CommentOut,
     empty_line,
-)
-
-from omc4py.classes import (
-    Dimensions,
-    REQUIRED_or_OPTIONAL,
-    TypeName,
-    VariableName,
 )
 
 

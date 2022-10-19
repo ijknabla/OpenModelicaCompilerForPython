@@ -1,20 +1,17 @@
 import argparse
 import contextlib
 import enum
-import inquirer  # type: ignore
-from lxml import etree  # type: ignore
-from pathlib import Path
 import shutil
 import sys
 import typing
+from pathlib import Path
+
+import inquirer  # type: ignore
+from lxml import etree  # type: ignore
 
 from omc4py.session import open_session
 
-from . import (
-    interface_xml,
-    module_py,
-)
-
+from . import interface_xml, module_py
 from .session import OMCSessionBootstrap
 
 

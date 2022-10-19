@@ -7,19 +7,15 @@ __all__ = (
     "parse_components",
 )
 
-import arpeggio  # type: ignore
 import functools
 import re
 import typing
 
-from ..classes import TypeName
+import arpeggio  # type: ignore
+
 from .. import exception
-
-from . import (
-    syntax,
-    visitor,
-)
-
+from ..classes import TypeName
+from . import syntax, visitor
 from .visitor import ComponentTuple
 
 

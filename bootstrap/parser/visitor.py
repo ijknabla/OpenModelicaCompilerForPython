@@ -6,16 +6,12 @@ __all__ = (
 
 import typing
 
+from omc4py.classes import TypeName, VariableName
 from omc4py.parser.visitor import (
     StringVisitor,
     TypeSpecifierVisitor,
     flatten_list,
     getitem_with_default,
-)
-
-from omc4py.classes import (
-    TypeName,
-    VariableName,
 )
 
 

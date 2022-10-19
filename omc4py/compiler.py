@@ -1,24 +1,19 @@
 import atexit
 import logging
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import typing
-import typing_extensions
 import uuid
 import warnings
+from pathlib import Path
+
+import typing_extensions
 import zmq  # type: ignore
 
-from . import (
-    classes,
-    exception,
-    string,
-)
-
+from . import classes, exception, string
 from .parser import parse_OMCExceptions
-
 
 logger = logging.getLogger(__name__)
 
