@@ -281,7 +281,7 @@ class TypeName:
 def split_dict(
     dictionary: typing.Dict[KT, typing.Any],
     condition: typing.Callable[[typing.Any], bool],
-) -> typing.Tuple[typing.Dict[KT, typing.Any], typing.Dict[KT, typing.Any],]:
+) -> typing.Tuple[typing.Dict[KT, typing.Any], typing.Dict[KT, typing.Any]]:
     yes, no = {}, {}
     for k, v in dictionary.items():
         if condition(v):

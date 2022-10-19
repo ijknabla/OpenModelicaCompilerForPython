@@ -45,12 +45,15 @@ line-length = 79
 [tool.flake8]
 exclude = ".venv"
 
-# flake8: Allow too-long line in auto-generated modules
+# Allow too-long line in auto-generated modules
 per-file-ignores = "omc4py/*/_omc_interface.py:E501"
 
-# flake8: The current omc4py metaclass is inevitably complicated
+# The current omc4py metaclass is inevitably complicated
 # to express the behavior of the Modelica class.
 max-complexity = 20
+
+# Ignore whitespace before colon
+extend-ignore = "E203,"
 
 [tool.isort]
 profile = "black"
