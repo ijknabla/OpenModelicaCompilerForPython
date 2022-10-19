@@ -1,4 +1,3 @@
-
 __all__ = (
     "parse_alias",
     "parse_enumerators",
@@ -27,7 +26,7 @@ def get_stored_definition_parser() -> arpeggio.Parser:
 
 
 def parse_alias(
-    code: str
+    code: str,
 ) -> typing.Optional[typing.Tuple[VariableName, TypeName]]:
     return arpeggio.visit_parse_tree(
         get_stored_definition_parser().parse(code),
@@ -36,7 +35,7 @@ def parse_alias(
 
 
 def parse_enumerators(
-    code: str
+    code: str,
 ) -> typing.List[typing.Tuple[VariableName, str]]:
     return arpeggio.visit_parse_tree(
         get_stored_definition_parser().parse(code),
@@ -44,9 +43,7 @@ def parse_enumerators(
     )
 
 
-def parse_variableHasDefault(
-    code: str
-) -> typing.Dict[VariableName, bool]:
+def parse_variableHasDefault(code: str) -> typing.Dict[VariableName, bool]:
     return dict(
         arpeggio.visit_parse_tree(
             get_stored_definition_parser().parse(code),

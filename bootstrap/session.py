@@ -1,4 +1,3 @@
-
 import enum
 import typing
 
@@ -28,18 +27,14 @@ class OMCSessionBootstrap(
         __result = self.__omc__.call_function(
             funcName="list",
             inputArguments=[
+                (Component(TypeName), "class_", class_, "optional"),
                 (
-                    Component(TypeName), "class_",
-                    class_, "optional"
+                    Component(Boolean),
+                    "interfaceOnly",
+                    interfaceOnly,
+                    "optional",
                 ),
-                (
-                    Component(Boolean), "interfaceOnly",
-                    interfaceOnly, "optional"
-                ),
-                (
-                    Component(Boolean), "shortOnly",
-                    shortOnly, "optional"
-                ),
+                (Component(Boolean), "shortOnly", shortOnly, "optional"),
             ],
             outputArguments=[
                 (Component(String), "contents"),
@@ -105,7 +100,7 @@ class OMCSessionBootstrap(
         return self.RestrictionEnum[
             " ".join(
                 word
-                for word in self.getClassRestriction(cl).split(' ')
+                for word in self.getClassRestriction(cl).split(" ")
                 if word not in keywords_to_ignore
             )
         ]

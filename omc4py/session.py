@@ -1,4 +1,3 @@
-
 import abc
 import re
 import typing
@@ -29,8 +28,8 @@ def __select_session_type(
     omc: AbstractOMCInteractive,
 ) -> typing.Type[AbstractOMCSession]:
     """
-Session class selector.
-Update this after new omc version supported!!!
+    Session class selector.
+    Update this after new omc version supported!!!
     """
     from . import (
         v_1_13,
@@ -61,9 +60,7 @@ Update this after new omc version supported!!!
 def open_session(
     omc_command: typing.Optional[compiler.StrOrPathLike] = None,
     *,
-    session_type: typing.Optional[
-        typing.Type[AbstractOMCSession]
-    ] = None,
+    session_type: typing.Optional[typing.Type[AbstractOMCSession]] = None,
 ) -> AbstractOMCSession:
     omc = compiler.OMCInteractive.open(omc_command)
 
@@ -89,8 +86,7 @@ class OMCSessionBase(
     AbstractOMCSession,
 ):
     def getComponents(
-        self,
-        name: TypeName
+        self, name: TypeName
     ) -> typing.Optional[typing.List[ComponentTuple]]:
         result_literal = self.__omc__.evaluate(
             f"getComponents({TypeName(name)})"
@@ -105,9 +101,7 @@ class OMCSessionBase(
         except Exception:
             excs = list(parse_OMCExceptions(result_literal))
             if not excs:
-                raise exception.OMCRuntimeError(
-                    result_literal
-                ) from None
+                raise exception.OMCRuntimeError(result_literal) from None
             else:
                 for exc in excs:
                     if isinstance(exc, Warning):
@@ -140,13 +134,9 @@ class OMCSessionBase__v_1_13(
             level = messageString.level.name
 
             if level == "notification":
-                warnings.warn(
-                    exception.OMCNotification(py_message)
-                )
+                warnings.warn(exception.OMCNotification(py_message))
             elif level == "warning":
-                warnings.warn(
-                    exception.OMCWarning(py_message)
-                )
+                warnings.warn(exception.OMCWarning(py_message))
             elif level == "error":
                 raise exception.OMCError(py_message)
             else:
@@ -168,8 +158,7 @@ class OMCSessionMinimal(
                 raise exc
 
     def getComponents(
-        self,
-        name: TypeName
+        self, name: TypeName
     ) -> typing.Optional[typing.List[ComponentTuple]]:
         result = super().getComponents(name)
         self.__check__()
@@ -180,11 +169,8 @@ class OMCSessionMinimal(
     ) -> str:
         __result = self.__omc__.call_function(
             funcName="getErrorString",
-            inputArguments=[
-            ],
-            outputArguments=[
-                (Component(String), "errorString")
-            ],
+            inputArguments=[],
+            outputArguments=[(Component(String), "errorString")],
             parser=parse_OMCValue,
         )
         return str(__result)
@@ -194,8 +180,7 @@ class OMCSessionMinimal(
     ) -> str:
         __result = self.__omc__.call_function(
             funcName="getVersion",
-            inputArguments=[
-            ],
+            inputArguments=[],
             outputArguments=[
                 (Component(String), "version"),
             ],

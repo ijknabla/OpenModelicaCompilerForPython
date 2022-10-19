@@ -1,4 +1,3 @@
-
 __all__ = (
     "omc_dialect_context",
     "std",
@@ -29,10 +28,7 @@ def sign():
 
 
 def number():
-    return (
-        arpeggio.Optional(sign),
-        std.UNSIGNED_NUMBER
-    )
+    return (arpeggio.Optional(sign), std.UNSIGNED_NUMBER)
 
 
 def boolean():
@@ -40,11 +36,19 @@ def boolean():
 
 
 def omc_array():
-    return "{", omc_value_list, "}",
+    return (
+        "{",
+        omc_value_list,
+        "}",
+    )
 
 
 def omc_tuple():
-    return "(", omc_value_list, ")",
+    return (
+        "(",
+        omc_value_list,
+        ")",
+    )
 
 
 def omc_value_list():
@@ -53,16 +57,17 @@ def omc_value_list():
 
 def omc_record_literal():
     return (
-        std.RECORD, std.type_specifier,
+        std.RECORD,
+        std.type_specifier,
         omc_record_element_list,
-        std.END, std.type_specifier, ";"
+        std.END,
+        std.type_specifier,
+        ";",
     )
 
 
 def omc_record_element_list():
-    return arpeggio.ZeroOrMore(
-        omc_record_element, sep=","
-    )
+    return arpeggio.ZeroOrMore(omc_record_element, sep=",")
 
 
 def omc_record_element():
@@ -93,17 +98,28 @@ def omc_component():
     return (
         "{",
         (
-            std.type_specifier, ",",  # className
-            std.IDENT, ",",  # name
-            std.STRING, ",",  # comment
-            std.STRING, ",",  # protected
-            boolean, ",",  # isFinal
-            boolean, ",",  # isFlow
-            boolean, ",",  # isStream
-            boolean, ",",  # isReplaceable
-            std.STRING, ",",  # variability
-            std.STRING, ",",  # innerOuter
-            std.STRING, ",",  # inputOutput
+            std.type_specifier,
+            ",",  # className
+            std.IDENT,
+            ",",  # name
+            std.STRING,
+            ",",  # comment
+            std.STRING,
+            ",",  # protected
+            boolean,
+            ",",  # isFinal
+            boolean,
+            ",",  # isFlow
+            boolean,
+            ",",  # isStream
+            boolean,
+            ",",  # isReplaceable
+            std.STRING,
+            ",",  # variability
+            std.STRING,
+            ",",  # innerOuter
+            std.STRING,
+            ",",  # inputOutput
             omc_dimensions,  # dimensions
         ),
         "}",
@@ -138,7 +154,7 @@ def stored_definition_withEOF():
     return std.stored_definition, arpeggio.EOF
 
 
-class OMCDialectContext():
+class OMCDialectContext:
     __enabled: typing.ClassVar[bool] = False
 
     def __enter__(self):

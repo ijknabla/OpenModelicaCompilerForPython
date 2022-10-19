@@ -1,4 +1,3 @@
-
 __all__ = (
     "open_session",
     "Real",

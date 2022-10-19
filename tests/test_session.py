@@ -1,4 +1,3 @@
-
 from omc4py import (
     TypeName,
     VariableName,
@@ -22,9 +21,7 @@ def session():
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_loadString(
-    session  # fixture
-):
+def test_loadString(session):  # fixture
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
     assert session.isType("MyEnumeration")
     assert session.isEnumeration("MyEnumeration")
@@ -37,9 +34,7 @@ def test_loadString(
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getClassNames(
-    session  # fixture
-):
+def test_getClassNames(session):  # fixture
     assert session.loadString(
         """
 package Test_getClassNames
@@ -56,17 +51,20 @@ type C = enumeration(c);
         """
     )
     assert (
-        session.getClassNames("Test_getClassNames") == [
+        session.getClassNames("Test_getClassNames")
+        == [
             TypeName("C"),
         ]
     ).all()
     assert (
-        session.getClassNames("Test_getClassNames", sort=True) == [
+        session.getClassNames("Test_getClassNames", sort=True)
+        == [
             TypeName("C"),
         ]
     ).all()
     assert (
-        session.getClassNames("Test_getClassNames", qualified=True) == [
+        session.getClassNames("Test_getClassNames", qualified=True)
+        == [
             TypeName("Test_getClassNames.C"),
         ]
     ).all()
@@ -78,19 +76,22 @@ type A = enumeration(a);
         """
     )
     assert (
-        session.getClassNames("Test_getClassNames") == [
+        session.getClassNames("Test_getClassNames")
+        == [
             TypeName("C"),
             TypeName("A"),
         ]
     ).all()
     assert (
-        session.getClassNames("Test_getClassNames", sort=True) == [
+        session.getClassNames("Test_getClassNames", sort=True)
+        == [
             TypeName("A"),
             TypeName("C"),
         ]
     ).all()
     assert (
-        session.getClassNames("Test_getClassNames", qualified=True) == [
+        session.getClassNames("Test_getClassNames", qualified=True)
+        == [
             TypeName("Test_getClassNames.C"),
             TypeName("Test_getClassNames.A"),
         ]
@@ -103,21 +104,24 @@ type B = enumeration(b);
         """
     )
     assert (
-        session.getClassNames("Test_getClassNames") == [
+        session.getClassNames("Test_getClassNames")
+        == [
             TypeName("C"),
             TypeName("A"),
             TypeName("B"),
         ]
     ).all()
     assert (
-        session.getClassNames("Test_getClassNames", sort=True) == [
+        session.getClassNames("Test_getClassNames", sort=True)
+        == [
             TypeName("A"),
             TypeName("B"),
             TypeName("C"),
         ]
     ).all()
     assert (
-        session.getClassNames("Test_getClassNames", qualified=True) == [
+        session.getClassNames("Test_getClassNames", qualified=True)
+        == [
             TypeName("Test_getClassNames.C"),
             TypeName("Test_getClassNames.A"),
             TypeName("Test_getClassNames.B"),
@@ -220,19 +224,32 @@ end Test_getComponents;
         if component.name == VariableName("a_any"):
             assert component.dimensions == (":",)
         elif component.name == VariableName("a_any_any"):
-            assert component.dimensions == (":", ":",)
+            assert component.dimensions == (
+                ":",
+                ":",
+            )
         elif component.name == VariableName("a_any_any_any"):
-            assert component.dimensions == (":", ":", ":",)
+            assert component.dimensions == (
+                ":",
+                ":",
+                ":",
+            )
         elif component.name == VariableName("a_1_2_3"):
-            assert component.dimensions == ("1", "2", "3",)
+            assert component.dimensions == (
+                "1",
+                "2",
+                "3",
+            )
         elif component.name == VariableName("a_3_2_1"):
-            assert component.dimensions == ("3", "2", "1",)
+            assert component.dimensions == (
+                "3",
+                "2",
+                "1",
+            )
         else:
             assert component.dimensions == ()
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_OpenModelica(
-    session  # fixture
-):
+def test_OpenModelica(session):  # fixture
     assert session.isPackage("OpenModelica")

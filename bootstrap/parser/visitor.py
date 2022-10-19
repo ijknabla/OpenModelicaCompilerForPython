@@ -1,4 +1,3 @@
-
 __all__ = (
     "AliasVisitor",
     "EnumeratorsVisitor",
@@ -20,9 +19,7 @@ from omc4py.classes import (
 )
 
 
-class Alias(
-    typing.NamedTuple
-):
+class Alias(typing.NamedTuple):
     name: VariableName
     target: TypeName
 
@@ -45,23 +42,17 @@ class AliasVisitor(
         return None
 
     def visit_short_class_specifier(
-        self,
-        node,
-        children
+        self, node, children
     ) -> typing.Optional[Alias]:
-        variableName, = children.IDENT
+        (variableName,) = children.IDENT
         type_specifier = getitem_with_default(
-            children.type_specifier, 0,
-            default=None
+            children.type_specifier, 0, default=None
         )
 
         if type_specifier is None:
             return None
         else:
-            return Alias(
-                name=variableName,
-                target=type_specifier
-            )
+            return Alias(name=variableName, target=type_specifier)
 
 
 class Enumerator(
@@ -91,21 +82,14 @@ class EnumeratorsVisitor(
         node,
         children,
     ) -> Enumerator:
-        name, = children.IDENT
-        comment = getitem_with_default(
-            children.comment, 0,
-            default=""
-        )
+        (name,) = children.IDENT
+        comment = getitem_with_default(children.comment, 0, default="")
         return Enumerator(
             name=name,
             comment=comment,
         )
 
-    def visit_comment(
-        self,
-        node,
-        children
-    ) -> str:
+    def visit_comment(self, node, children) -> str:
         return children.string_comment[0]
 
     def visit_string_comment(
@@ -116,9 +100,7 @@ class EnumeratorsVisitor(
         return "".join(children.STRING)
 
 
-class VariableHasDefault(
-    typing.NamedTuple
-):
+class VariableHasDefault(typing.NamedTuple):
     name: VariableName
     hasDefault: bool
 
@@ -137,12 +119,8 @@ class VariableHasDefaultVisitor(
             if isinstance(child, VariableHasDefault)
         ]
 
-    def visit_declaration(
-        self,
-        node,
-        children
-    ) -> VariableHasDefault:
-        name, = children.IDENT
+    def visit_declaration(self, node, children) -> VariableHasDefault:
+        (name,) = children.IDENT
         hasDefault = bool(children.modification)
         return VariableHasDefault(
             name=name,

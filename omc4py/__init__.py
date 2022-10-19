@@ -1,5 +1,4 @@
-
-__license__ = '''
+__license__ = """
 /*
  * This file is part of OpenModelica.
  *
@@ -30,7 +29,7 @@ __license__ = '''
  * See the full OSMC Public License conditions for more details.
  *
  */
-'''
+"""
 
 __version__ = "0.1.1"
 
