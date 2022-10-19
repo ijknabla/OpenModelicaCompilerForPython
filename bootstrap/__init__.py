@@ -1,21 +1,17 @@
-
 import argparse
 import contextlib
 import enum
-import inquirer  # type: ignore
-from lxml import etree  # type: ignore
-from pathlib import Path
 import shutil
 import sys
 import typing
+from pathlib import Path
+
+import inquirer  # type: ignore
+from lxml import etree  # type: ignore
 
 from omc4py.session import open_session
 
-from . import (
-    interface_xml,
-    module_py,
-)
-
+from . import interface_xml, module_py
 from .session import OMCSessionBootstrap
 
 
@@ -41,7 +37,8 @@ def generate_omc_interface(
 ):
     if inputType is InputType.executable:
         with open_session(
-            inputPath, session_type=OMCSessionBootstrap,
+            inputPath,
+            session_type=OMCSessionBootstrap,
         ) as session:
             omc_interface_xml = interface_xml.generate_omc_interface_xml(
                 typing.cast(OMCSessionBootstrap, session)
@@ -64,8 +61,7 @@ def generate_omc_interface(
 
 
 def check_input_args(
-    input_str: str,
-    inputType_hint: typing.Optional[InputType]
+    input_str: str, inputType_hint: typing.Optional[InputType]
 ) -> typing.Tuple[Path, InputType]:
     if inputType_hint is None:
         if Path(input_str).suffix == ".xml":
@@ -76,21 +72,15 @@ def check_input_args(
     elif inputType_hint is InputType.executable:
         executable = shutil.which(input_str)
         if executable is None:
-            raise ValueError(
-                f"Can't find executable for {input_str!r}"
-            )
+            raise ValueError(f"Can't find executable for {input_str!r}")
         return Path(executable), InputType.executable
 
     elif inputType_hint is InputType.xml:
         absPath = Path(input_str).resolve()
         if not absPath.exists():
-            raise FileNotFoundError(
-                f"{input_str!r} does not exists!"
-            )
+            raise FileNotFoundError(f"{input_str!r} does not exists!")
         if absPath.suffix != ".xml":
-            raise ValueError(
-                f"input must be xml, got {input_str!r}"
-            )
+            raise ValueError(f"input must be xml, got {input_str!r}")
         return absPath, InputType.xml
 
 
@@ -100,7 +90,7 @@ def open_by_output_args(
     outputFormat_hint: typing.Optional[OutputFormat],
     overwrite: typing.Optional[bool],
 ) -> typing.Iterator[typing.Tuple[typing.BinaryIO, OutputFormat]]:
-    if output_str == '-':
+    if output_str == "-":
         if outputFormat_hint is not None:
             yield sys.stdout.buffer, outputFormat_hint
         else:  # outputFormat_hint is None
@@ -186,8 +176,9 @@ Refactored main
     # # output
     # default is stdout, (generate python module)
     parser.add_argument(
-        "-o", "--output",
-        default='-',
+        "-o",
+        "--output",
+        default="-",
     )
 
     # # outputFormat
@@ -199,16 +190,15 @@ Refactored main
     )
 
     parser.add_argument(
-        "--overwrite", action="store_true",
+        "--overwrite",
+        action="store_true",
         default=None,
     )
 
     args = parser.parse_args()
 
     inputType_hint = (
-        InputType[args.inputType]
-        if args.inputType is not None
-        else None
+        InputType[args.inputType] if args.inputType is not None else None
     )
     outputFormat_hint = (
         OutputFormat[args.outputFormat]
@@ -227,6 +217,8 @@ Refactored main
         args.overwrite,
     ) as (outputFile, outputFormat):
         generate_omc_interface(
-            inputPath, inputType,
-            outputFile, outputFormat,
+            inputPath,
+            inputType,
+            outputFile,
+            outputFormat,
         )

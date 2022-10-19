@@ -1,4 +1,3 @@
-
 __all__ = (
     "open_session",
     "Real",
@@ -12,6 +11,7 @@ __all__ = (
 )
 
 import functools
+
 import omc4py.session
 
 from ._omc_interface import (
@@ -24,7 +24,6 @@ from ._omc_interface import (
     TypeName,
     VariableName,
 )
-
 
 open_session = functools.partial(
     omc4py.session.open_session,

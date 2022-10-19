@@ -1,4 +1,3 @@
-
 __all__ = (
     "escape_py_string",
     "unescape_modelica_string",
@@ -6,15 +5,15 @@ __all__ = (
 )
 
 
-from modelica_language.util import replace_all
-import numpy  # type: ignore
 import typing
 
+import numpy  # type: ignore
+from modelica_language.util import replace_all
 
 modelica_char_escape_map = {
     "\\": r"\\",
-    "\'": r"\'",
-    '\"': r'\"',
+    "'": r"\'",
+    '"': r"\"",
     "\a": r"\a",
     "\b": r"\b",
     "\f": r"\f",
@@ -24,36 +23,25 @@ modelica_char_escape_map = {
 }
 
 
-def escape_py_string(
-    py_string: str
-) -> str:
-    return replace_all(
-        py_string,
-        modelica_char_escape_map.items()
-    )
+def escape_py_string(py_string: str) -> str:
+    return replace_all(py_string, modelica_char_escape_map.items())
 
 
-def unescape_modelica_string(
-    modelica_string: str
-) -> str:
+def unescape_modelica_string(modelica_string: str) -> str:
     return replace_all(
         modelica_string,
         [
             (escaped, orignal)
             for orignal, escaped in modelica_char_escape_map.items()
-        ]
+        ],
     )
 
 
-def quote_py_string(
-    py_string: str
-) -> str:
+def quote_py_string(py_string: str) -> str:
     return '"' + escape_py_string(py_string) + '"'
 
 
-def unquote_modelica_string(
-    modelica_string: str
-) -> str:
+def unquote_modelica_string(modelica_string: str) -> str:
     if not modelica_string.startswith('"'):
         raise ValueError(
             f"modelica_string must starts with '\"' got {modelica_string!r}"
@@ -65,9 +53,7 @@ def unquote_modelica_string(
     return unescape_modelica_string(modelica_string[1:-1])
 
 
-def to_omc_literal(
-    obj: typing.Any
-) -> str:
+def to_omc_literal(obj: typing.Any) -> str:
     if hasattr(obj, "__to_omc_literal__"):
         return obj.__to_omc_literal__()
     elif isinstance(obj, (classes.Boolean, bool)):

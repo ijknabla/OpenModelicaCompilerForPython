@@ -1,4 +1,3 @@
-
 __all__ = (
     "ComponentTuple",
     "is_valid_identifier",
@@ -8,19 +7,15 @@ __all__ = (
     "parse_components",
 )
 
-import arpeggio  # type: ignore
 import functools
 import re
 import typing
 
-from ..classes import TypeName
+import arpeggio  # type: ignore
+
 from .. import exception
-
-from . import (
-    syntax,
-    visitor,
-)
-
+from ..classes import TypeName
+from . import syntax, visitor
 from .visitor import ComponentTuple
 
 
@@ -32,6 +27,7 @@ def omc_parser_getter(
     def wrapped():
         with syntax.omc_dialect_context:
             return fget()
+
     return wrapped
 
 
@@ -75,9 +71,7 @@ def get_omc_exception_regex():
     )
 
 
-def is_valid_identifier(
-    ident: str
-) -> bool:
+def is_valid_identifier(ident: str) -> bool:
     try:
         get_IDENT_parser().parse(ident)
         return True
@@ -85,41 +79,33 @@ def is_valid_identifier(
         return False
 
 
-def parse_typeName(
-    type_specifier: str
-) -> TypeName:
+def parse_typeName(type_specifier: str) -> TypeName:
     try:
         return arpeggio.visit_parse_tree(
             get_type_specifier_parser().parse(
                 type_specifier,
             ),
-            visitor.TypeSpecifierVisitor()
+            visitor.TypeSpecifierVisitor(),
         )
     except arpeggio.NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
-def parse_components(
-    literal: str
-) -> typing.List[ComponentTuple]:
+def parse_components(literal: str) -> typing.List[ComponentTuple]:
     return arpeggio.visit_parse_tree(
         get_omc_record_array_parser().parse(literal),
         visitor.ComponentArrayVisitor(source=literal),
     )
 
 
-def parse_OMCValue(
-    literal: str
-):
+def parse_OMCValue(literal: str):
     return arpeggio.visit_parse_tree(
         get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor(),
     )
 
 
-def parse_OMCValue__v_1_13(
-    literal: str
-):
+def parse_OMCValue__v_1_13(literal: str):
     return arpeggio.visit_parse_tree(
         get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor__v_1_13(),

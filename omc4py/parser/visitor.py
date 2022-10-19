@@ -1,10 +1,11 @@
-
-import arpeggio  # type: ignore
 import enum
-import numpy  # type: ignore
 import operator
 import typing
 
+import arpeggio  # type: ignore
+import numpy  # type: ignore
+
+from omc4py import string
 from omc4py.classes import (
     Integer,
     Real,
@@ -13,12 +14,8 @@ from omc4py.classes import (
     VariableNameVisitor,
 )
 
-from omc4py import string
 
-
-def flatten_list(
-    lis: list
-):
+def flatten_list(lis: list):
     for item in lis:
         if isinstance(item, list):
             yield from flatten_list(item)
@@ -55,11 +52,7 @@ class TypeSpecifierVisitor(
     ) -> typing.List[VariableName]:
         return children.IDENT
 
-    def visit_type_specifier(
-        self,
-        node,
-        children
-    ) -> TypeName:
+    def visit_type_specifier(self, node, children) -> TypeName:
         name = children.name[0]
         if node[0].value == ".":
             return TypeName(".", *name)
@@ -80,11 +73,8 @@ class NumberVisitor(
             return float(node.value)
 
     def visit_number(self, node, children):
-        sign = getitem_with_default(
-            children.sign, 0,
-            default="+"
-        )
-        unsigned, = children.UNSIGNED_NUMBER
+        sign = getitem_with_default(children.sign, 0, default="+")
+        (unsigned,) = children.UNSIGNED_NUMBER
 
         if sign == "+":
             signed = +unsigned
@@ -153,16 +143,12 @@ class OMCRecordVisitor(
         return key, value
 
     def visit_omc_record_element_list(
-        self,
-        node,
-        children
+        self, node, children
     ) -> typing.List[typing.Tuple[str, typing.Any]]:
         return children.omc_record_element
 
     def visit_omc_record_literal(
-        self,
-        node,
-        children
+        self, node, children
     ) -> typing.Dict[str, typing.Any]:
         elements = children.omc_record_element_list[0]
         return dict(elements)
@@ -178,9 +164,7 @@ class OMCValueVisitor(
     pass
 
 
-class OMCValueVisitor__v_1_13(
-    OMCValueVisitor
-):
+class OMCValueVisitor__v_1_13(OMCValueVisitor):
     def visit_omc_record_literal(
         self, node, children
     ) -> typing.Dict[str, typing.Any]:
@@ -189,7 +173,8 @@ class OMCValueVisitor__v_1_13(
 
         if (
             className == TypeName("OpenModelica.Scripting.SourceInfo")
-            and "filename" in record and "fileName" not in record
+            and "filename" in record
+            and "fileName" not in record
         ):
             record["fileName"] = record.pop("filename")
 
@@ -221,18 +206,17 @@ class ComponentArrayVisitor(
     __source: str
 
     @property
-    def source(self) -> str: return self.__source
+    def source(self) -> str:
+        return self.__source
 
-    def __init__(
-        self,
-        source: str
-    ):
+    def __init__(self, source: str):
         super().__init__()
         self.__source = source
 
     def visit_omc_component_array(self, node, children):
         return getitem_with_default(
-            children.omc_component_list, 0,
+            children.omc_component_list,
+            0,
             default=[],
         )
 
@@ -240,13 +224,22 @@ class ComponentArrayVisitor(
         return list(children.omc_component)
 
     def visit_omc_component(self, node, children):
-        className, = children.type_specifier
-        name, = children.IDENT
+        (className,) = children.type_specifier
+        (name,) = children.IDENT
         (
-            comment, protected, variability, innerOuter, inputOutput,
+            comment,
+            protected,
+            variability,
+            innerOuter,
+            inputOutput,
         ) = children.STRING
-        isFinal, isFlow, isStream, isReplaceable, = children.boolean
-        dimensions, = children.omc_dimensions
+        (
+            isFinal,
+            isFlow,
+            isStream,
+            isReplaceable,
+        ) = children.boolean
+        (dimensions,) = children.omc_dimensions
 
         return ComponentTuple(
             className=className,
@@ -266,17 +259,18 @@ class ComponentArrayVisitor(
     def visit_omc_dimensions(self, node, children):
         return tuple(
             getitem_with_default(
-                children.subscript_list, 0,
+                children.subscript_list,
+                0,
                 default=(),
             )
         )
 
     def visit_subscript_list(
-        self, node, children,
+        self,
+        node,
+        children,
     ):
         return children.subscript
 
     def visit_subscript(self, node, children):
-        return self.source[
-            node.position:node.position_end
-        ]
+        return self.source[node.position : node.position_end]

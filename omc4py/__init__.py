@@ -1,5 +1,4 @@
-
-__license__ = '''
+__license__ = """
 /*
  * This file is part of OpenModelica.
  *
@@ -30,7 +29,7 @@ __license__ = '''
  * See the full OSMC Public License conditions for more details.
  *
  */
-'''
+"""
 
 __version__ = "0.1.1"
 
@@ -54,12 +53,5 @@ if not __OMC4PY_SETUP__:
         "TypeName",
     )
 
-    from .classes import (
-        Boolean,
-        Integer,
-        Real,
-        String,
-        TypeName,
-        VariableName,
-    )
+    from .classes import Boolean, Integer, Real, String, TypeName, VariableName
     from .session import open_session
