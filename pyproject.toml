@@ -17,16 +17,6 @@ packages = [
     { include = "omc4py"},
 ]
 
-[tool.flake8]
-exclude = ".venv"
-
-# flake8: Allow too-long line in auto-generated modules
-per-file-ignores = "omc4py/*/_omc_interface.py:E501"
-
-# flake8: The current omc4py metaclass is inevitably complicated
-# to express the behavior of the Modelica class.
-max-complexity = 20
-
 [tool.poetry.dependencies]
 python = "^3.6"
 Arpeggio = ">=1.6"
@@ -48,3 +38,20 @@ black = ">=20.8.b1"
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+
+[tool.flake8]
+exclude = ".venv"
+
+# flake8: Allow too-long line in auto-generated modules
+per-file-ignores = "omc4py/*/_omc_interface.py:E501"
+
+# flake8: The current omc4py metaclass is inevitably complicated
+# to express the behavior of the Modelica class.
+max-complexity = 20
+
+[tool.isort]
+profile = "black"
+line_length = 79
