@@ -6,9 +6,9 @@ __all__ = (
 
 
 import typing
+from functools import reduce
 
 import numpy  # type: ignore
-from modelica_language.util import replace_all
 
 modelica_char_escape_map = {
     "\\": r"\\",
@@ -24,11 +24,11 @@ modelica_char_escape_map = {
 
 
 def escape_py_string(py_string: str) -> str:
-    return replace_all(py_string, modelica_char_escape_map.items())
+    return _replace_all(py_string, modelica_char_escape_map.items())
 
 
 def unescape_modelica_string(modelica_string: str) -> str:
-    return replace_all(
+    return _replace_all(
         modelica_string,
         [
             (escaped, orignal)
@@ -64,6 +64,12 @@ def to_omc_literal(obj: typing.Any) -> str:
         return "{" + ", ".join(map(to_omc_literal, obj)) + "}"
     else:
         return str(obj)
+
+
+def _replace_all(
+    s: str, old_and_new: typing.Iterable[typing.Tuple[str, str]]
+) -> str:
+    return reduce(lambda x, y: x.replace(y[0], y[1]), old_and_new, s)
 
 
 from . import classes  # noqa: E402
