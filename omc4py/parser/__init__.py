@@ -11,7 +11,7 @@ import functools
 import re
 import typing
 
-import arpeggio  # type: ignore
+import arpeggio
 
 from .. import exception
 from ..classes import TypeName

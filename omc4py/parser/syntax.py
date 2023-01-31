@@ -8,7 +8,7 @@ __all__ = (
 
 import typing
 
-import arpeggio  # type: ignore
+import arpeggio
 import modelica_language.parsers.syntax as std  # type: ignore
 
 _MODELICA_STANDARD_IDENT = std.IDENT

@@ -2,7 +2,7 @@ import enum
 import operator
 import typing
 
-import arpeggio  # type: ignore
+import arpeggio
 import numpy  # type: ignore
 
 from omc4py import string

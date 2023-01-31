@@ -6,7 +6,7 @@ __all__ = (
 
 import typing
 
-import arpeggio  # type: ignore
+import arpeggio
 
 import omc4py.parser.syntax
 from omc4py.classes import TypeName, VariableName

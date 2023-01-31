@@ -30,7 +30,7 @@ import functools
 import itertools
 import typing
 
-import arpeggio  # type: ignore
+import arpeggio
 import numpy  # type: ignore
 import typing_extensions
 
