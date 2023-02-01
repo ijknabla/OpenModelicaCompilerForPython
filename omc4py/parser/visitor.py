@@ -2,8 +2,8 @@ import enum
 import operator
 import typing
 
-import arpeggio  # type: ignore
 import numpy  # type: ignore
+from arpeggio import PTNodeVisitor
 
 from omc4py import string
 from omc4py.classes import (
@@ -61,7 +61,7 @@ class TypeSpecifierVisitor(
 
 
 class NumberVisitor(
-    arpeggio.PTNodeVisitor,
+    PTNodeVisitor,
 ):
     def visit_sign(self, node, *_):
         return node.value
@@ -92,7 +92,7 @@ class NumberVisitor(
 
 
 class BooleanVisitor(
-    arpeggio.PTNodeVisitor,
+    PTNodeVisitor,
 ):
     def visit_TRUE(self, *_):
         return True
@@ -105,14 +105,14 @@ class BooleanVisitor(
 
 
 class StringVisitor(
-    arpeggio.PTNodeVisitor,
+    PTNodeVisitor,
 ):
     def visit_STRING(self, node, *_):
         return string.unquote_modelica_string(node.value)
 
 
 class SequenceVisitor(
-    arpeggio.PTNodeVisitor,
+    PTNodeVisitor,
 ):
     def visit_omc_value_list(self, node, children):
         return children.omc_value

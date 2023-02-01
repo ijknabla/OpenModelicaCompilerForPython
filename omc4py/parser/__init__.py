@@ -10,53 +10,47 @@ __all__ = (
 import functools
 import re
 import typing
+from functools import lru_cache
 
-import arpeggio  # type: ignore
+from arpeggio import NoMatch, ParserPython, visit_parse_tree
 
 from .. import exception
 from ..classes import TypeName
-from . import syntax, visitor
+from . import visitor
+from .syntax import OMCDialectSyntax
 from .visitor import ComponentTuple
 
 
-def omc_parser_getter(
-    fget: typing.Callable[[], arpeggio.Parser]
-) -> typing.Callable[[], arpeggio.Parser]:
-    @functools.lru_cache(1)
-    @functools.wraps(fget)
-    def wrapped():
-        with syntax.omc_dialect_context:
-            return fget()
-
-    return wrapped
+@lru_cache(1)
+def get_IDENT_parser() -> ParserPython:
+    with OMCDialectSyntax:
+        return ParserPython(
+            OMCDialectSyntax.IDENT_withEOF,
+        )
 
 
-@omc_parser_getter
-def get_IDENT_parser() -> arpeggio.Parser:
-    return arpeggio.ParserPython(
-        syntax.IDENT_withEOF,
-    )
+@lru_cache(1)
+def get_type_specifier_parser() -> ParserPython:
+    with OMCDialectSyntax:
+        return ParserPython(
+            OMCDialectSyntax.type_specifier_withEOF,
+        )
 
 
-@omc_parser_getter
-def get_type_specifier_parser() -> arpeggio.Parser:
-    return arpeggio.ParserPython(
-        syntax.type_specifier_withEOF,
-    )
+@lru_cache(1)
+def get_omc_record_array_parser() -> ParserPython:
+    with OMCDialectSyntax:
+        return ParserPython(
+            OMCDialectSyntax.omc_component_array_withEOF,
+        )
 
 
-@omc_parser_getter
-def get_omc_record_array_parser() -> arpeggio.Parser:
-    return arpeggio.ParserPython(
-        syntax.omc_component_array_withEOF,
-    )
-
-
-@omc_parser_getter
-def get_omc_value_parser() -> arpeggio.Parser:
-    return arpeggio.ParserPython(
-        syntax.omc_value_withEOF,
-    )
+@lru_cache(1)
+def get_omc_value_parser() -> ParserPython:
+    with OMCDialectSyntax:
+        return ParserPython(
+            OMCDialectSyntax.omc_value_withEOF,
+        )
 
 
 @functools.lru_cache(1)
@@ -75,38 +69,38 @@ def is_valid_identifier(ident: str) -> bool:
     try:
         get_IDENT_parser().parse(ident)
         return True
-    except arpeggio.NoMatch:
+    except NoMatch:
         return False
 
 
 def parse_typeName(type_specifier: str) -> TypeName:
     try:
-        return arpeggio.visit_parse_tree(
+        return visit_parse_tree(
             get_type_specifier_parser().parse(
                 type_specifier,
             ),
             visitor.TypeSpecifierVisitor(),
         )
-    except arpeggio.NoMatch:
+    except NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
 def parse_components(literal: str) -> typing.List[ComponentTuple]:
-    return arpeggio.visit_parse_tree(
+    return visit_parse_tree(
         get_omc_record_array_parser().parse(literal),
         visitor.ComponentArrayVisitor(source=literal),
     )
 
 
 def parse_OMCValue(literal: str):
-    return arpeggio.visit_parse_tree(
+    return visit_parse_tree(
         get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor(),
     )
 
 
 def parse_OMCValue__v_1_13(literal: str):
-    return arpeggio.visit_parse_tree(
+    return visit_parse_tree(
         get_omc_value_parser().parse(literal),
         visitor.OMCValueVisitor__v_1_13(),
     )
