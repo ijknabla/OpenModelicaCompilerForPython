@@ -20,10 +20,10 @@ packages = [
 [tool.poetry.dependencies]
 python = "^3.6"
 Arpeggio = ">=1.6"
-ModelicaLanguage = "0.0.0a6"
 numpy = ">=1.7.0"
 pyzmq = ">=17.0.0"
 typing-extensions = ">=3.7.2"
+modelicalang = "^0.1.0a0"
 
 [tool.poetry.group.dev.dependencies]
 inquirer = "^2.8.0"

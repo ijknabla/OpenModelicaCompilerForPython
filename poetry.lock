@@ -404,20 +404,20 @@ files = [
 ]
 
 [[package]]
-name = "modelicalanguage"
-version = "0.0.0a6"
-description = "Modelica parser and class representation for Python3.x"
+name = "modelicalang"
+version = "0.1.0a0"
+description = "Modelica parser and class representation for Python"
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.6,<4.0"
 files = [
-    {file = "ModelicaLanguage-0.0.0a6-py3-none-any.whl", hash = "sha256:289b01ce828eb722b6dcbc677efb8583620a9dd00f3e2f0ef660e7ca8bf67a0b"},
-    {file = "ModelicaLanguage-0.0.0a6.tar.gz", hash = "sha256:2c875f5fbc0d625f7a150e555b5a7fbc6d8b173c4cef34f27def50c39a6b5103"},
+    {file = "modelicalang-0.1.0a0-py3-none-any.whl", hash = "sha256:d5a80c4ad98526a20e212ab9c7da1e58184fe7e41dca888eacc0810d791cab01"},
+    {file = "modelicalang-0.1.0a0.tar.gz", hash = "sha256:3a4c8aeffdbb073b6758ac18bb861a8277397c3f27203a6e23affb17ec81cb69"},
 ]
 
 [package.dependencies]
-Arpeggio = "*"
-Numpy = "*"
+Arpeggio = ">=0.8"
+typing-extensions = ">=3.10"
 
 [[package]]
 name = "mypy"
@@ -1047,4 +1047,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=4.6)", "pytest-black (
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.6"
-content-hash = "a74966a0352320b3a757b0d15b95a4060e19e094d00c974055c77a1f060a74f6"
+content-hash = "b0ed531849e25bac0b95c4717678fc1d681d2a362dd03a1e510bda50a88c631c"

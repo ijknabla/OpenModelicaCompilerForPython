@@ -30,9 +30,9 @@ import functools
 import itertools
 import typing
 
-import arpeggio
 import numpy  # type: ignore
 import typing_extensions
+from arpeggio import PTNodeVisitor
 
 from .string import to_omc_literal
 
@@ -155,7 +155,7 @@ def _VariableName_from_valid_identifier_no_check(
 
 
 class VariableNameVisitor(
-    arpeggio.PTNodeVisitor,
+    PTNodeVisitor,
 ):
     def visit_IDENT(
         self,
