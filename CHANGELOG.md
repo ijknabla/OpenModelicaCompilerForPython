@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Changed
+
+- Update modelica parser library to `modelicalang>=0.1`
+
 ## [0.1.1] - 2021-12-13
 ### Added
 - `pyproject.toml` to unify package settings.
