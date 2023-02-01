@@ -959,6 +959,25 @@ files = [
 ]
 
 [[package]]
+name = "types-arpeggio"
+version = "0.0.0"
+description = ""
+category = "dev"
+optional = false
+python-versions = "*"
+files = []
+develop = false
+
+[package.dependencies]
+arpeggio = ">=0.8"
+
+[package.source]
+type = "git"
+url = "https://github.com/ijknabla/types-arpeggio.git"
+reference = "main"
+resolved_reference = "d04e2ec99b30903877aa93eee2c77f05af5b91fa"
+
+[[package]]
 name = "types-docutils"
 version = "0.19.1.2"
 description = "Typing stubs for docutils"
@@ -1028,4 +1047,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=4.6)", "pytest-black (
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.6"
-content-hash = "2bda6e10afb225a8de5c6023ea1b9a952387ae6ec114dacbf0095b776962f1ed"
+content-hash = "a74966a0352320b3a757b0d15b95a4060e19e094d00c974055c77a1f060a74f6"
