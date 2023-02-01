@@ -1,4 +1,3 @@
-
 __all__ = (
     # Primitive types
     "Real",
@@ -26,16 +25,16 @@ __all__ = (
 )
 
 import abc
-import arpeggio  # type: ignore
 import enum
-import itertools
 import functools
-import numpy  # type: ignore
+import itertools
 import typing
+
+import numpy  # type: ignore
 import typing_extensions
+from arpeggio import PTNodeVisitor
 
 from .string import to_omc_literal
-
 
 # Type hints
 
@@ -63,12 +62,9 @@ EnumerationLike = typing.Union[
 ]
 
 InputArgument = typing.Tuple[
-    "Component", str,
-    typing.Any, REQUIRED_or_OPTIONAL
+    "Component", str, typing.Any, REQUIRED_or_OPTIONAL
 ]
-OutputArgument = typing.Tuple[
-    "Component", str
-]
+OutputArgument = typing.Tuple["Component", str]
 
 Parser = typing.Callable[[str], typing.Any]
 
@@ -91,8 +87,8 @@ else:
 
 # $Code classes OpenModelica.$Code.{VariableName, TypeName}
 
-class VariableName(
-):
+
+class VariableName:
     __slots__ = "__str"
 
     __str: str
@@ -120,12 +116,11 @@ class VariableName(
                 f"Invalid modelica identifier, got {identifier!r}"
             )
 
-        return _VariableName_from_valid_identifier_no_check(
-            cls, identifier
-        )
+        return _VariableName_from_valid_identifier_no_check(cls, identifier)
 
     def __eq__(
-        self, other,
+        self,
+        other,
     ):
         if not isinstance(other, VariableName):
             return False
@@ -160,7 +155,7 @@ def _VariableName_from_valid_identifier_no_check(
 
 
 class VariableNameVisitor(
-    arpeggio.PTNodeVisitor,
+    PTNodeVisitor,
 ):
     def visit_IDENT(
         self,
@@ -168,16 +163,12 @@ class VariableNameVisitor(
         children,
     ) -> VariableName:
         return _VariableName_from_valid_identifier_no_check(
-            VariableName,
-            str(node.value)
+            VariableName, str(node.value)
         )
 
 
-class TypeName(
-):
-    __slots__ = (
-        "__parts",
-    )
+class TypeName:
+    __slots__ = ("__parts",)
 
     __parts: typing.Tuple[str, ...]
 
@@ -199,9 +190,7 @@ class TypeName(
             itertools.chain(*map(TypeName.__split_part, parts))
         ):
             if part == "." and not i == 0:
-                raise ValueError(
-                    f"parts[{i}] is invalid, got {part!r}"
-                )
+                raise ValueError(f"parts[{i}] is invalid, got {part!r}")
             yield part
 
     @staticmethod
@@ -222,9 +211,7 @@ class TypeName(
             else:
                 yield from parser.parse_typeName(part).parts
         else:
-            raise TypeError(
-                f"Unexpected part, got {part}: {type(part)}"
-            )
+            raise TypeError(f"Unexpected part, got {part}: {type(part)}")
 
     @property
     def parts(
@@ -287,20 +274,14 @@ class TypeName(
 
     __to_omc_literal__ = __str__
 
-    def __truediv__(
-        self,
-        other: typing.Union[str, VariableName, "TypeName"]
-    ):
+    def __truediv__(self, other: typing.Union[str, VariableName, "TypeName"]):
         return type(self)(self, other)
 
 
 def split_dict(
     dictionary: typing.Dict[KT, typing.Any],
-    condition: typing.Callable[[typing.Any], bool]
-) -> typing.Tuple[
-    typing.Dict[KT, typing.Any],
-    typing.Dict[KT, typing.Any],
-]:
+    condition: typing.Callable[[typing.Any], bool],
+) -> typing.Tuple[typing.Dict[KT, typing.Any], typing.Dict[KT, typing.Any]]:
     yes, no = {}, {}
     for k, v in dictionary.items():
         if condition(v):
@@ -310,11 +291,10 @@ def split_dict(
     return yes, no
 
 
-class AbstractOMCInteractive(
-    abc.ABC
-):
+class AbstractOMCInteractive(abc.ABC):
     @abc.abstractmethod
-    def close(self) -> None: ...
+    def close(self) -> None:
+        ...
 
     @abc.abstractmethod
     def evaluate(
@@ -340,7 +320,9 @@ class AbstractOMCInteractive(
 
     def __exit__(
         self,
-        exc_type, exc_value, traceback,
+        exc_type,
+        exc_value,
+        traceback,
     ) -> typing_extensions.Literal[False]:
         self.close()
         return False
@@ -362,16 +344,20 @@ class AbstractOMCSession(
         return self.__omc
 
     @abc.abstractmethod
-    def __check__(self) -> None: ...
+    def __check__(self) -> None:
+        ...
 
-    def __enter__(self) -> "AbstractOMCSession": return self
+    def __enter__(self) -> "AbstractOMCSession":
+        return self
 
     def __close__(self):
         self.__omc__.close()
 
     def __exit__(
         self,
-        exc_type, exc_value, traceback,
+        exc_type,
+        exc_value,
+        traceback,
     ) -> typing_extensions.Literal[False]:
         self.__close__()
         return False
@@ -379,8 +365,8 @@ class AbstractOMCSession(
 
 # Meta classes for modelica-like class
 
-class ModelicaClassMeta(
-):
+
+class ModelicaClassMeta:
     __modelica_name__: TypeName
 
 
@@ -417,13 +403,17 @@ class ModelicaLongClassMeta(
 
     def __new__(
         mtcls,
-        name, bases, namespace,
+        name,
+        bases,
+        namespace,
     ):
         cls = typing.cast(
             ModelicaLongClassMeta,
             super().__new__(
                 mtcls,
-                name, bases, namespace,
+                name,
+                bases,
+                namespace,
             ),
         )
 
@@ -434,7 +424,9 @@ class ModelicaLongClassMeta(
                 BoundModelicaLongClassMeta,
                 type.__new__(
                     cls.__bound_class__,
-                    name, (BoundModelicaLongClass,), namespace,
+                    name,
+                    (BoundModelicaLongClass,),
+                    namespace,
                 ),
             )
             bound_cls.__modelica_name__ = cls.__modelica_name__
@@ -447,10 +439,15 @@ class ModelicaLongClassMeta(
         return cls
 
     if typing.TYPE_CHECKING:
+
         @classmethod
-        def __bind_session__(cls, session: AbstractOMCSession) \
-            -> "BoundModelicaLongClassMeta": ...
+        def __bind_session__(
+            cls, session: AbstractOMCSession
+        ) -> "BoundModelicaLongClassMeta":
+            ...
+
     else:
+
         def __bind_session__(
             cls,
             session: AbstractOMCSession,
@@ -476,9 +473,7 @@ class ModelicaLongClassMeta(
             and objType is not None
             and isinstance(objType, BoundModelicaLongClassMeta)
         ):
-            return cls.__bind_session__(
-                objType.__session__
-            )
+            return cls.__bind_session__(objType.__session__)
 
         return cls
 
@@ -488,9 +483,7 @@ class ModelicaLongClassMeta(
         )
 
 
-class ModelicaLongClassReference(
-    typing.NamedTuple
-):
+class ModelicaLongClassReference(typing.NamedTuple):
     value: ModelicaLongClassMeta
 
 
@@ -508,6 +501,7 @@ class BoundModelicaLongClassMeta(
         @functools.wraps(unbound_class.__call__)
         def wrapped(*args, **kwrds):
             return unbound_class(*args, **kwrds)
+
         return wrapped
 
 
@@ -524,7 +518,10 @@ class ModelicaRecordMeta(
     ModelicaLongClassMeta,
 ):
     def __new__(
-        mtcls, name, bases, namespace,
+        mtcls,
+        name,
+        bases,
+        namespace,
     ):
         element_definitions, actual_namespace = split_dict(
             namespace,
@@ -533,14 +530,15 @@ class ModelicaRecordMeta(
 
         cls = super().__new__(
             mtcls,
-            name, bases, actual_namespace,
+            name,
+            bases,
+            actual_namespace,
         )
 
         elements: typing.Dict[str, Component]
 
         def newfunc(
-            cls: typing.Type["ModelicaRecord"],
-            obj
+            cls: typing.Type["ModelicaRecord"], obj
         ) -> "ModelicaRecord":
             nonlocal elements
             elements = {
@@ -560,13 +558,9 @@ class ModelicaRecordMeta(
 
             keys = self.__dict.keys()
             if elements.keys() - keys:
-                raise ValueError(
-                    f'Missing keys {elements.keys() - keys}'
-                )
+                raise ValueError(f"Missing keys {elements.keys() - keys}")
             elif keys - elements.keys():
-                raise ValueError(
-                    f'Unexpected keys {keys - elements.keys()}'
-                )
+                raise ValueError(f"Unexpected keys {keys - elements.keys()}")
 
             for key, value in self.__dict.items():
                 component = typing.cast(Component, elements[key])
@@ -591,13 +585,9 @@ class ModelicaRecordMeta(
             ) -> typing.Any:
                 return self.__dict[key]
 
-            def setter(
-                self: ModelicaRecord,
-                value
-            ) -> None:
-                raise AttributeError(
-                    f"Can't set attribute {key!r}"
-                )
+            def setter(self: ModelicaRecord, value) -> None:
+                raise AttributeError(f"Can't set attribute {key!r}")
+
             return property(getter, setter)
 
         for key in element_definitions.keys():
@@ -611,12 +601,16 @@ class ModelicaFunctionMeta(
 ):
     def __new__(
         mtcls,
-        name, bases, namespace,
+        name,
+        bases,
+        namespace,
     ):
         if not bases:
             return super().__new__(
                 mtcls,
-                name, (), namespace,
+                name,
+                (),
+                namespace,
             )
 
         external_dict, actual_namespace = split_dict(
@@ -626,16 +620,14 @@ class ModelicaFunctionMeta(
 
         if not external_dict:
             raise TypeError(
-                f"ModelicaFunction {name!r} "
-                f"does not define @external"
+                f"ModelicaFunction {name!r} " f"does not define @external"
             )
         elif 1 < len(external_dict):
             raise TypeError(
-                f"ModelicaFunction {name!r} "
-                f"duplicate @external definition"
+                f"ModelicaFunction {name!r} " f"duplicate @external definition"
             )
         external_definition: external
-        external_definition, = external_dict.values()
+        (external_definition,) = external_dict.values()
 
         unbound_metaclass = type(
             f"Unbound_{name}Meta",
@@ -653,7 +645,9 @@ class ModelicaFunctionMeta(
             ModelicaFunctionMeta,
             super().__new__(
                 unbound_metaclass,
-                name, bases, actual_namespace,
+                name,
+                bases,
+                actual_namespace,
             ),
         )
         cls.__bound_class__ = bound_metaclass
@@ -663,8 +657,8 @@ class ModelicaFunctionMeta(
 
 # declaration class for modelica-like class definition
 
-class Component(
-):
+
+class Component:
     class_: typing.Type
     dimensions: Dimensions
 
@@ -680,19 +674,19 @@ class Component(
             self.dimensions = dimensions
 
     def __getitem__(
-        self, index,
+        self,
+        index,
     ) -> "Component":
         if not isinstance(index, tuple):
             return self[(index,)]
 
-        def dimensions_generator(
-        ) -> typing.Iterator[typing.Optional[int]]:
+        def dimensions_generator() -> typing.Iterator[typing.Optional[int]]:
             for idim, dimension in enumerate(index):
                 if isinstance(dimension, int):
                     if dimension < 0:
                         raise ValueError(
-                            f'dimension #{idim}: int must be positive, '
-                            f'got {dimension!r}'
+                            f"dimension #{idim}: int must be positive, "
+                            f"got {dimension!r}"
                         )
                     else:
                         yield dimension
@@ -703,7 +697,7 @@ class Component(
                     if not (start is None and stop is None and step is None):
                         raise ValueError(
                             f"dimension #{idim}: slice must be ':', "
-                            f'got {start!s}:{stop!s}:{step!s}'
+                            f"got {start!s}:{stop!s}:{step!s}"
                         )
                     else:
                         yield None
@@ -716,13 +710,16 @@ class Component(
         return Component(self.class_, tuple(dimensions_generator()))
 
     @property
-    def ndim(self) -> int: return len(self.dimensions)
+    def ndim(self) -> int:
+        return len(self.dimensions)
 
     @property
-    def is_scalar(self) -> bool: return self.ndim == 0
+    def is_scalar(self) -> bool:
+        return self.ndim == 0
 
     @property
-    def is_array(self) -> bool: return not self.is_scalar
+    def is_array(self) -> bool:
+        return not self.is_scalar
 
     @property
     def class_restrictions(
@@ -738,16 +735,22 @@ class Component(
             return (String, str)
         elif self.class_ is TypeName:
             return (  # TypeNameLike
-                ModelicaClassMeta, ModelicaEnumeration,
-                TypeName, VariableName, str,
+                ModelicaClassMeta,
+                ModelicaEnumeration,
+                TypeName,
+                VariableName,
+                str,
             )
         elif self.class_ is VariableName:
             return (  # VariableNameLike
-                TypeName, VariableName, str,
+                TypeName,
+                VariableName,
+                str,
             )
         elif issubclass(self.class_, ModelicaEnumeration):
             return (  # EnumerationLike
-                self.class_, TypeName,
+                self.class_,
+                TypeName,
             )
         else:
             return ()
@@ -760,7 +763,7 @@ class Component(
             return "<scalar>"
         else:
             return "[{}]".format(
-                ",".join(str(d) if d is not None else ':' for d in dimensions)
+                ",".join(str(d) if d is not None else ":" for d in dimensions)
             )
 
     def cast(
@@ -771,9 +774,7 @@ class Component(
     ) -> typing.Any:
         if value is None:
             if required == "required":
-                raise ValueError(
-                    f"Required value {name!r} is None"
-                )
+                raise ValueError(f"Required value {name!r} is None")
             if required == "optional":
                 return None
             else:
@@ -783,13 +784,13 @@ class Component(
 
         value_array = numpy.array(value, dtype=object)
 
-        same_n_dimensions = (self.ndim == value_array.ndim)
+        same_n_dimensions = self.ndim == value_array.ndim
         dimensions_are_correct = [
             True if expected is None else expected == actual
             for expected, actual in zip(self.dimensions, value_array.shape)
         ]
 
-        if not(same_n_dimensions and all(dimensions_are_correct)):
+        if not (same_n_dimensions and all(dimensions_are_correct)):
             raise ValueError(
                 f"Dimensions of {name!r} "
                 f"must be {self.dimensions_to_str(self.dimensions)}, "
@@ -801,9 +802,7 @@ class Component(
                 lambda cls: isinstance(cls, self.class_restrictions),
                 otypes=[numpy.dtype(bool)],
             )
-            isinstance_mask = isinstance_vectorized(
-                value_array
-            )
+            isinstance_mask = isinstance_vectorized(value_array)
             if not numpy.all(isinstance_mask):
                 if self.is_scalar:
                     raise TypeError(
@@ -820,20 +819,16 @@ class Component(
             return self.class_(value)
         else:
             class_vectorized = numpy.vectorize(
-                self.class_,
-                otypes=[numpy.dtype(self.class_)]
+                self.class_, otypes=[numpy.dtype(self.class_)]
             )
             return class_vectorized(value_array)
 
 
 # decorators for modelica-like class definition
 
-def modelica_name(
-    name: str
-):
-    def decorator(
-        obj: ModelicaClassMeta
-    ) -> ModelicaClassMeta:
+
+def modelica_name(name: str):
+    def decorator(obj: ModelicaClassMeta) -> ModelicaClassMeta:
         if not isinstance(obj, ModelicaClassMeta):
             raise TypeError(
                 "@modelica_name can only decorate ModelicaClassMeta, "
@@ -841,6 +836,7 @@ def modelica_name(
             )
         obj.__modelica_name__ = TypeName(name)
         return obj
+
     return decorator
 
 
@@ -854,17 +850,14 @@ class alias(
         self.__func__ = classmethod_like
 
     def __get__(self, obj, objType):
-        modelica_class = self.__func__(
-            objType
-        )
+        modelica_class = self.__func__(objType)
         if hasattr(modelica_class, "__get__"):
             return modelica_class.__get__(obj, objType)
         else:
             return modelica_class
 
 
-class element(
-):
+class element:
     def __init__(
         self,
         classmethod_like: typing.Callable,
@@ -889,8 +882,7 @@ class element(
         return component
 
 
-class external(
-):
+class external:
     def __init__(
         self,
         classmethod_like: typing.Callable,
@@ -898,16 +890,16 @@ class external(
         self.__func__ = classmethod_like
 
     @property
-    def unbound_implementation(
-        self
-    ):
+    def unbound_implementation(self):
         @functools.wraps(self.__func__)
         def implementation(
             cls: ModelicaFunctionMeta,
             session: AbstractOMCSession,
-            *args, **kwrds,
+            *args,
+            **kwrds,
         ):
             return self.__func__(cls, session, *args, **kwrds)
+
         return implementation
 
     @property
@@ -917,13 +909,16 @@ class external(
         @functools.wraps(functools.partial(self.__func__, None))
         def implementation(
             cls: BoundModelicaLongClassMeta,
-            *args, **kwrds,
+            *args,
+            **kwrds,
         ):
             return self.__func__(cls, cls.__session__, *args, **kwrds)
+
         return implementation
 
 
 # base classes for modelica-like class
+
 
 class ModelicaEnumeration(
     enum.Enum,
@@ -935,7 +930,7 @@ class ModelicaEnumeration(
         return Integer(count + 1)
 
     def __as_typeName__(self) -> TypeName:
-        return self.__modelica_name__/self.name
+        return self.__modelica_name__ / self.name
 
     def __str__(self) -> str:
         return str(self.__as_typeName__())
@@ -970,9 +965,7 @@ class ModelicaRecord(
     ) -> typing.Dict[str, typing.Any]:
         return dict(self.__items__())
 
-    def __repr__(
-        self
-    ) -> str:
+    def __repr__(self) -> str:
         return f"{type(self).__name__}({self.__as_dict__()})"
 
     def __str__(

@@ -1,9 +1,16 @@
-
 import abc
 import collections
 import keyword
-from lxml import etree  # type: ignore
 import typing
+
+from lxml import etree  # type: ignore
+
+from omc4py.classes import (
+    Dimensions,
+    REQUIRED_or_OPTIONAL,
+    TypeName,
+    VariableName,
+)
 
 from .code import (
     AbstractCode,
@@ -12,13 +19,6 @@ from .code import (
     CodeWithIndent,
     CommentOut,
     empty_line,
-)
-
-from omc4py.classes import (
-    Dimensions,
-    REQUIRED_or_OPTIONAL,
-    TypeName,
-    VariableName,
 )
 
 
@@ -35,13 +35,13 @@ class ClassNameAndDimensions(
     ) -> "ClassNameAndDimensions":
         className = TypeName(component.attrib["className"])
 
-        def dimension_generator(
-        ) -> typing.Iterator[typing.Optional[int]]:
-            for dimension in component.xpath('./dimensions/*'):
+        def dimension_generator() -> typing.Iterator[typing.Optional[int]]:
+            for dimension in component.xpath("./dimensions/*"):
                 try:
                     yield int(dimension.attrib["size"])
                 except ValueError:
                     yield None
+
         dimensions: Dimensions = tuple(dimension_generator())
 
         # Convert intrinsic types
@@ -51,9 +51,7 @@ class ClassNameAndDimensions(
             className = TypeName("VariableName")
         elif className.last_identifier == VariableName("VariableNames"):
             if dimensions:
-                raise ValueError(
-                    "VariableNames must be scalar"
-                )
+                raise ValueError("VariableNames must be scalar")
             className = TypeName("VariableName")
             dimensions = (None,)
 
@@ -64,11 +62,11 @@ class ClassNameAndDimensions(
         self,
     ) -> str:
         if not self.dimensions:
-            s_dimensions = ''
+            s_dimensions = ""
         else:
             s_dimensions = "[{}]".format(
-                ', '.join(
-                    str(dimension) if dimension is not None else ':'
+                ", ".join(
+                    str(dimension) if dimension is not None else ":"
                     for dimension in self.dimensions
                 )
             )
@@ -87,16 +85,15 @@ def is_supported_element(
 ) -> bool:
     if "ref" in element.attrib:
         ref = element.attrib["ref"]
-        target, = element.xpath(f'//*[@id="{ref}"]')
+        (target,) = element.xpath(f'//*[@id="{ref}"]')
         return is_supported_element(target)
 
     if element.tag in {"function", "record"}:
+
         def valid_component(
             component: etree._Element,
         ) -> bool:
-            className, _ = ClassNameAndDimensions.from_component(
-                component
-            )
+            className, _ = ClassNameAndDimensions.from_component(component)
             if className in {
                 TypeName("Real"),
                 TypeName("Integer"),
@@ -121,23 +118,15 @@ class AbstractModelicaClass(
     element: etree._Element
     children: typing.MutableMapping[str, "AbstractModelicaClass"]
 
-    def __init__(
-        self,
-        element: etree._Element
-    ):
+    def __init__(self, element: etree._Element):
         self.element = element
         self.children = collections.OrderedDict()
 
     @property
-    def className(
-        self
-    ) -> TypeName:
+    def className(self) -> TypeName:
         return TypeName(self.element.attrib["id"])
 
-    def __getitem__(
-        self,
-        index: TypeName
-    ) -> "AbstractModelicaClass":
+    def __getitem__(self, index: TypeName) -> "AbstractModelicaClass":
         if index == self.className:
             return self
 
@@ -152,17 +141,14 @@ class AbstractModelicaClass(
         parent = self[className.parent]
         parent.children[str(className.last_identifier)] = class_
 
-    def generate_class_header(
-        self,
-        base_class_name: str
-    ) -> Code:
+    def generate_class_header(self, base_class_name: str) -> Code:
         return Code(
             f"@modelica_name({str(self.className)!r})",
             f"class {self.className.last_identifier}(",
             CodeWithIndent(
                 f"{base_class_name},",
             ),
-            "):"
+            "):",
         )
 
     def generate___doc__(
@@ -175,11 +161,13 @@ class AbstractModelicaClass(
         if not code.text:
             content = ""
         else:
-            content = "\n".join([
-                '```modelica',
-                code.text.replace('\\', r'\\'),
-                '```',
-            ])
+            content = "\n".join(
+                [
+                    "```modelica",
+                    code.text.replace("\\", r"\\"),
+                    "```",
+                ]
+            )
 
         return Code(
             '"""',
@@ -210,9 +198,7 @@ class ModelicaAlias(
             f"@modelica_name({str(self.className)!r})",
             "@alias",
             f"def {self.className.last_identifier}(cls):",
-            CodeWithIndent(
-                f'return {self.element.attrib["ref"]}'
-            )
+            CodeWithIndent(f'return {self.element.attrib["ref"]}'),
         )
 
         if is_supported_element(self.element):
@@ -233,19 +219,14 @@ class ModelicaEnumeration(
             CodeWithIndent(
                 self.generate___doc__(),
                 enumerators_code,
-            )
+            ),
         )
 
-        for enumerator in self.element.xpath('./components/enumerators/*'):
+        for enumerator in self.element.xpath("./components/enumerators/*"):
             name = enumerator.attrib["name"]
             comment = enumerator.attrib["comment"]
             enumerators_code.append(
-                f"{name} = enum.auto()"
-                + (
-                    f"  # {comment}"
-                    if comment
-                    else ""
-                )
+                f"{name} = enum.auto()" + (f"  # {comment}" if comment else "")
             )
 
         if is_supported_element(self.element):
@@ -254,9 +235,7 @@ class ModelicaEnumeration(
             return CommentOut(code)
 
 
-class ModelicaPackage(
-    AbstractModelicaClass
-):
+class ModelicaPackage(AbstractModelicaClass):
     def to_code(
         self,
     ) -> AbstractCode:
@@ -265,7 +244,7 @@ class ModelicaPackage(
             CodeWithIndent(
                 *self.generate_class_codes(),
                 sep=empty_line,
-            )
+            ),
         )
 
         if is_supported_element(self.element):
@@ -286,18 +265,16 @@ class ModelicaRecord(
             CodeWithIndent(
                 self.generate___doc__(),
                 contents_code,
-            )
+            ),
         )
 
-        for element in self.element.xpath('./components/elements/*'):
+        for element in self.element.xpath("./components/elements/*"):
             name = element.attrib["name"]
             contents_code.append(
                 Code(
                     "@element",
                     f"def {name}(cls):",
-                    CodeWithIndent(
-                        f"return {get_component_literal(element)}"
-                    )
+                    CodeWithIndent(f"return {get_component_literal(element)}"),
                 )
             )
 
@@ -309,9 +286,7 @@ class ModelicaRecord(
             return CommentOut(code)
 
 
-class InputArgument(
-    typing.NamedTuple
-):
+class InputArgument(typing.NamedTuple):
     component_literal: str
     modelica_name: str
     required: REQUIRED_or_OPTIONAL
@@ -329,9 +304,7 @@ class InputArgument(
 class ModelicaFunction(
     AbstractModelicaClass,
 ):
-    def to_code(
-        self
-    ) -> AbstractCode:
+    def to_code(self) -> AbstractCode:
         external_code = Code()
         contents_code = Code(external_code, sep=empty_line)
         code = Code(
@@ -339,7 +312,7 @@ class ModelicaFunction(
             CodeWithIndent(
                 self.generate___doc__(),
                 contents_code,
-            )
+            ),
         )
 
         inputArguments = [
@@ -365,7 +338,7 @@ class ModelicaFunction(
                 "def _(",
                 CodeWithIndent(arguments_code),
                 "):",
-                CodeWithIndent(execution_code)
+                CodeWithIndent(execution_code),
             ]
         )
 
@@ -373,55 +346,55 @@ class ModelicaFunction(
         arguments_code.append("_session_: AbstractOMCSession,")
         for argument in sorted(
             inputArguments,
-            key=lambda argument: 0 if argument.required == "required" else 1
+            key=lambda argument: 0 if argument.required == "required" else 1,
         ):
             if argument.required == "required":
                 s_default = ""
             else:
                 s_default = "=None"
-            arguments_code.append(
-                f"{argument.py_name}{s_default},"
-            )
+            arguments_code.append(f"{argument.py_name}{s_default},")
 
         if self.className.parent == TypeName("OpenModelica.Scripting"):
             funcName = str(self.className.last_identifier)
         else:
             funcName = str(self.className)
 
-        execution_code.extend([
-            "return _session_.__omc__.call_function(",
-            CodeWithIndent(
-                f"funcName={funcName!r},",
-                "inputArguments=[",
+        execution_code.extend(
+            [
+                "return _session_.__omc__.call_function(",
                 CodeWithIndent(
-                    *(
-                        "("
-                        f"{argument.component_literal}, "
-                        f"{argument.modelica_name!r}, "
-                        f"{argument.py_name}, "
-                        f"{argument.required!r}"
-                        "),"
-                        for argument in inputArguments
-                    )
-                ),
-                "],",
-                "outputArguments=[",
-                CodeWithIndent(
-                    *(
-                        "("
-                        f"{get_component_literal(argument)}, "
-                        f'{argument.attrib["name"]!r}'
-                        "),"
-                        for argument in self.element.xpath(
-                            './components/arguments/*[@inputOutput="output"]'
+                    f"funcName={funcName!r},",
+                    "inputArguments=[",
+                    CodeWithIndent(
+                        *(
+                            "("
+                            f"{argument.component_literal}, "
+                            f"{argument.modelica_name!r}, "
+                            f"{argument.py_name}, "
+                            f"{argument.required!r}"
+                            "),"
+                            for argument in inputArguments
                         )
-                    )
+                    ),
+                    "],",
+                    "outputArguments=[",
+                    CodeWithIndent(
+                        *(
+                            "("
+                            f"{get_component_literal(argument)}, "
+                            f'{argument.attrib["name"]!r}'
+                            "),"
+                            for argument in self.element.xpath(
+                                './components/arguments/*[@inputOutput="output"]'  # noqa: E501
+                            )
+                        )
+                    ),
+                    "],",
+                    "parser=parse_OMCValue,",
                 ),
-                "],",
-                "parser=parse_OMCValue,",
-            ),
-            ")",
-        ])
+                ")",
+            ]
+        )
 
         contents_code.extend(self.generate_class_codes())
 
@@ -439,7 +412,7 @@ def generate_module_py(
         generate_import_statements(),
         empty_line * 2,
         generate_nested_modelica_class(
-            omc_interface_xml.xpath('//*[@id]')
+            omc_interface_xml.xpath("//*[@id]")
         ).to_code(),
         empty_line * 2,
         generate_session_class(
@@ -448,8 +421,7 @@ def generate_module_py(
     )
 
 
-def generate_import_statements(
-) -> Code:
+def generate_import_statements() -> Code:
     return Code(
         "from omc4py.classes import (",
         CodeWithIndent(
@@ -475,7 +447,7 @@ def generate_import_statements(
         empty_line,
         "from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue",
         empty_line,
-        "from omc4py.session import OMCSessionBase__v_1_13 as OMCSessionBase"
+        "from omc4py.session import OMCSessionBase__v_1_13 as OMCSessionBase",
     )
 
 
@@ -483,9 +455,7 @@ def generate_nested_modelica_class(
     elements: typing.List[etree._Element],
 ) -> AbstractModelicaClass:
     if not elements:
-        raise ValueError(
-            "elements are empty!"
-        )
+        raise ValueError("elements are empty!")
     elements_iter = iter(elements)
 
     root_modelica_class = generate_modelica_class(next(elements_iter))
@@ -500,7 +470,7 @@ def generate_modelica_class(
 ) -> AbstractModelicaClass:
     if "ref" in element.attrib:
         return ModelicaAlias(element)
-    elif element.tag == "type" and element.xpath('./components/enumerators'):
+    elif element.tag == "type" and element.xpath("./components/enumerators"):
         return ModelicaEnumeration(element)
     elif element.tag == "package":
         return ModelicaPackage(element)
@@ -524,24 +494,20 @@ def generate_session_class(
             "OMCSessionBase,",
         ),
         "):",
-        CodeWithIndent(
-            elements_code
-        )
+        CodeWithIndent(elements_code),
     )
 
     elements_code.append("OpenModelica = OpenModelica")
-    OpenModelica_Scripting, = omc_interface_xml.xpath(
+    (OpenModelica_Scripting,) = omc_interface_xml.xpath(
         '//*[@id="OpenModelica.Scripting"]'
     )
-    for modelica_class in OpenModelica_Scripting.xpath('./classes/*'):
+    for modelica_class in OpenModelica_Scripting.xpath("./classes/*"):
         if modelica_class.tag == "package":
             continue
 
         className = TypeName(modelica_class.attrib["id"])
         if is_supported_element(modelica_class):
-            elements_code.append(
-                f"{className.last_identifier} = {className}"
-            )
+            elements_code.append(f"{className.last_identifier} = {className}")
         else:
             elements_code.append(
                 f"# {className.last_identifier} = {className}"

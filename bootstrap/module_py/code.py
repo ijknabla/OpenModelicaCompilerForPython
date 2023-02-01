@@ -1,23 +1,16 @@
-
 import abc
 import itertools
 import typing
 
 
-class AbstractCode(
-    abc.ABC
-):
+class AbstractCode(abc.ABC):
     indentString: typing.ClassVar[str] = " " * 4
 
     @abc.abstractmethod
-    def append(
-        self, code
-    ) -> None:
+    def append(self, code) -> None:
         raise NotImplementedError()
 
-    def extend(
-        self, codes
-    ) -> None:
+    def extend(self, codes) -> None:
         for code in codes:
             self.append(code)
 
@@ -38,20 +31,10 @@ class AbstractCode(
         file: typing.BinaryIO,
         encoding="utf-8",
     ):
-        file.writelines(
-            (
-                line.encode(encoding)
-                for line in self.to_lines()
-            )
-        )
+        file.writelines((line.encode(encoding) for line in self.to_lines()))
 
-    def dump(
-        self,
-        file: typing.TextIO
-    ) -> None:
-        file.writelines(
-            self.to_lines()
-        )
+    def dump(self, file: typing.TextIO) -> None:
+        file.writelines(self.to_lines())
 
 
 class EmptyLines(
@@ -66,23 +49,17 @@ class EmptyLines(
         self.__size = size
 
     def append(self, item):
-        raise TypeError(
-            f"Can't append item to {type(self)}"
-        )
+        raise TypeError(f"Can't append item to {type(self)}")
 
-    def to_lines(
-        self,
-        indentLevel: int = 0
-    ) -> typing.Iterator[str]:
+    def to_lines(self, indentLevel: int = 0) -> typing.Iterator[str]:
         yield from ["\n"] * self.__size
 
     def __mul__(
-        self, n: int,
+        self,
+        n: int,
     ):
         if not isinstance(n, int):
-            raise TypeError(
-                f"n must be int, got {n}: {type(n)}"
-            )
+            raise TypeError(f"n must be int, got {n}: {type(n)}")
         return type(self)(self.__size * n)
 
 
@@ -100,19 +77,16 @@ class Code(
         *codes,
         sep=None,
     ):
-        if not(sep is None or isinstance(sep, AbstractCode)):
+        if not (sep is None or isinstance(sep, AbstractCode)):
             raise TypeError(
-                "sep must be AbstractCode or None, "
-                f"got {sep}: {type(sep)}"
+                "sep must be AbstractCode or None, " f"got {sep}: {type(sep)}"
             )
 
         self.__items = []
         self.__sep = sep
         self.extend(codes)
 
-    def append(
-        self, item
-    ):
+    def append(self, item):
         if isinstance(item, str):
             self.__items.extend(item.splitlines())
         elif isinstance(item, AbstractCode):
@@ -126,10 +100,7 @@ class Code(
         self,
     ) -> typing.Iterator[typing.Union[str, AbstractCode]]:
         items_iter = iter(self.__items)
-        for sep in itertools.repeat(
-            self.__sep,
-            len(self.__items)-1
-        ):
+        for sep in itertools.repeat(self.__sep, len(self.__items) - 1):
             yield next(items_iter)
             if sep is None:
                 continue
@@ -191,8 +162,7 @@ class CommentOut(
     ) -> typing.Iterator[str]:
         comment_base = self.indentString * indentLevel + "#"
 
-        def lines(
-        ) -> typing.Iterator[str]:
+        def lines() -> typing.Iterator[str]:
             for item in self.items():
                 if isinstance(item, AbstractCode):
                     yield from item.to_lines(0)

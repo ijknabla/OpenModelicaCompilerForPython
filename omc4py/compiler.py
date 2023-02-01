@@ -1,25 +1,19 @@
-
 import atexit
 import logging
 import os
-from pathlib import Path
 import shutil
 import subprocess
 import tempfile
 import typing
-import typing_extensions
 import uuid
 import warnings
+from pathlib import Path
+
+import typing_extensions
 import zmq  # type: ignore
 
-from . import (
-    classes,
-    exception,
-    string,
-)
-
+from . import classes, exception, string
 from .parser import parse_OMCExceptions
-
 
 logger = logging.getLogger(__name__)
 
@@ -31,16 +25,12 @@ def resolve_command(
 ) -> Path:
     executable = shutil.which(command)
     if executable is None:
-        raise FileNotFoundError(
-            f"Can't find executable of {command}"
-        )
+        raise FileNotFoundError(f"Can't find executable of {command}")
 
     return Path(executable).resolve()
 
 
-def find_openmodelica_zmq_port_filepath(
-    suffix: typing.Optional[str]
-) -> Path:
+def find_openmodelica_zmq_port_filepath(suffix: typing.Optional[str]) -> Path:
     temp_dir = Path(tempfile.gettempdir())
 
     pattern_of_name = "openmodelica*.port"
@@ -51,13 +41,11 @@ def find_openmodelica_zmq_port_filepath(
 
     if not candidates:
         raise ValueError(
-            f"Can't find openmodelica port file "
-            f"at {temp_dir}"
+            f"Can't find openmodelica port file " f"at {temp_dir}"
         )
     elif len(candidates) >= 2:
         raise ValueError(
-            f"Ambiguous openmodelica port file {candidates}"
-            f"at {temp_dir}"
+            f"Ambiguous openmodelica port file {candidates}" f"at {temp_dir}"
         )
 
     return candidates[0]
@@ -71,8 +59,7 @@ class OMCInteractive(
         "__process",
     )
 
-    __instances: typing_extensions.Final[typing.Set["OMCInteractive"]] \
-        = set()
+    __instances: typing_extensions.Final[typing.Set["OMCInteractive"]] = set()
 
     __socket: zmq.Socket
     __process: subprocess.Popen
@@ -91,10 +78,12 @@ class OMCInteractive(
         return self
 
     @property
-    def socket(self) -> zmq.Socket: return self.__socket
+    def socket(self) -> zmq.Socket:
+        return self.__socket
 
     @property
-    def process(self) -> subprocess.Popen: return self.__process
+    def process(self) -> subprocess.Popen:
+        return self.__process
 
     @classmethod
     def open(
@@ -113,7 +102,8 @@ class OMCInteractive(
 
         command = [
             str(resolve_command(omc_command)),
-            "--interactive=zmq", f"-z={suffix}",
+            "--interactive=zmq",
+            f"-z={suffix}",
         ]
 
         process = subprocess.Popen(
@@ -125,8 +115,8 @@ class OMCInteractive(
 
         logger.info(
             "(pid={pid}) Start omc :: {scommand}".format(
-                pid=process.pid,
-                scommand=" ".join(command))
+                pid=process.pid, scommand=" ".join(command)
+            )
         )
 
         self = cls(
@@ -142,15 +132,10 @@ class OMCInteractive(
 
         return self
 
-    def __connect_socket(
-        self,
-        suffix: str
-    ):
+    def __connect_socket(self, suffix: str):
         process_stdout: typing.IO
         if self.process.stdout is None:
-            ValueError(
-                "Ensure that subprocee.Popen(stdout=subprocess.PIPE)"
-            )
+            ValueError("Ensure that subprocee.Popen(stdout=subprocess.PIPE)")
         else:
             process_stdout = self.process.stdout
 
@@ -167,8 +152,7 @@ class OMCInteractive(
             port = port_filepath.read_text()
             self.socket.connect(port)
             logger.info(
-                f"(pid={self.process.pid}) "
-                f"Connect zmq sokcet via {port}"
+                f"(pid={self.process.pid}) " f"Connect zmq sokcet via {port}"
             )
         finally:
             try:
@@ -185,13 +169,9 @@ class OMCInteractive(
     ) -> None:
         if self in self.__instances:
             self.socket.close()
-            logger.info(
-                f"(pid={self.process.pid}) Close zmq sokcet"
-            )
+            logger.info(f"(pid={self.process.pid}) Close zmq sokcet")
             self.process.terminate()
-            logger.info(
-                f"(pid={self.process.pid}) Stop omc"
-            )
+            logger.info(f"(pid={self.process.pid}) Stop omc")
             self.__instances.remove(self)
 
     @classmethod
@@ -201,18 +181,11 @@ class OMCInteractive(
         for self in cls.__instances.copy():
             self.close()
 
-    def evaluate(
-        self,
-        expression: str
-    ) -> str:
-        logger.debug(
-            f"(pid={self.process.pid}) >>> {expression}"
-        )
+    def evaluate(self, expression: str) -> str:
+        logger.debug(f"(pid={self.process.pid}) >>> {expression}")
         self.socket.send_string(expression)
         result = self.socket.recv_string()
-        logger.debug(
-            f"(pid={self.process.pid}) {result}"
-        )
+        logger.debug(f"(pid={self.process.pid}) {result}")
         return result
 
     def call_function(
@@ -225,7 +198,7 @@ class OMCInteractive(
         def arguments() -> typing.Iterator[str]:
             to_keyword_argument = False
             for component, name, value, required in inputArguments:
-                to_keyword_argument |= (required == "optional")
+                to_keyword_argument |= required == "optional"
 
                 value = component.cast(name, value, required)
                 if value is None:
@@ -239,8 +212,7 @@ class OMCInteractive(
 
         result_literal = self.evaluate(
             "{funcName}({argument_list})".format(
-                funcName=funcName,
-                argument_list=", ".join(arguments())
+                funcName=funcName, argument_list=", ".join(arguments())
             )
         )
 
@@ -253,9 +225,7 @@ class OMCInteractive(
         except Exception:
             excs = list(parse_OMCExceptions(result_literal))
             if not excs:
-                raise exception.OMCRuntimeError(
-                    result_literal
-                ) from None
+                raise exception.OMCRuntimeError(result_literal) from None
             else:
                 for exc in excs:
                     if isinstance(exc, Warning):
@@ -271,7 +241,12 @@ class OMCInteractive(
                 f"but omc returns {result_value!r}"
             )
         elif len(outputArguments) == 1:
-            (component, name,), = outputArguments
+            (
+                (
+                    component,
+                    name,
+                ),
+            ) = outputArguments
             return component.cast(name, result_value)
         else:
             if len(result_value) != len(outputArguments):

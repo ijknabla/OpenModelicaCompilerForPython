@@ -1,158 +1,161 @@
+__all__ = ("OMCDialectSyntax",)
 
-__all__ = (
-    "omc_dialect_context",
-    "std",
-    "stored_definition_withEOF",
-    "type_specifier_withEOF",
+from arpeggio import EOF, Optional, RegExMatch, ZeroOrMore
+from modelicalang import v3_4
+from modelicalang._backend import (
+    ParsingExpressionLike,
+    returns_parsing_expression,
 )
 
 
-import arpeggio  # type: ignore
-import typing
+class OMCDialectSyntax(v3_4.Syntax):
+    @classmethod
+    @returns_parsing_expression
+    def IDENT(cls) -> ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
 
-import modelica_language.parsers.syntax as std  # type: ignore
+    @classmethod
+    @returns_parsing_expression
+    def sign(cls) -> ParsingExpressionLike:
+        return ["+", "-"]
 
+    @classmethod
+    @returns_parsing_expression
+    def number(cls) -> ParsingExpressionLike:
+        return (Optional(cls.sign), cls.UNSIGNED_NUMBER)
 
-_MODELICA_STANDARD_IDENT = std.IDENT
+    @classmethod
+    @returns_parsing_expression
+    def boolean(cls) -> ParsingExpressionLike:
+        return [cls.TRUE, cls.FALSE]
 
+    @classmethod
+    @returns_parsing_expression
+    def omc_array(cls) -> ParsingExpressionLike:
+        return (
+            "{",
+            cls.omc_value_list,
+            "}",
+        )
 
-def STANDARD_IDENT():
-    return _MODELICA_STANDARD_IDENT
+    @classmethod
+    @returns_parsing_expression
+    def omc_tuple(cls) -> ParsingExpressionLike:
+        return (
+            "(",
+            cls.omc_value_list,
+            ")",
+        )
 
+    @classmethod
+    @returns_parsing_expression
+    def omc_value_list(cls) -> ParsingExpressionLike:
+        return ZeroOrMore(cls.omc_value, sep=",")
 
-def IDENT():
-    return [STANDARD_IDENT, arpeggio.RegExMatch(r"\$\w*")]
+    @classmethod
+    @returns_parsing_expression
+    def omc_record_literal(cls) -> ParsingExpressionLike:
+        return (
+            cls.RECORD,
+            cls.type_specifier,
+            cls.omc_record_element_list,
+            cls.END,
+            cls.type_specifier,
+            ";",
+        )
 
+    @classmethod
+    @returns_parsing_expression
+    def omc_record_element_list(cls) -> ParsingExpressionLike:
+        return ZeroOrMore(cls.omc_record_element, sep=",")
 
-def sign():
-    return ["+", "-"]
+    @classmethod
+    @returns_parsing_expression
+    def omc_record_element(cls) -> ParsingExpressionLike:
+        return cls.IDENT, "=", cls.omc_value
 
+    @classmethod
+    @returns_parsing_expression
+    def omc_value(cls) -> ParsingExpressionLike:
+        return [
+            cls.type_specifier,
+            cls.number,
+            cls.boolean,
+            cls.STRING,
+            cls.omc_array,
+            cls.omc_tuple,
+            cls.omc_record_literal,
+        ]
 
-def number():
-    return (
-        arpeggio.Optional(sign),
-        std.UNSIGNED_NUMBER
-    )
+    @classmethod
+    @returns_parsing_expression
+    def subscript_list(cls) -> ParsingExpressionLike:
+        return ZeroOrMore(cls.subscript, sep=",")
 
+    @classmethod
+    @returns_parsing_expression
+    def omc_dimensions(cls) -> ParsingExpressionLike:
+        return "{", cls.subscript_list, "}"
 
-def boolean():
-    return [std.TRUE, std.FALSE]
+    @classmethod
+    @returns_parsing_expression
+    def omc_component(cls) -> ParsingExpressionLike:
+        return (
+            "{",
+            (
+                cls.type_specifier,
+                ",",  # className
+                cls.IDENT,
+                ",",  # name
+                cls.STRING,
+                ",",  # comment
+                cls.STRING,
+                ",",  # protected
+                cls.boolean,
+                ",",  # isFinal
+                cls.boolean,
+                ",",  # isFlow
+                cls.boolean,
+                ",",  # isStream
+                cls.boolean,
+                ",",  # isReplaceable
+                cls.STRING,
+                ",",  # variability
+                cls.STRING,
+                ",",  # innerOuter
+                cls.STRING,
+                ",",  # inputOutput
+                cls.omc_dimensions,  # dimensions
+            ),
+            "}",
+        )
 
+    @classmethod
+    @returns_parsing_expression
+    def omc_component_list(cls) -> ParsingExpressionLike:
+        return ZeroOrMore(cls.omc_component, sep=",")
 
-def omc_array():
-    return "{", omc_value_list, "}",
+    @classmethod
+    @returns_parsing_expression
+    def omc_component_array(cls) -> ParsingExpressionLike:
+        return "{", cls.omc_component_list, "}"
 
+    @classmethod
+    @returns_parsing_expression
+    def IDENT_withEOF(cls) -> ParsingExpressionLike:
+        return cls.IDENT, EOF
 
-def omc_tuple():
-    return "(", omc_value_list, ")",
+    @classmethod
+    @returns_parsing_expression
+    def type_specifier_withEOF(cls) -> ParsingExpressionLike:
+        return cls.type_specifier, EOF
 
+    @classmethod
+    @returns_parsing_expression
+    def omc_value_withEOF(cls) -> ParsingExpressionLike:
+        return cls.omc_value, EOF
 
-def omc_value_list():
-    return arpeggio.ZeroOrMore(omc_value, sep=",")
-
-
-def omc_record_literal():
-    return (
-        std.RECORD, std.type_specifier,
-        omc_record_element_list,
-        std.END, std.type_specifier, ";"
-    )
-
-
-def omc_record_element_list():
-    return arpeggio.ZeroOrMore(
-        omc_record_element, sep=","
-    )
-
-
-def omc_record_element():
-    return std.IDENT, "=", omc_value
-
-
-def omc_value():
-    return [
-        std.type_specifier,
-        number,
-        boolean,
-        std.STRING,
-        omc_array,
-        omc_tuple,
-        omc_record_literal,
-    ]
-
-
-def subscript_list():
-    return arpeggio.ZeroOrMore(std.subscript, sep=",")
-
-
-def omc_dimensions():
-    return "{", subscript_list, "}"
-
-
-def omc_component():
-    return (
-        "{",
-        (
-            std.type_specifier, ",",  # className
-            std.IDENT, ",",  # name
-            std.STRING, ",",  # comment
-            std.STRING, ",",  # protected
-            boolean, ",",  # isFinal
-            boolean, ",",  # isFlow
-            boolean, ",",  # isStream
-            boolean, ",",  # isReplaceable
-            std.STRING, ",",  # variability
-            std.STRING, ",",  # innerOuter
-            std.STRING, ",",  # inputOutput
-            omc_dimensions,  # dimensions
-        ),
-        "}",
-    )
-
-
-def omc_component_list():
-    return arpeggio.ZeroOrMore(omc_component, sep=",")
-
-
-def omc_component_array():
-    return "{", omc_component_list, "}"
-
-
-def IDENT_withEOF():
-    return std.IDENT, arpeggio.EOF
-
-
-def type_specifier_withEOF():
-    return std.type_specifier, arpeggio.EOF
-
-
-def omc_value_withEOF():
-    return omc_value, arpeggio.EOF
-
-
-def omc_component_array_withEOF():
-    return omc_component_array, arpeggio.EOF
-
-
-def stored_definition_withEOF():
-    return std.stored_definition, arpeggio.EOF
-
-
-class OMCDialectContext():
-    __enabled: typing.ClassVar[bool] = False
-
-    def __enter__(self):
-        if OMCDialectContext.__enabled:
-            raise ValueError("Duplicate OMCDialectContext")
-
-        OMCDialectContext.__enabled = True
-        std.IDENT = IDENT
-
-    def __exit__(self, exc_type, exc_value, traceback):
-        OMCDialectContext.__enabled = False
-        std.IDENT = _MODELICA_STANDARD_IDENT
-
-        return False
-
-
-omc_dialect_context = OMCDialectContext()
+    @classmethod
+    @returns_parsing_expression
+    def omc_component_array_withEOF(cls) -> ParsingExpressionLike:
+        return cls.omc_component_array, EOF
