@@ -959,6 +959,33 @@ files = [
 ]
 
 [[package]]
+name = "types-docutils"
+version = "0.19.1.2"
+description = "Typing stubs for docutils"
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-docutils-0.19.1.2.tar.gz", hash = "sha256:ca3d2135484adb52dd042bbddbd6eddcbbda8c608ba3f5e5f908bd548ffcb399"},
+    {file = "types_docutils-0.19.1.2-py3-none-any.whl", hash = "sha256:7be44dac1b160901308ac43762d5e89175105ed682092a3a1f08911d2573a470"},
+]
+
+[[package]]
+name = "types-setuptools"
+version = "65.7.0.3"
+description = "Typing stubs for setuptools"
+category = "dev"
+optional = false
+python-versions = "*"
+files = [
+    {file = "types-setuptools-65.7.0.3.tar.gz", hash = "sha256:c00f2dd1e6dcbb893faea4a57dbae80bb96d826b865d9ade8ae250a830cba10c"},
+    {file = "types_setuptools-65.7.0.3-py3-none-any.whl", hash = "sha256:b823969ea92a6d41d35933881d4c732248df834062e0d6f044c3eb36c446254e"},
+]
+
+[package.dependencies]
+types-docutils = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "4.0.1"
 description = "Backported and Experimental Type Hints for Python 3.6+"
@@ -1001,4 +1028,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=4.6)", "pytest-black (
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.6"
-content-hash = "806c1aac58456e5584cce8a8a13e643e15bbb94517d29d57265b29df549da2a8"
+content-hash = "2bda6e10afb225a8de5c6023ea1b9a952387ae6ec114dacbf0095b776962f1ed"
