@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0a0] - 2023-02-01
+
 ### Changed
 
 - Update modelica parser library to `modelicalang>=0.1`
@@ -43,7 +45,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
-[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.1...HEAD
+[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0a0...HEAD
+[0.2.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.1...v0.2.0a0
 [0.1.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.0.1...v0.1.0
 [0.0.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.0.0...v0.0.1
