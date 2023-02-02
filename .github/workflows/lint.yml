@@ -31,4 +31,4 @@ jobs:
           mypy --version
       - name: Lint python sources
         run: |
-          pflake8
+          pflake8 --verbose --count --show-source --statistics
