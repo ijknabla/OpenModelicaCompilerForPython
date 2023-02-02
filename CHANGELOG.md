@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- (development environment) Fix tests by GitHub Actions
+- Fix status badges to latest
+
 ## [0.2.0a0] - 2023-02-01
 
 ### Changed
