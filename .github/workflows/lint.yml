@@ -29,3 +29,6 @@ jobs:
           pflake8 --version
           which mypy
           mypy --version
+      - name: Lint python sources
+        run: |
+          pflake8
