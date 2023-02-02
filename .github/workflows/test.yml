@@ -29,3 +29,7 @@ jobs:
           python --version
           which pytest
           pytest --version
+      - name: Test python sources
+        run: |
+          useradd -m user
+          sudo -u user pytest -v tests/
