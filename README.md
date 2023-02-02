@@ -1,5 +1,5 @@
 
-# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING) [![Flake8](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Flake8/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3AFlake8)
+# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING) [![lint.yml](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/lint.yml/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/lint.yml)
 
 OpenModelica compiler (omc) interface for Python
 
