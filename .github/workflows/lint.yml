@@ -16,6 +16,13 @@ jobs:
       image: python:${{ matrix.python-version }}
 
     steps:
-    - name: Check version
-      run: |
-        python -V
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          curl -sSL https://install.python-poetry.org | python -
+          poetry install --only=main,lint
+      - name: Check version
+        run: |
+          poetry --version
+          python ---version
+          pip show
