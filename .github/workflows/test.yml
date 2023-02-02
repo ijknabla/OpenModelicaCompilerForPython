@@ -17,9 +17,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          pip install --no-cache-dir --upgrade pip
+          pip install --no-cache-dir --requirement requirements.test.txt
       - name: Check version
         run: |
           which omc
           omc --version
           which python
           python --version
+          which pytest
+          pytest --version
