@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.0] - 2023-02-02
+
+### Fixed
+
+- (development environment) Fix tests by GitHub Actions
+- Fix status badges to latest
+
 ## [0.2.0a0] - 2023-02-01
 
 ### Changed
@@ -45,7 +52,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
-[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0a0...HEAD
+[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0...HEAD
+[0.2.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0a0...v0.2.0
 [0.2.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.1...v0.2.0a0
 [0.1.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.0...v0.1.1
 [0.1.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.0.1...v0.1.0

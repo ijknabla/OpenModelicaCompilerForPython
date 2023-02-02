@@ -36,3 +36,25 @@ repos:
         -   pflake8
         language: system
         pass_filenames: false
+    -   id: poetry-export-lint-requirements
+        name: Export requirements.lint.txt
+        entry: poetry
+        args:
+        -   run
+        -   python
+        -   .pre-commit/poetry_export_requirements.py
+        -   lint
+        -   --output=requirements.lint.txt
+        language: system
+        files: ^(\.pre\-commit/poetry_export_requirements\.py|poetry\.lock)$
+    -   id: poetry-export-test-requirements
+        name: Export requirements.test.txt
+        entry: poetry
+        args:
+        -   run
+        -   python
+        -   .pre-commit/poetry_export_requirements.py
+        -   test
+        -   --output=requirements.test.txt
+        language: system
+        files: ^(\.pre\-commit/poetry_export_requirements\.py|poetry\.lock)$
