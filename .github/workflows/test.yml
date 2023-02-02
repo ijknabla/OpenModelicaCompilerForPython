@@ -27,9 +27,8 @@ jobs:
           omc --version
           which python
           python --version
-          which pytest
-          pytest --version
+          python -m pytest --version
       - name: Test python sources
         run: |
           useradd -m user
-          sudo -u user pytest -v tests/
+          sudo -u user python -m pytest -v tests/
