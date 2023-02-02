@@ -9,11 +9,11 @@ jobs:
     strategy:
       matrix:
         include:
-          - omc-version: 1.13.0
-            python-version: 3.6
+          - omc-version: omc1.13.0
+            python-version: py3.6
             os: stretch
     container:
-      image: ijknabla/openmodelica-python3:omc${{ matrix.omc-version }}-py${{ matrix.python-version }}-${{ matrix.os }}
+      image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
 
     steps:
       - uses: actions/checkout@v3
