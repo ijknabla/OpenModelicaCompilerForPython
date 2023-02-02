@@ -1,0 +1,62 @@
+
+name: Pytest
+
+on:
+  push:
+    branches: [ master, develop ]
+  pull_request:
+    branches: [ master, develop ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - omc-version: omc1.13.0
+            python-version: py3.6
+            os: stretch
+          - omc-version: omc1.13.2
+            python-version: py3.6
+            os: stretch
+          - omc-version: omc1.14.1
+            python-version: py3.6
+            os: buster
+          - omc-version: omc1.14.2
+            python-version: py3.6
+            os: buster
+          - omc-version: omc1.16.0
+            python-version: py3.6
+            os: buster
+          - omc-version: omc1.16.1
+            python-version: py3.6
+            os: buster
+          - omc-version: omc1.16.5
+            python-version: py3.6
+            os: buster
+          - omc-version: omc1.17.0
+            python-version: py3.6
+            os: buster
+          - omc-version: omc1.18.0
+            python-version: py3.6
+            os: bullseye
+    container:
+      image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Install dependencies
+        run: |
+          pip install --no-cache-dir --upgrade pip
+          pip install --no-cache-dir --requirement requirements.test.txt
+      - name: Check version
+        run: |
+          which omc
+          omc --version
+          which python
+          python --version
+          python -m pytest --version
+      - name: Test python sources
+        run: |
+          useradd -m user
+          sudo -u user python -m pytest -v tests/

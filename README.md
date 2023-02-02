@@ -1,23 +1,7 @@
 
-# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING) [![lint.yml](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/lint.yml/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/lint.yml)
+# OpenModelicaCompilerForPython [![License: OSMC-PL](https://img.shields.io/badge/license-OSMC--PL-lightgrey.svg)](./COPYING) [![lint.yml](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/lint.yml/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/lint.yml) [![Pytest](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/test.yml/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions/workflows/test.yml)
 
 OpenModelica compiler (omc) interface for Python
-
-## Tested omc versions
-
-[![Pytest (omc1.13.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.13.0%29%22)
-[![Pytest (omc1.13.2)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.13.2)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.13.2%29%22)
-
-[![Pytest (omc1.14.1)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.14.1)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.14.1%29%22)
-[![Pytest (omc1.14.2)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.14.2)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.14.2%29%22)
-
-[![Pytest (omc1.16.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.0%29%22)
-[![Pytest (omc1.16.1)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.1)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.1%29%22)
-[![Pytest (omc1.16.5)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.16.5)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.16.5%29%22)
-
-[![Pytest (omc1.17.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.17.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.17.0%29%22)
-
-[![Pytest (omc1.18.0)](https://github.com/ijknabla/OpenModelicaCompilerForPython/workflows/Pytest%20(omc1.18.0)/badge.svg)](https://github.com/ijknabla/OpenModelicaCompilerForPython/actions?query=workflow%3A%22Pytest+%28omc1.18.0%29%22)
 
 ## Change log
 
