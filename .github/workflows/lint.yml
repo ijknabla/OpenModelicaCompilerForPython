@@ -20,9 +20,11 @@ jobs:
       - name: Install dependencies
         run: |
           curl -sSL https://install.python-poetry.org | python -
+          export PATH="$HOME/.local/bin:$PATH"
           poetry install --only=main,lint
       - name: Check version
         run: |
-          poetry --version
+          which python
           python ---version
-          pip show
+          which poetry
+          poetry --version
