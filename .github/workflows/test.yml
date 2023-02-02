@@ -16,6 +16,9 @@ jobs:
           - omc-version: omc1.13.0
             python-version: py3.6
             os: stretch
+          - omc-version: omc1.13.2
+            python-version: py3.6
+            os: stretch
     container:
       image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
 
