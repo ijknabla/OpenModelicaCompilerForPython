@@ -19,12 +19,13 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          curl -sSL https://install.python-poetry.org | python -
-          export PATH="$HOME/.local/bin:$PATH"
-          poetry install --only=main,lint
+          pip install --no-cache-dir --upgrade pip
+          pip install --no-cache-dir --requirement requirements.lint.txt
       - name: Check version
         run: |
           which python
-          python ---version
-          which poetry
-          poetry --version
+          python --version
+          which pflake8
+          pflake8 --version
+          which mypy
+          mypy --version
