@@ -42,21 +42,20 @@ jobs:
             os: bullseye
     container:
       image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
-      options: --user user
 
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          pip install --no-cache-dir --upgrade pip
-          pip install --no-cache-dir --requirement requirements.test.txt
+          sudo -u user pip install --no-cache-dir --upgrade pip
+          sudo -u user pip install --no-cache-dir --requirement requirements.test.txt
       - name: Check version
         run: |
-          which omc
-          omc --version
-          which python
-          python --version
-          python -m pytest --version
+          sudo -u user which omc
+          sudo -u user omc --version
+          sudo -u user which python
+          sudo -u user python --version
+          sudo -u user python -m pytest --version
       - name: Test python sources
         run: |
-          python -m pytest -v tests/
+          sudo -u user python -m pytest -v tests/
