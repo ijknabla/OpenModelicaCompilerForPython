@@ -161,6 +161,10 @@ class VariableName(_BaseVariableName):
         return _BaseVariableName.__new__(cls, identifier)
 
 
+class VariableNameChildren:
+    IDENT: list[VariableName]
+
+
 class VariableNameVisitor(
     PTNodeVisitor,
 ):
