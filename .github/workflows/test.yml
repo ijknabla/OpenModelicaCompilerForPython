@@ -13,9 +13,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - omc-version: omc1.18.0
-            python-version: py3.6
-            os: bullseye
           - omc-version: omc1.13
             python-version: py3.7
             os: stretch
@@ -37,6 +34,12 @@ jobs:
           - omc-version: omc1.17
             python-version: py3.11
             os: buster
+          - omc-version: omc1.18
+            python-version: py3.7
+            os: bullseye
+          - omc-version: omc1.18
+            python-version: py3.11
+            os: bullseye
     container:
       image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
 
