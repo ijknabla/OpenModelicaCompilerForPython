@@ -40,6 +40,12 @@ jobs:
           - omc-version: omc1.18
             python-version: py3.11
             os: bullseye
+          - omc-version: omc1.19
+            python-version: py3.7
+            os: bullseye
+          - omc-version: omc1.19
+            python-version: py3.11
+            os: bullseye
     container:
       image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
 
