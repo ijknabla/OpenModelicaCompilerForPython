@@ -107,17 +107,24 @@ class NumberVisitor(
             )
 
 
+class BooleanChildren:
+    TRUE: list[bool]
+    FALSE: list[bool]
+    boolean: list[bool]
+
+
 class BooleanVisitor(
     PTNodeVisitor,
 ):
-    def visit_TRUE(self, *_):
+    def visit_TRUE(self, *_: object) -> bool:
         return True
 
-    def visit_FALSE(self, *_):
+    def visit_FALSE(self, *_: object) -> bool:
         return False
 
-    def visit_boolean(self, node, children):
-        return children[0]
+    def visit_boolean(self, _: object, children: BooleanChildren) -> bool:
+        (value,) = children.TRUE + children.FALSE
+        return value
 
 
 class StringVisitor(
