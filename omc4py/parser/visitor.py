@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import operator
 from collections.abc import Sequence
-from typing import Any, NamedTuple, TypeVar
+from typing import Any, NamedTuple, TypeVar, Union
 
 import numpy
-from arpeggio import PTNodeVisitor
+from arpeggio import PTNodeVisitor, Terminal
 from typing_extensions import SupportsIndex
 
 from omc4py import string
@@ -66,19 +66,29 @@ class TypeSpecifierVisitor(
             return TypeName(*name)
 
 
+class NumberChildren:
+    sign: list[str]
+    UNSIGNED_NUMBER: list[Union[int, float]]
+    number: list[Union[Integer, Real]]
+
+
 class NumberVisitor(
     PTNodeVisitor,
 ):
-    def visit_sign(self, node, *_):
+    def visit_sign(self, node: Terminal, _: object) -> str:
         return node.value
 
-    def visit_UNSIGNED_NUMBER(self, node, *_):
+    def visit_UNSIGNED_NUMBER(
+        self, node: Terminal, _: object
+    ) -> Union[int, float]:
         try:
             return int(node.value)
         except ValueError:
             return float(node.value)
 
-    def visit_number(self, node, children):
+    def visit_number(
+        self, _: object, children: NumberChildren
+    ) -> Union[Integer, Real]:
         sign = getitem_with_default(children.sign, 0, default="+")
         (unsigned,) = children.UNSIGNED_NUMBER
 
