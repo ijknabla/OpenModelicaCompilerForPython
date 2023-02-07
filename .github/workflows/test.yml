@@ -42,6 +42,7 @@ jobs:
             os: bullseye
     container:
       image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
+      options: --user user
 
     steps:
       - uses: actions/checkout@v3
@@ -58,5 +59,4 @@ jobs:
           python -m pytest --version
       - name: Test python sources
         run: |
-          getent passwd user || useradd -m user
-          sudo -u user python -m pytest -v tests/
+          python -m pytest -v tests/
