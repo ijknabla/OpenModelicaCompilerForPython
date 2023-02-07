@@ -13,12 +13,6 @@ jobs:
     strategy:
       matrix:
         include:
-          - omc-version: omc1.13.0
-            python-version: py3.6
-            os: stretch
-          - omc-version: omc1.13.2
-            python-version: py3.6
-            os: stretch
           - omc-version: omc1.14.1
             python-version: py3.6
             os: buster
