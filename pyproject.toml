@@ -27,7 +27,7 @@ modelicalang = "^0.1.0a0"
 
 [tool.poetry.group.dev.dependencies]
 inquirer = "^2.8.0"
-lxml = "^4.6.5"
+lxml = "^4.9.2"
 tqdm = "^4.62.3"
 isort = "^5.8"
 black = ">=20.8.b1"
