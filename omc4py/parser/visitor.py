@@ -127,10 +127,14 @@ class BooleanVisitor(
         return value
 
 
+class StringChildren:
+    STRING: list[str]
+
+
 class StringVisitor(
     PTNodeVisitor,
 ):
-    def visit_STRING(self, node, *_):
+    def visit_STRING(self, node: Terminal, _: object) -> str:
         return string.unquote_modelica_string(node.value)
 
 
