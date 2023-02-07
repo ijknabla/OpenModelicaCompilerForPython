@@ -14,6 +14,7 @@ from omc4py.classes import (
     Real,
     TypeName,
     VariableName,
+    VariableNameChildren,
     VariableNameVisitor,
 )
 
@@ -40,18 +41,25 @@ def getitem_with_default(
         return default
 
 
+class TypeSpecifierChildren(VariableNameChildren):
+    name: list[list[VariableName]]
+    type_specifier: list[TypeName]
+
+
 class TypeSpecifierVisitor(
     VariableNameVisitor,
 ):
     def visit_name(
         self,
-        node,
-        children,
+        _: object,
+        children: TypeSpecifierChildren,
     ) -> list[VariableName]:
         return children.IDENT
 
-    def visit_type_specifier(self, node, children) -> TypeName:
-        name = children.name[0]
+    def visit_type_specifier(
+        self, node, children: TypeSpecifierChildren
+    ) -> TypeName:
+        (name,) = children.name
         if node[0].value == ".":
             return TypeName(".", *name)
         else:
@@ -133,7 +141,7 @@ class OMCRecordVisitor(
 ):
     def visit_omc_record_element(
         self,
-        node,
+        _: object,
         children,
     ) -> tuple[str, Any]:
         key = str(children.IDENT[0])
@@ -141,11 +149,11 @@ class OMCRecordVisitor(
         return key, value
 
     def visit_omc_record_element_list(
-        self, node, children
+        self, _: object, children
     ) -> list[tuple[str, Any]]:
         return children.omc_record_element
 
-    def visit_omc_record_literal(self, node, children) -> dict[str, Any]:
+    def visit_omc_record_literal(self, _: object, children) -> dict[str, Any]:
         elements = children.omc_record_element_list[0]
         return dict(elements)
 
