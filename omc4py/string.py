@@ -57,7 +57,9 @@ def unquote_modelica_string(modelica_string: str) -> str:
 
 
 def to_omc_literal(obj: Any) -> str:
-    if hasattr(obj, "__to_omc_literal__"):
+    from .classes import SupportsToOMCLiteral
+
+    if isinstance(obj, SupportsToOMCLiteral):
         return obj.__to_omc_literal__()
     elif isinstance(obj, (classes.Boolean, bool)):
         return "true" if obj else "false"

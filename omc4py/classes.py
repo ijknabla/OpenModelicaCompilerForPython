@@ -33,6 +33,7 @@ import typing
 import numpy  # type: ignore
 import typing_extensions
 from arpeggio import PTNodeVisitor
+from typing_extensions import Protocol, runtime_checkable
 
 from .string import to_omc_literal
 
@@ -83,6 +84,12 @@ else:
     Integer = numpy.intc
     Boolean = numpy.bool_
     String = numpy.str_
+
+
+@runtime_checkable
+class SupportsToOMCLiteral(Protocol):
+    def __to_omc_literal__(self) -> str:
+        ...
 
 
 # $Code classes OpenModelica.$Code.{VariableName, TypeName}
