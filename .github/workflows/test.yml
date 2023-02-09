@@ -14,40 +14,40 @@ jobs:
       matrix:
         include:
           - omc-version: omc1.13
-            python-version: py3.7
+            python-version: py3.6
             os: stretch
           - omc-version: omc1.14
-            python-version: py3.7
+            python-version: py3.6
             os: buster
           - omc-version: omc1.14
             python-version: py3.9
             os: buster
           - omc-version: omc1.16
-            python-version: py3.7
+            python-version: py3.6
             os: buster
           - omc-version: omc1.16
             python-version: py3.9
             os: buster
           - omc-version: omc1.17
-            python-version: py3.7
+            python-version: py3.6
             os: buster
           - omc-version: omc1.17
             python-version: py3.9
             os: buster
           - omc-version: omc1.18
-            python-version: py3.7
+            python-version: py3.6
             os: bullseye
           - omc-version: omc1.18
             python-version: py3.9
             os: bullseye
           - omc-version: omc1.19
-            python-version: py3.7
+            python-version: py3.6
             os: bullseye
           - omc-version: omc1.19
             python-version: py3.9
             os: bullseye
           - omc-version: omc1.20
-            python-version: py3.7
+            python-version: py3.6
             os: bullseye
           - omc-version: omc1.20
             python-version: py3.9
