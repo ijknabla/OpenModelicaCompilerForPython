@@ -65,3 +65,8 @@ extend-ignore = "E203,"
 [tool.isort]
 profile = "black"
 line_length = 79
+
+[tool.mypy]
+plugins = [
+    "numpy.typing.mypy_plugin",
+]
