@@ -3,7 +3,6 @@ from __future__ import annotations
 import abc
 import re
 import warnings
-from collections.abc import Iterable
 from typing import Optional
 
 from . import compiler, exception
@@ -123,12 +122,12 @@ class OMCSessionBase__v_1_13(
     def getMessagesStringInternal(
         self,
         unique: bool,
-    ) -> Iterable:
+    ):
         ...
 
     def __check__(
         self,
-    ):
+    ) -> None:
         for messageString in self.getMessagesStringInternal(unique=True):
             message = str(messageString.message)
             kind = messageString.kind.name
