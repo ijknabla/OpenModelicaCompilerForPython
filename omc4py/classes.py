@@ -43,9 +43,8 @@ from typing import (
 )
 
 import numpy
-import typing_extensions
 from arpeggio import PTNodeVisitor
-from typing_extensions import Protocol, runtime_checkable
+from typing_extensions import Literal, Protocol, runtime_checkable
 
 from .string import to_omc_literal
 
@@ -53,8 +52,8 @@ from .string import to_omc_literal
 
 Dimensions = tuple[Optional[int], ...]
 
-REQUIRED = typing_extensions.Literal["required"]
-OPTIONAL = typing_extensions.Literal["optional"]
+REQUIRED = Literal["required"]
+OPTIONAL = Literal["optional"]
 REQUIRED_or_OPTIONAL = Union[REQUIRED, OPTIONAL]
 
 VariableNameLike = Union[
@@ -340,7 +339,7 @@ class AbstractOMCInteractive(abc.ABC):
         exc_type,
         exc_value,
         traceback,
-    ) -> typing_extensions.Literal[False]:
+    ) -> Literal[False]:
         self.close()
         return False
 
@@ -375,7 +374,7 @@ class AbstractOMCSession(
         exc_type,
         exc_value,
         traceback,
-    ) -> typing_extensions.Literal[False]:
+    ) -> Literal[False]:
         self.__close__()
         return False
 
