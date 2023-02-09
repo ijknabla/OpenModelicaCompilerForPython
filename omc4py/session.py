@@ -26,7 +26,16 @@ def __select_session_type(
     Session class selector.
     Update this after new omc version supported!!!
     """
-    from . import v_1_13, v_1_14, v_1_15, v_1_16, v_1_17, v_1_18
+    from . import (
+        v_1_13,
+        v_1_14,
+        v_1_15,
+        v_1_16,
+        v_1_17,
+        v_1_18,
+        v_1_19,
+        v_1_20,
+    )
 
     version = OMCSessionMinimal(omc).getVersionTuple()
     if version[:2] <= (1, 13):
@@ -41,8 +50,12 @@ def __select_session_type(
         return v_1_17.OMCSession
     elif version[:2] == (1, 18):
         return v_1_18.OMCSession
+    elif version[:2] == (1, 19):
+        return v_1_19.OMCSession
+    elif version[:2] == (1, 20):
+        return v_1_20.OMCSession
     else:
-        return v_1_18.OMCSession
+        return v_1_20.OMCSession
 
 
 def open_session(

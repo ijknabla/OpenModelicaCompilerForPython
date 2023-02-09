@@ -13,32 +13,44 @@ jobs:
     strategy:
       matrix:
         include:
-          - omc-version: omc1.13.0
+          - omc-version: omc1.13
             python-version: py3.6
             os: stretch
-          - omc-version: omc1.13.2
-            python-version: py3.6
-            os: stretch
-          - omc-version: omc1.14.1
+          - omc-version: omc1.14
             python-version: py3.6
             os: buster
-          - omc-version: omc1.14.2
+          - omc-version: omc1.14
+            python-version: py3.9
+            os: buster
+          - omc-version: omc1.16
             python-version: py3.6
             os: buster
-          - omc-version: omc1.16.0
+          - omc-version: omc1.16
+            python-version: py3.9
+            os: buster
+          - omc-version: omc1.17
             python-version: py3.6
             os: buster
-          - omc-version: omc1.16.1
-            python-version: py3.6
+          - omc-version: omc1.17
+            python-version: py3.9
             os: buster
-          - omc-version: omc1.16.5
+          - omc-version: omc1.18
             python-version: py3.6
-            os: buster
-          - omc-version: omc1.17.0
+            os: bullseye
+          - omc-version: omc1.18
+            python-version: py3.9
+            os: bullseye
+          - omc-version: omc1.19
             python-version: py3.6
-            os: buster
-          - omc-version: omc1.18.0
+            os: bullseye
+          - omc-version: omc1.19
+            python-version: py3.9
+            os: bullseye
+          - omc-version: omc1.20
             python-version: py3.6
+            os: bullseye
+          - omc-version: omc1.20
+            python-version: py3.9
             os: bullseye
     container:
       image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
@@ -47,16 +59,15 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          pip install --no-cache-dir --upgrade pip
-          pip install --no-cache-dir --requirement requirements.test.txt
+          sudo -u user pip install --no-cache-dir --upgrade pip
+          sudo -u user pip install --no-cache-dir --requirement requirements.test.txt
       - name: Check version
         run: |
-          which omc
-          omc --version
-          which python
-          python --version
-          python -m pytest --version
+          sudo -u user which omc
+          sudo -u user omc --version
+          sudo -u user which python
+          sudo -u user python --version
+          sudo -u user python -m pytest --version
       - name: Test python sources
         run: |
-          useradd -m user
           sudo -u user python -m pytest -v tests/
