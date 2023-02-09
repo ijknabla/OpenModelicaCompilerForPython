@@ -11,7 +11,7 @@ from collections.abc import Iterable, Sequence
 from functools import reduce
 from typing import Any
 
-import numpy  # type: ignore
+import numpy
 
 modelica_char_escape_map = {
     "\\": r"\\",
