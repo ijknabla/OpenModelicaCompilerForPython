@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.1] - 2023-02-09
+
+### Added
+
+- `omc4py.v_1_20` Support of _OpenModelica 1.20.x_
+- `omc4py.v_1_19` Support of _OpenModelica 1.19.x_
+
 ## [0.2.0] - 2023-02-02
 
 ### Fixed
@@ -52,7 +59,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
-[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0...HEAD
+[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.1...HEAD
+[0.2.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0a0...v0.2.0
 [0.2.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.1...v0.2.0a0
 [0.1.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.0...v0.1.1
