@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = (
     # Primitive types
     "Real",
@@ -28,9 +30,19 @@ import abc
 import enum
 import functools
 import itertools
-import typing
+from collections.abc import Callable, Iterable, Iterator, Sequence
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    ClassVar,
+    NamedTuple,
+    Optional,
+    TypeVar,
+    Union,
+    cast,
+)
 
-import numpy  # type: ignore
+import numpy
 import typing_extensions
 from arpeggio import PTNodeVisitor
 from typing_extensions import Protocol, runtime_checkable
@@ -39,42 +51,40 @@ from .string import to_omc_literal
 
 # Type hints
 
-Dimensions = typing.Tuple[typing.Optional[int], ...]
+Dimensions = tuple[Optional[int], ...]
 
 REQUIRED = typing_extensions.Literal["required"]
 OPTIONAL = typing_extensions.Literal["optional"]
-REQUIRED_or_OPTIONAL = typing.Union[REQUIRED, OPTIONAL]
+REQUIRED_or_OPTIONAL = Union[REQUIRED, OPTIONAL]
 
-VariableNameLike = typing.Union[
+VariableNameLike = Union[
     "TypeName",
     "VariableName",
     str,
 ]
 
-TypeNameLike = typing.Union[
+TypeNameLike = Union[
     "ModelicaClassMeta",
     "ModelicaEnumeration",
     VariableNameLike,
 ]
 
-EnumerationLike = typing.Union[
+EnumerationLike = Union[
     "ModelicaEnumerationMeta",
     "TypeName",
 ]
 
-InputArgument = typing.Tuple[
-    "Component", str, typing.Any, REQUIRED_or_OPTIONAL
-]
-OutputArgument = typing.Tuple["Component", str]
+InputArgument = tuple["Component", str, Any, REQUIRED_or_OPTIONAL]
+OutputArgument = tuple["Component", str]
 
-Parser = typing.Callable[[str], typing.Any]
+Parser = Callable[[str], Any]
 
-KT = typing.TypeVar("KT")
+KT = TypeVar("KT")
 
 
 # Primitive classes {Real, Integer, Boolean, String}
 
-if typing.TYPE_CHECKING:
+if TYPE_CHECKING:
     Real = float
     Integer = int
     Boolean = bool
@@ -153,7 +163,7 @@ class VariableName:
 
 
 def _VariableName_from_valid_identifier_no_check(
-    cls: typing.Type[VariableName],
+    cls: type[VariableName],
     identifier: str,
 ) -> VariableName:
     variableName = super(cls, VariableName).__new__(cls)  # type: ignore
@@ -177,7 +187,7 @@ class VariableNameVisitor(
 class TypeName:
     __slots__ = ("__parts",)
 
-    __parts: typing.Tuple[str, ...]
+    __parts: tuple[str, ...]
 
     def __new__(cls, part, *parts):
         if not parts:
@@ -191,8 +201,8 @@ class TypeName:
 
     @staticmethod
     def __split_parts(
-        parts: typing.Iterable[TypeNameLike],
-    ) -> typing.Iterator[str]:
+        parts: Iterable[TypeNameLike],
+    ) -> Iterator[str]:
         for i, part in enumerate(
             itertools.chain(*map(TypeName.__split_part, parts))
         ):
@@ -203,7 +213,7 @@ class TypeName:
     @staticmethod
     def __split_part(
         part: TypeNameLike,
-    ) -> typing.Iterator[str]:
+    ) -> Iterator[str]:
         if isinstance(part, ModelicaClassMeta):
             yield from part.__modelica_name__.parts
         elif isinstance(part, ModelicaEnumeration):
@@ -223,7 +233,7 @@ class TypeName:
     @property
     def parts(
         self,
-    ) -> typing.Tuple[str, ...]:
+    ) -> tuple[str, ...]:
         return self.__parts
 
     @property
@@ -245,7 +255,7 @@ class TypeName:
     @property
     def parents(
         self,
-    ) -> typing.Iterator["TypeName"]:
+    ) -> Iterator["TypeName"]:
         for end in reversed(range(1, len(self.parts))):
             yield TypeName(
                 *self.parts[:end],
@@ -281,14 +291,14 @@ class TypeName:
 
     __to_omc_literal__ = __str__
 
-    def __truediv__(self, other: typing.Union[str, VariableName, "TypeName"]):
+    def __truediv__(self, other: Union[str, VariableName, "TypeName"]):
         return type(self)(self, other)
 
 
 def split_dict(
-    dictionary: typing.Dict[KT, typing.Any],
-    condition: typing.Callable[[typing.Any], bool],
-) -> typing.Tuple[typing.Dict[KT, typing.Any], typing.Dict[KT, typing.Any]]:
+    dictionary: dict[KT, Any],
+    condition: Callable[[Any], bool],
+) -> tuple[dict[KT, Any], dict[KT, Any]]:
     yes, no = {}, {}
     for k, v in dictionary.items():
         if condition(v):
@@ -314,8 +324,8 @@ class AbstractOMCInteractive(abc.ABC):
     def call_function(
         self,
         funcName: str,
-        inputArguments: typing.Sequence[InputArgument],
-        outputArguments: typing.Sequence[OutputArgument],
+        inputArguments: Sequence[InputArgument],
+        outputArguments: Sequence[OutputArgument],
         parser: Parser,
     ):
         ...
@@ -404,9 +414,9 @@ class ModelicaLongClassMeta(
 ):
     # BoundModelicaLongClassMeta will be assigned
     # after BoundModelicaLongClassMeta is defined.
-    __bound_class__: typing.Type["BoundModelicaLongClassMeta"]
+    __bound_class__: type["BoundModelicaLongClassMeta"]
 
-    __bind_session: typing.Any
+    __bind_session: Any
 
     def __new__(
         mtcls,
@@ -414,7 +424,7 @@ class ModelicaLongClassMeta(
         bases,
         namespace,
     ):
-        cls = typing.cast(
+        cls = cast(
             ModelicaLongClassMeta,
             super().__new__(
                 mtcls,
@@ -427,7 +437,7 @@ class ModelicaLongClassMeta(
         def bind_session(
             session: AbstractOMCSession,
         ) -> "BoundModelicaLongClassMeta":
-            bound_cls = typing.cast(
+            bound_cls = cast(
                 BoundModelicaLongClassMeta,
                 type.__new__(
                     cls.__bound_class__,
@@ -445,7 +455,7 @@ class ModelicaLongClassMeta(
 
         return cls
 
-    if typing.TYPE_CHECKING:
+    if TYPE_CHECKING:
 
         @classmethod
         def __bind_session__(
@@ -490,7 +500,7 @@ class ModelicaLongClassMeta(
         )
 
 
-class ModelicaLongClassReference(typing.NamedTuple):
+class ModelicaLongClassReference(NamedTuple):
     value: ModelicaLongClassMeta
 
 
@@ -542,11 +552,9 @@ class ModelicaRecordMeta(
             actual_namespace,
         )
 
-        elements: typing.Dict[str, Component]
+        elements: dict[str, Component]
 
-        def newfunc(
-            cls: typing.Type["ModelicaRecord"], obj
-        ) -> "ModelicaRecord":
+        def newfunc(cls: type["ModelicaRecord"], obj) -> "ModelicaRecord":
             nonlocal elements
             elements = {
                 name: definition.get_component(cls)
@@ -570,14 +578,14 @@ class ModelicaRecordMeta(
                 raise ValueError(f"Unexpected keys {keys - elements.keys()}")
 
             for key, value in self.__dict.items():
-                component = typing.cast(Component, elements[key])
+                component = cast(Component, elements[key])
                 self.__dict[key] = component.cast(key, value)
 
             return self
 
         def itemsfunc(
             self: "ModelicaRecord",
-        ) -> typing.Iterator[typing.Tuple[str, typing.Any]]:
+        ) -> Iterator[tuple[str, Any]]:
             for key, value in self.__dict.items():
                 yield key, value
 
@@ -589,7 +597,7 @@ class ModelicaRecordMeta(
         ) -> property:
             def getter(
                 self: ModelicaRecord,
-            ) -> typing.Any:
+            ) -> Any:
                 return self.__dict[key]
 
             def setter(self: ModelicaRecord, value) -> None:
@@ -648,7 +656,7 @@ class ModelicaFunctionMeta(
             {"__call__": external_definition.bound_implementation},
         )
 
-        cls = typing.cast(
+        cls = cast(
             ModelicaFunctionMeta,
             super().__new__(
                 unbound_metaclass,
@@ -666,13 +674,13 @@ class ModelicaFunctionMeta(
 
 
 class Component:
-    class_: typing.Type
+    class_: type
     dimensions: Dimensions
 
     def __init__(
         self,
-        class_: typing.Type,
-        dimensions: typing.Optional[Dimensions] = None,
+        class_: type,
+        dimensions: Optional[Dimensions] = None,
     ):
         self.class_ = class_
         if dimensions is None:
@@ -687,7 +695,7 @@ class Component:
         if not isinstance(index, tuple):
             return self[(index,)]
 
-        def dimensions_generator() -> typing.Iterator[typing.Optional[int]]:
+        def dimensions_generator() -> Iterator[Optional[int]]:
             for idim, dimension in enumerate(index):
                 if isinstance(dimension, int):
                     if dimension < 0:
@@ -731,7 +739,7 @@ class Component:
     @property
     def class_restrictions(
         self,
-    ) -> typing.Tuple[typing.Type, ...]:
+    ) -> tuple[type, ...]:
         if self.class_ is Real:
             return (Real, float)
         elif self.class_ is Integer:
@@ -776,9 +784,9 @@ class Component:
     def cast(
         self,
         name: str,
-        value: typing.Any,
+        value: Any,
         required: REQUIRED_or_OPTIONAL = "required",
-    ) -> typing.Any:
+    ) -> Any:
         if value is None:
             if required == "required":
                 raise ValueError(f"Required value {name!r} is None")
@@ -852,7 +860,7 @@ class alias(
 ):
     def __init__(
         self,
-        classmethod_like: typing.Callable,
+        classmethod_like: Callable,
     ):
         self.__func__ = classmethod_like
 
@@ -867,7 +875,7 @@ class alias(
 class element:
     def __init__(
         self,
-        classmethod_like: typing.Callable,
+        classmethod_like: Callable,
     ):
         self.__func__ = classmethod_like
 
@@ -892,7 +900,7 @@ class element:
 class external:
     def __init__(
         self,
-        classmethod_like: typing.Callable,
+        classmethod_like: Callable,
     ):
         self.__func__ = classmethod_like
 
@@ -931,7 +939,7 @@ class ModelicaEnumeration(
     enum.Enum,
     metaclass=ModelicaEnumerationMeta,
 ):
-    __modelica_name__: typing.ClassVar[TypeName]
+    __modelica_name__: ClassVar[TypeName]
 
     def _generate_next_value_(name, start, count, last_values):
         return Integer(count + 1)
@@ -960,16 +968,16 @@ class ModelicaPackage(
 class ModelicaRecord(
     metaclass=ModelicaRecordMeta,
 ):
-    __modelica_name__: typing.ClassVar[TypeName]
+    __modelica_name__: ClassVar[TypeName]
 
-    __items__: typing.Callable[
+    __items__: Callable[
         ["ModelicaRecord"],
-        typing.Iterator[typing.Tuple[str, typing.Any]],
+        Iterator[tuple[str, Any]],
     ]
 
     def __as_dict__(
         self,
-    ) -> typing.Dict[str, typing.Any]:
+    ) -> dict[str, Any]:
         return dict(self.__items__())
 
     def __repr__(self) -> str:
