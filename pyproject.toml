@@ -18,11 +18,11 @@ packages = [
 ]
 
 [tool.poetry.dependencies]
-python = "^3.6"
+python = "^3.7"
 Arpeggio = ">=1.6"
 numpy = ">=1.7.0"
 pyzmq = ">=17.0.0"
-typing-extensions = ">=3.7.2"
+typing-extensions = ">=3.7.4.3"
 modelicalang = "^0.1.0a0"
 
 [tool.poetry.group.dev.dependencies]
@@ -65,3 +65,8 @@ extend-ignore = "E203,"
 [tool.isort]
 profile = "black"
 line_length = 79
+
+[tool.mypy]
+plugins = [
+    "numpy.typing.mypy_plugin",
+]

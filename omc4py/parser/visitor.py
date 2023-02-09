@@ -1,9 +1,12 @@
-import enum
-import operator
-import typing
+from __future__ import annotations
 
-import numpy  # type: ignore
+import operator
+from collections.abc import Sequence
+from typing import Any, NamedTuple, TypeVar
+
+import numpy
 from arpeggio import PTNodeVisitor
+from typing_extensions import SupportsIndex
 
 from omc4py import string
 from omc4py.classes import (
@@ -14,6 +17,8 @@ from omc4py.classes import (
     VariableNameVisitor,
 )
 
+T = TypeVar("T")
+
 
 def flatten_list(lis: list):
     for item in lis:
@@ -23,23 +28,16 @@ def flatten_list(lis: list):
             yield item
 
 
-class __DefaultFlag(enum.Flag):
-    no_default = enum.auto()
-
-
 def getitem_with_default(
-    sequence: typing.Sequence,
-    index: typing.Any,
+    sequence: Sequence[T],
+    index: SupportsIndex,
     *,
-    default=__DefaultFlag.no_default,
-):
+    default: T,
+) -> T:
     try:
         return operator.getitem(sequence, index)
     except IndexError:
-        if default is not __DefaultFlag.no_default:
-            return default
-        else:
-            raise
+        return default
 
 
 class TypeSpecifierVisitor(
@@ -49,7 +47,7 @@ class TypeSpecifierVisitor(
         self,
         node,
         children,
-    ) -> typing.List[VariableName]:
+    ) -> list[VariableName]:
         return children.IDENT
 
     def visit_type_specifier(self, node, children) -> TypeName:
@@ -137,19 +135,17 @@ class OMCRecordVisitor(
         self,
         node,
         children,
-    ) -> typing.Tuple[str, typing.Any]:
+    ) -> tuple[str, Any]:
         key = str(children.IDENT[0])
         value = children.omc_value[0]
         return key, value
 
     def visit_omc_record_element_list(
         self, node, children
-    ) -> typing.List[typing.Tuple[str, typing.Any]]:
+    ) -> list[tuple[str, Any]]:
         return children.omc_record_element
 
-    def visit_omc_record_literal(
-        self, node, children
-    ) -> typing.Dict[str, typing.Any]:
+    def visit_omc_record_literal(self, node, children) -> dict[str, Any]:
         elements = children.omc_record_element_list[0]
         return dict(elements)
 
@@ -165,9 +161,7 @@ class OMCValueVisitor(
 
 
 class OMCValueVisitor__v_1_13(OMCValueVisitor):
-    def visit_omc_record_literal(
-        self, node, children
-    ) -> typing.Dict[str, typing.Any]:
+    def visit_omc_record_literal(self, node, children) -> dict[str, Any]:
         className, _ = children.type_specifier
         record = super().visit_omc_record_literal(node, children)
 
@@ -182,7 +176,7 @@ class OMCValueVisitor__v_1_13(OMCValueVisitor):
 
 
 class ComponentTuple(
-    typing.NamedTuple,
+    NamedTuple,
 ):
     className: TypeName
     name: VariableName
@@ -195,7 +189,7 @@ class ComponentTuple(
     variability: str
     innerOuter: str
     inputOutput: str
-    dimensions: typing.Tuple[str, ...]
+    dimensions: tuple[str, ...]
 
 
 class ComponentArrayVisitor(

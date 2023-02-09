@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = (
     "ComponentTuple",
     "is_valid_identifier",
@@ -9,7 +11,7 @@ __all__ = (
 
 import functools
 import re
-import typing
+from collections.abc import Iterator
 from functools import lru_cache
 
 from arpeggio import NoMatch, ParserPython, visit_parse_tree
@@ -54,7 +56,7 @@ def get_omc_value_parser() -> ParserPython:
 
 
 @functools.lru_cache(1)
-def get_omc_exception_regex():
+def get_omc_exception_regex() -> re.Pattern[str]:
     return re.compile(
         (
             r"(\[(?P<info>[^]]*)\]\s+)?"
@@ -85,7 +87,7 @@ def parse_typeName(type_specifier: str) -> TypeName:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
-def parse_components(literal: str) -> typing.List[ComponentTuple]:
+def parse_components(literal: str) -> list[ComponentTuple]:
     return visit_parse_tree(
         get_omc_record_array_parser().parse(literal),
         visitor.ComponentArrayVisitor(source=literal),
@@ -108,7 +110,7 @@ def parse_OMCValue__v_1_13(literal: str):
 
 def parse_OMCExceptions(
     error_string: str,
-) -> typing.Iterator[exception.OMCException]:
+) -> Iterator[exception.OMCException]:
     for matched in get_omc_exception_regex().finditer(error_string):
         level = matched.group("level").lower()
         message = matched.group("message")

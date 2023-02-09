@@ -1,23 +1,27 @@
+from __future__ import annotations
+
 import atexit
 import logging
-import os
 import shutil
 import subprocess
 import tempfile
-import typing
 import uuid
 import warnings
+from collections.abc import Iterator, Sequence
+from os import PathLike
 from pathlib import Path
+from typing import IO, TYPE_CHECKING, Any, Optional, Union
 
-import typing_extensions
 import zmq  # type: ignore
+from typing_extensions import Final
 
 from . import classes, exception, string
 from .parser import parse_OMCExceptions
 
 logger = logging.getLogger(__name__)
 
-StrOrPathLike = typing.Union[str, os.PathLike]
+if TYPE_CHECKING:
+    StrOrPathLike = Union[str, PathLike[str]]
 
 
 def resolve_command(
@@ -30,7 +34,7 @@ def resolve_command(
     return Path(executable).resolve()
 
 
-def find_openmodelica_zmq_port_filepath(suffix: typing.Optional[str]) -> Path:
+def find_openmodelica_zmq_port_filepath(suffix: Optional[str]) -> Path:
     temp_dir = Path(tempfile.gettempdir())
 
     pattern_of_name = "openmodelica*.port"
@@ -59,16 +63,16 @@ class OMCInteractive(
         "__process",
     )
 
-    __instances: typing_extensions.Final[typing.Set["OMCInteractive"]] = set()
+    __instances: Final[set["OMCInteractive"]] = set()
 
     __socket: zmq.Socket
-    __process: subprocess.Popen
+    __process: subprocess.Popen[str]
 
     def __new__(
         cls,
         socket: zmq.Socket,
-        process: subprocess.Popen,
-    ):
+        process: subprocess.Popen[str],
+    ) -> "OMCInteractive":
         self = super().__new__(cls)
         self.__socket = socket
         self.__process = process
@@ -82,13 +86,13 @@ class OMCInteractive(
         return self.__socket
 
     @property
-    def process(self) -> subprocess.Popen:
+    def process(self) -> subprocess.Popen[str]:
         return self.__process
 
     @classmethod
     def open(
         cls,
-        omc_command: typing.Optional[StrOrPathLike] = None,
+        omc_command: Optional[StrOrPathLike] = None,
     ) -> "OMCInteractive":
         if omc_command is None:
             omc_command = "omc"
@@ -132,8 +136,8 @@ class OMCInteractive(
 
         return self
 
-    def __connect_socket(self, suffix: str):
-        process_stdout: typing.IO
+    def __connect_socket(self, suffix: str) -> None:
+        process_stdout: IO[str]
         if self.process.stdout is None:
             ValueError("Ensure that subprocee.Popen(stdout=subprocess.PIPE)")
         else:
@@ -191,11 +195,11 @@ class OMCInteractive(
     def call_function(
         self,
         funcName: str,
-        inputArguments: typing.Sequence[classes.InputArgument],
-        outputArguments: typing.Sequence[classes.OutputArgument],
+        inputArguments: Sequence[classes.InputArgument],
+        outputArguments: Sequence[classes.OutputArgument],
         parser: classes.Parser,
-    ) -> typing.Any:
-        def arguments() -> typing.Iterator[str]:
+    ) -> Any:
+        def arguments() -> Iterator[str]:
             to_keyword_argument = False
             for component, name, value, required in inputArguments:
                 to_keyword_argument |= required == "optional"

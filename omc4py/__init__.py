@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __license__ = """
 /*
  * This file is part of OpenModelica.

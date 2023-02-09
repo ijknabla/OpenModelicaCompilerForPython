@@ -1,7 +1,9 @@
+from __future__ import annotations
+
 import abc
 import re
-import typing
 import warnings
+from typing import Optional
 
 from . import compiler, exception
 from .classes import (
@@ -21,7 +23,7 @@ from .parser import (
 
 def __select_session_type(
     omc: AbstractOMCInteractive,
-) -> typing.Type[AbstractOMCSession]:
+) -> type[AbstractOMCSession]:
     """
     Session class selector.
     Update this after new omc version supported!!!
@@ -59,9 +61,9 @@ def __select_session_type(
 
 
 def open_session(
-    omc_command: typing.Optional[compiler.StrOrPathLike] = None,
+    omc_command: Optional[compiler.StrOrPathLike] = None,
     *,
-    session_type: typing.Optional[typing.Type[AbstractOMCSession]] = None,
+    session_type: Optional[type[AbstractOMCSession]] = None,
 ) -> AbstractOMCSession:
     omc = compiler.OMCInteractive.open(omc_command)
 
@@ -86,9 +88,7 @@ def open_session(
 class OMCSessionBase(
     AbstractOMCSession,
 ):
-    def getComponents(
-        self, name: TypeName
-    ) -> typing.Optional[typing.List[ComponentTuple]]:
+    def getComponents(self, name: TypeName) -> Optional[list[ComponentTuple]]:
         result_literal = self.__omc__.evaluate(
             f"getComponents({TypeName(name)})"
         )
@@ -122,12 +122,12 @@ class OMCSessionBase__v_1_13(
     def getMessagesStringInternal(
         self,
         unique: bool,
-    ) -> typing.Iterable:
+    ):
         ...
 
     def __check__(
         self,
-    ):
+    ) -> None:
         for messageString in self.getMessagesStringInternal(unique=True):
             message = str(messageString.message)
             kind = messageString.kind.name
@@ -158,9 +158,7 @@ class OMCSessionMinimal(
             else:
                 raise exc
 
-    def getComponents(
-        self, name: TypeName
-    ) -> typing.Optional[typing.List[ComponentTuple]]:
+    def getComponents(self, name: TypeName) -> Optional[list[ComponentTuple]]:
         result = super().getComponents(name)
         self.__check__()
         return result
@@ -192,7 +190,7 @@ class OMCSessionMinimal(
 
     def getVersionTuple(
         self,
-    ) -> typing.Tuple[int, int, int]:
+    ) -> tuple[int, int, int]:
         versionMatch = re.search(
             r"(?P<major>\d+)\.(?P<minor>\d+)\.(?P<build>\d+)",
             self.getVersion(),

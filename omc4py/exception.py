@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = (
     "OMCError",
     "OMCException",
@@ -5,13 +7,12 @@ __all__ = (
     "OMCWarning",
 )
 
-import typing
 import warnings
 
 
 def warn_always(
-    warning_type: typing.Type[Warning],
-) -> typing.Type[Warning]:
+    warning_type: type[Warning],
+) -> type[Warning]:
     warnings.simplefilter("always", warning_type)
     return warning_type
 
