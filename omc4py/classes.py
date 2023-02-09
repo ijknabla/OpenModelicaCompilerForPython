@@ -50,7 +50,8 @@ from .string import to_omc_literal
 
 # Type hints
 
-Dimensions = tuple[Optional[int], ...]
+if TYPE_CHECKING:
+    Dimensions = tuple[Optional[int], ...]
 
 REQUIRED = Literal["required"]
 OPTIONAL = Literal["optional"]
@@ -73,10 +74,11 @@ EnumerationLike = Union[
     "TypeName",
 ]
 
-InputArgument = tuple["Component", str, Any, REQUIRED_or_OPTIONAL]
-OutputArgument = tuple["Component", str]
+if TYPE_CHECKING:
+    InputArgument = tuple["Component", str, Any, REQUIRED_or_OPTIONAL]
+    OutputArgument = tuple["Component", str]
 
-Parser = Callable[[str], Any]
+    Parser = Callable[[str], Any]
 
 KT = TypeVar("KT")
 
