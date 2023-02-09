@@ -56,7 +56,7 @@ def get_omc_value_parser() -> ParserPython:
 
 
 @functools.lru_cache(1)
-def get_omc_exception_regex():
+def get_omc_exception_regex() -> re.Pattern[str]:
     return re.compile(
         (
             r"(\[(?P<info>[^]]*)\]\s+)?"
