@@ -10,7 +10,7 @@ import warnings
 from collections.abc import Iterator, Sequence
 from os import PathLike
 from pathlib import Path
-from typing import IO, TYPE_CHECKING, Any, AnyStr, Optional, Union
+from typing import IO, TYPE_CHECKING, Any, Optional, Union
 
 import zmq  # type: ignore
 from typing_extensions import Final
@@ -66,13 +66,13 @@ class OMCInteractive(
     __instances: Final[set["OMCInteractive"]] = set()
 
     __socket: zmq.Socket
-    __process: subprocess.Popen
+    __process: subprocess.Popen[str]
 
     def __new__(
         cls,
         socket: zmq.Socket,
-        process: subprocess.Popen,
-    ):
+        process: subprocess.Popen[str],
+    ) -> "OMCInteractive":
         self = super().__new__(cls)
         self.__socket = socket
         self.__process = process
@@ -86,7 +86,7 @@ class OMCInteractive(
         return self.__socket
 
     @property
-    def process(self) -> subprocess.Popen:
+    def process(self) -> subprocess.Popen[str]:
         return self.__process
 
     @classmethod
@@ -136,8 +136,8 @@ class OMCInteractive(
 
         return self
 
-    def __connect_socket(self, suffix: str):
-        process_stdout: IO[AnyStr]
+    def __connect_socket(self, suffix: str) -> None:
+        process_stdout: IO[str]
         if self.process.stdout is None:
             ValueError("Ensure that subprocee.Popen(stdout=subprocess.PIPE)")
         else:
