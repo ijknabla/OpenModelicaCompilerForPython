@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- `omc4py.v_1_20` Support of _OpenModelica 1.20.x_
+- `omc4py.v_1_19` Support of _OpenModelica 1.19.x_
+
 ## [0.2.0] - 2023-02-02
 
 ### Fixed
