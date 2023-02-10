@@ -1,16 +1,14 @@
+from __future__ import annotations
+
 import abc
 import collections
 import keyword
 import typing
+from typing import TYPE_CHECKING
 
 from lxml import etree  # type: ignore
 
-from omc4py.classes import (
-    Dimensions,
-    REQUIRED_or_OPTIONAL,
-    TypeName,
-    VariableName,
-)
+from omc4py.classes import REQUIRED_or_OPTIONAL, TypeName, VariableName
 
 from .code import (
     AbstractCode,
@@ -20,6 +18,9 @@ from .code import (
     CommentOut,
     empty_line,
 )
+
+if TYPE_CHECKING:
+    from omc4py.classes import Dimensions
 
 
 class ClassNameAndDimensions(
