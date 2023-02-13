@@ -32,12 +32,12 @@ from .syntax import OMCDialectSyntax
 from .visitor import (
     ComponentArrayVisitor,
     ComponentTuple,
+    OMCValue,
     OMCValueVisitor,
     OMCValueVisitor__v_1_13,
     TypeSpecifierVisitor,
 )
 
-OMCValue = Any
 TypeSpecifierParseTreeNode = NewType(
     "TypeSpecifierParseTreeNode", ParseTreeNode
 )

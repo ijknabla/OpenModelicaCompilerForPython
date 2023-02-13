@@ -6,18 +6,34 @@ from typing import Any, NamedTuple, TypeVar, Union
 
 import numpy
 from arpeggio import NonTerminal, PTNodeVisitor, Terminal
+from numpy.typing import NDArray
 from typing_extensions import SupportsIndex
 
 from omc4py import string
 from omc4py.classes import (
+    Boolean,
     Integer,
     Real,
+    String,
     TypeName,
     VariableName,
     _BaseVariableName,
 )
 
 T = TypeVar("T")
+
+
+OMCValue = Union[
+    Real,
+    Integer,
+    Boolean,
+    String,
+    VariableName,
+    TypeName,
+    NDArray[Any],
+    "tuple[Any, ...]",
+    "dict[str, Any]",
+]
 
 
 def flatten_list(lis: list):
@@ -154,59 +170,66 @@ class StringVisitor(
         return string.unquote_modelica_string(node.value)
 
 
-class SequenceVisitor(
-    PTNodeVisitor,
+class OMCValueChildren(
+    TypeSpecifierChildren, NumberChildren, BooleanChildren, StringChildren
 ):
-    def visit_omc_value_list(self, node, children):
+    omc_value: list[OMCValue]
+    omc_value_list: list[list[OMCValue]]
+    omc_record_element: list[tuple[str, OMCValue]]
+    omc_record_element_list: list[list[tuple[str, OMCValue]]]
+
+
+class OMCValueVisitor(
+    TypeSpecifierVisitor,
+    NumberVisitor,
+    BooleanVisitor,
+    StringVisitor,
+):
+    def visit_omc_value_list(
+        self, _: object, children: OMCValueChildren
+    ) -> list[OMCValue]:
         return children.omc_value
 
-    def visit_omc_tuple(self, node, children):
+    def visit_omc_tuple(
+        self, _: object, children: OMCValueChildren
+    ) -> tuple[OMCValue, ...]:
         if children.omc_value_list:
             return tuple(children.omc_value_list[0])
         else:
             return tuple()
 
-    def visit_omc_array(self, node, children):
+    def visit_omc_array(
+        self, _: object, children: OMCValueChildren
+    ) -> NDArray[Any] | list[OMCValue]:
         if children.omc_value_list:
-            return numpy.array(children.omc_value_list[0])
+            (value_list,) = children.omc_value_list
+            return numpy.array(value_list)
         else:
             return list()
 
-
-class OMCRecordVisitor(
-    TypeSpecifierVisitor,
-):
     def visit_omc_record_element(
-        self,
-        _: object,
-        children,
-    ) -> tuple[str, Any]:
-        key = str(children.IDENT[0])
-        value = children.omc_value[0]
+        self, _: object, children: OMCValueChildren
+    ) -> tuple[str, OMCValue]:
+        (key,) = map(str, children.IDENT)
+        (value,) = children.omc_value
         return key, value
 
     def visit_omc_record_element_list(
-        self, _: object, children
-    ) -> list[tuple[str, Any]]:
+        self, _: object, children: OMCValueChildren
+    ) -> list[tuple[str, OMCValue]]:
         return children.omc_record_element
 
-    def visit_omc_record_literal(self, _: object, children) -> dict[str, Any]:
-        elements = children.omc_record_element_list[0]
+    def visit_omc_record_literal(
+        self, _: object, children: OMCValueChildren
+    ) -> dict[str, OMCValue]:
+        (elements,) = children.omc_record_element_list
         return dict(elements)
 
 
-class OMCValueVisitor(
-    NumberVisitor,
-    BooleanVisitor,
-    StringVisitor,
-    SequenceVisitor,
-    OMCRecordVisitor,
-):
-    pass
-
-
 class OMCValueVisitor__v_1_13(OMCValueVisitor):
-    def visit_omc_record_literal(self, node, children) -> dict[str, Any]:
+    def visit_omc_record_literal(
+        self, node: object, children: OMCValueChildren
+    ) -> dict[str, OMCValue]:
         className, _ = children.type_specifier
         record = super().visit_omc_record_literal(node, children)
 
