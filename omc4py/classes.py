@@ -44,7 +44,7 @@ from typing import (
 
 import numpy
 from arpeggio import PTNodeVisitor, Terminal
-from typing_extensions import Literal, Protocol, runtime_checkable
+from typing_extensions import Literal, Protocol, TypeAlias, runtime_checkable
 
 from .string import to_omc_literal
 
@@ -52,8 +52,7 @@ from .string import to_omc_literal
 
 KT = TypeVar("KT")
 
-if TYPE_CHECKING:
-    Dimensions = tuple[Optional[int], ...]
+Dimensions: TypeAlias = "tuple[Optional[int], ...]"
 
 REQUIRED = Literal["required"]
 OPTIONAL = Literal["optional"]
@@ -76,10 +75,11 @@ EnumerationLike = Union[
     "TypeName",
 ]
 
-if TYPE_CHECKING:
-    InputArgument = tuple["Component", str, Any, REQUIRED_or_OPTIONAL]
-    OutputArgument = tuple["Component", str]
 
+InputArgument: TypeAlias = "tuple[Component, str, Any, REQUIRED_or_OPTIONAL]"
+OutputArgument: TypeAlias = "tuple[Component, str]"
+
+if TYPE_CHECKING:
     Parser = Callable[[str], Any]
 
 
