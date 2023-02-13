@@ -43,7 +43,6 @@ from typing import (
 )
 
 import numpy
-from arpeggio import PTNodeVisitor, Terminal
 from typing_extensions import Literal, Protocol, TypeAlias, runtime_checkable
 
 from .string import to_omc_literal
@@ -159,21 +158,6 @@ class VariableName(_BaseVariableName):
             )
 
         return _BaseVariableName.__new__(cls, identifier)
-
-
-class VariableNameChildren:
-    IDENT: list[VariableName]
-
-
-class VariableNameVisitor(
-    PTNodeVisitor,
-):
-    def visit_IDENT(
-        self,
-        node: Terminal,
-        _: object,
-    ) -> VariableName:
-        return _BaseVariableName.__new__(VariableName, node.value)
 
 
 T_btn = TypeVar("T_btn", bound="_BaseTypeName")

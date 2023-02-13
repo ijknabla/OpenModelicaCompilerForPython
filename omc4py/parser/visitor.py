@@ -14,8 +14,7 @@ from omc4py.classes import (
     Real,
     TypeName,
     VariableName,
-    VariableNameChildren,
-    VariableNameVisitor,
+    _BaseVariableName,
 )
 
 T = TypeVar("T")
@@ -39,6 +38,21 @@ def getitem_with_default(
         return operator.getitem(sequence, index)
     except IndexError:
         return default
+
+
+class VariableNameChildren:
+    IDENT: list[VariableName]
+
+
+class VariableNameVisitor(
+    PTNodeVisitor,
+):
+    def visit_IDENT(
+        self,
+        node: Terminal,
+        _: object,
+    ) -> VariableName:
+        return _BaseVariableName.__new__(VariableName, node.value)
 
 
 class TypeSpecifierChildren(VariableNameChildren):
