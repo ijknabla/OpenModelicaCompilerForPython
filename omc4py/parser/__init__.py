@@ -28,9 +28,14 @@ from typing_extensions import Literal
 
 from .. import exception
 from ..classes import TypeName
-from . import visitor
 from .syntax import OMCDialectSyntax
-from .visitor import ComponentTuple
+from .visitor import (
+    ComponentArrayVisitor,
+    ComponentTuple,
+    OMCValueVisitor,
+    OMCValueVisitor__v_1_13,
+    TypeSpecifierVisitor,
+)
 
 OMCValue = Any
 TypeSpecifierParseTreeNode = NewType(
@@ -54,7 +59,7 @@ def parse_typeName(type_specifier: str) -> TypeName:
     try:
         return _visit_parse_tree(
             _parse("type_specifier", type_specifier),
-            visitor.TypeSpecifierVisitor(),
+            TypeSpecifierVisitor(),
         )
     except NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
@@ -63,21 +68,21 @@ def parse_typeName(type_specifier: str) -> TypeName:
 def parse_components(literal: str) -> list[ComponentTuple]:
     return _visit_parse_tree(
         _parse("omc_component_array", literal),
-        visitor.ComponentArrayVisitor(source=literal),
+        ComponentArrayVisitor(source=literal),
     )
 
 
 def parse_OMCValue(literal: str) -> OMCValue:
     return _visit_parse_tree(
         _parse("omc_value", literal),
-        visitor.OMCValueVisitor(),
+        OMCValueVisitor(),
     )
 
 
 def parse_OMCValue__v_1_13(literal: str) -> OMCValue:
     return _visit_parse_tree(
         _parse("omc_value", literal),
-        visitor.OMCValueVisitor__v_1_13(),
+        OMCValueVisitor__v_1_13(),
     )
 
 
@@ -139,7 +144,7 @@ def _get_parser(syntax: str) -> ParserPython:
 @overload
 def _visit_parse_tree(
     parse_tree: OMCComponentArrayParseTreeNode,
-    visitor: visitor.ComponentArrayVisitor,
+    visitor: ComponentArrayVisitor,
 ) -> list[ComponentTuple]:
     ...
 
@@ -147,7 +152,7 @@ def _visit_parse_tree(
 @overload
 def _visit_parse_tree(
     parse_tree: TypeSpecifierParseTreeNode,
-    visitor: visitor.TypeSpecifierVisitor,
+    visitor: TypeSpecifierVisitor,
 ) -> TypeName:
     ...
 
@@ -155,7 +160,7 @@ def _visit_parse_tree(
 @overload
 def _visit_parse_tree(
     parse_tree: OMCValueParseTreeNode,
-    visitor: Union[visitor.OMCValueVisitor, visitor.OMCValueVisitor__v_1_13],
+    visitor: Union[OMCValueVisitor, OMCValueVisitor__v_1_13],
 ) -> OMCValue:
     ...
 
