@@ -1,36 +1,42 @@
 from contextlib import ExitStack
 from itertools import count
-from typing import Optional
+from typing import Any, Optional
 
 import pytest
 
 from omc4py.classes import TypeName, VariableName
 
 
-def test_variablename() -> None:
-    for obj in ["a", VariableName("a"), TypeName("a"), 0, 0.0, lambda: None]:
-        expected_exception: Optional[pytest.ExceptionInfo] = None
-        with ExitStack() as stack:
-            if not isinstance(obj, (str, VariableName, TypeName)):
-                expected_exception = stack.enter_context(
-                    pytest.raises(TypeError)
-                )
-            variablename = VariableName(obj)
-            assert VariableName(variablename) is variablename
-            assert variablename == variablename
-            if variablename == VariableName("a"):
-                assert str(variablename) == "a"
-            else:
-                assert str(variablename) != "a"
-            assert variablename != "a"
-            assert isinstance(hash(variablename), int)
-            assert str(variablename) in repr(variablename)
+@pytest.mark.parametrize(
+    "obj", ["a", "b", VariableName("a"), TypeName("a"), 0, 0.0, lambda: None]
+)
+def test_variablename(obj: Any) -> None:
+    variablename: Optional[VariableName] = None
+    expected_exception: Optional[pytest.ExceptionInfo] = None
 
-        if expected_exception is not None:
-            (arg,) = expected_exception.value.args
-            assert isinstance(arg, str)
-            assert repr(obj) in arg
-            assert repr(type(obj)) in arg
+    with ExitStack() as stack:
+        if not isinstance(obj, (str, VariableName, TypeName)):
+            expected_exception = stack.enter_context(pytest.raises(TypeError))
+        variablename = VariableName(obj)
+
+    if variablename is not None:
+        assert expected_exception is None
+
+        assert VariableName(variablename) is variablename
+        assert variablename == variablename
+        if variablename == VariableName("a"):
+            assert str(variablename) == "a"
+        else:
+            assert str(variablename) != "a"
+        assert variablename != "a"
+        assert isinstance(hash(variablename), int)
+        assert str(variablename) in repr(variablename)
+    else:
+        assert expected_exception is not None
+        (arg,) = expected_exception.value.args
+        assert isinstance(arg, str)
+        assert repr(obj) in arg
+        assert repr(type(obj)) in arg
 
 
 @pytest.mark.parametrize(
