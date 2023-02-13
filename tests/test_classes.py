@@ -1,6 +1,42 @@
+from contextlib import ExitStack
 from itertools import count
+from typing import Optional
+
+import pytest
 
 from omc4py.classes import TypeName, VariableName
+
+
+@pytest.mark.parametrize(
+    "s",
+    [
+        "",
+        "a",
+        "a$",
+        "aa",
+        "''",
+        "'a'",
+        "'\\a'",
+        "'aa'",
+        "'\"'",
+        "'a\"'",
+        "$",
+        "$$",
+        "$a",
+        "$aa",
+    ],
+)
+def test_variablename(s: str) -> None:
+    excepted_exception: Optional[pytest.ExceptionInfo] = None
+    with ExitStack() as stack:
+        if not is_valid_identifer(s):
+            excepted_exception = stack.enter_context(pytest.raises(ValueError))
+        VariableName(s)
+
+    if excepted_exception is not None:
+        (arg,) = excepted_exception.value.args
+        assert isinstance(arg, str)
+        assert repr(s) in arg
 
 
 def test_typename_combine() -> None:
