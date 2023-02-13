@@ -44,6 +44,11 @@ def test_variablename_constructor(s: str) -> None:
         assert repr(s) in arg
 
 
+def test_typename() -> None:
+    typename = TypeName("A")
+    assert TypeName(typename) is typename
+
+
 def test_typename_combine() -> None:
     parts_a = ("A1", "A2")
     parts_b = ("B1", "B2")
