@@ -13,14 +13,61 @@ import functools
 import re
 from collections.abc import Iterator
 from functools import lru_cache
+from typing import Any, NewType, Union, overload
 
-from arpeggio import NoMatch, ParserPython, visit_parse_tree
+from arpeggio import (
+    NoMatch,
+    ParserPython,
+    ParseTreeNode,
+    PTNodeVisitor,
+    visit_parse_tree,
+)
 
 from .. import exception
 from ..classes import TypeName
 from . import visitor
 from .syntax import OMCDialectSyntax
 from .visitor import ComponentTuple
+
+OMCValue = Any
+TypeSpecifierParseTreeNode = NewType(
+    "TypeSpecifierParseTreeNode", ParseTreeNode
+)
+ComponentArrayParseTreeNode = NewType(
+    "ComponentArrayParseTreeNode", ParseTreeNode
+)
+OMCValueParseTreeNode = NewType("OMCValueParseTreeNode", ParseTreeNode)
+
+
+@overload
+def _visit_parse_tree(
+    parse_tree: ComponentArrayParseTreeNode,
+    visitor: visitor.ComponentArrayVisitor,
+) -> list[ComponentTuple]:
+    ...
+
+
+@overload
+def _visit_parse_tree(
+    parse_tree: TypeSpecifierParseTreeNode,
+    visitor: visitor.TypeSpecifierVisitor,
+) -> TypeName:
+    ...
+
+
+@overload
+def _visit_parse_tree(
+    parse_tree: OMCValueParseTreeNode,
+    visitor: Union[visitor.OMCValueVisitor, visitor.OMCValueVisitor__v_1_13],
+) -> OMCValue:
+    ...
+
+
+def _visit_parse_tree(
+    parse_tree: ParseTreeNode,
+    visitor: PTNodeVisitor,
+) -> Any:
+    return visit_parse_tree(parse_tree, visitor)
 
 
 @lru_cache(1)
@@ -77,9 +124,11 @@ def is_valid_identifier(ident: str) -> bool:
 
 def parse_typeName(type_specifier: str) -> TypeName:
     try:
-        return visit_parse_tree(
-            get_type_specifier_parser().parse(
-                type_specifier,
+        return _visit_parse_tree(
+            TypeSpecifierParseTreeNode(
+                get_type_specifier_parser().parse(
+                    type_specifier,
+                )
             ),
             visitor.TypeSpecifierVisitor(),
         )
@@ -88,22 +137,24 @@ def parse_typeName(type_specifier: str) -> TypeName:
 
 
 def parse_components(literal: str) -> list[ComponentTuple]:
-    return visit_parse_tree(
-        get_omc_record_array_parser().parse(literal),
+    return _visit_parse_tree(
+        ComponentArrayParseTreeNode(
+            get_omc_record_array_parser().parse(literal)
+        ),
         visitor.ComponentArrayVisitor(source=literal),
     )
 
 
-def parse_OMCValue(literal: str):
-    return visit_parse_tree(
-        get_omc_value_parser().parse(literal),
+def parse_OMCValue(literal: str) -> OMCValue:
+    return _visit_parse_tree(
+        OMCValueParseTreeNode(get_omc_value_parser().parse(literal)),
         visitor.OMCValueVisitor(),
     )
 
 
-def parse_OMCValue__v_1_13(literal: str):
-    return visit_parse_tree(
-        get_omc_value_parser().parse(literal),
+def parse_OMCValue__v_1_13(literal: str) -> OMCValue:
+    return _visit_parse_tree(
+        OMCValueParseTreeNode(get_omc_value_parser().parse(literal)),
         visitor.OMCValueVisitor__v_1_13(),
     )
 
