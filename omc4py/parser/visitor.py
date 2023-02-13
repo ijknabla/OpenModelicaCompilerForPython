@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from typing import Any, NamedTuple, TypeVar, Union
 
 import numpy
-from arpeggio import NonTerminal, PTNodeVisitor, Terminal
+from arpeggio import NonTerminal, ParseTreeNode, PTNodeVisitor, Terminal
 from numpy.typing import NDArray
 from typing_extensions import SupportsIndex
 
@@ -260,6 +260,16 @@ class ComponentTuple(
     dimensions: tuple[str, ...]
 
 
+class ComponentArrayChildren(
+    BooleanChildren, StringChildren, TypeSpecifierChildren
+):
+    subscript: list[str]
+    subscript_list: list[list[str]]
+    omc_dimensions: list[tuple[str, ...]]
+    omc_component: list[ComponentTuple]
+    omc_component_list: list[list[ComponentTuple]]
+
+
 class ComponentArrayVisitor(
     BooleanVisitor,
     StringVisitor,
@@ -275,17 +285,23 @@ class ComponentArrayVisitor(
         super().__init__()
         self.__source = source
 
-    def visit_omc_component_array(self, node, children):
+    def visit_omc_component_array(
+        self, _: object, children: ComponentArrayChildren
+    ) -> list[ComponentTuple]:
         return getitem_with_default(
             children.omc_component_list,
             0,
             default=[],
         )
 
-    def visit_omc_component_list(self, node, children):
-        return list(children.omc_component)
+    def visit_omc_component_list(
+        self, _: object, children: ComponentArrayChildren
+    ) -> list[ComponentTuple]:
+        return children.omc_component
 
-    def visit_omc_component(self, node, children):
+    def visit_omc_component(
+        self, _: object, children: ComponentArrayChildren
+    ) -> ComponentTuple:
         (className,) = children.type_specifier
         (name,) = children.IDENT
         (
@@ -318,21 +334,23 @@ class ComponentArrayVisitor(
             dimensions=dimensions,
         )
 
-    def visit_omc_dimensions(self, node, children):
+    def visit_omc_dimensions(
+        self, _: object, children: ComponentArrayChildren
+    ) -> tuple[str, ...]:
         return tuple(
             getitem_with_default(
                 children.subscript_list,
                 0,
-                default=(),
+                default=[],
             )
         )
 
     def visit_subscript_list(
         self,
-        node,
-        children,
-    ):
+        _: object,
+        children: ComponentArrayChildren,
+    ) -> list[str]:
         return children.subscript
 
-    def visit_subscript(self, node, children):
+    def visit_subscript(self, node: ParseTreeNode, _: object) -> str:
         return self.source[node.position : node.position_end]
