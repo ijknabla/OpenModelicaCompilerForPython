@@ -36,14 +36,6 @@ OMCValue = Union[
 ]
 
 
-def flatten_list(lis: list):
-    for item in lis:
-        if isinstance(item, list):
-            yield from flatten_list(item)
-        else:
-            yield item
-
-
 def getitem_with_default(
     sequence: Sequence[T],
     index: SupportsIndex,
