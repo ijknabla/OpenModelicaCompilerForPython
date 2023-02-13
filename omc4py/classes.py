@@ -43,7 +43,7 @@ from typing import (
 )
 
 import numpy
-from arpeggio import PTNodeVisitor
+from arpeggio import PTNodeVisitor, Terminal
 from typing_extensions import Literal, Protocol, runtime_checkable
 
 from .string import to_omc_literal
@@ -165,26 +165,15 @@ class VariableName(_BaseVariableName):
         return _BaseVariableName.__new__(cls, identifier)
 
 
-def _VariableName_from_valid_identifier_no_check(
-    cls: type[VariableName],
-    identifier: str,
-) -> VariableName:
-    variableName = super(cls, VariableName).__new__(cls)  # type: ignore
-    variableName._VariableName__str = identifier
-    return variableName
-
-
 class VariableNameVisitor(
     PTNodeVisitor,
 ):
     def visit_IDENT(
         self,
-        node,
-        children,
+        node: Terminal,
+        _: object,
     ) -> VariableName:
-        return _VariableName_from_valid_identifier_no_check(
-            VariableName, str(node.value)
-        )
+        return _BaseVariableName.__new__(VariableName, node.value)
 
 
 class TypeName:
