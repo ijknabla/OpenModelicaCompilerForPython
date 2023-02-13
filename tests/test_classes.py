@@ -7,6 +7,11 @@ import pytest
 from omc4py.classes import TypeName, VariableName
 
 
+def test_variablename() -> None:
+    variablename = VariableName("a")
+    assert VariableName(variablename) is variablename
+
+
 @pytest.mark.parametrize(
     "s",
     [
@@ -26,7 +31,7 @@ from omc4py.classes import TypeName, VariableName
         "$aa",
     ],
 )
-def test_variablename(s: str) -> None:
+def test_variablename_constructor(s: str) -> None:
     excepted_exception: Optional[pytest.ExceptionInfo] = None
     with ExitStack() as stack:
         if not is_valid_identifer(s):
