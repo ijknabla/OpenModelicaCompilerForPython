@@ -43,15 +43,16 @@ from typing import (
 )
 
 import numpy
-from arpeggio import PTNodeVisitor
-from typing_extensions import Literal, Protocol, runtime_checkable
+from arpeggio import PTNodeVisitor, Terminal
+from typing_extensions import Literal, Protocol, TypeAlias, runtime_checkable
 
 from .string import to_omc_literal
 
 # Type hints
 
-if TYPE_CHECKING:
-    Dimensions = tuple[Optional[int], ...]
+KT = TypeVar("KT")
+
+Dimensions: TypeAlias = "tuple[Optional[int], ...]"
 
 REQUIRED = Literal["required"]
 OPTIONAL = Literal["optional"]
@@ -74,13 +75,12 @@ EnumerationLike = Union[
     "TypeName",
 ]
 
+
+InputArgument: TypeAlias = "tuple[Component, str, Any, REQUIRED_or_OPTIONAL]"
+OutputArgument: TypeAlias = "tuple[Component, str]"
+
 if TYPE_CHECKING:
-    InputArgument = tuple["Component", str, Any, REQUIRED_or_OPTIONAL]
-    OutputArgument = tuple["Component", str]
-
     Parser = Callable[[str], Any]
-
-KT = TypeVar("KT")
 
 
 # Primitive classes {Real, Integer, Boolean, String}
@@ -105,24 +105,48 @@ class SupportsToOMCLiteral(Protocol):
 
 # $Code classes OpenModelica.$Code.{VariableName, TypeName}
 
+T_bvn = TypeVar("T_bvn", bound="_BaseVariableName")
 
-class VariableName:
-    __slots__ = "__str"
 
-    __str: str
+class _BaseVariableName:
+    __slots__ = ("__identifier",)
+    __identifier: str
 
-    def __new__(
-        cls,
-        obj: VariableNameLike,
-    ):
-        if isinstance(obj, VariableName):
+    def __new__(cls: type[T_bvn], identifier: str) -> T_bvn:
+        self = super(_BaseVariableName, cls).__new__(cls)
+        self.__identifier = identifier
+        return self
+
+    def __eq__(self, other: Any) -> bool:
+        return (
+            isinstance(other, _BaseVariableName)
+            and self.__identifier == other.__identifier
+        )
+
+    def __hash__(self) -> int:
+        return hash(self.__identifier)
+
+    def __str__(self) -> str:
+        return self.__identifier
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self.__identifier!r})"
+
+    __to_omc_literal__ = __str__
+
+
+T_vn = TypeVar("T_vn", bound="VariableName")
+
+
+class VariableName(_BaseVariableName):
+    def __new__(cls: type[T_vn], obj: VariableNameLike) -> T_vn:
+        if isinstance(obj, cls):
             return obj
 
-        identifier: str
-        if isinstance(obj, TypeName):
-            identifier = to_omc_literal(obj)
-        elif isinstance(obj, str):
+        if isinstance(obj, str):
             identifier = obj
+        elif isinstance(obj, TypeName):
+            identifier = to_omc_literal(obj)
         else:
             raise TypeError(
                 "obj must be TypeName, VariableName or str, "
@@ -134,42 +158,7 @@ class VariableName:
                 f"Invalid modelica identifier, got {identifier!r}"
             )
 
-        return _VariableName_from_valid_identifier_no_check(cls, identifier)
-
-    def __eq__(
-        self,
-        other,
-    ):
-        if not isinstance(other, VariableName):
-            return False
-        else:
-            return str(self) == str(other)
-
-    def __hash__(
-        self,
-    ):
-        return hash(str(self))
-
-    def __str__(
-        self,
-    ) -> str:
-        return self.__str
-
-    def __repr__(
-        self,
-    ) -> str:
-        return f"{type(self).__name__}({str(self)!r})"
-
-    __to_omc_literal__ = __str__
-
-
-def _VariableName_from_valid_identifier_no_check(
-    cls: type[VariableName],
-    identifier: str,
-) -> VariableName:
-    variableName = super(cls, VariableName).__new__(cls)  # type: ignore
-    variableName._VariableName__str = identifier
-    return variableName
+        return _BaseVariableName.__new__(cls, identifier)
 
 
 class VariableNameVisitor(
@@ -177,33 +166,88 @@ class VariableNameVisitor(
 ):
     def visit_IDENT(
         self,
-        node,
-        children,
+        node: Terminal,
+        _: object,
     ) -> VariableName:
-        return _VariableName_from_valid_identifier_no_check(
-            VariableName, str(node.value)
-        )
+        return _BaseVariableName.__new__(VariableName, node.value)
 
 
-class TypeName:
-    __slots__ = ("__parts",)
+T_btn = TypeVar("T_btn", bound="_BaseTypeName")
 
-    __parts: tuple[str, ...]
 
-    def __new__(cls, part, *parts):
-        if not parts:
-            if isinstance(part, TypeName):
-                return part
+class _BaseTypeName:
+    __slots__ = ("parts",)
 
-        self = super().__new__(TypeName)
-        self.__parts = tuple(cls.__split_parts((part, *parts)))
+    parts: tuple[str, ...]
 
+    def __new__(cls: type[T_btn], parts: tuple[str, ...]) -> T_btn:
+        self = super(_BaseTypeName, cls).__new__(cls)
+        self.parts = parts
         return self
 
+    @property
+    def is_absolute(self) -> bool:
+        return bool(self.parts) and self.parts[0] == "."
+
+    def as_absolute(self: T_btn) -> T_btn:
+        if self.is_absolute:
+            return self
+        else:
+            return _BaseTypeName.__new__(type(self), (".", *self.parts))
+
+    @property
+    def last_identifier(self) -> VariableName:
+        return VariableName(self.parts[-1])
+
+    @property
+    def parents(self: T_btn) -> Iterator[T_btn]:
+        for end in reversed(range(1, len(self.parts))):
+            yield _BaseTypeName.__new__(
+                type(self),
+                self.parts[:end],
+            )
+
+    @property
+    def parent(self: T_btn) -> T_btn:
+        for parent in self.parents:
+            return parent
+        else:
+            return self
+
+    def __hash__(self) -> int:
+        return hash(self.parts)
+
+    def __eq__(self: T_btn, other: Any) -> bool:
+        return isinstance(other, _BaseTypeName) and self.parts == other.parts
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self.parts})"
+
+    def __str__(self) -> str:
+        if self.is_absolute:
+            return self.parts[0] + ".".join(self.parts[1:])
+        else:
+            return ".".join(self.parts)
+
+    __to_omc_literal__ = __str__
+
+
+T_tn = TypeVar("T_tn", bound="TypeName")
+
+
+class TypeName(_BaseTypeName):
+    def __new__(
+        cls: type[T_tn], part: TypeNameLike, *parts: TypeNameLike
+    ) -> T_tn:
+        if isinstance(part, cls) and not parts:
+            return part
+
+        return _BaseTypeName.__new__(
+            cls, tuple(TypeName.__split_parts((part, *parts)))
+        )
+
     @staticmethod
-    def __split_parts(
-        parts: Iterable[TypeNameLike],
-    ) -> Iterator[str]:
+    def __split_parts(parts: Iterable[TypeNameLike]) -> Iterator[str]:
         for i, part in enumerate(
             itertools.chain(*map(TypeName.__split_part, parts))
         ):
@@ -212,9 +256,7 @@ class TypeName:
             yield part
 
     @staticmethod
-    def __split_part(
-        part: TypeNameLike,
-    ) -> Iterator[str]:
+    def __split_part(part: TypeNameLike) -> Iterator[str]:
         if isinstance(part, ModelicaClassMeta):
             yield from part.__modelica_name__.parts
         elif isinstance(part, ModelicaEnumeration):
@@ -231,68 +273,7 @@ class TypeName:
         else:
             raise TypeError(f"Unexpected part, got {part}: {type(part)}")
 
-    @property
-    def parts(
-        self,
-    ) -> tuple[str, ...]:
-        return self.__parts
-
-    @property
-    def is_absolute(self) -> bool:
-        return bool(self.parts) and self.parts[0] == "."
-
-    def as_absolute(self):
-        if self.is_absolute:
-            return self
-        else:
-            return TypeName(".", self)
-
-    @property
-    def last_identifier(
-        self,
-    ) -> VariableName:
-        return VariableName(self.parts[-1])
-
-    @property
-    def parents(
-        self,
-    ) -> Iterator["TypeName"]:
-        for end in reversed(range(1, len(self.parts))):
-            yield TypeName(
-                *self.parts[:end],
-            )
-
-    @property
-    def parent(
-        self,
-    ) -> "TypeName":
-        for parent in self.parents:
-            return parent
-        else:
-            return self
-
-    def __hash__(self):
-        return hash(self.parts)
-
-    def __eq__(self, other):
-        return self.parts == type(self)(other).parts
-
-    def __repr__(
-        self,
-    ) -> str:
-        return f"{type(self).__name__}({str(self)!r})"
-
-    def __str__(
-        self,
-    ) -> str:
-        if self.is_absolute:
-            return self.parts[0] + ".".join(self.parts[1:])
-        else:
-            return ".".join(self.parts)
-
-    __to_omc_literal__ = __str__
-
-    def __truediv__(self, other: Union[str, VariableName, "TypeName"]):
+    def __truediv__(self: T_tn, other: TypeNameLike) -> T_tn:
         return type(self)(self, other)
 
 
