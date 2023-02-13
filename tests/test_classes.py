@@ -17,6 +17,14 @@ def test_variablename() -> None:
                 )
             variablename = VariableName(obj)
             assert VariableName(variablename) is variablename
+            assert variablename == variablename
+            if variablename == VariableName("a"):
+                assert str(variablename) == "a"
+            else:
+                assert str(variablename) != "a"
+            assert variablename != "a"
+            assert isinstance(hash(variablename), int)
+            assert str(variablename) in repr(variablename)
 
         if expected_exception is not None:
             (arg,) = expected_exception.value.args
