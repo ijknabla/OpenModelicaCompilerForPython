@@ -1,6 +1,6 @@
 __all__ = ("OMCDialectSyntax",)
 
-from arpeggio import EOF, Optional, RegExMatch, ZeroOrMore
+from arpeggio import Optional, RegExMatch, ZeroOrMore
 from modelicalang import v3_4
 from modelicalang._backend import (
     ParsingExpressionLike,
@@ -139,23 +139,3 @@ class OMCDialectSyntax(v3_4.Syntax):
     @returns_parsing_expression
     def omc_component_array(cls) -> ParsingExpressionLike:
         return "{", cls.omc_component_list, "}"
-
-    @classmethod
-    @returns_parsing_expression
-    def IDENT_withEOF(cls) -> ParsingExpressionLike:
-        return cls.IDENT, EOF
-
-    @classmethod
-    @returns_parsing_expression
-    def type_specifier_withEOF(cls) -> ParsingExpressionLike:
-        return cls.type_specifier, EOF
-
-    @classmethod
-    @returns_parsing_expression
-    def omc_value_withEOF(cls) -> ParsingExpressionLike:
-        return cls.omc_value, EOF
-
-    @classmethod
-    @returns_parsing_expression
-    def omc_component_array_withEOF(cls) -> ParsingExpressionLike:
-        return cls.omc_component_array, EOF

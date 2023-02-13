@@ -2,30 +2,38 @@ from __future__ import annotations
 
 import operator
 from collections.abc import Sequence
-from typing import Any, NamedTuple, TypeVar
+from typing import Any, NamedTuple, TypeVar, Union
 
 import numpy
-from arpeggio import PTNodeVisitor
+from arpeggio import NonTerminal, ParseTreeNode, PTNodeVisitor, Terminal
+from numpy.typing import NDArray
 from typing_extensions import SupportsIndex
 
 from omc4py import string
 from omc4py.classes import (
+    Boolean,
     Integer,
     Real,
+    String,
     TypeName,
     VariableName,
-    VariableNameVisitor,
+    _BaseVariableName,
 )
 
 T = TypeVar("T")
 
 
-def flatten_list(lis: list):
-    for item in lis:
-        if isinstance(item, list):
-            yield from flatten_list(item)
-        else:
-            yield item
+OMCValue = Union[
+    Real,
+    Integer,
+    Boolean,
+    String,
+    VariableName,
+    TypeName,
+    NDArray[Any],
+    "tuple[Any, ...]",
+    "dict[str, Any]",
+]
 
 
 def getitem_with_default(
@@ -40,37 +48,71 @@ def getitem_with_default(
         return default
 
 
+class VariableNameChildren:
+    IDENT: list[VariableName]
+
+
+class VariableNameVisitor(
+    PTNodeVisitor,
+):
+    def visit_IDENT(
+        self,
+        node: Terminal,
+        _: object,
+    ) -> VariableName:
+        return _BaseVariableName.__new__(VariableName, node.value)
+
+
+class TypeSpecifierChildren(VariableNameChildren):
+    name: list[list[VariableName]]
+    type_specifier: list[TypeName]
+
+
 class TypeSpecifierVisitor(
     VariableNameVisitor,
 ):
     def visit_name(
         self,
-        node,
-        children,
+        _: object,
+        children: TypeSpecifierChildren,
     ) -> list[VariableName]:
         return children.IDENT
 
-    def visit_type_specifier(self, node, children) -> TypeName:
-        name = children.name[0]
-        if node[0].value == ".":
-            return TypeName(".", *name)
+    def visit_type_specifier(
+        self, node: NonTerminal, children: TypeSpecifierChildren
+    ) -> TypeName:
+        head, *_ = node
+        (name,) = children.name
+
+        if isinstance(head, Terminal):
+            return TypeName(head.value, *name)
         else:
             return TypeName(*name)
+
+
+class NumberChildren:
+    sign: list[str]
+    UNSIGNED_NUMBER: list[Union[int, float]]
+    number: list[Union[Integer, Real]]
 
 
 class NumberVisitor(
     PTNodeVisitor,
 ):
-    def visit_sign(self, node, *_):
+    def visit_sign(self, node: Terminal, _: object) -> str:
         return node.value
 
-    def visit_UNSIGNED_NUMBER(self, node, *_):
+    def visit_UNSIGNED_NUMBER(
+        self, node: Terminal, _: object
+    ) -> Union[int, float]:
         try:
             return int(node.value)
         except ValueError:
             return float(node.value)
 
-    def visit_number(self, node, children):
+    def visit_number(
+        self, _: object, children: NumberChildren
+    ) -> Union[Integer, Real]:
         sign = getitem_with_default(children.sign, 0, default="+")
         (unsigned,) = children.UNSIGNED_NUMBER
 
@@ -89,79 +131,97 @@ class NumberVisitor(
             )
 
 
+class BooleanChildren:
+    TRUE: list[bool]
+    FALSE: list[bool]
+    boolean: list[bool]
+
+
 class BooleanVisitor(
     PTNodeVisitor,
 ):
-    def visit_TRUE(self, *_):
+    def visit_TRUE(self, *_: object) -> bool:
         return True
 
-    def visit_FALSE(self, *_):
+    def visit_FALSE(self, *_: object) -> bool:
         return False
 
-    def visit_boolean(self, node, children):
-        return children[0]
+    def visit_boolean(self, _: object, children: BooleanChildren) -> bool:
+        (value,) = children.TRUE + children.FALSE
+        return value
+
+
+class StringChildren:
+    STRING: list[str]
 
 
 class StringVisitor(
     PTNodeVisitor,
 ):
-    def visit_STRING(self, node, *_):
+    def visit_STRING(self, node: Terminal, _: object) -> str:
         return string.unquote_modelica_string(node.value)
 
 
-class SequenceVisitor(
-    PTNodeVisitor,
+class OMCValueChildren(
+    TypeSpecifierChildren, NumberChildren, BooleanChildren, StringChildren
 ):
-    def visit_omc_value_list(self, node, children):
+    omc_value: list[OMCValue]
+    omc_value_list: list[list[OMCValue]]
+    omc_record_element: list[tuple[str, OMCValue]]
+    omc_record_element_list: list[list[tuple[str, OMCValue]]]
+
+
+class OMCValueVisitor(
+    TypeSpecifierVisitor,
+    NumberVisitor,
+    BooleanVisitor,
+    StringVisitor,
+):
+    def visit_omc_value_list(
+        self, _: object, children: OMCValueChildren
+    ) -> list[OMCValue]:
         return children.omc_value
 
-    def visit_omc_tuple(self, node, children):
+    def visit_omc_tuple(
+        self, _: object, children: OMCValueChildren
+    ) -> tuple[OMCValue, ...]:
         if children.omc_value_list:
             return tuple(children.omc_value_list[0])
         else:
             return tuple()
 
-    def visit_omc_array(self, node, children):
+    def visit_omc_array(
+        self, _: object, children: OMCValueChildren
+    ) -> NDArray[Any] | list[OMCValue]:
         if children.omc_value_list:
-            return numpy.array(children.omc_value_list[0])
+            (value_list,) = children.omc_value_list
+            return numpy.array(value_list)
         else:
             return list()
 
-
-class OMCRecordVisitor(
-    TypeSpecifierVisitor,
-):
     def visit_omc_record_element(
-        self,
-        node,
-        children,
-    ) -> tuple[str, Any]:
-        key = str(children.IDENT[0])
-        value = children.omc_value[0]
+        self, _: object, children: OMCValueChildren
+    ) -> tuple[str, OMCValue]:
+        (key,) = map(str, children.IDENT)
+        (value,) = children.omc_value
         return key, value
 
     def visit_omc_record_element_list(
-        self, node, children
-    ) -> list[tuple[str, Any]]:
+        self, _: object, children: OMCValueChildren
+    ) -> list[tuple[str, OMCValue]]:
         return children.omc_record_element
 
-    def visit_omc_record_literal(self, node, children) -> dict[str, Any]:
-        elements = children.omc_record_element_list[0]
+    def visit_omc_record_literal(
+        self, _: object, children: OMCValueChildren
+    ) -> dict[str, OMCValue]:
+        (elements,) = children.omc_record_element_list
         return dict(elements)
 
 
-class OMCValueVisitor(
-    NumberVisitor,
-    BooleanVisitor,
-    StringVisitor,
-    SequenceVisitor,
-    OMCRecordVisitor,
-):
-    pass
-
-
 class OMCValueVisitor__v_1_13(OMCValueVisitor):
-    def visit_omc_record_literal(self, node, children) -> dict[str, Any]:
+    def visit_omc_record_literal(
+        self, node: object, children: OMCValueChildren
+    ) -> dict[str, OMCValue]:
         className, _ = children.type_specifier
         record = super().visit_omc_record_literal(node, children)
 
@@ -192,6 +252,16 @@ class ComponentTuple(
     dimensions: tuple[str, ...]
 
 
+class ComponentArrayChildren(
+    BooleanChildren, StringChildren, TypeSpecifierChildren
+):
+    subscript: list[str]
+    subscript_list: list[list[str]]
+    omc_dimensions: list[tuple[str, ...]]
+    omc_component: list[ComponentTuple]
+    omc_component_list: list[list[ComponentTuple]]
+
+
 class ComponentArrayVisitor(
     BooleanVisitor,
     StringVisitor,
@@ -207,17 +277,23 @@ class ComponentArrayVisitor(
         super().__init__()
         self.__source = source
 
-    def visit_omc_component_array(self, node, children):
+    def visit_omc_component_array(
+        self, _: object, children: ComponentArrayChildren
+    ) -> list[ComponentTuple]:
         return getitem_with_default(
             children.omc_component_list,
             0,
             default=[],
         )
 
-    def visit_omc_component_list(self, node, children):
-        return list(children.omc_component)
+    def visit_omc_component_list(
+        self, _: object, children: ComponentArrayChildren
+    ) -> list[ComponentTuple]:
+        return children.omc_component
 
-    def visit_omc_component(self, node, children):
+    def visit_omc_component(
+        self, _: object, children: ComponentArrayChildren
+    ) -> ComponentTuple:
         (className,) = children.type_specifier
         (name,) = children.IDENT
         (
@@ -250,21 +326,23 @@ class ComponentArrayVisitor(
             dimensions=dimensions,
         )
 
-    def visit_omc_dimensions(self, node, children):
+    def visit_omc_dimensions(
+        self, _: object, children: ComponentArrayChildren
+    ) -> tuple[str, ...]:
         return tuple(
             getitem_with_default(
                 children.subscript_list,
                 0,
-                default=(),
+                default=[],
             )
         )
 
     def visit_subscript_list(
         self,
-        node,
-        children,
-    ):
+        _: object,
+        children: ComponentArrayChildren,
+    ) -> list[str]:
         return children.subscript
 
-    def visit_subscript(self, node, children):
+    def visit_subscript(self, node: ParseTreeNode, _: object) -> str:
         return self.source[node.position : node.position_end]
