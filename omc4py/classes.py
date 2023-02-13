@@ -172,6 +172,66 @@ class VariableNameVisitor(
         return _BaseVariableName.__new__(VariableName, node.value)
 
 
+T_btn = TypeVar("T_btn", bound="_BaseTypeName")
+
+
+class _BaseTypeName:
+    __slots__ = ("parts",)
+
+    parts: tuple[str, ...]
+
+    def __new__(cls: type[T_btn], parts: tuple[str, ...]) -> T_btn:
+        self = super(_BaseTypeName, cls).__new__(cls)
+        self.parts = parts
+        return self
+
+    @property
+    def is_absolute(self) -> bool:
+        return bool(self.parts) and self.parts[0] == "."
+
+    def as_absolute(self: T_btn) -> T_btn:
+        if self.is_absolute:
+            return self
+        else:
+            return _BaseTypeName.__new__(type(self), (".", *self.parts))
+
+    @property
+    def last_identifier(self) -> VariableName:
+        return VariableName(self.parts[-1])
+
+    @property
+    def parents(self: T_btn) -> Iterator[T_btn]:
+        for end in reversed(range(1, len(self.parts))):
+            yield _BaseTypeName.__new__(
+                type(self),
+                self.parts[:end],
+            )
+
+    @property
+    def parent(self: T_btn) -> T_btn:
+        for parent in self.parents:
+            return parent
+        else:
+            return self
+
+    def __hash__(self) -> int:
+        return hash(self.parts)
+
+    def __eq__(self: T_btn, other: Any) -> bool:
+        return isinstance(other, _BaseTypeName) and self.parts == other.parts
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self.parts})"
+
+    def __str__(self) -> str:
+        if self.is_absolute:
+            return self.parts[0] + ".".join(self.parts[1:])
+        else:
+            return ".".join(self.parts)
+
+    __to_omc_literal__ = __str__
+
+
 class TypeName:
     __slots__ = ("__parts",)
 
