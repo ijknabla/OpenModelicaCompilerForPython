@@ -112,13 +112,10 @@ class _BaseVariableName:
     __slots__ = ("__identifier",)
     __identifier: str
 
-    def __new__(cls: type[T_bvn], identifier: Union[str, T_bvn]) -> T_bvn:
-        if not isinstance(identifier, str):
-            return identifier
-        else:
-            self = super(_BaseVariableName, cls).__new__(cls)
-            self.__identifier = identifier
-            return self
+    def __new__(cls: type[T_bvn], identifier: str) -> T_bvn:
+        self = super(_BaseVariableName, cls).__new__(cls)
+        self.__identifier = identifier
+        return self
 
     def __eq__(self, other: Any) -> bool:
         return (
@@ -143,9 +140,10 @@ T_vn = TypeVar("T_vn", bound="VariableName")
 
 class VariableName(_BaseVariableName):
     def __new__(cls: type[T_vn], obj: VariableNameLike) -> T_vn:
-        identifier: Union[str, T_vn]
+        if isinstance(obj, cls):
+            return obj
 
-        if isinstance(obj, (str, cls)):
+        if isinstance(obj, str):
             identifier = obj
         elif isinstance(obj, TypeName):
             identifier = to_omc_literal(obj)
@@ -155,9 +153,7 @@ class VariableName(_BaseVariableName):
                 f"got {obj!r}: {type(obj)}"
             )
 
-        if isinstance(identifier, str) and not parser.is_valid_identifier(
-            identifier
-        ):
+        if not parser.is_valid_identifier(identifier):
             raise ValueError(
                 f"Invalid modelica identifier, got {identifier!r}"
             )
