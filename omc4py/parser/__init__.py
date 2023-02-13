@@ -42,18 +42,6 @@ OMCComponentArrayParseTreeNode = NewType(
 OMCValueParseTreeNode = NewType("OMCValueParseTreeNode", ParseTreeNode)
 
 
-@functools.lru_cache(1)
-def get_omc_exception_regex() -> re.Pattern[str]:
-    return re.compile(
-        (
-            r"(\[(?P<info>[^]]*)\]\s+)?"
-            r"(?P<level>\w+):\s+"
-            r"(?P<message>((?!$).)*)$"
-        ),
-        re.MULTILINE,
-    )
-
-
 def is_valid_identifier(ident: str) -> bool:
     try:
         _parse("IDENT", ident)
@@ -96,7 +84,7 @@ def parse_OMCValue__v_1_13(literal: str) -> OMCValue:
 def parse_OMCExceptions(
     error_string: str,
 ) -> Iterator[exception.OMCException]:
-    for matched in get_omc_exception_regex().finditer(error_string):
+    for matched in _get_omc_exception_pattern().finditer(error_string):
         level = matched.group("level").lower()
         message = matched.group("message")
 
@@ -177,3 +165,15 @@ def _visit_parse_tree(
     visitor: PTNodeVisitor,
 ) -> Any:
     return visit_parse_tree(parse_tree, visitor)
+
+
+@functools.lru_cache(1)
+def _get_omc_exception_pattern() -> re.Pattern[str]:
+    return re.compile(
+        (
+            r"(\[(?P<info>[^]]*)\]\s+)?"
+            r"(?P<level>\w+):\s+"
+            r"(?P<message>((?!$).)*)$"
+        ),
+        re.MULTILINE,
+    )
