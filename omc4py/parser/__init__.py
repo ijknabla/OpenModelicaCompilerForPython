@@ -16,12 +16,15 @@ from functools import lru_cache
 from typing import Any, NewType, Union, overload
 
 from arpeggio import (
+    EOF,
     NoMatch,
     ParserPython,
     ParseTreeNode,
     PTNodeVisitor,
     visit_parse_tree,
 )
+from modelicalang import ParsingExpressionLike, returns_parsing_expression
+from typing_extensions import Literal
 
 from .. import exception
 from ..classes import TypeName
@@ -33,15 +36,15 @@ OMCValue = Any
 TypeSpecifierParseTreeNode = NewType(
     "TypeSpecifierParseTreeNode", ParseTreeNode
 )
-ComponentArrayParseTreeNode = NewType(
-    "ComponentArrayParseTreeNode", ParseTreeNode
+OMCComponentArrayParseTreeNode = NewType(
+    "OMCComponentArrayParseTreeNode", ParseTreeNode
 )
 OMCValueParseTreeNode = NewType("OMCValueParseTreeNode", ParseTreeNode)
 
 
 @overload
 def _visit_parse_tree(
-    parse_tree: ComponentArrayParseTreeNode,
+    parse_tree: OMCComponentArrayParseTreeNode,
     visitor: visitor.ComponentArrayVisitor,
 ) -> list[ComponentTuple]:
     ...
@@ -70,36 +73,42 @@ def _visit_parse_tree(
     return visit_parse_tree(parse_tree, visitor)
 
 
-@lru_cache(1)
-def get_IDENT_parser() -> ParserPython:
+@lru_cache(None)
+def _get_parser(syntax: str) -> ParserPython:
+    @returns_parsing_expression
+    def _root_rule_() -> ParsingExpressionLike:
+        return getattr(OMCDialectSyntax, syntax), EOF
+
     with OMCDialectSyntax:
-        return ParserPython(
-            OMCDialectSyntax.IDENT_withEOF,
-        )
+        return ParserPython(_root_rule_)
 
 
-@lru_cache(1)
-def get_type_specifier_parser() -> ParserPython:
-    with OMCDialectSyntax:
-        return ParserPython(
-            OMCDialectSyntax.type_specifier_withEOF,
-        )
+@overload
+def _parse(syntax: Literal["IDENT"], text: str) -> ParseTreeNode:
+    ...
 
 
-@lru_cache(1)
-def get_omc_record_array_parser() -> ParserPython:
-    with OMCDialectSyntax:
-        return ParserPython(
-            OMCDialectSyntax.omc_component_array_withEOF,
-        )
+@overload
+def _parse(
+    syntax: Literal["type_specifier"], text: str
+) -> TypeSpecifierParseTreeNode:
+    ...
 
 
-@lru_cache(1)
-def get_omc_value_parser() -> ParserPython:
-    with OMCDialectSyntax:
-        return ParserPython(
-            OMCDialectSyntax.omc_value_withEOF,
-        )
+@overload
+def _parse(
+    syntax: Literal["omc_component_array"], text: str
+) -> OMCComponentArrayParseTreeNode:
+    ...
+
+
+@overload
+def _parse(syntax: Literal["omc_value"], text: str) -> OMCValueParseTreeNode:
+    ...
+
+
+def _parse(syntax: str, text: str) -> ParseTreeNode:
+    return _get_parser(syntax).parse(text)
 
 
 @functools.lru_cache(1)
@@ -116,7 +125,7 @@ def get_omc_exception_regex() -> re.Pattern[str]:
 
 def is_valid_identifier(ident: str) -> bool:
     try:
-        get_IDENT_parser().parse(ident)
+        _parse("IDENT", ident)
         return True
     except NoMatch:
         return False
@@ -125,11 +134,7 @@ def is_valid_identifier(ident: str) -> bool:
 def parse_typeName(type_specifier: str) -> TypeName:
     try:
         return _visit_parse_tree(
-            TypeSpecifierParseTreeNode(
-                get_type_specifier_parser().parse(
-                    type_specifier,
-                )
-            ),
+            _parse("type_specifier", type_specifier),
             visitor.TypeSpecifierVisitor(),
         )
     except NoMatch:
@@ -138,23 +143,21 @@ def parse_typeName(type_specifier: str) -> TypeName:
 
 def parse_components(literal: str) -> list[ComponentTuple]:
     return _visit_parse_tree(
-        ComponentArrayParseTreeNode(
-            get_omc_record_array_parser().parse(literal)
-        ),
+        _parse("omc_component_array", literal),
         visitor.ComponentArrayVisitor(source=literal),
     )
 
 
 def parse_OMCValue(literal: str) -> OMCValue:
     return _visit_parse_tree(
-        OMCValueParseTreeNode(get_omc_value_parser().parse(literal)),
+        _parse("omc_value", literal),
         visitor.OMCValueVisitor(),
     )
 
 
 def parse_OMCValue__v_1_13(literal: str) -> OMCValue:
     return _visit_parse_tree(
-        OMCValueParseTreeNode(get_omc_value_parser().parse(literal)),
+        _parse("omc_value", literal),
         visitor.OMCValueVisitor__v_1_13(),
     )
 
