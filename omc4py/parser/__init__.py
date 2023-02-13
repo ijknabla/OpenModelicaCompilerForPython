@@ -42,75 +42,6 @@ OMCComponentArrayParseTreeNode = NewType(
 OMCValueParseTreeNode = NewType("OMCValueParseTreeNode", ParseTreeNode)
 
 
-@overload
-def _visit_parse_tree(
-    parse_tree: OMCComponentArrayParseTreeNode,
-    visitor: visitor.ComponentArrayVisitor,
-) -> list[ComponentTuple]:
-    ...
-
-
-@overload
-def _visit_parse_tree(
-    parse_tree: TypeSpecifierParseTreeNode,
-    visitor: visitor.TypeSpecifierVisitor,
-) -> TypeName:
-    ...
-
-
-@overload
-def _visit_parse_tree(
-    parse_tree: OMCValueParseTreeNode,
-    visitor: Union[visitor.OMCValueVisitor, visitor.OMCValueVisitor__v_1_13],
-) -> OMCValue:
-    ...
-
-
-def _visit_parse_tree(
-    parse_tree: ParseTreeNode,
-    visitor: PTNodeVisitor,
-) -> Any:
-    return visit_parse_tree(parse_tree, visitor)
-
-
-@lru_cache(None)
-def _get_parser(syntax: str) -> ParserPython:
-    @returns_parsing_expression
-    def _root_rule_() -> ParsingExpressionLike:
-        return getattr(OMCDialectSyntax, syntax), EOF
-
-    with OMCDialectSyntax:
-        return ParserPython(_root_rule_)
-
-
-@overload
-def _parse(syntax: Literal["IDENT"], text: str) -> ParseTreeNode:
-    ...
-
-
-@overload
-def _parse(
-    syntax: Literal["type_specifier"], text: str
-) -> TypeSpecifierParseTreeNode:
-    ...
-
-
-@overload
-def _parse(
-    syntax: Literal["omc_component_array"], text: str
-) -> OMCComponentArrayParseTreeNode:
-    ...
-
-
-@overload
-def _parse(syntax: Literal["omc_value"], text: str) -> OMCValueParseTreeNode:
-    ...
-
-
-def _parse(syntax: str, text: str) -> ParseTreeNode:
-    return _get_parser(syntax).parse(text)
-
-
 @functools.lru_cache(1)
 def get_omc_exception_regex() -> re.Pattern[str]:
     return re.compile(
@@ -177,3 +108,72 @@ def parse_OMCExceptions(
             yield exception.OMCError(message)
         else:  # Not-implemented now, but valid level (for future)
             yield exception.OMCError(message)
+
+
+@overload
+def _parse(syntax: Literal["IDENT"], text: str) -> ParseTreeNode:
+    ...
+
+
+@overload
+def _parse(
+    syntax: Literal["type_specifier"], text: str
+) -> TypeSpecifierParseTreeNode:
+    ...
+
+
+@overload
+def _parse(
+    syntax: Literal["omc_component_array"], text: str
+) -> OMCComponentArrayParseTreeNode:
+    ...
+
+
+@overload
+def _parse(syntax: Literal["omc_value"], text: str) -> OMCValueParseTreeNode:
+    ...
+
+
+def _parse(syntax: str, text: str) -> ParseTreeNode:
+    return _get_parser(syntax).parse(text)
+
+
+@lru_cache(None)
+def _get_parser(syntax: str) -> ParserPython:
+    @returns_parsing_expression
+    def _root_rule_() -> ParsingExpressionLike:
+        return getattr(OMCDialectSyntax, syntax), EOF
+
+    with OMCDialectSyntax:
+        return ParserPython(_root_rule_)
+
+
+@overload
+def _visit_parse_tree(
+    parse_tree: OMCComponentArrayParseTreeNode,
+    visitor: visitor.ComponentArrayVisitor,
+) -> list[ComponentTuple]:
+    ...
+
+
+@overload
+def _visit_parse_tree(
+    parse_tree: TypeSpecifierParseTreeNode,
+    visitor: visitor.TypeSpecifierVisitor,
+) -> TypeName:
+    ...
+
+
+@overload
+def _visit_parse_tree(
+    parse_tree: OMCValueParseTreeNode,
+    visitor: Union[visitor.OMCValueVisitor, visitor.OMCValueVisitor__v_1_13],
+) -> OMCValue:
+    ...
+
+
+def _visit_parse_tree(
+    parse_tree: ParseTreeNode,
+    visitor: PTNodeVisitor,
+) -> Any:
+    return visit_parse_tree(parse_tree, visitor)
