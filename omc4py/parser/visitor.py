@@ -5,7 +5,7 @@ from collections.abc import Sequence
 from typing import Any, NamedTuple, TypeVar, Union
 
 import numpy
-from arpeggio import PTNodeVisitor, Terminal
+from arpeggio import NonTerminal, PTNodeVisitor, Terminal
 from typing_extensions import SupportsIndex
 
 from omc4py import string
@@ -71,11 +71,13 @@ class TypeSpecifierVisitor(
         return children.IDENT
 
     def visit_type_specifier(
-        self, node, children: TypeSpecifierChildren
+        self, node: NonTerminal, children: TypeSpecifierChildren
     ) -> TypeName:
+        head, *_ = node
         (name,) = children.name
-        if node[0].value == ".":
-            return TypeName(".", *name)
+
+        if isinstance(head, Terminal):
+            return TypeName(head.value, *name)
         else:
             return TypeName(*name)
 
