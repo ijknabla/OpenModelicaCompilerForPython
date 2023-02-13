@@ -232,25 +232,22 @@ class _BaseTypeName:
     __to_omc_literal__ = __str__
 
 
-class TypeName:
-    __slots__ = ("__parts",)
+T_tn = TypeVar("T_tn", bound="TypeName")
 
-    __parts: tuple[str, ...]
 
-    def __new__(cls, part, *parts):
-        if not parts:
-            if isinstance(part, TypeName):
-                return part
+class TypeName(_BaseTypeName):
+    def __new__(
+        cls: type[T_tn], part: TypeNameLike, *parts: TypeNameLike
+    ) -> T_tn:
+        if isinstance(part, cls) and not parts:
+            return part
 
-        self = super().__new__(TypeName)
-        self.__parts = tuple(cls.__split_parts((part, *parts)))
-
-        return self
+        return _BaseTypeName.__new__(
+            cls, tuple(TypeName.__split_parts((part, *parts)))
+        )
 
     @staticmethod
-    def __split_parts(
-        parts: Iterable[TypeNameLike],
-    ) -> Iterator[str]:
+    def __split_parts(parts: Iterable[TypeNameLike]) -> Iterator[str]:
         for i, part in enumerate(
             itertools.chain(*map(TypeName.__split_part, parts))
         ):
@@ -259,9 +256,7 @@ class TypeName:
             yield part
 
     @staticmethod
-    def __split_part(
-        part: TypeNameLike,
-    ) -> Iterator[str]:
+    def __split_part(part: TypeNameLike) -> Iterator[str]:
         if isinstance(part, ModelicaClassMeta):
             yield from part.__modelica_name__.parts
         elif isinstance(part, ModelicaEnumeration):
@@ -278,68 +273,7 @@ class TypeName:
         else:
             raise TypeError(f"Unexpected part, got {part}: {type(part)}")
 
-    @property
-    def parts(
-        self,
-    ) -> tuple[str, ...]:
-        return self.__parts
-
-    @property
-    def is_absolute(self) -> bool:
-        return bool(self.parts) and self.parts[0] == "."
-
-    def as_absolute(self):
-        if self.is_absolute:
-            return self
-        else:
-            return TypeName(".", self)
-
-    @property
-    def last_identifier(
-        self,
-    ) -> VariableName:
-        return VariableName(self.parts[-1])
-
-    @property
-    def parents(
-        self,
-    ) -> Iterator["TypeName"]:
-        for end in reversed(range(1, len(self.parts))):
-            yield TypeName(
-                *self.parts[:end],
-            )
-
-    @property
-    def parent(
-        self,
-    ) -> "TypeName":
-        for parent in self.parents:
-            return parent
-        else:
-            return self
-
-    def __hash__(self):
-        return hash(self.parts)
-
-    def __eq__(self, other):
-        return self.parts == type(self)(other).parts
-
-    def __repr__(
-        self,
-    ) -> str:
-        return f"{type(self).__name__}({str(self)!r})"
-
-    def __str__(
-        self,
-    ) -> str:
-        if self.is_absolute:
-            return self.parts[0] + ".".join(self.parts[1:])
-        else:
-            return ".".join(self.parts)
-
-    __to_omc_literal__ = __str__
-
-    def __truediv__(self, other: Union[str, VariableName, "TypeName"]):
+    def __truediv__(self: T_tn, other: TypeNameLike) -> T_tn:
         return type(self)(self, other)
 
 
