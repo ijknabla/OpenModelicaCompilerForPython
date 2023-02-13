@@ -50,6 +50,8 @@ from .string import to_omc_literal
 
 # Type hints
 
+KT = TypeVar("KT")
+
 if TYPE_CHECKING:
     Dimensions = tuple[Optional[int], ...]
 
@@ -80,8 +82,6 @@ if TYPE_CHECKING:
 
     Parser = Callable[[str], Any]
 
-KT = TypeVar("KT")
-
 
 # Primitive classes {Real, Integer, Boolean, String}
 
@@ -105,62 +105,64 @@ class SupportsToOMCLiteral(Protocol):
 
 # $Code classes OpenModelica.$Code.{VariableName, TypeName}
 
+T_bvn = TypeVar("T_bvn", bound="_BaseVariableName")
 
-class VariableName:
-    __slots__ = "__str"
 
-    __str: str
+class _BaseVariableName:
+    __slots__ = ("__identifier",)
+    __identifier: str
 
-    def __new__(
-        cls,
-        obj: VariableNameLike,
-    ):
-        if isinstance(obj, VariableName):
-            return obj
+    def __new__(cls: type[T_bvn], identifier: Union[str, T_bvn]) -> T_bvn:
+        if not isinstance(identifier, str):
+            return identifier
+        else:
+            self = super(_BaseVariableName, cls).__new__(cls)
+            self.__identifier = identifier
+            return self
 
-        identifier: str
-        if isinstance(obj, TypeName):
-            identifier = to_omc_literal(obj)
-        elif isinstance(obj, str):
+    def __eq__(self, other: Any) -> bool:
+        return (
+            isinstance(other, _BaseVariableName)
+            and self.__identifier == other.__identifier
+        )
+
+    def __hash__(self) -> int:
+        return hash(self.__identifier)
+
+    def __str__(self) -> str:
+        return self.__identifier
+
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({self.__identifier!r})"
+
+    __to_omc_literal__ = __str__
+
+
+T_vn = TypeVar("T_vn", bound="VariableName")
+
+
+class VariableName(_BaseVariableName):
+    def __new__(cls: type[T_vn], obj: VariableNameLike) -> T_vn:
+        identifier: Union[str, T_vn]
+
+        if isinstance(obj, (str, cls)):
             identifier = obj
+        elif isinstance(obj, TypeName):
+            identifier = to_omc_literal(obj)
         else:
             raise TypeError(
                 "obj must be TypeName, VariableName or str, "
                 f"got {obj!r}: {type(obj)}"
             )
 
-        if not parser.is_valid_identifier(identifier):
+        if isinstance(identifier, str) and not parser.is_valid_identifier(
+            identifier
+        ):
             raise ValueError(
                 f"Invalid modelica identifier, got {identifier!r}"
             )
 
-        return _VariableName_from_valid_identifier_no_check(cls, identifier)
-
-    def __eq__(
-        self,
-        other,
-    ):
-        if not isinstance(other, VariableName):
-            return False
-        else:
-            return str(self) == str(other)
-
-    def __hash__(
-        self,
-    ):
-        return hash(str(self))
-
-    def __str__(
-        self,
-    ) -> str:
-        return self.__str
-
-    def __repr__(
-        self,
-    ) -> str:
-        return f"{type(self).__name__}({str(self)!r})"
-
-    __to_omc_literal__ = __str__
+        return _BaseVariableName.__new__(cls, identifier)
 
 
 def _VariableName_from_valid_identifier_no_check(
