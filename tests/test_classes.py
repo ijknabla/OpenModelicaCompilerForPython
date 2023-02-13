@@ -8,8 +8,21 @@ from omc4py.classes import TypeName, VariableName
 
 
 def test_variablename() -> None:
-    variablename = VariableName("a")
-    assert VariableName(variablename) is variablename
+    for obj in ["a", VariableName("a"), TypeName("a"), 0, 0.0, lambda: None]:
+        expected_exception: Optional[pytest.ExceptionInfo] = None
+        with ExitStack() as stack:
+            if not isinstance(obj, (str, VariableName, TypeName)):
+                expected_exception = stack.enter_context(
+                    pytest.raises(TypeError)
+                )
+            variablename = VariableName(obj)
+            assert VariableName(variablename) is variablename
+
+        if expected_exception is not None:
+            (arg,) = expected_exception.value.args
+            assert isinstance(arg, str)
+            assert repr(obj) in arg
+            assert repr(type(obj)) in arg
 
 
 @pytest.mark.parametrize(
