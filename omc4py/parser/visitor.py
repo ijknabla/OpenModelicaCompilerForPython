@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import operator
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from typing import Any, NamedTuple, TypeVar, Union
 
 import numpy
@@ -17,6 +17,7 @@ from omc4py.classes import (
     String,
     TypeName,
     VariableName,
+    _BaseTypeName,
     _BaseVariableName,
 )
 
@@ -48,13 +49,12 @@ def getitem_with_default(
         return default
 
 
-class VariableNameChildren:
+class TypeSpecifierChildren:
     IDENT: list[VariableName]
+    type_specifier: list[TypeName]
 
 
-class VariableNameVisitor(
-    PTNodeVisitor,
-):
+class TypeSpecifierVisitor(PTNodeVisitor):
     def visit_IDENT(
         self,
         node: Terminal,
@@ -62,32 +62,22 @@ class VariableNameVisitor(
     ) -> VariableName:
         return _BaseVariableName.__new__(VariableName, node.value)
 
+    def visit_type_specifier(self, node: NonTerminal, _: object) -> TypeName:
+        parts = tuple(
+            s
+            for i, s in enumerate(self.__iter_terminal_nodes(node))
+            if s != "." or i == 0
+        )
 
-class TypeSpecifierChildren(VariableNameChildren):
-    name: list[list[VariableName]]
-    type_specifier: list[TypeName]
+        return _BaseTypeName.__new__(TypeName, parts)
 
-
-class TypeSpecifierVisitor(
-    VariableNameVisitor,
-):
-    def visit_name(
-        self,
-        _: object,
-        children: TypeSpecifierChildren,
-    ) -> list[VariableName]:
-        return children.IDENT
-
-    def visit_type_specifier(
-        self, node: NonTerminal, children: TypeSpecifierChildren
-    ) -> TypeName:
-        head, *_ = node
-        (name,) = children.name
-
-        if isinstance(head, Terminal):
-            return TypeName(head.value, *name)
-        else:
-            return TypeName(*name)
+    @classmethod
+    def __iter_terminal_nodes(cls, node: NonTerminal) -> Iterator[str]:
+        for child in node:
+            if isinstance(child, Terminal):
+                yield child.value
+            elif isinstance(child, NonTerminal):
+                yield from cls.__iter_terminal_nodes(child)
 
 
 class NumberChildren:
@@ -126,7 +116,7 @@ class NumberVisitor(
         elif isinstance(signed, float):
             return Real(signed)
         else:
-            raise TypeError(
+            raise NotImplementedError(
                 f"Unexpected number type, got {signed!r}: {type(signed)}"
             )
 
