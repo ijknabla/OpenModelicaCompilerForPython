@@ -3,8 +3,9 @@ from typing import Any
 import pytest
 from numpy import array
 
-from omc4py.classes import TypeName
-from omc4py.parser import parse_OMCValue
+from omc4py.classes import TypeName, VariableName
+from omc4py.parser import parse_components, parse_OMCValue
+from omc4py.parser.visitor import ComponentTuple
 
 
 @pytest.mark.parametrize(
@@ -38,3 +39,45 @@ def test_parse_primitives(literal: str, expected: Any) -> None:
 )
 def test_parse_arrays(literal: str, expected: Any) -> None:
     assert (parse_OMCValue(literal) == array(expected)).all()
+
+
+@pytest.mark.parametrize(
+    "literal, expected",
+    [
+        ("{}", []),
+        (
+            """\
+{
+    {
+        className,
+        name,
+        "comment",
+        "protected",
+        true, true, true, true,
+        "variability",
+        "innerOuter",
+        "inputOutput",
+        {:}
+    }
+}""",
+            [
+                ComponentTuple(
+                    className=TypeName("className"),
+                    name=VariableName("name"),
+                    comment="comment",
+                    protected="protected",
+                    isFinal=True,
+                    isFlow=True,
+                    isStream=True,
+                    isReplaceable=True,
+                    variability="variability",
+                    innerOuter="innerOuter",
+                    inputOutput="inputOutput",
+                    dimensions=(":",),
+                )
+            ],
+        ),
+    ],
+)
+def test_parse_omc_component_array(literal: str, expected: Any) -> None:
+    assert parse_components(literal) == expected
