@@ -261,6 +261,9 @@ class TypeName(_BaseTypeName):
         else:
             raise TypeError(f"Unexpected part, got {part}: {type(part)}")
 
+    def __repr__(self) -> str:
+        return f"{type(self).__name__}({str(self)!r})"
+
     def __truediv__(self: T_tn, other: TypeNameLike) -> T_tn:
         return type(self)(self, other)
 
