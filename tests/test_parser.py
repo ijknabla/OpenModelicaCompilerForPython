@@ -15,6 +15,7 @@ from omc4py.parser import parse_OMCValue
         ("-1", -1),
         ("true", True),
         ("false", False),
+        ('"text"', "text"),
         ("A.$a", TypeName("A.$a")),
     ],
 )
