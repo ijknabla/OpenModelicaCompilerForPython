@@ -116,7 +116,7 @@ class NumberVisitor(
         elif isinstance(signed, float):
             return Real(signed)
         else:
-            raise TypeError(
+            raise NotImplementedError(
                 f"Unexpected number type, got {signed!r}: {type(signed)}"
             )
 
