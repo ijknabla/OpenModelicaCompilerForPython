@@ -10,9 +10,16 @@ from omc4py.classes import TypeName, VariableName
 from omc4py.parser.visitor import (
     StringVisitor,
     TypeSpecifierVisitor,
-    flatten_list,
     getitem_with_default,
 )
+
+
+def flatten_list(lis: list):
+    for item in lis:
+        if isinstance(item, list):
+            yield from flatten_list(item)
+        else:
+            yield item
 
 
 class Alias(typing.NamedTuple):
