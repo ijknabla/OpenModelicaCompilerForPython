@@ -49,13 +49,12 @@ def getitem_with_default(
         return default
 
 
-class VariableNameChildren:
+class TypeSpecifierChildren:
     IDENT: list[VariableName]
+    type_specifier: list[TypeName]
 
 
-class VariableNameVisitor(
-    PTNodeVisitor,
-):
+class TypeSpecifierVisitor(PTNodeVisitor):
     def visit_IDENT(
         self,
         node: Terminal,
@@ -63,25 +62,7 @@ class VariableNameVisitor(
     ) -> VariableName:
         return _BaseVariableName.__new__(VariableName, node.value)
 
-
-class TypeSpecifierChildren(VariableNameChildren):
-    name: list[list[VariableName]]
-    type_specifier: list[TypeName]
-
-
-class TypeSpecifierVisitor(
-    VariableNameVisitor,
-):
-    def visit_name(
-        self,
-        _: object,
-        children: TypeSpecifierChildren,
-    ) -> list[VariableName]:
-        return children.IDENT
-
-    def visit_type_specifier(
-        self, node: NonTerminal, children: TypeSpecifierChildren
-    ) -> TypeName:
+    def visit_type_specifier(self, node: NonTerminal, _: object) -> TypeName:
         parts = tuple(
             s
             for i, s in enumerate(self.__iter_terminal_nodes(node))
