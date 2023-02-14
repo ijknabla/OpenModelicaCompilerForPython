@@ -2,6 +2,7 @@ from typing import Any
 
 import pytest
 
+from omc4py.classes import TypeName
 from omc4py.parser import parse_OMCValue
 
 
@@ -12,6 +13,7 @@ from omc4py.parser import parse_OMCValue
         ("-1.0", -1.0),
         ("+1", +1),
         ("-1", -1),
+        ("A.$a", TypeName("A.$a")),
     ],
 )
 def test_parse_primitives(literal: str, expected: Any) -> None:
