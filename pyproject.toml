@@ -55,6 +55,7 @@ exclude_lines = [
     "^\\s*class \\w+\\(Protocol",
     "^\\s*@overload$",
     "^\\s*if TYPE_CHECKING",
+    "^\\s*raise NotImplementedError",
 ]
 
 [tool.flake8]
