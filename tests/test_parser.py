@@ -20,6 +20,8 @@ from omc4py.parser import parse_OMCValue
         ("A.$a", TypeName("A.$a")),
         ("()", ()),
         ("(0, 1)", (0, 1)),
+        ("record A a = 0 end A;", {"a": 0}),
+        ("record A a = 0, b = 1 end A;", {"a": 0, "b": 1}),
     ],
 )
 def test_parse_primitives(literal: str, expected: Any) -> None:
