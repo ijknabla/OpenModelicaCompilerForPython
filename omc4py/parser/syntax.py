@@ -103,28 +103,17 @@ class OMCDialectSyntax(v3_4.Syntax):
         return (
             "{",
             (
-                cls.type_specifier,
-                ",",  # className
-                cls.IDENT,
-                ",",  # name
-                cls.STRING,
-                ",",  # comment
-                cls.STRING,
-                ",",  # protected
-                cls.boolean,
-                ",",  # isFinal
-                cls.boolean,
-                ",",  # isFlow
-                cls.boolean,
-                ",",  # isStream
-                cls.boolean,
-                ",",  # isReplaceable
-                cls.STRING,
-                ",",  # variability
-                cls.STRING,
-                ",",  # innerOuter
-                cls.STRING,
-                ",",  # inputOutput
+                *(cls.type_specifier, ","),  # className
+                *(cls.IDENT, ","),  # name
+                *(cls.STRING, ","),  # comment
+                *(cls.STRING, ","),  # protected
+                *(cls.boolean, ","),  # isFinal
+                *(cls.boolean, ","),  # isFlow
+                *(cls.boolean, ","),  # isStream
+                *(cls.boolean, ","),  # isReplaceable
+                *(cls.STRING, ","),  # variability
+                *(cls.STRING, ","),  # innerOuter
+                *(cls.STRING, ","),  # inputOutput
                 cls.omc_dimensions,  # dimensions
             ),
             "}",
