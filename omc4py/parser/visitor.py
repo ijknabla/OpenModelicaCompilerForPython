@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import operator
-from collections.abc import Sequence
+from collections.abc import Iterator, Sequence
 from typing import Any, NamedTuple, TypeVar, Union
 
 import numpy
@@ -17,6 +17,7 @@ from omc4py.classes import (
     String,
     TypeName,
     VariableName,
+    _BaseTypeName,
     _BaseVariableName,
 )
 
@@ -81,13 +82,21 @@ class TypeSpecifierVisitor(
     def visit_type_specifier(
         self, node: NonTerminal, children: TypeSpecifierChildren
     ) -> TypeName:
-        head, *_ = node
-        (name,) = children.name
+        parts = tuple(
+            s
+            for i, s in enumerate(self.__iter_terminal_nodes(node))
+            if s != "." or i == 0
+        )
 
-        if isinstance(head, Terminal):
-            return TypeName(head.value, *name)
-        else:
-            return TypeName(*name)
+        return _BaseTypeName.__new__(TypeName, parts)
+
+    @classmethod
+    def __iter_terminal_nodes(cls, node: NonTerminal) -> Iterator[str]:
+        for child in node:
+            if isinstance(child, Terminal):
+                yield child.value
+            elif isinstance(child, NonTerminal):
+                yield from cls.__iter_terminal_nodes(child)
 
 
 class NumberChildren:
