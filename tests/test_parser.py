@@ -13,6 +13,8 @@ from omc4py.parser import parse_OMCValue
         ("-1.0", -1.0),
         ("+1", +1),
         ("-1", -1),
+        ("true", True),
+        ("false", False),
         ("A.$a", TypeName("A.$a")),
     ],
 )
