@@ -4,7 +4,8 @@ import pytest
 from numpy import array
 
 from omc4py.classes import TypeName, VariableName
-from omc4py.parser import parse_components, parse_OMCValue
+from omc4py.parser import parse_components
+from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
 from omc4py.parser.visitor import ComponentTuple
 
 
@@ -23,6 +24,14 @@ from omc4py.parser.visitor import ComponentTuple
         ("(0, 1)", (0, 1)),
         ("record A a = 0 end A;", {"a": 0}),
         ("record A a = 0, b = 1 end A;", {"a": 0, "b": 1}),
+        (
+            """\
+record OpenModelica.Scripting.SourceInfo
+    filename = "filename"
+end OpenModelica.Scripting.SourceInfo;
+""",
+            {"fileName": "filename"},
+        ),
     ],
 )
 def test_parse_primitives(literal: str, expected: Any) -> None:
