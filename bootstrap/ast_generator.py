@@ -24,9 +24,10 @@ from ast import (
     expr,
     keyword,
 )
-from collections.abc import Iterable, Iterator
+from collections import defaultdict
+from collections.abc import Iterable, Iterator, Sequence
 from itertools import product
-from typing import NewType
+from typing import NewType, Optional
 
 from .util import countup
 
@@ -107,26 +108,6 @@ def iter_ndarray_class_defs(dims: Iterable[int]) -> Iterator[ClassDef]:
 
 
 def _ndarray_class_def(dim: Dimension) -> ClassDef:
-    item_type: expr
-    if dim == 1:
-        item_type = Name(id="DType", ctx=Load())
-    else:
-        item_type = Subscript(
-            value=Name(id=f"_NDArray__{dim-1}", ctx=Load()),
-            slice=Index(
-                value=Tuple(
-                    elts=[
-                        Name(id="DType", ctx=Load()),
-                        *(
-                            Name(id=f"Size{i}", ctx=Load())
-                            for i in countup(2, dim - 1)
-                        ),
-                    ],
-                    ctx=Load(),
-                )
-            ),
-            ctx=Load(),
-        )
     return ClassDef(
         name=f"_NDArray__{dim}",
         bases=[
@@ -148,7 +129,7 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
             ),
             Subscript(
                 value=Name(id="Sequence", ctx=Load()),
-                slice=Index(value=item_type),
+                slice=Index(value=_get_indexed_type(countup(2, dim - 1))),
                 ctx=Load(),
             ),
         ],
@@ -184,6 +165,27 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
                 simple=1,
             ),
             FunctionDef(
+                name="__eq__",
+                args=arguments(
+                    args=[
+                        arg(arg="self", annotation=None),
+                        arg(
+                            arg="other", annotation=Name(id="Any", ctx=Load())
+                        ),
+                    ],
+                    vararg=None,
+                    kwonlyargs=[],
+                    kw_defaults=[],
+                    kwarg=None,
+                    defaults=[],
+                    posonlyargs=[],
+                ),
+                body=[Expr(value=Ellipsis())],
+                decorator_list=[],
+                returns=Name(id="bool", ctx=Load()),
+                lineno=None,
+            ),
+            FunctionDef(
                 name="__len__",
                 args=arguments(
                     args=[arg(arg="self", annotation=None)],
@@ -199,115 +201,119 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
                 returns=Name(id="Size1", ctx=Load()),
                 lineno=None,
             ),
-            FunctionDef(
-                name="__getitem__",
-                args=arguments(
-                    args=[
-                        arg(arg="self", annotation=None),
-                        arg(
-                            arg="index",
-                            annotation=Subscript(
-                                value=Name(id="Union", ctx=Load()),
-                                slice=Index(
-                                    value=Tuple(
-                                        elts=[
-                                            Name(id="int", ctx=Load()),
-                                            Subscript(
-                                                value=Name(
-                                                    id="tuple", ctx=Load()
-                                                ),
-                                                slice=Index(
-                                                    value=Name(
-                                                        id="int", ctx=Load()
-                                                    )
-                                                ),
-                                                ctx=Load(),
-                                            ),
-                                        ],
-                                        ctx=Load(),
-                                    )
-                                ),
-                                ctx=Load(),
-                            ),
-                        ),
-                    ],
-                    vararg=None,
-                    kwonlyargs=[],
-                    kw_defaults=[],
-                    kwarg=None,
-                    defaults=[],
-                    posonlyargs=[],
-                ),
-                body=[Expr(value=Ellipsis())],
-                decorator_list=[Name(id="overload", ctx=Load())],
-                returns=item_type,
-                lineno=None,
-            ),
-            FunctionDef(
-                name="__getitem__",
-                args=arguments(
-                    args=[
-                        arg(arg="self", annotation=None),
-                        arg(
-                            arg="index",
-                            annotation=Subscript(
-                                value=Name(id="Union", ctx=Load()),
-                                slice=Index(
-                                    value=Tuple(
-                                        elts=[
-                                            Name(id="slice", ctx=Load()),
-                                            Subscript(
-                                                value=Name(
-                                                    id="tuple", ctx=Load()
-                                                ),
-                                                slice=Index(
-                                                    value=Name(
-                                                        id="slice", ctx=Load()
-                                                    )
-                                                ),
-                                                ctx=Load(),
-                                            ),
-                                        ],
-                                        ctx=Load(),
-                                    )
-                                ),
-                                ctx=Load(),
-                            ),
-                        ),
-                    ],
-                    vararg=None,
-                    kwonlyargs=[],
-                    kw_defaults=[],
-                    kwarg=None,
-                    defaults=[],
-                    posonlyargs=[],
-                ),
-                body=[Expr(value=Ellipsis())],
-                decorator_list=[Name(id="overload", ctx=Load())],
-                returns=Subscript(
-                    value=Name(id=f"_NDArray__{dim}", ctx=Load()),
-                    slice=Index(
-                        value=Tuple(
-                            elts=[
-                                Name(id="DType", ctx=Load()),
-                                *(
-                                    Name(
-                                        id="int" if i == 1 else f"Size{i}",
-                                        ctx=Load(),
-                                    )
-                                    for i in countup(1, dim)
-                                ),
-                            ],
-                            ctx=Load(),
-                        )
-                    ),
-                    ctx=Load(),
-                ),
-                lineno=None,
-            ),
+            *_iter_ndarray_getitem_overload_function_defs(dim=dim),
         ],
         decorator_list=[],
     )
+
+
+def _iter_ndarray_getitem_overload_function_defs(
+    dim: Dimension,
+) -> Iterator[FunctionDef]:
+    categories: defaultdict[
+        tuple[Optional[Dimension], ...], list[tuple[bool, ...]]
+    ]
+    categories = defaultdict(list)
+
+    for n_index in countup(1, dim):
+        for is_slice_seq in product(*([[False, True]] * n_index)):
+            indices = (
+                *([None] * sum(is_slice_seq)),
+                *map(Dimension, countup(1, dim)[len(is_slice_seq) :]),
+            )
+            categories[indices].append(is_slice_seq)
+
+    for indices, is_slice_seqseq in sorted(
+        categories.items(), key=lambda item: len(item[0])
+    ):
+        annotations: list[expr]
+        annotations = []
+        for is_slice_seq in sorted(is_slice_seqseq):
+            name, *names = list(map(_slice_or_int, is_slice_seq))
+            if not names:
+                annotations.extend(
+                    [
+                        name,
+                        Subscript(
+                            value=Name(id="tuple", ctx=Load()),
+                            slice=Index(value=name),
+                            ctx=Load(),
+                        ),
+                    ]
+                )
+            else:
+                annotations.append(
+                    Subscript(
+                        value=Name(id="tuple", ctx=Load()),
+                        slice=Index(
+                            value=Tuple(elts=[name, *names], ctx=Load())
+                        ),
+                        ctx=Load(),
+                    )
+                )
+
+        annotation, *annotations = annotations
+
+        if annotations:
+            annotation = Subscript(
+                value=Name(id="Union", ctx=Load()),
+                slice=Index(
+                    value=Tuple(elts=[annotation, *annotations], ctx=Load())
+                ),
+                ctx=Load(),
+            )
+
+        yield FunctionDef(
+            name="__getitem__",
+            args=arguments(
+                args=[
+                    arg(arg="self", annotation=None),
+                    arg(
+                        arg="index",
+                        annotation=annotation,
+                    ),
+                ],
+                vararg=None,
+                kwonlyargs=[],
+                kw_defaults=[],
+                kwarg=None,
+                defaults=[],
+                posonlyargs=[],
+            ),
+            body=[Expr(value=Ellipsis())],
+            decorator_list=[Name(id="overload", ctx=Load())],
+            returns=_get_indexed_type(indices),
+            lineno=None,
+        )
+
+
+def _get_indexed_type(indices: Sequence[Optional[Dimension]]):
+    if not indices:
+        return Name(id="DType", ctx=Load())
+    else:
+        return Subscript(
+            value=Name(id=f"_NDArray__{len(indices)}", ctx=Load()),
+            slice=Index(
+                value=Tuple(
+                    elts=[
+                        Name(id="DType", ctx=Load()),
+                        *(
+                            Name(
+                                id="int" if index is None else f"Size{index}",
+                                ctx=Load(),
+                            )
+                            for index in indices
+                        ),
+                    ],
+                    ctx=Load(),
+                )
+            ),
+            ctx=Load(),
+        )
+
+
+def _slice_or_int(is_slice: bool) -> Name:
+    return Name(id="slice" if is_slice else "int", ctx=Load())
 
 
 def iter_array_overload_function_defs(

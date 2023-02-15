@@ -30,6 +30,7 @@ def main(output: IO[str], max_dim: int, max_size: int) -> None:
                     (
                         "typing",
                         [
+                            "Any",
                             "Generic",
                             "Optional",
                             "TypeVar",
