@@ -5,6 +5,7 @@ from typing import IO
 import click
 
 from .ast_generator import (
+    iter_array_overload_function_defs,
     iter_import_froms,
     iter_ndarray_class_defs,
     iter_ndarray_type_vars,
@@ -41,6 +42,7 @@ def main(output: IO[str], max_dim: int, max_size: int) -> None:
             ),
             *iter_ndarray_type_vars(dims=dims, sizes=sizes),
             *iter_ndarray_class_defs(dims=dims),
+            *iter_array_overload_function_defs(dims=dims),
         ],
         type_ignores=[],
     )
