@@ -184,6 +184,27 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
                 simple=1,
             ),
             FunctionDef(
+                name="__eq__",
+                args=arguments(
+                    args=[
+                        arg(arg="self", annotation=None),
+                        arg(
+                            arg="other", annotation=Name(id="Any", ctx=Load())
+                        ),
+                    ],
+                    vararg=None,
+                    kwonlyargs=[],
+                    kw_defaults=[],
+                    kwarg=None,
+                    defaults=[],
+                    posonlyargs=[],
+                ),
+                body=[Expr(value=Ellipsis())],
+                decorator_list=[],
+                returns=Name(id="bool", ctx=Load()),
+                lineno=None,
+            ),
+            FunctionDef(
                 name="__len__",
                 args=arguments(
                     args=[arg(arg="self", annotation=None)],
