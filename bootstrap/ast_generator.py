@@ -401,8 +401,10 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
                 kw_defaults=[NameConstant(value=None), None],
                 kwarg=None,
                 defaults=[],
+                posonlyargs=[],
             ),
             body=[Expr(value=Ellipsis())],
             decorator_list=[Name(id="overload", ctx=Load())],
             returns=returns,
+            lineno=None,
         )
