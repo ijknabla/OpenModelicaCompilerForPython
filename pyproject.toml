@@ -30,7 +30,7 @@ inquirer = "^2.8.0"
 lxml = "^4.9.2"
 tqdm = "^4.62.3"
 isort = "^5.8"
-black = ">=20.8.b1"
+black = ">=23"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "^0.971"

@@ -19,7 +19,6 @@ from ..session import OMCSessionBootstrap
 def generate_omc_interface_xml(
     session: OMCSessionBootstrap,
 ) -> etree._ElementTree:
-
     root = generate_root_element(session)
 
     OpenModelica = TypeName("OpenModelica")
