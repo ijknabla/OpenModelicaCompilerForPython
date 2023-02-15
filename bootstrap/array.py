@@ -26,7 +26,16 @@ def main(output: IO[str], max_dim: int, max_size: int) -> None:
                 [
                     ("__future__", ["annotations"]),
                     ("collections.abc", ["Sequence"]),
-                    ("typing", ["Generic", "TypeVar", "Union", "overload"]),
+                    (
+                        "typing",
+                        [
+                            "Generic",
+                            "Optional",
+                            "TypeVar",
+                            "Union",
+                            "overload",
+                        ],
+                    ),
                     ("typing_extensions", ["Literal"]),
                 ]
             ),
