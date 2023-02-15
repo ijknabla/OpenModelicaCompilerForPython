@@ -56,13 +56,7 @@ def iter_ndarray_type_vars(
         targets=[Name(id="DType", ctx=Store())],
         value=Call(
             func=Name(id="TypeVar", ctx=Load()),
-            args=[
-                Str(s="DType"),
-                Name(id="float", ctx=Load()),
-                Name(id="int", ctx=Load()),
-                Name(id="bool", ctx=Load()),
-                Name(id="str", ctx=Load()),
-            ],
+            args=[Str(s="DType")],
             keywords=[],
         ),
         lineno=None,
