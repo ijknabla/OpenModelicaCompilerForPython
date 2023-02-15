@@ -4,7 +4,11 @@ from typing import IO
 
 import click
 
-from .ast_generator import iter_import_froms, iter_ndarray_type_vars
+from .ast_generator import (
+    iter_import_froms,
+    iter_ndarray_class_defs,
+    iter_ndarray_type_vars,
+)
 from .backport import unparse
 from .util import countup
 
@@ -27,6 +31,7 @@ def main(output: IO[str], max_dim: int, max_size: int) -> None:
                 ]
             ),
             *iter_ndarray_type_vars(dims=dims, sizes=sizes),
+            *iter_ndarray_class_defs(dims=dims),
         ],
         type_ignores=[],
     )
