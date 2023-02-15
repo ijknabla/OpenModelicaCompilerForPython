@@ -25,7 +25,7 @@ from ast import (
     keyword,
 )
 from collections import defaultdict
-from collections.abc import Iterable, Iterator, Sequence
+from collections.abc import Iterable, Iterator
 from itertools import product
 from typing import NewType, Optional
 
@@ -129,7 +129,11 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
             ),
             Subscript(
                 value=Name(id="Sequence", ctx=Load()),
-                slice=Index(value=_get_indexed_type(countup(2, dim - 1))),
+                slice=Index(
+                    value=_get_indexed_type(
+                        map(Dimension, countup(2, dim - 1))
+                    )
+                ),
                 ctx=Load(),
             ),
         ],
@@ -287,7 +291,8 @@ def _iter_ndarray_getitem_overload_function_defs(
         )
 
 
-def _get_indexed_type(indices: Sequence[Optional[Dimension]]):
+def _get_indexed_type(indices: Iterable[Optional[Dimension]]) -> expr:
+    indices = tuple(indices)
     if not indices:
         return Name(id="DType", ctx=Load())
     else:
