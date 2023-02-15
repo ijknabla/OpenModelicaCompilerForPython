@@ -109,7 +109,7 @@ def iter_ndarray_class_defs(dims: Iterable[int]) -> Iterator[ClassDef]:
 
 def _ndarray_class_def(dim: Dimension) -> ClassDef:
     return ClassDef(
-        name=f"_NDArray__{dim}",
+        name=_array_class_name(dim),
         bases=[
             Subscript(
                 value=Name(id="Generic", ctx=Load()),
@@ -297,7 +297,9 @@ def _get_indexed_type(indices: Iterable[Optional[Dimension]]) -> expr:
         return Name(id="DType", ctx=Load())
     else:
         return Subscript(
-            value=Name(id=f"_NDArray__{len(indices)}", ctx=Load()),
+            value=Name(
+                id=_array_class_name(Dimension(len(indices))), ctx=Load()
+            ),
             slice=Index(
                 value=Tuple(
                     elts=[
@@ -380,7 +382,7 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
             returns = Name(id="DType", ctx=Load())
         else:
             returns = Subscript(
-                value=Name(id=f"_NDArray__{dim}", ctx=Load()),
+                value=Name(id=_array_class_name(dim), ctx=Load()),
                 slice=Index(
                     value=Tuple(
                         elts=[
@@ -420,3 +422,7 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
             returns=returns,
             lineno=None,
         )
+
+
+def _array_class_name(dim: Dimension) -> str:
+    return f"Array{dim}D"
