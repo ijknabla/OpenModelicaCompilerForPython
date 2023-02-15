@@ -325,7 +325,7 @@ def iter_array_overload_function_defs(
 
 
 def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
-    annotation: expr = Name(id="DType", ctx=Load())
+    annotation: expr = Name(id="Any", ctx=Load())
     for _ in range(dim):
         annotation = Subscript(
             value=Name(id="Sequence", ctx=Load()),

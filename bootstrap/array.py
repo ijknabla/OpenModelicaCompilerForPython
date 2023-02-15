@@ -32,7 +32,6 @@ def main(output: IO[str], max_dim: int, max_size: int) -> None:
                         [
                             "Any",
                             "Generic",
-                            "Optional",
                             "TypeVar",
                             "Union",
                             "overload",
