@@ -343,14 +343,8 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
     dtype_kwonlyarg = arg(
         arg="dtype",
         annotation=Subscript(
-            value=Name(id="Optional", ctx=Load()),
-            slice=Index(
-                value=Subscript(
-                    value=Name(id="type", ctx=Load()),
-                    slice=Index(value=Name(id="DType", ctx=Load())),
-                    ctx=Load(),
-                )
-            ),
+            value=Name(id="type", ctx=Load()),
+            slice=Index(value=Name(id="DType", ctx=Load())),
             ctx=Load(),
         ),
     )
@@ -412,7 +406,7 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
                     dtype_kwonlyarg,
                     shape_kwonlyarg,
                 ],
-                kw_defaults=[NameConstant(value=None), None],
+                kw_defaults=[None, None],
                 kwarg=None,
                 defaults=[],
                 posonlyargs=[],
