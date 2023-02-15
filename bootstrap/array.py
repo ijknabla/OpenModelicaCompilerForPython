@@ -4,7 +4,7 @@ from typing import IO
 
 import click
 
-from .ast_generator import iter_import_froms
+from .ast_generator import iter_import_froms, iter_ndarray_type_vars
 from .backport import unparse
 from .util import countup
 
@@ -14,8 +14,8 @@ from .util import countup
 @click.option("--max-dim", type=int, required=True)
 @click.option("--max-size", type=int, required=True)
 def main(output: IO[str], max_dim: int, max_size: int) -> None:
-    countup(1, max_dim)
-    countup(1, max_size)
+    dims = countup(1, max_dim)
+    sizes = countup(1, max_size)
     module = Module(
         body=[
             *iter_import_froms(
@@ -26,6 +26,7 @@ def main(output: IO[str], max_dim: int, max_size: int) -> None:
                     ("typing_extensions", ["Literal"]),
                 ]
             ),
+            *iter_ndarray_type_vars(dims=dims, sizes=sizes),
         ],
         type_ignores=[],
     )
