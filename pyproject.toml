@@ -84,3 +84,9 @@ line_length = 79
 plugins = [
     "numpy.typing.mypy_plugin",
 ]
+
+[[tool.mypy.overrides]]
+module = [
+    "astunparse",
+]
+ignore_missing_imports = true
