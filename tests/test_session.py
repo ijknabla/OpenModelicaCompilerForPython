@@ -159,7 +159,6 @@ end Test_getComponents;
     )
 
     for component in session.getComponents("Test_getComponents"):
-
         assert component.className == TypeName("A")
 
         assert isinstance(component.name, VariableName)

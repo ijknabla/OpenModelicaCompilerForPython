@@ -70,4 +70,4 @@ jobs:
           sudo -u user python -m pytest --version
       - name: Test python sources
         run: |
-          sudo -u user python -m pytest -v tests/
+          sudo -u user python -m pytest -v

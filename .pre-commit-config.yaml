@@ -55,6 +55,7 @@ repos:
         -   python
         -   .pre-commit/poetry_export_requirements.py
         -   test
+        -   bootstrap
         -   --output=requirements.test.txt
         language: system
         files: ^(\.pre\-commit/poetry_export_requirements\.py|poetry\.lock)$
