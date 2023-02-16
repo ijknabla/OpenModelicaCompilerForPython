@@ -58,7 +58,7 @@ def array_stub_module(
                 ]
             ),
             *_iter_array_stub_type_vars(types=types, dims=dims, sizes=sizes),
-            *_iter_array_class_defs(dims=dims),
+            *_iter_nd_array_class_defs(dims=dims),
             *_iter_array_overload_function_defs(types=types, dims=dims),
         ],
         type_ignores=[],
@@ -137,12 +137,12 @@ def _iter_array_stub_type_vars(
         )
 
 
-def _iter_array_class_defs(dims: Collection[int]) -> Iterator[ClassDef]:
+def _iter_nd_array_class_defs(dims: Collection[int]) -> Iterator[ClassDef]:
     for dim in map(Dimension, dims):
-        yield _array_class_def(dim)
+        yield _nd_array_class_def(dim)
 
 
-def _array_class_def(dim: Dimension) -> ClassDef:
+def _nd_array_class_def(dim: Dimension) -> ClassDef:
     return ClassDef(
         name=_array_class_name(dim),
         bases=[
