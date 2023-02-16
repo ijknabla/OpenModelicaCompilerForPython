@@ -8,9 +8,9 @@ T = TypeVar("T")
 if TYPE_CHECKING:
     from collections.abc import Sequence
 else:
-    if sys.version_info >= (3, 9):
+    if sys.version_info >= (3, 9):  # pragma: no cover
         from collections.abc import Sequence
-    else:
+    else:  # pragma: no cover
         from collections.abc import Sequence as _Sequence
 
         class Sequence(_Sequence, Generic[T]):
