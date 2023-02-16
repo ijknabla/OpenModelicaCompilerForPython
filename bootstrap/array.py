@@ -16,11 +16,13 @@ from .util import countup
 
 @click.command
 @click.option("-o", "--output", type=click.File("w"), default=sys.stdout)
+@click.option("--max-type", type=int, required=True)
 @click.option("--max-dim", type=int, required=True)
 @click.option("--max-size", type=int, required=True)
-def main(output: IO[str], max_dim: int, max_size: int) -> None:
+def main(output: IO[str], max_dim: int, max_size: int, max_type: int) -> None:
     dims = countup(1, max_dim)
     sizes = countup(1, max_size)
+    countup(1, max_type)
     module = Module(
         body=[
             *iter_import_froms(
