@@ -179,37 +179,21 @@ def _array_meta_class_getitem_overload_function_defs(
     dtype_annotation: expr
     returns_dtype_annotation: expr
     if type == 1:
-        dtype_annotation = Subscript(
-            value=Name(id="Union", ctx=Load()),
-            slice=Tuple(
-                elts=[
-                    _dtype_type(),
-                    Subscript(
-                        value=Name(id="tuple", ctx=Load()),
-                        slice=Tuple(elts=[_dtype_type()], ctx=Load()),
-                        ctx=Load(),
-                    ),
-                ],
-                ctx=Load(),
-            ),
-            ctx=Load(),
+        dtype_annotation = _union_subscript(
+            _tuple([_dtype_type(), _tuple_subscript(_tuple([_dtype_type()]))])
         )
-        returns_dtype_annotation = Name(id=_dtype_name(), ctx=Load())
+        returns_dtype_annotation = _name(_dtype_name())
     else:
-        dtype_annotation = Subscript(
-            value=Name(id="tuple", ctx=Load()),
-            slice=Tuple(
-                elts=[_dtype_type(i) for i in countup(1, type)], ctx=Load()
-            ),
-            ctx=Load(),
+        dtype_annotation = _tuple_subscript(
+            _tuple(
+                [
+                    _type_subscript(_name(_dtype_name(i)))
+                    for i in countup(1, type)
+                ]
+            )
         )
-        returns_dtype_annotation = Subscript(
-            value=Name(id="Union", ctx=Load()),
-            slice=Tuple(
-                elts=[Name(id=_dtype_name(i)) for i in countup(1, type)],
-                ctx=Load(),
-            ),
-            ctx=Load(),
+        returns_dtype_annotation = _union_subscript(
+            _tuple([_name(_dtype_name(i)) for i in countup(1, type)])
         )
 
     for explicit_sequence in product(*([(True, False)] * dim)):
@@ -229,17 +213,13 @@ def _array_meta_class_getitem_overload_function_defs(
                     arg(arg="cls", annotation=None),
                     arg(
                         arg="index",
-                        annotation=_subscript(
-                            value=_name("tuple"),
-                            slice=_tuple(
-                                elts=[
+                        annotation=_tuple_subscript(
+                            _tuple(
+                                [
                                     dtype_annotation,
-                                    _subscript(
-                                        value=_name("tuple"),
-                                        slice=_tuple(elts=index_shape),
-                                    ),
-                                ],
-                            ),
+                                    _tuple_subscript(_tuple(elts=index_shape)),
+                                ]
+                            )
                         ),
                     ),
                 ],
@@ -252,14 +232,13 @@ def _array_meta_class_getitem_overload_function_defs(
             ),
             body=[Expr(value=Ellipsis())],
             decorator_list=[_name("overload")],
-            returns=_subscript(
-                value=_name("type"),
-                slice=_subscript(
+            returns=_type_subscript(
+                _subscript(
                     value=_name(_array_class_name(dim)),
                     slice=_tuple(
                         elts=[returns_dtype_annotation, *returns_shape]
                     ),
-                ),
+                )
             ),
             lineno=None,
         )
@@ -469,6 +448,18 @@ def _name(id: str) -> Name:
 
 def _subscript(value: expr, slice: expr) -> Subscript:
     return Subscript(value=value, slice=slice, ctx=Load())
+
+
+def _tuple_subscript(slice: expr) -> Subscript:
+    return _subscript(value=_name("tuple"), slice=slice)
+
+
+def _type_subscript(slice: expr) -> Subscript:
+    return _subscript(value=_name("type"), slice=slice)
+
+
+def _union_subscript(slice: expr) -> Subscript:
+    return _subscript(value=_name("Union"), slice=slice)
 
 
 def _tuple(elts: Iterable[expr]) -> Tuple:
