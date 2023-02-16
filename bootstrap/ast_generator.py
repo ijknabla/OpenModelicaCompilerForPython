@@ -478,8 +478,12 @@ def _dtype_type(type: Optional[int] = None) -> Subscript:
     )
 
 
-def _array_class_name(dim: Dimension) -> str:
-    return f"Array{dim}D"
+def _array_class_name(
+    dim: Optional[Dimension] = None, meta: bool = False
+) -> str:
+    dim_suffix = "" if dim is None else f"{dim}D"
+    meta_suffix = "" if not meta else "Meta"
+    return f"Array{dim_suffix}{meta_suffix}"
 
 
 def _indexed_array_class_name(indices: Iterable[Optional[Dimension]]) -> expr:
