@@ -1,15 +1,9 @@
 import sys
-from ast import Module
 from typing import IO
 
 import click
 
-from .ast_generator import (
-    iter_array_overload_function_defs,
-    iter_import_froms,
-    iter_ndarray_class_defs,
-    iter_ndarray_type_vars,
-)
+from .ast_generator import array_stub_module
 from .backport import unparse
 from .util import countup
 
@@ -24,33 +18,10 @@ MAX_SIZE = 8
 @click.option("--max-dim", type=int, default=MAX_DIM)
 @click.option("--max-size", type=int, default=MAX_SIZE)
 def main(output: IO[str], max_dim: int, max_size: int, max_type: int) -> None:
-    dims = countup(1, max_dim)
-    sizes = countup(1, max_size)
-    types = countup(1, max_type)
-    module = Module(
-        body=[
-            *iter_import_froms(
-                [
-                    ("__future__", ["annotations"]),
-                    ("collections.abc", ["Sequence"]),
-                    (
-                        "typing",
-                        [
-                            "Any",
-                            "Generic",
-                            "TypeVar",
-                            "Union",
-                            "overload",
-                        ],
-                    ),
-                    ("typing_extensions", ["Literal"]),
-                ]
-            ),
-            *iter_ndarray_type_vars(types=types, dims=dims, sizes=sizes),
-            *iter_ndarray_class_defs(dims=dims),
-            *iter_array_overload_function_defs(dims=dims),
-        ],
-        type_ignores=[],
+    module = array_stub_module(
+        types=countup(1, max_type),
+        dims=countup(1, max_dim),
+        sizes=countup(1, max_size),
     )
     output.write(unparse(module))
 

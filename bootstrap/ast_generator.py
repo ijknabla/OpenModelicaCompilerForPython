@@ -11,6 +11,7 @@ from ast import (
     ImportFrom,
     Index,
     Load,
+    Module,
     Name,
     NameConstant,
     Num,
@@ -34,7 +35,37 @@ from .util import countup
 Dimension = NewType("Dimension", int)
 
 
-def iter_import_froms(
+def array_stub_module(
+    types: Collection[int], dims: Collection[int], sizes: Collection[int]
+) -> Module:
+    return Module(
+        body=[
+            *_iter_import_froms(
+                [
+                    ("__future__", ["annotations"]),
+                    ("collections.abc", ["Sequence"]),
+                    (
+                        "typing",
+                        [
+                            "Any",
+                            "Generic",
+                            "TypeVar",
+                            "Union",
+                            "overload",
+                        ],
+                    ),
+                    ("typing_extensions", ["Literal"]),
+                ]
+            ),
+            *_iter_array_stub_type_vars(types=types, dims=dims, sizes=sizes),
+            *_iter_array_class_defs(dims=dims),
+            *_iter_array_overload_function_defs(dims=dims),
+        ],
+        type_ignores=[],
+    )
+
+
+def _iter_import_froms(
     module_and_names: Iterable[tuple[str, Iterable[str]]],
 ) -> Iterator[ImportFrom]:
     for module, names in module_and_names:
@@ -49,7 +80,7 @@ def _import_from(module: str, names: Iterable[str]) -> ImportFrom:
     )
 
 
-def iter_ndarray_type_vars(
+def _iter_array_stub_type_vars(
     types: Collection[int], dims: Collection[int], sizes: Collection[int]
 ) -> Iterator[Assign]:
     yield Assign(
@@ -106,12 +137,12 @@ def iter_ndarray_type_vars(
         )
 
 
-def iter_ndarray_class_defs(dims: Collection[int]) -> Iterator[ClassDef]:
+def _iter_array_class_defs(dims: Collection[int]) -> Iterator[ClassDef]:
     for dim in map(Dimension, dims):
-        yield _ndarray_class_def(dim)
+        yield _array_class_def(dim)
 
 
-def _ndarray_class_def(dim: Dimension) -> ClassDef:
+def _array_class_def(dim: Dimension) -> ClassDef:
     return ClassDef(
         name=_array_class_name(dim),
         bases=[
@@ -134,7 +165,7 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
             Subscript(
                 value=Name(id="Sequence", ctx=Load()),
                 slice=Index(
-                    value=_get_indexed_type(
+                    value=_indexed_array_class_name(
                         map(Dimension, countup(2, dim - 1))
                     )
                 ),
@@ -209,13 +240,13 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
                 returns=Name(id="Size1", ctx=Load()),
                 lineno=None,
             ),
-            *_iter_ndarray_getitem_overload_function_defs(dim=dim),
+            *_iter_array_getitem_overload_function_defs(dim=dim),
         ],
         decorator_list=[],
     )
 
 
-def _iter_ndarray_getitem_overload_function_defs(
+def _iter_array_getitem_overload_function_defs(
     dim: Dimension,
 ) -> Iterator[FunctionDef]:
     for index_annotation, returns_annotation in _iter_index_annotations(dim):
@@ -297,49 +328,23 @@ def _iter_index_annotations(dim: Dimension) -> Iterator[tuple[expr, expr]]:
                 ctx=Load(),
             )
 
-        yield annotation, _get_indexed_type(indices)
-
-
-def _get_indexed_type(indices: Iterable[Optional[Dimension]]) -> expr:
-    indices = tuple(indices)
-    if not indices:
-        return Name(id=_dtype_name(), ctx=Load())
-    else:
-        return Subscript(
-            value=Name(
-                id=_array_class_name(Dimension(len(indices))), ctx=Load()
-            ),
-            slice=Index(
-                value=Tuple(
-                    elts=[
-                        Name(id=_dtype_name(), ctx=Load()),
-                        *(
-                            Name(
-                                id="int" if index is None else f"Size{index}",
-                                ctx=Load(),
-                            )
-                            for index in indices
-                        ),
-                    ],
-                    ctx=Load(),
-                )
-            ),
-            ctx=Load(),
-        )
+        yield annotation, _indexed_array_class_name(indices)
 
 
 def _slice_or_int(is_slice: bool) -> Name:
     return Name(id="slice" if is_slice else "int", ctx=Load())
 
 
-def iter_array_overload_function_defs(
+def _iter_array_overload_function_defs(
     dims: Collection[int],
 ) -> Iterator[FunctionDef]:
     for dim in map(Dimension, [0, *dims]):
-        yield from array_overload_function_defs(dim)
+        yield from _iter_each_array_overload_function_defs(dim)
 
 
-def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
+def _iter_each_array_overload_function_defs(
+    dim: Dimension,
+) -> Iterator[FunctionDef]:
     annotation: expr = Name(id="Any", ctx=Load())
     for _ in range(dim):
         annotation = Subscript(
@@ -433,3 +438,31 @@ def _dtype_name(type: Optional[int] = None) -> str:
 
 def _array_class_name(dim: Dimension) -> str:
     return f"Array{dim}D"
+
+
+def _indexed_array_class_name(indices: Iterable[Optional[Dimension]]) -> expr:
+    indices = tuple(indices)
+    if not indices:
+        return Name(id=_dtype_name(), ctx=Load())
+    else:
+        return Subscript(
+            value=Name(
+                id=_array_class_name(Dimension(len(indices))), ctx=Load()
+            ),
+            slice=Index(
+                value=Tuple(
+                    elts=[
+                        Name(id=_dtype_name(), ctx=Load()),
+                        *(
+                            Name(
+                                id="int" if index is None else f"Size{index}",
+                                ctx=Load(),
+                            )
+                            for index in indices
+                        ),
+                    ],
+                    ctx=Load(),
+                )
+            ),
+            ctx=Load(),
+        )
