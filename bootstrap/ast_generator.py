@@ -25,7 +25,7 @@ from ast import (
     keyword,
 )
 from collections import defaultdict
-from collections.abc import Iterable, Iterator
+from collections.abc import Collection, Iterable, Iterator
 from itertools import product
 from typing import NewType, Optional
 
@@ -50,7 +50,7 @@ def _import_from(module: str, names: Iterable[str]) -> ImportFrom:
 
 
 def iter_ndarray_type_vars(
-    types: Iterable[int], dims: Iterable[int], sizes: Iterable[int]
+    types: Collection[int], dims: Collection[int], sizes: Collection[int]
 ) -> Iterator[Assign]:
     yield Assign(
         targets=[Name(id=_dtype_name(), ctx=Store())],
@@ -106,7 +106,7 @@ def iter_ndarray_type_vars(
         )
 
 
-def iter_ndarray_class_defs(dims: Iterable[int]) -> Iterator[ClassDef]:
+def iter_ndarray_class_defs(dims: Collection[int]) -> Iterator[ClassDef]:
     for dim in map(Dimension, dims):
         yield _ndarray_class_def(dim)
 
@@ -333,7 +333,7 @@ def _slice_or_int(is_slice: bool) -> Name:
 
 
 def iter_array_overload_function_defs(
-    dims: Iterable[int],
+    dims: Collection[int],
 ) -> Iterator[FunctionDef]:
     for dim in map(Dimension, [0, *dims]):
         yield from array_overload_function_defs(dim)
