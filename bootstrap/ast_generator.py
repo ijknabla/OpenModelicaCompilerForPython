@@ -218,6 +218,32 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
 def _iter_ndarray_getitem_overload_function_defs(
     dim: Dimension,
 ) -> Iterator[FunctionDef]:
+    for index_annotation, returns_annotation in _iter_index_annotations(dim):
+        yield FunctionDef(
+            name="__getitem__",
+            args=arguments(
+                args=[
+                    arg(arg="self", annotation=None),
+                    arg(
+                        arg="index",
+                        annotation=index_annotation,
+                    ),
+                ],
+                vararg=None,
+                kwonlyargs=[],
+                kw_defaults=[],
+                kwarg=None,
+                defaults=[],
+                posonlyargs=[],
+            ),
+            body=[Expr(value=Ellipsis())],
+            decorator_list=[Name(id="overload", ctx=Load())],
+            returns=returns_annotation,
+            lineno=None,
+        )
+
+
+def _iter_index_annotations(dim: Dimension) -> Iterator[tuple[expr, expr]]:
     categories: defaultdict[
         tuple[Optional[Dimension], ...], list[tuple[bool, ...]]
     ]
@@ -271,28 +297,7 @@ def _iter_ndarray_getitem_overload_function_defs(
                 ctx=Load(),
             )
 
-        yield FunctionDef(
-            name="__getitem__",
-            args=arguments(
-                args=[
-                    arg(arg="self", annotation=None),
-                    arg(
-                        arg="index",
-                        annotation=annotation,
-                    ),
-                ],
-                vararg=None,
-                kwonlyargs=[],
-                kw_defaults=[],
-                kwarg=None,
-                defaults=[],
-                posonlyargs=[],
-            ),
-            body=[Expr(value=Ellipsis())],
-            decorator_list=[Name(id="overload", ctx=Load())],
-            returns=_get_indexed_type(indices),
-            lineno=None,
-        )
+        yield annotation, _get_indexed_type(indices)
 
 
 def _get_indexed_type(indices: Iterable[Optional[Dimension]]) -> expr:
