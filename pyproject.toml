@@ -47,6 +47,7 @@ types-setuptools = "^65.7.0.3"
 pytest = "^6.2.5"
 pytest-dependency = "^0.5.1"
 pytest-cov = "^4.0.0"
+typing-extensions = ">=4.1.0"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
