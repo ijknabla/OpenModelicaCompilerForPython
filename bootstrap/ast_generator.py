@@ -436,6 +436,14 @@ def _dtype_name(type: Optional[int] = None) -> str:
     return "DType" + ("" if type is None else f"{type}")
 
 
+def _dtype_type(type: Optional[int] = None) -> Subscript:
+    return Subscript(
+        value=Name(id="type", ctx=Load()),
+        slice=Name(id=_dtype_name(type), ctx=Load()),
+        ctx=Load(),
+    )
+
+
 def _array_class_name(dim: Dimension) -> str:
     return f"Array{dim}D"
 
