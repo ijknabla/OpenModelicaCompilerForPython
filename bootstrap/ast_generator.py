@@ -59,7 +59,7 @@ def array_stub_module(
             ),
             *_iter_array_stub_type_vars(types=types, dims=dims, sizes=sizes),
             *_iter_array_class_defs(dims=dims),
-            *_iter_array_overload_function_defs(dims=dims),
+            *_iter_array_overload_function_defs(types=types, dims=dims),
         ],
         type_ignores=[],
     )
@@ -336,31 +336,65 @@ def _slice_or_int(is_slice: bool) -> Name:
 
 
 def _iter_array_overload_function_defs(
+    types: Collection[int],
     dims: Collection[int],
 ) -> Iterator[FunctionDef]:
-    for dim in map(Dimension, [0, *dims]):
-        yield from _iter_each_array_overload_function_defs(dim)
+    for dim, typ in product(map(Dimension, [0, *dims]), types):
+        yield from _iter_each_array_overload_function_defs(typ, dim)
 
 
 def _iter_each_array_overload_function_defs(
+    type: int,
     dim: Dimension,
 ) -> Iterator[FunctionDef]:
-    annotation: expr = Name(id="Any", ctx=Load())
-    for _ in range(dim):
-        annotation = Subscript(
-            value=Name(id="Sequence", ctx=Load()),
-            slice=Index(value=annotation),
+    dtype_annotation: expr
+    returns_dtype_annotation: expr
+    if type == 1:
+        dtype_annotation = Subscript(
+            value=Name(id="Union", ctx=Load()),
+            slice=Tuple(
+                elts=[
+                    _dtype_type(),
+                    Subscript(
+                        value=Name(id="tuple", ctx=Load()),
+                        slice=Tuple(elts=[_dtype_type()], ctx=Load()),
+                        ctx=Load(),
+                    ),
+                ],
+                ctx=Load(),
+            ),
+            ctx=Load(),
+        )
+        returns_dtype_annotation = Name(id=_dtype_name(), ctx=Load())
+    else:
+        dtype_annotation = Subscript(
+            value=Name(id="tuple", ctx=Load()),
+            slice=Tuple(
+                elts=[_dtype_type(i) for i in countup(1, type)], ctx=Load()
+            ),
+            ctx=Load(),
+        )
+        returns_dtype_annotation = Subscript(
+            value=Name(id="Union", ctx=Load()),
+            slice=Tuple(
+                elts=[Name(id=_dtype_name(i)) for i in countup(1, type)],
+                ctx=Load(),
+            ),
             ctx=Load(),
         )
 
-    object_arg = arg(arg="object", annotation=annotation)
+    object_annotation: expr = Name(id="Any", ctx=Load())
+    for _ in range(dim):
+        object_annotation = Subscript(
+            value=Name(id="Sequence", ctx=Load()),
+            slice=Index(value=object_annotation),
+            ctx=Load(),
+        )
+
+    object_arg = arg(arg="object", annotation=object_annotation)
     dtype_kwonlyarg = arg(
         arg="dtype",
-        annotation=Subscript(
-            value=Name(id="type", ctx=Load()),
-            slice=Index(value=Name(id=_dtype_name(), ctx=Load())),
-            ctx=Load(),
-        ),
+        annotation=dtype_annotation,
     )
 
     for explicit_sequence in product(*([(True, False)] * dim)):
@@ -387,14 +421,14 @@ def _iter_each_array_overload_function_defs(
 
         returns: expr
         if dim == 0:
-            returns = Name(id=_dtype_name(), ctx=Load())
+            returns = returns_dtype_annotation
         else:
             returns = Subscript(
                 value=Name(id=_array_class_name(dim), ctx=Load()),
                 slice=Index(
                     value=Tuple(
                         elts=[
-                            Name(id=_dtype_name(), ctx=Load()),
+                            returns_dtype_annotation,
                             *(
                                 Name(
                                     id=f"SizeArg{i}" if explicit else "int",
