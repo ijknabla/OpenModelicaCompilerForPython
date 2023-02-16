@@ -26,8 +26,6 @@ def test_array_stub() -> None:
             "-m",
             "bootstrap.array",
             f"--output={array_pyi}",
-            "--max-dim=2",
-            "--max-size=16",
         ]
         run(bootstrap_cmd, check=True)
 
