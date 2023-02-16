@@ -22,7 +22,7 @@ from .util import countup
 def main(output: IO[str], max_dim: int, max_size: int, max_type: int) -> None:
     dims = countup(1, max_dim)
     sizes = countup(1, max_size)
-    countup(1, max_type)
+    types = countup(1, max_type)
     module = Module(
         body=[
             *iter_import_froms(
@@ -42,7 +42,7 @@ def main(output: IO[str], max_dim: int, max_size: int, max_type: int) -> None:
                     ("typing_extensions", ["Literal"]),
                 ]
             ),
-            *iter_ndarray_type_vars(dims=dims, sizes=sizes),
+            *iter_ndarray_type_vars(types=types, dims=dims, sizes=sizes),
             *iter_ndarray_class_defs(dims=dims),
             *iter_array_overload_function_defs(dims=dims),
         ],

@@ -50,17 +50,27 @@ def _import_from(module: str, names: Iterable[str]) -> ImportFrom:
 
 
 def iter_ndarray_type_vars(
-    dims: Iterable[int], sizes: Iterable[int]
+    types: Iterable[int], dims: Iterable[int], sizes: Iterable[int]
 ) -> Iterator[Assign]:
     yield Assign(
-        targets=[Name(id="DType", ctx=Store())],
+        targets=[Name(id=_dtype_name(), ctx=Store())],
         value=Call(
             func=Name(id="TypeVar", ctx=Load()),
-            args=[Str(s="DType")],
+            args=[Str(s=_dtype_name())],
             keywords=[],
         ),
         lineno=None,
     )
+    for typ in types:
+        yield Assign(
+            targets=[Name(id=_dtype_name(typ), ctx=Store())],
+            value=Call(
+                func=Name(id="TypeVar", ctx=Load()),
+                args=[Str(s=_dtype_name(typ))],
+                keywords=[],
+            ),
+            lineno=None,
+        )
     for dim in dims:
         yield Assign(
             targets=[Name(id=f"Size{dim}", ctx=Store())],
@@ -110,7 +120,7 @@ def _ndarray_class_def(dim: Dimension) -> ClassDef:
                 slice=Index(
                     value=Tuple(
                         elts=[
-                            Name(id="DType", ctx=Load()),
+                            Name(id=_dtype_name(), ctx=Load()),
                             *(
                                 Name(id=f"Size{i}", ctx=Load())
                                 for i in range(1, dim + 1)
@@ -288,7 +298,7 @@ def _iter_ndarray_getitem_overload_function_defs(
 def _get_indexed_type(indices: Iterable[Optional[Dimension]]) -> expr:
     indices = tuple(indices)
     if not indices:
-        return Name(id="DType", ctx=Load())
+        return Name(id=_dtype_name(), ctx=Load())
     else:
         return Subscript(
             value=Name(
@@ -297,7 +307,7 @@ def _get_indexed_type(indices: Iterable[Optional[Dimension]]) -> expr:
             slice=Index(
                 value=Tuple(
                     elts=[
-                        Name(id="DType", ctx=Load()),
+                        Name(id=_dtype_name(), ctx=Load()),
                         *(
                             Name(
                                 id="int" if index is None else f"Size{index}",
@@ -338,7 +348,7 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
         arg="dtype",
         annotation=Subscript(
             value=Name(id="type", ctx=Load()),
-            slice=Index(value=Name(id="DType", ctx=Load())),
+            slice=Index(value=Name(id=_dtype_name(), ctx=Load())),
             ctx=Load(),
         ),
     )
@@ -367,14 +377,14 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
 
         returns: expr
         if dim == 0:
-            returns = Name(id="DType", ctx=Load())
+            returns = Name(id=_dtype_name(), ctx=Load())
         else:
             returns = Subscript(
                 value=Name(id=_array_class_name(dim), ctx=Load()),
                 slice=Index(
                     value=Tuple(
                         elts=[
-                            Name(id="DType", ctx=Load()),
+                            Name(id=_dtype_name(), ctx=Load()),
                             *(
                                 Name(
                                     id=f"SizeArg{i}" if explicit else "int",
@@ -410,6 +420,10 @@ def array_overload_function_defs(dim: Dimension) -> Iterator[FunctionDef]:
             returns=returns,
             lineno=None,
         )
+
+
+def _dtype_name(type: Optional[int] = None) -> str:
+    return "DType" + ("" if type is None else f"{type}")
 
 
 def _array_class_name(dim: Dimension) -> str:
