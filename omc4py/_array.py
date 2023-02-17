@@ -72,8 +72,8 @@ class Array:
             and all(isinstance(size, int) or size is None for size in shape)
         ):
             raise TypeError(
-                "shape (index[1]) must be tuple[int | None, ...] "
-                f"and length at least 1, got {shape}"
+                "shape (index[1]) must be tuple[int | None, ...], "
+                f"got {shape}"
             )
 
         if isinstance(dtype, type):

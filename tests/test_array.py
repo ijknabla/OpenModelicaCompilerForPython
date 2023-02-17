@@ -59,6 +59,9 @@ def test_array_repr() -> None:
     ixss = Array[int, (None, None)]([[0, 1], [2, 3], [4, 5]])
     assert eval(repr(ixss)) == ixss
 
+    ixss = Array[(int,), (None, None)]([[0, 1], [2, 3], [4, 5]])
+    assert eval(repr(ixss)) == ixss
+
 
 def test_array_shape_check() -> None:
     assert Array[int, (None, 2)](
@@ -101,10 +104,24 @@ def test_array_shape_check() -> None:
 
 def test_array_type_check() -> None:
     with pytest.raises(TypeError):
+        Array[[str, (2,)]]
+    with pytest.raises(TypeError):
+        Array[("str",), (2,)]
+    with pytest.raises(TypeError):
+        Array[(str,), 2]
+    with pytest.raises(TypeError):
+        Array[(str,), ("2",)]
+    with pytest.raises(TypeError):
+        Array[list, (2,)]
+    with pytest.raises(TypeError):
+        Array[(list,), (2,)]
+    with pytest.raises(TypeError):
         Array[str, (2,)]("01")
     with pytest.raises(TypeError):
         Array[int, (2,)]([0, "1"])
     with pytest.raises(TypeError):
         Array[str, (2,)]([0, "1"])
+    with pytest.raises(TypeError):
+        Array[str, (2,)](["0", "1"])[...]
 
     reveal_type(Array[(int, str), (2,)]([0, "0"]))
