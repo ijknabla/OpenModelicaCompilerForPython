@@ -1,13 +1,10 @@
 import pytest
 from typing_extensions import reveal_type
 
-from omc4py._array import Array, array
+from omc4py._array import Array
 
 
 def test_array_element() -> None:
-    scalar = 0
-    assert array(scalar, dtype=int, shape=()) is scalar
-
     data1d = range(4, 8)
     array1d = Array[int, (4,)](data1d)
 
