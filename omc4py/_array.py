@@ -276,7 +276,9 @@ class Array:
                     object[i], *sizes, indices=(*indices, i)
                 )
 
-    def __setattr(self, name: Literal["__data__", "shape"], value: Any):
+    def __setattr(
+        self, name: Literal["__data__", "shape"], value: Any
+    ) -> None:
         object.__setattr__(self, name, value)
 
     @classmethod
