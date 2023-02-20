@@ -56,7 +56,7 @@ class Array:
         if not isinstance(index, tuple) and len(index) == 2:
             raise TypeError(f"index must be a tuple of length 2, got {index}")
 
-        dtype, shape = index
+        dtype, __shape__ = index
 
         if not (
             isinstance(dtype, type)
@@ -69,13 +69,15 @@ class Array:
             )
 
         if not (
-            isinstance(shape, tuple)
-            and shape
-            and all(isinstance(size, int) or size is None for size in shape)
+            isinstance(__shape__, tuple)
+            and __shape__
+            and all(
+                isinstance(size, int) or size is None for size in __shape__
+            )
         ):
             raise TypeError(
                 "shape (index[1]) must be tuple[int | None, ...], "
-                f"got {shape}"
+                f"got {__shape__}"
             )
 
         if isinstance(dtype, type):
@@ -92,7 +94,17 @@ class Array:
                         f"must not be sequence-like type, got {t}"
                     )
 
-        return type(cls.__name__, (Array,), dict(dtype=dtype, __shape__=shape))
+        return cls.__get_array_type(dtype=dtype, __shape__=__shape__)
+
+    @classmethod
+    def __get_array_type(
+        cls,
+        dtype: Union[type, tuple[type, ...]],
+        __shape__: tuple[Optional[int], ...],
+    ) -> type[Array]:
+        return type(
+            cls.__name__, (Array,), dict(dtype=dtype, __shape__=__shape__)
+        )
 
     def __post_init__(self, object: Any) -> None:
         shape = self.__assume_shape(object)
@@ -180,7 +192,9 @@ class Array:
                 self.__data__, cast(Sequence[int], indices)
             )
 
-        result = type(self).__new__(type(self)[self.dtype, shape])
+        array_type = self.__get_array_type(self.dtype, __shape__=shape)
+
+        result = array_type.__new__(array_type)
         result.__setattr("shape", shape)
 
         __data__: Any
