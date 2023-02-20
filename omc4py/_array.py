@@ -161,15 +161,12 @@ class Array:
             if size == 0 and isinstance(index, int):
                 raise IndexError(f"{type(self).__name__} index out of range")
 
-        bounded_indices = (
-            *(
-                (i if isinstance(i, int) else range(s)[i])
-                for s, i in zip(self.shape, indices)
-            ),
-            *map(range, self.shape[len(indices) :]),
-        )
+        def bounded_indices() -> Iterator[Union[int, range]]:
+            for s, i in zip(self.shape, indices):
+                yield ((i if isinstance(i, int) else range(s)[i]))
+            yield from map(range, self.shape[len(indices) :])
 
-        return self.__get_by_bounded_indices(bounded_indices)
+        return self.__get_by_bounded_indices(tuple(bounded_indices()))
 
     def __get_by_bounded_indices(
         self, indices: Sequence[Union[int, range]]
