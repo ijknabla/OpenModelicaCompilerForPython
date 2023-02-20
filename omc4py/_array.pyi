@@ -33,7 +33,102 @@ SizeArg2 = TypeVar(
     Literal[8],
 )
 
-class Array1D(Generic[(DType, Size1)], Sequence[DType]):
+class ArrayMeta(type):
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (Union[(type[DType], tuple[(type[DType],)])], tuple[(SizeArg1,)])
+        ],
+    ) -> type[_1DArray[(DType, SizeArg1)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (Union[(type[DType], tuple[(type[DType],)])], tuple[(None,)])
+        ],
+    ) -> type[_1DArray[(DType, int)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (tuple[(type[DType1], type[DType2])], tuple[(SizeArg1,)])
+        ],
+    ) -> type[_1DArray[(Union[(DType1, DType2)], SizeArg1)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[(tuple[(type[DType1], type[DType2])], tuple[(None,)])],
+    ) -> type[_1DArray[(Union[(DType1, DType2)], int)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (
+                Union[(type[DType], tuple[(type[DType],)])],
+                tuple[(SizeArg1, SizeArg2)],
+            )
+        ],
+    ) -> type[_2DArray[(DType, SizeArg1, SizeArg2)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (
+                Union[(type[DType], tuple[(type[DType],)])],
+                tuple[(SizeArg1, None)],
+            )
+        ],
+    ) -> type[_2DArray[(DType, SizeArg1, int)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (
+                Union[(type[DType], tuple[(type[DType],)])],
+                tuple[(None, SizeArg2)],
+            )
+        ],
+    ) -> type[_2DArray[(DType, int, SizeArg2)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (Union[(type[DType], tuple[(type[DType],)])], tuple[(None, None)])
+        ],
+    ) -> type[_2DArray[(DType, int, int)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (tuple[(type[DType1], type[DType2])], tuple[(SizeArg1, SizeArg2)])
+        ],
+    ) -> type[_2DArray[(Union[(DType1, DType2)], SizeArg1, SizeArg2)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (tuple[(type[DType1], type[DType2])], tuple[(SizeArg1, None)])
+        ],
+    ) -> type[_2DArray[(Union[(DType1, DType2)], SizeArg1, int)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (tuple[(type[DType1], type[DType2])], tuple[(None, SizeArg2)])
+        ],
+    ) -> type[_2DArray[(Union[(DType1, DType2)], int, SizeArg2)]]: ...
+    @overload
+    def __getitem__(
+        cls,
+        index: tuple[
+            (tuple[(type[DType1], type[DType2])], tuple[(None, None)])
+        ],
+    ) -> type[_2DArray[(Union[(DType1, DType2)], int, int)]]: ...
+
+class Array(metaclass=ArrayMeta): ...
+
+class _1DArray(Generic[(DType, Size1)], Sequence[DType]):
     ndim: Literal[1]
     shape: tuple[(Size1,)]
 
@@ -44,10 +139,10 @@ class Array1D(Generic[(DType, Size1)], Sequence[DType]):
     @overload
     def __getitem__(
         self, index: Union[(slice, tuple[slice])]
-    ) -> Array1D[(DType, int)]: ...
+    ) -> _1DArray[(DType, int)]: ...
 
-class Array2D(
-    Generic[(DType, Size1, Size2)], Sequence[Array1D[(DType, Size2)]]
+class _2DArray(
+    Generic[(DType, Size1, Size2)], Sequence[_1DArray[(DType, Size2)]]
 ):
     ndim: Literal[2]
     shape: tuple[(Size1, Size2)]
@@ -59,115 +154,16 @@ class Array2D(
     @overload
     def __getitem__(
         self, index: Union[(int, tuple[int])]
-    ) -> Array1D[(DType, Size2)]: ...
+    ) -> _1DArray[(DType, Size2)]: ...
     @overload
     def __getitem__(
         self, index: Union[(tuple[(int, slice)], tuple[(slice, int)])]
-    ) -> Array1D[(DType, int)]: ...
+    ) -> _1DArray[(DType, int)]: ...
     @overload
     def __getitem__(
         self, index: Union[(slice, tuple[slice])]
-    ) -> Array2D[(DType, int, Size2)]: ...
+    ) -> _2DArray[(DType, int, Size2)]: ...
     @overload
     def __getitem__(
         self, index: tuple[(slice, slice)]
-    ) -> Array2D[(DType, int, int)]: ...
-
-@overload
-def array(
-    object: Any,
-    *,
-    dtype: Union[(type[DType], tuple[(type[DType],)])],
-    shape: tuple[()],
-) -> DType: ...
-@overload
-def array(
-    object: Any,
-    *,
-    dtype: tuple[(type[DType1], type[DType2])],
-    shape: tuple[()],
-) -> Union[(DType1, DType2)]: ...
-@overload
-def array(
-    object: Sequence[Any],
-    *,
-    dtype: Union[(type[DType], tuple[(type[DType],)])],
-    shape: tuple[(SizeArg1,)],
-) -> Array1D[(DType, SizeArg1)]: ...
-@overload
-def array(
-    object: Sequence[Any],
-    *,
-    dtype: Union[(type[DType], tuple[(type[DType],)])],
-    shape: tuple[(None,)],
-) -> Array1D[(DType, int)]: ...
-@overload
-def array(
-    object: Sequence[Any],
-    *,
-    dtype: tuple[(type[DType1], type[DType2])],
-    shape: tuple[(SizeArg1,)],
-) -> Array1D[(Union[(DType1, DType2)], SizeArg1)]: ...
-@overload
-def array(
-    object: Sequence[Any],
-    *,
-    dtype: tuple[(type[DType1], type[DType2])],
-    shape: tuple[(None,)],
-) -> Array1D[(Union[(DType1, DType2)], int)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: Union[(type[DType], tuple[(type[DType],)])],
-    shape: tuple[(SizeArg1, SizeArg2)],
-) -> Array2D[(DType, SizeArg1, SizeArg2)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: Union[(type[DType], tuple[(type[DType],)])],
-    shape: tuple[(SizeArg1, None)],
-) -> Array2D[(DType, SizeArg1, int)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: Union[(type[DType], tuple[(type[DType],)])],
-    shape: tuple[(None, SizeArg2)],
-) -> Array2D[(DType, int, SizeArg2)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: Union[(type[DType], tuple[(type[DType],)])],
-    shape: tuple[(None, None)],
-) -> Array2D[(DType, int, int)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: tuple[(type[DType1], type[DType2])],
-    shape: tuple[(SizeArg1, SizeArg2)],
-) -> Array2D[(Union[(DType1, DType2)], SizeArg1, SizeArg2)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: tuple[(type[DType1], type[DType2])],
-    shape: tuple[(SizeArg1, None)],
-) -> Array2D[(Union[(DType1, DType2)], SizeArg1, int)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: tuple[(type[DType1], type[DType2])],
-    shape: tuple[(None, SizeArg2)],
-) -> Array2D[(Union[(DType1, DType2)], int, SizeArg2)]: ...
-@overload
-def array(
-    object: Sequence[Sequence[Any]],
-    *,
-    dtype: tuple[(type[DType1], type[DType2])],
-    shape: tuple[(None, None)],
-) -> Array2D[(Union[(DType1, DType2)], int, int)]: ...
+    ) -> _2DArray[(DType, int, int)]: ...

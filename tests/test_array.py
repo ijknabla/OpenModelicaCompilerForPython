@@ -1,15 +1,12 @@
 import pytest
 from typing_extensions import reveal_type
 
-from omc4py._array import array
+from omc4py._array import Array
 
 
 def test_array_element() -> None:
-    scalar = 0
-    assert array(scalar, dtype=int, shape=()) is scalar
-
     data1d = range(4, 8)
-    array1d = array(data1d, dtype=int, shape=(4,))
+    array1d = Array[int, (4,)](data1d)
 
     assert array1d.ndim == 1
     assert array1d.shape == (4,)
@@ -23,7 +20,7 @@ def test_array_element() -> None:
         assert array1d[i] == data
 
     data2d = [[0, 1], [2, 3], [4, 5]]
-    array2d = array(data2d, dtype=int, shape=(3, 2))
+    array2d = Array[int, (3, 2)](data2d)
     assert array2d.ndim == 2
     assert array2d.shape == (3, 2)
     assert len(array2d) == array2d.shape[0]
@@ -59,68 +56,89 @@ def test_array_element() -> None:
 
 
 def test_array_repr() -> None:
-    from omc4py._array import ArrayND
+    ixss = Array[int, (None, None)]([[0, 1], [2, 3], [4, 5]])
+    assert eval(repr(ixss)) == ixss
 
-    assert isinstance(ArrayND, type)
-    ixss = array([[0, 1], [2, 3], [4, 5]], dtype=int, shape=(None, None))
+    ixss = Array[(int,), (None, None)]([[0, 1], [2, 3], [4, 5]])
     assert eval(repr(ixss)) == ixss
 
 
 def test_array_shape_check() -> None:
-    assert array(
+    assert Array[int, (None, 2)](
         [
             [1, 1],
             [2, 2],
-        ],
-        dtype=int,
-        shape=(None, 2),
+        ]
     ).shape == (2, 2)
 
-    assert array(
+    assert Array[int, (2, None)](
         [
             [1, 1],
             [2, 2],
-        ],
-        dtype=int,
-        shape=(2, None),
+        ]
     ).shape == (2, 2)
 
-    assert array(
+    assert Array[int, (None, None)](
         [
             [1, 1],
             [2, 2],
-        ],
-        dtype=int,
-        shape=(None, None),
+        ]
     ).shape == (2, 2)
 
     with pytest.raises(ValueError):
-        array(
+        Array[int, (1, 2)](
             [
                 [1, 1],
                 [2, 2],
             ],
-            dtype=int,
-            shape=(1, 2),
         )
 
     with pytest.raises(ValueError):
-        array(
+        Array[int, (2, None)](
             [
                 [1],
                 [2, 2],
-            ],
-            dtype=int,
-            shape=(2, None),
+            ]
         )
+
+
+def test_index_check() -> None:
+    ixss = Array[int, (2, 2)](
+        [
+            [1, 1],
+            [2, 2],
+        ]
+    )
+    with pytest.raises(IndexError):
+        ixss[0, 0, 0]
+
+    assert ixss[0:][0] == ixss[0]
+    assert ixss[1:][0] == ixss[1]
+    assert ixss[2:].shape == (0, 2)
+    with pytest.raises(IndexError):
+        ixss[2:][0]
 
 
 def test_array_type_check() -> None:
     with pytest.raises(TypeError):
-        array("01", dtype=str, shape=(2,))
+        Array[[str, (2,)]]
     with pytest.raises(TypeError):
-        array([0, "1"], dtype=int, shape=(2,))
+        Array[("str",), (2,)]
     with pytest.raises(TypeError):
-        array([0, "1"], dtype=str, shape=(2,))
+        Array[(str,), 2]
+    with pytest.raises(TypeError):
+        Array[(str,), ("2",)]
+    with pytest.raises(TypeError):
+        Array[list, (2,)]
+    with pytest.raises(TypeError):
+        Array[(list,), (2,)]
+    with pytest.raises(TypeError):
+        Array[str, (2,)]("01")
+    with pytest.raises(TypeError):
+        Array[int, (2,)]([0, "1"])
+    with pytest.raises(TypeError):
+        Array[str, (2,)]([0, "1"])
+    with pytest.raises(TypeError):
+        Array[str, (2,)](["0", "1"])[...]
 
-    reveal_type(array([0, "0"], dtype=(int, str), shape=(2,)))
+    reveal_type(Array[(int, str), (2,)]([0, "0"]))
