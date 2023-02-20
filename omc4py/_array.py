@@ -151,7 +151,7 @@ class Array:
             )
 
         if not (len(indices) <= self.ndim):
-            raise ValueError(
+            raise IndexError(
                 f"index length exceed ndim={self.ndim}, got {len(indices)}"
             )
 

@@ -102,6 +102,23 @@ def test_array_shape_check() -> None:
         )
 
 
+def test_index_check() -> None:
+    ixss = Array[int, (2, 2)](
+        [
+            [1, 1],
+            [2, 2],
+        ]
+    )
+    with pytest.raises(IndexError):
+        ixss[0, 0, 0]
+
+    assert ixss[0:][0] == ixss[0]
+    assert ixss[1:][0] == ixss[1]
+    assert ixss[2:].shape == (0, 2)
+    with pytest.raises(IndexError):
+        ixss[2:][0]
+
+
 def test_array_type_check() -> None:
     with pytest.raises(TypeError):
         Array[[str, (2,)]]
