@@ -7,22 +7,26 @@ from itertools import product
 from operator import getitem
 from typing import Any, ClassVar, Optional, Union, cast
 
-from typing_extensions import Literal
+from typing_extensions import Literal, TypeAlias
 
 from .meta import SupportsArrayIndexing
+
+DType: TypeAlias = Union[type, "tuple[type, ...]"]
+Size = Optional[int]
+Shape: TypeAlias = "tuple[Size, ...]"
 
 
 @dataclass(frozen=True)
 class Array:
-    dtype: ClassVar[Union[type, tuple[type, ...]]]
-    __shape__: ClassVar[tuple[Optional[int], ...]]
+    dtype: ClassVar[DType]
+    __shape__: ClassVar[Shape]
     object: InitVar[Any]
     shape: tuple[int, ...] = field(init=False)
     __data__: list[Any] = field(init=False)
 
     def __class_getitem__(
         cls,
-        index: tuple[Union[type, tuple[type, ...]], tuple[Optional[int], ...]],
+        index: tuple[DType, Shape],
     ) -> type[Array]:
         if not isinstance(index, tuple) and len(index) == 2:
             raise TypeError(f"index must be a tuple of length 2, got {index}")
