@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import ByteString, Iterator, Mapping
+from collections.abc import ByteString, Iterable, Iterator, Mapping, Sequence
 from dataclasses import InitVar, dataclass, field
 from functools import reduce
 from itertools import product
@@ -8,8 +8,6 @@ from operator import getitem
 from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar, Union, cast
 
 from typing_extensions import Literal, Protocol, runtime_checkable
-
-from .backport import Iterable, Sequence
 
 DType = TypeVar("DType")
 T_co = TypeVar("T_co", covariant=True)
@@ -189,7 +187,7 @@ class Array:
 
         if not shape:
             return self.__get_by_indices(
-                self.__data__, cast(Sequence[int], indices)
+                self.__data__, cast("Sequence[int]", indices)
             )
 
         array_type = self.__get_array_type(self.dtype, __shape__=shape)
