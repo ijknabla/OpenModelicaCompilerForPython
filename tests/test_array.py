@@ -56,11 +56,15 @@ def test_array_element() -> None:
 
 
 def test_array_repr() -> None:
+    import omc4py._array
+
+    local_scope = {"omc4py": omc4py}
+
     ixss = Array[int, (None, None)]([[0, 1], [2, 3], [4, 5]])
-    assert eval(repr(ixss)) == ixss
+    assert eval(repr(ixss), globals(), local_scope) == ixss
 
     ixss = Array[(int,), (None, None)]([[0, 1], [2, 3], [4, 5]])
-    assert eval(repr(ixss)) == ixss
+    assert eval(repr(ixss), globals(), local_scope) == ixss
 
 
 def test_array_shape_check() -> None:
