@@ -62,30 +62,12 @@ class _ArrayMeta(type):
 
 
 @dataclass(frozen=True)
-class Array:
+class Array(metaclass=_ArrayMeta):
     dtype: ClassVar[DType]
     __shape__: ClassVar[Shape]
     object: InitVar[Any]
     shape: tuple[int, ...] = field(init=False)
     __data__: list[Any] = field(init=False)
-
-    def __class_getitem__(
-        cls,
-        index: tuple[DType, Shape],
-    ) -> type[Array]:
-        dtype, __shape__ = _sanitize_array_type_index(index)
-
-        return cls.__get_array_type(dtype=dtype, __shape__=__shape__)
-
-    @classmethod
-    def __get_array_type(
-        cls,
-        dtype: Union[type, tuple[type, ...]],
-        __shape__: tuple[Optional[int], ...],
-    ) -> type[Array]:
-        return type(
-            cls.__name__, (Array,), dict(dtype=dtype, __shape__=__shape__)
-        )
 
     def __post_init__(self, object: Any) -> None:
         shape = self.__assume_shape(object)
@@ -173,10 +155,10 @@ class Array:
                 self.__data__, cast("Sequence[int]", indices)
             )
 
-        array_type = self.__get_array_type(self.dtype, __shape__=shape)
-
-        result = array_type.__new__(array_type)
-        result.__setattr("shape", shape)
+        array_type: type[Array]
+        array_type = Array[self.dtype, shape]
+        array = array_type.__new__(array_type)
+        array.__setattr("shape", shape)
 
         __data__: Any
         if any(size == 0 for size in shape):
@@ -196,9 +178,9 @@ class Array:
                     value=self.__get_by_indices(self.__data__, src),
                 )
 
-        result.__setattr("__data__", __data__)
+        array.__setattr("__data__", __data__)
 
-        return result
+        return array
 
     def __assume_shape(self, object: Any) -> tuple[int, ...]:
         result: list[int]
