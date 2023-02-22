@@ -38,6 +38,8 @@ Dimension = NewType("Dimension", int)
 def array_stub_module(
     types: Collection[int], dims: Collection[int], sizes: Collection[int]
 ) -> Module:
+    dims_ = list(map(Dimension, dims))
+
     return Module(
         body=[
             *_iter_import_froms(
@@ -57,9 +59,9 @@ def array_stub_module(
                     ("typing_extensions", ["Literal"]),
                 ]
             ),
-            *_iter_array_stub_type_vars(types=types, dims=dims, sizes=sizes),
-            *_iter_array_class_defs(types=types, dims=dims),
-            *_iter_nd_array_class_defs(dims=dims),
+            *_iter_array_stub_type_vars(types=types, dims=dims_, sizes=sizes),
+            *_iter_array_class_defs(types=types, dims=dims_),
+            *_iter_nd_array_class_defs(dims=dims_),
         ],
         type_ignores=[],
     )
@@ -81,7 +83,7 @@ def _import_from(module: str, names: Iterable[str]) -> ImportFrom:
 
 
 def _iter_array_stub_type_vars(
-    types: Collection[int], dims: Collection[int], sizes: Collection[int]
+    types: Collection[int], dims: Collection[Dimension], sizes: Collection[int]
 ) -> Iterator[Assign]:
     yield Assign(
         targets=[Name(id=_dtype_name(), ctx=Store())],
@@ -244,7 +246,9 @@ def _array_meta_class_getitem_overload_function_defs(
         )
 
 
-def _iter_nd_array_class_defs(dims: Collection[int]) -> Iterator[ClassDef]:
+def _iter_nd_array_class_defs(
+    dims: Collection[Dimension],
+) -> Iterator[ClassDef]:
     for dim in map(Dimension, dims):
         yield _nd_array_class_def(dim)
 
