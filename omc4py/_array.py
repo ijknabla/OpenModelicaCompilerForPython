@@ -340,8 +340,4 @@ def _format_dtype(dtype: DType) -> str:
         ("" if _is_builtin(t) else f"{t.__module__}.") + t.__name__
         for t in _iter_dtype(dtype)
     ]
-
-    if not names:
-        return name
-    else:
-        return "(" + ", ".join([name, *names]) + ")"
+    return ("({})" if names else "{}").format(", ".join([name, *names]))
