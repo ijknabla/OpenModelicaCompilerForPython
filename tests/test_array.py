@@ -4,6 +4,14 @@ from typing_extensions import reveal_type
 from omc4py._array import Array
 
 
+def test_array_type() -> None:
+    IntArray = Array[int, (None,)]  # type: ignore
+    assert repr(Array) == "<class 'omc4py._array.Array'>"
+    assert repr(IntArray) == "omc4py._array.Array[int, (None,)]"
+    with pytest.raises(TypeError):
+        IntArray[int, (None,)]  # type: ignore
+
+
 def test_array_element() -> None:
     data1d = range(4, 8)
     array1d = Array[int, (4,)](data1d)
@@ -56,11 +64,15 @@ def test_array_element() -> None:
 
 
 def test_array_repr() -> None:
+    import omc4py._array
+
+    local_scope = {"omc4py": omc4py}
+
     ixss = Array[int, (None, None)]([[0, 1], [2, 3], [4, 5]])
-    assert eval(repr(ixss)) == ixss
+    assert eval(repr(ixss), globals(), local_scope) == ixss
 
     ixss = Array[(int,), (None, None)]([[0, 1], [2, 3], [4, 5]])
-    assert eval(repr(ixss)) == ixss
+    assert eval(repr(ixss), globals(), local_scope) == ixss
 
 
 def test_array_shape_check() -> None:
