@@ -6,7 +6,7 @@ from dataclasses import InitVar, dataclass, field
 from functools import reduce
 from itertools import product
 from operator import getitem
-from typing import Any, ClassVar, Optional, TypeVar, Union, cast
+from typing import Any, ClassVar, Optional, TypeVar, Union, cast, overload
 
 from typing_extensions import Literal, TypeAlias, TypedDict
 
@@ -239,10 +239,20 @@ class Array(metaclass=_ArrayMeta):
                     object[i], *sizes, indices=(*indices, i)
                 )
 
+    @overload
     def __setattr(
-        self, name: Literal["__data__", "shape"], value: Any
+        self, __name: Literal["shape"], __value: tuple[int, ...]
     ) -> None:
-        object.__setattr__(self, name, value)
+        ...
+
+    @overload
+    def __setattr(
+        self, __name: Literal["__data__"], __value: list[Any]
+    ) -> None:
+        ...
+
+    def __setattr(self, __name: str, __value: Any) -> None:
+        object.__setattr__(self, __name, __value)
 
     @classmethod
     def __get_by_indices(cls, object: Any, indices: Iterable[int]) -> Any:
