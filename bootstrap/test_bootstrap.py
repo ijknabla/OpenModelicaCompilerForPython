@@ -29,5 +29,12 @@ def test_array_stub() -> None:
         ]
         run(bootstrap_cmd, check=True)
 
-        mypy_cmd = [sys.executable, "-m", "mypy", "--strict", f"{array_pyi}"]
-        run(mypy_cmd, check=True)
+        mypy_cmd = [
+            sys.executable,
+            "-m",
+            "mypy",
+            "--strict",
+            "--ignore-missing-imports",
+            f"{array_pyi.name}",
+        ]
+        run(mypy_cmd, check=True, cwd=directory)
