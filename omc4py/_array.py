@@ -233,7 +233,7 @@ class Array:
 
 
 def _sanitize_array_type_index(index: Any) -> tuple[DType, Shape]:
-    if not isinstance(index, tuple) and len(index) == 2:
+    if not (isinstance(index, tuple) and len(index) == 2):
         raise TypeError(f"index must be a tuple of length 2, got {index}")
 
     dtype, __shape__ = index
