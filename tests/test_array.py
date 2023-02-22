@@ -110,7 +110,7 @@ def test_index_check() -> None:
         ]
     )
     with pytest.raises(IndexError):
-        ixss[0, 0, 0]
+        ixss[0, 0, 0]  # type: ignore
 
     assert ixss[0:][0] == ixss[0]
     assert ixss[1:][0] == ixss[1]
@@ -121,13 +121,13 @@ def test_index_check() -> None:
 
 def test_array_type_check() -> None:
     with pytest.raises(TypeError):
-        Array[[str, (2,)]]
+        Array[[str, (2,)]]  # type: ignore
     with pytest.raises(TypeError):
-        Array[("str",), (2,)]
+        Array[("str",), (2,)]  # type: ignore
     with pytest.raises(TypeError):
-        Array[(str,), 2]
+        Array[(str,), 2]  # type: ignore
     with pytest.raises(TypeError):
-        Array[(str,), ("2",)]
+        Array[(str,), ("2",)]  # type: ignore
     with pytest.raises(TypeError):
         Array[list, (2,)]
     with pytest.raises(TypeError):
@@ -135,10 +135,10 @@ def test_array_type_check() -> None:
     with pytest.raises(TypeError):
         Array[str, (2,)]("01")
     with pytest.raises(TypeError):
-        Array[int, (2,)]([0, "1"])
+        Array[int, (2,)]([0, "1"])  # type: ignore
     with pytest.raises(TypeError):
-        Array[str, (2,)]([0, "1"])
+        Array[str, (2,)]([0, "1"])  # type: ignore
     with pytest.raises(TypeError):
-        Array[str, (2,)](["0", "1"])[...]
+        Array[str, (2,)](["0", "1"])[...]  # type: ignore
 
     reveal_type(Array[(int, str), (2,)]([0, "0"]))
