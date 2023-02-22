@@ -7,6 +7,7 @@ from functools import reduce
 from itertools import product
 from operator import getitem
 from typing import Any, ClassVar, Optional, TypeVar, Union, cast, overload
+from weakref import WeakValueDictionary
 
 from typing_extensions import Literal, TypeAlias, TypedDict
 
@@ -25,6 +26,12 @@ class _ArrayMetaNameSpace(TypedDict):
 
 
 class _ArrayMeta(type):
+    __cache: ClassVar[
+        WeakValueDictionary[
+            tuple[_ArrayMeta, frozenset[type], Shape], _ArrayMeta
+        ]
+    ]
+    __cache = WeakValueDictionary()
     dtype: DType = object
     __shape__: Shape = ()
 
@@ -47,12 +54,19 @@ class _ArrayMeta(type):
             )
 
         dtype, __shape__ = _sanitize_array_type_index(index)
+        key = (cls, frozenset(_iter_dtype(dtype)), __shape__)
+
+        try:
+            return cast(T_array_meta, cls.__cache[key])
+        except KeyError:
+            pass
 
         indexed_cls = type(cls)(
             cls.__name__,
             (cls,),
             dict(_ArrayMetaNameSpace(dtype=dtype, __shape__=__shape__)),
         )
+        cls.__cache[key] = indexed_cls
 
         return indexed_cls
 
