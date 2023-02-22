@@ -6,15 +6,59 @@ from dataclasses import InitVar, dataclass, field
 from functools import reduce
 from itertools import product
 from operator import getitem
-from typing import Any, ClassVar, Optional, Union, cast
+from typing import Any, ClassVar, Optional, TypeVar, Union, cast
 
-from typing_extensions import Literal, TypeAlias
+from typing_extensions import Literal, TypeAlias, TypedDict
 
 from .meta import SupportsArrayIndexing
+
+T_array_meta = TypeVar("T_array_meta", bound="_ArrayMeta")
 
 DType: TypeAlias = Union[type, "tuple[type, ...]"]
 Size = Optional[int]
 Shape: TypeAlias = "tuple[Size, ...]"
+
+
+class _ArrayMetaNameSpace(TypedDict):
+    dtype: DType
+    __shape__: Shape
+
+
+class _ArrayMeta(type):
+    dtype: DType = object
+    __shape__: Shape = ()
+
+    def __repr__(cls) -> str:
+        if cls.__is_root:
+            return super().__repr__()
+        else:
+            return (
+                f"{_format_dtype(cls)}"
+                f"[{_format_dtype(cls.dtype)}, {cls.__shape__!r}]"
+            )
+
+    def __getitem__(
+        cls: T_array_meta,
+        index: tuple[DType, Shape],
+    ) -> T_array_meta:
+        if not cls.__is_root:
+            raise TypeError(
+                f"There are no dtype, shape variables left in {cls!r}"
+            )
+
+        dtype, __shape__ = _sanitize_array_type_index(index)
+
+        indexed_cls = type(cls)(
+            cls.__name__,
+            (cls,),
+            dict(_ArrayMetaNameSpace(dtype=dtype, __shape__=__shape__)),
+        )
+
+        return indexed_cls
+
+    @property
+    def __is_root(cls) -> bool:
+        return cls.dtype is object and cls.__shape__ == ()
 
 
 @dataclass(frozen=True)
@@ -292,3 +336,15 @@ def _type_order(typ: type) -> tuple[int, str, str]:
 
 def _is_builtin(obj: Any) -> bool:
     return obj in builtins.__dict__.values()
+
+
+def _format_dtype(dtype: DType) -> str:
+    name, *names = [
+        ("" if _is_builtin(t) else f"{t.__module__}.") + t.__name__
+        for t in _iter_dtype(dtype)
+    ]
+
+    if not names:
+        return name
+    else:
+        return "(" + ", ".join([name, *names]) + ")"
