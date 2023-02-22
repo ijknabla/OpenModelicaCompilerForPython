@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import builtins
 from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import InitVar, dataclass, field
 from functools import reduce
@@ -28,46 +29,7 @@ class Array:
         cls,
         index: tuple[DType, Shape],
     ) -> type[Array]:
-        if not isinstance(index, tuple) and len(index) == 2:
-            raise TypeError(f"index must be a tuple of length 2, got {index}")
-
-        dtype, __shape__ = index
-
-        if not (
-            isinstance(dtype, type)
-            or isinstance(dtype, tuple)
-            and all(isinstance(t, type) for t in dtype)
-        ):
-            raise TypeError(
-                "dtype (index[0]) must be type | tuple[type, ...], "
-                f"got {dtype}"
-            )
-
-        if not (
-            isinstance(__shape__, tuple)
-            and __shape__
-            and all(
-                isinstance(size, int) or size is None for size in __shape__
-            )
-        ):
-            raise TypeError(
-                "shape (index[1]) must be tuple[int | None, ...], "
-                f"got {__shape__}"
-            )
-
-        if isinstance(dtype, type):
-            if issubclass(dtype, SupportsArrayIndexing):
-                raise TypeError(
-                    "dtype (index[0]) must not be "
-                    f"sequence-like type, got {dtype}"
-                )
-        else:
-            for i, t in enumerate(dtype):
-                if issubclass(t, SupportsArrayIndexing):
-                    raise TypeError(
-                        f"dtype[{i}] (index[0][{i}]) "
-                        f"must not be sequence-like type, got {t}"
-                    )
+        dtype, __shape__ = _sanitize_array_type_index(index)
 
         return cls.__get_array_type(dtype=dtype, __shape__=__shape__)
 
@@ -268,3 +230,65 @@ class Array:
             object[index] = value
         else:
             cls.__set_by_indices(object[index], *indices, value=value)
+
+
+def _sanitize_array_type_index(index: Any) -> tuple[DType, Shape]:
+    if not isinstance(index, tuple) and len(index) == 2:
+        raise TypeError(f"index must be a tuple of length 2, got {index}")
+
+    dtype, __shape__ = index
+    if not (
+        isinstance(dtype, type)
+        or isinstance(dtype, tuple)
+        and 0 < len(dtype)
+        and all(isinstance(t, type) for t in dtype)
+    ):
+        raise TypeError(
+            "dtype := index[0] must be type or not empty tuple[type, ...], "
+            f"got {dtype}"
+        )
+
+    for i, t in enumerate(_iter_dtype(dtype)):
+        if issubclass(t, SupportsArrayIndexing):
+            t_repr = (
+                "index[0]" if isinstance(dtype, type) else f"index[0][{i}]"
+            )
+            raise TypeError(
+                f"dtype := {t_repr} "
+                f"must not be sequence-like type, got {t}"
+            )
+
+    if not (
+        isinstance(__shape__, tuple)
+        and __shape__
+        and all(isinstance(size, int) or size is None for size in __shape__)
+    ):
+        raise TypeError(
+            "shape := index[1] must be not empty tuple[int | None, ...], "
+            f"got {__shape__}"
+        )
+
+    t, *ts = sorted(set(_iter_dtype(dtype)), key=_type_order)
+    if not ts:
+        return t, __shape__
+    else:
+        return (t, *ts), __shape__
+
+
+def _iter_dtype(dtype: DType) -> Iterator[type]:
+    if isinstance(dtype, type):
+        yield dtype
+    else:
+        yield from dtype
+
+
+def _type_order(typ: type) -> tuple[int, str, str]:
+    return (
+        0 if _is_builtin(typ) else 1,
+        typ.__module__,
+        typ.__name__,
+    )
+
+
+def _is_builtin(obj: Any) -> bool:
+    return obj in builtins.__dict__.values()
