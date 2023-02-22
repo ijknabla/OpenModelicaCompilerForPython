@@ -115,16 +115,7 @@ class Array(metaclass=_ArrayMeta):
             return bool(self.__data__ == other)
 
     def __repr__(self) -> str:
-        if isinstance(self.dtype, type):
-            s_dtype = self.dtype.__name__
-        else:
-            s_dtype = (
-                "(" + " ".join(f"{typ.__name__}," for typ in self.dtype) + ")"
-            )
-        return (
-            f"{type(self).__name__}"
-            f"[{s_dtype}, {self.__shape__}]({self.__data__})"
-        )
+        return f"{type(self)!r}({self.__data__})"
 
     def __getitem__(
         self, index: Union[int, slice, tuple[Union[int, slice]]]
