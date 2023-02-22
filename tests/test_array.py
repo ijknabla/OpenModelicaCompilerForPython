@@ -4,6 +4,14 @@ from typing_extensions import reveal_type
 from omc4py._array import Array
 
 
+def test_array_type() -> None:
+    IntArray = Array[int, (None,)]
+    assert repr(Array) == "<class 'omc4py._array.Array'>"
+    assert repr(IntArray) == "omc4py._array.Array[int, (None,)]"
+    with pytest.raises(TypeError):
+        IntArray[int, (None,)]
+
+
 def test_array_element() -> None:
     data1d = range(4, 8)
     array1d = Array[int, (4,)](data1d)
