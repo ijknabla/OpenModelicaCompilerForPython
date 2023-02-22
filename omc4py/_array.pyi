@@ -5,6 +5,8 @@ from typing import Any, Generic, TypeVar, Union, overload
 
 from typing_extensions import Literal
 
+from omc4py.meta import SupportsArrayIndexing
+
 DType = TypeVar("DType")
 DType1 = TypeVar("DType1")
 DType2 = TypeVar("DType2")
@@ -132,6 +134,7 @@ class _1DArray(Generic[(DType, Size1)], Sequence[DType]):
     ndim: Literal[1]
     shape: tuple[(Size1,)]
 
+    def __init__(self, object: SupportsArrayIndexing[DType]) -> None: ...
     def __eq__(self, other: Any) -> bool: ...
     def __len__(self) -> Size1: ...
     @overload
@@ -147,6 +150,9 @@ class _2DArray(
     ndim: Literal[2]
     shape: tuple[(Size1, Size2)]
 
+    def __init__(
+        self, object: SupportsArrayIndexing[SupportsArrayIndexing[DType]]
+    ) -> None: ...
     def __eq__(self, other: Any) -> bool: ...
     def __len__(self) -> Size1: ...
     @overload
