@@ -1,42 +1,15 @@
 from __future__ import annotations
 
-from collections.abc import ByteString, Iterable, Iterator, Mapping, Sequence
+from collections.abc import Iterable, Iterator, Sequence
 from dataclasses import InitVar, dataclass, field
 from functools import reduce
 from itertools import product
 from operator import getitem
-from typing import TYPE_CHECKING, Any, ClassVar, Optional, TypeVar, Union, cast
+from typing import Any, ClassVar, Optional, Union, cast
 
-from typing_extensions import Literal, Protocol, runtime_checkable
+from typing_extensions import Literal
 
-DType = TypeVar("DType")
-T_co = TypeVar("T_co", covariant=True)
-
-if TYPE_CHECKING:
-    ProtocolMeta = type
-else:
-    ProtocolMeta = type(Protocol)
-
-
-class SupportsIndexAccessMeta(ProtocolMeta):
-    def __instancecheck__(cls, instance: Any) -> bool:
-        return issubclass(type(instance), cls) and 0 < len(instance)
-
-    def __subclasscheck__(cls, subclass: type[Any]) -> bool:
-        return (
-            not issubclass(subclass, (ByteString, Mapping, memoryview, str))
-            and hasattr(subclass, "__len__")
-            and hasattr(subclass, "__getitem__")
-        )
-
-
-@runtime_checkable
-class SupportsIndexAccess(Protocol[T_co], metaclass=SupportsIndexAccessMeta):
-    def __len__(self) -> int:
-        ...
-
-    def __getitem__(self, index: int) -> T_co:
-        ...
+from .meta import SupportsArrayIndexing
 
 
 @dataclass(frozen=True)
@@ -79,14 +52,14 @@ class Array:
             )
 
         if isinstance(dtype, type):
-            if issubclass(dtype, SupportsIndexAccess):
+            if issubclass(dtype, SupportsArrayIndexing):
                 raise TypeError(
                     "dtype (index[0]) must not be "
                     f"sequence-like type, got {dtype}"
                 )
         else:
             for i, t in enumerate(dtype):
-                if issubclass(t, SupportsIndexAccess):
+                if issubclass(t, SupportsArrayIndexing):
                     raise TypeError(
                         f"dtype[{i}] (index[0][{i}]) "
                         f"must not be sequence-like type, got {t}"
@@ -221,7 +194,7 @@ class Array:
         result: list[int]
         result = []
         for i, expected_size in enumerate(self.__shape__):
-            if not isinstance(object, SupportsIndexAccess):
+            if not isinstance(object, SupportsArrayIndexing):
                 raise TypeError(
                     "object"
                     + "[0]" * i
