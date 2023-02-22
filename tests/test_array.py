@@ -5,11 +5,11 @@ from omc4py._array import Array
 
 
 def test_array_type() -> None:
-    IntArray = Array[int, (None,)]
+    IntArray = Array[int, (None,)]  # type: ignore
     assert repr(Array) == "<class 'omc4py._array.Array'>"
     assert repr(IntArray) == "omc4py._array.Array[int, (None,)]"
     with pytest.raises(TypeError):
-        IntArray[int, (None,)]
+        IntArray[int, (None,)]  # type: ignore
 
 
 def test_array_element() -> None:
