@@ -111,9 +111,7 @@ def _iter_array_stub_type_vars(
             value=Call(
                 func=Name(id="TypeVar", ctx=Load()),
                 args=[Str(s=f"Size{dim}")],
-                keywords=[
-                    keyword(arg="bound", value=Name(id="int", ctx=Load()))
-                ],
+                keywords=[keyword(arg="bound", value=_name("int"))],
             ),
             lineno=None,
         )
@@ -125,9 +123,10 @@ def _iter_array_stub_type_vars(
                 func=Name(id="TypeVar", ctx=Load()),
                 args=[
                     Str(s=f"SizeArg{dim}"),
+                    _name("int"),
                     *(
                         Subscript(
-                            value=Name(id="Literal", ctx=Load()),
+                            value=_name("Literal"),
                             slice=Index(value=Num(n=size)),
                             ctx=Load(),
                         )
