@@ -14,6 +14,7 @@ Size1 = TypeVar("Size1", bound=int)
 Size2 = TypeVar("Size2", bound=int)
 SizeArg1 = TypeVar(
     "SizeArg1",
+    int,
     Literal[1],
     Literal[2],
     Literal[3],
@@ -25,6 +26,7 @@ SizeArg1 = TypeVar(
 )
 SizeArg2 = TypeVar(
     "SizeArg2",
+    int,
     Literal[1],
     Literal[2],
     Literal[3],
