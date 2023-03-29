@@ -34,7 +34,7 @@ def generate_omc_interface(
     inputType: InputType,
     outputFile: typing.BinaryIO,
     outputFormat: OutputFormat,
-):
+) -> None:
     if inputType is InputType.executable:
         with open_session(
             inputPath,
@@ -151,7 +151,7 @@ def open_by_output_args(
                     yield outputFile, outputFormat
 
 
-def main():
+def main() -> None:
     """\
 Refactored main
     """
