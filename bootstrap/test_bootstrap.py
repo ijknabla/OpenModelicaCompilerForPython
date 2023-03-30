@@ -17,9 +17,11 @@ from bootstrap import OutputFormat
         (OutputFormat.xml, ".xml"),
     ],
 )
+@pytest.mark.parametrize("overwrite", [True, False])
 def test_bootstrap(
     output_format: OutputFormat,
     output_suffix: str,
+    overwrite: bool,
 ) -> None:
     xml = Path(
         resource_filename(__name__, "interface_xml/omc_interface.v_1_13_0.xml")
@@ -37,6 +39,7 @@ def test_bootstrap(
                 *("--inputType", "xml"),
                 *("--output", f"{directory / f'output{output_suffix}'}"),
                 *("--outputFormat", output_format.name),
+                *(["--overwrite"] if overwrite else []),
             ],
             check=True,
         )
