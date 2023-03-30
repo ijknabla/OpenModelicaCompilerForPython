@@ -1,10 +1,10 @@
-import argparse
 import contextlib
 import enum
 import shutil
 import sys
 import typing
 from pathlib import Path
+from typing import Optional
 
 import inquirer  # type: ignore
 from lxml import etree  # type: ignore
@@ -34,7 +34,7 @@ def generate_omc_interface(
     inputType: InputType,
     outputFile: typing.BinaryIO,
     outputFormat: OutputFormat,
-):
+) -> None:
     if inputType is InputType.executable:
         with open_session(
             inputPath,
@@ -61,36 +61,36 @@ def generate_omc_interface(
 
 
 def check_input_args(
-    input_str: str, inputType_hint: typing.Optional[InputType]
+    input_path: Path, inputType_hint: typing.Optional[InputType]
 ) -> typing.Tuple[Path, InputType]:
     if inputType_hint is None:
-        if Path(input_str).suffix == ".xml":
-            return check_input_args(input_str, InputType.xml)
+        if input_path.suffix == ".xml":
+            return check_input_args(input_path, InputType.xml)
         else:
-            return check_input_args(input_str, InputType.executable)
+            return check_input_args(input_path, InputType.executable)
 
     elif inputType_hint is InputType.executable:
-        executable = shutil.which(input_str)
+        executable = shutil.which(input_path)
         if executable is None:
-            raise ValueError(f"Can't find executable for {input_str!r}")
+            raise ValueError(f"Can't find executable for {input_path!r}")
         return Path(executable), InputType.executable
 
     elif inputType_hint is InputType.xml:
-        absPath = Path(input_str).resolve()
+        absPath = input_path.resolve()
         if not absPath.exists():
-            raise FileNotFoundError(f"{input_str!r} does not exists!")
+            raise FileNotFoundError(f"{input_path!r} does not exists!")
         if absPath.suffix != ".xml":
-            raise ValueError(f"input must be xml, got {input_str!r}")
+            raise ValueError(f"input must be xml, got {input_path!r}")
         return absPath, InputType.xml
 
 
 @contextlib.contextmanager
 def open_by_output_args(
-    output_str: str,
+    output_path: Optional[Path],
     outputFormat_hint: typing.Optional[OutputFormat],
     overwrite: typing.Optional[bool],
 ) -> typing.Iterator[typing.Tuple[typing.BinaryIO, OutputFormat]]:
-    if output_str == "-":
+    if output_path is None:
         if outputFormat_hint is not None:
             yield sys.stdout.buffer, outputFormat_hint
         else:  # outputFormat_hint is None
@@ -98,7 +98,7 @@ def open_by_output_args(
             yield sys.stdout.buffer, OutputFormat.module
 
     else:
-        output = Path(output_str).resolve()
+        output = Path(output_path).resolve()
         outputFormat: OutputFormat
 
         if outputFormat_hint is not None:
@@ -106,12 +106,12 @@ def open_by_output_args(
             if outputFormat is OutputFormat.module and output.suffix != ".py":
                 raise ValueError(
                     "--outputFormat=module, but output file suffix is not .py"
-                    f", got {output_str!r}"
+                    f", got {output_path!r}"
                 )
             if outputFormat is OutputFormat.xml and output.suffix != ".xml":
                 raise ValueError(
                     "--outputFormat=xml, but output file suffix is not .xml"
-                    f", got {output_str!r}"
+                    f", got {output_path!r}"
                 )
         else:  # outputFormat_hint is None:
             if output.suffix == ".py":
@@ -121,7 +121,7 @@ def open_by_output_args(
             else:
                 raise ValueError(
                     "output file suffix must be .py or .xml"
-                    f", got {output_str!r}"
+                    f", got {output_path!r}"
                 )
 
         try:
@@ -134,7 +134,7 @@ def open_by_output_args(
                         inquirer.Confirm(
                             "overwrite",
                             message=(
-                                f"Do you want to overwrite {output_str!r}?"
+                                f"Do you want to overwrite {output_path!r}?"
                             ),
                         )
                     ]
@@ -149,76 +149,3 @@ def open_by_output_args(
             else:
                 with output.open("wb") as outputFile:
                     yield outputFile, outputFormat
-
-
-def main():
-    """\
-Refactored main
-    """
-    parser = argparse.ArgumentParser(
-        prog="omc4py bootstrap",
-    )
-
-    # # input
-    # omc executable or omc interface xml
-    parser.add_argument(
-        "input",
-    )
-
-    # # inputType
-    # {executable, xml}
-    # default is None (selected by `input`)
-    parser.add_argument(
-        "--inputType",
-        choices=InputType.__members__,
-    )
-
-    # # output
-    # default is stdout, (generate python module)
-    parser.add_argument(
-        "-o",
-        "--output",
-        default="-",
-    )
-
-    # # outputFormat
-    # {module, xml}
-    # default is None (select by `output`)
-    parser.add_argument(
-        "--outputFormat",
-        choices=OutputFormat.__members__,
-    )
-
-    parser.add_argument(
-        "--overwrite",
-        action="store_true",
-        default=None,
-    )
-
-    args = parser.parse_args()
-
-    inputType_hint = (
-        InputType[args.inputType] if args.inputType is not None else None
-    )
-    outputFormat_hint = (
-        OutputFormat[args.outputFormat]
-        if args.outputFormat is not None
-        else None
-    )
-
-    inputPath, inputType = check_input_args(
-        args.input,
-        inputType_hint,
-    )
-
-    with open_by_output_args(
-        args.output,
-        outputFormat_hint,
-        args.overwrite,
-    ) as (outputFile, outputFormat):
-        generate_omc_interface(
-            inputPath,
-            inputType,
-            outputFile,
-            outputFormat,
-        )
