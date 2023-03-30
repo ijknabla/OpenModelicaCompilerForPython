@@ -10,25 +10,36 @@ from pkg_resources import resource_filename
 from bootstrap import OutputFormat
 
 
-@pytest.mark.parametrize("output_format", OutputFormat)
+@pytest.mark.parametrize(
+    "output_format, output_suffix",
+    [
+        (OutputFormat.module, ".py"),
+        (OutputFormat.xml, ".xml"),
+    ],
+)
 def test_bootstrap(
     output_format: OutputFormat,
+    output_suffix: str,
 ) -> None:
     xml = Path(
         resource_filename(__name__, "interface_xml/omc_interface.v_1_13_0.xml")
     )
     assert xml.exists()
-    run(
-        [
-            sys.executable,
-            "-m",
-            "bootstrap",
-            f"{xml}",  # input
-            *("--inputType", "xml"),
-            *("--outputFormat", output_format.name),
-        ],
-        check=True,
-    )
+    with ExitStack() as stack:
+        enter = stack.enter_context
+        directory = Path(enter(TemporaryDirectory()))
+        run(
+            [
+                sys.executable,
+                "-m",
+                "bootstrap",
+                f"{xml}",  # input
+                *("--inputType", "xml"),
+                *("--output", f"{directory / f'output{output_suffix}'}"),
+                *("--outputFormat", output_format.name),
+            ],
+            check=True,
+        )
 
 
 def test_array_stub() -> None:
