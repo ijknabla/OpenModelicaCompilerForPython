@@ -175,7 +175,7 @@ def open_by_output_args(
     type=click.Path(exists=True, dir_okay=False, path_type=Path),
 )
 @click.option(
-    "--inputType",
+    "--input-type",
     type=EnumChoice(InputType),
     help="""\
 if not specified, selected by INPUT
@@ -190,7 +190,7 @@ if not specified, output is stdout
 """,
 )
 @click.option(
-    "--outputFormat",
+    "--output-format",
     type=EnumChoice(OutputFormat),
     help="""\
 if not specified, selected by --output
@@ -206,9 +206,9 @@ if not specified, selected by --output
 )
 def main(
     input_path: Path,
-    inputtype: Optional[InputType],
+    input_type: Optional[InputType],
     output_path: Optional[Path],
-    outputformat: Optional[OutputFormat],
+    output_format: Optional[OutputFormat],
     overwrite: bool,
 ) -> None:
     """\
@@ -218,12 +218,12 @@ INPUT: omc executable or omc interface xml
     """
     inputPath, inputType = check_input_args(
         input_path,
-        inputtype,
+        input_type,
     )
 
     with open_by_output_args(
         output_path,
-        outputformat,
+        output_format,
         overwrite,
     ) as (outputFile, outputFormat):
         generate_omc_interface(

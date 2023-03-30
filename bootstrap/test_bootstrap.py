@@ -36,9 +36,9 @@ def test_bootstrap(
                 "-m",
                 "bootstrap",
                 f"{xml}",  # input
-                *("--inputType", "xml"),
+                *("--input-type", "xml"),
                 *("--output", f"{directory / f'output{output_suffix}'}"),
-                *("--outputFormat", output_format.name),
+                *("--output-format", output_format.name),
                 *(["--overwrite"] if overwrite else []),
             ],
             check=True,
