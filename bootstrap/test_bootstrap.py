@@ -4,10 +4,16 @@ from pathlib import Path
 from subprocess import run
 from tempfile import TemporaryDirectory
 
+import pytest
 from pkg_resources import resource_filename
 
+from bootstrap import OutputFormat
 
-def test_bootstrap() -> None:
+
+@pytest.mark.parametrize("output_format", OutputFormat)
+def test_bootstrap(
+    output_format: OutputFormat,
+) -> None:
     xml = Path(
         resource_filename(__name__, "interface_xml/omc_interface.v_1_13_0.xml")
     )
@@ -19,6 +25,7 @@ def test_bootstrap() -> None:
             "bootstrap",
             f"{xml}",  # input
             *("--inputType", "xml"),
+            *("--outputFormat", output_format.name),
         ],
         check=True,
     )
