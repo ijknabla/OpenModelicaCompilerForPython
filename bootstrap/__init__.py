@@ -5,7 +5,9 @@ import shutil
 import sys
 import typing
 from pathlib import Path
+from typing import Optional, Type
 
+import click
 import inquirer  # type: ignore
 from lxml import etree  # type: ignore
 
@@ -13,6 +15,22 @@ from omc4py.session import open_session
 
 from . import interface_xml, module_py
 from .session import OMCSessionBootstrap
+
+
+class EnumChoice(click.Choice):
+    enum_type: Type[enum.Enum]
+
+    def __init__(self, enum_type: Type[enum.Enum]):
+        super().__init__([e.name for e in enum_type])
+        self.enum_type = enum_type
+
+    def convert(
+        self,
+        value: str,
+        param: Optional[click.Parameter],
+        ctx: Optional[click.Context],
+    ) -> enum.Enum:
+        return self.enum_type[super().convert(value, param, ctx)]
 
 
 class InputType(
