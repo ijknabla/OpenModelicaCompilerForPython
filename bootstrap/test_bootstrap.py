@@ -12,7 +12,16 @@ def test_bootstrap() -> None:
         resource_filename(__name__, "interface_xml/omc_interface.v_1_13_0.xml")
     )
     assert xml.exists()
-    run([sys.executable, "-m", "bootstrap", f"{xml}"], check=True)
+    run(
+        [
+            sys.executable,
+            "-m",
+            "bootstrap",
+            f"{xml}",  # input
+            *("--inputType", "xml"),
+        ],
+        check=True,
+    )
 
 
 def test_array_stub() -> None:
