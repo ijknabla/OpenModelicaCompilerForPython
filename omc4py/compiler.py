@@ -22,7 +22,6 @@ from typing import (
     Optional,
     TypeVar,
     Union,
-    overload,
 )
 
 import zmq.asyncio
@@ -38,54 +37,12 @@ if TYPE_CHECKING:
     StrOrPathLike = Union[str, PathLike[str]]
 
 
-@overload
-def _enter_zmq_context(
-    context_type: type[zmq.Context],
-    omc_command: Optional[StrOrPathLike] = None,
-) -> tuple[Process, zmq.Socket, ExitStack]:
-    ...
-
-
-@overload
-def _enter_zmq_context(
-    context_type: type[zmq.asyncio.Context],
-    omc_command: Optional[StrOrPathLike] = None,
-) -> tuple[Process, zmq.asyncio.Socket, ExitStack]:
-    ...
-
-
-def _enter_zmq_context(
-    context_type: type[zmq.Context | zmq.asyncio.Context],
-    omc_command: Optional[StrOrPathLike] = None,
-) -> tuple[Process, zmq.Socket | zmq.asyncio.Socket, ExitStack]:
-    stack = ExitStack()
-    atexit.register(stack.close)
-
-    process, port = stack.enter_context(
-        _create_omc_interactive("omc" if omc_command is None else omc_command)
-    )
-
-    stack.callback(
-        lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
-    )
-    socket: zmq.Socket | zmq.asyncio.Socket
-    socket = context_type().socket(zmq.REQ)
-    stack.enter_context(socket)
-    socket.connect(port)
-    logger.info(f"(pid={process.pid}) Connect zmq sokcet via {port}")
-
-    return process, socket, stack
-
-
-_T_context = TypeVar("_T_context", zmq.Context, zmq.asyncio.Context)
 _T_socket = TypeVar("_T_socket", zmq.Socket, zmq.asyncio.Socket)
-_T_interactive = TypeVar(
-    "_T_interactive", bound="GenericOMCInteractive[Any, Any]"
-)
+_T_interactive = TypeVar("_T_interactive", bound="GenericOMCInteractive[Any]")
 
 
 @dataclass(frozen=True)
-class GenericOMCInteractive(Generic[_T_context, _T_socket]):
+class GenericOMCInteractive(Generic[_T_socket]):
     process: Process
     socket: _T_socket
     stack: ExitStack = field(repr=False)
@@ -96,9 +53,22 @@ class GenericOMCInteractive(Generic[_T_context, _T_socket]):
         cls: type[_T_interactive],
         omc_command: Optional[StrOrPathLike] = None,
     ) -> _T_interactive:
-        process, socket, stack = _enter_zmq_context(
-            cls.context_type, omc_command
+        stack = ExitStack()
+        atexit.register(stack.close)
+
+        process, port = stack.enter_context(
+            _create_omc_interactive(
+                "omc" if omc_command is None else omc_command
+            )
         )
+
+        stack.callback(
+            lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
+        )
+        socket = stack.enter_context(cls.context_type().socket(zmq.REQ))
+        socket.connect(port)  # type: ignore
+        logger.info(f"(pid={process.pid}) Connect zmq sokcet via {port}")
+
         return cls(process=process, socket=socket, stack=stack)
 
     def close(
@@ -110,7 +80,7 @@ class GenericOMCInteractive(Generic[_T_context, _T_socket]):
 
 @dataclass(frozen=True)
 class OMCInteractive(
-    GenericOMCInteractive[zmq.Context, zmq.Socket],
+    GenericOMCInteractive[zmq.Socket],
     classes.AbstractOMCInteractive,
 ):
     context_type: ClassVar[type[zmq.Context]] = zmq.Context
@@ -198,7 +168,7 @@ class OMCInteractive(
 
 @dataclass(frozen=True)
 class AsyncOMCInteractive(
-    GenericOMCInteractive[zmq.asyncio.Context, zmq.asyncio.Socket],
+    GenericOMCInteractive[zmq.asyncio.Socket],
 ):
     context_type: ClassVar[type[zmq.asyncio.Context]] = zmq.asyncio.Context
 
