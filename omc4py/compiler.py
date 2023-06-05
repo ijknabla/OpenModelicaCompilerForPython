@@ -1,13 +1,14 @@
 from __future__ import annotations
 
+import atexit
 import logging
 import shutil
 import tempfile
 import uuid
 import warnings
 from asyncio import Lock
-from collections.abc import Iterator, Sequence
-from contextlib import ExitStack, suppress
+from collections.abc import Generator, Iterator, Sequence
+from contextlib import ExitStack, contextmanager, suppress
 from dataclasses import dataclass, field
 from functools import lru_cache
 from os import PathLike
@@ -58,44 +59,11 @@ def _enter_zmq_context(
     omc_command: Optional[StrOrPathLike] = None,
 ) -> tuple[Process, zmq.Socket | zmq.asyncio.Socket, ExitStack]:
     stack = ExitStack()
-    if omc_command is None:
-        omc_command = "omc"
+    atexit.register(stack.close)
 
-    suffix = str(uuid.uuid4())
-
-    command = [
-        str(resolve_command(omc_command)),
-        "--interactive=zmq",
-        "--locale=C",
-        f"-z={suffix}",
-    ]
-
-    stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
-    process = stack.enter_context(
-        terminating(
-            Popen(
-                command,
-                stdout=PIPE,
-                stderr=DEVNULL,
-                encoding="utf-8",
-            )
-        )
+    process, port = stack.enter_context(
+        _create_omc_interactive("omc" if omc_command is None else omc_command)
     )
-    assert process.stdout is not None
-
-    logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
-
-    first_line = process.stdout.readline()
-    logger.debug(f"(pid={process.pid}) >>> {first_line}")
-
-    with unlinking(
-        find_openmodelica_zmq_port_filepath(suffix)
-    ) as port_filepath:
-        logger.info(
-            f"(pid={process.pid}) Find zmq port file at {port_filepath}"
-        )
-        port = port_filepath.read_text()
-    logger.info(f"(pid={process.pid}) Remove zmq port file at {port_filepath}")
 
     stack.callback(
         lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
@@ -107,37 +75,6 @@ def _enter_zmq_context(
     logger.info(f"(pid={process.pid}) Connect zmq sokcet via {port}")
 
     return process, socket, stack
-
-
-def resolve_command(
-    command: StrOrPathLike,
-) -> Path:
-    executable = shutil.which(command)
-    if executable is None:
-        raise FileNotFoundError(f"Can't find executable of {command}")
-
-    return Path(executable).resolve()
-
-
-def find_openmodelica_zmq_port_filepath(suffix: Optional[str]) -> Path:
-    temp_dir = Path(tempfile.gettempdir())
-
-    pattern_of_name = "openmodelica*.port"
-    if suffix is not None:
-        pattern_of_name += f".{suffix}"
-
-    candidates = tuple(temp_dir.glob(pattern_of_name))
-
-    if not candidates:
-        raise ValueError(
-            f"Can't find openmodelica port file " f"at {temp_dir}"
-        )
-    elif len(candidates) >= 2:
-        raise ValueError(
-            f"Ambiguous openmodelica port file {candidates}" f"at {temp_dir}"
-        )
-
-    return candidates[0]
 
 
 _T_context = TypeVar("_T_context", zmq.Context, zmq.asyncio.Context)
@@ -276,3 +213,74 @@ class AsyncOMCInteractive(
     @lru_cache(None)
     def __lock(self) -> Lock:
         return Lock()
+
+
+@contextmanager
+def _create_omc_interactive(
+    omc_command: StrOrPathLike,
+) -> Generator[tuple[Process, str], None, None]:
+    with ExitStack() as stack:
+        suffix = str(uuid.uuid4())
+
+        command = [
+            f"{_resolve_command(omc_command)}",
+            "--interactive=zmq",
+            "--locale=C",
+            f"-z={suffix}",
+        ]
+
+        stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
+        process = stack.enter_context(
+            terminating(
+                Popen(command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8")
+            )
+        )
+        assert process.stdout is not None
+        logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
+
+        first_line = process.stdout.readline()
+        logger.debug(f"(pid={process.pid}) >>> {first_line}")
+
+        with unlinking(
+            _find_openmodelica_zmq_port_filepath(suffix)
+        ) as port_filepath:
+            logger.info(
+                f"(pid={process.pid}) Find zmq port file at {port_filepath}"
+            )
+            port = port_filepath.read_text()
+        logger.info(
+            f"(pid={process.pid}) Remove zmq port file at {port_filepath}"
+        )
+
+        yield process, port
+
+
+def _resolve_command(
+    command: StrOrPathLike,
+) -> Path:
+    executable = shutil.which(command)
+    if executable is None:
+        raise FileNotFoundError(f"Can't find executable of {command}")
+
+    return Path(executable).resolve()
+
+
+def _find_openmodelica_zmq_port_filepath(suffix: Optional[str]) -> Path:
+    temp_dir = Path(tempfile.gettempdir())
+
+    pattern_of_name = "openmodelica*.port"
+    if suffix is not None:
+        pattern_of_name += f".{suffix}"
+
+    candidates = tuple(temp_dir.glob(pattern_of_name))
+
+    if not candidates:
+        raise ValueError(
+            f"Can't find openmodelica port file " f"at {temp_dir}"
+        )
+    elif len(candidates) >= 2:
+        raise ValueError(
+            f"Ambiguous openmodelica port file {candidates}" f"at {temp_dir}"
+        )
+
+    return candidates[0]
