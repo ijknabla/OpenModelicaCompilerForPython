@@ -255,3 +255,17 @@ class OMCInteractive(
                     outputArguments, result_value
                 )
             )
+
+
+@dataclass(frozen=True)
+class AsyncOMCInteractive(
+    GenericOMCInteractive[zmq.asyncio.Context, zmq.asyncio.Socket],
+):
+    context_type: ClassVar[type[zmq.asyncio.Context]] = zmq.asyncio.Context
+
+    async def evaluate(self, expression: str) -> str:
+        logger.debug(f"(pid={self.process.pid}) >>> {expression}")
+        await self.socket.send_string(expression)
+        result = await self.socket.recv_string()
+        logger.debug(f"(pid={self.process.pid}) {result}")
+        return result
