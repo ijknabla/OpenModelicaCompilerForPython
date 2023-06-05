@@ -1,21 +1,19 @@
 from __future__ import annotations
 
-import atexit
 import logging
 import shutil
-import subprocess
 import tempfile
 import uuid
 import warnings
 from collections.abc import Iterator, Sequence
-from contextlib import ExitStack
+from contextlib import ExitStack, suppress
+from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import IO, TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union
 
 import zmq
-from typing_extensions import Final
 
 from . import classes, exception, string
 from ._util import terminating, unlinking
@@ -112,135 +110,27 @@ def find_openmodelica_zmq_port_filepath(suffix: Optional[str]) -> Path:
     return candidates[0]
 
 
+@dataclass(frozen=True)
 class OMCInteractive(
     classes.AbstractOMCInteractive,
 ):
-    __slots__ = (
-        "__socket",
-        "__process",
-    )
-
-    __instances: Final[set["OMCInteractive"]] = set()
-
-    __socket: zmq.Socket
-    __process: subprocess.Popen[str]
-
-    def __new__(
-        cls,
-        socket: zmq.Socket,
-        process: subprocess.Popen[str],
-    ) -> "OMCInteractive":
-        self = super().__new__(cls)
-        self.__socket = socket
-        self.__process = process
-
-        self.__instances.add(self)
-
-        return self
-
-    @property
-    def socket(self) -> zmq.Socket:
-        return self.__socket
-
-    @property
-    def process(self) -> subprocess.Popen[str]:
-        return self.__process
+    process: Process
+    socket: zmq.Socket
+    stack: ExitStack = field(repr=False)
 
     @classmethod
     def open(
         cls,
         omc_command: Optional[StrOrPathLike] = None,
     ) -> "OMCInteractive":
-        if omc_command is None:
-            omc_command = "omc"
-
-        suffix = str(uuid.uuid4())
-
-        socket = zmq.Context().socket(
-            # pylint: disable=no-member
-            zmq.REQ
-        )
-
-        command = [
-            str(resolve_command(omc_command)),
-            "--interactive=zmq",
-            f"-z={suffix}",
-        ]
-
-        process = subprocess.Popen(
-            command,
-            universal_newlines=True,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.DEVNULL,
-        )
-
-        logger.info(
-            "(pid={pid}) Start omc :: {scommand}".format(
-                pid=process.pid, scommand=" ".join(command)
-            )
-        )
-
-        self = cls(
-            socket=socket,
-            process=process,
-        )
-
-        try:
-            self.__connect_socket(suffix)
-        except Exception:
-            self.close()
-            raise
-
-        return self
-
-    def __connect_socket(self, suffix: str) -> None:
-        process_stdout: IO[str]
-        if self.process.stdout is None:
-            ValueError("Ensure that subprocee.Popen(stdout=subprocess.PIPE)")
-        else:
-            process_stdout = self.process.stdout
-
-        process_stdout.readline()
-
-        port_filepath = find_openmodelica_zmq_port_filepath(suffix)
-
-        logger.info(
-            f"(pid={self.process.pid}) "
-            f"Find zmq port file at {port_filepath}"
-        )
-
-        try:
-            port = port_filepath.read_text()
-            self.socket.connect(port)
-            logger.info(
-                f"(pid={self.process.pid}) " f"Connect zmq sokcet via {port}"
-            )
-        finally:
-            try:
-                port_filepath.unlink()
-                logger.info(
-                    f"(pid={self.process.pid}) "
-                    f"Remove zmq port file at {port_filepath}"
-                )
-            except FileNotFoundError:
-                pass
+        process, socket, stack = _enter_zmq_context(omc_command)
+        return cls(process=process, socket=socket, stack=stack)
 
     def close(
         self,
     ) -> None:
-        if self in self.__instances:
-            self.socket.close()
-            logger.info(f"(pid={self.process.pid}) Close zmq sokcet")
-            self.process.terminate()
-            logger.info(f"(pid={self.process.pid}) Stop omc")
-            self.__instances.remove(self)
-
-    @classmethod
-    def close_all(
-        cls,
-    ) -> None:
-        for self in cls.__instances.copy():
-            self.close()
+        with suppress(Exception):
+            self.stack.close()
 
     def evaluate(self, expression: str) -> str:
         logger.debug(f"(pid={self.process.pid}) >>> {expression}")
@@ -321,6 +211,3 @@ class OMCInteractive(
                     outputArguments, result_value
                 )
             )
-
-
-atexit.register(OMCInteractive.close_all)
