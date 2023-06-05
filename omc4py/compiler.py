@@ -11,9 +11,9 @@ from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, Any, Optional, Union
+from typing import TYPE_CHECKING, Any, Optional, Union, overload
 
-import zmq
+import zmq.asyncio
 
 from . import classes, exception, string
 from ._util import terminating, unlinking
@@ -26,9 +26,26 @@ if TYPE_CHECKING:
     StrOrPathLike = Union[str, PathLike[str]]
 
 
+@overload
 def _enter_zmq_context(
+    context_type: type[zmq.Context],
     omc_command: Optional[StrOrPathLike] = None,
 ) -> tuple[Process, zmq.Socket, ExitStack]:
+    ...
+
+
+@overload
+def _enter_zmq_context(
+    context_type: type[zmq.asyncio.Context],
+    omc_command: Optional[StrOrPathLike] = None,
+) -> tuple[Process, zmq.asyncio.Socket, ExitStack]:
+    ...
+
+
+def _enter_zmq_context(
+    context_type: type[zmq.Context | zmq.asyncio.Context],
+    omc_command: Optional[StrOrPathLike] = None,
+) -> tuple[Process, zmq.Socket | zmq.asyncio.Socket, ExitStack]:
     stack = ExitStack()
     if omc_command is None:
         omc_command = "omc"
@@ -72,7 +89,9 @@ def _enter_zmq_context(
     stack.callback(
         lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
     )
-    socket = stack.enter_context(zmq.Context().socket(zmq.REQ))
+    socket: zmq.Socket | zmq.asyncio.Socket
+    socket = context_type().socket(zmq.REQ)
+    stack.enter_context(socket)
     socket.connect(port)
     logger.info(f"(pid={process.pid}) Connect zmq sokcet via {port}")
 
@@ -123,7 +142,7 @@ class OMCInteractive(
         cls,
         omc_command: Optional[StrOrPathLike] = None,
     ) -> "OMCInteractive":
-        process, socket, stack = _enter_zmq_context(omc_command)
+        process, socket, stack = _enter_zmq_context(zmq.Context, omc_command)
         return cls(process=process, socket=socket, stack=stack)
 
     def close(
