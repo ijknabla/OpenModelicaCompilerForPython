@@ -8,20 +8,77 @@ import tempfile
 import uuid
 import warnings
 from collections.abc import Iterator, Sequence
+from contextlib import ExitStack
 from os import PathLike
 from pathlib import Path
+from subprocess import DEVNULL, PIPE, Popen
 from typing import IO, TYPE_CHECKING, Any, Optional, Union
 
-import zmq  # type: ignore
+import zmq
 from typing_extensions import Final
 
 from . import classes, exception, string
+from ._util import terminating, unlinking
 from .parser import parse_OMCExceptions
 
 logger = logging.getLogger(__name__)
 
 if TYPE_CHECKING:
+    Process = Popen[str]
     StrOrPathLike = Union[str, PathLike[str]]
+
+
+def _enter_zmq_context(
+    omc_command: Optional[StrOrPathLike] = None,
+) -> tuple[Process, zmq.Socket, ExitStack]:
+    stack = ExitStack()
+    if omc_command is None:
+        omc_command = "omc"
+
+    suffix = str(uuid.uuid4())
+
+    command = [
+        str(resolve_command(omc_command)),
+        "--interactive=zmq",
+        "--locale=C",
+        f"-z={suffix}",
+    ]
+
+    stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
+    process = stack.enter_context(
+        terminating(
+            Popen(
+                command,
+                stdout=PIPE,
+                stderr=DEVNULL,
+                encoding="utf-8",
+            )
+        )
+    )
+    assert process.stdout is not None
+
+    logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
+
+    first_line = process.stdout.readline()
+    logger.debug(f"(pid={process.pid}) >>> {first_line}")
+
+    with unlinking(
+        find_openmodelica_zmq_port_filepath(suffix)
+    ) as port_filepath:
+        logger.info(
+            f"(pid={process.pid}) Find zmq port file at {port_filepath}"
+        )
+        port = port_filepath.read_text()
+    logger.info(f"(pid={process.pid}) Remove zmq port file at {port_filepath}")
+
+    stack.callback(
+        lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
+    )
+    socket = stack.enter_context(zmq.Context().socket(zmq.REQ))
+    socket.connect(port)
+    logger.info(f"(pid={process.pid}) Connect zmq sokcet via {port}")
+
+    return process, socket, stack
 
 
 def resolve_command(
