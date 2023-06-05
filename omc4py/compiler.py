@@ -5,9 +5,11 @@ import shutil
 import tempfile
 import uuid
 import warnings
+from asyncio import Lock
 from collections.abc import Iterator, Sequence
 from contextlib import ExitStack, suppress
 from dataclasses import dataclass, field
+from functools import lru_cache
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
@@ -264,8 +266,13 @@ class AsyncOMCInteractive(
     context_type: ClassVar[type[zmq.asyncio.Context]] = zmq.asyncio.Context
 
     async def evaluate(self, expression: str) -> str:
-        logger.debug(f"(pid={self.process.pid}) >>> {expression}")
-        await self.socket.send_string(expression)
-        result = await self.socket.recv_string()
-        logger.debug(f"(pid={self.process.pid}) {result}")
+        async with self.__lock():
+            logger.debug(f"(pid={self.process.pid}) >>> {expression}")
+            await self.socket.send_string(expression)
+            result = await self.socket.recv_string()
+            logger.debug(f"(pid={self.process.pid}) {result}")
         return result
+
+    @lru_cache(None)
+    def __lock(self) -> Lock:
+        return Lock()
