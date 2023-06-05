@@ -11,7 +11,16 @@ from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, Any, Optional, Union, overload
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    ClassVar,
+    Generic,
+    Optional,
+    TypeVar,
+    Union,
+    overload,
+)
 
 import zmq.asyncio
 
@@ -129,20 +138,28 @@ def find_openmodelica_zmq_port_filepath(suffix: Optional[str]) -> Path:
     return candidates[0]
 
 
+_T_context = TypeVar("_T_context", zmq.Context, zmq.asyncio.Context)
+_T_socket = TypeVar("_T_socket", zmq.Socket, zmq.asyncio.Socket)
+_T_interactive = TypeVar(
+    "_T_interactive", bound="GenericOMCInteractive[Any, Any]"
+)
+
+
 @dataclass(frozen=True)
-class OMCInteractive(
-    classes.AbstractOMCInteractive,
-):
+class GenericOMCInteractive(Generic[_T_context, _T_socket]):
     process: Process
-    socket: zmq.Socket
+    socket: _T_socket
     stack: ExitStack = field(repr=False)
+    context_type: ClassVar[type[zmq.Context | zmq.asyncio.Context]]
 
     @classmethod
     def open(
-        cls,
+        cls: type[_T_interactive],
         omc_command: Optional[StrOrPathLike] = None,
-    ) -> "OMCInteractive":
-        process, socket, stack = _enter_zmq_context(zmq.Context, omc_command)
+    ) -> _T_interactive:
+        process, socket, stack = _enter_zmq_context(
+            cls.context_type, omc_command
+        )
         return cls(process=process, socket=socket, stack=stack)
 
     def close(
@@ -150,6 +167,14 @@ class OMCInteractive(
     ) -> None:
         with suppress(Exception):
             self.stack.close()
+
+
+@dataclass(frozen=True)
+class OMCInteractive(
+    GenericOMCInteractive[zmq.Context, zmq.Socket],
+    classes.AbstractOMCInteractive,
+):
+    context_type: ClassVar[type[zmq.Context]] = zmq.Context
 
     def evaluate(self, expression: str) -> str:
         logger.debug(f"(pid={self.process.pid}) >>> {expression}")
