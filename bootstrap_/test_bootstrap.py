@@ -7,7 +7,7 @@ from tempfile import TemporaryDirectory
 import pytest
 from pkg_resources import resource_filename
 
-from bootstrap import OutputFormat
+from bootstrap_ import OutputFormat
 
 
 @pytest.mark.parametrize(
@@ -34,7 +34,7 @@ def test_bootstrap(
             [
                 sys.executable,
                 "-m",
-                "bootstrap",
+                "bootstrap_",
                 f"{xml}",  # input
                 *("--input-type", "xml"),
                 *("--output", f"{directory / f'output{output_suffix}'}"),
@@ -54,7 +54,7 @@ def test_array_stub() -> None:
         bootstrap_cmd = [
             sys.executable,
             "-m",
-            "bootstrap.array",
+            "bootstrap_.array",
             f"--output={array_pyi}",
         ]
         run(bootstrap_cmd, check=True)
