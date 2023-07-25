@@ -45,8 +45,9 @@ types-setuptools = "^65.7.0.3"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^6.2.5"
-pytest-dependency = "^0.5.1"
+pytest-asyncio = "^0.20"
 pytest-cov = "^4.0.0"
+pytest-dependency = "^0.5.1"
 typing-extensions = ">=4.1.0"
 
 [build-system]
