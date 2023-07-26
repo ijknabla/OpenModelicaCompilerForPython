@@ -10,6 +10,7 @@ from typing import cast as typing_cast
 
 from arpeggio import (
     EOF,
+    NoMatch,
     NonTerminal,
     Optional,
     ParserPython,
@@ -33,6 +34,7 @@ from typing_extensions import (
     get_type_hints,
 )
 
+from omc4py.exception import OMCRuntimeError
 from omc4py.string import unquote_modelica_string
 
 from .modelica import enumeration, record
@@ -73,7 +75,10 @@ def parse(typ: type[_T], literal: str) -> _T:
     parser = _get_parser(
         *map(_Token.from_value_type, _get_types(typ, keep_component=True))
     )
-    parse_tree = parser.parse(literal)
+    try:
+        parse_tree = parser.parse(literal)
+    except NoMatch:
+        raise OMCRuntimeError(literal) from None
     return cast(typ, visit_parse_tree(parse_tree, Visitor()))
 
 
