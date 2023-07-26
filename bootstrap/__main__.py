@@ -1,17 +1,25 @@
 from __future__ import annotations
 
+import os
 import sys
 from asyncio import run
 from collections.abc import Callable, Coroutine, Sequence
 from functools import wraps
+from itertools import chain
 from pathlib import Path
 from typing import IO, Any, TypeVar
 
 import click
 import yaml
+from tqdm import tqdm
 from typing_extensions import ParamSpec
 
-from .interface import create_interface, create_interface_by_docker
+from .interface import (
+    Interface,
+    Version,
+    create_interface,
+    create_interface_by_docker,
+)
 
 _P = ParamSpec("_P")
 _T = TypeVar("_T")
@@ -85,6 +93,49 @@ async def interface_docker(
         output_dir=output_dir,
         pip_cache_dir=pip_cache_dir,
     )
+
+
+if sys.version_info >= (3, 10):
+    from ast import unparse
+
+    from .code import create_code
+
+    global code
+
+    @main.command()
+    @click.option(
+        "-o",
+        "--output-dir",
+        type=click.Path(
+            exists=True, dir_okay=True, file_okay=False, path_type=Path
+        ),
+        default=Path("."),
+    )
+    @click.argument(
+        "inputs",
+        metavar="INPUTS",
+        type=click.File("r", encoding="utf-8", lazy=True),
+        nargs=-1,
+    )
+    @run_decorator
+    async def code(
+        inputs: Sequence[IO[str]],
+        output_dir: Path,
+    ) -> None:
+        interface: Interface
+        interface = dict(
+            sorted(
+                chain.from_iterable(
+                    yaml.safe_load(i).items() for i in tqdm(inputs)
+                ),
+                key=lambda item: Version.parse(item[0]),
+            )
+        )
+        async for rel_path, module in create_code(interface):
+            path = output_dir / rel_path
+            os.makedirs(path.parent, exist_ok=True)
+            with path.open("w", encoding="utf-8") as o:
+                print(unparse(module), file=o)
 
 
 if __name__ == "__main__":
