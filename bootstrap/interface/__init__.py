@@ -6,16 +6,21 @@ from asyncio import (
     CancelledError,
     Event,
     Queue,
+    create_subprocess_exec,
     create_task,
     gather,
     wait,
 )
-from collections.abc import AsyncGenerator, AsyncIterator, Sequence
+from asyncio.subprocess import PIPE
+from collections.abc import AsyncGenerator, AsyncIterator, Iterable, Sequence
 from contextlib import ExitStack, suppress
 from dataclasses import dataclass, field
 from functools import reduce
+from pathlib import Path, PurePosixPath
+from subprocess import CalledProcessError
 from typing import Generic, Mapping, NamedTuple, NewType, TypeVar, overload
 
+from pkg_resources import resource_filename
 from typing_extensions import Literal, NotRequired, Self, TypedDict
 
 from neo import TypeName, VariableName
@@ -95,6 +100,128 @@ async def create_interface(n: int) -> Interface:
             _dump_key(n): e for n, e in entities.items() if e is not None
         }
     }
+
+
+async def create_interface_by_docker(
+    image: Iterable[str] | str,
+    n: int,
+    output_dir: Path,
+    pip_cache_dir: Path | None,
+) -> None:
+    if not isinstance(image, str):
+        await gather(
+            *(
+                create_interface_by_docker(i, n, output_dir, pip_cache_dir)
+                for i in image
+            )
+        )
+        return
+
+    omc_version_match = re.search(
+        r"(\d+)\.(\d+)\.\d",
+        await _docker_run(
+            image,
+            [],
+            ["omc", "--version"],
+            pipe=True,
+        ),
+    )
+    assert omc_version_match is not None
+    major, minor = map(int, omc_version_match.groups())
+
+    omc4py_s = Path(resource_filename("bootstrap", "..")).resolve()
+    omc4py_t = PurePosixPath("/omc4py")
+    output_s = output_dir.resolve()
+    output_t = PurePosixPath("/output") / f"v_{major}_{minor}.yaml"
+
+    docker_args = [
+        "--mount",
+        f"type=bind,source={omc4py_s},target={omc4py_t}",
+        "--mount",
+        f"type=bind,source={output_s},target={output_t.parent}",
+    ]
+
+    PYTHON = "sudo -u user python"
+
+    if pip_cache_dir is not None:
+        pip_cache_s = pip_cache_dir.resolve()
+        pip_cache_t = PurePosixPath("/pip-cache")
+
+        docker_args.extend(
+            [
+                "--mount",
+                f"type=bind,source={pip_cache_s},target={pip_cache_t}",
+            ]
+        )
+        PYTHON = f"sudo -u user env PIP_CACHE_DIR={pip_cache_t} python"
+
+    await _docker_run(
+        image,
+        docker_args,
+        [
+            "bash",
+            "-c",
+            " && ".join(
+                [
+                    f"cd {omc4py_t}",
+                    f"{PYTHON} -m pip install -U pip",
+                    f"{PYTHON} -m pip install -r requirements.test.txt",
+                    f"{PYTHON} -m bootstrap interface -n {n} -o {output_t}",
+                ]
+            ),
+        ],
+        pipe=False,
+    )
+
+
+@overload
+async def _docker_run(
+    image: str,
+    docker_args: Iterable[str],
+    args: Iterable[str],
+    pipe: Literal[False],
+) -> None:
+    ...
+
+
+@overload
+async def _docker_run(
+    image: str,
+    docker_args: Iterable[str],
+    args: Iterable[str],
+    pipe: Literal[True],
+) -> str:
+    ...
+
+
+async def _docker_run(
+    image: str,
+    docker_args: Iterable[str],
+    args: Iterable[str],
+    pipe: Literal[False, True],
+) -> str | None:
+    cmd = [
+        "docker",
+        "run",
+        *docker_args,
+        image,
+        *args,
+    ]
+    process = await create_subprocess_exec(
+        *cmd,
+        stdout=PIPE if pipe else None,
+    )
+    try:
+        o, _ = await process.communicate()
+        if pipe:
+            return o.decode("utf-8")
+        if process.returncode:
+            raise CalledProcessError(process.returncode, cmd)
+    finally:
+        if process.returncode is None:
+            process.terminate()
+
+    return None
 
 
 def _union(
