@@ -1,97 +1,56 @@
-import enum
-import typing
+from typing import List, Union
 
-from omc4py.classes import Boolean, Component, String, TypeName
-from omc4py.parser import parse_OMCValue
-from omc4py.session import OMCSessionMinimal
+import neo.session.aio
+from neo import TypeName
+from neo.modelica import external
 
 
-class OMCSessionBootstrap(
-    OMCSessionMinimal,
-):
-    def list(
-        self,
-        class_: typing.Optional[TypeName] = None,
-        interfaceOnly: typing.Optional[bool] = None,
-        shortOnly: typing.Optional[bool] = None,
-    ) -> str:
-        __result = self.__omc__.call_function(
-            funcName="list",
-            inputArguments=[
-                (Component(TypeName), "class_", class_, "optional"),
-                (
-                    Component(Boolean),
-                    "interfaceOnly",
-                    interfaceOnly,
-                    "optional",
-                ),
-                (Component(Boolean), "shortOnly", shortOnly, "optional"),
-            ],
-            outputArguments=[
-                (Component(String), "contents"),
-            ],
-            parser=parse_OMCValue,
-        )
-        self.__check__()
-        return str(__result)
+class Session(neo.session.aio.Session):
+    @external(".OpenModelica.Scripting.getVersion")
+    @staticmethod
+    async def getVersion() -> str:
+        raise NotImplementedError()
 
-    def getClassNames(
-        self,
-        class_: typing.Optional[TypeName] = None,
-        recursive: typing.Optional[bool] = None,
-        qualified: typing.Optional[bool] = None,
-    ) -> typing.List[TypeName]:
-        __result = self.__omc__.call_function(
-            funcName="getClassNames",
-            inputArguments=[
-                (Component(TypeName), "class_", class_, "optional"),
-                (Component(Boolean), "recursive", recursive, "optional"),
-                (Component(Boolean), "qualified", qualified, "optional"),
-            ],
-            outputArguments=[
-                (Component(TypeName)[:], "classNames"),
-            ],
-            parser=parse_OMCValue,
-        )
-        self.__check__()
-        return list(__result)
+    @external(".OpenModelica.Scripting.list")
+    @staticmethod
+    async def list(class_: Union[TypeName, str], interfaceOnly: bool) -> str:
+        raise NotImplementedError()
 
-    def getClassRestriction(
-        self,
-        cl: TypeName,
-    ) -> str:
-        __result = self.__omc__.call_function(
-            funcName="getClassRestriction",
-            inputArguments=[
-                (Component(TypeName), "cl", cl, "required"),
-            ],
-            outputArguments=[
-                (Component(String), "restriction"),
-            ],
-            parser=parse_OMCValue,
-        )
-        self.__check__()
-        return str(__result)
+    @external(".OpenModelica.Scripting.getClassNames")
+    @staticmethod
+    async def getClassNames(
+        class_: Union[TypeName, str],
+        builtin: bool,
+        showProtected: bool,
+    ) -> List[TypeName]:
+        raise NotImplementedError()
 
-    class RestrictionEnum(
-        enum.Enum,
-    ):
-        type = enum.auto()
-        package = enum.auto()
-        record = enum.auto()
-        function = enum.auto()
+    @external(".OpenModelica.Scripting.getClassRestriction")
+    @staticmethod
+    async def getClassRestriction(cl: Union[TypeName, str]) -> str:
+        raise NotImplementedError()
 
-    def getClassRestrictionEnum(
-        self,
-        cl: TypeName,
-    ) -> "RestrictionEnum":
-        keywords_to_ignore = {
-            "impure",
-        }
-        return self.RestrictionEnum[
-            " ".join(
-                word
-                for word in self.getClassRestriction(cl).split(" ")
-                if word not in keywords_to_ignore
-            )
-        ]
+    @external(".OpenModelica.Scripting.isType")
+    @staticmethod
+    async def isType(cl: Union[TypeName, str]) -> bool:
+        raise NotImplementedError()
+
+    @external(".OpenModelica.Scripting.isPackage")
+    @staticmethod
+    async def isPackage(cl: Union[TypeName, str]) -> bool:
+        raise NotImplementedError()
+
+    @external(".OpenModelica.Scripting.isRecord")
+    @staticmethod
+    async def isRecord(cl: Union[TypeName, str]) -> bool:
+        raise NotImplementedError()
+
+    @external(".OpenModelica.Scripting.isFunction")
+    @staticmethod
+    async def isFunction(cl: Union[TypeName, str]) -> bool:
+        raise NotImplementedError()
+
+    @external(".OpenModelica.Scripting.isEnumeration")
+    @staticmethod
+    async def isEnumeration(cl: Union[TypeName, str]) -> bool:
+        raise NotImplementedError()
