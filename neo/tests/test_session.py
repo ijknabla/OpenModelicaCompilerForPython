@@ -9,8 +9,8 @@ import neo.session.aio
 from neo import TypeName, VariableName
 from neo.openmodelica import Component
 
-from . import Enum, one
-from .aio import EmptySession, NestedSession, OneSession
+from .session import Enum, one
+from .session.aio import EmptySession, NestedSession, OneSession
 
 
 @pytest.mark.parametrize(

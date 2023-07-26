@@ -11,7 +11,7 @@ import neo.session
 import neo.session.aio
 from omc4py.compiler import AsyncOMCInteractive, OMCInteractive
 
-from .aio import EmptySession, NestedSession, OneSession
+from .session.aio import EmptySession, NestedSession, OneSession
 
 
 @pytest.fixture(scope="session")
