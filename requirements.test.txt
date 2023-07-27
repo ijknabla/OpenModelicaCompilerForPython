@@ -7,7 +7,6 @@ colorama==0.4.4 ; python_version >= "3.7" and python_version < "4.0" and (platfo
 coverage[toml]==7.1.0 ; python_version >= "3.7" and python_version < "4.0"
 importlib-metadata==4.2.0 ; python_version >= "3.7" and python_version < "3.8"
 iniconfig==1.1.1 ; python_version >= "3.7" and python_version < "4.0"
-lxml==4.9.2 ; python_version >= "3.7" and python_version < "4.0"
 modelicalang==0.1.0a0 ; python_version >= "3.7" and python_version < "4.0"
 mypy-extensions==0.4.3 ; python_version >= "3.7" and python_version < "4.0"
 mypy==1.0.0 ; python_version >= "3.7" and python_version < "4.0"
