@@ -338,11 +338,6 @@ class Syntax(v3_5.Syntax):
 
     @classmethod
     @returns_parsing_expression
-    def string(cls) -> ParsingExpressionLike:
-        return cls.STRING
-
-    @classmethod
-    @returns_parsing_expression
     def variablename(cls) -> ParsingExpressionLike:
         return cls.IDENT
 
@@ -359,15 +354,15 @@ class Syntax(v3_5.Syntax):
             (
                 *(cls.typename, ","),  # className
                 *(cls.variablename, ","),  # name
-                *(cls.string, ","),  # comment
-                *(cls.string, ","),  # protected
+                *(cls.STRING, ","),  # comment
+                *(cls.STRING, ","),  # protected
                 *(cls.boolean, ","),  # isFinal
                 *(cls.boolean, ","),  # isFlow
                 *(cls.boolean, ","),  # isStream
                 *(cls.boolean, ","),  # isReplaceable
-                *(cls.string, ","),  # variability
-                *(cls.string, ","),  # innerOuter
-                *(cls.string, ","),  # inputOutput
+                *(cls.STRING, ","),  # variability
+                *(cls.STRING, ","),  # innerOuter
+                *(cls.STRING, ","),  # inputOutput
                 cls.subscript_list,  # dimensions
             ),
             "}",
@@ -452,7 +447,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def string_primary(cls) -> ParsingExpressionLike:
-        return [cls.string, cls.string_array]
+        return [cls.STRING, cls.string_array]
 
     @classmethod
     @returns_parsing_expression
@@ -557,7 +552,7 @@ class Visitor(PTNodeVisitor):
     ) -> BooleanPrimary:
         return children.boolean_primary
 
-    def visit_string(self, node: Terminal, _: Never) -> str:
+    def visit_STRING(self, node: Terminal, _: Never) -> str:
         return unquote_modelica_string(node.flat_str())
 
     def visit_string_array(
