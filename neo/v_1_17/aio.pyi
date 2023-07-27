@@ -1,17 +1,36 @@
 from __future__ import annotations
+
 from dataclasses import dataclass
 from typing import List, Sequence, Union
+
 from typing_extensions import Annotated, Literal
-from ..enumeration import Access__v_1_14, DiffFormat__v_1_13, ErrorKind__v_1_13, ErrorLevel__v_1_16, ExportKind__v_1_13, FileType__v_1_13, LinearSystemSolver__v_1_13, StandardStream__v_1_13, oms_causality__v_1_14, oms_fault_type__v_1_16, oms_signal_type__v_1_14, oms_solver__v_1_14, oms_system__v_1_14, oms_tlm_domain__v_1_14, oms_tlm_interpolation__v_1_14
+
+from ..enumeration import (
+    Access__v_1_14,
+    DiffFormat__v_1_13,
+    ErrorKind__v_1_13,
+    ErrorLevel__v_1_16,
+    ExportKind__v_1_13,
+    FileType__v_1_13,
+    LinearSystemSolver__v_1_13,
+    StandardStream__v_1_13,
+    oms_causality__v_1_14,
+    oms_fault_type__v_1_16,
+    oms_signal_type__v_1_14,
+    oms_solver__v_1_14,
+    oms_system__v_1_14,
+    oms_tlm_domain__v_1_14,
+    oms_tlm_interpolation__v_1_14,
+)
 from ..modelica import alias, external, package, record
 from ..openmodelica import TypeName, VariableName
 from ..session.aio import Session as BasicSession
 
-@external('.OpenModelica.threadData.ThreadData')
+@external(".OpenModelica.threadData.ThreadData")
 @dataclass
 class ThreadData(record):
     """record ThreadData
-end ThreadData;"""
+    end ThreadData;"""
 
 class getAvailableMatchingAlgorithms:
     allChoices: List[str]
@@ -57,21 +76,22 @@ class solveLinearSystem:
     X: List[float]
     info: int
 
-@external('.OpenModelica.Scripting.simulate.SimulationResult')
+@external(".OpenModelica.Scripting.simulate.SimulationResult")
 @dataclass
 class SimulationResult(record):
     """record SimulationResult
-  String resultFile;
-  String simulationOptions;
-  String messages;
-  Real timeFrontend;
-  Real timeBackend;
-  Real timeSimCode;
-  Real timeTemplates;
-  Real timeCompile;
-  Real timeSimulation;
-  Real timeTotal;
-end SimulationResult;"""
+      String resultFile;
+      String simulationOptions;
+      String messages;
+      Real timeFrontend;
+      Real timeBackend;
+      Real timeSimCode;
+      Real timeTemplates;
+      Real timeCompile;
+      Real timeSimulation;
+      Real timeTotal;
+    end SimulationResult;"""
+
     resultFile: str
     simulationOptions: str
     messages: str
@@ -91,24 +111,25 @@ class getTimeStamp:
     timeStamp: float
     timeStampAsString: str
 
-@external('.OpenModelica.Scripting.getComponentsTest.Component')
+@external(".OpenModelica.Scripting.getComponentsTest.Component")
 @dataclass
 class Component(record):
     """record Component
-  String className;
-  // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
-  String name;
-  String comment;
-  Boolean isProtected;
-  Boolean isFinal;
-  Boolean isFlow;
-  Boolean isStream;
-  Boolean isReplaceable;
-  String variability "'constant', 'parameter', 'discrete', ''";
-  String innerOuter "'inner', 'outer', ''";
-  String inputOutput "'input', 'output', ''";
-  String dimensions[:];
-end Component;"""
+      String className;
+      // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
+      String name;
+      String comment;
+      Boolean isProtected;
+      Boolean isFinal;
+      Boolean isFlow;
+      Boolean isStream;
+      Boolean isReplaceable;
+      String variability "'constant', 'parameter', 'discrete', ''";
+      String innerOuter "'inner', 'outer', ''";
+      String inputOutput "'input', 'output', ''";
+      String dimensions[:];
+    end Component;"""
+
     className: str
     name: str
     comment: str
@@ -230,169 +251,155 @@ class oms_parseModelName:
     cref: str
     status: int
 
-@external('.OpenModelica.AutoCompletion.Annotations.Protection.License')
+@external(".OpenModelica.AutoCompletion.Annotations.Protection.License")
 @dataclass
 class License(record):
     """record License
-  String libraryKey;
-  String licenseFile = "" "Optional, default mapping if empty";
-end License;"""
+      String libraryKey;
+      String licenseFile = "" "Optional, default mapping if empty";
+    end License;"""
+
     libraryKey: str
     licenseFile: str
 
-@external('.OpenModelica')
+@external(".OpenModelica")
 class OpenModelica(package):
-
-    @external('.OpenModelica.threadData')
+    @external(".OpenModelica.threadData")
     @classmethod
     async def threadData(_) -> ThreadData:
         """function threadData
-  output ThreadData threadData;
-end threadData;"""
+          output ThreadData threadData;
+        end threadData;"""
         raise NotImplementedError()
-
-    @external('.OpenModelica.Internal')
+    @external(".OpenModelica.Internal")
     class Internal(package):
-
-        @external('.OpenModelica.Internal.ClockConstructor')
+        @external(".OpenModelica.Internal.ClockConstructor")
         @classmethod
         async def ClockConstructor(_) -> None:
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.delay2')
+        @external(".OpenModelica.Internal.delay2")
         @classmethod
         async def delay2(_, expr: float, delayTime: float) -> float:
             """impure function delay2
-  input Real expr;
-  parameter input Real delayTime;
-  output Real value;
-end delay2;"""
+              input Real expr;
+              parameter input Real delayTime;
+              output Real value;
+            end delay2;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.delay3')
+        @external(".OpenModelica.Internal.delay3")
         @classmethod
-        async def delay3(_, expr: float, delayTime: float, delayMax: float) -> float:
+        async def delay3(
+            _, expr: float, delayTime: float, delayMax: float
+        ) -> float:
             """impure function delay3
-  input Real expr, delayTime;
-  parameter input Real delayMax;
-  output Real value;
-end delay3;"""
+              input Real expr, delayTime;
+              parameter input Real delayMax;
+              output Real value;
+            end delay3;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.intAbs')
+        @external(".OpenModelica.Internal.intAbs")
         @classmethod
         async def intAbs(_, v: int) -> int:
             """function intAbs
-  input Integer v;
-  output Integer o;
-end intAbs;"""
+              input Integer v;
+              output Integer o;
+            end intAbs;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.realAbs')
+        @external(".OpenModelica.Internal.realAbs")
         @classmethod
         async def realAbs(_, v: float) -> float:
             """function realAbs
-  input Real v;
-  output Real o;
-end realAbs;"""
+              input Real v;
+              output Real o;
+            end realAbs;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.intDiv')
+        @external(".OpenModelica.Internal.intDiv")
         @classmethod
         async def intDiv(_, x: int, y: int) -> int:
             """function intDiv
-  input Integer x;
-  input Integer y;
-  output Integer z;
-end intDiv;"""
+              input Integer x;
+              input Integer y;
+              output Integer z;
+            end intDiv;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.realDiv')
+        @external(".OpenModelica.Internal.realDiv")
         @classmethod
         async def realDiv(_, x: float, y: float) -> float:
             """function realDiv
-  input Real x;
-  input Real y;
-  output Real z;
-end realDiv;"""
+              input Real x;
+              input Real y;
+              output Real z;
+            end realDiv;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.intMod')
+        @external(".OpenModelica.Internal.intMod")
         @classmethod
         async def intMod(_, x: int, y: int) -> int:
             """function intMod
-  input Integer x;
-  input Integer y;
-  output Integer z;
-end intMod;"""
+              input Integer x;
+              input Integer y;
+              output Integer z;
+            end intMod;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.realMod')
+        @external(".OpenModelica.Internal.realMod")
         @classmethod
         async def realMod(_, x: float, y: float) -> float:
             """function realMod
-  input Real x;
-  input Real y;
-  output Real z;
-end realMod;"""
+              input Real x;
+              input Real y;
+              output Real z;
+            end realMod;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.intRem')
+        @external(".OpenModelica.Internal.intRem")
         @classmethod
         async def intRem(_, x: int, y: int) -> int:
             """function intRem
-  input Integer x;
-  input Integer y;
-  output Integer z;
-end intRem;"""
+              input Integer x;
+              input Integer y;
+              output Integer z;
+            end intRem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.realRem')
+        @external(".OpenModelica.Internal.realRem")
         @classmethod
         async def realRem(_, x: float, y: float) -> float:
             """function realRem
-  input Real x;
-  input Real y;
-  output Real z;
-end realRem;"""
+              input Real x;
+              input Real y;
+              output Real z;
+            end realRem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Internal.Architecture')
+        @external(".OpenModelica.Internal.Architecture")
         class Architecture(package):
-
-            @external('.OpenModelica.Internal.Architecture.numBits')
+            @external(".OpenModelica.Internal.Architecture.numBits")
             @classmethod
             async def numBits(_) -> int:
                 """function numBits
-  output Integer numBit;
-end numBits;"""
+                  output Integer numBit;
+                end numBits;"""
                 raise NotImplementedError()
-
-            @external('.OpenModelica.Internal.Architecture.integerMax')
+            @external(".OpenModelica.Internal.Architecture.integerMax")
             @classmethod
             async def integerMax(_) -> int:
                 """function integerMax
-  output Integer max;
-end integerMax;"""
+                  output Integer max;
+                end integerMax;"""
                 raise NotImplementedError()
-
-    @external('.OpenModelica.Scripting')
+    @external(".OpenModelica.Scripting")
     class Scripting(package):
-
-        @external('.OpenModelica.Scripting.CheckSettingsResult')
+        @external(".OpenModelica.Scripting.CheckSettingsResult")
         @dataclass
         class CheckSettingsResult(record):
             """record CheckSettingsResult
-  String OPENMODELICAHOME, OPENMODELICALIBRARY, OMC_PATH, SYSTEM_PATH, OMDEV_PATH;
-  Boolean OMC_FOUND;
-  String MODELICAUSERCFLAGS, WORKING_DIRECTORY;
-  Boolean CREATE_FILE_WORKS, REMOVE_FILE_WORKS;
-  String OS, SYSTEM_INFO, SENDDATALIBS, C_COMPILER, C_COMPILER_VERSION;
-  Boolean C_COMPILER_RESPONDING, HAVE_CORBA;
-  String CONFIGURE_CMDLINE;
-  annotation(
-    preferredView = "text");
-end CheckSettingsResult;"""
+              String OPENMODELICAHOME, OPENMODELICALIBRARY, OMC_PATH, SYSTEM_PATH, OMDEV_PATH;
+              Boolean OMC_FOUND;
+              String MODELICAUSERCFLAGS, WORKING_DIRECTORY;
+              Boolean CREATE_FILE_WORKS, REMOVE_FILE_WORKS;
+              String OS, SYSTEM_INFO, SENDDATALIBS, C_COMPILER, C_COMPILER_VERSION;
+              Boolean C_COMPILER_RESPONDING, HAVE_CORBA;
+              String CONFIGURE_CMDLINE;
+              annotation(
+                preferredView = "text");
+            end CheckSettingsResult;"""
+
             OPENMODELICAHOME: str
             OPENMODELICALIBRARY: str
             OMC_PATH: str
@@ -411,851 +418,842 @@ end CheckSettingsResult;"""
             C_COMPILER_RESPONDING: bool
             HAVE_CORBA: bool
             CONFIGURE_CMDLINE: str
-
-        @external('.OpenModelica.Scripting.Internal')
+        @external(".OpenModelica.Scripting.Internal")
         class Internal(package):
-
-            @external('.OpenModelica.Scripting.Internal.Time')
+            @external(".OpenModelica.Scripting.Internal.Time")
             class Time(package):
-
-                @external('.OpenModelica.Scripting.Internal.Time.readableTime')
+                @external(".OpenModelica.Scripting.Internal.Time.readableTime")
                 @classmethod
                 async def readableTime(_, sec: float) -> str:
                     """function readableTime
-  input Real sec;
-  output String str;
-end readableTime;"""
+                      input Real sec;
+                      output String str;
+                    end readableTime;"""
                     raise NotImplementedError()
-
-                @external('.OpenModelica.Scripting.Internal.Time.timerTick')
+                @external(".OpenModelica.Scripting.Internal.Time.timerTick")
                 @classmethod
                 async def timerTick(_, index: int) -> None:
                     """function timerTick
-  input Integer index;
-end timerTick;"""
+                      input Integer index;
+                    end timerTick;"""
                     raise NotImplementedError()
-
-                @external('.OpenModelica.Scripting.Internal.Time.timerTock')
+                @external(".OpenModelica.Scripting.Internal.Time.timerTock")
                 @classmethod
                 async def timerTock(_, index: int) -> float:
                     """function timerTock
-  input Integer index;
-  output Real elapsed;
-end timerTock;"""
+                      input Integer index;
+                      output Real elapsed;
+                    end timerTock;"""
                     raise NotImplementedError()
-
-                @external('.OpenModelica.Scripting.Internal.Time.timerClear')
+                @external(".OpenModelica.Scripting.Internal.Time.timerClear")
                 @classmethod
                 async def timerClear(_, index: int) -> None:
                     """function timerClear
-  input Integer index;
-end timerClear;"""
+                      input Integer index;
+                    end timerClear;"""
                     raise NotImplementedError()
             FileType = FileType__v_1_13
 
-            @external('.OpenModelica.Scripting.Internal.stat')
+            @external(".OpenModelica.Scripting.Internal.stat")
             @classmethod
             async def stat(_, name: str) -> FileType__v_1_13:
                 """function stat
-  input String name;
-  output FileType fileType;
-end stat;"""
+                  input String name;
+                  output FileType fileType;
+                end stat;"""
                 raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.checkSettings')
+        @external(".OpenModelica.Scripting.checkSettings")
         @classmethod
-        async def checkSettings(_) -> OpenModelica.Scripting.CheckSettingsResult:
+        async def checkSettings(
+            _,
+        ) -> OpenModelica.Scripting.CheckSettingsResult:
             """function checkSettings
-  output CheckSettingsResult result;
-end checkSettings;"""
+              output CheckSettingsResult result;
+            end checkSettings;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadFile')
+        @external(".OpenModelica.Scripting.loadFile")
         @classmethod
-        async def loadFile(_, fileName: str, encoding: str=..., uses: bool=..., notify: bool=..., requireExactVersion: bool=...) -> bool:
+        async def loadFile(
+            _,
+            fileName: str,
+            encoding: str = ...,
+            uses: bool = ...,
+            notify: bool = ...,
+            requireExactVersion: bool = ...,
+        ) -> bool:
             """function loadFile
-  input String fileName;
-  input String encoding = "UTF-8";
-  input Boolean uses = true;
-  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
-  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
-  output Boolean success;
-end loadFile;"""
+              input String fileName;
+              input String encoding = "UTF-8";
+              input Boolean uses = true;
+              input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+              input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
+              output Boolean success;
+            end loadFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadFiles')
+        @external(".OpenModelica.Scripting.loadFiles")
         @classmethod
-        async def loadFiles(_, fileNames: Sequence[str], encoding: str=..., numThreads: int=..., uses: bool=..., notify: bool=..., requireExactVersion: bool=...) -> bool:
+        async def loadFiles(
+            _,
+            fileNames: Sequence[str],
+            encoding: str = ...,
+            numThreads: int = ...,
+            uses: bool = ...,
+            notify: bool = ...,
+            requireExactVersion: bool = ...,
+        ) -> bool:
             """function loadFiles
-  input String[:] fileNames;
-  input String encoding = "UTF-8";
-  input Integer numThreads = OpenModelica.Scripting.numProcessors();
-  input Boolean uses = true;
-  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
-  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
-  output Boolean success;
-end loadFiles;"""
+              input String[:] fileNames;
+              input String encoding = "UTF-8";
+              input Integer numThreads = OpenModelica.Scripting.numProcessors();
+              input Boolean uses = true;
+              input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+              input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
+              output Boolean success;
+            end loadFiles;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.parseEncryptedPackage')
+        @external(".OpenModelica.Scripting.parseEncryptedPackage")
         @classmethod
-        async def parseEncryptedPackage(_, fileName: str, workdir: str=...) -> List[TypeName]:
+        async def parseEncryptedPackage(
+            _, fileName: str, workdir: str = ...
+        ) -> List[TypeName]:
             """function parseEncryptedPackage
-  input String fileName;
-  input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
-  output TypeName names[:];
-end parseEncryptedPackage;"""
+              input String fileName;
+              input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
+              output TypeName names[:];
+            end parseEncryptedPackage;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadEncryptedPackage')
+        @external(".OpenModelica.Scripting.loadEncryptedPackage")
         @classmethod
-        async def loadEncryptedPackage(_, fileName: str, workdir: str=..., skipUnzip: bool=..., uses: bool=..., notify: bool=..., requireExactVersion: bool=...) -> bool:
+        async def loadEncryptedPackage(
+            _,
+            fileName: str,
+            workdir: str = ...,
+            skipUnzip: bool = ...,
+            uses: bool = ...,
+            notify: bool = ...,
+            requireExactVersion: bool = ...,
+        ) -> bool:
             """function loadEncryptedPackage
-  input String fileName;
-  input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
-  input Boolean skipUnzip = false "Skips the unzip of .mol if true. In that case we expect the files are already extracted e.g., because of parseEncryptedPackage() call.";
-  input Boolean uses = true;
-  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
-  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
-  output Boolean success;
-end loadEncryptedPackage;"""
+              input String fileName;
+              input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
+              input Boolean skipUnzip = false "Skips the unzip of .mol if true. In that case we expect the files are already extracted e.g., because of parseEncryptedPackage() call.";
+              input Boolean uses = true;
+              input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+              input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
+              output Boolean success;
+            end loadEncryptedPackage;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.reloadClass')
+        @external(".OpenModelica.Scripting.reloadClass")
         @classmethod
-        async def reloadClass(_, name: Union[TypeName, str], encoding: str=...) -> bool:
+        async def reloadClass(
+            _, name: Union[TypeName, str], encoding: str = ...
+        ) -> bool:
             """function reloadClass
-  input TypeName name;
-  input String encoding = "UTF-8";
-  output Boolean success;
-end reloadClass;"""
+              input TypeName name;
+              input String encoding = "UTF-8";
+              output Boolean success;
+            end reloadClass;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadString')
+        @external(".OpenModelica.Scripting.loadString")
         @classmethod
-        async def loadString(_, data: str, filename: str=..., encoding: str=..., merge: bool=...) -> bool:
+        async def loadString(
+            _,
+            data: str,
+            filename: str = ...,
+            encoding: str = ...,
+            merge: bool = ...,
+        ) -> bool:
             """function loadString
-  input String data;
-  input String filename = "<interactive>";
-  input String encoding = "UTF-8";
-  input Boolean merge = false "if merge is true the parsed AST is merged with the existing AST, default to false which means that is replaced, not merged";
-  output Boolean success;
-end loadString;"""
+              input String data;
+              input String filename = "<interactive>";
+              input String encoding = "UTF-8";
+              input Boolean merge = false "if merge is true the parsed AST is merged with the existing AST, default to false which means that is replaced, not merged";
+              output Boolean success;
+            end loadString;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.parseString')
+        @external(".OpenModelica.Scripting.parseString")
         @classmethod
-        async def parseString(_, data: str, filename: str=...) -> List[TypeName]:
+        async def parseString(
+            _, data: str, filename: str = ...
+        ) -> List[TypeName]:
             """function parseString
-  input String data;
-  input String filename = "<interactive>";
-  output TypeName names[:];
-end parseString;"""
+              input String data;
+              input String filename = "<interactive>";
+              output TypeName names[:];
+            end parseString;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.parseFile')
+        @external(".OpenModelica.Scripting.parseFile")
         @classmethod
-        async def parseFile(_, filename: str, encoding: str=...) -> List[TypeName]:
+        async def parseFile(
+            _, filename: str, encoding: str = ...
+        ) -> List[TypeName]:
             """function parseFile
-  input String filename;
-  input String encoding = "UTF-8";
-  output TypeName names[:];
-end parseFile;"""
+              input String filename;
+              input String encoding = "UTF-8";
+              output TypeName names[:];
+            end parseFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadFileInteractiveQualified')
+        @external(".OpenModelica.Scripting.loadFileInteractiveQualified")
         @classmethod
-        async def loadFileInteractiveQualified(_, filename: str, encoding: str=..., uses: bool=..., notify: bool=..., requireExactVersion: bool=...) -> List[TypeName]:
+        async def loadFileInteractiveQualified(
+            _,
+            filename: str,
+            encoding: str = ...,
+            uses: bool = ...,
+            notify: bool = ...,
+            requireExactVersion: bool = ...,
+        ) -> List[TypeName]:
             """function loadFileInteractiveQualified
-  input String filename;
-  input String encoding = "UTF-8";
-  input Boolean uses = true;
-  input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
-  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
-  output TypeName names[:];
-end loadFileInteractiveQualified;"""
+              input String filename;
+              input String encoding = "UTF-8";
+              input Boolean uses = true;
+              input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+              input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
+              output TypeName names[:];
+            end loadFileInteractiveQualified;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadFileInteractive')
+        @external(".OpenModelica.Scripting.loadFileInteractive")
         @classmethod
-        async def loadFileInteractive(_, filename: str, encoding: str=...) -> List[TypeName]:
+        async def loadFileInteractive(
+            _, filename: str, encoding: str = ...
+        ) -> List[TypeName]:
             """function loadFileInteractive
-  input String filename;
-  input String encoding = "UTF-8";
-  output TypeName names[:];
-end loadFileInteractive;"""
+              input String filename;
+              input String encoding = "UTF-8";
+              output TypeName names[:];
+            end loadFileInteractive;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.system')
+        @external(".OpenModelica.Scripting.system")
         @classmethod
-        async def system(_, callStr: str, outputFile: str=...) -> int:
+        async def system(_, callStr: str, outputFile: str = ...) -> int:
             """impure function system
-  input String callStr "String to call: sh -c $callStr";
-  input String outputFile = "" "The output is redirected to this file (unless already done by callStr)";
-  output Integer retval "Return value of the system call; usually 0 on success";
-end system;"""
+              input String callStr "String to call: sh -c $callStr";
+              input String outputFile = "" "The output is redirected to this file (unless already done by callStr)";
+              output Integer retval "Return value of the system call; usually 0 on success";
+            end system;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.system_parallel')
+        @external(".OpenModelica.Scripting.system_parallel")
         @classmethod
-        async def system_parallel(_, callStr: Sequence[str], numThreads: int=...) -> List[int]:
+        async def system_parallel(
+            _, callStr: Sequence[str], numThreads: int = ...
+        ) -> List[int]:
             """impure function system_parallel
-  input String callStr[:] "String to call: sh -c $callStr";
-  input Integer numThreads = numProcessors();
-  output Integer retval[:] "Return value of the system call; usually 0 on success";
-end system_parallel;"""
+              input String callStr[:] "String to call: sh -c $callStr";
+              input Integer numThreads = numProcessors();
+              output Integer retval[:] "Return value of the system call; usually 0 on success";
+            end system_parallel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.saveAll')
+        @external(".OpenModelica.Scripting.saveAll")
         @classmethod
         async def saveAll(_, fileName: str) -> bool:
             """function saveAll
-  input String fileName;
-  output Boolean success;
-end saveAll;"""
+              input String fileName;
+              output Boolean success;
+            end saveAll;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.help')
+        @external(".OpenModelica.Scripting.help")
         @classmethod
-        async def help(_, topic: str=...) -> str:
+        async def help(_, topic: str = ...) -> str:
             """function help
-  input String topic = "topics";
-  output String helpText;
-end help;"""
+              input String topic = "topics";
+              output String helpText;
+            end help;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.clear')
+        @external(".OpenModelica.Scripting.clear")
         @classmethod
         async def clear(_) -> bool:
             """function clear
-  output Boolean success;
-end clear;"""
+              output Boolean success;
+            end clear;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.clearProgram')
+        @external(".OpenModelica.Scripting.clearProgram")
         @classmethod
         async def clearProgram(_) -> bool:
             """function clearProgram
-  output Boolean success;
-end clearProgram;"""
+              output Boolean success;
+            end clearProgram;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.clearVariables')
+        @external(".OpenModelica.Scripting.clearVariables")
         @classmethod
         async def clearVariables(_) -> bool:
             """function clearVariables
-  output Boolean success;
-end clearVariables;"""
+              output Boolean success;
+            end clearVariables;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateHeader')
+        @external(".OpenModelica.Scripting.generateHeader")
         @classmethod
         async def generateHeader(_, fileName: str) -> bool:
             """function generateHeader
-  input String fileName;
-  output Boolean success;
-end generateHeader;"""
+              input String fileName;
+              output Boolean success;
+            end generateHeader;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateJuliaHeader')
+        @external(".OpenModelica.Scripting.generateJuliaHeader")
         @classmethod
         async def generateJuliaHeader(_, fileName: str) -> bool:
             """function generateJuliaHeader
-  input String fileName;
-  output Boolean success;
-end generateJuliaHeader;"""
+              input String fileName;
+              output Boolean success;
+            end generateJuliaHeader;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateSeparateCode')
+        @external(".OpenModelica.Scripting.generateSeparateCode")
         @classmethod
-        async def generateSeparateCode(_, className: Union[TypeName, str], cleanCache: bool=...) -> bool:
+        async def generateSeparateCode(
+            _, className: Union[TypeName, str], cleanCache: bool = ...
+        ) -> bool:
             """function generateSeparateCode
-  input TypeName className;
-  input Boolean cleanCache = false "If true, the cache is reset between each generated package. This conserves memory at the cost of speed.";
-  output Boolean success;
-end generateSeparateCode;"""
+              input TypeName className;
+              input Boolean cleanCache = false "If true, the cache is reset between each generated package. This conserves memory at the cost of speed.";
+              output Boolean success;
+            end generateSeparateCode;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateSeparateCodeDependencies')
+        @external(".OpenModelica.Scripting.generateSeparateCodeDependencies")
         @classmethod
-        async def generateSeparateCodeDependencies(_, stampSuffix: str=...) -> List[str]:
+        async def generateSeparateCodeDependencies(
+            _, stampSuffix: str = ...
+        ) -> List[str]:
             """function generateSeparateCodeDependencies
-  input String stampSuffix = ".c" "Suffix to add to dependencies (often .c.stamp)";
-  output String[:] dependencies;
-end generateSeparateCodeDependencies;"""
+              input String stampSuffix = ".c" "Suffix to add to dependencies (often .c.stamp)";
+              output String[:] dependencies;
+            end generateSeparateCodeDependencies;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile')
+        @external(
+            ".OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile"
+        )
         @classmethod
-        async def generateSeparateCodeDependenciesMakefile(_, filename: str, directory: str=..., suffix: str=...) -> bool:
+        async def generateSeparateCodeDependenciesMakefile(
+            _, filename: str, directory: str = ..., suffix: str = ...
+        ) -> bool:
             """function generateSeparateCodeDependenciesMakefile
-  input String filename "The file to write the makefile to";
-  input String directory = "" "The relative path of the generated files";
-  input String suffix = ".c" "Often .stamp since we do not update all the files";
-  output Boolean success;
-end generateSeparateCodeDependenciesMakefile;"""
+              input String filename "The file to write the makefile to";
+              input String directory = "" "The relative path of the generated files";
+              input String suffix = ".c" "Often .stamp since we do not update all the files";
+              output Boolean success;
+            end generateSeparateCodeDependenciesMakefile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getLinker')
+        @external(".OpenModelica.Scripting.getLinker")
         @classmethod
         async def getLinker(_) -> str:
             """function getLinker
-  output String linker;
-end getLinker;"""
+              output String linker;
+            end getLinker;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setLinker')
+        @external(".OpenModelica.Scripting.setLinker")
         @classmethod
         async def setLinker(_, linker: str) -> bool:
             """function setLinker
-  input String linker;
-  output Boolean success;
-end setLinker;"""
+              input String linker;
+              output Boolean success;
+            end setLinker;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getLinkerFlags')
+        @external(".OpenModelica.Scripting.getLinkerFlags")
         @classmethod
         async def getLinkerFlags(_) -> str:
             """function getLinkerFlags
-  output String linkerFlags;
-end getLinkerFlags;"""
+              output String linkerFlags;
+            end getLinkerFlags;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setLinkerFlags')
+        @external(".OpenModelica.Scripting.setLinkerFlags")
         @classmethod
         async def setLinkerFlags(_, linkerFlags: str) -> bool:
             """function setLinkerFlags
-  input String linkerFlags;
-  output Boolean success;
-end setLinkerFlags;"""
+              input String linkerFlags;
+              output Boolean success;
+            end setLinkerFlags;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getCompiler')
+        @external(".OpenModelica.Scripting.getCompiler")
         @classmethod
         async def getCompiler(_) -> str:
             """function getCompiler
-  output String compiler;
-end getCompiler;"""
+              output String compiler;
+            end getCompiler;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCompiler')
+        @external(".OpenModelica.Scripting.setCompiler")
         @classmethod
         async def setCompiler(_, compiler: str) -> bool:
             """function setCompiler
-  input String compiler;
-  output Boolean success;
-end setCompiler;"""
+              input String compiler;
+              output Boolean success;
+            end setCompiler;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCFlags')
+        @external(".OpenModelica.Scripting.setCFlags")
         @classmethod
         async def setCFlags(_, inString: str) -> bool:
             """function setCFlags
-  input String inString;
-  output Boolean success;
-end setCFlags;"""
+              input String inString;
+              output Boolean success;
+            end setCFlags;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getCFlags')
+        @external(".OpenModelica.Scripting.getCFlags")
         @classmethod
         async def getCFlags(_) -> str:
             """function getCFlags
-  output String outString;
-end getCFlags;"""
+              output String outString;
+            end getCFlags;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getCXXCompiler')
+        @external(".OpenModelica.Scripting.getCXXCompiler")
         @classmethod
         async def getCXXCompiler(_) -> str:
             """function getCXXCompiler
-  output String compiler;
-end getCXXCompiler;"""
+              output String compiler;
+            end getCXXCompiler;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCXXCompiler')
+        @external(".OpenModelica.Scripting.setCXXCompiler")
         @classmethod
         async def setCXXCompiler(_, compiler: str) -> bool:
             """function setCXXCompiler
-  input String compiler;
-  output Boolean success;
-end setCXXCompiler;"""
+              input String compiler;
+              output Boolean success;
+            end setCXXCompiler;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.verifyCompiler')
+        @external(".OpenModelica.Scripting.verifyCompiler")
         @classmethod
         async def verifyCompiler(_) -> bool:
             """function verifyCompiler
-  output Boolean compilerWorks;
-end verifyCompiler;"""
+              output Boolean compilerWorks;
+            end verifyCompiler;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCompilerPath')
+        @external(".OpenModelica.Scripting.setCompilerPath")
         @classmethod
         async def setCompilerPath(_, compilerPath: str) -> bool:
             """function setCompilerPath
-  input String compilerPath;
-  output Boolean success;
-end setCompilerPath;"""
+              input String compilerPath;
+              output Boolean success;
+            end setCompilerPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getCompileCommand')
+        @external(".OpenModelica.Scripting.getCompileCommand")
         @classmethod
         async def getCompileCommand(_) -> str:
             """function getCompileCommand
-  output String compileCommand;
-end getCompileCommand;"""
+              output String compileCommand;
+            end getCompileCommand;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCompileCommand')
+        @external(".OpenModelica.Scripting.setCompileCommand")
         @classmethod
         async def setCompileCommand(_, compileCommand: str) -> bool:
             """function setCompileCommand
-  input String compileCommand;
-  output Boolean success;
-end setCompileCommand;"""
+              input String compileCommand;
+              output Boolean success;
+            end setCompileCommand;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setPlotCommand')
+        @external(".OpenModelica.Scripting.setPlotCommand")
         @classmethod
         async def setPlotCommand(_, plotCommand: str) -> bool:
             """function setPlotCommand
-  input String plotCommand;
-  output Boolean success;
-end setPlotCommand;"""
+              input String plotCommand;
+              output Boolean success;
+            end setPlotCommand;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getSettings')
+        @external(".OpenModelica.Scripting.getSettings")
         @classmethod
         async def getSettings(_) -> str:
             """function getSettings
-  output String settings;
-end getSettings;"""
+              output String settings;
+            end getSettings;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setTempDirectoryPath')
+        @external(".OpenModelica.Scripting.setTempDirectoryPath")
         @classmethod
         async def setTempDirectoryPath(_, tempDirectoryPath: str) -> bool:
             """function setTempDirectoryPath
-  input String tempDirectoryPath;
-  output Boolean success;
-end setTempDirectoryPath;"""
+              input String tempDirectoryPath;
+              output Boolean success;
+            end setTempDirectoryPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getTempDirectoryPath')
+        @external(".OpenModelica.Scripting.getTempDirectoryPath")
         @classmethod
         async def getTempDirectoryPath(_) -> str:
             """function getTempDirectoryPath
-  output String tempDirectoryPath;
-end getTempDirectoryPath;"""
+              output String tempDirectoryPath;
+            end getTempDirectoryPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getEnvironmentVar')
+        @external(".OpenModelica.Scripting.getEnvironmentVar")
         @classmethod
         async def getEnvironmentVar(_, var: str) -> str:
             """function getEnvironmentVar
-  input String var;
-  output String value "returns empty string on failure";
-end getEnvironmentVar;"""
+              input String var;
+              output String value "returns empty string on failure";
+            end getEnvironmentVar;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setEnvironmentVar')
+        @external(".OpenModelica.Scripting.setEnvironmentVar")
         @classmethod
         async def setEnvironmentVar(_, var: str, value: str) -> bool:
             """function setEnvironmentVar
-  input String var;
-  input String value;
-  output Boolean success;
-end setEnvironmentVar;"""
+              input String var;
+              input String value;
+              output Boolean success;
+            end setEnvironmentVar;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.appendEnvironmentVar')
+        @external(".OpenModelica.Scripting.appendEnvironmentVar")
         @classmethod
         async def appendEnvironmentVar(_, var: str, value: str) -> str:
             """function appendEnvironmentVar
-  input String var;
-  input String value;
-  output String result "returns \\"error\\" if the variable could not be appended";
-end appendEnvironmentVar;"""
+              input String var;
+              input String value;
+              output String result "returns \\"error\\" if the variable could not be appended";
+            end appendEnvironmentVar;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setInstallationDirectoryPath')
+        @external(".OpenModelica.Scripting.setInstallationDirectoryPath")
         @classmethod
-        async def setInstallationDirectoryPath(_, installationDirectoryPath: str) -> bool:
+        async def setInstallationDirectoryPath(
+            _, installationDirectoryPath: str
+        ) -> bool:
             """function setInstallationDirectoryPath
-  input String installationDirectoryPath;
-  output Boolean success;
-end setInstallationDirectoryPath;"""
+              input String installationDirectoryPath;
+              output Boolean success;
+            end setInstallationDirectoryPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInstallationDirectoryPath')
+        @external(".OpenModelica.Scripting.getInstallationDirectoryPath")
         @classmethod
         async def getInstallationDirectoryPath(_) -> str:
             """function getInstallationDirectoryPath
-  output String installationDirectoryPath;
-end getInstallationDirectoryPath;"""
+              output String installationDirectoryPath;
+            end getInstallationDirectoryPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setModelicaPath')
+        @external(".OpenModelica.Scripting.setModelicaPath")
         @classmethod
         async def setModelicaPath(_, modelicaPath: str) -> bool:
             """function setModelicaPath
-  input String modelicaPath;
-  output Boolean success;
-end setModelicaPath;"""
+              input String modelicaPath;
+              output Boolean success;
+            end setModelicaPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getModelicaPath')
+        @external(".OpenModelica.Scripting.getModelicaPath")
         @classmethod
         async def getModelicaPath(_) -> str:
             """function getModelicaPath
-  output String modelicaPath;
-end getModelicaPath;"""
+              output String modelicaPath;
+            end getModelicaPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCompilerFlags')
+        @external(".OpenModelica.Scripting.setCompilerFlags")
         @classmethod
         async def setCompilerFlags(_, compilerFlags: str) -> bool:
             """function setCompilerFlags
-  input String compilerFlags;
-  output Boolean success;
-end setCompilerFlags;"""
+              input String compilerFlags;
+              output Boolean success;
+            end setCompilerFlags;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.enableNewInstantiation')
+        @external(".OpenModelica.Scripting.enableNewInstantiation")
         @classmethod
         async def enableNewInstantiation(_) -> bool:
             """function enableNewInstantiation
-  output Boolean success;
-end enableNewInstantiation;"""
+              output Boolean success;
+            end enableNewInstantiation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.disableNewInstantiation')
+        @external(".OpenModelica.Scripting.disableNewInstantiation")
         @classmethod
         async def disableNewInstantiation(_) -> bool:
             """function disableNewInstantiation
-  output Boolean success;
-end disableNewInstantiation;"""
+              output Boolean success;
+            end disableNewInstantiation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setDebugFlags')
+        @external(".OpenModelica.Scripting.setDebugFlags")
         @classmethod
         async def setDebugFlags(_, debugFlags: str) -> bool:
             """function setDebugFlags
-  input String debugFlags;
-  output Boolean success;
-end setDebugFlags;"""
+              input String debugFlags;
+              output Boolean success;
+            end setDebugFlags;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.clearDebugFlags')
+        @external(".OpenModelica.Scripting.clearDebugFlags")
         @classmethod
         async def clearDebugFlags(_) -> bool:
             """function clearDebugFlags
-  output Boolean success;
-end clearDebugFlags;"""
+              output Boolean success;
+            end clearDebugFlags;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setPreOptModules')
+        @external(".OpenModelica.Scripting.setPreOptModules")
         @classmethod
         async def setPreOptModules(_, modules: str) -> bool:
             """function setPreOptModules
-  input String modules;
-  output Boolean success;
-end setPreOptModules;"""
+              input String modules;
+              output Boolean success;
+            end setPreOptModules;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCheapMatchingAlgorithm')
+        @external(".OpenModelica.Scripting.setCheapMatchingAlgorithm")
         @classmethod
         async def setCheapMatchingAlgorithm(_, matchingAlgorithm: int) -> bool:
             """function setCheapMatchingAlgorithm
-  input Integer matchingAlgorithm;
-  output Boolean success;
-end setCheapMatchingAlgorithm;"""
+              input Integer matchingAlgorithm;
+              output Boolean success;
+            end setCheapMatchingAlgorithm;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getMatchingAlgorithm')
+        @external(".OpenModelica.Scripting.getMatchingAlgorithm")
         @classmethod
         async def getMatchingAlgorithm(_) -> str:
             """function getMatchingAlgorithm
-  output String selected;
-end getMatchingAlgorithm;"""
+              output String selected;
+            end getMatchingAlgorithm;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAvailableMatchingAlgorithms')
+        @external(".OpenModelica.Scripting.getAvailableMatchingAlgorithms")
         @classmethod
-        async def getAvailableMatchingAlgorithms(_) -> getAvailableMatchingAlgorithms:
+        async def getAvailableMatchingAlgorithms(
+            _,
+        ) -> getAvailableMatchingAlgorithms:
             """function getAvailableMatchingAlgorithms
-  output String[:] allChoices;
-  output String[:] allComments;
-end getAvailableMatchingAlgorithms;"""
+              output String[:] allChoices;
+              output String[:] allComments;
+            end getAvailableMatchingAlgorithms;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setMatchingAlgorithm')
+        @external(".OpenModelica.Scripting.setMatchingAlgorithm")
         @classmethod
         async def setMatchingAlgorithm(_, matchingAlgorithm: str) -> bool:
             """function setMatchingAlgorithm
-  input String matchingAlgorithm;
-  output Boolean success;
-end setMatchingAlgorithm;"""
+              input String matchingAlgorithm;
+              output Boolean success;
+            end setMatchingAlgorithm;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getIndexReductionMethod')
+        @external(".OpenModelica.Scripting.getIndexReductionMethod")
         @classmethod
         async def getIndexReductionMethod(_) -> str:
             """function getIndexReductionMethod
-  output String selected;
-end getIndexReductionMethod;"""
+              output String selected;
+            end getIndexReductionMethod;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAvailableIndexReductionMethods')
+        @external(".OpenModelica.Scripting.getAvailableIndexReductionMethods")
         @classmethod
-        async def getAvailableIndexReductionMethods(_) -> getAvailableIndexReductionMethods:
+        async def getAvailableIndexReductionMethods(
+            _,
+        ) -> getAvailableIndexReductionMethods:
             """function getAvailableIndexReductionMethods
-  output String[:] allChoices;
-  output String[:] allComments;
-end getAvailableIndexReductionMethods;"""
+              output String[:] allChoices;
+              output String[:] allComments;
+            end getAvailableIndexReductionMethods;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setIndexReductionMethod')
+        @external(".OpenModelica.Scripting.setIndexReductionMethod")
         @classmethod
         async def setIndexReductionMethod(_, method: str) -> bool:
             """function setIndexReductionMethod
-  input String method;
-  output Boolean success;
-end setIndexReductionMethod;"""
+              input String method;
+              output Boolean success;
+            end setIndexReductionMethod;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setPostOptModules')
+        @external(".OpenModelica.Scripting.setPostOptModules")
         @classmethod
         async def setPostOptModules(_, modules: str) -> bool:
             """function setPostOptModules
-  input String modules;
-  output Boolean success;
-end setPostOptModules;"""
+              input String modules;
+              output Boolean success;
+            end setPostOptModules;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getTearingMethod')
+        @external(".OpenModelica.Scripting.getTearingMethod")
         @classmethod
         async def getTearingMethod(_) -> str:
             """function getTearingMethod
-  output String selected;
-end getTearingMethod;"""
+              output String selected;
+            end getTearingMethod;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAvailableTearingMethods')
+        @external(".OpenModelica.Scripting.getAvailableTearingMethods")
         @classmethod
         async def getAvailableTearingMethods(_) -> getAvailableTearingMethods:
             """function getAvailableTearingMethods
-  output String[:] allChoices;
-  output String[:] allComments;
-end getAvailableTearingMethods;"""
+              output String[:] allChoices;
+              output String[:] allComments;
+            end getAvailableTearingMethods;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setTearingMethod')
+        @external(".OpenModelica.Scripting.setTearingMethod")
         @classmethod
         async def setTearingMethod(_, tearingMethod: str) -> bool:
             """function setTearingMethod
-  input String tearingMethod;
-  output Boolean success;
-end setTearingMethod;"""
+              input String tearingMethod;
+              output Boolean success;
+            end setTearingMethod;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setCommandLineOptions')
+        @external(".OpenModelica.Scripting.setCommandLineOptions")
         @classmethod
         async def setCommandLineOptions(_, option: str) -> bool:
             """function setCommandLineOptions
-  input String option;
-  output Boolean success;
-end setCommandLineOptions;"""
+              input String option;
+              output Boolean success;
+            end setCommandLineOptions;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getCommandLineOptions')
+        @external(".OpenModelica.Scripting.getCommandLineOptions")
         @classmethod
         async def getCommandLineOptions(_) -> List[str]:
             """function getCommandLineOptions
-  output String[:] flags;
-end getCommandLineOptions;"""
+              output String[:] flags;
+            end getCommandLineOptions;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getConfigFlagValidOptions')
+        @external(".OpenModelica.Scripting.getConfigFlagValidOptions")
         @classmethod
-        async def getConfigFlagValidOptions(_, flag: str) -> getConfigFlagValidOptions:
+        async def getConfigFlagValidOptions(
+            _, flag: str
+        ) -> getConfigFlagValidOptions:
             """function getConfigFlagValidOptions
-  input String flag;
-  output String validOptions[:];
-  output String mainDescription;
-  output String descriptions[:];
-end getConfigFlagValidOptions;"""
+              input String flag;
+              output String validOptions[:];
+              output String mainDescription;
+              output String descriptions[:];
+            end getConfigFlagValidOptions;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.clearCommandLineOptions')
+        @external(".OpenModelica.Scripting.clearCommandLineOptions")
         @classmethod
         async def clearCommandLineOptions(_) -> bool:
             """function clearCommandLineOptions
-  output Boolean success;
-end clearCommandLineOptions;"""
+              output Boolean success;
+            end clearCommandLineOptions;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getVersion')
+        @external(".OpenModelica.Scripting.getVersion")
         @classmethod
-        async def getVersion(_, cl: Union[TypeName, str]=...) -> str:
+        async def getVersion(_, cl: Union[TypeName, str] = ...) -> str:
             """function getVersion
-  input TypeName cl = $Code(OpenModelica);
-  output String version;
-end getVersion;"""
+              input TypeName cl = $Code(OpenModelica);
+              output String version;
+            end getVersion;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.regularFileExists')
+        @external(".OpenModelica.Scripting.regularFileExists")
         @classmethod
         async def regularFileExists(_, fileName: str) -> bool:
             """function regularFileExists
-  input String fileName;
-  output Boolean exists;
-end regularFileExists;"""
+              input String fileName;
+              output Boolean exists;
+            end regularFileExists;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.directoryExists')
+        @external(".OpenModelica.Scripting.directoryExists")
         @classmethod
         async def directoryExists(_, dirName: str) -> bool:
             """function directoryExists
-  input String dirName;
-  output Boolean exists;
-end directoryExists;"""
+              input String dirName;
+              output Boolean exists;
+            end directoryExists;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.stat')
+        @external(".OpenModelica.Scripting.stat")
         @classmethod
         async def stat(_, fileName: str) -> stat:
             """impure function stat
-  input String fileName;
-  output Boolean success;
-  output Real fileSize;
-  output Real mtime;
-end stat;"""
+              input String fileName;
+              output Boolean success;
+              output Real fileSize;
+              output Real mtime;
+            end stat;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.readFile')
+        @external(".OpenModelica.Scripting.readFile")
         @classmethod
         async def readFile(_, fileName: str) -> str:
             """impure function readFile
-  input String fileName;
-  output String contents;
-end readFile;"""
+              input String fileName;
+              output String contents;
+            end readFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.writeFile')
+        @external(".OpenModelica.Scripting.writeFile")
         @classmethod
-        async def writeFile(_, fileName: str, data: str, append: bool=...) -> bool:
+        async def writeFile(
+            _, fileName: str, data: str, append: bool = ...
+        ) -> bool:
             """impure function writeFile
-  input String fileName;
-  input String data;
-  input Boolean append = false;
-  output Boolean success;
-end writeFile;"""
+              input String fileName;
+              input String data;
+              input Boolean append = false;
+              output Boolean success;
+            end writeFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.compareFilesAndMove')
+        @external(".OpenModelica.Scripting.compareFilesAndMove")
         @classmethod
         async def compareFilesAndMove(_, newFile: str, oldFile: str) -> bool:
             """impure function compareFilesAndMove
-  input String newFile;
-  input String oldFile;
-  output Boolean success;
-end compareFilesAndMove;"""
+              input String newFile;
+              input String oldFile;
+              output Boolean success;
+            end compareFilesAndMove;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.compareFiles')
+        @external(".OpenModelica.Scripting.compareFiles")
         @classmethod
         async def compareFiles(_, file1: str, file2: str) -> bool:
             """impure function compareFiles
-  input String file1;
-  input String file2;
-  output Boolean isEqual;
-end compareFiles;"""
+              input String file1;
+              input String file2;
+              output Boolean isEqual;
+            end compareFiles;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.alarm')
+        @external(".OpenModelica.Scripting.alarm")
         @classmethod
         async def alarm(_, seconds: int) -> int:
             """impure function alarm
-  input Integer seconds;
-  output Integer previousSeconds;
-end alarm;"""
+              input Integer seconds;
+              output Integer previousSeconds;
+            end alarm;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.regex')
+        @external(".OpenModelica.Scripting.regex")
         @classmethod
-        async def regex(_, str: str, re: str, maxMatches: int=..., extended: bool=..., caseInsensitive: bool=...) -> regex:
+        async def regex(
+            _,
+            str: str,
+            re: str,
+            maxMatches: int = ...,
+            extended: bool = ...,
+            caseInsensitive: bool = ...,
+        ) -> regex:
             """function regex
-  input String str;
-  input String re;
-  input Integer maxMatches = 1 "The maximum number of matches that will be returned";
-  input Boolean extended = true "Use POSIX extended or regular syntax";
-  input Boolean caseInsensitive = false;
-  output Integer numMatches "-1 is an error, 0 means no match, else returns a number 1..maxMatches";
-  output String matchedSubstrings[maxMatches] "unmatched strings are returned as empty";
-end regex;"""
+              input String str;
+              input String re;
+              input Integer maxMatches = 1 "The maximum number of matches that will be returned";
+              input Boolean extended = true "Use POSIX extended or regular syntax";
+              input Boolean caseInsensitive = false;
+              output Integer numMatches "-1 is an error, 0 means no match, else returns a number 1..maxMatches";
+              output String matchedSubstrings[maxMatches] "unmatched strings are returned as empty";
+            end regex;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.regexBool')
+        @external(".OpenModelica.Scripting.regexBool")
         @classmethod
-        async def regexBool(_, str: str, re: str, extended: bool=..., caseInsensitive: bool=...) -> bool:
+        async def regexBool(
+            _,
+            str: str,
+            re: str,
+            extended: bool = ...,
+            caseInsensitive: bool = ...,
+        ) -> bool:
             """function regexBool
-  input String str;
-  input String re;
-  input Boolean extended = true "Use POSIX extended or regular syntax";
-  input Boolean caseInsensitive = false;
-  output Boolean matches;
-end regexBool;"""
+              input String str;
+              input String re;
+              input Boolean extended = true "Use POSIX extended or regular syntax";
+              input Boolean caseInsensitive = false;
+              output Boolean matches;
+            end regexBool;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.testsuiteFriendlyName')
+        @external(".OpenModelica.Scripting.testsuiteFriendlyName")
         @classmethod
         async def testsuiteFriendlyName(_, path: str) -> str:
             """function testsuiteFriendlyName
-  input String path;
-  output String fixed;
-end testsuiteFriendlyName;"""
+              input String path;
+              output String fixed;
+            end testsuiteFriendlyName;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.readFileNoNumeric')
+        @external(".OpenModelica.Scripting.readFileNoNumeric")
         @classmethod
         async def readFileNoNumeric(_, fileName: str) -> str:
             """function readFileNoNumeric
-  input String fileName;
-  output String contents;
-end readFileNoNumeric;"""
+              input String fileName;
+              output String contents;
+            end readFileNoNumeric;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getErrorString')
+        @external(".OpenModelica.Scripting.getErrorString")
         @classmethod
-        async def getErrorString(_, warningsAsErrors: bool=...) -> str:
+        async def getErrorString(_, warningsAsErrors: bool = ...) -> str:
             """impure function getErrorString
-  input Boolean warningsAsErrors = false;
-  output String errorString;
-end getErrorString;"""
+              input Boolean warningsAsErrors = false;
+              output String errorString;
+            end getErrorString;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getMessagesString')
+        @external(".OpenModelica.Scripting.getMessagesString")
         @classmethod
         async def getMessagesString(_) -> str:
             """function getMessagesString
-  output String messagesString;
-end getMessagesString;"""
+              output String messagesString;
+            end getMessagesString;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.SourceInfo')
+        @external(".OpenModelica.Scripting.SourceInfo")
         @dataclass
         class SourceInfo(record):
             """record SourceInfo
-  String fileName;
-  Boolean readonly;
-  Integer lineStart;
-  Integer columnStart;
-  Integer lineEnd;
-  Integer columnEnd;
-  annotation(
-    preferredView = "text");
-end SourceInfo;"""
+              String fileName;
+              Boolean readonly;
+              Integer lineStart;
+              Integer columnStart;
+              Integer lineEnd;
+              Integer columnEnd;
+              annotation(
+                preferredView = "text");
+            end SourceInfo;"""
+
             fileName: str
             readonly: bool
             lineStart: int
@@ -1265,2083 +1263,2429 @@ end SourceInfo;"""
         ErrorKind = ErrorKind__v_1_13
         ErrorLevel = ErrorLevel__v_1_16
 
-        @external('.OpenModelica.Scripting.ErrorMessage')
+        @external(".OpenModelica.Scripting.ErrorMessage")
         @dataclass
         class ErrorMessage(record):
             """record ErrorMessage
-  SourceInfo info;
-  String message "After applying the individual arguments";
-  ErrorKind kind;
-  ErrorLevel level;
-  Integer id "Internal ID of the error (just ignore this)";
-  annotation(
-    preferredView = "text");
-end ErrorMessage;"""
+              SourceInfo info;
+              String message "After applying the individual arguments";
+              ErrorKind kind;
+              ErrorLevel level;
+              Integer id "Internal ID of the error (just ignore this)";
+              annotation(
+                preferredView = "text");
+            end ErrorMessage;"""
+
             info: OpenModelica.Scripting.SourceInfo
             message: str
             kind: ErrorKind__v_1_13
             level: ErrorLevel__v_1_16
             id: int
-
-        @external('.OpenModelica.Scripting.getMessagesStringInternal')
+        @external(".OpenModelica.Scripting.getMessagesStringInternal")
         @classmethod
-        async def getMessagesStringInternal(_, unique: bool=...) -> List[OpenModelica.Scripting.ErrorMessage]:
+        async def getMessagesStringInternal(
+            _, unique: bool = ...
+        ) -> List[OpenModelica.Scripting.ErrorMessage]:
             """function getMessagesStringInternal
-  input Boolean unique = true;
-  output ErrorMessage[:] messagesString;
-end getMessagesStringInternal;"""
+              input Boolean unique = true;
+              output ErrorMessage[:] messagesString;
+            end getMessagesStringInternal;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.countMessages')
+        @external(".OpenModelica.Scripting.countMessages")
         @classmethod
         async def countMessages(_) -> countMessages:
             """function countMessages
-  output Integer numMessages;
-  output Integer numErrors;
-  output Integer numWarnings;
-end countMessages;"""
+              output Integer numMessages;
+              output Integer numErrors;
+              output Integer numWarnings;
+            end countMessages;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.clearMessages')
+        @external(".OpenModelica.Scripting.clearMessages")
         @classmethod
         async def clearMessages(_) -> bool:
             """function clearMessages
-  output Boolean success;
-end clearMessages;"""
+              output Boolean success;
+            end clearMessages;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.runScript')
+        @external(".OpenModelica.Scripting.runScript")
         @classmethod
         async def runScript(_, fileName: str) -> str:
             """impure function runScript
-  input String fileName "*.mos";
-  output String result;
-end runScript;"""
+              input String fileName "*.mos";
+              output String result;
+            end runScript;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.echo')
+        @external(".OpenModelica.Scripting.echo")
         @classmethod
         async def echo(_, setEcho: bool) -> bool:
             """function echo
-  input Boolean setEcho;
-  output Boolean newEcho;
-end echo;"""
+              input Boolean setEcho;
+              output Boolean newEcho;
+            end echo;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getClassesInModelicaPath')
+        @external(".OpenModelica.Scripting.getClassesInModelicaPath")
         @classmethod
         async def getClassesInModelicaPath(_) -> str:
             """function getClassesInModelicaPath
-  output String classesInModelicaPath;
-end getClassesInModelicaPath;"""
+              output String classesInModelicaPath;
+            end getClassesInModelicaPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAnnotationVersion')
+        @external(".OpenModelica.Scripting.getAnnotationVersion")
         @classmethod
         async def getAnnotationVersion(_) -> str:
             """function getAnnotationVersion
-  output String annotationVersion;
-end getAnnotationVersion;"""
+              output String annotationVersion;
+            end getAnnotationVersion;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setAnnotationVersion')
+        @external(".OpenModelica.Scripting.setAnnotationVersion")
         @classmethod
         async def setAnnotationVersion(_, annotationVersion: str) -> bool:
             """function setAnnotationVersion
-  input String annotationVersion;
-  output Boolean success;
-end setAnnotationVersion;"""
+              input String annotationVersion;
+              output Boolean success;
+            end setAnnotationVersion;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNoSimplify')
+        @external(".OpenModelica.Scripting.getNoSimplify")
         @classmethod
         async def getNoSimplify(_) -> bool:
             """function getNoSimplify
-  output Boolean noSimplify;
-end getNoSimplify;"""
+              output Boolean noSimplify;
+            end getNoSimplify;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setNoSimplify')
+        @external(".OpenModelica.Scripting.setNoSimplify")
         @classmethod
         async def setNoSimplify(_, noSimplify: bool) -> bool:
             """function setNoSimplify
-  input Boolean noSimplify;
-  output Boolean success;
-end setNoSimplify;"""
+              input Boolean noSimplify;
+              output Boolean success;
+            end setNoSimplify;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getVectorizationLimit')
+        @external(".OpenModelica.Scripting.getVectorizationLimit")
         @classmethod
         async def getVectorizationLimit(_) -> int:
             """function getVectorizationLimit
-  output Integer vectorizationLimit;
-end getVectorizationLimit;"""
+              output Integer vectorizationLimit;
+            end getVectorizationLimit;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setVectorizationLimit')
+        @external(".OpenModelica.Scripting.setVectorizationLimit")
         @classmethod
         async def setVectorizationLimit(_, vectorizationLimit: int) -> bool:
             """function setVectorizationLimit
-  input Integer vectorizationLimit;
-  output Boolean success;
-end setVectorizationLimit;"""
+              input Integer vectorizationLimit;
+              output Boolean success;
+            end setVectorizationLimit;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getDefaultOpenCLDevice')
+        @external(".OpenModelica.Scripting.getDefaultOpenCLDevice")
         @classmethod
         async def getDefaultOpenCLDevice(_) -> int:
             """function getDefaultOpenCLDevice
-  output Integer defdevid;
-end getDefaultOpenCLDevice;"""
+              output Integer defdevid;
+            end getDefaultOpenCLDevice;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setDefaultOpenCLDevice')
+        @external(".OpenModelica.Scripting.setDefaultOpenCLDevice")
         @classmethod
         async def setDefaultOpenCLDevice(_, defdevid: int) -> bool:
             """function setDefaultOpenCLDevice
-  input Integer defdevid;
-  output Boolean success;
-end setDefaultOpenCLDevice;"""
+              input Integer defdevid;
+              output Boolean success;
+            end setDefaultOpenCLDevice;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setShowAnnotations')
+        @external(".OpenModelica.Scripting.setShowAnnotations")
         @classmethod
         async def setShowAnnotations(_, show: bool) -> bool:
             """function setShowAnnotations
-  input Boolean show;
-  output Boolean success;
-end setShowAnnotations;"""
+              input Boolean show;
+              output Boolean success;
+            end setShowAnnotations;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getShowAnnotations')
+        @external(".OpenModelica.Scripting.getShowAnnotations")
         @classmethod
         async def getShowAnnotations(_) -> bool:
             """function getShowAnnotations
-  output Boolean show;
-end getShowAnnotations;"""
+              output Boolean show;
+            end getShowAnnotations;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setOrderConnections')
+        @external(".OpenModelica.Scripting.setOrderConnections")
         @classmethod
         async def setOrderConnections(_, orderConnections: bool) -> bool:
             """function setOrderConnections
-  input Boolean orderConnections;
-  output Boolean success;
-end setOrderConnections;"""
+              input Boolean orderConnections;
+              output Boolean success;
+            end setOrderConnections;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getOrderConnections')
+        @external(".OpenModelica.Scripting.getOrderConnections")
         @classmethod
         async def getOrderConnections(_) -> bool:
             """function getOrderConnections
-  output Boolean orderConnections;
-end getOrderConnections;"""
+              output Boolean orderConnections;
+            end getOrderConnections;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setLanguageStandard')
+        @external(".OpenModelica.Scripting.setLanguageStandard")
         @classmethod
         async def setLanguageStandard(_, inVersion: str) -> bool:
             """function setLanguageStandard
-  input String inVersion;
-  output Boolean success;
-end setLanguageStandard;"""
+              input String inVersion;
+              output Boolean success;
+            end setLanguageStandard;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getLanguageStandard')
+        @external(".OpenModelica.Scripting.getLanguageStandard")
         @classmethod
         async def getLanguageStandard(_) -> str:
             """function getLanguageStandard
-  output String outVersion;
-end getLanguageStandard;"""
+              output String outVersion;
+            end getLanguageStandard;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAstAsCorbaString')
+        @external(".OpenModelica.Scripting.getAstAsCorbaString")
         @classmethod
-        async def getAstAsCorbaString(_, fileName: str=...) -> str:
+        async def getAstAsCorbaString(_, fileName: str = ...) -> str:
             """function getAstAsCorbaString
-  input String fileName = "<interactive>";
-  output String result "returns the string if fileName is interactive; else it returns ok or error depending on if writing the file succeeded";
-end getAstAsCorbaString;"""
+              input String fileName = "<interactive>";
+              output String result "returns the string if fileName is interactive; else it returns ok or error depending on if writing the file succeeded";
+            end getAstAsCorbaString;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.cd')
+        @external(".OpenModelica.Scripting.cd")
         @classmethod
-        async def cd(_, newWorkingDirectory: str=...) -> str:
+        async def cd(_, newWorkingDirectory: str = ...) -> str:
             """function cd
-  input String newWorkingDirectory = "";
-  output String workingDirectory;
-end cd;"""
+              input String newWorkingDirectory = "";
+              output String workingDirectory;
+            end cd;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.mkdir')
+        @external(".OpenModelica.Scripting.mkdir")
         @classmethod
         async def mkdir(_, newDirectory: str) -> bool:
             """function mkdir
-  input String newDirectory;
-  output Boolean success;
-end mkdir;"""
+              input String newDirectory;
+              output Boolean success;
+            end mkdir;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.copy')
+        @external(".OpenModelica.Scripting.copy")
         @classmethod
         async def copy(_, source: str, destination: str) -> bool:
             """function copy
-  input String source;
-  input String destination;
-  output Boolean success;
-end copy;"""
+              input String source;
+              input String destination;
+              output Boolean success;
+            end copy;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.remove')
+        @external(".OpenModelica.Scripting.remove")
         @classmethod
         async def remove(_, path: str) -> bool:
             """function remove
-  input String path;
-  output Boolean success "Returns true on success.";
-end remove;"""
+              input String path;
+              output Boolean success "Returns true on success.";
+            end remove;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.checkModel')
+        @external(".OpenModelica.Scripting.checkModel")
         @classmethod
         async def checkModel(_, className: Union[TypeName, str]) -> str:
             """function checkModel
-  input TypeName className;
-  output String result;
-end checkModel;"""
+              input TypeName className;
+              output String result;
+            end checkModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.checkAllModelsRecursive')
+        @external(".OpenModelica.Scripting.checkAllModelsRecursive")
         @classmethod
-        async def checkAllModelsRecursive(_, className: Union[TypeName, str], checkProtected: bool=...) -> str:
+        async def checkAllModelsRecursive(
+            _, className: Union[TypeName, str], checkProtected: bool = ...
+        ) -> str:
             """function checkAllModelsRecursive
-  input TypeName className;
-  input Boolean checkProtected = false "Checks also protected classes if true";
-  output String result;
-end checkAllModelsRecursive;"""
+              input TypeName className;
+              input Boolean checkProtected = false "Checks also protected classes if true";
+              output String result;
+            end checkAllModelsRecursive;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.typeOf')
+        @external(".OpenModelica.Scripting.typeOf")
         @classmethod
         async def typeOf(_, variableName: Union[VariableName, str]) -> str:
             """function typeOf
-  input VariableName variableName;
-  output String result;
-end typeOf;"""
+              input VariableName variableName;
+              output String result;
+            end typeOf;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.instantiateModel')
+        @external(".OpenModelica.Scripting.instantiateModel")
         @classmethod
         async def instantiateModel(_, className: Union[TypeName, str]) -> str:
             """function instantiateModel
-  input TypeName className;
-  output String result;
-end instantiateModel;"""
+              input TypeName className;
+              output String result;
+            end instantiateModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.buildOpenTURNSInterface')
+        @external(".OpenModelica.Scripting.buildOpenTURNSInterface")
         @classmethod
-        async def buildOpenTURNSInterface(_, className: Union[TypeName, str], pythonTemplateFile: str, showFlatModelica: bool=...) -> str:
+        async def buildOpenTURNSInterface(
+            _,
+            className: Union[TypeName, str],
+            pythonTemplateFile: str,
+            showFlatModelica: bool = ...,
+        ) -> str:
             """function buildOpenTURNSInterface
-  input TypeName className;
-  input String pythonTemplateFile;
-  input Boolean showFlatModelica = false;
-  output String outPythonScript;
-end buildOpenTURNSInterface;"""
+              input TypeName className;
+              input String pythonTemplateFile;
+              input Boolean showFlatModelica = false;
+              output String outPythonScript;
+            end buildOpenTURNSInterface;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.runOpenTURNSPythonScript')
+        @external(".OpenModelica.Scripting.runOpenTURNSPythonScript")
         @classmethod
         async def runOpenTURNSPythonScript(_, pythonScriptFile: str) -> str:
             """function runOpenTURNSPythonScript
-  input String pythonScriptFile;
-  output String logOutputFile;
-end runOpenTURNSPythonScript;"""
+              input String pythonScriptFile;
+              output String logOutputFile;
+            end runOpenTURNSPythonScript;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateCode')
+        @external(".OpenModelica.Scripting.generateCode")
         @classmethod
         async def generateCode(_, className: Union[TypeName, str]) -> bool:
             """function generateCode
-  input TypeName className;
-  output Boolean success;
-end generateCode;"""
+              input TypeName className;
+              output Boolean success;
+            end generateCode;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadModel')
+        @external(".OpenModelica.Scripting.loadModel")
         @classmethod
-        async def loadModel(_, className: Union[TypeName, str], priorityVersion: Sequence[str]=..., notify: bool=..., languageStandard: str=..., requireExactVersion: bool=...) -> bool:
+        async def loadModel(
+            _,
+            className: Union[TypeName, str],
+            priorityVersion: Sequence[str] = ...,
+            notify: bool = ...,
+            languageStandard: str = ...,
+            requireExactVersion: bool = ...,
+        ) -> bool:
             """function loadModel
-  input TypeName className;
-  input String[:] priorityVersion = {"default"};
-  input Boolean notify = false "Give a notification of the libraries and versions that were loaded";
-  input String languageStandard = "" "Override the set language standard. Parse with the given setting, but do not change it permanently.";
-  input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
-  output Boolean success;
-end loadModel;"""
+              input TypeName className;
+              input String[:] priorityVersion = {"default"};
+              input Boolean notify = false "Give a notification of the libraries and versions that were loaded";
+              input String languageStandard = "" "Override the set language standard. Parse with the given setting, but do not change it permanently.";
+              input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
+              output Boolean success;
+            end loadModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.deleteFile')
+        @external(".OpenModelica.Scripting.deleteFile")
         @classmethod
         async def deleteFile(_, fileName: str) -> bool:
             """function deleteFile
-  input String fileName;
-  output Boolean success;
-end deleteFile;"""
+              input String fileName;
+              output Boolean success;
+            end deleteFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.saveModel')
+        @external(".OpenModelica.Scripting.saveModel")
         @classmethod
-        async def saveModel(_, fileName: str, className: Union[TypeName, str]) -> bool:
+        async def saveModel(
+            _, fileName: str, className: Union[TypeName, str]
+        ) -> bool:
             """function saveModel
-  input String fileName;
-  input TypeName className;
-  output Boolean success;
-end saveModel;"""
+              input String fileName;
+              input TypeName className;
+              output Boolean success;
+            end saveModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.saveTotalModel')
+        @external(".OpenModelica.Scripting.saveTotalModel")
         @classmethod
-        async def saveTotalModel(_, fileName: str, className: Union[TypeName, str], stripAnnotations: bool=..., stripComments: bool=...) -> bool:
+        async def saveTotalModel(
+            _,
+            fileName: str,
+            className: Union[TypeName, str],
+            stripAnnotations: bool = ...,
+            stripComments: bool = ...,
+        ) -> bool:
             """function saveTotalModel
-  input String fileName;
-  input TypeName className;
-  input Boolean stripAnnotations = false;
-  input Boolean stripComments = false;
-  output Boolean success;
-end saveTotalModel;"""
+              input String fileName;
+              input TypeName className;
+              input Boolean stripAnnotations = false;
+              input Boolean stripComments = false;
+              output Boolean success;
+            end saveTotalModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.save')
+        @external(".OpenModelica.Scripting.save")
         @classmethod
         async def save(_, className: Union[TypeName, str]) -> bool:
             """function save
-  input TypeName className;
-  output Boolean success;
-end save;"""
+              input TypeName className;
+              output Boolean success;
+            end save;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.saveTotalSCode')
+        @external(".OpenModelica.Scripting.saveTotalSCode")
         @classmethod
         async def saveTotalSCode(_) -> None:
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.translateGraphics')
+        @external(".OpenModelica.Scripting.translateGraphics")
         @classmethod
         async def translateGraphics(_, className: Union[TypeName, str]) -> str:
             """function translateGraphics
-  input TypeName className;
-  output String result;
-end translateGraphics;"""
+              input TypeName className;
+              output String result;
+            end translateGraphics;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.dumpXMLDAE')
+        @external(".OpenModelica.Scripting.dumpXMLDAE")
         @classmethod
-        async def dumpXMLDAE(_, className: Union[TypeName, str], translationLevel: str=..., addOriginalAdjacencyMatrix: bool=..., addSolvingInfo: bool=..., addMathMLCode: bool=..., dumpResiduals: bool=..., fileNamePrefix: str=..., rewriteRulesFile: str=...) -> dumpXMLDAE:
+        async def dumpXMLDAE(
+            _,
+            className: Union[TypeName, str],
+            translationLevel: str = ...,
+            addOriginalAdjacencyMatrix: bool = ...,
+            addSolvingInfo: bool = ...,
+            addMathMLCode: bool = ...,
+            dumpResiduals: bool = ...,
+            fileNamePrefix: str = ...,
+            rewriteRulesFile: str = ...,
+        ) -> dumpXMLDAE:
             """function dumpXMLDAE
-  input TypeName className;
-  input String translationLevel = "flat" "flat, optimiser, backEnd, or stateSpace";
-  input Boolean addOriginalAdjacencyMatrix = false;
-  input Boolean addSolvingInfo = false;
-  input Boolean addMathMLCode = false;
-  input Boolean dumpResiduals = false;
-  input String fileNamePrefix = "<default>" "this is the className in string form by default";
-  input String rewriteRulesFile = "" "the file from where the rewiteRules are read, default is empty which means no rewrite rules";
-  output Boolean success "if the function succeeded true/false";
-  output String xmlfileName "the Xml file";
-end dumpXMLDAE;"""
+              input TypeName className;
+              input String translationLevel = "flat" "flat, optimiser, backEnd, or stateSpace";
+              input Boolean addOriginalAdjacencyMatrix = false;
+              input Boolean addSolvingInfo = false;
+              input Boolean addMathMLCode = false;
+              input Boolean dumpResiduals = false;
+              input String fileNamePrefix = "<default>" "this is the className in string form by default";
+              input String rewriteRulesFile = "" "the file from where the rewiteRules are read, default is empty which means no rewrite rules";
+              output Boolean success "if the function succeeded true/false";
+              output String xmlfileName "the Xml file";
+            end dumpXMLDAE;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.convertUnits')
+        @external(".OpenModelica.Scripting.convertUnits")
         @classmethod
         async def convertUnits(_, s1: str, s2: str) -> convertUnits:
             """function convertUnits
-  input String s1;
-  input String s2;
-  output Boolean unitsCompatible;
-  output Real scaleFactor;
-  output Real offset;
-end convertUnits;"""
+              input String s1;
+              input String s2;
+              output Boolean unitsCompatible;
+              output Real scaleFactor;
+              output Real offset;
+            end convertUnits;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getDerivedUnits')
+        @external(".OpenModelica.Scripting.getDerivedUnits")
         @classmethod
         async def getDerivedUnits(_, baseUnit: str) -> List[str]:
             """function getDerivedUnits
-  input String baseUnit;
-  output String[:] derivedUnits;
-end getDerivedUnits;"""
+              input String baseUnit;
+              output String[:] derivedUnits;
+            end getDerivedUnits;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.listVariables')
+        @external(".OpenModelica.Scripting.listVariables")
         @classmethod
         async def listVariables(_) -> List[TypeName]:
             """function listVariables
-  output TypeName variables[:];
-end listVariables;"""
+              output TypeName variables[:];
+            end listVariables;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.strtok')
+        @external(".OpenModelica.Scripting.strtok")
         @classmethod
         async def strtok(_, string: str, token: str) -> List[str]:
             """function strtok
-  input String string;
-  input String token;
-  output String[:] strings;
-end strtok;"""
+              input String string;
+              input String token;
+              output String[:] strings;
+            end strtok;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.stringSplit')
+        @external(".OpenModelica.Scripting.stringSplit")
         @classmethod
         async def stringSplit(_, string: str, token: str) -> List[str]:
             """function stringSplit
-  input String string;
-  input String token "single character only";
-  output String[:] strings;
-end stringSplit;"""
+              input String string;
+              input String token "single character only";
+              output String[:] strings;
+            end stringSplit;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.stringReplace')
+        @external(".OpenModelica.Scripting.stringReplace")
         @classmethod
         async def stringReplace(_, str: str, source: str, target: str) -> str:
             """function stringReplace
-  input String str;
-  input String source;
-  input String target;
-  output String res;
-end stringReplace;"""
+              input String str;
+              input String source;
+              input String target;
+              output String res;
+            end stringReplace;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.escapeXML')
+        @external(".OpenModelica.Scripting.escapeXML")
         @classmethod
         async def escapeXML(_, inStr: str) -> str:
             """function escapeXML
-  input String inStr;
-  output String outStr;
-end escapeXML;"""
+              input String inStr;
+              output String outStr;
+            end escapeXML;"""
             raise NotImplementedError()
         ExportKind = ExportKind__v_1_13
 
-        @external('.OpenModelica.Scripting.list')
+        @external(".OpenModelica.Scripting.list")
         @classmethod
-        async def list(_, class_: Union[TypeName, str]=..., interfaceOnly: bool=..., shortOnly: bool=..., exportKind: Union[ExportKind__v_1_13, Literal['Absyn', 1, 'SCode', 2, 'MetaModelicaInterface', 3, 'Internal', 4]]=...) -> str:
+        async def list(
+            _,
+            class_: Union[TypeName, str] = ...,
+            interfaceOnly: bool = ...,
+            shortOnly: bool = ...,
+            exportKind: Union[
+                ExportKind__v_1_13,
+                Literal[
+                    "Absyn",
+                    1,
+                    "SCode",
+                    2,
+                    "MetaModelicaInterface",
+                    3,
+                    "Internal",
+                    4,
+                ],
+            ] = ...,
+        ) -> str:
             """function list
-  input TypeName class_ = $Code(AllLoadedClasses);
-  input Boolean interfaceOnly = false;
-  input Boolean shortOnly = false "only short class definitions";
-  input ExportKind exportKind = ExportKind.Absyn;
-  output String contents;
-end list;"""
+              input TypeName class_ = $Code(AllLoadedClasses);
+              input Boolean interfaceOnly = false;
+              input Boolean shortOnly = false "only short class definitions";
+              input ExportKind exportKind = ExportKind.Absyn;
+              output String contents;
+            end list;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.listFile')
+        @external(".OpenModelica.Scripting.listFile")
         @classmethod
-        async def listFile(_, class_: Union[TypeName, str], nestedClasses: bool=...) -> str:
+        async def listFile(
+            _, class_: Union[TypeName, str], nestedClasses: bool = ...
+        ) -> str:
             """function listFile
-  input TypeName class_;
-  input Boolean nestedClasses = true;
-  output String contents;
-end listFile;"""
+              input TypeName class_;
+              input Boolean nestedClasses = true;
+              output String contents;
+            end listFile;"""
             raise NotImplementedError()
         DiffFormat = DiffFormat__v_1_13
 
-        @external('.OpenModelica.Scripting.diffModelicaFileListings')
+        @external(".OpenModelica.Scripting.diffModelicaFileListings")
         @classmethod
-        async def diffModelicaFileListings(_, before: str, after: str, diffFormat: Union[DiffFormat__v_1_13, Literal['plain', 1, 'color', 2, 'xml', 3]]=...) -> str:
+        async def diffModelicaFileListings(
+            _,
+            before: str,
+            after: str,
+            diffFormat: Union[
+                DiffFormat__v_1_13, Literal["plain", 1, "color", 2, "xml", 3]
+            ] = ...,
+        ) -> str:
             """function diffModelicaFileListings
-  input String before, after;
-  input DiffFormat diffFormat = DiffFormat.color;
-  output String result;
-end diffModelicaFileListings;"""
+              input String before, after;
+              input DiffFormat diffFormat = DiffFormat.color;
+              output String result;
+            end diffModelicaFileListings;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.exportToFigaro')
+        @external(".OpenModelica.Scripting.exportToFigaro")
         @classmethod
-        async def exportToFigaro(_, path: Union[TypeName, str], database: str, mode: str, options: str, processor: str, directory: str=...) -> bool:
+        async def exportToFigaro(
+            _,
+            path: Union[TypeName, str],
+            database: str,
+            mode: str,
+            options: str,
+            processor: str,
+            directory: str = ...,
+        ) -> bool:
             """function exportToFigaro
-  input TypeName path;
-  input String directory = cd();
-  input String database;
-  input String mode;
-  input String options;
-  input String processor;
-  output Boolean success;
-end exportToFigaro;"""
+              input TypeName path;
+              input String directory = cd();
+              input String database;
+              input String mode;
+              input String options;
+              input String processor;
+              output Boolean success;
+            end exportToFigaro;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.inferBindings')
+        @external(".OpenModelica.Scripting.inferBindings")
         @classmethod
         async def inferBindings(_, path: Union[TypeName, str]) -> bool:
             """function inferBindings
-  input TypeName path;
-  output Boolean success;
-end inferBindings;"""
+              input TypeName path;
+              output Boolean success;
+            end inferBindings;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateVerificationScenarios')
+        @external(".OpenModelica.Scripting.generateVerificationScenarios")
         @classmethod
-        async def generateVerificationScenarios(_, path: Union[TypeName, str]) -> bool:
+        async def generateVerificationScenarios(
+            _, path: Union[TypeName, str]
+        ) -> bool:
             """function generateVerificationScenarios
-  input TypeName path;
-  output Boolean success;
-end generateVerificationScenarios;"""
+              input TypeName path;
+              output Boolean success;
+            end generateVerificationScenarios;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.rewriteBlockCall')
+        @external(".OpenModelica.Scripting.rewriteBlockCall")
         @classmethod
-        async def rewriteBlockCall(_, className: Union[TypeName, str], inDefs: Union[TypeName, str]) -> bool:
+        async def rewriteBlockCall(
+            _, className: Union[TypeName, str], inDefs: Union[TypeName, str]
+        ) -> bool:
             """function rewriteBlockCall
-  input TypeName className;
-  input TypeName inDefs;
-  output Boolean success;
-end rewriteBlockCall;"""
+              input TypeName className;
+              input TypeName inDefs;
+              output Boolean success;
+            end rewriteBlockCall;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.realpath')
+        @external(".OpenModelica.Scripting.realpath")
         @classmethod
         async def realpath(_, name: str) -> str:
             """function realpath
-  input String name "Absolute or relative file or directory name";
-  output String fullName "Full path of 'name'";
-end realpath;"""
+              input String name "Absolute or relative file or directory name";
+              output String fullName "Full path of 'name'";
+            end realpath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.uriToFilename')
+        @external(".OpenModelica.Scripting.uriToFilename")
         @classmethod
         async def uriToFilename(_, uri: str) -> str:
             """function uriToFilename
-  input String uri;
-  output String filename = "";
-end uriToFilename;"""
+              input String uri;
+              output String filename = "";
+            end uriToFilename;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getLoadedLibraries')
+        @external(".OpenModelica.Scripting.getLoadedLibraries")
         @classmethod
         async def getLoadedLibraries(_) -> List[List[str]]:
             """function getLoadedLibraries
-  output String[:, 2] libraries;
-end getLoadedLibraries;"""
+              output String[:, 2] libraries;
+            end getLoadedLibraries;"""
             raise NotImplementedError()
         LinearSystemSolver = LinearSystemSolver__v_1_13
 
-        @external('.OpenModelica.Scripting.solveLinearSystem')
+        @external(".OpenModelica.Scripting.solveLinearSystem")
         @classmethod
-        async def solveLinearSystem(_, A: Sequence[Sequence[float]], B: Sequence[float], solver: Union[LinearSystemSolver__v_1_13, Literal['dgesv', 1, 'lpsolve55', 2]]=..., isInt: Sequence[int]=...) -> solveLinearSystem:
+        async def solveLinearSystem(
+            _,
+            A: Sequence[Sequence[float]],
+            B: Sequence[float],
+            solver: Union[
+                LinearSystemSolver__v_1_13, Literal["dgesv", 1, "lpsolve55", 2]
+            ] = ...,
+            isInt: Sequence[int] = ...,
+        ) -> solveLinearSystem:
             """function solveLinearSystem
-  input Real[size(B, 1), size(B, 1)] A;
-  input Real[:] B;
-  input LinearSystemSolver solver = LinearSystemSolver.dgesv;
-  input Integer[:] isInt = {-1} "list of indices that are integers";
-  output Real[size(B, 1)] X;
-  output Integer info;
-end solveLinearSystem;"""
+              input Real[size(B, 1), size(B, 1)] A;
+              input Real[:] B;
+              input LinearSystemSolver solver = LinearSystemSolver.dgesv;
+              input Integer[:] isInt = {-1} "list of indices that are integers";
+              output Real[size(B, 1)] X;
+              output Integer info;
+            end solveLinearSystem;"""
             raise NotImplementedError()
         StandardStream = StandardStream__v_1_13
 
-        @external('.OpenModelica.Scripting.reopenStandardStream')
+        @external(".OpenModelica.Scripting.reopenStandardStream")
         @classmethod
-        async def reopenStandardStream(_, _stream: Union[StandardStream__v_1_13, Literal['stdin', 1, 'stdout', 2, 'stderr', 3]], filename: str) -> bool:
+        async def reopenStandardStream(
+            _,
+            _stream: Union[
+                StandardStream__v_1_13,
+                Literal["stdin", 1, "stdout", 2, "stderr", 3],
+            ],
+            filename: str,
+        ) -> bool:
             """function reopenStandardStream
-  input StandardStream _stream;
-  input String filename;
-  output Boolean success;
-end reopenStandardStream;"""
+              input StandardStream _stream;
+              input String filename;
+              output Boolean success;
+            end reopenStandardStream;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.importFMU')
+        @external(".OpenModelica.Scripting.importFMU")
         @classmethod
-        async def importFMU(_, filename: str, workdir: str=..., loglevel: int=..., fullPath: bool=..., debugLogging: bool=..., generateInputConnectors: bool=..., generateOutputConnectors: bool=...) -> str:
+        async def importFMU(
+            _,
+            filename: str,
+            workdir: str = ...,
+            loglevel: int = ...,
+            fullPath: bool = ...,
+            debugLogging: bool = ...,
+            generateInputConnectors: bool = ...,
+            generateOutputConnectors: bool = ...,
+        ) -> str:
             """function importFMU
-  input String filename "the fmu file name";
-  input String workdir = "<default>" "The output directory for imported FMU files. <default> will put the files to current working directory.";
-  input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
-  input Boolean fullPath = false "When true the full output path is returned otherwise only the file name.";
-  input Boolean debugLogging = false "When true the FMU's debug output is printed.";
-  input Boolean generateInputConnectors = true "When true creates the input connector pins.";
-  input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
-  output String generatedFileName "Returns the full path of the generated file.";
-end importFMU;"""
+              input String filename "the fmu file name";
+              input String workdir = "<default>" "The output directory for imported FMU files. <default> will put the files to current working directory.";
+              input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
+              input Boolean fullPath = false "When true the full output path is returned otherwise only the file name.";
+              input Boolean debugLogging = false "When true the FMU's debug output is printed.";
+              input Boolean generateInputConnectors = true "When true creates the input connector pins.";
+              input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
+              output String generatedFileName "Returns the full path of the generated file.";
+            end importFMU;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.importFMUModelDescription')
+        @external(".OpenModelica.Scripting.importFMUModelDescription")
         @classmethod
-        async def importFMUModelDescription(_, filename: str, workdir: str=..., loglevel: int=..., fullPath: bool=..., debugLogging: bool=..., generateInputConnectors: bool=..., generateOutputConnectors: bool=...) -> str:
+        async def importFMUModelDescription(
+            _,
+            filename: str,
+            workdir: str = ...,
+            loglevel: int = ...,
+            fullPath: bool = ...,
+            debugLogging: bool = ...,
+            generateInputConnectors: bool = ...,
+            generateOutputConnectors: bool = ...,
+        ) -> str:
             """function importFMUModelDescription
-  input String filename "the fmu file name";
-  input String workdir = "<default>" "The output directory for imported FMU files. <default> will put the files to current working directory.";
-  input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
-  input Boolean fullPath = false "When true the full output path is returned otherwise only the file name.";
-  input Boolean debugLogging = false "When true the FMU's debug output is printed.";
-  input Boolean generateInputConnectors = true "When true creates the input connector pins.";
-  input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
-  output String generatedFileName "Returns the full path of the generated file.";
-end importFMUModelDescription;"""
+              input String filename "the fmu file name";
+              input String workdir = "<default>" "The output directory for imported FMU files. <default> will put the files to current working directory.";
+              input Integer loglevel = 3 "loglevel_nothing=0;loglevel_fatal=1;loglevel_error=2;loglevel_warning=3;loglevel_info=4;loglevel_verbose=5;loglevel_debug=6";
+              input Boolean fullPath = false "When true the full output path is returned otherwise only the file name.";
+              input Boolean debugLogging = false "When true the FMU's debug output is printed.";
+              input Boolean generateInputConnectors = true "When true creates the input connector pins.";
+              input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
+              output String generatedFileName "Returns the full path of the generated file.";
+            end importFMUModelDescription;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.translateModelFMU')
+        @external(".OpenModelica.Scripting.translateModelFMU")
         @classmethod
-        async def translateModelFMU(_, className: Union[TypeName, str], version: str=..., fmuType: str=..., fileNamePrefix: str=..., includeResources: bool=...) -> str:
+        async def translateModelFMU(
+            _,
+            className: Union[TypeName, str],
+            version: str = ...,
+            fmuType: str = ...,
+            fileNamePrefix: str = ...,
+            includeResources: bool = ...,
+        ) -> str:
             """function translateModelFMU
-  input TypeName className "the class that should translated";
-  input String version = "2.0" "FMU version, 1.0 or 2.0.";
-  input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
-  input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"className\\"";
-  input Boolean includeResources = false "include Modelica based resources via loadResource or not";
-  output String generatedFileName "Returns the full path of the generated FMU.";
-end translateModelFMU;"""
+              input TypeName className "the class that should translated";
+              input String version = "2.0" "FMU version, 1.0 or 2.0.";
+              input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
+              input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"className\\"";
+              input Boolean includeResources = false "include Modelica based resources via loadResource or not";
+              output String generatedFileName "Returns the full path of the generated FMU.";
+            end translateModelFMU;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.buildModelFMU')
+        @external(".OpenModelica.Scripting.buildModelFMU")
         @classmethod
-        async def buildModelFMU(_, className: Union[TypeName, str], version: str=..., fmuType: str=..., fileNamePrefix: str=..., platforms: Sequence[str]=..., includeResources: bool=...) -> str:
+        async def buildModelFMU(
+            _,
+            className: Union[TypeName, str],
+            version: str = ...,
+            fmuType: str = ...,
+            fileNamePrefix: str = ...,
+            platforms: Sequence[str] = ...,
+            includeResources: bool = ...,
+        ) -> str:
             """function buildModelFMU
-  input TypeName className "the class that should translated";
-  input String version = "2.0" "FMU version, 1.0 or 2.0.";
-  input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
-  input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"className\\"";
-  input String platforms[:] = {"static"} "The list of platforms to generate code for. \\"dynamic\\"=current platform, dynamically link the runtime. \\"static\\"=current platform, statically link everything. Else, use a host triple, e.g. \\"x86_64-linux-gnu\\" or \\"x86_64-w64-mingw32\\"";
-  input Boolean includeResources = false "include Modelica based resources via loadResource or not";
-  output String generatedFileName "Returns the full path of the generated FMU.";
-end buildModelFMU;"""
+              input TypeName className "the class that should translated";
+              input String version = "2.0" "FMU version, 1.0 or 2.0.";
+              input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
+              input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"className\\"";
+              input String platforms[:] = {"static"} "The list of platforms to generate code for. \\"dynamic\\"=current platform, dynamically link the runtime. \\"static\\"=current platform, statically link everything. Else, use a host triple, e.g. \\"x86_64-linux-gnu\\" or \\"x86_64-w64-mingw32\\"";
+              input Boolean includeResources = false "include Modelica based resources via loadResource or not";
+              output String generatedFileName "Returns the full path of the generated FMU.";
+            end buildModelFMU;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.buildEncryptedPackage')
+        @external(".OpenModelica.Scripting.buildEncryptedPackage")
         @classmethod
-        async def buildEncryptedPackage(_, className: Union[TypeName, str], encrypt: bool=...) -> bool:
+        async def buildEncryptedPackage(
+            _, className: Union[TypeName, str], encrypt: bool = ...
+        ) -> bool:
             """function buildEncryptedPackage
-  input TypeName className "the class that should encrypted";
-  input Boolean encrypt = true;
-  output Boolean success;
-end buildEncryptedPackage;"""
+              input TypeName className "the class that should encrypted";
+              input Boolean encrypt = true;
+              output Boolean success;
+            end buildEncryptedPackage;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.simulate')
+        @external(".OpenModelica.Scripting.simulate")
         @classmethod
-        async def simulate(_, className: Union[TypeName, str], startTime: float=..., stopTime: float=..., numberOfIntervals: float=..., tolerance: float=..., method: str=..., fileNamePrefix: str=..., options: str=..., outputFormat: str=..., variableFilter: str=..., cflags: str=..., simflags: str=...) -> SimulationResult:
+        async def simulate(
+            _,
+            className: Union[TypeName, str],
+            startTime: float = ...,
+            stopTime: float = ...,
+            numberOfIntervals: float = ...,
+            tolerance: float = ...,
+            method: str = ...,
+            fileNamePrefix: str = ...,
+            options: str = ...,
+            outputFormat: str = ...,
+            variableFilter: str = ...,
+            cflags: str = ...,
+            simflags: str = ...,
+        ) -> SimulationResult:
             """function simulate
-  input TypeName className "the class that should simulated";
-  input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
-  input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-  input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
-  input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
-  input String method = "<default>" "integration method used for simulation. <default> = dassl";
-  input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
-  input String options = "<default>" "options. <default> = \\"\\"";
-  input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-  input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
-  input String cflags = "<default>" "cflags. <default> = \\"\\"";
-  input String simflags = "<default>" "simflags. <default> = \\"\\"";
-  output SimulationResult simulationResults;
+              input TypeName className "the class that should simulated";
+              input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
+              input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
+              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
+              input String method = "<default>" "integration method used for simulation. <default> = dassl";
+              input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
+              input String options = "<default>" "options. <default> = \\"\\"";
+              input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
+              input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+              input String cflags = "<default>" "cflags. <default> = \\"\\"";
+              input String simflags = "<default>" "simflags. <default> = \\"\\"";
+              output SimulationResult simulationResults;
 
-  record SimulationResult
-    String resultFile;
-    String simulationOptions;
-    String messages;
-    Real timeFrontend;
-    Real timeBackend;
-    Real timeSimCode;
-    Real timeTemplates;
-    Real timeCompile;
-    Real timeSimulation;
-    Real timeTotal;
-  end SimulationResult;
-end simulate;"""
+              record SimulationResult
+                String resultFile;
+                String simulationOptions;
+                String messages;
+                Real timeFrontend;
+                Real timeBackend;
+                Real timeSimCode;
+                Real timeTemplates;
+                Real timeCompile;
+                Real timeSimulation;
+                Real timeTotal;
+              end SimulationResult;
+            end simulate;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.buildModel')
+        @external(".OpenModelica.Scripting.buildModel")
         @classmethod
-        async def buildModel(_, className: Union[TypeName, str], startTime: float=..., stopTime: float=..., numberOfIntervals: float=..., tolerance: float=..., method: str=..., fileNamePrefix: str=..., options: str=..., outputFormat: str=..., variableFilter: str=..., cflags: str=..., simflags: str=...) -> List[str]:
+        async def buildModel(
+            _,
+            className: Union[TypeName, str],
+            startTime: float = ...,
+            stopTime: float = ...,
+            numberOfIntervals: float = ...,
+            tolerance: float = ...,
+            method: str = ...,
+            fileNamePrefix: str = ...,
+            options: str = ...,
+            outputFormat: str = ...,
+            variableFilter: str = ...,
+            cflags: str = ...,
+            simflags: str = ...,
+        ) -> List[str]:
             """function buildModel
-  input TypeName className "the class that should be built";
-  input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
-  input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-  input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
-  input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
-  input String method = "<default>" "integration method used for simulation. <default> = dassl";
-  input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
-  input String options = "<default>" "options. <default> = \\"\\"";
-  input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-  input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
-  input String cflags = "<default>" "cflags. <default> = \\"\\"";
-  input String simflags = "<default>" "simflags. <default> = \\"\\"";
-  output String[2] buildModelResults;
-end buildModel;"""
+              input TypeName className "the class that should be built";
+              input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
+              input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
+              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
+              input String method = "<default>" "integration method used for simulation. <default> = dassl";
+              input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
+              input String options = "<default>" "options. <default> = \\"\\"";
+              input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
+              input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+              input String cflags = "<default>" "cflags. <default> = \\"\\"";
+              input String simflags = "<default>" "simflags. <default> = \\"\\"";
+              output String[2] buildModelResults;
+            end buildModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.buildLabel')
+        @external(".OpenModelica.Scripting.buildLabel")
         @classmethod
-        async def buildLabel(_, className: Union[TypeName, str], startTime: float=..., stopTime: float=..., numberOfIntervals: int=..., tolerance: float=..., method: str=..., fileNamePrefix: str=..., options: str=..., outputFormat: str=..., variableFilter: str=..., cflags: str=..., simflags: str=...) -> List[str]:
+        async def buildLabel(
+            _,
+            className: Union[TypeName, str],
+            startTime: float = ...,
+            stopTime: float = ...,
+            numberOfIntervals: int = ...,
+            tolerance: float = ...,
+            method: str = ...,
+            fileNamePrefix: str = ...,
+            options: str = ...,
+            outputFormat: str = ...,
+            variableFilter: str = ...,
+            cflags: str = ...,
+            simflags: str = ...,
+        ) -> List[str]:
             """function buildLabel
-  input TypeName className "the class that should be built";
-  input Real startTime = 0.0 "the start time of the simulation. <default> = 0.0";
-  input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-  input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
-  input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
-  input String method = "dassl" "integration method used for simulation. <default> = dassl";
-  input String fileNamePrefix = "" "fileNamePrefix. <default> = \\"\\"";
-  input String options = "" "options. <default> = \\"\\"";
-  input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-  input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
-  input String cflags = "" "cflags. <default> = \\"\\"";
-  input String simflags = "" "simflags. <default> = \\"\\"";
-  output String[2] buildModelResults;
-end buildLabel;"""
+              input TypeName className "the class that should be built";
+              input Real startTime = 0.0 "the start time of the simulation. <default> = 0.0";
+              input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
+              input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
+              input String method = "dassl" "integration method used for simulation. <default> = dassl";
+              input String fileNamePrefix = "" "fileNamePrefix. <default> = \\"\\"";
+              input String options = "" "options. <default> = \\"\\"";
+              input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
+              input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+              input String cflags = "" "cflags. <default> = \\"\\"";
+              input String simflags = "" "simflags. <default> = \\"\\"";
+              output String[2] buildModelResults;
+            end buildLabel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.reduceTerms')
+        @external(".OpenModelica.Scripting.reduceTerms")
         @classmethod
-        async def reduceTerms(_, className: Union[TypeName, str], startTime: float=..., stopTime: float=..., numberOfIntervals: int=..., tolerance: float=..., method: str=..., fileNamePrefix: str=..., options: str=..., outputFormat: str=..., variableFilter: str=..., cflags: str=..., simflags: str=..., labelstoCancel: str=...) -> List[str]:
+        async def reduceTerms(
+            _,
+            className: Union[TypeName, str],
+            startTime: float = ...,
+            stopTime: float = ...,
+            numberOfIntervals: int = ...,
+            tolerance: float = ...,
+            method: str = ...,
+            fileNamePrefix: str = ...,
+            options: str = ...,
+            outputFormat: str = ...,
+            variableFilter: str = ...,
+            cflags: str = ...,
+            simflags: str = ...,
+            labelstoCancel: str = ...,
+        ) -> List[str]:
             """function reduceTerms
-  input TypeName className "the class that should be built";
-  input Real startTime = 0.0 "the start time of the simulation. <default> = 0.0";
-  input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-  input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
-  input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
-  input String method = "dassl" "integration method used for simulation. <default> = dassl";
-  input String fileNamePrefix = "" "fileNamePrefix. <default> = \\"\\"";
-  input String options = "" "options. <default> = \\"\\"";
-  input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-  input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
-  input String cflags = "" "cflags. <default> = \\"\\"";
-  input String simflags = "" "simflags. <default> = \\"\\"";
-  input String labelstoCancel = "";
-  output String[2] buildModelResults;
-end reduceTerms;"""
+              input TypeName className "the class that should be built";
+              input Real startTime = 0.0 "the start time of the simulation. <default> = 0.0";
+              input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
+              input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
+              input String method = "dassl" "integration method used for simulation. <default> = dassl";
+              input String fileNamePrefix = "" "fileNamePrefix. <default> = \\"\\"";
+              input String options = "" "options. <default> = \\"\\"";
+              input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
+              input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+              input String cflags = "" "cflags. <default> = \\"\\"";
+              input String simflags = "" "simflags. <default> = \\"\\"";
+              input String labelstoCancel = "";
+              output String[2] buildModelResults;
+            end reduceTerms;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.moveClass')
+        @external(".OpenModelica.Scripting.moveClass")
         @classmethod
-        async def moveClass(_, className: Union[TypeName, str], offset: int) -> bool:
+        async def moveClass(
+            _, className: Union[TypeName, str], offset: int
+        ) -> bool:
             """function moveClass
-  input TypeName className "the class that should be moved";
-  input Integer offset "Offset in the class list.";
-  output Boolean result;
-end moveClass;"""
+              input TypeName className "the class that should be moved";
+              input Integer offset "Offset in the class list.";
+              output Boolean result;
+            end moveClass;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.moveClassToTop')
+        @external(".OpenModelica.Scripting.moveClassToTop")
         @classmethod
         async def moveClassToTop(_, className: Union[TypeName, str]) -> bool:
             """function moveClassToTop
-  input TypeName className;
-  output Boolean result;
-end moveClassToTop;"""
+              input TypeName className;
+              output Boolean result;
+            end moveClassToTop;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.moveClassToBottom')
+        @external(".OpenModelica.Scripting.moveClassToBottom")
         @classmethod
-        async def moveClassToBottom(_, className: Union[TypeName, str]) -> bool:
+        async def moveClassToBottom(
+            _, className: Union[TypeName, str]
+        ) -> bool:
             """function moveClassToBottom
-  input TypeName className;
-  output Boolean result;
-end moveClassToBottom;"""
+              input TypeName className;
+              output Boolean result;
+            end moveClassToBottom;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.copyClass')
+        @external(".OpenModelica.Scripting.copyClass")
         @classmethod
-        async def copyClass(_, className: Union[TypeName, str], newClassName: str, withIn: Union[TypeName, str]=...) -> bool:
+        async def copyClass(
+            _,
+            className: Union[TypeName, str],
+            newClassName: str,
+            withIn: Union[TypeName, str] = ...,
+        ) -> bool:
             """function copyClass
-  input TypeName className "the class that should be copied";
-  input String newClassName "the name for new class";
-  input TypeName withIn = $Code(TopLevel) "the with in path for new class";
-  output Boolean result;
-end copyClass;"""
+              input TypeName className "the class that should be copied";
+              input String newClassName "the name for new class";
+              input TypeName withIn = $Code(TopLevel) "the with in path for new class";
+              output Boolean result;
+            end copyClass;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.linearize')
+        @external(".OpenModelica.Scripting.linearize")
         @classmethod
-        async def linearize(_, className: Union[TypeName, str], startTime: float=..., stopTime: float=..., numberOfIntervals: float=..., stepSize: float=..., tolerance: float=..., method: str=..., fileNamePrefix: str=..., storeInTemp: bool=..., noClean: bool=..., options: str=..., outputFormat: str=..., variableFilter: str=..., cflags: str=..., simflags: str=...) -> str:
+        async def linearize(
+            _,
+            className: Union[TypeName, str],
+            startTime: float = ...,
+            stopTime: float = ...,
+            numberOfIntervals: float = ...,
+            stepSize: float = ...,
+            tolerance: float = ...,
+            method: str = ...,
+            fileNamePrefix: str = ...,
+            storeInTemp: bool = ...,
+            noClean: bool = ...,
+            options: str = ...,
+            outputFormat: str = ...,
+            variableFilter: str = ...,
+            cflags: str = ...,
+            simflags: str = ...,
+        ) -> str:
             """function linearize
-  input TypeName className "the class that should simulated";
-  input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
-  input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-  input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
-  input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
-  input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
-  input String method = "<default>" "integration method used for simulation. <default> = dassl";
-  input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
-  input Boolean storeInTemp = false "storeInTemp. <default> = false";
-  input Boolean noClean = false "noClean. <default> = false";
-  input String options = "<default>" "options. <default> = \\"\\"";
-  input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-  input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
-  input String cflags = "<default>" "cflags. <default> = \\"\\"";
-  input String simflags = "<default>" "simflags. <default> = \\"\\"";
-  output String linearizationResult;
-end linearize;"""
+              input TypeName className "the class that should simulated";
+              input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
+              input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
+              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
+              input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
+              input String method = "<default>" "integration method used for simulation. <default> = dassl";
+              input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
+              input Boolean storeInTemp = false "storeInTemp. <default> = false";
+              input Boolean noClean = false "noClean. <default> = false";
+              input String options = "<default>" "options. <default> = \\"\\"";
+              input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
+              input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+              input String cflags = "<default>" "cflags. <default> = \\"\\"";
+              input String simflags = "<default>" "simflags. <default> = \\"\\"";
+              output String linearizationResult;
+            end linearize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.optimize')
+        @external(".OpenModelica.Scripting.optimize")
         @classmethod
-        async def optimize(_, className: Union[TypeName, str], startTime: float=..., stopTime: float=..., numberOfIntervals: float=..., stepSize: float=..., tolerance: float=..., method: str=..., fileNamePrefix: str=..., storeInTemp: bool=..., noClean: bool=..., options: str=..., outputFormat: str=..., variableFilter: str=..., cflags: str=..., simflags: str=...) -> str:
+        async def optimize(
+            _,
+            className: Union[TypeName, str],
+            startTime: float = ...,
+            stopTime: float = ...,
+            numberOfIntervals: float = ...,
+            stepSize: float = ...,
+            tolerance: float = ...,
+            method: str = ...,
+            fileNamePrefix: str = ...,
+            storeInTemp: bool = ...,
+            noClean: bool = ...,
+            options: str = ...,
+            outputFormat: str = ...,
+            variableFilter: str = ...,
+            cflags: str = ...,
+            simflags: str = ...,
+        ) -> str:
             """function optimize
-  input TypeName className "the class that should simulated";
-  input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
-  input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-  input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
-  input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
-  input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
-  input String method = DAE.SCONST("optimization") "optimize a modelica/optimica model.";
-  input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
-  input Boolean storeInTemp = false "storeInTemp. <default> = false";
-  input Boolean noClean = false "noClean. <default> = false";
-  input String options = "<default>" "options. <default> = \\"\\"";
-  input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-  input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
-  input String cflags = "<default>" "cflags. <default> = \\"\\"";
-  input String simflags = "<default>" "simflags. <default> = \\"\\"";
-  output String optimizationResults;
-end optimize;"""
+              input TypeName className "the class that should simulated";
+              input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
+              input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
+              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
+              input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
+              input String method = DAE.SCONST("optimization") "optimize a modelica/optimica model.";
+              input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
+              input Boolean storeInTemp = false "storeInTemp. <default> = false";
+              input Boolean noClean = false "noClean. <default> = false";
+              input String options = "<default>" "options. <default> = \\"\\"";
+              input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
+              input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+              input String cflags = "<default>" "cflags. <default> = \\"\\"";
+              input String simflags = "<default>" "simflags. <default> = \\"\\"";
+              output String optimizationResults;
+            end optimize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getSourceFile')
+        @external(".OpenModelica.Scripting.getSourceFile")
         @classmethod
         async def getSourceFile(_, class_: Union[TypeName, str]) -> str:
             """function getSourceFile
-  input TypeName class_;
-  output String filename "empty on failure";
-end getSourceFile;"""
+              input TypeName class_;
+              output String filename "empty on failure";
+            end getSourceFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setSourceFile')
+        @external(".OpenModelica.Scripting.setSourceFile")
         @classmethod
-        async def setSourceFile(_, class_: Union[TypeName, str], filename: str) -> bool:
+        async def setSourceFile(
+            _, class_: Union[TypeName, str], filename: str
+        ) -> bool:
             """function setSourceFile
-  input TypeName class_;
-  input String filename;
-  output Boolean success;
-end setSourceFile;"""
+              input TypeName class_;
+              input String filename;
+              output Boolean success;
+            end setSourceFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isShortDefinition')
+        @external(".OpenModelica.Scripting.isShortDefinition")
         @classmethod
         async def isShortDefinition(_, class_: Union[TypeName, str]) -> bool:
             """function isShortDefinition
-  input TypeName class_;
-  output Boolean isShortCls;
-end isShortDefinition;"""
+              input TypeName class_;
+              output Boolean isShortCls;
+            end isShortDefinition;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setClassComment')
+        @external(".OpenModelica.Scripting.setClassComment")
         @classmethod
-        async def setClassComment(_, class_: Union[TypeName, str], filename: str) -> bool:
+        async def setClassComment(
+            _, class_: Union[TypeName, str], filename: str
+        ) -> bool:
             """function setClassComment
-  input TypeName class_;
-  input String filename;
-  output Boolean success;
-end setClassComment;"""
+              input TypeName class_;
+              input String filename;
+              output Boolean success;
+            end setClassComment;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getClassNames')
+        @external(".OpenModelica.Scripting.getClassNames")
         @classmethod
-        async def getClassNames(_, class_: Union[TypeName, str]=..., recursive: bool=..., qualified: bool=..., sort: bool=..., builtin: bool=..., showProtected: bool=..., includeConstants: bool=...) -> List[TypeName]:
+        async def getClassNames(
+            _,
+            class_: Union[TypeName, str] = ...,
+            recursive: bool = ...,
+            qualified: bool = ...,
+            sort: bool = ...,
+            builtin: bool = ...,
+            showProtected: bool = ...,
+            includeConstants: bool = ...,
+        ) -> List[TypeName]:
             """function getClassNames
-  input TypeName class_ = $Code(AllLoadedClasses);
-  input Boolean recursive = false;
-  input Boolean qualified = false;
-  input Boolean sort = false;
-  input Boolean builtin = false "List also builtin classes if true";
-  input Boolean showProtected = false "List also protected classes if true";
-  input Boolean includeConstants = false "List also constants in the class if true";
-  output TypeName classNames[:];
-end getClassNames;"""
+              input TypeName class_ = $Code(AllLoadedClasses);
+              input Boolean recursive = false;
+              input Boolean qualified = false;
+              input Boolean sort = false;
+              input Boolean builtin = false "List also builtin classes if true";
+              input Boolean showProtected = false "List also protected classes if true";
+              input Boolean includeConstants = false "List also constants in the class if true";
+              output TypeName classNames[:];
+            end getClassNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getUsedClassNames')
+        @external(".OpenModelica.Scripting.getUsedClassNames")
         @classmethod
-        async def getUsedClassNames(_, className: Union[TypeName, str]) -> List[TypeName]:
+        async def getUsedClassNames(
+            _, className: Union[TypeName, str]
+        ) -> List[TypeName]:
             """function getUsedClassNames
-  input TypeName className;
-  output TypeName classNames[:];
-end getUsedClassNames;"""
+              input TypeName className;
+              output TypeName classNames[:];
+            end getUsedClassNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getPackages')
+        @external(".OpenModelica.Scripting.getPackages")
         @classmethod
-        async def getPackages(_, class_: Union[TypeName, str]=...) -> List[TypeName]:
+        async def getPackages(
+            _, class_: Union[TypeName, str] = ...
+        ) -> List[TypeName]:
             """function getPackages
-  input TypeName class_ = $Code(AllLoadedClasses);
-  output TypeName classNames[:];
-end getPackages;"""
+              input TypeName class_ = $Code(AllLoadedClasses);
+              output TypeName classNames[:];
+            end getPackages;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAllSubtypeOf')
+        @external(".OpenModelica.Scripting.getAllSubtypeOf")
         @classmethod
-        async def getAllSubtypeOf(_, className: Union[TypeName, str], parentClass: Union[TypeName, str]=..., qualified: bool=..., includePartial: bool=..., sort: bool=...) -> List[TypeName]:
+        async def getAllSubtypeOf(
+            _,
+            className: Union[TypeName, str],
+            parentClass: Union[TypeName, str] = ...,
+            qualified: bool = ...,
+            includePartial: bool = ...,
+            sort: bool = ...,
+        ) -> List[TypeName]:
             """function getAllSubtypeOf
-  input TypeName className;
-  input TypeName parentClass = $Code(AllLoadedClasses);
-  input Boolean qualified = false;
-  input Boolean includePartial = false;
-  input Boolean sort = false;
-  output TypeName classNames[:];
-end getAllSubtypeOf;"""
+              input TypeName className;
+              input TypeName parentClass = $Code(AllLoadedClasses);
+              input Boolean qualified = false;
+              input Boolean includePartial = false;
+              input Boolean sort = false;
+              output TypeName classNames[:];
+            end getAllSubtypeOf;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.basePlotFunction')
+        @external(".OpenModelica.Scripting.basePlotFunction")
         @classmethod
-        async def basePlotFunction(_, fileName: str=..., interpolation: str=..., title: str=..., legend: bool=..., grid: bool=..., logX: bool=..., logY: bool=..., xLabel: str=..., yLabel: str=..., points: bool=..., xRange: Sequence[float]=..., yRange: Sequence[float]=...) -> bool:
+        async def basePlotFunction(
+            _,
+            fileName: str = ...,
+            interpolation: str = ...,
+            title: str = ...,
+            legend: bool = ...,
+            grid: bool = ...,
+            logX: bool = ...,
+            logY: bool = ...,
+            xLabel: str = ...,
+            yLabel: str = ...,
+            points: bool = ...,
+            xRange: Sequence[float] = ...,
+            yRange: Sequence[float] = ...,
+        ) -> bool:
             """partial function basePlotFunction
-  input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
-  input String interpolation = "linear" "
-      Determines if the simulation data should be interpolated to allow drawing of continuous lines in the diagram.
-      \\"linear\\" results in linear interpolation between data points, \\"constant\\" keeps the value of the last known
-      data point until a new one is found and \\"none\\" results in a diagram where only known data points are plotted.";
-  input String title = "Plot by OpenModelica" "This text will be used as the diagram title.";
-  input Boolean legend = true "Determines whether or not the variable legend is shown.";
-  input Boolean grid = true "Determines whether or not a grid is shown in the diagram.";
-  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
-  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
-  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
-  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
-  input Boolean points = false "Determines whether or not the data points should be indicated by a dot in the diagram.";
-  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
-  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
-  output Boolean success "Returns true on success";
-end basePlotFunction;"""
+              input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
+              input String interpolation = "linear" "
+                  Determines if the simulation data should be interpolated to allow drawing of continuous lines in the diagram.
+                  \\"linear\\" results in linear interpolation between data points, \\"constant\\" keeps the value of the last known
+                  data point until a new one is found and \\"none\\" results in a diagram where only known data points are plotted.";
+              input String title = "Plot by OpenModelica" "This text will be used as the diagram title.";
+              input Boolean legend = true "Determines whether or not the variable legend is shown.";
+              input Boolean grid = true "Determines whether or not a grid is shown in the diagram.";
+              input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+              input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+              input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+              input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+              input Boolean points = false "Determines whether or not the data points should be indicated by a dot in the diagram.";
+              input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+              input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+              output Boolean success "Returns true on success";
+            end basePlotFunction;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.plot')
+        @external(".OpenModelica.Scripting.plot")
         @classmethod
-        async def plot(_, vars: Sequence[Union[VariableName, str]], externalWindow: bool=..., fileName: str=..., title: str=..., grid: str=..., logX: bool=..., logY: bool=..., xLabel: str=..., yLabel: str=..., xRange: Sequence[float]=..., yRange: Sequence[float]=..., curveWidth: float=..., curveStyle: int=..., legendPosition: str=..., footer: str=..., autoScale: bool=..., forceOMPlot: bool=...) -> bool:
+        async def plot(
+            _,
+            vars: Sequence[Union[VariableName, str]],
+            externalWindow: bool = ...,
+            fileName: str = ...,
+            title: str = ...,
+            grid: str = ...,
+            logX: bool = ...,
+            logY: bool = ...,
+            xLabel: str = ...,
+            yLabel: str = ...,
+            xRange: Sequence[float] = ...,
+            yRange: Sequence[float] = ...,
+            curveWidth: float = ...,
+            curveStyle: int = ...,
+            legendPosition: str = ...,
+            footer: str = ...,
+            autoScale: bool = ...,
+            forceOMPlot: bool = ...,
+        ) -> bool:
             """function plot
-  input VariableNames vars "The variables you want to plot";
-  input Boolean externalWindow = false "Opens the plot in a new plot window";
-  input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
-  input String title = "" "This text will be used as the diagram title.";
-  input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
-  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
-  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
-  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
-  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
-  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
-  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
-  input Real curveWidth = 1.0 "Sets the width of the curve.";
-  input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
-  input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
-  input String footer = "" "This text will be used as the diagram footer.";
-  input Boolean autoScale = true "Use auto scale while plotting.";
-  input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
-  output Boolean success "Returns true on success";
-end plot;"""
+              input VariableNames vars "The variables you want to plot";
+              input Boolean externalWindow = false "Opens the plot in a new plot window";
+              input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
+              input String title = "" "This text will be used as the diagram title.";
+              input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+              input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+              input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+              input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+              input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+              input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+              input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+              input Real curveWidth = 1.0 "Sets the width of the curve.";
+              input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
+              input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
+              input String footer = "" "This text will be used as the diagram footer.";
+              input Boolean autoScale = true "Use auto scale while plotting.";
+              input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
+              output Boolean success "Returns true on success";
+            end plot;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.plotAll')
+        @external(".OpenModelica.Scripting.plotAll")
         @classmethod
-        async def plotAll(_, externalWindow: bool=..., fileName: str=..., title: str=..., grid: str=..., logX: bool=..., logY: bool=..., xLabel: str=..., yLabel: str=..., xRange: Sequence[float]=..., yRange: Sequence[float]=..., curveWidth: float=..., curveStyle: int=..., legendPosition: str=..., footer: str=..., autoScale: bool=..., forceOMPlot: bool=...) -> bool:
+        async def plotAll(
+            _,
+            externalWindow: bool = ...,
+            fileName: str = ...,
+            title: str = ...,
+            grid: str = ...,
+            logX: bool = ...,
+            logY: bool = ...,
+            xLabel: str = ...,
+            yLabel: str = ...,
+            xRange: Sequence[float] = ...,
+            yRange: Sequence[float] = ...,
+            curveWidth: float = ...,
+            curveStyle: int = ...,
+            legendPosition: str = ...,
+            footer: str = ...,
+            autoScale: bool = ...,
+            forceOMPlot: bool = ...,
+        ) -> bool:
             """function plotAll
-  input Boolean externalWindow = false "Opens the plot in a new plot window";
-  input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
-  input String title = "" "This text will be used as the diagram title.";
-  input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
-  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
-  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
-  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
-  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
-  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
-  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
-  input Real curveWidth = 1.0 "Sets the width of the curve.";
-  input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
-  input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
-  input String footer = "" "This text will be used as the diagram footer.";
-  input Boolean autoScale = true "Use auto scale while plotting.";
-  input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
-  output Boolean success "Returns true on success";
-end plotAll;"""
+              input Boolean externalWindow = false "Opens the plot in a new plot window";
+              input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
+              input String title = "" "This text will be used as the diagram title.";
+              input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+              input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+              input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+              input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+              input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+              input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+              input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+              input Real curveWidth = 1.0 "Sets the width of the curve.";
+              input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
+              input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
+              input String footer = "" "This text will be used as the diagram footer.";
+              input Boolean autoScale = true "Use auto scale while plotting.";
+              input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
+              output Boolean success "Returns true on success";
+            end plotAll;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.plotParametric')
+        @external(".OpenModelica.Scripting.plotParametric")
         @classmethod
-        async def plotParametric(_, xVariable: Union[VariableName, str], yVariable: Union[VariableName, str], externalWindow: bool=..., fileName: str=..., title: str=..., grid: str=..., logX: bool=..., logY: bool=..., xLabel: str=..., yLabel: str=..., xRange: Sequence[float]=..., yRange: Sequence[float]=..., curveWidth: float=..., curveStyle: int=..., legendPosition: str=..., footer: str=..., autoScale: bool=..., forceOMPlot: bool=...) -> bool:
+        async def plotParametric(
+            _,
+            xVariable: Union[VariableName, str],
+            yVariable: Union[VariableName, str],
+            externalWindow: bool = ...,
+            fileName: str = ...,
+            title: str = ...,
+            grid: str = ...,
+            logX: bool = ...,
+            logY: bool = ...,
+            xLabel: str = ...,
+            yLabel: str = ...,
+            xRange: Sequence[float] = ...,
+            yRange: Sequence[float] = ...,
+            curveWidth: float = ...,
+            curveStyle: int = ...,
+            legendPosition: str = ...,
+            footer: str = ...,
+            autoScale: bool = ...,
+            forceOMPlot: bool = ...,
+        ) -> bool:
             """function plotParametric
-  input VariableName xVariable;
-  input VariableName yVariable;
-  input Boolean externalWindow = false "Opens the plot in a new plot window";
-  input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
-  input String title = "" "This text will be used as the diagram title.";
-  input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
-  input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
-  input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
-  input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
-  input String yLabel = "" "This text will be used as the vertical label in the diagram.";
-  input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
-  input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
-  input Real curveWidth = 1.0 "Sets the width of the curve.";
-  input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
-  input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
-  input String footer = "" "This text will be used as the diagram footer.";
-  input Boolean autoScale = true "Use auto scale while plotting.";
-  input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
-  output Boolean success "Returns true on success";
-end plotParametric;"""
+              input VariableName xVariable;
+              input VariableName yVariable;
+              input Boolean externalWindow = false "Opens the plot in a new plot window";
+              input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
+              input String title = "" "This text will be used as the diagram title.";
+              input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+              input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
+              input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
+              input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+              input String yLabel = "" "This text will be used as the vertical label in the diagram.";
+              input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
+              input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
+              input Real curveWidth = 1.0 "Sets the width of the curve.";
+              input Integer curveStyle = 1 "Sets the style of the curve. SolidLine=1, DashLine=2, DotLine=3, DashDotLine=4, DashDotDotLine=5, Sticks=6, Steps=7.";
+              input String legendPosition = "top" "Sets the POSITION of the legend i.e left, right, top, bottom, none.";
+              input String footer = "" "This text will be used as the diagram footer.";
+              input Boolean autoScale = true "Use auto scale while plotting.";
+              input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
+              output Boolean success "Returns true on success";
+            end plotParametric;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.readSimulationResult')
+        @external(".OpenModelica.Scripting.readSimulationResult")
         @classmethod
-        async def readSimulationResult(_, filename: str, variables: Sequence[Union[VariableName, str]], size: int=...) -> List[List[float]]:
+        async def readSimulationResult(
+            _,
+            filename: str,
+            variables: Sequence[Union[VariableName, str]],
+            size: int = ...,
+        ) -> List[List[float]]:
             """function readSimulationResult
-  input String filename;
-  input VariableNames variables;
-  input Integer size = 0 "0=read any size... If the size is not the same as the result-file, this function fails";
-  output Real result[:, :];
-end readSimulationResult;"""
+              input String filename;
+              input VariableNames variables;
+              input Integer size = 0 "0=read any size... If the size is not the same as the result-file, this function fails";
+              output Real result[:, :];
+            end readSimulationResult;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.readSimulationResultSize')
+        @external(".OpenModelica.Scripting.readSimulationResultSize")
         @classmethod
         async def readSimulationResultSize(_, fileName: str) -> int:
             """function readSimulationResultSize
-  input String fileName;
-  output Integer sz;
-end readSimulationResultSize;"""
+              input String fileName;
+              output Integer sz;
+            end readSimulationResultSize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.readSimulationResultVars')
+        @external(".OpenModelica.Scripting.readSimulationResultVars")
         @classmethod
-        async def readSimulationResultVars(_, fileName: str, readParameters: bool=..., openmodelicaStyle: bool=...) -> List[str]:
+        async def readSimulationResultVars(
+            _,
+            fileName: str,
+            readParameters: bool = ...,
+            openmodelicaStyle: bool = ...,
+        ) -> List[str]:
             """function readSimulationResultVars
-  input String fileName;
-  input Boolean readParameters = true;
-  input Boolean openmodelicaStyle = false;
-  output String[:] vars;
-end readSimulationResultVars;"""
+              input String fileName;
+              input Boolean readParameters = true;
+              input Boolean openmodelicaStyle = false;
+              output String[:] vars;
+            end readSimulationResultVars;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.filterSimulationResults')
+        @external(".OpenModelica.Scripting.filterSimulationResults")
         @classmethod
-        async def filterSimulationResults(_, inFile: str, outFile: str, vars: Sequence[str], numberOfIntervals: int=..., removeDescription: bool=...) -> bool:
+        async def filterSimulationResults(
+            _,
+            inFile: str,
+            outFile: str,
+            vars: Sequence[str],
+            numberOfIntervals: int = ...,
+            removeDescription: bool = ...,
+        ) -> bool:
             """function filterSimulationResults
-  input String inFile;
-  input String outFile;
-  input String[:] vars;
-  input Integer numberOfIntervals = 0 "0=Do not resample";
-  input Boolean removeDescription = false;
-  output Boolean success;
-end filterSimulationResults;"""
+              input String inFile;
+              input String outFile;
+              input String[:] vars;
+              input Integer numberOfIntervals = 0 "0=Do not resample";
+              input Boolean removeDescription = false;
+              output Boolean success;
+            end filterSimulationResults;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.compareSimulationResults')
+        @external(".OpenModelica.Scripting.compareSimulationResults")
         @classmethod
-        async def compareSimulationResults(_, filename: str, reffilename: str, logfilename: str, relTol: float=..., absTol: float=..., vars: Sequence[str]=...) -> List[str]:
+        async def compareSimulationResults(
+            _,
+            filename: str,
+            reffilename: str,
+            logfilename: str,
+            relTol: float = ...,
+            absTol: float = ...,
+            vars: Sequence[str] = ...,
+        ) -> List[str]:
             """function compareSimulationResults
-  input String filename;
-  input String reffilename;
-  input String logfilename;
-  input Real relTol = 0.01;
-  input Real absTol = 0.0001;
-  input String[:] vars = fill("", 0);
-  output String[:] result;
-end compareSimulationResults;"""
+              input String filename;
+              input String reffilename;
+              input String logfilename;
+              input Real relTol = 0.01;
+              input Real absTol = 0.0001;
+              input String[:] vars = fill("", 0);
+              output String[:] result;
+            end compareSimulationResults;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.deltaSimulationResults')
+        @external(".OpenModelica.Scripting.deltaSimulationResults")
         @classmethod
-        async def deltaSimulationResults(_, filename: str, reffilename: str, method: str, vars: Sequence[str]=...) -> float:
+        async def deltaSimulationResults(
+            _,
+            filename: str,
+            reffilename: str,
+            method: str,
+            vars: Sequence[str] = ...,
+        ) -> float:
             """function deltaSimulationResults
-  input String filename;
-  input String reffilename;
-  input String method "method to compute then error. choose 1norm, 2norm, maxerr";
-  input String[:] vars = fill("", 0);
-  output Real result;
-end deltaSimulationResults;"""
+              input String filename;
+              input String reffilename;
+              input String method "method to compute then error. choose 1norm, 2norm, maxerr";
+              input String[:] vars = fill("", 0);
+              output Real result;
+            end deltaSimulationResults;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.diffSimulationResults')
+        @external(".OpenModelica.Scripting.diffSimulationResults")
         @classmethod
-        async def diffSimulationResults(_, actualFile: str, expectedFile: str, diffPrefix: str, relTol: float=..., relTolDiffMinMax: float=..., rangeDelta: float=..., vars: Sequence[str]=..., keepEqualResults: bool=...) -> diffSimulationResults:
+        async def diffSimulationResults(
+            _,
+            actualFile: str,
+            expectedFile: str,
+            diffPrefix: str,
+            relTol: float = ...,
+            relTolDiffMinMax: float = ...,
+            rangeDelta: float = ...,
+            vars: Sequence[str] = ...,
+            keepEqualResults: bool = ...,
+        ) -> diffSimulationResults:
             """function diffSimulationResults
-  input String actualFile;
-  input String expectedFile;
-  input String diffPrefix;
-  input Real relTol = 1e-3 "y tolerance";
-  input Real relTolDiffMinMax = 1e-4 "y tolerance based on the difference between the maximum and minimum of the signal";
-  input Real rangeDelta = 0.002 "x tolerance";
-  input String[:] vars = fill("", 0);
-  input Boolean keepEqualResults = false;
-  output Boolean success;
-  output String[:] failVars;
-end diffSimulationResults;"""
+              input String actualFile;
+              input String expectedFile;
+              input String diffPrefix;
+              input Real relTol = 1e-3 "y tolerance";
+              input Real relTolDiffMinMax = 1e-4 "y tolerance based on the difference between the maximum and minimum of the signal";
+              input Real rangeDelta = 0.002 "x tolerance";
+              input String[:] vars = fill("", 0);
+              input Boolean keepEqualResults = false;
+              output Boolean success;
+              output String[:] failVars;
+            end diffSimulationResults;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.diffSimulationResultsHtml')
+        @external(".OpenModelica.Scripting.diffSimulationResultsHtml")
         @classmethod
-        async def diffSimulationResultsHtml(_, var: str, actualFile: str, expectedFile: str, relTol: float=..., relTolDiffMinMax: float=..., rangeDelta: float=...) -> str:
+        async def diffSimulationResultsHtml(
+            _,
+            var: str,
+            actualFile: str,
+            expectedFile: str,
+            relTol: float = ...,
+            relTolDiffMinMax: float = ...,
+            rangeDelta: float = ...,
+        ) -> str:
             """function diffSimulationResultsHtml
-  input String var;
-  input String actualFile;
-  input String expectedFile;
-  input Real relTol = 1e-3 "y tolerance";
-  input Real relTolDiffMinMax = 1e-4 "y tolerance based on the difference between the maximum and minimum of the signal";
-  input Real rangeDelta = 0.002 "x tolerance";
-  output String html;
-end diffSimulationResultsHtml;"""
+              input String var;
+              input String actualFile;
+              input String expectedFile;
+              input Real relTol = 1e-3 "y tolerance";
+              input Real relTolDiffMinMax = 1e-4 "y tolerance based on the difference between the maximum and minimum of the signal";
+              input Real rangeDelta = 0.002 "x tolerance";
+              output String html;
+            end diffSimulationResultsHtml;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.checkTaskGraph')
+        @external(".OpenModelica.Scripting.checkTaskGraph")
         @classmethod
-        async def checkTaskGraph(_, filename: str, reffilename: str) -> List[str]:
+        async def checkTaskGraph(
+            _, filename: str, reffilename: str
+        ) -> List[str]:
             """function checkTaskGraph
-  input String filename;
-  input String reffilename;
-  output String[:] result;
-end checkTaskGraph;"""
+              input String filename;
+              input String reffilename;
+              output String[:] result;
+            end checkTaskGraph;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.checkCodeGraph')
+        @external(".OpenModelica.Scripting.checkCodeGraph")
         @classmethod
-        async def checkCodeGraph(_, graphfile: str, codefile: str) -> List[str]:
+        async def checkCodeGraph(
+            _, graphfile: str, codefile: str
+        ) -> List[str]:
             """function checkCodeGraph
-  input String graphfile;
-  input String codefile;
-  output String[:] result;
-end checkCodeGraph;"""
+              input String graphfile;
+              input String codefile;
+              output String[:] result;
+            end checkCodeGraph;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.val')
+        @external(".OpenModelica.Scripting.val")
         @classmethod
-        async def val(_, var: Union[VariableName, str], timePoint: float=..., fileName: str=...) -> float:
+        async def val(
+            _,
+            var: Union[VariableName, str],
+            timePoint: float = ...,
+            fileName: str = ...,
+        ) -> float:
             """function val
-  input VariableName var;
-  input Real timePoint = 0.0;
-  input String fileName = "<default>" "The contents of the currentSimulationResult variable";
-  output Real valAtTime;
-end val;"""
+              input VariableName var;
+              input Real timePoint = 0.0;
+              input String fileName = "<default>" "The contents of the currentSimulationResult variable";
+              output Real valAtTime;
+            end val;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.closeSimulationResultFile')
+        @external(".OpenModelica.Scripting.closeSimulationResultFile")
         @classmethod
         async def closeSimulationResultFile(_) -> bool:
             """function closeSimulationResultFile
-  output Boolean success;
-end closeSimulationResultFile;"""
+              output Boolean success;
+            end closeSimulationResultFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getParameterNames')
+        @external(".OpenModelica.Scripting.getParameterNames")
         @classmethod
-        async def getParameterNames(_, class_: Union[TypeName, str]) -> List[str]:
+        async def getParameterNames(
+            _, class_: Union[TypeName, str]
+        ) -> List[str]:
             """function getParameterNames
-  input TypeName class_;
-  output String[:] parameters;
-end getParameterNames;"""
+              input TypeName class_;
+              output String[:] parameters;
+            end getParameterNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getParameterValue')
+        @external(".OpenModelica.Scripting.getParameterValue")
         @classmethod
-        async def getParameterValue(_, class_: Union[TypeName, str], parameterName: str) -> str:
+        async def getParameterValue(
+            _, class_: Union[TypeName, str], parameterName: str
+        ) -> str:
             """function getParameterValue
-  input TypeName class_;
-  input String parameterName;
-  output String parameterValue;
-end getParameterValue;"""
+              input TypeName class_;
+              input String parameterName;
+              output String parameterValue;
+            end getParameterValue;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getComponentModifierNames')
+        @external(".OpenModelica.Scripting.getComponentModifierNames")
         @classmethod
-        async def getComponentModifierNames(_, class_: Union[TypeName, str], componentName: str) -> List[str]:
+        async def getComponentModifierNames(
+            _, class_: Union[TypeName, str], componentName: str
+        ) -> List[str]:
             """function getComponentModifierNames
-  input TypeName class_;
-  input String componentName;
-  output String[:] modifiers;
-end getComponentModifierNames;"""
+              input TypeName class_;
+              input String componentName;
+              output String[:] modifiers;
+            end getComponentModifierNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getComponentModifierValue')
+        @external(".OpenModelica.Scripting.getComponentModifierValue")
         @classmethod
-        async def getComponentModifierValue(_, class_: Union[TypeName, str], modifier: Union[TypeName, str]) -> str:
+        async def getComponentModifierValue(
+            _, class_: Union[TypeName, str], modifier: Union[TypeName, str]
+        ) -> str:
             """function getComponentModifierValue
-  input TypeName class_;
-  input TypeName modifier;
-  output String value;
-end getComponentModifierValue;"""
+              input TypeName class_;
+              input TypeName modifier;
+              output String value;
+            end getComponentModifierValue;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getComponentModifierValues')
+        @external(".OpenModelica.Scripting.getComponentModifierValues")
         @classmethod
-        async def getComponentModifierValues(_, class_: Union[TypeName, str], modifier: Union[TypeName, str]) -> str:
+        async def getComponentModifierValues(
+            _, class_: Union[TypeName, str], modifier: Union[TypeName, str]
+        ) -> str:
             """function getComponentModifierValues
-  input TypeName class_;
-  input TypeName modifier;
-  output String value;
-end getComponentModifierValues;"""
+              input TypeName class_;
+              input TypeName modifier;
+              output String value;
+            end getComponentModifierValues;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.removeComponentModifiers')
+        @external(".OpenModelica.Scripting.removeComponentModifiers")
         @classmethod
-        async def removeComponentModifiers(_, class_: Union[TypeName, str], componentName: str, keepRedeclares: bool=...) -> bool:
+        async def removeComponentModifiers(
+            _,
+            class_: Union[TypeName, str],
+            componentName: str,
+            keepRedeclares: bool = ...,
+        ) -> bool:
             """function removeComponentModifiers
-  input TypeName class_;
-  input String componentName;
-  input Boolean keepRedeclares = false;
-  output Boolean success;
-end removeComponentModifiers;"""
+              input TypeName class_;
+              input String componentName;
+              input Boolean keepRedeclares = false;
+              output Boolean success;
+            end removeComponentModifiers;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getElementModifierNames')
+        @external(".OpenModelica.Scripting.getElementModifierNames")
         @classmethod
-        async def getElementModifierNames(_, className: Union[TypeName, str], elementName: str) -> List[str]:
+        async def getElementModifierNames(
+            _, className: Union[TypeName, str], elementName: str
+        ) -> List[str]:
             """function getElementModifierNames
-  input TypeName className;
-  input String elementName;
-  output String[:] modifiers;
-end getElementModifierNames;"""
+              input TypeName className;
+              input String elementName;
+              output String[:] modifiers;
+            end getElementModifierNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getElementModifierValue')
+        @external(".OpenModelica.Scripting.getElementModifierValue")
         @classmethod
-        async def getElementModifierValue(_, className: Union[TypeName, str], modifier: Union[TypeName, str]) -> str:
+        async def getElementModifierValue(
+            _, className: Union[TypeName, str], modifier: Union[TypeName, str]
+        ) -> str:
             """function getElementModifierValue
-  input TypeName className;
-  input TypeName modifier;
-  output String value;
-end getElementModifierValue;"""
+              input TypeName className;
+              input TypeName modifier;
+              output String value;
+            end getElementModifierValue;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getElementModifierValues')
+        @external(".OpenModelica.Scripting.getElementModifierValues")
         @classmethod
-        async def getElementModifierValues(_, className: Union[TypeName, str], modifier: Union[TypeName, str]) -> str:
+        async def getElementModifierValues(
+            _, className: Union[TypeName, str], modifier: Union[TypeName, str]
+        ) -> str:
             """function getElementModifierValues
-  input TypeName className;
-  input TypeName modifier;
-  output String value;
-end getElementModifierValues;"""
+              input TypeName className;
+              input TypeName modifier;
+              output String value;
+            end getElementModifierValues;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.removeElementModifiers')
+        @external(".OpenModelica.Scripting.removeElementModifiers")
         @classmethod
-        async def removeElementModifiers(_, className: Union[TypeName, str], componentName: str, keepRedeclares: bool=...) -> bool:
+        async def removeElementModifiers(
+            _,
+            className: Union[TypeName, str],
+            componentName: str,
+            keepRedeclares: bool = ...,
+        ) -> bool:
             """function removeElementModifiers
-  input TypeName className;
-  input String componentName;
-  input Boolean keepRedeclares = false;
-  output Boolean success;
-end removeElementModifiers;"""
+              input TypeName className;
+              input String componentName;
+              input Boolean keepRedeclares = false;
+              output Boolean success;
+            end removeElementModifiers;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInstantiatedParametersAndValues')
+        @external(".OpenModelica.Scripting.getInstantiatedParametersAndValues")
         @classmethod
-        async def getInstantiatedParametersAndValues(_, cls: Union[TypeName, str]) -> List[str]:
+        async def getInstantiatedParametersAndValues(
+            _, cls: Union[TypeName, str]
+        ) -> List[str]:
             """function getInstantiatedParametersAndValues
-  input TypeName cls;
-  output String[:] values;
-end getInstantiatedParametersAndValues;"""
+              input TypeName cls;
+              output String[:] values;
+            end getInstantiatedParametersAndValues;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.removeExtendsModifiers')
+        @external(".OpenModelica.Scripting.removeExtendsModifiers")
         @classmethod
-        async def removeExtendsModifiers(_, className: Union[TypeName, str], baseClassName: Union[TypeName, str], keepRedeclares: bool=...) -> bool:
+        async def removeExtendsModifiers(
+            _,
+            className: Union[TypeName, str],
+            baseClassName: Union[TypeName, str],
+            keepRedeclares: bool = ...,
+        ) -> bool:
             """function removeExtendsModifiers
-  input TypeName className;
-  input TypeName baseClassName;
-  input Boolean keepRedeclares = false;
-  output Boolean success;
-end removeExtendsModifiers;"""
+              input TypeName className;
+              input TypeName baseClassName;
+              input Boolean keepRedeclares = false;
+              output Boolean success;
+            end removeExtendsModifiers;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.updateConnectionAnnotation')
+        @external(".OpenModelica.Scripting.updateConnectionAnnotation")
         @classmethod
-        async def updateConnectionAnnotation(_, className: Union[TypeName, str], from_: Annotated[str, alias[Literal['from']]], to: str, annotate: str) -> bool:
+        async def updateConnectionAnnotation(
+            _,
+            className: Union[TypeName, str],
+            from_: Annotated[str, alias[Literal["from"]]],
+            to: str,
+            annotate: str,
+        ) -> bool:
             """function updateConnectionAnnotation
-  input TypeName className;
-  input String from;
-  input String to;
-  input String annotate;
-  output Boolean result;
-end updateConnectionAnnotation;"""
+              input TypeName className;
+              input String from;
+              input String to;
+              input String annotate;
+              output Boolean result;
+            end updateConnectionAnnotation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.updateConnectionNames')
+        @external(".OpenModelica.Scripting.updateConnectionNames")
         @classmethod
-        async def updateConnectionNames(_, className: Union[TypeName, str], from_: Annotated[str, alias[Literal['from']]], to: str, fromNew: str, toNew: str) -> bool:
+        async def updateConnectionNames(
+            _,
+            className: Union[TypeName, str],
+            from_: Annotated[str, alias[Literal["from"]]],
+            to: str,
+            fromNew: str,
+            toNew: str,
+        ) -> bool:
             """function updateConnectionNames
-  input TypeName className;
-  input String from;
-  input String to;
-  input String fromNew;
-  input String toNew;
-  output Boolean result;
-end updateConnectionNames;"""
+              input TypeName className;
+              input String from;
+              input String to;
+              input String fromNew;
+              input String toNew;
+              output Boolean result;
+            end updateConnectionNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getConnectionCount')
+        @external(".OpenModelica.Scripting.getConnectionCount")
         @classmethod
-        async def getConnectionCount(_, className: Union[TypeName, str]) -> int:
+        async def getConnectionCount(
+            _, className: Union[TypeName, str]
+        ) -> int:
             """function getConnectionCount
-  input TypeName className;
-  output Integer count;
-end getConnectionCount;"""
+              input TypeName className;
+              output Integer count;
+            end getConnectionCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthConnection')
+        @external(".OpenModelica.Scripting.getNthConnection")
         @classmethod
-        async def getNthConnection(_, className: Union[TypeName, str], index: int) -> List[str]:
+        async def getNthConnection(
+            _, className: Union[TypeName, str], index: int
+        ) -> List[str]:
             """function getNthConnection
-  input TypeName className;
-  input Integer index;
-  output String[:] result;
-end getNthConnection;"""
+              input TypeName className;
+              input Integer index;
+              output String[:] result;
+            end getNthConnection;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAlgorithmCount')
+        @external(".OpenModelica.Scripting.getAlgorithmCount")
         @classmethod
         async def getAlgorithmCount(_, class_: Union[TypeName, str]) -> int:
             """function getAlgorithmCount
-  input TypeName class_;
-  output Integer count;
-end getAlgorithmCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getAlgorithmCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthAlgorithm')
+        @external(".OpenModelica.Scripting.getNthAlgorithm")
         @classmethod
-        async def getNthAlgorithm(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthAlgorithm(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthAlgorithm
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthAlgorithm;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthAlgorithm;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInitialAlgorithmCount')
+        @external(".OpenModelica.Scripting.getInitialAlgorithmCount")
         @classmethod
-        async def getInitialAlgorithmCount(_, class_: Union[TypeName, str]) -> int:
+        async def getInitialAlgorithmCount(
+            _, class_: Union[TypeName, str]
+        ) -> int:
             """function getInitialAlgorithmCount
-  input TypeName class_;
-  output Integer count;
-end getInitialAlgorithmCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getInitialAlgorithmCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthInitialAlgorithm')
+        @external(".OpenModelica.Scripting.getNthInitialAlgorithm")
         @classmethod
-        async def getNthInitialAlgorithm(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthInitialAlgorithm(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthInitialAlgorithm
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthInitialAlgorithm;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthInitialAlgorithm;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAlgorithmItemsCount')
+        @external(".OpenModelica.Scripting.getAlgorithmItemsCount")
         @classmethod
-        async def getAlgorithmItemsCount(_, class_: Union[TypeName, str]) -> int:
+        async def getAlgorithmItemsCount(
+            _, class_: Union[TypeName, str]
+        ) -> int:
             """function getAlgorithmItemsCount
-  input TypeName class_;
-  output Integer count;
-end getAlgorithmItemsCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getAlgorithmItemsCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthAlgorithmItem')
+        @external(".OpenModelica.Scripting.getNthAlgorithmItem")
         @classmethod
-        async def getNthAlgorithmItem(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthAlgorithmItem(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthAlgorithmItem
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthAlgorithmItem;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthAlgorithmItem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInitialAlgorithmItemsCount')
+        @external(".OpenModelica.Scripting.getInitialAlgorithmItemsCount")
         @classmethod
-        async def getInitialAlgorithmItemsCount(_, class_: Union[TypeName, str]) -> int:
+        async def getInitialAlgorithmItemsCount(
+            _, class_: Union[TypeName, str]
+        ) -> int:
             """function getInitialAlgorithmItemsCount
-  input TypeName class_;
-  output Integer count;
-end getInitialAlgorithmItemsCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getInitialAlgorithmItemsCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthInitialAlgorithmItem')
+        @external(".OpenModelica.Scripting.getNthInitialAlgorithmItem")
         @classmethod
-        async def getNthInitialAlgorithmItem(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthInitialAlgorithmItem(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthInitialAlgorithmItem
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthInitialAlgorithmItem;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthInitialAlgorithmItem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getEquationCount')
+        @external(".OpenModelica.Scripting.getEquationCount")
         @classmethod
         async def getEquationCount(_, class_: Union[TypeName, str]) -> int:
             """function getEquationCount
-  input TypeName class_;
-  output Integer count;
-end getEquationCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getEquationCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthEquation')
+        @external(".OpenModelica.Scripting.getNthEquation")
         @classmethod
-        async def getNthEquation(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthEquation(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthEquation
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthEquation;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthEquation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInitialEquationCount')
+        @external(".OpenModelica.Scripting.getInitialEquationCount")
         @classmethod
-        async def getInitialEquationCount(_, class_: Union[TypeName, str]) -> int:
+        async def getInitialEquationCount(
+            _, class_: Union[TypeName, str]
+        ) -> int:
             """function getInitialEquationCount
-  input TypeName class_;
-  output Integer count;
-end getInitialEquationCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getInitialEquationCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthInitialEquation')
+        @external(".OpenModelica.Scripting.getNthInitialEquation")
         @classmethod
-        async def getNthInitialEquation(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthInitialEquation(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthInitialEquation
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthInitialEquation;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthInitialEquation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getEquationItemsCount')
+        @external(".OpenModelica.Scripting.getEquationItemsCount")
         @classmethod
-        async def getEquationItemsCount(_, class_: Union[TypeName, str]) -> int:
+        async def getEquationItemsCount(
+            _, class_: Union[TypeName, str]
+        ) -> int:
             """function getEquationItemsCount
-  input TypeName class_;
-  output Integer count;
-end getEquationItemsCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getEquationItemsCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthEquationItem')
+        @external(".OpenModelica.Scripting.getNthEquationItem")
         @classmethod
-        async def getNthEquationItem(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthEquationItem(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthEquationItem
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthEquationItem;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthEquationItem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInitialEquationItemsCount')
+        @external(".OpenModelica.Scripting.getInitialEquationItemsCount")
         @classmethod
-        async def getInitialEquationItemsCount(_, class_: Union[TypeName, str]) -> int:
+        async def getInitialEquationItemsCount(
+            _, class_: Union[TypeName, str]
+        ) -> int:
             """function getInitialEquationItemsCount
-  input TypeName class_;
-  output Integer count;
-end getInitialEquationItemsCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getInitialEquationItemsCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthInitialEquationItem')
+        @external(".OpenModelica.Scripting.getNthInitialEquationItem")
         @classmethod
-        async def getNthInitialEquationItem(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthInitialEquationItem(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthInitialEquationItem
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthInitialEquationItem;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthInitialEquationItem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAnnotationCount')
+        @external(".OpenModelica.Scripting.getAnnotationCount")
         @classmethod
         async def getAnnotationCount(_, class_: Union[TypeName, str]) -> int:
             """function getAnnotationCount
-  input TypeName class_;
-  output Integer count;
-end getAnnotationCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getAnnotationCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthAnnotationString')
+        @external(".OpenModelica.Scripting.getNthAnnotationString")
         @classmethod
-        async def getNthAnnotationString(_, class_: Union[TypeName, str], index: int) -> str:
+        async def getNthAnnotationString(
+            _, class_: Union[TypeName, str], index: int
+        ) -> str:
             """function getNthAnnotationString
-  input TypeName class_;
-  input Integer index;
-  output String result;
-end getNthAnnotationString;"""
+              input TypeName class_;
+              input Integer index;
+              output String result;
+            end getNthAnnotationString;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getImportCount')
+        @external(".OpenModelica.Scripting.getImportCount")
         @classmethod
         async def getImportCount(_, class_: Union[TypeName, str]) -> int:
             """function getImportCount
-  input TypeName class_;
-  output Integer count;
-end getImportCount;"""
+              input TypeName class_;
+              output Integer count;
+            end getImportCount;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getNthImport')
+        @external(".OpenModelica.Scripting.getNthImport")
         @classmethod
-        async def getNthImport(_, class_: Union[TypeName, str], index: int) -> List[str]:
+        async def getNthImport(
+            _, class_: Union[TypeName, str], index: int
+        ) -> List[str]:
             """function getNthImport
-  input TypeName class_;
-  input Integer index;
-  output String out[3] "{\\"Path\\",\\"Id\\",\\"Kind\\"}";
-end getNthImport;"""
+              input TypeName class_;
+              input Integer index;
+              output String out[3] "{\\"Path\\",\\"Id\\",\\"Kind\\"}";
+            end getNthImport;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.iconv')
+        @external(".OpenModelica.Scripting.iconv")
         @classmethod
-        async def iconv(_, string: str, from_: Annotated[str, alias[Literal['from']]], to: str=...) -> str:
+        async def iconv(
+            _,
+            string: str,
+            from_: Annotated[str, alias[Literal["from"]]],
+            to: str = ...,
+        ) -> str:
             """function iconv
-  input String string;
-  input String from;
-  input String to = "UTF-8";
-  output String result;
-end iconv;"""
+              input String string;
+              input String from;
+              input String to = "UTF-8";
+              output String result;
+            end iconv;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getDocumentationAnnotation')
+        @external(".OpenModelica.Scripting.getDocumentationAnnotation")
         @classmethod
-        async def getDocumentationAnnotation(_, cl: Union[TypeName, str]) -> List[str]:
+        async def getDocumentationAnnotation(
+            _, cl: Union[TypeName, str]
+        ) -> List[str]:
             """function getDocumentationAnnotation
-  input TypeName cl;
-  output String out[3] "{info,revision,infoHeader} TODO: Should be changed to have 2 outputs instead of an array of 2 Strings...";
-end getDocumentationAnnotation;"""
+              input TypeName cl;
+              output String out[3] "{info,revision,infoHeader} TODO: Should be changed to have 2 outputs instead of an array of 2 Strings...";
+            end getDocumentationAnnotation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setDocumentationAnnotation')
+        @external(".OpenModelica.Scripting.setDocumentationAnnotation")
         @classmethod
-        async def setDocumentationAnnotation(_, class_: Union[TypeName, str], info: str=..., revisions: str=...) -> bool:
+        async def setDocumentationAnnotation(
+            _,
+            class_: Union[TypeName, str],
+            info: str = ...,
+            revisions: str = ...,
+        ) -> bool:
             """function setDocumentationAnnotation
-  input TypeName class_;
-  input String info = "";
-  input String revisions = "";
-  output Boolean bool;
-end setDocumentationAnnotation;"""
+              input TypeName class_;
+              input String info = "";
+              input String revisions = "";
+              output Boolean bool;
+            end setDocumentationAnnotation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getTimeStamp')
+        @external(".OpenModelica.Scripting.getTimeStamp")
         @classmethod
         async def getTimeStamp(_, cl: Union[TypeName, str]) -> getTimeStamp:
             """function getTimeStamp
-  input TypeName cl;
-  output Real timeStamp;
-  output String timeStampAsString;
-end getTimeStamp;"""
+              input TypeName cl;
+              output Real timeStamp;
+              output String timeStampAsString;
+            end getTimeStamp;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.stringTypeName')
+        @external(".OpenModelica.Scripting.stringTypeName")
         @classmethod
         async def stringTypeName(_, str: str) -> TypeName:
             """function stringTypeName
-  input String str;
-  output TypeName cl;
-end stringTypeName;"""
+              input String str;
+              output TypeName cl;
+            end stringTypeName;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.stringVariableName')
+        @external(".OpenModelica.Scripting.stringVariableName")
         @classmethod
         async def stringVariableName(_, str: str) -> VariableName:
             """function stringVariableName
-  input String str;
-  output VariableName cl;
-end stringVariableName;"""
+              input String str;
+              output VariableName cl;
+            end stringVariableName;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.typeNameString')
+        @external(".OpenModelica.Scripting.typeNameString")
         @classmethod
         async def typeNameString(_, cl: Union[TypeName, str]) -> str:
             """function typeNameString
-  input TypeName cl;
-  output String out;
-end typeNameString;"""
+              input TypeName cl;
+              output String out;
+            end typeNameString;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.typeNameStrings')
+        @external(".OpenModelica.Scripting.typeNameStrings")
         @classmethod
         async def typeNameStrings(_, cl: Union[TypeName, str]) -> List[str]:
             """function typeNameStrings
-  input TypeName cl;
-  output String out[:];
-end typeNameStrings;"""
+              input TypeName cl;
+              output String out[:];
+            end typeNameStrings;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getClassComment')
+        @external(".OpenModelica.Scripting.getClassComment")
         @classmethod
         async def getClassComment(_, cl: Union[TypeName, str]) -> str:
             """function getClassComment
-  input TypeName cl;
-  output String comment;
-end getClassComment;"""
+              input TypeName cl;
+              output String comment;
+            end getClassComment;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.dirname')
+        @external(".OpenModelica.Scripting.dirname")
         @classmethod
         async def dirname(_, path: str) -> str:
             """function dirname
-  input String path;
-  output String dirname;
-end dirname;"""
+              input String path;
+              output String dirname;
+            end dirname;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.basename')
+        @external(".OpenModelica.Scripting.basename")
         @classmethod
         async def basename(_, path: str) -> str:
             """function basename
-  input String path;
-  output String basename;
-end basename;"""
+              input String path;
+              output String basename;
+            end basename;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getClassRestriction')
+        @external(".OpenModelica.Scripting.getClassRestriction")
         @classmethod
         async def getClassRestriction(_, cl: Union[TypeName, str]) -> str:
             """function getClassRestriction
-  input TypeName cl;
-  output String restriction;
-end getClassRestriction;"""
+              input TypeName cl;
+              output String restriction;
+            end getClassRestriction;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isType')
+        @external(".OpenModelica.Scripting.isType")
         @classmethod
         async def isType(_, cl: Union[TypeName, str]) -> bool:
             """function isType
-  input TypeName cl;
-  output Boolean b;
-end isType;"""
+              input TypeName cl;
+              output Boolean b;
+            end isType;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isPackage')
+        @external(".OpenModelica.Scripting.isPackage")
         @classmethod
         async def isPackage(_, cl: Union[TypeName, str]) -> bool:
             """function isPackage
-  input TypeName cl;
-  output Boolean b;
-end isPackage;"""
+              input TypeName cl;
+              output Boolean b;
+            end isPackage;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isClass')
+        @external(".OpenModelica.Scripting.isClass")
         @classmethod
         async def isClass(_, cl: Union[TypeName, str]) -> bool:
             """function isClass
-  input TypeName cl;
-  output Boolean b;
-end isClass;"""
+              input TypeName cl;
+              output Boolean b;
+            end isClass;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isRecord')
+        @external(".OpenModelica.Scripting.isRecord")
         @classmethod
         async def isRecord(_, cl: Union[TypeName, str]) -> bool:
             """function isRecord
-  input TypeName cl;
-  output Boolean b;
-end isRecord;"""
+              input TypeName cl;
+              output Boolean b;
+            end isRecord;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isBlock')
+        @external(".OpenModelica.Scripting.isBlock")
         @classmethod
         async def isBlock(_, cl: Union[TypeName, str]) -> bool:
             """function isBlock
-  input TypeName cl;
-  output Boolean b;
-end isBlock;"""
+              input TypeName cl;
+              output Boolean b;
+            end isBlock;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isFunction')
+        @external(".OpenModelica.Scripting.isFunction")
         @classmethod
         async def isFunction(_, cl: Union[TypeName, str]) -> bool:
             """function isFunction
-  input TypeName cl;
-  output Boolean b;
-end isFunction;"""
+              input TypeName cl;
+              output Boolean b;
+            end isFunction;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isPartial')
+        @external(".OpenModelica.Scripting.isPartial")
         @classmethod
         async def isPartial(_, cl: Union[TypeName, str]) -> bool:
             """function isPartial
-  input TypeName cl;
-  output Boolean b;
-end isPartial;"""
+              input TypeName cl;
+              output Boolean b;
+            end isPartial;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isModel')
+        @external(".OpenModelica.Scripting.isModel")
         @classmethod
         async def isModel(_, cl: Union[TypeName, str]) -> bool:
             """function isModel
-  input TypeName cl;
-  output Boolean b;
-end isModel;"""
+              input TypeName cl;
+              output Boolean b;
+            end isModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isConnector')
+        @external(".OpenModelica.Scripting.isConnector")
         @classmethod
         async def isConnector(_, cl: Union[TypeName, str]) -> bool:
             """function isConnector
-  input TypeName cl;
-  output Boolean b;
-end isConnector;"""
+              input TypeName cl;
+              output Boolean b;
+            end isConnector;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isOptimization')
+        @external(".OpenModelica.Scripting.isOptimization")
         @classmethod
         async def isOptimization(_, cl: Union[TypeName, str]) -> bool:
             """function isOptimization
-  input TypeName cl;
-  output Boolean b;
-end isOptimization;"""
+              input TypeName cl;
+              output Boolean b;
+            end isOptimization;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isEnumeration')
+        @external(".OpenModelica.Scripting.isEnumeration")
         @classmethod
         async def isEnumeration(_, cl: Union[TypeName, str]) -> bool:
             """function isEnumeration
-  input TypeName cl;
-  output Boolean b;
-end isEnumeration;"""
+              input TypeName cl;
+              output Boolean b;
+            end isEnumeration;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isOperator')
+        @external(".OpenModelica.Scripting.isOperator")
         @classmethod
         async def isOperator(_, cl: Union[TypeName, str]) -> bool:
             """function isOperator
-  input TypeName cl;
-  output Boolean b;
-end isOperator;"""
+              input TypeName cl;
+              output Boolean b;
+            end isOperator;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isOperatorRecord')
+        @external(".OpenModelica.Scripting.isOperatorRecord")
         @classmethod
         async def isOperatorRecord(_, cl: Union[TypeName, str]) -> bool:
             """function isOperatorRecord
-  input TypeName cl;
-  output Boolean b;
-end isOperatorRecord;"""
+              input TypeName cl;
+              output Boolean b;
+            end isOperatorRecord;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isOperatorFunction')
+        @external(".OpenModelica.Scripting.isOperatorFunction")
         @classmethod
         async def isOperatorFunction(_, cl: Union[TypeName, str]) -> bool:
             """function isOperatorFunction
-  input TypeName cl;
-  output Boolean b;
-end isOperatorFunction;"""
+              input TypeName cl;
+              output Boolean b;
+            end isOperatorFunction;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isProtectedClass')
+        @external(".OpenModelica.Scripting.isProtectedClass")
         @classmethod
-        async def isProtectedClass(_, cl: Union[TypeName, str], c2: str) -> bool:
+        async def isProtectedClass(
+            _, cl: Union[TypeName, str], c2: str
+        ) -> bool:
             """function isProtectedClass
-  input TypeName cl;
-  input String c2;
-  output Boolean b;
-end isProtectedClass;"""
+              input TypeName cl;
+              input String c2;
+              output Boolean b;
+            end isProtectedClass;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getBuiltinType')
+        @external(".OpenModelica.Scripting.getBuiltinType")
         @classmethod
         async def getBuiltinType(_, cl: Union[TypeName, str]) -> str:
             """function getBuiltinType
-  input TypeName cl;
-  output String name;
-end getBuiltinType;"""
+              input TypeName cl;
+              output String name;
+            end getBuiltinType;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.setInitXmlStartValue')
+        @external(".OpenModelica.Scripting.setInitXmlStartValue")
         @classmethod
-        async def setInitXmlStartValue(_, fileName: str, variableName: str, startValue: str, outputFile: str) -> bool:
+        async def setInitXmlStartValue(
+            _,
+            fileName: str,
+            variableName: str,
+            startValue: str,
+            outputFile: str,
+        ) -> bool:
             """function setInitXmlStartValue
-  input String fileName;
-  input String variableName;
-  input String startValue;
-  input String outputFile;
-  output Boolean success = false;
-end setInitXmlStartValue;"""
+              input String fileName;
+              input String variableName;
+              input String startValue;
+              input String outputFile;
+              output Boolean success = false;
+            end setInitXmlStartValue;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.ngspicetoModelica')
+        @external(".OpenModelica.Scripting.ngspicetoModelica")
         @classmethod
         async def ngspicetoModelica(_, netlistfileName: str) -> bool:
             """function ngspicetoModelica
-  input String netlistfileName;
-  output Boolean success = false;
-end ngspicetoModelica;"""
+              input String netlistfileName;
+              output Boolean success = false;
+            end ngspicetoModelica;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInheritedClasses')
+        @external(".OpenModelica.Scripting.getInheritedClasses")
         @classmethod
-        async def getInheritedClasses(_, name: Union[TypeName, str]) -> List[TypeName]:
+        async def getInheritedClasses(
+            _, name: Union[TypeName, str]
+        ) -> List[TypeName]:
             """function getInheritedClasses
-  input TypeName name;
-  output TypeName inheritedClasses[:];
-end getInheritedClasses;"""
+              input TypeName name;
+              output TypeName inheritedClasses[:];
+            end getInheritedClasses;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getComponentsTest')
+        @external(".OpenModelica.Scripting.getComponentsTest")
         @classmethod
-        async def getComponentsTest(_, name: Union[TypeName, str]) -> List[Component]:
+        async def getComponentsTest(
+            _, name: Union[TypeName, str]
+        ) -> List[Component]:
             """function getComponentsTest
-  input TypeName name;
-  output Component[:] components;
+              input TypeName name;
+              output Component[:] components;
 
-  record Component
-    String className;
-    // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
-    String name;
-    String comment;
-    Boolean isProtected;
-    Boolean isFinal;
-    Boolean isFlow;
-    Boolean isStream;
-    Boolean isReplaceable;
-    String variability "'constant', 'parameter', 'discrete', ''";
-    String innerOuter "'inner', 'outer', ''";
-    String inputOutput "'input', 'output', ''";
-    String dimensions[:];
-  end Component;
-end getComponentsTest;"""
+              record Component
+                String className;
+                // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
+                String name;
+                String comment;
+                Boolean isProtected;
+                Boolean isFinal;
+                Boolean isFlow;
+                Boolean isStream;
+                Boolean isReplaceable;
+                String variability "'constant', 'parameter', 'discrete', ''";
+                String innerOuter "'inner', 'outer', ''";
+                String inputOutput "'input', 'output', ''";
+                String dimensions[:];
+              end Component;
+            end getComponentsTest;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.isExperiment')
+        @external(".OpenModelica.Scripting.isExperiment")
         @classmethod
         async def isExperiment(_, name: Union[TypeName, str]) -> bool:
             """function isExperiment
-  input TypeName name;
-  output Boolean res;
-end isExperiment;"""
+              input TypeName name;
+              output Boolean res;
+            end isExperiment;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getSimulationOptions')
+        @external(".OpenModelica.Scripting.getSimulationOptions")
         @classmethod
-        async def getSimulationOptions(_, name: Union[TypeName, str], defaultStartTime: float=..., defaultStopTime: float=..., defaultTolerance: float=..., defaultNumberOfIntervals: int=..., defaultInterval: float=...) -> getSimulationOptions:
+        async def getSimulationOptions(
+            _,
+            name: Union[TypeName, str],
+            defaultStartTime: float = ...,
+            defaultStopTime: float = ...,
+            defaultTolerance: float = ...,
+            defaultNumberOfIntervals: int = ...,
+            defaultInterval: float = ...,
+        ) -> getSimulationOptions:
             """function getSimulationOptions
-  input TypeName name;
-  input Real defaultStartTime = 0.0;
-  input Real defaultStopTime = 1.0;
-  input Real defaultTolerance = 1e-6;
-  input Integer defaultNumberOfIntervals = 500 "May be overridden by defining defaultInterval instead";
-  input Real defaultInterval = 0.0 "If = 0.0, then numberOfIntervals is used to calculate the step size";
-  output Real startTime;
-  output Real stopTime;
-  output Real tolerance;
-  output Integer numberOfIntervals;
-  output Real interval;
-end getSimulationOptions;"""
+              input TypeName name;
+              input Real defaultStartTime = 0.0;
+              input Real defaultStopTime = 1.0;
+              input Real defaultTolerance = 1e-6;
+              input Integer defaultNumberOfIntervals = 500 "May be overridden by defining defaultInterval instead";
+              input Real defaultInterval = 0.0 "If = 0.0, then numberOfIntervals is used to calculate the step size";
+              output Real startTime;
+              output Real stopTime;
+              output Real tolerance;
+              output Integer numberOfIntervals;
+              output Real interval;
+            end getSimulationOptions;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAnnotationNamedModifiers')
+        @external(".OpenModelica.Scripting.getAnnotationNamedModifiers")
         @classmethod
-        async def getAnnotationNamedModifiers(_, name: Union[TypeName, str], vendorannotation: str) -> List[str]:
+        async def getAnnotationNamedModifiers(
+            _, name: Union[TypeName, str], vendorannotation: str
+        ) -> List[str]:
             """function getAnnotationNamedModifiers
-  input TypeName name;
-  input String vendorannotation;
-  output String[:] modifiernamelist;
-end getAnnotationNamedModifiers;"""
+              input TypeName name;
+              input String vendorannotation;
+              output String[:] modifiernamelist;
+            end getAnnotationNamedModifiers;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAnnotationModifierValue')
+        @external(".OpenModelica.Scripting.getAnnotationModifierValue")
         @classmethod
-        async def getAnnotationModifierValue(_, name: Union[TypeName, str], vendorannotation: str, modifiername: str) -> str:
+        async def getAnnotationModifierValue(
+            _,
+            name: Union[TypeName, str],
+            vendorannotation: str,
+            modifiername: str,
+        ) -> str:
             """function getAnnotationModifierValue
-  input TypeName name;
-  input String vendorannotation;
-  input String modifiername;
-  output String modifiernamevalue;
-end getAnnotationModifierValue;"""
+              input TypeName name;
+              input String vendorannotation;
+              input String modifiername;
+              output String modifiernamevalue;
+            end getAnnotationModifierValue;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.classAnnotationExists')
+        @external(".OpenModelica.Scripting.classAnnotationExists")
         @classmethod
-        async def classAnnotationExists(_, className: Union[TypeName, str], annotationName: Union[TypeName, str]) -> bool:
+        async def classAnnotationExists(
+            _,
+            className: Union[TypeName, str],
+            annotationName: Union[TypeName, str],
+        ) -> bool:
             """function classAnnotationExists
-  input TypeName className;
-  input TypeName annotationName;
-  output Boolean exists;
-end classAnnotationExists;"""
+              input TypeName className;
+              input TypeName annotationName;
+              output Boolean exists;
+            end classAnnotationExists;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getBooleanClassAnnotation')
+        @external(".OpenModelica.Scripting.getBooleanClassAnnotation")
         @classmethod
-        async def getBooleanClassAnnotation(_, className: Union[TypeName, str], annotationName: Union[TypeName, str]) -> bool:
+        async def getBooleanClassAnnotation(
+            _,
+            className: Union[TypeName, str],
+            annotationName: Union[TypeName, str],
+        ) -> bool:
             """function getBooleanClassAnnotation
-  input TypeName className;
-  input TypeName annotationName;
-  output Boolean value;
-end getBooleanClassAnnotation;"""
+              input TypeName className;
+              input TypeName annotationName;
+              output Boolean value;
+            end getBooleanClassAnnotation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.extendsFrom')
+        @external(".OpenModelica.Scripting.extendsFrom")
         @classmethod
-        async def extendsFrom(_, className: Union[TypeName, str], baseClassName: Union[TypeName, str]) -> bool:
+        async def extendsFrom(
+            _,
+            className: Union[TypeName, str],
+            baseClassName: Union[TypeName, str],
+        ) -> bool:
             """function extendsFrom
-  input TypeName className;
-  input TypeName baseClassName;
-  output Boolean res;
-end extendsFrom;"""
+              input TypeName className;
+              input TypeName baseClassName;
+              output Boolean res;
+            end extendsFrom;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.loadModelica3D')
+        @external(".OpenModelica.Scripting.loadModelica3D")
         @classmethod
-        async def loadModelica3D(_, version: str=...) -> bool:
+        async def loadModelica3D(_, version: str = ...) -> bool:
             """function loadModelica3D
-  input String version = "3.2.1";
-  output Boolean status;
-end loadModelica3D;"""
+              input String version = "3.2.1";
+              output Boolean status;
+            end loadModelica3D;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.searchClassNames')
+        @external(".OpenModelica.Scripting.searchClassNames")
         @classmethod
-        async def searchClassNames(_, searchText: str, findInText: bool=...) -> List[TypeName]:
+        async def searchClassNames(
+            _, searchText: str, findInText: bool = ...
+        ) -> List[TypeName]:
             """function searchClassNames
-  input String searchText;
-  input Boolean findInText = false;
-  output TypeName classNames[:];
-end searchClassNames;"""
+              input String searchText;
+              input Boolean findInText = false;
+              output TypeName classNames[:];
+            end searchClassNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getAvailableLibraries')
+        @external(".OpenModelica.Scripting.getAvailableLibraries")
         @classmethod
         async def getAvailableLibraries(_) -> List[str]:
             """function getAvailableLibraries
-  output String[:] libraries;
-end getAvailableLibraries;"""
+              output String[:] libraries;
+            end getAvailableLibraries;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.installPackage')
+        @external(".OpenModelica.Scripting.installPackage")
         @classmethod
-        async def installPackage(_, pkg: Union[TypeName, str], version: str=..., exactMatch: bool=...) -> bool:
+        async def installPackage(
+            _,
+            pkg: Union[TypeName, str],
+            version: str = ...,
+            exactMatch: bool = ...,
+        ) -> bool:
             """function installPackage
-  input TypeName pkg;
-  input String version = "";
-  input Boolean exactMatch = false;
-  output Boolean result;
-end installPackage;"""
+              input TypeName pkg;
+              input String version = "";
+              input Boolean exactMatch = false;
+              output Boolean result;
+            end installPackage;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.updatePackageIndex')
+        @external(".OpenModelica.Scripting.updatePackageIndex")
         @classmethod
         async def updatePackageIndex(_) -> bool:
             """function updatePackageIndex
-  output Boolean result;
-end updatePackageIndex;"""
+              output Boolean result;
+            end updatePackageIndex;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.upgradeInstalledPackages')
+        @external(".OpenModelica.Scripting.upgradeInstalledPackages")
         @classmethod
-        async def upgradeInstalledPackages(_, installNewestVersions: bool=...) -> bool:
+        async def upgradeInstalledPackages(
+            _, installNewestVersions: bool = ...
+        ) -> bool:
             """function upgradeInstalledPackages
-  input Boolean installNewestVersions = true;
-  output Boolean result;
-end upgradeInstalledPackages;"""
+              input Boolean installNewestVersions = true;
+              output Boolean result;
+            end upgradeInstalledPackages;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getUses')
+        @external(".OpenModelica.Scripting.getUses")
         @classmethod
         async def getUses(_, pack: Union[TypeName, str]) -> List[List[str]]:
             """function getUses
-  input TypeName pack;
-  output String[:, :] uses;
-end getUses;"""
+              input TypeName pack;
+              output String[:, :] uses;
+            end getUses;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getConversionsFromVersions')
+        @external(".OpenModelica.Scripting.getConversionsFromVersions")
         @classmethod
-        async def getConversionsFromVersions(_, pack: Union[TypeName, str]) -> getConversionsFromVersions:
+        async def getConversionsFromVersions(
+            _, pack: Union[TypeName, str]
+        ) -> getConversionsFromVersions:
             """function getConversionsFromVersions
-  input TypeName pack;
-  output String[:] withoutConversion;
-  output String[:] withConversion;
-end getConversionsFromVersions;"""
+              input TypeName pack;
+              output String[:] withoutConversion;
+              output String[:] withConversion;
+            end getConversionsFromVersions;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getDerivedClassModifierNames')
+        @external(".OpenModelica.Scripting.getDerivedClassModifierNames")
         @classmethod
-        async def getDerivedClassModifierNames(_, className: Union[TypeName, str]) -> List[str]:
+        async def getDerivedClassModifierNames(
+            _, className: Union[TypeName, str]
+        ) -> List[str]:
             """function getDerivedClassModifierNames
-  input TypeName className;
-  output String[:] modifierNames;
-end getDerivedClassModifierNames;"""
+              input TypeName className;
+              output String[:] modifierNames;
+            end getDerivedClassModifierNames;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getDerivedClassModifierValue')
+        @external(".OpenModelica.Scripting.getDerivedClassModifierValue")
         @classmethod
-        async def getDerivedClassModifierValue(_, className: Union[TypeName, str], modifierName: Union[TypeName, str]) -> str:
+        async def getDerivedClassModifierValue(
+            _,
+            className: Union[TypeName, str],
+            modifierName: Union[TypeName, str],
+        ) -> str:
             """function getDerivedClassModifierValue
-  input TypeName className;
-  input TypeName modifierName;
-  output String modifierValue;
-end getDerivedClassModifierValue;"""
+              input TypeName className;
+              input TypeName modifierName;
+              output String modifierValue;
+            end getDerivedClassModifierValue;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateEntryPoint')
+        @external(".OpenModelica.Scripting.generateEntryPoint")
         @classmethod
-        async def generateEntryPoint(_, fileName: str, entryPoint: Union[TypeName, str], url: str=...) -> None:
+        async def generateEntryPoint(
+            _, fileName: str, entryPoint: Union[TypeName, str], url: str = ...
+        ) -> None:
             """function generateEntryPoint
-  input String fileName;
-  input TypeName entryPoint;
-  input String url = "https://trac.openmodelica.org/OpenModelica/newticket";
-end generateEntryPoint;"""
+              input String fileName;
+              input TypeName entryPoint;
+              input String url = "https://trac.openmodelica.org/OpenModelica/newticket";
+            end generateEntryPoint;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.numProcessors')
+        @external(".OpenModelica.Scripting.numProcessors")
         @classmethod
         async def numProcessors(_) -> int:
             """function numProcessors
-  output Integer result;
-end numProcessors;"""
+              output Integer result;
+            end numProcessors;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.runScriptParallel')
+        @external(".OpenModelica.Scripting.runScriptParallel")
         @classmethod
-        async def runScriptParallel(_, scripts: Sequence[str], numThreads: int=..., useThreads: bool=...) -> List[bool]:
+        async def runScriptParallel(
+            _,
+            scripts: Sequence[str],
+            numThreads: int = ...,
+            useThreads: bool = ...,
+        ) -> List[bool]:
             """function runScriptParallel
-  input String scripts[:];
-  input Integer numThreads = numProcessors();
-  input Boolean useThreads = false;
-  output Boolean results[:];
-end runScriptParallel;"""
+              input String scripts[:];
+              input Integer numThreads = numProcessors();
+              input Boolean useThreads = false;
+              output Boolean results[:];
+            end runScriptParallel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.exit')
+        @external(".OpenModelica.Scripting.exit")
         @classmethod
         async def exit(_, status: int) -> None:
             """function exit
-  input Integer status;
-end exit;"""
+              input Integer status;
+            end exit;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.threadWorkFailed')
+        @external(".OpenModelica.Scripting.threadWorkFailed")
         @classmethod
         async def threadWorkFailed(_) -> None:
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getMemorySize')
+        @external(".OpenModelica.Scripting.getMemorySize")
         @classmethod
         async def getMemorySize(_) -> float:
             """function getMemorySize
-  output Real memory(unit = "MiB");
-end getMemorySize;"""
+              output Real memory(unit = "MiB");
+            end getMemorySize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.GC_gcollect_and_unmap')
+        @external(".OpenModelica.Scripting.GC_gcollect_and_unmap")
         @classmethod
         async def GC_gcollect_and_unmap(_) -> None:
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.GC_expand_hp')
+        @external(".OpenModelica.Scripting.GC_expand_hp")
         @classmethod
         async def GC_expand_hp(_, size: int) -> bool:
             """function GC_expand_hp
-  input Integer size;
-  output Boolean success;
-end GC_expand_hp;"""
+              input Integer size;
+              output Boolean success;
+            end GC_expand_hp;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.GC_set_max_heap_size')
+        @external(".OpenModelica.Scripting.GC_set_max_heap_size")
         @classmethod
         async def GC_set_max_heap_size(_, size: int) -> bool:
             """function GC_set_max_heap_size
-  input Integer size;
-  output Boolean success;
-end GC_set_max_heap_size;"""
+              input Integer size;
+              output Boolean success;
+            end GC_set_max_heap_size;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.GC_PROFSTATS')
+        @external(".OpenModelica.Scripting.GC_PROFSTATS")
         @dataclass
         class GC_PROFSTATS(record):
             """record GC_PROFSTATS
-  Integer heapsize_full;
-  Integer free_bytes_full;
-  Integer unmapped_bytes;
-  Integer bytes_allocd_since_gc;
-  Integer allocd_bytes_before_gc;
-  Integer non_gc_bytes;
-  Integer gc_no;
-  Integer markers_m1;
-  Integer bytes_reclaimed_since_gc;
-  Integer reclaimed_bytes_before_gc;
-end GC_PROFSTATS;"""
+              Integer heapsize_full;
+              Integer free_bytes_full;
+              Integer unmapped_bytes;
+              Integer bytes_allocd_since_gc;
+              Integer allocd_bytes_before_gc;
+              Integer non_gc_bytes;
+              Integer gc_no;
+              Integer markers_m1;
+              Integer bytes_reclaimed_since_gc;
+              Integer reclaimed_bytes_before_gc;
+            end GC_PROFSTATS;"""
+
             heapsize_full: int
             free_bytes_full: int
             unmapped_bytes: int
@@ -3352,109 +3696,124 @@ end GC_PROFSTATS;"""
             markers_m1: int
             bytes_reclaimed_since_gc: int
             reclaimed_bytes_before_gc: int
-
-        @external('.OpenModelica.Scripting.GC_get_prof_stats')
+        @external(".OpenModelica.Scripting.GC_get_prof_stats")
         @classmethod
         async def GC_get_prof_stats(_) -> OpenModelica.Scripting.GC_PROFSTATS:
             """function GC_get_prof_stats
-  output GC_PROFSTATS gcStats;
-end GC_get_prof_stats;"""
+              output GC_PROFSTATS gcStats;
+            end GC_get_prof_stats;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.checkInterfaceOfPackages')
+        @external(".OpenModelica.Scripting.checkInterfaceOfPackages")
         @classmethod
-        async def checkInterfaceOfPackages(_, cl: Union[TypeName, str], dependencyMatrix: Sequence[Sequence[str]]) -> bool:
+        async def checkInterfaceOfPackages(
+            _,
+            cl: Union[TypeName, str],
+            dependencyMatrix: Sequence[Sequence[str]],
+        ) -> bool:
             """function checkInterfaceOfPackages
-  input TypeName cl;
-  input String dependencyMatrix[:, :];
-  output Boolean success;
-end checkInterfaceOfPackages;"""
+              input TypeName cl;
+              input String dependencyMatrix[:, :];
+              output Boolean success;
+            end checkInterfaceOfPackages;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.sortStrings')
+        @external(".OpenModelica.Scripting.sortStrings")
         @classmethod
         async def sortStrings(_, arr: Sequence[str]) -> List[str]:
             """function sortStrings
-  input String arr[:];
-  output String sorted[:];
-end sortStrings;"""
+              input String arr[:];
+              output String sorted[:];
+            end sortStrings;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getClassInformation')
+        @external(".OpenModelica.Scripting.getClassInformation")
         @classmethod
-        async def getClassInformation(_, cl: Union[TypeName, str]) -> getClassInformation:
+        async def getClassInformation(
+            _, cl: Union[TypeName, str]
+        ) -> getClassInformation:
             """function getClassInformation
-  input TypeName cl;
-  output String restriction, comment;
-  output Boolean partialPrefix, finalPrefix, encapsulatedPrefix;
-  output String fileName;
-  output Boolean fileReadOnly;
-  output Integer lineNumberStart, columnNumberStart, lineNumberEnd, columnNumberEnd;
-  output String dimensions[:];
-  output Boolean isProtectedClass;
-  output Boolean isDocumentationClass;
-  output String version;
-  output String preferredView;
-  output Boolean state;
-  output String access;
-end getClassInformation;"""
+              input TypeName cl;
+              output String restriction, comment;
+              output Boolean partialPrefix, finalPrefix, encapsulatedPrefix;
+              output String fileName;
+              output Boolean fileReadOnly;
+              output Integer lineNumberStart, columnNumberStart, lineNumberEnd, columnNumberEnd;
+              output String dimensions[:];
+              output Boolean isProtectedClass;
+              output Boolean isDocumentationClass;
+              output String version;
+              output String preferredView;
+              output Boolean state;
+              output String access;
+            end getClassInformation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getTransitions')
+        @external(".OpenModelica.Scripting.getTransitions")
         @classmethod
-        async def getTransitions(_, cl: Union[TypeName, str]) -> List[List[str]]:
+        async def getTransitions(
+            _, cl: Union[TypeName, str]
+        ) -> List[List[str]]:
             """function getTransitions
-  input TypeName cl;
-  output String[:, :] transitions;
-end getTransitions;"""
+              input TypeName cl;
+              output String[:, :] transitions;
+            end getTransitions;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.deleteTransition')
+        @external(".OpenModelica.Scripting.deleteTransition")
         @classmethod
-        async def deleteTransition(_, cl: Union[TypeName, str], from_: Annotated[str, alias[Literal['from']]], to: str, condition: str, immediate: bool, reset: bool, synchronize: bool, priority: int) -> bool:
+        async def deleteTransition(
+            _,
+            cl: Union[TypeName, str],
+            from_: Annotated[str, alias[Literal["from"]]],
+            to: str,
+            condition: str,
+            immediate: bool,
+            reset: bool,
+            synchronize: bool,
+            priority: int,
+        ) -> bool:
             """function deleteTransition
-  input TypeName cl;
-  input String from;
-  input String to;
-  input String condition;
-  input Boolean immediate;
-  input Boolean reset;
-  input Boolean synchronize;
-  input Integer priority;
-  output Boolean bool;
-end deleteTransition;"""
+              input TypeName cl;
+              input String from;
+              input String to;
+              input String condition;
+              input Boolean immediate;
+              input Boolean reset;
+              input Boolean synchronize;
+              input Integer priority;
+              output Boolean bool;
+            end deleteTransition;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.getInitialStates')
+        @external(".OpenModelica.Scripting.getInitialStates")
         @classmethod
-        async def getInitialStates(_, cl: Union[TypeName, str]) -> List[List[str]]:
+        async def getInitialStates(
+            _, cl: Union[TypeName, str]
+        ) -> List[List[str]]:
             """function getInitialStates
-  input TypeName cl;
-  output String[:, :] initialStates;
-end getInitialStates;"""
+              input TypeName cl;
+              output String[:, :] initialStates;
+            end getInitialStates;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.deleteInitialState')
+        @external(".OpenModelica.Scripting.deleteInitialState")
         @classmethod
-        async def deleteInitialState(_, cl: Union[TypeName, str], state: str) -> bool:
+        async def deleteInitialState(
+            _, cl: Union[TypeName, str], state: str
+        ) -> bool:
             """function deleteInitialState
-  input TypeName cl;
-  input String state;
-  output Boolean bool;
-end deleteInitialState;"""
+              input TypeName cl;
+              input String state;
+              output Boolean bool;
+            end deleteInitialState;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.generateScriptingAPI')
+        @external(".OpenModelica.Scripting.generateScriptingAPI")
         @classmethod
-        async def generateScriptingAPI(_, cl: Union[TypeName, str], name: str) -> generateScriptingAPI:
+        async def generateScriptingAPI(
+            _, cl: Union[TypeName, str], name: str
+        ) -> generateScriptingAPI:
             """function generateScriptingAPI
-  input TypeName cl;
-  input String name;
-  output Boolean success;
-  output String moFile;
-  output String qtFile;
-  output String qtHeader;
-end generateScriptingAPI;"""
+              input TypeName cl;
+              input String name;
+              output Boolean success;
+              output String moFile;
+              output String qtFile;
+              output String qtHeader;
+            end generateScriptingAPI;"""
             raise NotImplementedError()
         oms_system = oms_system__v_1_14
         oms_causality = oms_causality__v_1_14
@@ -3464,875 +3823,992 @@ end generateScriptingAPI;"""
         oms_tlm_interpolation = oms_tlm_interpolation__v_1_14
         oms_fault_type = oms_fault_type__v_1_16
 
-        @external('.OpenModelica.Scripting.loadOMSimulator')
+        @external(".OpenModelica.Scripting.loadOMSimulator")
         @classmethod
         async def loadOMSimulator(_) -> int:
             """function loadOMSimulator
-  output Integer status;
-end loadOMSimulator;"""
+              output Integer status;
+            end loadOMSimulator;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.unloadOMSimulator')
+        @external(".OpenModelica.Scripting.unloadOMSimulator")
         @classmethod
         async def unloadOMSimulator(_) -> int:
             """function unloadOMSimulator
-  output Integer status;
-end unloadOMSimulator;"""
+              output Integer status;
+            end unloadOMSimulator;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addBus')
+        @external(".OpenModelica.Scripting.oms_addBus")
         @classmethod
         async def oms_addBus(_, cref: str) -> int:
             """function oms_addBus
-  input String cref;
-  output Integer status;
-end oms_addBus;"""
+              input String cref;
+              output Integer status;
+            end oms_addBus;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addConnection')
+        @external(".OpenModelica.Scripting.oms_addConnection")
         @classmethod
         async def oms_addConnection(_, crefA: str, crefB: str) -> int:
             """function oms_addConnection
-  input String crefA;
-  input String crefB;
-  output Integer status;
-end oms_addConnection;"""
+              input String crefA;
+              input String crefB;
+              output Integer status;
+            end oms_addConnection;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addConnector')
+        @external(".OpenModelica.Scripting.oms_addConnector")
         @classmethod
-        async def oms_addConnector(_, cref: str, causality: Union[oms_causality__v_1_14, Literal['oms_causality_input', 1, 'oms_causality_output', 2, 'oms_causality_parameter', 3, 'oms_causality_bidir', 4, 'oms_causality_undefined', 5]], type_: Union[oms_signal_type__v_1_14, Literal['oms_signal_type_real', 1, 'oms_signal_type_integer', 2, 'oms_signal_type_boolean', 3, 'oms_signal_type_string', 4, 'oms_signal_type_enum', 5, 'oms_signal_type_bus', 6]]) -> int:
+        async def oms_addConnector(
+            _,
+            cref: str,
+            causality: Union[
+                oms_causality__v_1_14,
+                Literal[
+                    "oms_causality_input",
+                    1,
+                    "oms_causality_output",
+                    2,
+                    "oms_causality_parameter",
+                    3,
+                    "oms_causality_bidir",
+                    4,
+                    "oms_causality_undefined",
+                    5,
+                ],
+            ],
+            type_: Union[
+                oms_signal_type__v_1_14,
+                Literal[
+                    "oms_signal_type_real",
+                    1,
+                    "oms_signal_type_integer",
+                    2,
+                    "oms_signal_type_boolean",
+                    3,
+                    "oms_signal_type_string",
+                    4,
+                    "oms_signal_type_enum",
+                    5,
+                    "oms_signal_type_bus",
+                    6,
+                ],
+            ],
+        ) -> int:
             """function oms_addConnector
-  input String cref;
-  input oms_causality causality;
-  input oms_signal_type type_;
-  output Integer status;
-end oms_addConnector;"""
+              input String cref;
+              input oms_causality causality;
+              input oms_signal_type type_;
+              output Integer status;
+            end oms_addConnector;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addConnectorToBus')
+        @external(".OpenModelica.Scripting.oms_addConnectorToBus")
         @classmethod
-        async def oms_addConnectorToBus(_, busCref: str, connectorCref: str) -> int:
+        async def oms_addConnectorToBus(
+            _, busCref: str, connectorCref: str
+        ) -> int:
             """function oms_addConnectorToBus
-  input String busCref;
-  input String connectorCref;
-  output Integer status;
-end oms_addConnectorToBus;"""
+              input String busCref;
+              input String connectorCref;
+              output Integer status;
+            end oms_addConnectorToBus;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addConnectorToTLMBus')
+        @external(".OpenModelica.Scripting.oms_addConnectorToTLMBus")
         @classmethod
-        async def oms_addConnectorToTLMBus(_, busCref: str, connectorCref: str, type_: str) -> int:
+        async def oms_addConnectorToTLMBus(
+            _, busCref: str, connectorCref: str, type_: str
+        ) -> int:
             """function oms_addConnectorToTLMBus
-  input String busCref;
-  input String connectorCref;
-  input String type_;
-  output Integer status;
-end oms_addConnectorToTLMBus;"""
+              input String busCref;
+              input String connectorCref;
+              input String type_;
+              output Integer status;
+            end oms_addConnectorToTLMBus;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addDynamicValueIndicator')
+        @external(".OpenModelica.Scripting.oms_addDynamicValueIndicator")
         @classmethod
-        async def oms_addDynamicValueIndicator(_, signal: str, lower: str, upper: str, stepSize: float) -> int:
+        async def oms_addDynamicValueIndicator(
+            _, signal: str, lower: str, upper: str, stepSize: float
+        ) -> int:
             """function oms_addDynamicValueIndicator
-  input String signal;
-  input String lower;
-  input String upper;
-  input Real stepSize;
-  output Integer status;
-end oms_addDynamicValueIndicator;"""
+              input String signal;
+              input String lower;
+              input String upper;
+              input Real stepSize;
+              output Integer status;
+            end oms_addDynamicValueIndicator;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addEventIndicator')
+        @external(".OpenModelica.Scripting.oms_addEventIndicator")
         @classmethod
         async def oms_addEventIndicator(_, signal: str) -> int:
             """function oms_addEventIndicator
-  input String signal;
-  output Integer status;
-end oms_addEventIndicator;"""
+              input String signal;
+              output Integer status;
+            end oms_addEventIndicator;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addExternalModel')
+        @external(".OpenModelica.Scripting.oms_addExternalModel")
         @classmethod
-        async def oms_addExternalModel(_, cref: str, path: str, startscript: str) -> int:
+        async def oms_addExternalModel(
+            _, cref: str, path: str, startscript: str
+        ) -> int:
             """function oms_addExternalModel
-  input String cref;
-  input String path;
-  input String startscript;
-  output Integer status;
-end oms_addExternalModel;"""
+              input String cref;
+              input String path;
+              input String startscript;
+              output Integer status;
+            end oms_addExternalModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addSignalsToResults')
+        @external(".OpenModelica.Scripting.oms_addSignalsToResults")
         @classmethod
         async def oms_addSignalsToResults(_, cref: str, regex: str) -> int:
             """function oms_addSignalsToResults
-  input String cref;
-  input String regex;
-  output Integer status;
-end oms_addSignalsToResults;"""
+              input String cref;
+              input String regex;
+              output Integer status;
+            end oms_addSignalsToResults;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addStaticValueIndicator')
+        @external(".OpenModelica.Scripting.oms_addStaticValueIndicator")
         @classmethod
-        async def oms_addStaticValueIndicator(_, signal: str, lower: float, upper: float, stepSize: float) -> int:
+        async def oms_addStaticValueIndicator(
+            _, signal: str, lower: float, upper: float, stepSize: float
+        ) -> int:
             """function oms_addStaticValueIndicator
-  input String signal;
-  input Real lower;
-  input Real upper;
-  input Real stepSize;
-  output Integer status;
-end oms_addStaticValueIndicator;"""
+              input String signal;
+              input Real lower;
+              input Real upper;
+              input Real stepSize;
+              output Integer status;
+            end oms_addStaticValueIndicator;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addSubModel')
+        @external(".OpenModelica.Scripting.oms_addSubModel")
         @classmethod
         async def oms_addSubModel(_, cref: str, fmuPath: str) -> int:
             """function oms_addSubModel
-  input String cref;
-  input String fmuPath;
-  output Integer status;
-end oms_addSubModel;"""
+              input String cref;
+              input String fmuPath;
+              output Integer status;
+            end oms_addSubModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addSystem')
+        @external(".OpenModelica.Scripting.oms_addSystem")
         @classmethod
-        async def oms_addSystem(_, cref: str, type_: Union[oms_system__v_1_14, Literal['oms_system_none', 1, 'oms_system_tlm', 2, 'oms_system_wc', 3, 'oms_system_sc', 4]]) -> int:
+        async def oms_addSystem(
+            _,
+            cref: str,
+            type_: Union[
+                oms_system__v_1_14,
+                Literal[
+                    "oms_system_none",
+                    1,
+                    "oms_system_tlm",
+                    2,
+                    "oms_system_wc",
+                    3,
+                    "oms_system_sc",
+                    4,
+                ],
+            ],
+        ) -> int:
             """function oms_addSystem
-  input String cref;
-  input oms_system type_;
-  output Integer status;
-end oms_addSystem;"""
+              input String cref;
+              input oms_system type_;
+              output Integer status;
+            end oms_addSystem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addTimeIndicator')
+        @external(".OpenModelica.Scripting.oms_addTimeIndicator")
         @classmethod
         async def oms_addTimeIndicator(_, signal: str) -> int:
             """function oms_addTimeIndicator
-  input String signal;
-  output Integer status;
-end oms_addTimeIndicator;"""
+              input String signal;
+              output Integer status;
+            end oms_addTimeIndicator;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addTLMBus')
+        @external(".OpenModelica.Scripting.oms_addTLMBus")
         @classmethod
-        async def oms_addTLMBus(_, cref: str, domain: Union[oms_tlm_domain__v_1_14, Literal['oms_tlm_domain_input', 1, 'oms_tlm_domain_output', 2, 'oms_tlm_domain_mechanical', 3, 'oms_tlm_domain_rotational', 4, 'oms_tlm_domain_hydraulic', 5, 'oms_tlm_domain_electric', 6]], dimensions: int, interpolation: Union[oms_tlm_interpolation__v_1_14, Literal['oms_tlm_no_interpolation', 1, 'oms_tlm_coarse_grained', 2, 'oms_tlm_fine_grained', 3]]) -> int:
+        async def oms_addTLMBus(
+            _,
+            cref: str,
+            domain: Union[
+                oms_tlm_domain__v_1_14,
+                Literal[
+                    "oms_tlm_domain_input",
+                    1,
+                    "oms_tlm_domain_output",
+                    2,
+                    "oms_tlm_domain_mechanical",
+                    3,
+                    "oms_tlm_domain_rotational",
+                    4,
+                    "oms_tlm_domain_hydraulic",
+                    5,
+                    "oms_tlm_domain_electric",
+                    6,
+                ],
+            ],
+            dimensions: int,
+            interpolation: Union[
+                oms_tlm_interpolation__v_1_14,
+                Literal[
+                    "oms_tlm_no_interpolation",
+                    1,
+                    "oms_tlm_coarse_grained",
+                    2,
+                    "oms_tlm_fine_grained",
+                    3,
+                ],
+            ],
+        ) -> int:
             """function oms_addTLMBus
-  input String cref;
-  input oms_tlm_domain domain;
-  input Integer dimensions;
-  input oms_tlm_interpolation interpolation;
-  output Integer status;
-end oms_addTLMBus;"""
+              input String cref;
+              input oms_tlm_domain domain;
+              input Integer dimensions;
+              input oms_tlm_interpolation interpolation;
+              output Integer status;
+            end oms_addTLMBus;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_addTLMConnection')
+        @external(".OpenModelica.Scripting.oms_addTLMConnection")
         @classmethod
-        async def oms_addTLMConnection(_, crefA: str, crefB: str, delay: float, alpha: float, linearimpedance: float, angularimpedance: float) -> int:
+        async def oms_addTLMConnection(
+            _,
+            crefA: str,
+            crefB: str,
+            delay: float,
+            alpha: float,
+            linearimpedance: float,
+            angularimpedance: float,
+        ) -> int:
             """function oms_addTLMConnection
-  input String crefA;
-  input String crefB;
-  input Real delay;
-  input Real alpha;
-  input Real linearimpedance;
-  input Real angularimpedance;
-  output Integer status;
-end oms_addTLMConnection;"""
+              input String crefA;
+              input String crefB;
+              input Real delay;
+              input Real alpha;
+              input Real linearimpedance;
+              input Real angularimpedance;
+              output Integer status;
+            end oms_addTLMConnection;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_cancelSimulation_asynchronous')
+        @external(".OpenModelica.Scripting.oms_cancelSimulation_asynchronous")
         @classmethod
         async def oms_cancelSimulation_asynchronous(_, cref: str) -> int:
             """function oms_cancelSimulation_asynchronous
-  input String cref;
-  output Integer status;
-end oms_cancelSimulation_asynchronous;"""
+              input String cref;
+              output Integer status;
+            end oms_cancelSimulation_asynchronous;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_compareSimulationResults')
+        @external(".OpenModelica.Scripting.oms_compareSimulationResults")
         @classmethod
-        async def oms_compareSimulationResults(_, filenameA: str, filenameB: str, var: str, relTol: float, absTol: float) -> int:
+        async def oms_compareSimulationResults(
+            _,
+            filenameA: str,
+            filenameB: str,
+            var: str,
+            relTol: float,
+            absTol: float,
+        ) -> int:
             """function oms_compareSimulationResults
-  input String filenameA;
-  input String filenameB;
-  input String var;
-  input Real relTol;
-  input Real absTol;
-  output Integer status;
-end oms_compareSimulationResults;"""
+              input String filenameA;
+              input String filenameB;
+              input String var;
+              input Real relTol;
+              input Real absTol;
+              output Integer status;
+            end oms_compareSimulationResults;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_copySystem')
+        @external(".OpenModelica.Scripting.oms_copySystem")
         @classmethod
         async def oms_copySystem(_, source: str, target: str) -> int:
             """function oms_copySystem
-  input String source;
-  input String target;
-  output Integer status;
-end oms_copySystem;"""
+              input String source;
+              input String target;
+              output Integer status;
+            end oms_copySystem;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_delete')
+        @external(".OpenModelica.Scripting.oms_delete")
         @classmethod
         async def oms_delete(_, cref: str) -> int:
             """function oms_delete
-  input String cref;
-  output Integer status;
-end oms_delete;"""
+              input String cref;
+              output Integer status;
+            end oms_delete;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_deleteConnection')
+        @external(".OpenModelica.Scripting.oms_deleteConnection")
         @classmethod
         async def oms_deleteConnection(_, crefA: str, crefB: str) -> int:
             """function oms_deleteConnection
-  input String crefA;
-  input String crefB;
-  output Integer status;
-end oms_deleteConnection;"""
+              input String crefA;
+              input String crefB;
+              output Integer status;
+            end oms_deleteConnection;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_deleteConnectorFromBus')
+        @external(".OpenModelica.Scripting.oms_deleteConnectorFromBus")
         @classmethod
-        async def oms_deleteConnectorFromBus(_, busCref: str, connectorCref: str) -> int:
+        async def oms_deleteConnectorFromBus(
+            _, busCref: str, connectorCref: str
+        ) -> int:
             """function oms_deleteConnectorFromBus
-  input String busCref;
-  input String connectorCref;
-  output Integer status;
-end oms_deleteConnectorFromBus;"""
+              input String busCref;
+              input String connectorCref;
+              output Integer status;
+            end oms_deleteConnectorFromBus;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_deleteConnectorFromTLMBus')
+        @external(".OpenModelica.Scripting.oms_deleteConnectorFromTLMBus")
         @classmethod
-        async def oms_deleteConnectorFromTLMBus(_, busCref: str, connectorCref: str) -> int:
+        async def oms_deleteConnectorFromTLMBus(
+            _, busCref: str, connectorCref: str
+        ) -> int:
             """function oms_deleteConnectorFromTLMBus
-  input String busCref;
-  input String connectorCref;
-  output Integer status;
-end oms_deleteConnectorFromTLMBus;"""
+              input String busCref;
+              input String connectorCref;
+              output Integer status;
+            end oms_deleteConnectorFromTLMBus;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_export')
+        @external(".OpenModelica.Scripting.oms_export")
         @classmethod
         async def oms_export(_, cref: str, filename: str) -> int:
             """function oms_export
-  input String cref;
-  input String filename;
-  output Integer status;
-end oms_export;"""
+              input String cref;
+              input String filename;
+              output Integer status;
+            end oms_export;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_exportDependencyGraphs')
+        @external(".OpenModelica.Scripting.oms_exportDependencyGraphs")
         @classmethod
-        async def oms_exportDependencyGraphs(_, cref: str, initialization: str, event: str, simulation: str) -> int:
+        async def oms_exportDependencyGraphs(
+            _, cref: str, initialization: str, event: str, simulation: str
+        ) -> int:
             """function oms_exportDependencyGraphs
-  input String cref;
-  input String initialization;
-  input String event;
-  input String simulation;
-  output Integer status;
-end oms_exportDependencyGraphs;"""
+              input String cref;
+              input String initialization;
+              input String event;
+              input String simulation;
+              output Integer status;
+            end oms_exportDependencyGraphs;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_exportSnapshot')
+        @external(".OpenModelica.Scripting.oms_exportSnapshot")
         @classmethod
         async def oms_exportSnapshot(_, cref: str) -> oms_exportSnapshot:
             """function oms_exportSnapshot
-  input String cref;
-  output String contents;
-  output Integer status;
-end oms_exportSnapshot;"""
+              input String cref;
+              output String contents;
+              output Integer status;
+            end oms_exportSnapshot;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_extractFMIKind')
+        @external(".OpenModelica.Scripting.oms_extractFMIKind")
         @classmethod
         async def oms_extractFMIKind(_, filename: str) -> oms_extractFMIKind:
             """function oms_extractFMIKind
-  input String filename;
-  output Integer kind;
-  output Integer status;
-end oms_extractFMIKind;"""
+              input String filename;
+              output Integer kind;
+              output Integer status;
+            end oms_extractFMIKind;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getBoolean')
+        @external(".OpenModelica.Scripting.oms_getBoolean")
         @classmethod
         async def oms_getBoolean(_, cref: str) -> oms_getBoolean:
             """function oms_getBoolean
-  input String cref;
-  output Boolean value;
-  output Integer status;
-end oms_getBoolean;"""
+              input String cref;
+              output Boolean value;
+              output Integer status;
+            end oms_getBoolean;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getFixedStepSize')
+        @external(".OpenModelica.Scripting.oms_getFixedStepSize")
         @classmethod
         async def oms_getFixedStepSize(_, cref: str) -> oms_getFixedStepSize:
             """function oms_getFixedStepSize
-  input String cref;
-  output Real stepSize;
-  output Integer status;
-end oms_getFixedStepSize;"""
+              input String cref;
+              output Real stepSize;
+              output Integer status;
+            end oms_getFixedStepSize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getInteger')
+        @external(".OpenModelica.Scripting.oms_getInteger")
         @classmethod
         async def oms_getInteger(_, cref: str, value: int) -> int:
             """function oms_getInteger
-  input String cref;
-  input Integer value;
-  output Integer status;
-end oms_getInteger;"""
+              input String cref;
+              input Integer value;
+              output Integer status;
+            end oms_getInteger;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getModelState')
+        @external(".OpenModelica.Scripting.oms_getModelState")
         @classmethod
         async def oms_getModelState(_, cref: str) -> oms_getModelState:
             """function oms_getModelState
-  input String cref;
-  output Integer modelState;
-  output Integer status;
-end oms_getModelState;"""
+              input String cref;
+              output Integer modelState;
+              output Integer status;
+            end oms_getModelState;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getReal')
+        @external(".OpenModelica.Scripting.oms_getReal")
         @classmethod
         async def oms_getReal(_, cref: str) -> oms_getReal:
             """function oms_getReal
-  input String cref;
-  output Real value;
-  output Integer status;
-end oms_getReal;"""
+              input String cref;
+              output Real value;
+              output Integer status;
+            end oms_getReal;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getSolver')
+        @external(".OpenModelica.Scripting.oms_getSolver")
         @classmethod
         async def oms_getSolver(_, cref: str) -> oms_getSolver:
             """function oms_getSolver
-  input String cref;
-  output Integer solver;
-  output Integer status;
-end oms_getSolver;"""
+              input String cref;
+              output Integer solver;
+              output Integer status;
+            end oms_getSolver;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getStartTime')
+        @external(".OpenModelica.Scripting.oms_getStartTime")
         @classmethod
         async def oms_getStartTime(_, cref: str) -> oms_getStartTime:
             """function oms_getStartTime
-  input String cref;
-  output Real startTime;
-  output Integer status;
-end oms_getStartTime;"""
+              input String cref;
+              output Real startTime;
+              output Integer status;
+            end oms_getStartTime;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getStopTime')
+        @external(".OpenModelica.Scripting.oms_getStopTime")
         @classmethod
         async def oms_getStopTime(_, cref: str) -> oms_getStopTime:
             """function oms_getStopTime
-  input String cref;
-  output Real stopTime;
-  output Integer status;
-end oms_getStopTime;"""
+              input String cref;
+              output Real stopTime;
+              output Integer status;
+            end oms_getStopTime;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getSubModelPath')
+        @external(".OpenModelica.Scripting.oms_getSubModelPath")
         @classmethod
         async def oms_getSubModelPath(_, cref: str) -> oms_getSubModelPath:
             """function oms_getSubModelPath
-  input String cref;
-  output String path;
-  output Integer status;
-end oms_getSubModelPath;"""
+              input String cref;
+              output String path;
+              output Integer status;
+            end oms_getSubModelPath;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getSystemType')
+        @external(".OpenModelica.Scripting.oms_getSystemType")
         @classmethod
         async def oms_getSystemType(_, cref: str) -> oms_getSystemType:
             """function oms_getSystemType
-  input String cref;
-  output Integer type_;
-  output Integer status;
-end oms_getSystemType;"""
+              input String cref;
+              output Integer type_;
+              output Integer status;
+            end oms_getSystemType;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getTolerance')
+        @external(".OpenModelica.Scripting.oms_getTolerance")
         @classmethod
         async def oms_getTolerance(_, cref: str) -> oms_getTolerance:
             """function oms_getTolerance
-  input String cref;
-  output Real absoluteTolerance;
-  output Real relativeTolerance;
-  output Integer status;
-end oms_getTolerance;"""
+              input String cref;
+              output Real absoluteTolerance;
+              output Real relativeTolerance;
+              output Integer status;
+            end oms_getTolerance;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getVariableStepSize')
+        @external(".OpenModelica.Scripting.oms_getVariableStepSize")
         @classmethod
-        async def oms_getVariableStepSize(_, cref: str) -> oms_getVariableStepSize:
+        async def oms_getVariableStepSize(
+            _, cref: str
+        ) -> oms_getVariableStepSize:
             """function oms_getVariableStepSize
-  input String cref;
-  output Real initialStepSize;
-  output Real minimumStepSize;
-  output Real maximumStepSize;
-  output Integer status;
-end oms_getVariableStepSize;"""
+              input String cref;
+              output Real initialStepSize;
+              output Real minimumStepSize;
+              output Real maximumStepSize;
+              output Integer status;
+            end oms_getVariableStepSize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_faultInjection')
+        @external(".OpenModelica.Scripting.oms_faultInjection")
         @classmethod
-        async def oms_faultInjection(_, signal: str, faultType: Union[oms_fault_type__v_1_16, Literal['oms_fault_type_bias', 1, 'oms_fault_type_gain', 2, 'oms_fault_type_const', 3]], faultValue: float) -> int:
+        async def oms_faultInjection(
+            _,
+            signal: str,
+            faultType: Union[
+                oms_fault_type__v_1_16,
+                Literal[
+                    "oms_fault_type_bias",
+                    1,
+                    "oms_fault_type_gain",
+                    2,
+                    "oms_fault_type_const",
+                    3,
+                ],
+            ],
+            faultValue: float,
+        ) -> int:
             """function oms_faultInjection
-  input String signal;
-  input oms_fault_type faultType;
-  input Real faultValue;
-  output Integer status;
-end oms_faultInjection;"""
+              input String signal;
+              input oms_fault_type faultType;
+              input Real faultValue;
+              output Integer status;
+            end oms_faultInjection;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_importFile')
+        @external(".OpenModelica.Scripting.oms_importFile")
         @classmethod
         async def oms_importFile(_, filename: str) -> oms_importFile:
             """function oms_importFile
-  input String filename;
-  output String cref;
-  output Integer status;
-end oms_importFile;"""
+              input String filename;
+              output String cref;
+              output Integer status;
+            end oms_importFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_importSnapshot')
+        @external(".OpenModelica.Scripting.oms_importSnapshot")
         @classmethod
         async def oms_importSnapshot(_, cref: str, snapshot: str) -> int:
             """function oms_importSnapshot
-  input String cref;
-  input String snapshot;
-  output Integer status;
-end oms_importSnapshot;"""
+              input String cref;
+              input String snapshot;
+              output Integer status;
+            end oms_importSnapshot;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_initialize')
+        @external(".OpenModelica.Scripting.oms_initialize")
         @classmethod
         async def oms_initialize(_, cref: str) -> int:
             """function oms_initialize
-  input String cref;
-  output Integer status;
-end oms_initialize;"""
+              input String cref;
+              output Integer status;
+            end oms_initialize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_instantiate')
+        @external(".OpenModelica.Scripting.oms_instantiate")
         @classmethod
         async def oms_instantiate(_, cref: str) -> int:
             """function oms_instantiate
-  input String cref;
-  output Integer status;
-end oms_instantiate;"""
+              input String cref;
+              output Integer status;
+            end oms_instantiate;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_list')
+        @external(".OpenModelica.Scripting.oms_list")
         @classmethod
         async def oms_list(_, cref: str) -> oms_list:
             """function oms_list
-  input String cref;
-  output String contents;
-  output Integer status;
-end oms_list;"""
+              input String cref;
+              output String contents;
+              output Integer status;
+            end oms_list;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_listUnconnectedConnectors')
+        @external(".OpenModelica.Scripting.oms_listUnconnectedConnectors")
         @classmethod
-        async def oms_listUnconnectedConnectors(_, cref: str) -> oms_listUnconnectedConnectors:
+        async def oms_listUnconnectedConnectors(
+            _, cref: str
+        ) -> oms_listUnconnectedConnectors:
             """function oms_listUnconnectedConnectors
-  input String cref;
-  output String contents;
-  output Integer status;
-end oms_listUnconnectedConnectors;"""
+              input String cref;
+              output String contents;
+              output Integer status;
+            end oms_listUnconnectedConnectors;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_loadSnapshot')
+        @external(".OpenModelica.Scripting.oms_loadSnapshot")
         @classmethod
         async def oms_loadSnapshot(_, cref: str, snapshot: str) -> int:
             """function oms_loadSnapshot
-  input String cref;
-  input String snapshot;
-  output Integer status;
-end oms_loadSnapshot;"""
+              input String cref;
+              input String snapshot;
+              output Integer status;
+            end oms_loadSnapshot;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_newModel')
+        @external(".OpenModelica.Scripting.oms_newModel")
         @classmethod
         async def oms_newModel(_, cref: str) -> int:
             """function oms_newModel
-  input String cref;
-  output Integer status;
-end oms_newModel;"""
+              input String cref;
+              output Integer status;
+            end oms_newModel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_parseModelName')
+        @external(".OpenModelica.Scripting.oms_parseModelName")
         @classmethod
         async def oms_parseModelName(_, contents: str) -> oms_parseModelName:
             """function oms_parseModelName
-  input String contents;
-  output String cref;
-  output Integer status;
-end oms_parseModelName;"""
+              input String contents;
+              output String cref;
+              output Integer status;
+            end oms_parseModelName;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_removeSignalsFromResults')
+        @external(".OpenModelica.Scripting.oms_removeSignalsFromResults")
         @classmethod
-        async def oms_removeSignalsFromResults(_, cref: str, regex: str) -> int:
+        async def oms_removeSignalsFromResults(
+            _, cref: str, regex: str
+        ) -> int:
             """function oms_removeSignalsFromResults
-  input String cref;
-  input String regex;
-  output Integer status;
-end oms_removeSignalsFromResults;"""
+              input String cref;
+              input String regex;
+              output Integer status;
+            end oms_removeSignalsFromResults;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_rename')
+        @external(".OpenModelica.Scripting.oms_rename")
         @classmethod
         async def oms_rename(_, cref: str, newCref: str) -> int:
             """function oms_rename
-  input String cref;
-  input String newCref;
-  output Integer status;
-end oms_rename;"""
+              input String cref;
+              input String newCref;
+              output Integer status;
+            end oms_rename;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_reset')
+        @external(".OpenModelica.Scripting.oms_reset")
         @classmethod
         async def oms_reset(_, cref: str) -> int:
             """function oms_reset
-  input String cref;
-  output Integer status;
-end oms_reset;"""
+              input String cref;
+              output Integer status;
+            end oms_reset;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_RunFile')
+        @external(".OpenModelica.Scripting.oms_RunFile")
         @classmethod
         async def oms_RunFile(_, filename: str) -> int:
             """function oms_RunFile
-  input String filename;
-  output Integer status;
-end oms_RunFile;"""
+              input String filename;
+              output Integer status;
+            end oms_RunFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setBoolean')
+        @external(".OpenModelica.Scripting.oms_setBoolean")
         @classmethod
         async def oms_setBoolean(_, cref: str, value: bool) -> int:
             """function oms_setBoolean
-  input String cref;
-  input Boolean value;
-  output Integer status;
-end oms_setBoolean;"""
+              input String cref;
+              input Boolean value;
+              output Integer status;
+            end oms_setBoolean;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setCommandLineOption')
+        @external(".OpenModelica.Scripting.oms_setCommandLineOption")
         @classmethod
         async def oms_setCommandLineOption(_, cmd: str) -> int:
             """function oms_setCommandLineOption
-  input String cmd;
-  output Integer status;
-end oms_setCommandLineOption;"""
+              input String cmd;
+              output Integer status;
+            end oms_setCommandLineOption;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setFixedStepSize')
+        @external(".OpenModelica.Scripting.oms_setFixedStepSize")
         @classmethod
         async def oms_setFixedStepSize(_, cref: str, stepSize: float) -> int:
             """function oms_setFixedStepSize
-  input String cref;
-  input Real stepSize;
-  output Integer status;
-end oms_setFixedStepSize;"""
+              input String cref;
+              input Real stepSize;
+              output Integer status;
+            end oms_setFixedStepSize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setInteger')
+        @external(".OpenModelica.Scripting.oms_setInteger")
         @classmethod
         async def oms_setInteger(_, cref: str, value: int) -> int:
             """function oms_setInteger
-  input String cref;
-  input Integer value;
-  output Integer status;
-end oms_setInteger;"""
+              input String cref;
+              input Integer value;
+              output Integer status;
+            end oms_setInteger;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setLogFile')
+        @external(".OpenModelica.Scripting.oms_setLogFile")
         @classmethod
         async def oms_setLogFile(_, filename: str) -> int:
             """function oms_setLogFile
-  input String filename;
-  output Integer status;
-end oms_setLogFile;"""
+              input String filename;
+              output Integer status;
+            end oms_setLogFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setLoggingInterval')
+        @external(".OpenModelica.Scripting.oms_setLoggingInterval")
         @classmethod
-        async def oms_setLoggingInterval(_, cref: str, loggingInterval: float) -> int:
+        async def oms_setLoggingInterval(
+            _, cref: str, loggingInterval: float
+        ) -> int:
             """function oms_setLoggingInterval
-  input String cref;
-  input Real loggingInterval;
-  output Integer status;
-end oms_setLoggingInterval;"""
+              input String cref;
+              input Real loggingInterval;
+              output Integer status;
+            end oms_setLoggingInterval;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setLoggingLevel')
+        @external(".OpenModelica.Scripting.oms_setLoggingLevel")
         @classmethod
         async def oms_setLoggingLevel(_, logLevel: int) -> int:
             """function oms_setLoggingLevel
-  input Integer logLevel;
-  output Integer status;
-end oms_setLoggingLevel;"""
+              input Integer logLevel;
+              output Integer status;
+            end oms_setLoggingLevel;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setReal')
+        @external(".OpenModelica.Scripting.oms_setReal")
         @classmethod
         async def oms_setReal(_, cref: str, value: float) -> int:
             """function oms_setReal
-  input String cref;
-  input Real value;
-  output Integer status;
-end oms_setReal;"""
+              input String cref;
+              input Real value;
+              output Integer status;
+            end oms_setReal;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setRealInputDerivative')
+        @external(".OpenModelica.Scripting.oms_setRealInputDerivative")
         @classmethod
-        async def oms_setRealInputDerivative(_, cref: str, value: float) -> int:
+        async def oms_setRealInputDerivative(
+            _, cref: str, value: float
+        ) -> int:
             """function oms_setRealInputDerivative
-  input String cref;
-  input Real value;
-  output Integer status;
-end oms_setRealInputDerivative;"""
+              input String cref;
+              input Real value;
+              output Integer status;
+            end oms_setRealInputDerivative;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setResultFile')
+        @external(".OpenModelica.Scripting.oms_setResultFile")
         @classmethod
-        async def oms_setResultFile(_, cref: str, filename: str, bufferSize: int) -> int:
+        async def oms_setResultFile(
+            _, cref: str, filename: str, bufferSize: int
+        ) -> int:
             """function oms_setResultFile
-  input String cref;
-  input String filename;
-  input Integer bufferSize;
-  output Integer status;
-end oms_setResultFile;"""
+              input String cref;
+              input String filename;
+              input Integer bufferSize;
+              output Integer status;
+            end oms_setResultFile;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setSignalFilter')
+        @external(".OpenModelica.Scripting.oms_setSignalFilter")
         @classmethod
         async def oms_setSignalFilter(_, cref: str, regex: str) -> int:
             """function oms_setSignalFilter
-  input String cref;
-  input String regex;
-  output Integer status;
-end oms_setSignalFilter;"""
+              input String cref;
+              input String regex;
+              output Integer status;
+            end oms_setSignalFilter;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setSolver')
+        @external(".OpenModelica.Scripting.oms_setSolver")
         @classmethod
-        async def oms_setSolver(_, cref: str, solver: Union[oms_solver__v_1_14, Literal['oms_solver_none', 1, 'oms_solver_sc_min', 2, 'oms_solver_sc_explicit_euler', 3, 'oms_solver_sc_cvode', 4, 'oms_solver_sc_max', 5, 'oms_solver_wc_min', 6, 'oms_solver_wc_ma', 7, 'oms_solver_wc_mav', 8, 'oms_solver_wc_assc', 9, 'oms_solver_wc_mav2', 10, 'oms_solver_wc_max', 11]]) -> int:
+        async def oms_setSolver(
+            _,
+            cref: str,
+            solver: Union[
+                oms_solver__v_1_14,
+                Literal[
+                    "oms_solver_none",
+                    1,
+                    "oms_solver_sc_min",
+                    2,
+                    "oms_solver_sc_explicit_euler",
+                    3,
+                    "oms_solver_sc_cvode",
+                    4,
+                    "oms_solver_sc_max",
+                    5,
+                    "oms_solver_wc_min",
+                    6,
+                    "oms_solver_wc_ma",
+                    7,
+                    "oms_solver_wc_mav",
+                    8,
+                    "oms_solver_wc_assc",
+                    9,
+                    "oms_solver_wc_mav2",
+                    10,
+                    "oms_solver_wc_max",
+                    11,
+                ],
+            ],
+        ) -> int:
             """function oms_setSolver
-  input String cref;
-  input oms_solver solver;
-  output Integer status;
-end oms_setSolver;"""
+              input String cref;
+              input oms_solver solver;
+              output Integer status;
+            end oms_setSolver;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setStartTime')
+        @external(".OpenModelica.Scripting.oms_setStartTime")
         @classmethod
         async def oms_setStartTime(_, cref: str, startTime: float) -> int:
             """function oms_setStartTime
-  input String cref;
-  input Real startTime;
-  output Integer status;
-end oms_setStartTime;"""
+              input String cref;
+              input Real startTime;
+              output Integer status;
+            end oms_setStartTime;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setStopTime')
+        @external(".OpenModelica.Scripting.oms_setStopTime")
         @classmethod
         async def oms_setStopTime(_, cref: str, stopTime: float) -> int:
             """function oms_setStopTime
-  input String cref;
-  input Real stopTime;
-  output Integer status;
-end oms_setStopTime;"""
+              input String cref;
+              input Real stopTime;
+              output Integer status;
+            end oms_setStopTime;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setTempDirectory')
+        @external(".OpenModelica.Scripting.oms_setTempDirectory")
         @classmethod
         async def oms_setTempDirectory(_, newTempDir: str) -> int:
             """function oms_setTempDirectory
-  input String newTempDir;
-  output Integer status;
-end oms_setTempDirectory;"""
+              input String newTempDir;
+              output Integer status;
+            end oms_setTempDirectory;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setTLMPositionAndOrientation')
+        @external(".OpenModelica.Scripting.oms_setTLMPositionAndOrientation")
         @classmethod
-        async def oms_setTLMPositionAndOrientation(_, cref: str, x1: float, x2: float, x3: float, A11: float, A12: float, A13: float, A21: float, A22: float, A23: float, A31: float, A32: float, A33: float) -> int:
+        async def oms_setTLMPositionAndOrientation(
+            _,
+            cref: str,
+            x1: float,
+            x2: float,
+            x3: float,
+            A11: float,
+            A12: float,
+            A13: float,
+            A21: float,
+            A22: float,
+            A23: float,
+            A31: float,
+            A32: float,
+            A33: float,
+        ) -> int:
             """function oms_setTLMPositionAndOrientation
-  input String cref;
-  input Real x1;
-  input Real x2;
-  input Real x3;
-  input Real A11;
-  input Real A12;
-  input Real A13;
-  input Real A21;
-  input Real A22;
-  input Real A23;
-  input Real A31;
-  input Real A32;
-  input Real A33;
-  output Integer status;
-end oms_setTLMPositionAndOrientation;"""
+              input String cref;
+              input Real x1;
+              input Real x2;
+              input Real x3;
+              input Real A11;
+              input Real A12;
+              input Real A13;
+              input Real A21;
+              input Real A22;
+              input Real A23;
+              input Real A31;
+              input Real A32;
+              input Real A33;
+              output Integer status;
+            end oms_setTLMPositionAndOrientation;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setTLMSocketData')
+        @external(".OpenModelica.Scripting.oms_setTLMSocketData")
         @classmethod
-        async def oms_setTLMSocketData(_, cref: str, address: str, managerPort: int, monitorPort: int) -> int:
+        async def oms_setTLMSocketData(
+            _, cref: str, address: str, managerPort: int, monitorPort: int
+        ) -> int:
             """function oms_setTLMSocketData
-  input String cref;
-  input String address;
-  input Integer managerPort;
-  input Integer monitorPort;
-  output Integer status;
-end oms_setTLMSocketData;"""
+              input String cref;
+              input String address;
+              input Integer managerPort;
+              input Integer monitorPort;
+              output Integer status;
+            end oms_setTLMSocketData;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setTolerance')
+        @external(".OpenModelica.Scripting.oms_setTolerance")
         @classmethod
-        async def oms_setTolerance(_, cref: str, absoluteTolerance: float, relativeTolerance: float) -> int:
+        async def oms_setTolerance(
+            _, cref: str, absoluteTolerance: float, relativeTolerance: float
+        ) -> int:
             """function oms_setTolerance
-  input String cref;
-  input Real absoluteTolerance;
-  input Real relativeTolerance;
-  output Integer status;
-end oms_setTolerance;"""
+              input String cref;
+              input Real absoluteTolerance;
+              input Real relativeTolerance;
+              output Integer status;
+            end oms_setTolerance;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setVariableStepSize')
+        @external(".OpenModelica.Scripting.oms_setVariableStepSize")
         @classmethod
-        async def oms_setVariableStepSize(_, cref: str, initialStepSize: float, minimumStepSize: float, maximumStepSize: float) -> int:
+        async def oms_setVariableStepSize(
+            _,
+            cref: str,
+            initialStepSize: float,
+            minimumStepSize: float,
+            maximumStepSize: float,
+        ) -> int:
             """function oms_setVariableStepSize
-  input String cref;
-  input Real initialStepSize;
-  input Real minimumStepSize;
-  input Real maximumStepSize;
-  output Integer status;
-end oms_setVariableStepSize;"""
+              input String cref;
+              input Real initialStepSize;
+              input Real minimumStepSize;
+              input Real maximumStepSize;
+              output Integer status;
+            end oms_setVariableStepSize;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_setWorkingDirectory')
+        @external(".OpenModelica.Scripting.oms_setWorkingDirectory")
         @classmethod
         async def oms_setWorkingDirectory(_, newWorkingDir: str) -> int:
             """function oms_setWorkingDirectory
-  input String newWorkingDir;
-  output Integer status;
-end oms_setWorkingDirectory;"""
+              input String newWorkingDir;
+              output Integer status;
+            end oms_setWorkingDirectory;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_simulate')
+        @external(".OpenModelica.Scripting.oms_simulate")
         @classmethod
         async def oms_simulate(_, cref: str) -> int:
             """function oms_simulate
-  input String cref;
-  output Integer status;
-end oms_simulate;"""
+              input String cref;
+              output Integer status;
+            end oms_simulate;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_stepUntil')
+        @external(".OpenModelica.Scripting.oms_stepUntil")
         @classmethod
         async def oms_stepUntil(_, cref: str, stopTime: float) -> int:
             """function oms_stepUntil
-  input String cref;
-  input Real stopTime;
-  output Integer status;
-end oms_stepUntil;"""
+              input String cref;
+              input Real stopTime;
+              output Integer status;
+            end oms_stepUntil;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_terminate')
+        @external(".OpenModelica.Scripting.oms_terminate")
         @classmethod
         async def oms_terminate(_, cref: str) -> int:
             """function oms_terminate
-  input String cref;
-  output Integer status;
-end oms_terminate;"""
+              input String cref;
+              output Integer status;
+            end oms_terminate;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.oms_getVersion')
+        @external(".OpenModelica.Scripting.oms_getVersion")
         @classmethod
         async def oms_getVersion(_) -> str:
             """function oms_getVersion
-  output String version;
-end oms_getVersion;"""
+              output String version;
+            end oms_getVersion;"""
             raise NotImplementedError()
-
-        @external('.OpenModelica.Scripting.Experimental')
+        @external(".OpenModelica.Scripting.Experimental")
         class Experimental(package):
-
-            @external('.OpenModelica.Scripting.Experimental.relocateFunctions')
+            @external(".OpenModelica.Scripting.Experimental.relocateFunctions")
             @classmethod
-            async def relocateFunctions(_, fileName: str, names: Sequence[Sequence[str]]) -> bool:
+            async def relocateFunctions(
+                _, fileName: str, names: Sequence[Sequence[str]]
+            ) -> bool:
                 """function relocateFunctions
-  input String fileName;
-  input String names[:, 2];
-  output Boolean success;
-end relocateFunctions;"""
+                  input String fileName;
+                  input String names[:, 2];
+                  output Boolean success;
+                end relocateFunctions;"""
                 raise NotImplementedError()
-
-            @external('.OpenModelica.Scripting.Experimental.toJulia')
+            @external(".OpenModelica.Scripting.Experimental.toJulia")
             @classmethod
             async def toJulia(_) -> str:
                 """function toJulia
-  output String res;
-end toJulia;"""
+                  output String res;
+                end toJulia;"""
                 raise NotImplementedError()
-
-            @external('.OpenModelica.Scripting.Experimental.interactiveDumpAbsynToJL')
+            @external(
+                ".OpenModelica.Scripting.Experimental.interactiveDumpAbsynToJL"
+            )
             @classmethod
             async def interactiveDumpAbsynToJL(_) -> str:
                 """function interactiveDumpAbsynToJL
-  output String res;
-end interactiveDumpAbsynToJL;"""
+                  output String res;
+                end interactiveDumpAbsynToJL;"""
                 raise NotImplementedError()
-
-    @external('.OpenModelica.AutoCompletion')
+    @external(".OpenModelica.AutoCompletion")
     class AutoCompletion(package):
-
-        @external('.OpenModelica.AutoCompletion.Annotations')
+        @external(".OpenModelica.AutoCompletion.Annotations")
         class Annotations(package):
-
-            @external('.OpenModelica.AutoCompletion.Annotations.Documentation')
+            @external(".OpenModelica.AutoCompletion.Annotations.Documentation")
             @dataclass
             class Documentation(record):
                 """record Documentation "Defines the documentation."
-  String info "The textual description of the class.";
-  String revisions "A list of revisions and other annotations defined by a tool.";
-end Documentation;"""
+                  String info "The textual description of the class.";
+                  String revisions "A list of revisions and other annotations defined by a tool.";
+                end Documentation;"""
+
                 info: str
                 revisions: str
-
-            @external('.OpenModelica.AutoCompletion.Annotations.experiment')
+            @external(".OpenModelica.AutoCompletion.Annotations.experiment")
             @dataclass
             class experiment(record):
                 """record experiment "Define default experiment parameters."
-  Real StartTime(unit = "s") = 0 "Default start time of simulation.";
-  Real StopTime(unit = "s") = 1 "Default stop time of simulation.";
-  Real Interval(unit = "s", min = 0) = 0.002 "Resolution for the result grid.";
-  Real Tolerance(min = 0) = 1e-6 "Default relative integration tolerance.";
-end experiment;"""
+                  Real StartTime(unit = "s") = 0 "Default start time of simulation.";
+                  Real StopTime(unit = "s") = 1 "Default stop time of simulation.";
+                  Real Interval(unit = "s", min = 0) = 0.002 "Resolution for the result grid.";
+                  Real Tolerance(min = 0) = 1e-6 "Default relative integration tolerance.";
+                end experiment;"""
+
                 StartTime: float
                 StopTime: float
                 Interval: float
                 Tolerance: float
-
-            @external('.OpenModelica.AutoCompletion.Annotations.Dialog')
+            @external(".OpenModelica.AutoCompletion.Annotations.Dialog")
             @dataclass
             class Dialog(record):
                 """record Dialog
-  parameter String tab = "General";
-  parameter String group = "Parameters";
-  parameter Boolean enable = true;
-  parameter Boolean showStartAttribute = false;
-  parameter Boolean colorSelector = false;
-  parameter Selector loadSelector;
-  parameter Selector saveSelector;
-  parameter String groupImage = "";
-  parameter Boolean connectorSizing = false;
-end Dialog;"""
+                  parameter String tab = "General";
+                  parameter String group = "Parameters";
+                  parameter Boolean enable = true;
+                  parameter Boolean showStartAttribute = false;
+                  parameter Boolean colorSelector = false;
+                  parameter Selector loadSelector;
+                  parameter Selector saveSelector;
+                  parameter String groupImage = "";
+                  parameter Boolean connectorSizing = false;
+                end Dialog;"""
+
                 tab: str
                 group: str
                 enable: bool
@@ -4342,107 +4818,111 @@ end Dialog;"""
                 saveSelector: OpenModelica.AutoCompletion.Annotations.Selector
                 groupImage: str
                 connectorSizing: bool
-
-            @external('.OpenModelica.AutoCompletion.Annotations.Selector')
+            @external(".OpenModelica.AutoCompletion.Annotations.Selector")
             @dataclass
             class Selector(record):
                 """record Selector
-  parameter String filter = "";
-  parameter String caption = "";
-end Selector;"""
+                  parameter String filter = "";
+                  parameter String caption = "";
+                end Selector;"""
+
                 filter: str
                 caption: str
-
-            @external('.OpenModelica.AutoCompletion.Annotations.uses')
+            @external(".OpenModelica.AutoCompletion.Annotations.uses")
             @dataclass
             class uses(record):
                 """record uses "A list of dependent classes."
-end uses;"""
+                end uses;"""
+
             Access = Access__v_1_14
 
-            @external('.OpenModelica.AutoCompletion.Annotations.Protection')
+            @external(".OpenModelica.AutoCompletion.Annotations.Protection")
             @dataclass
             class Protection(record):
                 """record Protection "Protection of class"
-  Access access "Defines what parts of a class are visible.";
-  String features[:] = fill("", 0) "Required license features";
+                  Access access "Defines what parts of a class are visible.";
+                  String features[:] = fill("", 0) "Required license features";
 
-  record License
-    String libraryKey;
-    String licenseFile = "" "Optional, default mapping if empty";
-  end License;
-end Protection;"""
+                  record License
+                    String libraryKey;
+                    String licenseFile = "" "Optional, default mapping if empty";
+                  end License;
+                end Protection;"""
+
                 access: Access__v_1_14
                 features: List[str]
-
-            @external('.OpenModelica.AutoCompletion.Annotations.Authorization')
+            @external(".OpenModelica.AutoCompletion.Annotations.Authorization")
             @dataclass
             class Authorization(record):
                 """record Authorization
-  String licensor = "" "Optional string to show information about the licensor";
-  String libraryKey "Matching the key in the class. Must be encrypted and not visible";
-  License license[:] "Definition of the license options and of the access rights";
-end Authorization;"""
+                  String licensor = "" "Optional string to show information about the licensor";
+                  String libraryKey "Matching the key in the class. Must be encrypted and not visible";
+                  License license[:] "Definition of the license options and of the access rights";
+                end Authorization;"""
+
                 licensor: str
                 libraryKey: str
                 license: List[OpenModelica.AutoCompletion.Annotations.License]
-
-            @external('.OpenModelica.AutoCompletion.Annotations.License')
+            @external(".OpenModelica.AutoCompletion.Annotations.License")
             @dataclass
             class License(record):
                 """record License
-  String licensee = "" "Optional string to show information about the licensee";
-  String id[:] "Unique machine identifications, e.g. MAC addresses";
-  String features[:] = fill("", 0) "Activated library license features";
-  String startDate = "" "Optional start date in UTCformat YYYY-MM-DD";
-  String expirationDate = "" "Optional expiration date in UTCformat YYYY-MM-DD";
-  String operations[:] = fill("", 0) "Library usage conditions";
-end License;"""
+                  String licensee = "" "Optional string to show information about the licensee";
+                  String id[:] "Unique machine identifications, e.g. MAC addresses";
+                  String features[:] = fill("", 0) "Activated library license features";
+                  String startDate = "" "Optional start date in UTCformat YYYY-MM-DD";
+                  String expirationDate = "" "Optional expiration date in UTCformat YYYY-MM-DD";
+                  String operations[:] = fill("", 0) "Library usage conditions";
+                end License;"""
+
                 licensee: str
                 id: List[str]
                 features: List[str]
                 startDate: str
                 expirationDate: str
                 operations: List[str]
-
-            @external('.OpenModelica.AutoCompletion.Annotations.inverse')
+            @external(".OpenModelica.AutoCompletion.Annotations.inverse")
             @dataclass
             class inverse(record):
                 """record inverse
-end inverse;"""
+                end inverse;"""
 
-            @external('.OpenModelica.AutoCompletion.Annotations.choices')
+            @external(".OpenModelica.AutoCompletion.Annotations.choices")
             @dataclass
             class choices(record):
                 """record choices "Defines a suitable redeclaration or modifications of the element."
-  Boolean checkBox = true "Display a checkbox to input the values false or true in the graphical user interface.";
-  // TODO: how to handle choice?
-end choices;"""
-                checkBox: bool
+                  Boolean checkBox = true "Display a checkbox to input the values false or true in the graphical user interface.";
+                  // TODO: how to handle choice?
+                end choices;"""
 
-            @external('.OpenModelica.AutoCompletion.Annotations.derivative')
+                checkBox: bool
+            @external(".OpenModelica.AutoCompletion.Annotations.derivative")
             @dataclass
             class derivative(record):
                 """record derivative
-  Integer order = 1;
-  String noDerivative;
-  String zeroDerivative;
-end derivative;"""
+                  Integer order = 1;
+                  String noDerivative;
+                  String zeroDerivative;
+                end derivative;"""
+
                 order: int
                 noDerivative: str
                 zeroDerivative: str
-
-            @external('.OpenModelica.AutoCompletion.Annotations.__OpenModelica_commandLineOptions')
+            @external(
+                ".OpenModelica.AutoCompletion.Annotations.__OpenModelica_commandLineOptions"
+            )
             @dataclass
             class __OpenModelica_commandLineOptions(record):
                 """record __OpenModelica_commandLineOptions
-end __OpenModelica_commandLineOptions;"""
+                end __OpenModelica_commandLineOptions;"""
 
-            @external('.OpenModelica.AutoCompletion.Annotations.__OpenModelica_simulationFlags')
+            @external(
+                ".OpenModelica.AutoCompletion.Annotations.__OpenModelica_simulationFlags"
+            )
             @dataclass
             class __OpenModelica_simulationFlags(record):
                 """record __OpenModelica_simulationFlags
-end __OpenModelica_simulationFlags;"""
+                end __OpenModelica_simulationFlags;"""
 
 class Session(BasicSession):
     OpenModelica = OpenModelica
@@ -4455,7 +4935,9 @@ class Session(BasicSession):
     loadString = OpenModelica.Scripting.loadString
     parseString = OpenModelica.Scripting.parseString
     parseFile = OpenModelica.Scripting.parseFile
-    loadFileInteractiveQualified = OpenModelica.Scripting.loadFileInteractiveQualified
+    loadFileInteractiveQualified = (
+        OpenModelica.Scripting.loadFileInteractiveQualified
+    )
     loadFileInteractive = OpenModelica.Scripting.loadFileInteractive
     system = OpenModelica.Scripting.system
     system_parallel = OpenModelica.Scripting.system_parallel
@@ -4467,8 +4949,12 @@ class Session(BasicSession):
     generateHeader = OpenModelica.Scripting.generateHeader
     generateJuliaHeader = OpenModelica.Scripting.generateJuliaHeader
     generateSeparateCode = OpenModelica.Scripting.generateSeparateCode
-    generateSeparateCodeDependencies = OpenModelica.Scripting.generateSeparateCodeDependencies
-    generateSeparateCodeDependenciesMakefile = OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile
+    generateSeparateCodeDependencies = (
+        OpenModelica.Scripting.generateSeparateCodeDependencies
+    )
+    generateSeparateCodeDependenciesMakefile = (
+        OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile
+    )
     getLinker = OpenModelica.Scripting.getLinker
     setLinker = OpenModelica.Scripting.setLinker
     getLinkerFlags = OpenModelica.Scripting.getLinkerFlags
@@ -4490,8 +4976,12 @@ class Session(BasicSession):
     getEnvironmentVar = OpenModelica.Scripting.getEnvironmentVar
     setEnvironmentVar = OpenModelica.Scripting.setEnvironmentVar
     appendEnvironmentVar = OpenModelica.Scripting.appendEnvironmentVar
-    setInstallationDirectoryPath = OpenModelica.Scripting.setInstallationDirectoryPath
-    getInstallationDirectoryPath = OpenModelica.Scripting.getInstallationDirectoryPath
+    setInstallationDirectoryPath = (
+        OpenModelica.Scripting.setInstallationDirectoryPath
+    )
+    getInstallationDirectoryPath = (
+        OpenModelica.Scripting.getInstallationDirectoryPath
+    )
     setModelicaPath = OpenModelica.Scripting.setModelicaPath
     getModelicaPath = OpenModelica.Scripting.getModelicaPath
     setCompilerFlags = OpenModelica.Scripting.setCompilerFlags
@@ -4500,20 +4990,30 @@ class Session(BasicSession):
     setDebugFlags = OpenModelica.Scripting.setDebugFlags
     clearDebugFlags = OpenModelica.Scripting.clearDebugFlags
     setPreOptModules = OpenModelica.Scripting.setPreOptModules
-    setCheapMatchingAlgorithm = OpenModelica.Scripting.setCheapMatchingAlgorithm
+    setCheapMatchingAlgorithm = (
+        OpenModelica.Scripting.setCheapMatchingAlgorithm
+    )
     getMatchingAlgorithm = OpenModelica.Scripting.getMatchingAlgorithm
-    getAvailableMatchingAlgorithms = OpenModelica.Scripting.getAvailableMatchingAlgorithms
+    getAvailableMatchingAlgorithms = (
+        OpenModelica.Scripting.getAvailableMatchingAlgorithms
+    )
     setMatchingAlgorithm = OpenModelica.Scripting.setMatchingAlgorithm
     getIndexReductionMethod = OpenModelica.Scripting.getIndexReductionMethod
-    getAvailableIndexReductionMethods = OpenModelica.Scripting.getAvailableIndexReductionMethods
+    getAvailableIndexReductionMethods = (
+        OpenModelica.Scripting.getAvailableIndexReductionMethods
+    )
     setIndexReductionMethod = OpenModelica.Scripting.setIndexReductionMethod
     setPostOptModules = OpenModelica.Scripting.setPostOptModules
     getTearingMethod = OpenModelica.Scripting.getTearingMethod
-    getAvailableTearingMethods = OpenModelica.Scripting.getAvailableTearingMethods
+    getAvailableTearingMethods = (
+        OpenModelica.Scripting.getAvailableTearingMethods
+    )
     setTearingMethod = OpenModelica.Scripting.setTearingMethod
     setCommandLineOptions = OpenModelica.Scripting.setCommandLineOptions
     getCommandLineOptions = OpenModelica.Scripting.getCommandLineOptions
-    getConfigFlagValidOptions = OpenModelica.Scripting.getConfigFlagValidOptions
+    getConfigFlagValidOptions = (
+        OpenModelica.Scripting.getConfigFlagValidOptions
+    )
     clearCommandLineOptions = OpenModelica.Scripting.clearCommandLineOptions
     getVersion = OpenModelica.Scripting.getVersion
     regularFileExists = OpenModelica.Scripting.regularFileExists
@@ -4530,7 +5030,9 @@ class Session(BasicSession):
     readFileNoNumeric = OpenModelica.Scripting.readFileNoNumeric
     getErrorString = OpenModelica.Scripting.getErrorString
     getMessagesString = OpenModelica.Scripting.getMessagesString
-    getMessagesStringInternal = OpenModelica.Scripting.getMessagesStringInternal
+    getMessagesStringInternal = (
+        OpenModelica.Scripting.getMessagesStringInternal
+    )
     countMessages = OpenModelica.Scripting.countMessages
     clearMessages = OpenModelica.Scripting.clearMessages
     runScript = OpenModelica.Scripting.runScript
@@ -4582,7 +5084,9 @@ class Session(BasicSession):
     diffModelicaFileListings = OpenModelica.Scripting.diffModelicaFileListings
     exportToFigaro = OpenModelica.Scripting.exportToFigaro
     inferBindings = OpenModelica.Scripting.inferBindings
-    generateVerificationScenarios = OpenModelica.Scripting.generateVerificationScenarios
+    generateVerificationScenarios = (
+        OpenModelica.Scripting.generateVerificationScenarios
+    )
     rewriteBlockCall = OpenModelica.Scripting.rewriteBlockCall
     realpath = OpenModelica.Scripting.realpath
     uriToFilename = OpenModelica.Scripting.uriToFilename
@@ -4590,7 +5094,9 @@ class Session(BasicSession):
     solveLinearSystem = OpenModelica.Scripting.solveLinearSystem
     reopenStandardStream = OpenModelica.Scripting.reopenStandardStream
     importFMU = OpenModelica.Scripting.importFMU
-    importFMUModelDescription = OpenModelica.Scripting.importFMUModelDescription
+    importFMUModelDescription = (
+        OpenModelica.Scripting.importFMUModelDescription
+    )
     translateModelFMU = OpenModelica.Scripting.translateModelFMU
     buildModelFMU = OpenModelica.Scripting.buildModelFMU
     buildEncryptedPackage = OpenModelica.Scripting.buildEncryptedPackage
@@ -4623,24 +5129,38 @@ class Session(BasicSession):
     compareSimulationResults = OpenModelica.Scripting.compareSimulationResults
     deltaSimulationResults = OpenModelica.Scripting.deltaSimulationResults
     diffSimulationResults = OpenModelica.Scripting.diffSimulationResults
-    diffSimulationResultsHtml = OpenModelica.Scripting.diffSimulationResultsHtml
+    diffSimulationResultsHtml = (
+        OpenModelica.Scripting.diffSimulationResultsHtml
+    )
     checkTaskGraph = OpenModelica.Scripting.checkTaskGraph
     checkCodeGraph = OpenModelica.Scripting.checkCodeGraph
     val = OpenModelica.Scripting.val
-    closeSimulationResultFile = OpenModelica.Scripting.closeSimulationResultFile
+    closeSimulationResultFile = (
+        OpenModelica.Scripting.closeSimulationResultFile
+    )
     getParameterNames = OpenModelica.Scripting.getParameterNames
     getParameterValue = OpenModelica.Scripting.getParameterValue
-    getComponentModifierNames = OpenModelica.Scripting.getComponentModifierNames
-    getComponentModifierValue = OpenModelica.Scripting.getComponentModifierValue
-    getComponentModifierValues = OpenModelica.Scripting.getComponentModifierValues
+    getComponentModifierNames = (
+        OpenModelica.Scripting.getComponentModifierNames
+    )
+    getComponentModifierValue = (
+        OpenModelica.Scripting.getComponentModifierValue
+    )
+    getComponentModifierValues = (
+        OpenModelica.Scripting.getComponentModifierValues
+    )
     removeComponentModifiers = OpenModelica.Scripting.removeComponentModifiers
     getElementModifierNames = OpenModelica.Scripting.getElementModifierNames
     getElementModifierValue = OpenModelica.Scripting.getElementModifierValue
     getElementModifierValues = OpenModelica.Scripting.getElementModifierValues
     removeElementModifiers = OpenModelica.Scripting.removeElementModifiers
-    getInstantiatedParametersAndValues = OpenModelica.Scripting.getInstantiatedParametersAndValues
+    getInstantiatedParametersAndValues = (
+        OpenModelica.Scripting.getInstantiatedParametersAndValues
+    )
     removeExtendsModifiers = OpenModelica.Scripting.removeExtendsModifiers
-    updateConnectionAnnotation = OpenModelica.Scripting.updateConnectionAnnotation
+    updateConnectionAnnotation = (
+        OpenModelica.Scripting.updateConnectionAnnotation
+    )
     updateConnectionNames = OpenModelica.Scripting.updateConnectionNames
     getConnectionCount = OpenModelica.Scripting.getConnectionCount
     getNthConnection = OpenModelica.Scripting.getNthConnection
@@ -4650,23 +5170,35 @@ class Session(BasicSession):
     getNthInitialAlgorithm = OpenModelica.Scripting.getNthInitialAlgorithm
     getAlgorithmItemsCount = OpenModelica.Scripting.getAlgorithmItemsCount
     getNthAlgorithmItem = OpenModelica.Scripting.getNthAlgorithmItem
-    getInitialAlgorithmItemsCount = OpenModelica.Scripting.getInitialAlgorithmItemsCount
-    getNthInitialAlgorithmItem = OpenModelica.Scripting.getNthInitialAlgorithmItem
+    getInitialAlgorithmItemsCount = (
+        OpenModelica.Scripting.getInitialAlgorithmItemsCount
+    )
+    getNthInitialAlgorithmItem = (
+        OpenModelica.Scripting.getNthInitialAlgorithmItem
+    )
     getEquationCount = OpenModelica.Scripting.getEquationCount
     getNthEquation = OpenModelica.Scripting.getNthEquation
     getInitialEquationCount = OpenModelica.Scripting.getInitialEquationCount
     getNthInitialEquation = OpenModelica.Scripting.getNthInitialEquation
     getEquationItemsCount = OpenModelica.Scripting.getEquationItemsCount
     getNthEquationItem = OpenModelica.Scripting.getNthEquationItem
-    getInitialEquationItemsCount = OpenModelica.Scripting.getInitialEquationItemsCount
-    getNthInitialEquationItem = OpenModelica.Scripting.getNthInitialEquationItem
+    getInitialEquationItemsCount = (
+        OpenModelica.Scripting.getInitialEquationItemsCount
+    )
+    getNthInitialEquationItem = (
+        OpenModelica.Scripting.getNthInitialEquationItem
+    )
     getAnnotationCount = OpenModelica.Scripting.getAnnotationCount
     getNthAnnotationString = OpenModelica.Scripting.getNthAnnotationString
     getImportCount = OpenModelica.Scripting.getImportCount
     getNthImport = OpenModelica.Scripting.getNthImport
     iconv = OpenModelica.Scripting.iconv
-    getDocumentationAnnotation = OpenModelica.Scripting.getDocumentationAnnotation
-    setDocumentationAnnotation = OpenModelica.Scripting.setDocumentationAnnotation
+    getDocumentationAnnotation = (
+        OpenModelica.Scripting.getDocumentationAnnotation
+    )
+    setDocumentationAnnotation = (
+        OpenModelica.Scripting.setDocumentationAnnotation
+    )
     getTimeStamp = OpenModelica.Scripting.getTimeStamp
     stringTypeName = OpenModelica.Scripting.stringTypeName
     stringVariableName = OpenModelica.Scripting.stringVariableName
@@ -4698,10 +5230,16 @@ class Session(BasicSession):
     getComponentsTest = OpenModelica.Scripting.getComponentsTest
     isExperiment = OpenModelica.Scripting.isExperiment
     getSimulationOptions = OpenModelica.Scripting.getSimulationOptions
-    getAnnotationNamedModifiers = OpenModelica.Scripting.getAnnotationNamedModifiers
-    getAnnotationModifierValue = OpenModelica.Scripting.getAnnotationModifierValue
+    getAnnotationNamedModifiers = (
+        OpenModelica.Scripting.getAnnotationNamedModifiers
+    )
+    getAnnotationModifierValue = (
+        OpenModelica.Scripting.getAnnotationModifierValue
+    )
     classAnnotationExists = OpenModelica.Scripting.classAnnotationExists
-    getBooleanClassAnnotation = OpenModelica.Scripting.getBooleanClassAnnotation
+    getBooleanClassAnnotation = (
+        OpenModelica.Scripting.getBooleanClassAnnotation
+    )
     extendsFrom = OpenModelica.Scripting.extendsFrom
     loadModelica3D = OpenModelica.Scripting.loadModelica3D
     searchClassNames = OpenModelica.Scripting.searchClassNames
@@ -4710,9 +5248,15 @@ class Session(BasicSession):
     updatePackageIndex = OpenModelica.Scripting.updatePackageIndex
     upgradeInstalledPackages = OpenModelica.Scripting.upgradeInstalledPackages
     getUses = OpenModelica.Scripting.getUses
-    getConversionsFromVersions = OpenModelica.Scripting.getConversionsFromVersions
-    getDerivedClassModifierNames = OpenModelica.Scripting.getDerivedClassModifierNames
-    getDerivedClassModifierValue = OpenModelica.Scripting.getDerivedClassModifierValue
+    getConversionsFromVersions = (
+        OpenModelica.Scripting.getConversionsFromVersions
+    )
+    getDerivedClassModifierNames = (
+        OpenModelica.Scripting.getDerivedClassModifierNames
+    )
+    getDerivedClassModifierValue = (
+        OpenModelica.Scripting.getDerivedClassModifierValue
+    )
     generateEntryPoint = OpenModelica.Scripting.generateEntryPoint
     numProcessors = OpenModelica.Scripting.numProcessors
     runScriptParallel = OpenModelica.Scripting.runScriptParallel
@@ -4738,25 +5282,39 @@ class Session(BasicSession):
     oms_addConnector = OpenModelica.Scripting.oms_addConnector
     oms_addConnectorToBus = OpenModelica.Scripting.oms_addConnectorToBus
     oms_addConnectorToTLMBus = OpenModelica.Scripting.oms_addConnectorToTLMBus
-    oms_addDynamicValueIndicator = OpenModelica.Scripting.oms_addDynamicValueIndicator
+    oms_addDynamicValueIndicator = (
+        OpenModelica.Scripting.oms_addDynamicValueIndicator
+    )
     oms_addEventIndicator = OpenModelica.Scripting.oms_addEventIndicator
     oms_addExternalModel = OpenModelica.Scripting.oms_addExternalModel
     oms_addSignalsToResults = OpenModelica.Scripting.oms_addSignalsToResults
-    oms_addStaticValueIndicator = OpenModelica.Scripting.oms_addStaticValueIndicator
+    oms_addStaticValueIndicator = (
+        OpenModelica.Scripting.oms_addStaticValueIndicator
+    )
     oms_addSubModel = OpenModelica.Scripting.oms_addSubModel
     oms_addSystem = OpenModelica.Scripting.oms_addSystem
     oms_addTimeIndicator = OpenModelica.Scripting.oms_addTimeIndicator
     oms_addTLMBus = OpenModelica.Scripting.oms_addTLMBus
     oms_addTLMConnection = OpenModelica.Scripting.oms_addTLMConnection
-    oms_cancelSimulation_asynchronous = OpenModelica.Scripting.oms_cancelSimulation_asynchronous
-    oms_compareSimulationResults = OpenModelica.Scripting.oms_compareSimulationResults
+    oms_cancelSimulation_asynchronous = (
+        OpenModelica.Scripting.oms_cancelSimulation_asynchronous
+    )
+    oms_compareSimulationResults = (
+        OpenModelica.Scripting.oms_compareSimulationResults
+    )
     oms_copySystem = OpenModelica.Scripting.oms_copySystem
     oms_delete = OpenModelica.Scripting.oms_delete
     oms_deleteConnection = OpenModelica.Scripting.oms_deleteConnection
-    oms_deleteConnectorFromBus = OpenModelica.Scripting.oms_deleteConnectorFromBus
-    oms_deleteConnectorFromTLMBus = OpenModelica.Scripting.oms_deleteConnectorFromTLMBus
+    oms_deleteConnectorFromBus = (
+        OpenModelica.Scripting.oms_deleteConnectorFromBus
+    )
+    oms_deleteConnectorFromTLMBus = (
+        OpenModelica.Scripting.oms_deleteConnectorFromTLMBus
+    )
     oms_export = OpenModelica.Scripting.oms_export
-    oms_exportDependencyGraphs = OpenModelica.Scripting.oms_exportDependencyGraphs
+    oms_exportDependencyGraphs = (
+        OpenModelica.Scripting.oms_exportDependencyGraphs
+    )
     oms_exportSnapshot = OpenModelica.Scripting.oms_exportSnapshot
     oms_extractFMIKind = OpenModelica.Scripting.oms_extractFMIKind
     oms_getBoolean = OpenModelica.Scripting.oms_getBoolean
@@ -4777,11 +5335,15 @@ class Session(BasicSession):
     oms_initialize = OpenModelica.Scripting.oms_initialize
     oms_instantiate = OpenModelica.Scripting.oms_instantiate
     oms_list = OpenModelica.Scripting.oms_list
-    oms_listUnconnectedConnectors = OpenModelica.Scripting.oms_listUnconnectedConnectors
+    oms_listUnconnectedConnectors = (
+        OpenModelica.Scripting.oms_listUnconnectedConnectors
+    )
     oms_loadSnapshot = OpenModelica.Scripting.oms_loadSnapshot
     oms_newModel = OpenModelica.Scripting.oms_newModel
     oms_parseModelName = OpenModelica.Scripting.oms_parseModelName
-    oms_removeSignalsFromResults = OpenModelica.Scripting.oms_removeSignalsFromResults
+    oms_removeSignalsFromResults = (
+        OpenModelica.Scripting.oms_removeSignalsFromResults
+    )
     oms_rename = OpenModelica.Scripting.oms_rename
     oms_reset = OpenModelica.Scripting.oms_reset
     oms_RunFile = OpenModelica.Scripting.oms_RunFile
@@ -4793,14 +5355,18 @@ class Session(BasicSession):
     oms_setLoggingInterval = OpenModelica.Scripting.oms_setLoggingInterval
     oms_setLoggingLevel = OpenModelica.Scripting.oms_setLoggingLevel
     oms_setReal = OpenModelica.Scripting.oms_setReal
-    oms_setRealInputDerivative = OpenModelica.Scripting.oms_setRealInputDerivative
+    oms_setRealInputDerivative = (
+        OpenModelica.Scripting.oms_setRealInputDerivative
+    )
     oms_setResultFile = OpenModelica.Scripting.oms_setResultFile
     oms_setSignalFilter = OpenModelica.Scripting.oms_setSignalFilter
     oms_setSolver = OpenModelica.Scripting.oms_setSolver
     oms_setStartTime = OpenModelica.Scripting.oms_setStartTime
     oms_setStopTime = OpenModelica.Scripting.oms_setStopTime
     oms_setTempDirectory = OpenModelica.Scripting.oms_setTempDirectory
-    oms_setTLMPositionAndOrientation = OpenModelica.Scripting.oms_setTLMPositionAndOrientation
+    oms_setTLMPositionAndOrientation = (
+        OpenModelica.Scripting.oms_setTLMPositionAndOrientation
+    )
     oms_setTLMSocketData = OpenModelica.Scripting.oms_setTLMSocketData
     oms_setTolerance = OpenModelica.Scripting.oms_setTolerance
     oms_setVariableStepSize = OpenModelica.Scripting.oms_setVariableStepSize
