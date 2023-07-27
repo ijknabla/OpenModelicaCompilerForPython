@@ -61,7 +61,7 @@ def _external(obj: _T, class_name: str) -> _T:
     ):
         obj.__omc_class__ = TypeName(class_name)
         return obj  # type: ignore
-    elif isinstance(obj, staticmethod):
+    elif isinstance(obj, classmethod):
         return _create_function(class_name, obj.__func__)  # type: ignore
 
     raise NotImplementedError(obj)
@@ -73,7 +73,8 @@ def _create_function(
     from .parser import parse
 
     @wraps(f)
-    def _wrapped(self: Any, *args: Any, **kwargs: Any) -> Any:
+    def _wrapped(_: Any, *args: Any, **kwargs: Any) -> Any:
+        self = _
         if not isinstance(self, SupportsInteractiveProperty):
             raise ValueError(f"{self} is not SupportsInteractiveProperty")
 
@@ -106,7 +107,11 @@ def _get_argument(f: Callable[..., Any], *args: Any, **kwargs: Any) -> str:
     paraphrases = _get_paraphrases(signature)
 
     def _iter_arguments() -> Generator[str, None, None]:
-        for key, value in signature.bind(*args, **kwargs).arguments.items():
+        for key, value in signature.bind(
+            None, *args, **kwargs
+        ).arguments.items():
+            if value is None:
+                continue
             name = paraphrases[key]
             literal = to_omc_literal(cast(type_hints[key], value))
 

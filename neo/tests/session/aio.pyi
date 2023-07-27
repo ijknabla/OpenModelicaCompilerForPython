@@ -5,44 +5,44 @@ from . import one
 
 class Session(neo.session.aio.Session):
     @external(".OpenModelica.Scripting.loadFile")
-    @staticmethod
-    async def loadFile(fileName: str) -> bool:
+    @classmethod
+    async def loadFile(_, fileName: str) -> bool:
         raise NotImplementedError()
 
 class EmptySession(Session):
     @external(".empty")
-    @staticmethod
-    async def empty() -> None:
+    @classmethod
+    async def empty(_) -> None:
         raise NotImplementedError()
 
 class OneSession(Session):
     @external(".one")
-    @staticmethod
-    async def one() -> one:
+    @classmethod
+    async def one(_) -> one:
         raise NotImplementedError()
 
 @external(".Nested")
 class Nested(package):
     @external(".Nested.level")
-    @staticmethod
-    async def level() -> int:
+    @classmethod
+    async def level(_) -> int:
         raise NotImplementedError()
     @external(".Nested.Nested")
     class Nested(package):
         @external(".Nested.Nested.level")
-        @staticmethod
-        async def level() -> int:
+        @classmethod
+        async def level(_) -> int:
             raise NotImplementedError()
         @external(".Nested.Nested.Nested")
         class Nested(package):
             @external(".Nested.Nested.Nested.level")
-            @staticmethod
-            async def level() -> int:
+            @classmethod
+            async def level(_) -> int:
                 raise NotImplementedError()
 
 class NestedSession(Session):
     Nested = Nested
 
-    level_1 = staticmethod(Nested.level)
-    level_2 = staticmethod(Nested.Nested.level)
-    level_3 = staticmethod(Nested.Nested.Nested.level)
+    level_1 = classmethod(Nested.level)
+    level_2 = classmethod(Nested.Nested.level)
+    level_3 = classmethod(Nested.Nested.Nested.level)

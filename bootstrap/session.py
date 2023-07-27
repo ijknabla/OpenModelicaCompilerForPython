@@ -7,18 +7,21 @@ from neo.modelica import external
 
 class Session(neo.session.aio.Session):
     @external(".OpenModelica.Scripting.getVersion")
-    @staticmethod
-    async def getVersion() -> str:
+    @classmethod
+    async def getVersion(_) -> str:
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.list")
-    @staticmethod
-    async def list(class_: Union[TypeName, str], interfaceOnly: bool) -> str:
+    @classmethod
+    async def list(
+        _, class_: Union[TypeName, str], interfaceOnly: bool
+    ) -> str:
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.getClassNames")
-    @staticmethod
+    @classmethod
     async def getClassNames(
+        _,
         class_: Union[TypeName, str],
         builtin: bool,
         showProtected: bool,
@@ -26,31 +29,31 @@ class Session(neo.session.aio.Session):
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.getClassRestriction")
-    @staticmethod
-    async def getClassRestriction(cl: Union[TypeName, str]) -> str:
+    @classmethod
+    async def getClassRestriction(_, cl: Union[TypeName, str]) -> str:
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.isType")
-    @staticmethod
-    async def isType(cl: Union[TypeName, str]) -> bool:
+    @classmethod
+    async def isType(_, cl: Union[TypeName, str]) -> bool:
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.isPackage")
-    @staticmethod
-    async def isPackage(cl: Union[TypeName, str]) -> bool:
+    @classmethod
+    async def isPackage(_, cl: Union[TypeName, str]) -> bool:
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.isRecord")
-    @staticmethod
-    async def isRecord(cl: Union[TypeName, str]) -> bool:
+    @classmethod
+    async def isRecord(_, cl: Union[TypeName, str]) -> bool:
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.isFunction")
-    @staticmethod
-    async def isFunction(cl: Union[TypeName, str]) -> bool:
+    @classmethod
+    async def isFunction(_, cl: Union[TypeName, str]) -> bool:
         raise NotImplementedError()
 
     @external(".OpenModelica.Scripting.isEnumeration")
-    @staticmethod
-    async def isEnumeration(cl: Union[TypeName, str]) -> bool:
+    @classmethod
+    async def isEnumeration(_, cl: Union[TypeName, str]) -> bool:
         raise NotImplementedError()

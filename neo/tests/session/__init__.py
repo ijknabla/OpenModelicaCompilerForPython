@@ -6,15 +6,15 @@ from neo.modelica import enumeration, external, package
 
 class Session(neo.session.Session):
     @external(".OpenModelica.Scripting.loadFile")
-    @staticmethod
-    def loadFile(fileName: str) -> bool:
+    @classmethod
+    def loadFile(_, fileName: str) -> bool:
         raise NotImplementedError()
 
 
 class EmptySession(Session):
     @external(".empty")
-    @staticmethod
-    def empty() -> None:
+    @classmethod
+    def empty(_) -> None:
         raise NotImplementedError()
 
 
@@ -33,30 +33,30 @@ class one(NamedTuple):
 
 class OneSession(Session):
     @external(".one")
-    @staticmethod
-    def one() -> one:
+    @classmethod
+    def one(_) -> one:
         raise NotImplementedError()
 
 
 @external(".Nested")
 class Nested(package):
     @external(".Nested.level")
-    @staticmethod
-    def level() -> int:
+    @classmethod
+    def level(_) -> int:
         raise NotImplementedError()
 
     @external(".Nested.Nested")
     class Nested(package):
         @external(".Nested.Nested.level")
-        @staticmethod
-        def level() -> int:
+        @classmethod
+        def level(_) -> int:
             raise NotImplementedError()
 
         @external(".Nested.Nested.Nested")
         class Nested(package):
             @external(".Nested.Nested.Nested.level")
-            @staticmethod
-            def level() -> int:
+            @classmethod
+            def level(_) -> int:
                 raise NotImplementedError()
 
 
@@ -64,9 +64,9 @@ class NestedSession(Session):
     Nested = Nested
 
     if TYPE_CHECKING:
-        level_1 = staticmethod(Nested.level)
-        level_2 = staticmethod(Nested.Nested.level)
-        level_3 = staticmethod(Nested.Nested.Nested.level)
+        level_1 = classmethod(Nested.level)
+        level_2 = classmethod(Nested.Nested.level)
+        level_3 = classmethod(Nested.Nested.Nested.level)
     else:
         level_1 = Nested.level
         level_2 = Nested.Nested.level
