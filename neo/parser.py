@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import enum
 import sys
-from collections.abc import Callable, Iterable, Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterable, TypeVar, Union
 from typing import cast as typing_cast
 
 from arpeggio import (
@@ -338,36 +338,21 @@ class Syntax(v3_5.Syntax):
 
     @classmethod
     @returns_parsing_expression
-    def string(cls) -> ParsingExpressionLike:
-        return cls.STRING
-
-    @classmethod
-    @returns_parsing_expression
-    def variablename(cls) -> ParsingExpressionLike:
-        return cls.IDENT
-
-    @classmethod
-    @returns_parsing_expression
-    def typename(cls) -> ParsingExpressionLike:
-        return cls.type_specifier
-
-    @classmethod
-    @returns_parsing_expression
     def component(cls) -> ParsingExpressionLike:
         return (
             "{",
             (
-                *(cls.typename, ","),  # className
-                *(cls.variablename, ","),  # name
-                *(cls.string, ","),  # comment
-                *(cls.string, ","),  # protected
+                *(cls.type_specifier, ","),  # className
+                *(cls.IDENT, ","),  # name
+                *(cls.STRING, ","),  # comment
+                *(cls.STRING, ","),  # protected
                 *(cls.boolean, ","),  # isFinal
                 *(cls.boolean, ","),  # isFlow
                 *(cls.boolean, ","),  # isStream
                 *(cls.boolean, ","),  # isReplaceable
-                *(cls.string, ","),  # variability
-                *(cls.string, ","),  # innerOuter
-                *(cls.string, ","),  # inputOutput
+                *(cls.STRING, ","),  # variability
+                *(cls.STRING, ","),  # innerOuter
+                *(cls.STRING, ","),  # inputOutput
                 cls.subscript_list,  # dimensions
             ),
             "}",
@@ -452,7 +437,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def string_primary(cls) -> ParsingExpressionLike:
-        return [cls.string, cls.string_array]
+        return [cls.STRING, cls.string_array]
 
     @classmethod
     @returns_parsing_expression
@@ -462,7 +447,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def variablename_primary(cls) -> ParsingExpressionLike:
-        return [cls.variablename, cls.variablename_array]
+        return [cls.IDENT, cls.variablename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -472,7 +457,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def typename_primary(cls) -> ParsingExpressionLike:
-        return [cls.typename, cls.typename_array]
+        return [cls.type_specifier, cls.typename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -505,20 +490,26 @@ if TYPE_CHECKING:
     BooleanPrimary = list[bool] | list[list[bool]]
     StringPrimary = list[str] | list[list[str]]
     TuplePrimary = list[tuple[Any, ...]] | list[list[tuple[Any, ...]]]
+else:
+    AnyPrimary = ...
+    BooleanPrimary = ...
+    StringPrimary = ...
+    TuplePrimary = ...
 
-    class Children(Protocol, Iterable[Any]):
-        IDENT: list[str]
-        real_primary: StringPrimary
-        integer_primary: StringPrimary
-        boolean_primary: BooleanPrimary
-        string_primary: StringPrimary
-        variablename_primary: StringPrimary
-        typename_primary: StringPrimary
-        component_primary: TuplePrimary
-        record_primary: AnyPrimary
-        record_element: list[tuple[str, Any]]
-        record_expression: list[Any]
-        subscript: list[str]
+
+class Children(Protocol, Iterable[Any]):
+    IDENT: list[str]
+    real_primary: StringPrimary
+    integer_primary: StringPrimary
+    boolean_primary: BooleanPrimary
+    string_primary: StringPrimary
+    variablename_primary: StringPrimary
+    typename_primary: StringPrimary
+    component_primary: TuplePrimary
+    record_primary: AnyPrimary
+    record_element: list[tuple[str, Any]]
+    record_expression: list[Any]
+    subscript: list[str]
 
 
 class Visitor(PTNodeVisitor):
@@ -557,7 +548,7 @@ class Visitor(PTNodeVisitor):
     ) -> BooleanPrimary:
         return children.boolean_primary
 
-    def visit_string(self, node: Terminal, _: Never) -> str:
+    def visit_STRING(self, node: Terminal, _: Never) -> str:
         return unquote_modelica_string(node.flat_str())
 
     def visit_string_array(
@@ -565,7 +556,7 @@ class Visitor(PTNodeVisitor):
     ) -> StringPrimary:
         return children.string_primary
 
-    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
+    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_variablename_array(
@@ -573,7 +564,7 @@ class Visitor(PTNodeVisitor):
     ) -> StringPrimary:
         return children.variablename_primary
 
-    def visit_typename(self, node: NonTerminal, _: Never) -> str:
+    def visit_type_specifier(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_typename_array(
