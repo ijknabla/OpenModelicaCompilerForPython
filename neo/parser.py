@@ -338,16 +338,11 @@ class Syntax(v3_5.Syntax):
 
     @classmethod
     @returns_parsing_expression
-    def typename(cls) -> ParsingExpressionLike:
-        return cls.type_specifier
-
-    @classmethod
-    @returns_parsing_expression
     def component(cls) -> ParsingExpressionLike:
         return (
             "{",
             (
-                *(cls.typename, ","),  # className
+                *(cls.type_specifier, ","),  # className
                 *(cls.IDENT, ","),  # name
                 *(cls.STRING, ","),  # comment
                 *(cls.STRING, ","),  # protected
@@ -462,7 +457,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def typename_primary(cls) -> ParsingExpressionLike:
-        return [cls.typename, cls.typename_array]
+        return [cls.type_specifier, cls.typename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -563,7 +558,7 @@ class Visitor(PTNodeVisitor):
     ) -> StringPrimary:
         return children.variablename_primary
 
-    def visit_typename(self, node: NonTerminal, _: Never) -> str:
+    def visit_type_specifier(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_typename_array(
