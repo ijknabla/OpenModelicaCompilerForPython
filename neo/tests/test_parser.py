@@ -115,7 +115,7 @@ def _iter_enumeration_values(
         elif val_type is int:
             val = e.value  # type: ignore
         elif val_type is str:
-            val = e.name  # type: ignore
+            val = e.name
         else:
             raise NotImplementedError(val)
 
