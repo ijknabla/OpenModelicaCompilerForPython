@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+__all__ = ("Session",)
+
 from contextlib import closing
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, List, Union
@@ -27,7 +29,23 @@ class Session:
     def __exit__(self, *exc_info: Any) -> None:
         return closing(self).__exit__()
 
-    def getComponents(self, name: Union[TypeName, str]) -> List[Component]:
-        expression = f"getComponents({to_omc_literal(cast(TypeName, name))})"
-        literal = self.__omc_interactive__.evaluate(expression)
-        return parse(List[Component], literal)
+    if TYPE_CHECKING:
+
+        def getComponents(self, name: Union[TypeName, str]) -> List[Component]:
+            ...
+
+    else:
+
+        def getComponents(self, name):
+            expression = (
+                f"getComponents({to_omc_literal(cast(TypeName, name))})"
+            )
+            literal = self.__omc_interactive__.evaluate(expression)
+            if isinstance(literal, str):
+                return parse(List[Component], literal)
+            else:
+
+                async def getComponents():
+                    return parse(List[Component], await literal)
+
+                return getComponents()
