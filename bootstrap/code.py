@@ -40,6 +40,7 @@ from collections.abc import (
 )
 from concurrent.futures import ProcessPoolExecutor
 from functools import lru_cache
+from itertools import product
 from keyword import iskeyword
 from pathlib import PurePath
 from typing import DefaultDict, NamedTuple
@@ -68,6 +69,9 @@ async def create_code(
     loop = get_running_loop()
     with ProcessPoolExecutor() as executor:
         pending = set(
+            loop.run_in_executor(executor, _create_module, v, aio)
+            for v, aio in product(interface, [False, True])
+        ) | set(
             loop.run_in_executor(
                 executor,
                 _create_interface,
@@ -76,7 +80,7 @@ async def create_code(
                 enum_refs[v],
                 interface[v],
             )
-            for v in interface.keys()
+            for v in interface
         )
         while pending:
             done, pending = await wait(pending, return_when=FIRST_COMPLETED)
@@ -220,6 +224,46 @@ def _categorize_enumerations(
     return categories
 
 
+def _create_module(
+    version: VersionString, aio: bool
+) -> list[tuple[PurePath, Module]]:
+    if aio:
+        _all_ = ["Session"]
+        imports = [
+            ImportFrom(
+                module="_interface", names=[alias(name="Session")], level=1
+            ),
+        ]
+    else:
+        _all_ = ["Session", "aio"]
+        imports = [
+            ImportFrom(names=[alias(name="aio")], level=1),
+            ImportFrom(
+                module="_interface", names=[alias(name="Session")], level=1
+            ),
+        ]
+
+    module = Module(
+        body=[
+            Assign(
+                targets=[Name(id="__all__", ctx=Store())],
+                value=Tuple(
+                    elts=[Constant(value=item) for item in _all_], ctx=Load()
+                ),
+                lineno=None,
+            ),
+            *imports,
+        ],
+        type_ignores=[],
+    )
+
+    package_dir = PurePath(_format_version(version))
+    if aio:
+        return [(package_dir / "aio.py", module)]
+    else:
+        return [(package_dir / "__init__.py", module)]
+
+
 def _create_interface(
     version: VersionString,
     enumeration_names: list[str],
@@ -247,6 +291,8 @@ def _create_interface(
         for name in references.keys() | functions
         for parent in _parents(name)
     )
+
+    package_dir = PurePath(_format_version(version))
 
     result = []
     for aio in [False, True]:
@@ -298,7 +344,7 @@ def _create_interface(
 
             parent_body.append(statement)
 
-        init = Module(
+        interface = Module(
             body=[
                 *_iter_imports(enumeration_names, aio),
                 *module_body,
@@ -307,7 +353,7 @@ def _create_interface(
             type_ignores=[],
         )
 
-        init.body.append(
+        interface.body.append(
             ClassDef(
                 name="Session",
                 bases=[_reference("BasicSession")],
@@ -317,27 +363,10 @@ def _create_interface(
             )
         )
 
-        package = PurePath(_format_version(version))
-        result.append((package / ("aio.pyi" if aio else "__init__.py"), init))
-
-    result.append(
-        (
-            package / "aio.py",
-            Module(
-                body=[
-                    Assign(
-                        targets=[Name(id="__all__", ctx=Store())],
-                        value=Tuple(
-                            elts=[Constant(value="Session")], ctx=Load()
-                        ),
-                        lineno=None,
-                    ),
-                    ImportFrom(names=[alias(name="Session")], level=1),
-                ],
-                type_ignores=[],
-            ),
-        )
-    )
+        if aio:
+            result.append((package_dir / "aio.pyi", interface))
+        else:
+            result.append((package_dir / "_interface.py", interface))
 
     return result
 
