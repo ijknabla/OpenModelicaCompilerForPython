@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import enum
 import sys
-from collections.abc import Callable, Iterable, Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterable, TypeVar, Union
 from typing import cast as typing_cast
 
 from arpeggio import (
@@ -490,20 +490,26 @@ if TYPE_CHECKING:
     BooleanPrimary = list[bool] | list[list[bool]]
     StringPrimary = list[str] | list[list[str]]
     TuplePrimary = list[tuple[Any, ...]] | list[list[tuple[Any, ...]]]
+else:
+    AnyPrimary = ...
+    BooleanPrimary = ...
+    StringPrimary = ...
+    TuplePrimary = ...
 
-    class Children(Protocol, Iterable[Any]):
-        IDENT: list[str]
-        real_primary: StringPrimary
-        integer_primary: StringPrimary
-        boolean_primary: BooleanPrimary
-        string_primary: StringPrimary
-        variablename_primary: StringPrimary
-        typename_primary: StringPrimary
-        component_primary: TuplePrimary
-        record_primary: AnyPrimary
-        record_element: list[tuple[str, Any]]
-        record_expression: list[Any]
-        subscript: list[str]
+
+class Children(Protocol, Iterable[Any]):
+    IDENT: list[str]
+    real_primary: StringPrimary
+    integer_primary: StringPrimary
+    boolean_primary: BooleanPrimary
+    string_primary: StringPrimary
+    variablename_primary: StringPrimary
+    typename_primary: StringPrimary
+    component_primary: TuplePrimary
+    record_primary: AnyPrimary
+    record_element: list[tuple[str, Any]]
+    record_expression: list[Any]
+    subscript: list[str]
 
 
 class Visitor(PTNodeVisitor):
