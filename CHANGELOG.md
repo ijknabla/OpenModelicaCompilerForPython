@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Add Type-hints for session class
+- Support asyncio (coroutine) in session class
+
 ## [0.2.1] - 2023-02-09
 
 ### Added
