@@ -338,11 +338,6 @@ class Syntax(v3_5.Syntax):
 
     @classmethod
     @returns_parsing_expression
-    def variablename(cls) -> ParsingExpressionLike:
-        return cls.IDENT
-
-    @classmethod
-    @returns_parsing_expression
     def typename(cls) -> ParsingExpressionLike:
         return cls.type_specifier
 
@@ -353,7 +348,7 @@ class Syntax(v3_5.Syntax):
             "{",
             (
                 *(cls.typename, ","),  # className
-                *(cls.variablename, ","),  # name
+                *(cls.IDENT, ","),  # name
                 *(cls.STRING, ","),  # comment
                 *(cls.STRING, ","),  # protected
                 *(cls.boolean, ","),  # isFinal
@@ -457,7 +452,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def variablename_primary(cls) -> ParsingExpressionLike:
-        return [cls.variablename, cls.variablename_array]
+        return [cls.IDENT, cls.variablename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -560,7 +555,7 @@ class Visitor(PTNodeVisitor):
     ) -> StringPrimary:
         return children.string_primary
 
-    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
+    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_variablename_array(
