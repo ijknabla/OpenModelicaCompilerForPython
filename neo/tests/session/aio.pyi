@@ -43,6 +43,6 @@ class Nested(package):
 class NestedSession(Session):
     Nested = Nested
 
-    level_1 = classmethod(Nested.level)
-    level_2 = classmethod(Nested.Nested.level)
-    level_3 = classmethod(Nested.Nested.Nested.level)
+    level_1 = staticmethod(Nested.level)
+    level_2 = staticmethod(Nested.Nested.level)
+    level_3 = staticmethod(Nested.Nested.Nested.level)
