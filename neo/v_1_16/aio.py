@@ -1,2 +1,2 @@
 __all__ = ("Session",)
-from . import Session
+from ._interface import Session
