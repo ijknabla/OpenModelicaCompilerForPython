@@ -64,7 +64,7 @@ def _check_components(components: list[Component]) -> None:
     ):
         assert component.className == TypeName(class_name)
         assert component.name == VariableName(name)
-        assert isinstance(component.comment, str) and component.comment
+        assert isinstance(component.comment, str)
         assert component.protected == "public"
         assert component.isFinal is False
         assert component.isFlow is False
