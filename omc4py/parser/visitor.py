@@ -2,11 +2,9 @@ from __future__ import annotations
 
 import operator
 from collections.abc import Iterator, Sequence
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import TYPE_CHECKING, TypeVar, Union
 
-import numpy
 from arpeggio import NonTerminal, PTNodeVisitor, Terminal
-from numpy.typing import NDArray
 from typing_extensions import SupportsIndex
 
 from omc4py import string
@@ -16,15 +14,6 @@ if TYPE_CHECKING:
 
 
 T = TypeVar("T")
-
-
-OMCValue = Union[
-    "VariableName",
-    "TypeName",
-    NDArray[Any],
-    "tuple[Any, ...]",
-    "dict[str, Any]",
-]
 
 
 def getitem_with_default(
@@ -144,78 +133,3 @@ class StringVisitor(
 ):
     def visit_STRING(self, node: Terminal, _: object) -> str:
         return string.unquote_modelica_string(node.value)
-
-
-class OMCValueChildren(
-    TypeSpecifierChildren, NumberChildren, BooleanChildren, StringChildren
-):
-    omc_value: list[OMCValue]
-    omc_value_list: list[list[OMCValue]]
-    omc_record_element: list[tuple[str, OMCValue]]
-    omc_record_element_list: list[list[tuple[str, OMCValue]]]
-
-
-class OMCValueVisitor(
-    TypeSpecifierVisitor,
-    NumberVisitor,
-    BooleanVisitor,
-    StringVisitor,
-):
-    def visit_omc_value_list(
-        self, _: object, children: OMCValueChildren
-    ) -> list[OMCValue]:
-        return children.omc_value
-
-    def visit_omc_tuple(
-        self, _: object, children: OMCValueChildren
-    ) -> tuple[OMCValue, ...]:
-        if children.omc_value_list:
-            return tuple(children.omc_value_list[0])
-        else:
-            return tuple()
-
-    def visit_omc_array(
-        self, _: object, children: OMCValueChildren
-    ) -> NDArray[Any] | list[OMCValue]:
-        if children.omc_value_list:
-            (value_list,) = children.omc_value_list
-            return numpy.array(value_list)
-        else:
-            return list()
-
-    def visit_omc_record_element(
-        self, _: object, children: OMCValueChildren
-    ) -> tuple[str, OMCValue]:
-        (key,) = map(str, children.IDENT)
-        (value,) = children.omc_value
-        return key, value
-
-    def visit_omc_record_element_list(
-        self, _: object, children: OMCValueChildren
-    ) -> list[tuple[str, OMCValue]]:
-        return children.omc_record_element
-
-    def visit_omc_record_literal(
-        self, _: object, children: OMCValueChildren
-    ) -> dict[str, OMCValue]:
-        (elements,) = children.omc_record_element_list
-        return dict(elements)
-
-
-class OMCValueVisitor__v_1_13(OMCValueVisitor):
-    def visit_omc_record_literal(
-        self, node: object, children: OMCValueChildren
-    ) -> dict[str, OMCValue]:
-        from neo.openmodelica import TypeName
-
-        className, _ = children.type_specifier
-        record = super().visit_omc_record_literal(node, children)
-
-        if (
-            className == TypeName("OpenModelica.Scripting.SourceInfo")
-            and "filename" in record
-            and "fileName" not in record
-        ):
-            record["fileName"] = record.pop("filename")
-
-        return record

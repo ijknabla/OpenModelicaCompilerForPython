@@ -12,7 +12,7 @@ import functools
 import re
 from collections.abc import Iterator
 from functools import lru_cache
-from typing import TYPE_CHECKING, Any, NewType, Union, overload
+from typing import TYPE_CHECKING, Any, NewType, overload
 
 from arpeggio import (
     EOF,
@@ -27,12 +27,7 @@ from typing_extensions import Literal
 
 from .. import exception
 from .syntax import OMCDialectSyntax
-from .visitor import (
-    OMCValue,
-    OMCValueVisitor,
-    OMCValueVisitor__v_1_13,
-    TypeSpecifierVisitor,
-)
+from .visitor import TypeSpecifierVisitor
 
 if TYPE_CHECKING:
     from neo.openmodelica import TypeName
@@ -62,20 +57,6 @@ def parse_typeName(type_specifier: str) -> TypeName:
         )
     except NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
-
-
-def parse_OMCValue(literal: str) -> OMCValue:
-    return _visit_parse_tree(
-        _parse("omc_value", literal),
-        OMCValueVisitor(),
-    )
-
-
-def parse_OMCValue__v_1_13(literal: str) -> OMCValue:
-    return _visit_parse_tree(
-        _parse("omc_value", literal),
-        OMCValueVisitor__v_1_13(),
-    )
 
 
 def parse_OMCExceptions(
@@ -138,14 +119,6 @@ def _visit_parse_tree(
     parse_tree: TypeSpecifierParseTreeNode,
     visitor: TypeSpecifierVisitor,
 ) -> TypeName:
-    ...
-
-
-@overload
-def _visit_parse_tree(
-    parse_tree: OMCValueParseTreeNode,
-    visitor: Union[OMCValueVisitor, OMCValueVisitor__v_1_13],
-) -> OMCValue:
     ...
 
 
