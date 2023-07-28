@@ -6,7 +6,6 @@ __all__ = (
     "parse_OMCExceptions",
     "parse_OMCValue",
     "parse_typeName",
-    "parse_components",
 )
 
 import functools
@@ -29,8 +28,6 @@ from typing_extensions import Literal
 from .. import exception
 from .syntax import OMCDialectSyntax
 from .visitor import (
-    ComponentArrayVisitor,
-    ComponentTuple,
     OMCValue,
     OMCValueVisitor,
     OMCValueVisitor__v_1_13,
@@ -65,13 +62,6 @@ def parse_typeName(type_specifier: str) -> TypeName:
         )
     except NoMatch:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
-
-
-def parse_components(literal: str) -> list[ComponentTuple]:
-    return _visit_parse_tree(
-        _parse("omc_component_array", literal),
-        ComponentArrayVisitor(source=literal),
-    )
 
 
 def parse_OMCValue(literal: str) -> OMCValue:
@@ -141,14 +131,6 @@ def _get_parser(syntax: str) -> ParserPython:
 
     with OMCDialectSyntax:
         return ParserPython(_root_rule_)
-
-
-@overload
-def _visit_parse_tree(
-    parse_tree: OMCComponentArrayParseTreeNode,
-    visitor: ComponentArrayVisitor,
-) -> list[ComponentTuple]:
-    ...
 
 
 @overload

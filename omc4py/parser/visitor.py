@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import operator
 from collections.abc import Iterator, Sequence
-from typing import TYPE_CHECKING, Any, NamedTuple, TypeVar, Union
+from typing import TYPE_CHECKING, Any, TypeVar, Union
 
 import numpy
-from arpeggio import NonTerminal, ParseTreeNode, PTNodeVisitor, Terminal
+from arpeggio import NonTerminal, PTNodeVisitor, Terminal
 from numpy.typing import NDArray
 from typing_extensions import SupportsIndex
 
@@ -219,116 +219,3 @@ class OMCValueVisitor__v_1_13(OMCValueVisitor):
             record["fileName"] = record.pop("filename")
 
         return record
-
-
-class ComponentTuple(
-    NamedTuple,
-):
-    className: TypeName
-    name: VariableName
-    comment: str
-    protected: str
-    isFinal: bool
-    isFlow: bool
-    isStream: bool
-    isReplaceable: bool
-    variability: str
-    innerOuter: str
-    inputOutput: str
-    dimensions: tuple[str, ...]
-
-
-class ComponentArrayChildren(
-    BooleanChildren, StringChildren, TypeSpecifierChildren
-):
-    subscript: list[str]
-    subscript_list: list[list[str]]
-    omc_dimensions: list[tuple[str, ...]]
-    omc_component: list[ComponentTuple]
-    omc_component_list: list[list[ComponentTuple]]
-
-
-class ComponentArrayVisitor(
-    BooleanVisitor,
-    StringVisitor,
-    TypeSpecifierVisitor,
-):
-    __source: str
-
-    @property
-    def source(self) -> str:
-        return self.__source
-
-    def __init__(self, source: str):
-        super().__init__()
-        self.__source = source
-
-    def visit_omc_component_array(
-        self, _: object, children: ComponentArrayChildren
-    ) -> list[ComponentTuple]:
-        return getitem_with_default(
-            children.omc_component_list,
-            0,
-            default=[],
-        )
-
-    def visit_omc_component_list(
-        self, _: object, children: ComponentArrayChildren
-    ) -> list[ComponentTuple]:
-        return children.omc_component
-
-    def visit_omc_component(
-        self, _: object, children: ComponentArrayChildren
-    ) -> ComponentTuple:
-        (className,) = children.type_specifier
-        (name,) = children.IDENT
-        (
-            comment,
-            protected,
-            variability,
-            innerOuter,
-            inputOutput,
-        ) = children.STRING
-        (
-            isFinal,
-            isFlow,
-            isStream,
-            isReplaceable,
-        ) = children.boolean
-        (dimensions,) = children.omc_dimensions
-
-        return ComponentTuple(
-            className=className,
-            name=name,
-            comment=comment,
-            protected=protected,
-            isFinal=isFinal,
-            isFlow=isFlow,
-            isStream=isStream,
-            isReplaceable=isReplaceable,
-            variability=variability,
-            innerOuter=innerOuter,
-            inputOutput=inputOutput,
-            dimensions=dimensions,
-        )
-
-    def visit_omc_dimensions(
-        self, _: object, children: ComponentArrayChildren
-    ) -> tuple[str, ...]:
-        return tuple(
-            getitem_with_default(
-                children.subscript_list,
-                0,
-                default=[],
-            )
-        )
-
-    def visit_subscript_list(
-        self,
-        _: object,
-        children: ComponentArrayChildren,
-    ) -> list[str]:
-        return children.subscript
-
-    def visit_subscript(self, node: ParseTreeNode, _: object) -> str:
-        return self.source[node.position : node.position_end]
