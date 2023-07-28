@@ -16,6 +16,7 @@ from ast import (
     Constant,
     Expr,
     FunctionDef,
+    If,
     ImportFrom,
     Load,
     Module,
@@ -40,6 +41,7 @@ from collections.abc import (
 )
 from concurrent.futures import ProcessPoolExecutor
 from functools import lru_cache
+from itertools import product
 from keyword import iskeyword
 from pathlib import PurePath
 from typing import DefaultDict, NamedTuple
@@ -68,6 +70,9 @@ async def create_code(
     loop = get_running_loop()
     with ProcessPoolExecutor() as executor:
         pending = set(
+            loop.run_in_executor(executor, _create_module, v, aio)
+            for v, aio in product(interface, [False, True])
+        ) | set(
             loop.run_in_executor(
                 executor,
                 _create_interface,
@@ -76,7 +81,7 @@ async def create_code(
                 enum_refs[v],
                 interface[v],
             )
-            for v in interface.keys()
+            for v in interface
         )
         while pending:
             done, pending = await wait(pending, return_when=FIRST_COMPLETED)
@@ -220,6 +225,46 @@ def _categorize_enumerations(
     return categories
 
 
+def _create_module(
+    version: VersionString, aio: bool
+) -> list[tuple[PurePath, Module]]:
+    if aio:
+        _all_ = ["Session"]
+        imports = [
+            ImportFrom(
+                module="_interface", names=[alias(name="Session")], level=1
+            ),
+        ]
+    else:
+        _all_ = ["Session", "aio"]
+        imports = [
+            ImportFrom(names=[alias(name="aio")], level=1),
+            ImportFrom(
+                module="_interface", names=[alias(name="Session")], level=1
+            ),
+        ]
+
+    module = Module(
+        body=[
+            Assign(
+                targets=[Name(id="__all__", ctx=Store())],
+                value=Tuple(
+                    elts=[Constant(value=item) for item in _all_], ctx=Load()
+                ),
+                lineno=None,
+            ),
+            *imports,
+        ],
+        type_ignores=[],
+    )
+
+    package_dir = PurePath(_format_version(version))
+    if aio:
+        return [(package_dir / "aio.py", module)]
+    else:
+        return [(package_dir / "__init__.py", module)]
+
+
 def _create_interface(
     version: VersionString,
     enumeration_names: list[str],
@@ -248,11 +293,14 @@ def _create_interface(
         for parent in _parents(name)
     )
 
+    package_dir = PurePath(_format_version(version))
+
     result = []
     for aio in [False, True]:
         module_body = list[stmt]()
         package_bodies = dict[tuple[str, ...], list[stmt]]({(): []})
-        session_body = list[stmt]()
+        root_packages = list[TypeNameString]()
+        scripting_functions = list[TypeNameString]()
 
         for name, entity in entities.items():
             statement: stmt
@@ -265,7 +313,7 @@ def _create_interface(
             elif entity.get("isPackage") and name in packages:
                 statement = _create_package(name)
                 if len(_parts(name)) <= 1:
-                    session_body.append(_create_package_assign(name))
+                    root_packages.append(name)
 
             elif entity.get("isFunction") and name in functions:
                 components = entity["components"]
@@ -283,7 +331,7 @@ def _create_interface(
                 )
 
                 if _parts(name)[:-1] == ("OpenModelica", "Scripting"):
-                    session_body.append(_create_function_assign(name))
+                    scripting_functions.append(name)
 
             else:
                 continue
@@ -298,7 +346,7 @@ def _create_interface(
 
             parent_body.append(statement)
 
-        init = Module(
+        interface = Module(
             body=[
                 *_iter_imports(enumeration_names, aio),
                 *module_body,
@@ -307,37 +355,70 @@ def _create_interface(
             type_ignores=[],
         )
 
-        init.body.append(
-            ClassDef(
-                name="Session",
-                bases=[_reference("BasicSession")],
-                keywords=[],
-                body=session_body,
-                decorator_list=[],
+        session = ClassDef(
+            name="Session",
+            bases=[_reference("BasicSession")],
+            keywords=[],
+            body=[],
+            decorator_list=[],
+        )
+
+        session.body.extend(
+            (
+                _create_assign(
+                    _parts(package)[-1], _reference(*_parts(package))
+                )
+                for package in root_packages
             )
         )
 
-        package = PurePath(_format_version(version))
-        result.append((package / ("aio.pyi" if aio else "__init__.py"), init))
+        scripting_functions = [
+            (_parts(function)[-1], _reference(*_parts(function)))
+            for function in scripting_functions
+        ]
 
-    result.append(
-        (
-            package / "aio.py",
-            Module(
-                body=[
-                    Assign(
-                        targets=[Name(id="__all__", ctx=Store())],
-                        value=Tuple(
-                            elts=[Constant(value="Session")], ctx=Load()
+        if aio:
+            session.body.extend(
+                [
+                    _create_assign(
+                        name,
+                        Call(
+                            func=_reference("staticmethod"),
+                            args=[value],
+                            keywords=[],
                         ),
-                        lineno=None,
-                    ),
-                    ImportFrom(names=[alias(name="Session")], level=1),
-                ],
-                type_ignores=[],
-            ),
-        )
-    )
+                    )
+                    for name, value in scripting_functions
+                ]
+            )
+        else:
+            session.body.append(
+                If(
+                    test=_reference("TYPE_CHECKING"),
+                    body=[
+                        _create_assign(
+                            name,
+                            Call(
+                                func=_reference("staticmethod"),
+                                args=[value],
+                                keywords=[],
+                            ),
+                        )
+                        for name, value in scripting_functions
+                    ],
+                    orelse=[
+                        _create_assign(name, value)
+                        for name, value in scripting_functions
+                    ],
+                )
+            )
+
+        interface.body.append(session)
+
+        if aio:
+            result.append((package_dir / "aio.pyi", interface))
+        else:
+            result.append((package_dir / "_interface.py", interface))
 
     return result
 
@@ -359,9 +440,9 @@ def _iter_imports(
     yield ImportFrom(
         module="typing",
         names=[
-            alias(name="List"),
-            alias(name="Sequence"),
-            alias(name="Union"),
+            alias(name=name)
+            for name in ([] if aio else ["TYPE_CHECKING"])
+            + ["List", "Sequence", "Union"]
         ],
         level=0,
     )
@@ -463,14 +544,6 @@ def _create_package(name: TypeNameString) -> ClassDef:
         keywords=[],
         body=[],
         decorator_list=[_external_decorator(name)],
-    )
-
-
-def _create_package_assign(name: TypeNameString) -> Assign:
-    return Assign(
-        targets=[Name(id=_parts(name)[-1], ctx=Store())],
-        value=_reference(_parts(name)[-1]),
-        lineno=None,
     )
 
 
@@ -596,6 +669,14 @@ def _create_record(
             _external_decorator(name),
             _reference("dataclass"),
         ],
+    )
+
+
+def _create_assign(target: str, value: expr) -> Assign:
+    return Assign(
+        targets=[Name(id=target, ctx=Store())],
+        value=value,
+        lineno=None,
     )
 
 

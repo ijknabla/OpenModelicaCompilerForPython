@@ -55,7 +55,7 @@ repos:
         -   export
         -   --format=requirements.txt
         -   --without-hashes
-        -   --only=bootstrap,main,test
+        -   --only=main,test
         -   --output=requirements.test.txt
         language: system
         pass_filenames: false
