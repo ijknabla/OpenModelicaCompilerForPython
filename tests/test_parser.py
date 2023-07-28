@@ -38,11 +38,13 @@ class OneTwo(enumeration):
     Two = 2
 
 
+@external(".RecordA")
 @dataclass
 class RecordA(record):
     a: int
 
 
+@external(".RecordAB")
 @dataclass
 class RecordAB(record):
     a: int
