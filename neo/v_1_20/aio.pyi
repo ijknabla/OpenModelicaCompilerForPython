@@ -5022,469 +5022,685 @@ class OpenModelica(package):
 
 class Session(BasicSession):
     OpenModelica = OpenModelica
-    checkSettings = OpenModelica.Scripting.checkSettings
-    loadFile = OpenModelica.Scripting.loadFile
-    loadFiles = OpenModelica.Scripting.loadFiles
-    parseEncryptedPackage = OpenModelica.Scripting.parseEncryptedPackage
-    loadEncryptedPackage = OpenModelica.Scripting.loadEncryptedPackage
-    reloadClass = OpenModelica.Scripting.reloadClass
-    loadString = OpenModelica.Scripting.loadString
-    parseString = OpenModelica.Scripting.parseString
-    parseFile = OpenModelica.Scripting.parseFile
-    loadFileInteractiveQualified = (
+    checkSettings = staticmethod(OpenModelica.Scripting.checkSettings)
+    loadFile = staticmethod(OpenModelica.Scripting.loadFile)
+    loadFiles = staticmethod(OpenModelica.Scripting.loadFiles)
+    parseEncryptedPackage = staticmethod(
+        OpenModelica.Scripting.parseEncryptedPackage
+    )
+    loadEncryptedPackage = staticmethod(
+        OpenModelica.Scripting.loadEncryptedPackage
+    )
+    reloadClass = staticmethod(OpenModelica.Scripting.reloadClass)
+    loadString = staticmethod(OpenModelica.Scripting.loadString)
+    parseString = staticmethod(OpenModelica.Scripting.parseString)
+    parseFile = staticmethod(OpenModelica.Scripting.parseFile)
+    loadFileInteractiveQualified = staticmethod(
         OpenModelica.Scripting.loadFileInteractiveQualified
     )
-    loadFileInteractive = OpenModelica.Scripting.loadFileInteractive
-    system = OpenModelica.Scripting.system
-    system_parallel = OpenModelica.Scripting.system_parallel
-    saveAll = OpenModelica.Scripting.saveAll
-    help = OpenModelica.Scripting.help
-    clear = OpenModelica.Scripting.clear
-    clearProgram = OpenModelica.Scripting.clearProgram
-    clearVariables = OpenModelica.Scripting.clearVariables
-    generateHeader = OpenModelica.Scripting.generateHeader
-    generateJuliaHeader = OpenModelica.Scripting.generateJuliaHeader
-    generateSeparateCode = OpenModelica.Scripting.generateSeparateCode
-    generateSeparateCodeDependencies = (
+    loadFileInteractive = staticmethod(
+        OpenModelica.Scripting.loadFileInteractive
+    )
+    system = staticmethod(OpenModelica.Scripting.system)
+    system_parallel = staticmethod(OpenModelica.Scripting.system_parallel)
+    saveAll = staticmethod(OpenModelica.Scripting.saveAll)
+    help = staticmethod(OpenModelica.Scripting.help)
+    clear = staticmethod(OpenModelica.Scripting.clear)
+    clearProgram = staticmethod(OpenModelica.Scripting.clearProgram)
+    clearVariables = staticmethod(OpenModelica.Scripting.clearVariables)
+    generateHeader = staticmethod(OpenModelica.Scripting.generateHeader)
+    generateJuliaHeader = staticmethod(
+        OpenModelica.Scripting.generateJuliaHeader
+    )
+    generateSeparateCode = staticmethod(
+        OpenModelica.Scripting.generateSeparateCode
+    )
+    generateSeparateCodeDependencies = staticmethod(
         OpenModelica.Scripting.generateSeparateCodeDependencies
     )
-    generateSeparateCodeDependenciesMakefile = (
+    generateSeparateCodeDependenciesMakefile = staticmethod(
         OpenModelica.Scripting.generateSeparateCodeDependenciesMakefile
     )
-    getLinker = OpenModelica.Scripting.getLinker
-    setLinker = OpenModelica.Scripting.setLinker
-    getLinkerFlags = OpenModelica.Scripting.getLinkerFlags
-    setLinkerFlags = OpenModelica.Scripting.setLinkerFlags
-    getCompiler = OpenModelica.Scripting.getCompiler
-    setCompiler = OpenModelica.Scripting.setCompiler
-    setCFlags = OpenModelica.Scripting.setCFlags
-    getCFlags = OpenModelica.Scripting.getCFlags
-    getCXXCompiler = OpenModelica.Scripting.getCXXCompiler
-    setCXXCompiler = OpenModelica.Scripting.setCXXCompiler
-    verifyCompiler = OpenModelica.Scripting.verifyCompiler
-    setCompilerPath = OpenModelica.Scripting.setCompilerPath
-    getCompileCommand = OpenModelica.Scripting.getCompileCommand
-    setCompileCommand = OpenModelica.Scripting.setCompileCommand
-    setPlotCommand = OpenModelica.Scripting.setPlotCommand
-    getSettings = OpenModelica.Scripting.getSettings
-    setTempDirectoryPath = OpenModelica.Scripting.setTempDirectoryPath
-    getTempDirectoryPath = OpenModelica.Scripting.getTempDirectoryPath
-    getEnvironmentVar = OpenModelica.Scripting.getEnvironmentVar
-    setEnvironmentVar = OpenModelica.Scripting.setEnvironmentVar
-    appendEnvironmentVar = OpenModelica.Scripting.appendEnvironmentVar
-    setInstallationDirectoryPath = (
+    getLinker = staticmethod(OpenModelica.Scripting.getLinker)
+    setLinker = staticmethod(OpenModelica.Scripting.setLinker)
+    getLinkerFlags = staticmethod(OpenModelica.Scripting.getLinkerFlags)
+    setLinkerFlags = staticmethod(OpenModelica.Scripting.setLinkerFlags)
+    getCompiler = staticmethod(OpenModelica.Scripting.getCompiler)
+    setCompiler = staticmethod(OpenModelica.Scripting.setCompiler)
+    setCFlags = staticmethod(OpenModelica.Scripting.setCFlags)
+    getCFlags = staticmethod(OpenModelica.Scripting.getCFlags)
+    getCXXCompiler = staticmethod(OpenModelica.Scripting.getCXXCompiler)
+    setCXXCompiler = staticmethod(OpenModelica.Scripting.setCXXCompiler)
+    verifyCompiler = staticmethod(OpenModelica.Scripting.verifyCompiler)
+    setCompilerPath = staticmethod(OpenModelica.Scripting.setCompilerPath)
+    getCompileCommand = staticmethod(OpenModelica.Scripting.getCompileCommand)
+    setCompileCommand = staticmethod(OpenModelica.Scripting.setCompileCommand)
+    setPlotCommand = staticmethod(OpenModelica.Scripting.setPlotCommand)
+    getSettings = staticmethod(OpenModelica.Scripting.getSettings)
+    setTempDirectoryPath = staticmethod(
+        OpenModelica.Scripting.setTempDirectoryPath
+    )
+    getTempDirectoryPath = staticmethod(
+        OpenModelica.Scripting.getTempDirectoryPath
+    )
+    getEnvironmentVar = staticmethod(OpenModelica.Scripting.getEnvironmentVar)
+    setEnvironmentVar = staticmethod(OpenModelica.Scripting.setEnvironmentVar)
+    appendEnvironmentVar = staticmethod(
+        OpenModelica.Scripting.appendEnvironmentVar
+    )
+    setInstallationDirectoryPath = staticmethod(
         OpenModelica.Scripting.setInstallationDirectoryPath
     )
-    getInstallationDirectoryPath = (
+    getInstallationDirectoryPath = staticmethod(
         OpenModelica.Scripting.getInstallationDirectoryPath
     )
-    setModelicaPath = OpenModelica.Scripting.setModelicaPath
-    getModelicaPath = OpenModelica.Scripting.getModelicaPath
-    getHomeDirectoryPath = OpenModelica.Scripting.getHomeDirectoryPath
-    setCompilerFlags = OpenModelica.Scripting.setCompilerFlags
-    enableNewInstantiation = OpenModelica.Scripting.enableNewInstantiation
-    disableNewInstantiation = OpenModelica.Scripting.disableNewInstantiation
-    setDebugFlags = OpenModelica.Scripting.setDebugFlags
-    clearDebugFlags = OpenModelica.Scripting.clearDebugFlags
-    setPreOptModules = OpenModelica.Scripting.setPreOptModules
-    setCheapMatchingAlgorithm = (
+    setModelicaPath = staticmethod(OpenModelica.Scripting.setModelicaPath)
+    getModelicaPath = staticmethod(OpenModelica.Scripting.getModelicaPath)
+    getHomeDirectoryPath = staticmethod(
+        OpenModelica.Scripting.getHomeDirectoryPath
+    )
+    setCompilerFlags = staticmethod(OpenModelica.Scripting.setCompilerFlags)
+    enableNewInstantiation = staticmethod(
+        OpenModelica.Scripting.enableNewInstantiation
+    )
+    disableNewInstantiation = staticmethod(
+        OpenModelica.Scripting.disableNewInstantiation
+    )
+    setDebugFlags = staticmethod(OpenModelica.Scripting.setDebugFlags)
+    clearDebugFlags = staticmethod(OpenModelica.Scripting.clearDebugFlags)
+    setPreOptModules = staticmethod(OpenModelica.Scripting.setPreOptModules)
+    setCheapMatchingAlgorithm = staticmethod(
         OpenModelica.Scripting.setCheapMatchingAlgorithm
     )
-    getMatchingAlgorithm = OpenModelica.Scripting.getMatchingAlgorithm
-    getAvailableMatchingAlgorithms = (
+    getMatchingAlgorithm = staticmethod(
+        OpenModelica.Scripting.getMatchingAlgorithm
+    )
+    getAvailableMatchingAlgorithms = staticmethod(
         OpenModelica.Scripting.getAvailableMatchingAlgorithms
     )
-    setMatchingAlgorithm = OpenModelica.Scripting.setMatchingAlgorithm
-    getIndexReductionMethod = OpenModelica.Scripting.getIndexReductionMethod
-    getAvailableIndexReductionMethods = (
+    setMatchingAlgorithm = staticmethod(
+        OpenModelica.Scripting.setMatchingAlgorithm
+    )
+    getIndexReductionMethod = staticmethod(
+        OpenModelica.Scripting.getIndexReductionMethod
+    )
+    getAvailableIndexReductionMethods = staticmethod(
         OpenModelica.Scripting.getAvailableIndexReductionMethods
     )
-    setIndexReductionMethod = OpenModelica.Scripting.setIndexReductionMethod
-    setPostOptModules = OpenModelica.Scripting.setPostOptModules
-    getTearingMethod = OpenModelica.Scripting.getTearingMethod
-    getAvailableTearingMethods = (
+    setIndexReductionMethod = staticmethod(
+        OpenModelica.Scripting.setIndexReductionMethod
+    )
+    setPostOptModules = staticmethod(OpenModelica.Scripting.setPostOptModules)
+    getTearingMethod = staticmethod(OpenModelica.Scripting.getTearingMethod)
+    getAvailableTearingMethods = staticmethod(
         OpenModelica.Scripting.getAvailableTearingMethods
     )
-    setTearingMethod = OpenModelica.Scripting.setTearingMethod
-    setCommandLineOptions = OpenModelica.Scripting.setCommandLineOptions
-    getCommandLineOptions = OpenModelica.Scripting.getCommandLineOptions
-    getConfigFlagValidOptions = (
+    setTearingMethod = staticmethod(OpenModelica.Scripting.setTearingMethod)
+    setCommandLineOptions = staticmethod(
+        OpenModelica.Scripting.setCommandLineOptions
+    )
+    getCommandLineOptions = staticmethod(
+        OpenModelica.Scripting.getCommandLineOptions
+    )
+    getConfigFlagValidOptions = staticmethod(
         OpenModelica.Scripting.getConfigFlagValidOptions
     )
-    clearCommandLineOptions = OpenModelica.Scripting.clearCommandLineOptions
-    getVersion = OpenModelica.Scripting.getVersion
-    regularFileExists = OpenModelica.Scripting.regularFileExists
-    directoryExists = OpenModelica.Scripting.directoryExists
-    stat = OpenModelica.Scripting.stat
-    readFile = OpenModelica.Scripting.readFile
-    writeFile = OpenModelica.Scripting.writeFile
-    compareFilesAndMove = OpenModelica.Scripting.compareFilesAndMove
-    compareFiles = OpenModelica.Scripting.compareFiles
-    alarm = OpenModelica.Scripting.alarm
-    regex = OpenModelica.Scripting.regex
-    regexBool = OpenModelica.Scripting.regexBool
-    testsuiteFriendlyName = OpenModelica.Scripting.testsuiteFriendlyName
-    readFileNoNumeric = OpenModelica.Scripting.readFileNoNumeric
-    getErrorString = OpenModelica.Scripting.getErrorString
-    getMessagesString = OpenModelica.Scripting.getMessagesString
-    getMessagesStringInternal = (
+    clearCommandLineOptions = staticmethod(
+        OpenModelica.Scripting.clearCommandLineOptions
+    )
+    getVersion = staticmethod(OpenModelica.Scripting.getVersion)
+    regularFileExists = staticmethod(OpenModelica.Scripting.regularFileExists)
+    directoryExists = staticmethod(OpenModelica.Scripting.directoryExists)
+    stat = staticmethod(OpenModelica.Scripting.stat)
+    readFile = staticmethod(OpenModelica.Scripting.readFile)
+    writeFile = staticmethod(OpenModelica.Scripting.writeFile)
+    compareFilesAndMove = staticmethod(
+        OpenModelica.Scripting.compareFilesAndMove
+    )
+    compareFiles = staticmethod(OpenModelica.Scripting.compareFiles)
+    alarm = staticmethod(OpenModelica.Scripting.alarm)
+    regex = staticmethod(OpenModelica.Scripting.regex)
+    regexBool = staticmethod(OpenModelica.Scripting.regexBool)
+    testsuiteFriendlyName = staticmethod(
+        OpenModelica.Scripting.testsuiteFriendlyName
+    )
+    readFileNoNumeric = staticmethod(OpenModelica.Scripting.readFileNoNumeric)
+    getErrorString = staticmethod(OpenModelica.Scripting.getErrorString)
+    getMessagesString = staticmethod(OpenModelica.Scripting.getMessagesString)
+    getMessagesStringInternal = staticmethod(
         OpenModelica.Scripting.getMessagesStringInternal
     )
-    countMessages = OpenModelica.Scripting.countMessages
-    clearMessages = OpenModelica.Scripting.clearMessages
-    runScript = OpenModelica.Scripting.runScript
-    echo = OpenModelica.Scripting.echo
-    getClassesInModelicaPath = OpenModelica.Scripting.getClassesInModelicaPath
-    getAnnotationVersion = OpenModelica.Scripting.getAnnotationVersion
-    setAnnotationVersion = OpenModelica.Scripting.setAnnotationVersion
-    getNoSimplify = OpenModelica.Scripting.getNoSimplify
-    setNoSimplify = OpenModelica.Scripting.setNoSimplify
-    getVectorizationLimit = OpenModelica.Scripting.getVectorizationLimit
-    setVectorizationLimit = OpenModelica.Scripting.setVectorizationLimit
-    getDefaultOpenCLDevice = OpenModelica.Scripting.getDefaultOpenCLDevice
-    setDefaultOpenCLDevice = OpenModelica.Scripting.setDefaultOpenCLDevice
-    setShowAnnotations = OpenModelica.Scripting.setShowAnnotations
-    getShowAnnotations = OpenModelica.Scripting.getShowAnnotations
-    setOrderConnections = OpenModelica.Scripting.setOrderConnections
-    getOrderConnections = OpenModelica.Scripting.getOrderConnections
-    setLanguageStandard = OpenModelica.Scripting.setLanguageStandard
-    getLanguageStandard = OpenModelica.Scripting.getLanguageStandard
-    getAstAsCorbaString = OpenModelica.Scripting.getAstAsCorbaString
-    cd = OpenModelica.Scripting.cd
-    mkdir = OpenModelica.Scripting.mkdir
-    copy = OpenModelica.Scripting.copy
-    remove = OpenModelica.Scripting.remove
-    checkModel = OpenModelica.Scripting.checkModel
-    checkAllModelsRecursive = OpenModelica.Scripting.checkAllModelsRecursive
-    typeOf = OpenModelica.Scripting.typeOf
-    instantiateModel = OpenModelica.Scripting.instantiateModel
-    generateCode = OpenModelica.Scripting.generateCode
-    loadModel = OpenModelica.Scripting.loadModel
-    deleteFile = OpenModelica.Scripting.deleteFile
-    saveModel = OpenModelica.Scripting.saveModel
-    saveTotalModel = OpenModelica.Scripting.saveTotalModel
-    saveTotalModelDebug = OpenModelica.Scripting.saveTotalModelDebug
-    save = OpenModelica.Scripting.save
-    saveTotalSCode = OpenModelica.Scripting.saveTotalSCode
-    translateGraphics = OpenModelica.Scripting.translateGraphics
-    dumpXMLDAE = OpenModelica.Scripting.dumpXMLDAE
-    convertUnits = OpenModelica.Scripting.convertUnits
-    getDerivedUnits = OpenModelica.Scripting.getDerivedUnits
-    listVariables = OpenModelica.Scripting.listVariables
-    strtok = OpenModelica.Scripting.strtok
-    stringSplit = OpenModelica.Scripting.stringSplit
-    stringReplace = OpenModelica.Scripting.stringReplace
-    escapeXML = OpenModelica.Scripting.escapeXML
-    list = OpenModelica.Scripting.list
-    listFile = OpenModelica.Scripting.listFile
-    diffModelicaFileListings = OpenModelica.Scripting.diffModelicaFileListings
-    exportToFigaro = OpenModelica.Scripting.exportToFigaro
-    inferBindings = OpenModelica.Scripting.inferBindings
-    generateVerificationScenarios = (
+    countMessages = staticmethod(OpenModelica.Scripting.countMessages)
+    clearMessages = staticmethod(OpenModelica.Scripting.clearMessages)
+    runScript = staticmethod(OpenModelica.Scripting.runScript)
+    echo = staticmethod(OpenModelica.Scripting.echo)
+    getClassesInModelicaPath = staticmethod(
+        OpenModelica.Scripting.getClassesInModelicaPath
+    )
+    getAnnotationVersion = staticmethod(
+        OpenModelica.Scripting.getAnnotationVersion
+    )
+    setAnnotationVersion = staticmethod(
+        OpenModelica.Scripting.setAnnotationVersion
+    )
+    getNoSimplify = staticmethod(OpenModelica.Scripting.getNoSimplify)
+    setNoSimplify = staticmethod(OpenModelica.Scripting.setNoSimplify)
+    getVectorizationLimit = staticmethod(
+        OpenModelica.Scripting.getVectorizationLimit
+    )
+    setVectorizationLimit = staticmethod(
+        OpenModelica.Scripting.setVectorizationLimit
+    )
+    getDefaultOpenCLDevice = staticmethod(
+        OpenModelica.Scripting.getDefaultOpenCLDevice
+    )
+    setDefaultOpenCLDevice = staticmethod(
+        OpenModelica.Scripting.setDefaultOpenCLDevice
+    )
+    setShowAnnotations = staticmethod(
+        OpenModelica.Scripting.setShowAnnotations
+    )
+    getShowAnnotations = staticmethod(
+        OpenModelica.Scripting.getShowAnnotations
+    )
+    setOrderConnections = staticmethod(
+        OpenModelica.Scripting.setOrderConnections
+    )
+    getOrderConnections = staticmethod(
+        OpenModelica.Scripting.getOrderConnections
+    )
+    setLanguageStandard = staticmethod(
+        OpenModelica.Scripting.setLanguageStandard
+    )
+    getLanguageStandard = staticmethod(
+        OpenModelica.Scripting.getLanguageStandard
+    )
+    getAstAsCorbaString = staticmethod(
+        OpenModelica.Scripting.getAstAsCorbaString
+    )
+    cd = staticmethod(OpenModelica.Scripting.cd)
+    mkdir = staticmethod(OpenModelica.Scripting.mkdir)
+    copy = staticmethod(OpenModelica.Scripting.copy)
+    remove = staticmethod(OpenModelica.Scripting.remove)
+    checkModel = staticmethod(OpenModelica.Scripting.checkModel)
+    checkAllModelsRecursive = staticmethod(
+        OpenModelica.Scripting.checkAllModelsRecursive
+    )
+    typeOf = staticmethod(OpenModelica.Scripting.typeOf)
+    instantiateModel = staticmethod(OpenModelica.Scripting.instantiateModel)
+    generateCode = staticmethod(OpenModelica.Scripting.generateCode)
+    loadModel = staticmethod(OpenModelica.Scripting.loadModel)
+    deleteFile = staticmethod(OpenModelica.Scripting.deleteFile)
+    saveModel = staticmethod(OpenModelica.Scripting.saveModel)
+    saveTotalModel = staticmethod(OpenModelica.Scripting.saveTotalModel)
+    saveTotalModelDebug = staticmethod(
+        OpenModelica.Scripting.saveTotalModelDebug
+    )
+    save = staticmethod(OpenModelica.Scripting.save)
+    saveTotalSCode = staticmethod(OpenModelica.Scripting.saveTotalSCode)
+    translateGraphics = staticmethod(OpenModelica.Scripting.translateGraphics)
+    dumpXMLDAE = staticmethod(OpenModelica.Scripting.dumpXMLDAE)
+    convertUnits = staticmethod(OpenModelica.Scripting.convertUnits)
+    getDerivedUnits = staticmethod(OpenModelica.Scripting.getDerivedUnits)
+    listVariables = staticmethod(OpenModelica.Scripting.listVariables)
+    strtok = staticmethod(OpenModelica.Scripting.strtok)
+    stringSplit = staticmethod(OpenModelica.Scripting.stringSplit)
+    stringReplace = staticmethod(OpenModelica.Scripting.stringReplace)
+    escapeXML = staticmethod(OpenModelica.Scripting.escapeXML)
+    list = staticmethod(OpenModelica.Scripting.list)
+    listFile = staticmethod(OpenModelica.Scripting.listFile)
+    diffModelicaFileListings = staticmethod(
+        OpenModelica.Scripting.diffModelicaFileListings
+    )
+    exportToFigaro = staticmethod(OpenModelica.Scripting.exportToFigaro)
+    inferBindings = staticmethod(OpenModelica.Scripting.inferBindings)
+    generateVerificationScenarios = staticmethod(
         OpenModelica.Scripting.generateVerificationScenarios
     )
-    rewriteBlockCall = OpenModelica.Scripting.rewriteBlockCall
-    realpath = OpenModelica.Scripting.realpath
-    uriToFilename = OpenModelica.Scripting.uriToFilename
-    getLoadedLibraries = OpenModelica.Scripting.getLoadedLibraries
-    solveLinearSystem = OpenModelica.Scripting.solveLinearSystem
-    reopenStandardStream = OpenModelica.Scripting.reopenStandardStream
-    importFMU = OpenModelica.Scripting.importFMU
-    importFMUModelDescription = (
+    rewriteBlockCall = staticmethod(OpenModelica.Scripting.rewriteBlockCall)
+    realpath = staticmethod(OpenModelica.Scripting.realpath)
+    uriToFilename = staticmethod(OpenModelica.Scripting.uriToFilename)
+    getLoadedLibraries = staticmethod(
+        OpenModelica.Scripting.getLoadedLibraries
+    )
+    solveLinearSystem = staticmethod(OpenModelica.Scripting.solveLinearSystem)
+    reopenStandardStream = staticmethod(
+        OpenModelica.Scripting.reopenStandardStream
+    )
+    importFMU = staticmethod(OpenModelica.Scripting.importFMU)
+    importFMUModelDescription = staticmethod(
         OpenModelica.Scripting.importFMUModelDescription
     )
-    translateModelFMU = OpenModelica.Scripting.translateModelFMU
-    buildModelFMU = OpenModelica.Scripting.buildModelFMU
-    buildEncryptedPackage = OpenModelica.Scripting.buildEncryptedPackage
-    simulate = OpenModelica.Scripting.simulate
-    buildModel = OpenModelica.Scripting.buildModel
-    buildLabel = OpenModelica.Scripting.buildLabel
-    reduceTerms = OpenModelica.Scripting.reduceTerms
-    moveClass = OpenModelica.Scripting.moveClass
-    moveClassToTop = OpenModelica.Scripting.moveClassToTop
-    moveClassToBottom = OpenModelica.Scripting.moveClassToBottom
-    copyClass = OpenModelica.Scripting.copyClass
-    linearize = OpenModelica.Scripting.linearize
-    optimize = OpenModelica.Scripting.optimize
-    getSourceFile = OpenModelica.Scripting.getSourceFile
-    setSourceFile = OpenModelica.Scripting.setSourceFile
-    isShortDefinition = OpenModelica.Scripting.isShortDefinition
-    setClassComment = OpenModelica.Scripting.setClassComment
-    getClassNames = OpenModelica.Scripting.getClassNames
-    getUsedClassNames = OpenModelica.Scripting.getUsedClassNames
-    getPackages = OpenModelica.Scripting.getPackages
-    getAllSubtypeOf = OpenModelica.Scripting.getAllSubtypeOf
-    basePlotFunction = OpenModelica.Scripting.basePlotFunction
-    plot = OpenModelica.Scripting.plot
-    plotAll = OpenModelica.Scripting.plotAll
-    plotParametric = OpenModelica.Scripting.plotParametric
-    readSimulationResult = OpenModelica.Scripting.readSimulationResult
-    readSimulationResultSize = OpenModelica.Scripting.readSimulationResultSize
-    readSimulationResultVars = OpenModelica.Scripting.readSimulationResultVars
-    filterSimulationResults = OpenModelica.Scripting.filterSimulationResults
-    compareSimulationResults = OpenModelica.Scripting.compareSimulationResults
-    deltaSimulationResults = OpenModelica.Scripting.deltaSimulationResults
-    diffSimulationResults = OpenModelica.Scripting.diffSimulationResults
-    diffSimulationResultsHtml = (
+    translateModelFMU = staticmethod(OpenModelica.Scripting.translateModelFMU)
+    buildModelFMU = staticmethod(OpenModelica.Scripting.buildModelFMU)
+    buildEncryptedPackage = staticmethod(
+        OpenModelica.Scripting.buildEncryptedPackage
+    )
+    simulate = staticmethod(OpenModelica.Scripting.simulate)
+    buildModel = staticmethod(OpenModelica.Scripting.buildModel)
+    buildLabel = staticmethod(OpenModelica.Scripting.buildLabel)
+    reduceTerms = staticmethod(OpenModelica.Scripting.reduceTerms)
+    moveClass = staticmethod(OpenModelica.Scripting.moveClass)
+    moveClassToTop = staticmethod(OpenModelica.Scripting.moveClassToTop)
+    moveClassToBottom = staticmethod(OpenModelica.Scripting.moveClassToBottom)
+    copyClass = staticmethod(OpenModelica.Scripting.copyClass)
+    linearize = staticmethod(OpenModelica.Scripting.linearize)
+    optimize = staticmethod(OpenModelica.Scripting.optimize)
+    getSourceFile = staticmethod(OpenModelica.Scripting.getSourceFile)
+    setSourceFile = staticmethod(OpenModelica.Scripting.setSourceFile)
+    isShortDefinition = staticmethod(OpenModelica.Scripting.isShortDefinition)
+    setClassComment = staticmethod(OpenModelica.Scripting.setClassComment)
+    getClassNames = staticmethod(OpenModelica.Scripting.getClassNames)
+    getUsedClassNames = staticmethod(OpenModelica.Scripting.getUsedClassNames)
+    getPackages = staticmethod(OpenModelica.Scripting.getPackages)
+    getAllSubtypeOf = staticmethod(OpenModelica.Scripting.getAllSubtypeOf)
+    basePlotFunction = staticmethod(OpenModelica.Scripting.basePlotFunction)
+    plot = staticmethod(OpenModelica.Scripting.plot)
+    plotAll = staticmethod(OpenModelica.Scripting.plotAll)
+    plotParametric = staticmethod(OpenModelica.Scripting.plotParametric)
+    readSimulationResult = staticmethod(
+        OpenModelica.Scripting.readSimulationResult
+    )
+    readSimulationResultSize = staticmethod(
+        OpenModelica.Scripting.readSimulationResultSize
+    )
+    readSimulationResultVars = staticmethod(
+        OpenModelica.Scripting.readSimulationResultVars
+    )
+    filterSimulationResults = staticmethod(
+        OpenModelica.Scripting.filterSimulationResults
+    )
+    compareSimulationResults = staticmethod(
+        OpenModelica.Scripting.compareSimulationResults
+    )
+    deltaSimulationResults = staticmethod(
+        OpenModelica.Scripting.deltaSimulationResults
+    )
+    diffSimulationResults = staticmethod(
+        OpenModelica.Scripting.diffSimulationResults
+    )
+    diffSimulationResultsHtml = staticmethod(
         OpenModelica.Scripting.diffSimulationResultsHtml
     )
-    checkTaskGraph = OpenModelica.Scripting.checkTaskGraph
-    checkCodeGraph = OpenModelica.Scripting.checkCodeGraph
-    val = OpenModelica.Scripting.val
-    closeSimulationResultFile = (
+    checkTaskGraph = staticmethod(OpenModelica.Scripting.checkTaskGraph)
+    checkCodeGraph = staticmethod(OpenModelica.Scripting.checkCodeGraph)
+    val = staticmethod(OpenModelica.Scripting.val)
+    closeSimulationResultFile = staticmethod(
         OpenModelica.Scripting.closeSimulationResultFile
     )
-    getParameterNames = OpenModelica.Scripting.getParameterNames
-    getParameterValue = OpenModelica.Scripting.getParameterValue
-    getComponentModifierNames = (
+    getParameterNames = staticmethod(OpenModelica.Scripting.getParameterNames)
+    getParameterValue = staticmethod(OpenModelica.Scripting.getParameterValue)
+    getComponentModifierNames = staticmethod(
         OpenModelica.Scripting.getComponentModifierNames
     )
-    getComponentModifierValue = (
+    getComponentModifierValue = staticmethod(
         OpenModelica.Scripting.getComponentModifierValue
     )
-    getComponentModifierValues = (
+    getComponentModifierValues = staticmethod(
         OpenModelica.Scripting.getComponentModifierValues
     )
-    removeComponentModifiers = OpenModelica.Scripting.removeComponentModifiers
-    getElementModifierNames = OpenModelica.Scripting.getElementModifierNames
-    getElementModifierValue = OpenModelica.Scripting.getElementModifierValue
-    getElementModifierValues = OpenModelica.Scripting.getElementModifierValues
-    removeElementModifiers = OpenModelica.Scripting.removeElementModifiers
-    getInstantiatedParametersAndValues = (
+    removeComponentModifiers = staticmethod(
+        OpenModelica.Scripting.removeComponentModifiers
+    )
+    getElementModifierNames = staticmethod(
+        OpenModelica.Scripting.getElementModifierNames
+    )
+    getElementModifierValue = staticmethod(
+        OpenModelica.Scripting.getElementModifierValue
+    )
+    getElementModifierValues = staticmethod(
+        OpenModelica.Scripting.getElementModifierValues
+    )
+    removeElementModifiers = staticmethod(
+        OpenModelica.Scripting.removeElementModifiers
+    )
+    getInstantiatedParametersAndValues = staticmethod(
         OpenModelica.Scripting.getInstantiatedParametersAndValues
     )
-    removeExtendsModifiers = OpenModelica.Scripting.removeExtendsModifiers
-    updateConnectionAnnotation = (
+    removeExtendsModifiers = staticmethod(
+        OpenModelica.Scripting.removeExtendsModifiers
+    )
+    updateConnectionAnnotation = staticmethod(
         OpenModelica.Scripting.updateConnectionAnnotation
     )
-    updateConnectionNames = OpenModelica.Scripting.updateConnectionNames
-    getConnectionCount = OpenModelica.Scripting.getConnectionCount
-    getNthConnection = OpenModelica.Scripting.getNthConnection
-    getAlgorithmCount = OpenModelica.Scripting.getAlgorithmCount
-    getNthAlgorithm = OpenModelica.Scripting.getNthAlgorithm
-    getInitialAlgorithmCount = OpenModelica.Scripting.getInitialAlgorithmCount
-    getNthInitialAlgorithm = OpenModelica.Scripting.getNthInitialAlgorithm
-    getAlgorithmItemsCount = OpenModelica.Scripting.getAlgorithmItemsCount
-    getNthAlgorithmItem = OpenModelica.Scripting.getNthAlgorithmItem
-    getInitialAlgorithmItemsCount = (
+    updateConnectionNames = staticmethod(
+        OpenModelica.Scripting.updateConnectionNames
+    )
+    getConnectionCount = staticmethod(
+        OpenModelica.Scripting.getConnectionCount
+    )
+    getNthConnection = staticmethod(OpenModelica.Scripting.getNthConnection)
+    getAlgorithmCount = staticmethod(OpenModelica.Scripting.getAlgorithmCount)
+    getNthAlgorithm = staticmethod(OpenModelica.Scripting.getNthAlgorithm)
+    getInitialAlgorithmCount = staticmethod(
+        OpenModelica.Scripting.getInitialAlgorithmCount
+    )
+    getNthInitialAlgorithm = staticmethod(
+        OpenModelica.Scripting.getNthInitialAlgorithm
+    )
+    getAlgorithmItemsCount = staticmethod(
+        OpenModelica.Scripting.getAlgorithmItemsCount
+    )
+    getNthAlgorithmItem = staticmethod(
+        OpenModelica.Scripting.getNthAlgorithmItem
+    )
+    getInitialAlgorithmItemsCount = staticmethod(
         OpenModelica.Scripting.getInitialAlgorithmItemsCount
     )
-    getNthInitialAlgorithmItem = (
+    getNthInitialAlgorithmItem = staticmethod(
         OpenModelica.Scripting.getNthInitialAlgorithmItem
     )
-    getEquationCount = OpenModelica.Scripting.getEquationCount
-    getNthEquation = OpenModelica.Scripting.getNthEquation
-    getInitialEquationCount = OpenModelica.Scripting.getInitialEquationCount
-    getNthInitialEquation = OpenModelica.Scripting.getNthInitialEquation
-    getEquationItemsCount = OpenModelica.Scripting.getEquationItemsCount
-    getNthEquationItem = OpenModelica.Scripting.getNthEquationItem
-    getInitialEquationItemsCount = (
+    getEquationCount = staticmethod(OpenModelica.Scripting.getEquationCount)
+    getNthEquation = staticmethod(OpenModelica.Scripting.getNthEquation)
+    getInitialEquationCount = staticmethod(
+        OpenModelica.Scripting.getInitialEquationCount
+    )
+    getNthInitialEquation = staticmethod(
+        OpenModelica.Scripting.getNthInitialEquation
+    )
+    getEquationItemsCount = staticmethod(
+        OpenModelica.Scripting.getEquationItemsCount
+    )
+    getNthEquationItem = staticmethod(
+        OpenModelica.Scripting.getNthEquationItem
+    )
+    getInitialEquationItemsCount = staticmethod(
         OpenModelica.Scripting.getInitialEquationItemsCount
     )
-    getNthInitialEquationItem = (
+    getNthInitialEquationItem = staticmethod(
         OpenModelica.Scripting.getNthInitialEquationItem
     )
-    getAnnotationCount = OpenModelica.Scripting.getAnnotationCount
-    getNthAnnotationString = OpenModelica.Scripting.getNthAnnotationString
-    getImportCount = OpenModelica.Scripting.getImportCount
-    getMMfileTotalDependencies = (
+    getAnnotationCount = staticmethod(
+        OpenModelica.Scripting.getAnnotationCount
+    )
+    getNthAnnotationString = staticmethod(
+        OpenModelica.Scripting.getNthAnnotationString
+    )
+    getImportCount = staticmethod(OpenModelica.Scripting.getImportCount)
+    getMMfileTotalDependencies = staticmethod(
         OpenModelica.Scripting.getMMfileTotalDependencies
     )
-    getImportedNames = OpenModelica.Scripting.getImportedNames
-    getNthImport = OpenModelica.Scripting.getNthImport
-    iconv = OpenModelica.Scripting.iconv
-    getDocumentationAnnotation = (
+    getImportedNames = staticmethod(OpenModelica.Scripting.getImportedNames)
+    getNthImport = staticmethod(OpenModelica.Scripting.getNthImport)
+    iconv = staticmethod(OpenModelica.Scripting.iconv)
+    getDocumentationAnnotation = staticmethod(
         OpenModelica.Scripting.getDocumentationAnnotation
     )
-    setDocumentationAnnotation = (
+    setDocumentationAnnotation = staticmethod(
         OpenModelica.Scripting.setDocumentationAnnotation
     )
-    getTimeStamp = OpenModelica.Scripting.getTimeStamp
-    stringTypeName = OpenModelica.Scripting.stringTypeName
-    stringVariableName = OpenModelica.Scripting.stringVariableName
-    typeNameString = OpenModelica.Scripting.typeNameString
-    typeNameStrings = OpenModelica.Scripting.typeNameStrings
-    getClassComment = OpenModelica.Scripting.getClassComment
-    dirname = OpenModelica.Scripting.dirname
-    basename = OpenModelica.Scripting.basename
-    getClassRestriction = OpenModelica.Scripting.getClassRestriction
-    isType = OpenModelica.Scripting.isType
-    isPackage = OpenModelica.Scripting.isPackage
-    isClass = OpenModelica.Scripting.isClass
-    isRecord = OpenModelica.Scripting.isRecord
-    isBlock = OpenModelica.Scripting.isBlock
-    isFunction = OpenModelica.Scripting.isFunction
-    isPartial = OpenModelica.Scripting.isPartial
-    isModel = OpenModelica.Scripting.isModel
-    isConnector = OpenModelica.Scripting.isConnector
-    isOptimization = OpenModelica.Scripting.isOptimization
-    isEnumeration = OpenModelica.Scripting.isEnumeration
-    isOperator = OpenModelica.Scripting.isOperator
-    isOperatorRecord = OpenModelica.Scripting.isOperatorRecord
-    isOperatorFunction = OpenModelica.Scripting.isOperatorFunction
-    isProtectedClass = OpenModelica.Scripting.isProtectedClass
-    getBuiltinType = OpenModelica.Scripting.getBuiltinType
-    setInitXmlStartValue = OpenModelica.Scripting.setInitXmlStartValue
-    ngspicetoModelica = OpenModelica.Scripting.ngspicetoModelica
-    getInheritedClasses = OpenModelica.Scripting.getInheritedClasses
-    getComponentsTest = OpenModelica.Scripting.getComponentsTest
-    isExperiment = OpenModelica.Scripting.isExperiment
-    getSimulationOptions = OpenModelica.Scripting.getSimulationOptions
-    getAnnotationNamedModifiers = (
+    getTimeStamp = staticmethod(OpenModelica.Scripting.getTimeStamp)
+    stringTypeName = staticmethod(OpenModelica.Scripting.stringTypeName)
+    stringVariableName = staticmethod(
+        OpenModelica.Scripting.stringVariableName
+    )
+    typeNameString = staticmethod(OpenModelica.Scripting.typeNameString)
+    typeNameStrings = staticmethod(OpenModelica.Scripting.typeNameStrings)
+    getClassComment = staticmethod(OpenModelica.Scripting.getClassComment)
+    dirname = staticmethod(OpenModelica.Scripting.dirname)
+    basename = staticmethod(OpenModelica.Scripting.basename)
+    getClassRestriction = staticmethod(
+        OpenModelica.Scripting.getClassRestriction
+    )
+    isType = staticmethod(OpenModelica.Scripting.isType)
+    isPackage = staticmethod(OpenModelica.Scripting.isPackage)
+    isClass = staticmethod(OpenModelica.Scripting.isClass)
+    isRecord = staticmethod(OpenModelica.Scripting.isRecord)
+    isBlock = staticmethod(OpenModelica.Scripting.isBlock)
+    isFunction = staticmethod(OpenModelica.Scripting.isFunction)
+    isPartial = staticmethod(OpenModelica.Scripting.isPartial)
+    isModel = staticmethod(OpenModelica.Scripting.isModel)
+    isConnector = staticmethod(OpenModelica.Scripting.isConnector)
+    isOptimization = staticmethod(OpenModelica.Scripting.isOptimization)
+    isEnumeration = staticmethod(OpenModelica.Scripting.isEnumeration)
+    isOperator = staticmethod(OpenModelica.Scripting.isOperator)
+    isOperatorRecord = staticmethod(OpenModelica.Scripting.isOperatorRecord)
+    isOperatorFunction = staticmethod(
+        OpenModelica.Scripting.isOperatorFunction
+    )
+    isProtectedClass = staticmethod(OpenModelica.Scripting.isProtectedClass)
+    getBuiltinType = staticmethod(OpenModelica.Scripting.getBuiltinType)
+    setInitXmlStartValue = staticmethod(
+        OpenModelica.Scripting.setInitXmlStartValue
+    )
+    ngspicetoModelica = staticmethod(OpenModelica.Scripting.ngspicetoModelica)
+    getInheritedClasses = staticmethod(
+        OpenModelica.Scripting.getInheritedClasses
+    )
+    getComponentsTest = staticmethod(OpenModelica.Scripting.getComponentsTest)
+    isExperiment = staticmethod(OpenModelica.Scripting.isExperiment)
+    getSimulationOptions = staticmethod(
+        OpenModelica.Scripting.getSimulationOptions
+    )
+    getAnnotationNamedModifiers = staticmethod(
         OpenModelica.Scripting.getAnnotationNamedModifiers
     )
-    getAnnotationModifierValue = (
+    getAnnotationModifierValue = staticmethod(
         OpenModelica.Scripting.getAnnotationModifierValue
     )
-    classAnnotationExists = OpenModelica.Scripting.classAnnotationExists
-    getBooleanClassAnnotation = (
+    classAnnotationExists = staticmethod(
+        OpenModelica.Scripting.classAnnotationExists
+    )
+    getBooleanClassAnnotation = staticmethod(
         OpenModelica.Scripting.getBooleanClassAnnotation
     )
-    extendsFrom = OpenModelica.Scripting.extendsFrom
-    loadModelica3D = OpenModelica.Scripting.loadModelica3D
-    searchClassNames = OpenModelica.Scripting.searchClassNames
-    getAvailableLibraries = OpenModelica.Scripting.getAvailableLibraries
-    getAvailableLibraryVersions = (
+    extendsFrom = staticmethod(OpenModelica.Scripting.extendsFrom)
+    loadModelica3D = staticmethod(OpenModelica.Scripting.loadModelica3D)
+    searchClassNames = staticmethod(OpenModelica.Scripting.searchClassNames)
+    getAvailableLibraries = staticmethod(
+        OpenModelica.Scripting.getAvailableLibraries
+    )
+    getAvailableLibraryVersions = staticmethod(
         OpenModelica.Scripting.getAvailableLibraryVersions
     )
-    installPackage = OpenModelica.Scripting.installPackage
-    updatePackageIndex = OpenModelica.Scripting.updatePackageIndex
-    upgradeInstalledPackages = OpenModelica.Scripting.upgradeInstalledPackages
-    getAvailablePackageVersions = (
+    installPackage = staticmethod(OpenModelica.Scripting.installPackage)
+    updatePackageIndex = staticmethod(
+        OpenModelica.Scripting.updatePackageIndex
+    )
+    upgradeInstalledPackages = staticmethod(
+        OpenModelica.Scripting.upgradeInstalledPackages
+    )
+    getAvailablePackageVersions = staticmethod(
         OpenModelica.Scripting.getAvailablePackageVersions
     )
-    getAvailablePackageConversionsTo = (
+    getAvailablePackageConversionsTo = staticmethod(
         OpenModelica.Scripting.getAvailablePackageConversionsTo
     )
-    getAvailablePackageConversionsFrom = (
+    getAvailablePackageConversionsFrom = staticmethod(
         OpenModelica.Scripting.getAvailablePackageConversionsFrom
     )
-    getUses = OpenModelica.Scripting.getUses
-    getConversionsFromVersions = (
+    getUses = staticmethod(OpenModelica.Scripting.getUses)
+    getConversionsFromVersions = staticmethod(
         OpenModelica.Scripting.getConversionsFromVersions
     )
-    getDerivedClassModifierNames = (
+    getDerivedClassModifierNames = staticmethod(
         OpenModelica.Scripting.getDerivedClassModifierNames
     )
-    getDerivedClassModifierValue = (
+    getDerivedClassModifierValue = staticmethod(
         OpenModelica.Scripting.getDerivedClassModifierValue
     )
-    generateEntryPoint = OpenModelica.Scripting.generateEntryPoint
-    numProcessors = OpenModelica.Scripting.numProcessors
-    runScriptParallel = OpenModelica.Scripting.runScriptParallel
-    exit = OpenModelica.Scripting.exit
-    threadWorkFailed = OpenModelica.Scripting.threadWorkFailed
-    getMemorySize = OpenModelica.Scripting.getMemorySize
-    GC_gcollect_and_unmap = OpenModelica.Scripting.GC_gcollect_and_unmap
-    GC_expand_hp = OpenModelica.Scripting.GC_expand_hp
-    GC_set_max_heap_size = OpenModelica.Scripting.GC_set_max_heap_size
-    GC_get_prof_stats = OpenModelica.Scripting.GC_get_prof_stats
-    checkInterfaceOfPackages = OpenModelica.Scripting.checkInterfaceOfPackages
-    sortStrings = OpenModelica.Scripting.sortStrings
-    getClassInformation = OpenModelica.Scripting.getClassInformation
-    getTransitions = OpenModelica.Scripting.getTransitions
-    deleteTransition = OpenModelica.Scripting.deleteTransition
-    getInitialStates = OpenModelica.Scripting.getInitialStates
-    deleteInitialState = OpenModelica.Scripting.deleteInitialState
-    generateScriptingAPI = OpenModelica.Scripting.generateScriptingAPI
-    runConversionScript = OpenModelica.Scripting.runConversionScript
-    convertPackageToLibrary = OpenModelica.Scripting.convertPackageToLibrary
-    getModelInstance = OpenModelica.Scripting.getModelInstance
-    storeAST = OpenModelica.Scripting.storeAST
-    restoreAST = OpenModelica.Scripting.restoreAST
-    loadOMSimulator = OpenModelica.Scripting.loadOMSimulator
-    unloadOMSimulator = OpenModelica.Scripting.unloadOMSimulator
-    oms_addBus = OpenModelica.Scripting.oms_addBus
-    oms_addConnection = OpenModelica.Scripting.oms_addConnection
-    oms_addConnector = OpenModelica.Scripting.oms_addConnector
-    oms_addConnectorToBus = OpenModelica.Scripting.oms_addConnectorToBus
-    oms_addConnectorToTLMBus = OpenModelica.Scripting.oms_addConnectorToTLMBus
-    oms_addDynamicValueIndicator = (
+    generateEntryPoint = staticmethod(
+        OpenModelica.Scripting.generateEntryPoint
+    )
+    numProcessors = staticmethod(OpenModelica.Scripting.numProcessors)
+    runScriptParallel = staticmethod(OpenModelica.Scripting.runScriptParallel)
+    exit = staticmethod(OpenModelica.Scripting.exit)
+    threadWorkFailed = staticmethod(OpenModelica.Scripting.threadWorkFailed)
+    getMemorySize = staticmethod(OpenModelica.Scripting.getMemorySize)
+    GC_gcollect_and_unmap = staticmethod(
+        OpenModelica.Scripting.GC_gcollect_and_unmap
+    )
+    GC_expand_hp = staticmethod(OpenModelica.Scripting.GC_expand_hp)
+    GC_set_max_heap_size = staticmethod(
+        OpenModelica.Scripting.GC_set_max_heap_size
+    )
+    GC_get_prof_stats = staticmethod(OpenModelica.Scripting.GC_get_prof_stats)
+    checkInterfaceOfPackages = staticmethod(
+        OpenModelica.Scripting.checkInterfaceOfPackages
+    )
+    sortStrings = staticmethod(OpenModelica.Scripting.sortStrings)
+    getClassInformation = staticmethod(
+        OpenModelica.Scripting.getClassInformation
+    )
+    getTransitions = staticmethod(OpenModelica.Scripting.getTransitions)
+    deleteTransition = staticmethod(OpenModelica.Scripting.deleteTransition)
+    getInitialStates = staticmethod(OpenModelica.Scripting.getInitialStates)
+    deleteInitialState = staticmethod(
+        OpenModelica.Scripting.deleteInitialState
+    )
+    generateScriptingAPI = staticmethod(
+        OpenModelica.Scripting.generateScriptingAPI
+    )
+    runConversionScript = staticmethod(
+        OpenModelica.Scripting.runConversionScript
+    )
+    convertPackageToLibrary = staticmethod(
+        OpenModelica.Scripting.convertPackageToLibrary
+    )
+    getModelInstance = staticmethod(OpenModelica.Scripting.getModelInstance)
+    storeAST = staticmethod(OpenModelica.Scripting.storeAST)
+    restoreAST = staticmethod(OpenModelica.Scripting.restoreAST)
+    loadOMSimulator = staticmethod(OpenModelica.Scripting.loadOMSimulator)
+    unloadOMSimulator = staticmethod(OpenModelica.Scripting.unloadOMSimulator)
+    oms_addBus = staticmethod(OpenModelica.Scripting.oms_addBus)
+    oms_addConnection = staticmethod(OpenModelica.Scripting.oms_addConnection)
+    oms_addConnector = staticmethod(OpenModelica.Scripting.oms_addConnector)
+    oms_addConnectorToBus = staticmethod(
+        OpenModelica.Scripting.oms_addConnectorToBus
+    )
+    oms_addConnectorToTLMBus = staticmethod(
+        OpenModelica.Scripting.oms_addConnectorToTLMBus
+    )
+    oms_addDynamicValueIndicator = staticmethod(
         OpenModelica.Scripting.oms_addDynamicValueIndicator
     )
-    oms_addEventIndicator = OpenModelica.Scripting.oms_addEventIndicator
-    oms_addExternalModel = OpenModelica.Scripting.oms_addExternalModel
-    oms_addSignalsToResults = OpenModelica.Scripting.oms_addSignalsToResults
-    oms_addStaticValueIndicator = (
+    oms_addEventIndicator = staticmethod(
+        OpenModelica.Scripting.oms_addEventIndicator
+    )
+    oms_addExternalModel = staticmethod(
+        OpenModelica.Scripting.oms_addExternalModel
+    )
+    oms_addSignalsToResults = staticmethod(
+        OpenModelica.Scripting.oms_addSignalsToResults
+    )
+    oms_addStaticValueIndicator = staticmethod(
         OpenModelica.Scripting.oms_addStaticValueIndicator
     )
-    oms_addSubModel = OpenModelica.Scripting.oms_addSubModel
-    oms_addSystem = OpenModelica.Scripting.oms_addSystem
-    oms_addTimeIndicator = OpenModelica.Scripting.oms_addTimeIndicator
-    oms_addTLMBus = OpenModelica.Scripting.oms_addTLMBus
-    oms_addTLMConnection = OpenModelica.Scripting.oms_addTLMConnection
-    oms_compareSimulationResults = (
+    oms_addSubModel = staticmethod(OpenModelica.Scripting.oms_addSubModel)
+    oms_addSystem = staticmethod(OpenModelica.Scripting.oms_addSystem)
+    oms_addTimeIndicator = staticmethod(
+        OpenModelica.Scripting.oms_addTimeIndicator
+    )
+    oms_addTLMBus = staticmethod(OpenModelica.Scripting.oms_addTLMBus)
+    oms_addTLMConnection = staticmethod(
+        OpenModelica.Scripting.oms_addTLMConnection
+    )
+    oms_compareSimulationResults = staticmethod(
         OpenModelica.Scripting.oms_compareSimulationResults
     )
-    oms_copySystem = OpenModelica.Scripting.oms_copySystem
-    oms_delete = OpenModelica.Scripting.oms_delete
-    oms_deleteConnection = OpenModelica.Scripting.oms_deleteConnection
-    oms_deleteConnectorFromBus = (
+    oms_copySystem = staticmethod(OpenModelica.Scripting.oms_copySystem)
+    oms_delete = staticmethod(OpenModelica.Scripting.oms_delete)
+    oms_deleteConnection = staticmethod(
+        OpenModelica.Scripting.oms_deleteConnection
+    )
+    oms_deleteConnectorFromBus = staticmethod(
         OpenModelica.Scripting.oms_deleteConnectorFromBus
     )
-    oms_deleteConnectorFromTLMBus = (
+    oms_deleteConnectorFromTLMBus = staticmethod(
         OpenModelica.Scripting.oms_deleteConnectorFromTLMBus
     )
-    oms_export = OpenModelica.Scripting.oms_export
-    oms_exportDependencyGraphs = (
+    oms_export = staticmethod(OpenModelica.Scripting.oms_export)
+    oms_exportDependencyGraphs = staticmethod(
         OpenModelica.Scripting.oms_exportDependencyGraphs
     )
-    oms_exportSnapshot = OpenModelica.Scripting.oms_exportSnapshot
-    oms_extractFMIKind = OpenModelica.Scripting.oms_extractFMIKind
-    oms_getBoolean = OpenModelica.Scripting.oms_getBoolean
-    oms_getFixedStepSize = OpenModelica.Scripting.oms_getFixedStepSize
-    oms_getInteger = OpenModelica.Scripting.oms_getInteger
-    oms_getModelState = OpenModelica.Scripting.oms_getModelState
-    oms_getReal = OpenModelica.Scripting.oms_getReal
-    oms_getSolver = OpenModelica.Scripting.oms_getSolver
-    oms_getStartTime = OpenModelica.Scripting.oms_getStartTime
-    oms_getStopTime = OpenModelica.Scripting.oms_getStopTime
-    oms_getSubModelPath = OpenModelica.Scripting.oms_getSubModelPath
-    oms_getSystemType = OpenModelica.Scripting.oms_getSystemType
-    oms_getTolerance = OpenModelica.Scripting.oms_getTolerance
-    oms_getVariableStepSize = OpenModelica.Scripting.oms_getVariableStepSize
-    oms_faultInjection = OpenModelica.Scripting.oms_faultInjection
-    oms_importFile = OpenModelica.Scripting.oms_importFile
-    oms_importSnapshot = OpenModelica.Scripting.oms_importSnapshot
-    oms_initialize = OpenModelica.Scripting.oms_initialize
-    oms_instantiate = OpenModelica.Scripting.oms_instantiate
-    oms_list = OpenModelica.Scripting.oms_list
-    oms_listUnconnectedConnectors = (
+    oms_exportSnapshot = staticmethod(
+        OpenModelica.Scripting.oms_exportSnapshot
+    )
+    oms_extractFMIKind = staticmethod(
+        OpenModelica.Scripting.oms_extractFMIKind
+    )
+    oms_getBoolean = staticmethod(OpenModelica.Scripting.oms_getBoolean)
+    oms_getFixedStepSize = staticmethod(
+        OpenModelica.Scripting.oms_getFixedStepSize
+    )
+    oms_getInteger = staticmethod(OpenModelica.Scripting.oms_getInteger)
+    oms_getModelState = staticmethod(OpenModelica.Scripting.oms_getModelState)
+    oms_getReal = staticmethod(OpenModelica.Scripting.oms_getReal)
+    oms_getSolver = staticmethod(OpenModelica.Scripting.oms_getSolver)
+    oms_getStartTime = staticmethod(OpenModelica.Scripting.oms_getStartTime)
+    oms_getStopTime = staticmethod(OpenModelica.Scripting.oms_getStopTime)
+    oms_getSubModelPath = staticmethod(
+        OpenModelica.Scripting.oms_getSubModelPath
+    )
+    oms_getSystemType = staticmethod(OpenModelica.Scripting.oms_getSystemType)
+    oms_getTolerance = staticmethod(OpenModelica.Scripting.oms_getTolerance)
+    oms_getVariableStepSize = staticmethod(
+        OpenModelica.Scripting.oms_getVariableStepSize
+    )
+    oms_faultInjection = staticmethod(
+        OpenModelica.Scripting.oms_faultInjection
+    )
+    oms_importFile = staticmethod(OpenModelica.Scripting.oms_importFile)
+    oms_importSnapshot = staticmethod(
+        OpenModelica.Scripting.oms_importSnapshot
+    )
+    oms_initialize = staticmethod(OpenModelica.Scripting.oms_initialize)
+    oms_instantiate = staticmethod(OpenModelica.Scripting.oms_instantiate)
+    oms_list = staticmethod(OpenModelica.Scripting.oms_list)
+    oms_listUnconnectedConnectors = staticmethod(
         OpenModelica.Scripting.oms_listUnconnectedConnectors
     )
-    oms_loadSnapshot = OpenModelica.Scripting.oms_loadSnapshot
-    oms_newModel = OpenModelica.Scripting.oms_newModel
-    oms_removeSignalsFromResults = (
+    oms_loadSnapshot = staticmethod(OpenModelica.Scripting.oms_loadSnapshot)
+    oms_newModel = staticmethod(OpenModelica.Scripting.oms_newModel)
+    oms_removeSignalsFromResults = staticmethod(
         OpenModelica.Scripting.oms_removeSignalsFromResults
     )
-    oms_rename = OpenModelica.Scripting.oms_rename
-    oms_reset = OpenModelica.Scripting.oms_reset
-    oms_RunFile = OpenModelica.Scripting.oms_RunFile
-    oms_setBoolean = OpenModelica.Scripting.oms_setBoolean
-    oms_setCommandLineOption = OpenModelica.Scripting.oms_setCommandLineOption
-    oms_setFixedStepSize = OpenModelica.Scripting.oms_setFixedStepSize
-    oms_setInteger = OpenModelica.Scripting.oms_setInteger
-    oms_setLogFile = OpenModelica.Scripting.oms_setLogFile
-    oms_setLoggingInterval = OpenModelica.Scripting.oms_setLoggingInterval
-    oms_setLoggingLevel = OpenModelica.Scripting.oms_setLoggingLevel
-    oms_setReal = OpenModelica.Scripting.oms_setReal
-    oms_setRealInputDerivative = (
+    oms_rename = staticmethod(OpenModelica.Scripting.oms_rename)
+    oms_reset = staticmethod(OpenModelica.Scripting.oms_reset)
+    oms_RunFile = staticmethod(OpenModelica.Scripting.oms_RunFile)
+    oms_setBoolean = staticmethod(OpenModelica.Scripting.oms_setBoolean)
+    oms_setCommandLineOption = staticmethod(
+        OpenModelica.Scripting.oms_setCommandLineOption
+    )
+    oms_setFixedStepSize = staticmethod(
+        OpenModelica.Scripting.oms_setFixedStepSize
+    )
+    oms_setInteger = staticmethod(OpenModelica.Scripting.oms_setInteger)
+    oms_setLogFile = staticmethod(OpenModelica.Scripting.oms_setLogFile)
+    oms_setLoggingInterval = staticmethod(
+        OpenModelica.Scripting.oms_setLoggingInterval
+    )
+    oms_setLoggingLevel = staticmethod(
+        OpenModelica.Scripting.oms_setLoggingLevel
+    )
+    oms_setReal = staticmethod(OpenModelica.Scripting.oms_setReal)
+    oms_setRealInputDerivative = staticmethod(
         OpenModelica.Scripting.oms_setRealInputDerivative
     )
-    oms_setResultFile = OpenModelica.Scripting.oms_setResultFile
-    oms_setSignalFilter = OpenModelica.Scripting.oms_setSignalFilter
-    oms_setSolver = OpenModelica.Scripting.oms_setSolver
-    oms_setStartTime = OpenModelica.Scripting.oms_setStartTime
-    oms_setStopTime = OpenModelica.Scripting.oms_setStopTime
-    oms_setTempDirectory = OpenModelica.Scripting.oms_setTempDirectory
-    oms_setTLMPositionAndOrientation = (
+    oms_setResultFile = staticmethod(OpenModelica.Scripting.oms_setResultFile)
+    oms_setSignalFilter = staticmethod(
+        OpenModelica.Scripting.oms_setSignalFilter
+    )
+    oms_setSolver = staticmethod(OpenModelica.Scripting.oms_setSolver)
+    oms_setStartTime = staticmethod(OpenModelica.Scripting.oms_setStartTime)
+    oms_setStopTime = staticmethod(OpenModelica.Scripting.oms_setStopTime)
+    oms_setTempDirectory = staticmethod(
+        OpenModelica.Scripting.oms_setTempDirectory
+    )
+    oms_setTLMPositionAndOrientation = staticmethod(
         OpenModelica.Scripting.oms_setTLMPositionAndOrientation
     )
-    oms_setTLMSocketData = OpenModelica.Scripting.oms_setTLMSocketData
-    oms_setTolerance = OpenModelica.Scripting.oms_setTolerance
-    oms_setVariableStepSize = OpenModelica.Scripting.oms_setVariableStepSize
-    oms_setWorkingDirectory = OpenModelica.Scripting.oms_setWorkingDirectory
-    oms_simulate = OpenModelica.Scripting.oms_simulate
-    oms_stepUntil = OpenModelica.Scripting.oms_stepUntil
-    oms_terminate = OpenModelica.Scripting.oms_terminate
-    oms_getVersion = OpenModelica.Scripting.oms_getVersion
+    oms_setTLMSocketData = staticmethod(
+        OpenModelica.Scripting.oms_setTLMSocketData
+    )
+    oms_setTolerance = staticmethod(OpenModelica.Scripting.oms_setTolerance)
+    oms_setVariableStepSize = staticmethod(
+        OpenModelica.Scripting.oms_setVariableStepSize
+    )
+    oms_setWorkingDirectory = staticmethod(
+        OpenModelica.Scripting.oms_setWorkingDirectory
+    )
+    oms_simulate = staticmethod(OpenModelica.Scripting.oms_simulate)
+    oms_stepUntil = staticmethod(OpenModelica.Scripting.oms_stepUntil)
+    oms_terminate = staticmethod(OpenModelica.Scripting.oms_terminate)
+    oms_getVersion = staticmethod(OpenModelica.Scripting.oms_getVersion)
