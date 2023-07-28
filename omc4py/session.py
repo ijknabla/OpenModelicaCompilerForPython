@@ -5,84 +5,14 @@ import re
 import warnings
 from typing import Optional
 
-from . import compiler, exception
-from .classes import (
-    AbstractOMCInteractive,
-    AbstractOMCSession,
-    Component,
-    String,
-    TypeName,
-)
+from . import exception
+from .classes import AbstractOMCSession, Component, String, TypeName
 from .parser import (
     ComponentTuple,
     parse_components,
     parse_OMCExceptions,
     parse_OMCValue,
 )
-
-
-def __select_session_type(
-    omc: AbstractOMCInteractive,
-) -> type[AbstractOMCSession]:
-    """
-    Session class selector.
-    Update this after new omc version supported!!!
-    """
-    from . import (
-        v_1_13,
-        v_1_14,
-        v_1_15,
-        v_1_16,
-        v_1_17,
-        v_1_18,
-        v_1_19,
-        v_1_20,
-    )
-
-    version = OMCSessionMinimal(omc).getVersionTuple()
-    if version[:2] <= (1, 13):
-        return v_1_13.OMCSession
-    elif version[:2] == (1, 14):
-        return v_1_14.OMCSession
-    elif version[:2] == (1, 15):
-        return v_1_15.OMCSession
-    elif version[:2] == (1, 16):
-        return v_1_16.OMCSession
-    elif version[:2] == (1, 17):
-        return v_1_17.OMCSession
-    elif version[:2] == (1, 18):
-        return v_1_18.OMCSession
-    elif version[:2] == (1, 19):
-        return v_1_19.OMCSession
-    elif version[:2] == (1, 20):
-        return v_1_20.OMCSession
-    else:
-        return v_1_20.OMCSession
-
-
-def open_session(
-    omc_command: Optional[compiler.StrOrPathLike] = None,
-    *,
-    session_type: Optional[type[AbstractOMCSession]] = None,
-) -> AbstractOMCSession:
-    omc = compiler.OMCInteractive.open(omc_command)
-
-    try:
-        if session_type is None:
-            session_type = __select_session_type(omc)
-        else:
-            if not issubclass(session_type, AbstractOMCSession):
-                raise TypeError(
-                    "session_type must be "
-                    f"subclass of {AbstractOMCSession}, "
-                    f"got {session_type}"
-                )
-
-        return session_type(omc)
-
-    except Exception:
-        omc.close()
-        raise
 
 
 class OMCSessionBase(

@@ -46,7 +46,6 @@ if not __OMC4PY_SETUP__:
     __all__ = (
         "__license__",
         "__version__",
-        "open_session",
         "Real",
         "Integer",
         "Boolean",
@@ -56,4 +55,3 @@ if not __OMC4PY_SETUP__:
     )
 
     from .classes import Boolean, Integer, Real, String, TypeName, VariableName
-    from .session import open_session
