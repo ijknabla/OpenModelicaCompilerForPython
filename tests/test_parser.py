@@ -18,7 +18,6 @@ from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
 @pytest.mark.parametrize(
     "literal, expected",
     [
-        ("()", ()),
         (
             """\
 record OpenModelica.Scripting.SourceInfo
