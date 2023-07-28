@@ -1,5 +1,6 @@
 import pytest
 
+from neo import latest
 from omc4py import TypeName, VariableName, open_session
 
 
@@ -10,15 +11,8 @@ def test_open_session():
         session.__check__()
 
 
-@pytest.fixture
-def session():
-    with open_session() as session:
-        yield session
-        session.__check__()
-
-
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_loadString(session):  # fixture
+def test_loadString(session: latest.Session):
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
     assert session.isType("MyEnumeration")
     assert session.isEnumeration("MyEnumeration")
@@ -31,7 +25,7 @@ def test_loadString(session):  # fixture
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getClassNames(session):  # fixture
+def test_getClassNames(session: latest.Session):
     assert session.loadString(
         """
 package Test_getClassNames
@@ -47,24 +41,15 @@ within Test_getClassNames;
 type C = enumeration(c);
         """
     )
-    assert (
-        session.getClassNames("Test_getClassNames")
-        == [
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", sort=True)
-        == [
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", qualified=True)
-        == [
-            TypeName("Test_getClassNames.C"),
-        ]
-    ).all()
+    assert session.getClassNames("Test_getClassNames") == [
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", sort=True) == [
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", qualified=True) == [
+        TypeName("Test_getClassNames.C"),
+    ]
 
     assert session.loadString(
         """
@@ -72,27 +57,18 @@ within Test_getClassNames;
 type A = enumeration(a);
         """
     )
-    assert (
-        session.getClassNames("Test_getClassNames")
-        == [
-            TypeName("C"),
-            TypeName("A"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", sort=True)
-        == [
-            TypeName("A"),
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", qualified=True)
-        == [
-            TypeName("Test_getClassNames.C"),
-            TypeName("Test_getClassNames.A"),
-        ]
-    ).all()
+    assert session.getClassNames("Test_getClassNames") == [
+        TypeName("C"),
+        TypeName("A"),
+    ]
+    assert session.getClassNames("Test_getClassNames", sort=True) == [
+        TypeName("A"),
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", qualified=True) == [
+        TypeName("Test_getClassNames.C"),
+        TypeName("Test_getClassNames.A"),
+    ]
 
     assert session.loadString(
         """
@@ -100,36 +76,25 @@ within Test_getClassNames;
 type B = enumeration(b);
         """
     )
-    assert (
-        session.getClassNames("Test_getClassNames")
-        == [
-            TypeName("C"),
-            TypeName("A"),
-            TypeName("B"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", sort=True)
-        == [
-            TypeName("A"),
-            TypeName("B"),
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", qualified=True)
-        == [
-            TypeName("Test_getClassNames.C"),
-            TypeName("Test_getClassNames.A"),
-            TypeName("Test_getClassNames.B"),
-        ]
-    ).all()
+    assert session.getClassNames("Test_getClassNames") == [
+        TypeName("C"),
+        TypeName("A"),
+        TypeName("B"),
+    ]
+    assert session.getClassNames("Test_getClassNames", sort=True) == [
+        TypeName("A"),
+        TypeName("B"),
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", qualified=True) == [
+        TypeName("Test_getClassNames.C"),
+        TypeName("Test_getClassNames.A"),
+        TypeName("Test_getClassNames.B"),
+    ]
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getComponents(
-    session,  # fixture
-):
+def test_getComponents(session: latest.Session):
     assert session.loadString(
         """
 class Test_getComponents
@@ -218,34 +183,36 @@ end Test_getComponents;
             assert component.inputOutput == "unspecified"
 
         if component.name == VariableName("a_any"):
-            assert component.dimensions == (":",)
+            assert component.dimensions == [
+                ":",
+            ]
         elif component.name == VariableName("a_any_any"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 ":",
                 ":",
-            )
+            ]
         elif component.name == VariableName("a_any_any_any"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 ":",
                 ":",
                 ":",
-            )
+            ]
         elif component.name == VariableName("a_1_2_3"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 "1",
                 "2",
                 "3",
-            )
+            ]
         elif component.name == VariableName("a_3_2_1"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 "3",
                 "2",
                 "1",
-            )
+            ]
         else:
-            assert component.dimensions == ()
+            assert component.dimensions == []
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_OpenModelica(session):  # fixture
+def test_OpenModelica(session: latest.Session):
     assert session.isPackage("OpenModelica")
