@@ -60,3 +60,15 @@ repos:
         language: system
         pass_filenames: false
         files: ^poetry\.lock$
+    -   id: poetry-export-bootstrap-requirements
+        name: Export requirements.bootstrap.txt
+        entry: poetry
+        args:
+        -   export
+        -   --format=requirements.txt
+        -   --without-hashes
+        -   --only=main,bootstrap
+        -   --output=requirements.bootstrap.txt
+        language: system
+        pass_filenames: false
+        files: ^poetry\.lock$
