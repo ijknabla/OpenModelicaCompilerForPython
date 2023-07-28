@@ -33,6 +33,10 @@ if TYPE_CHECKING:
 
     Command = str | PathLike[str]
 
+    Version__2_X = tuple[Literal[2], int]
+    Version__1_X = tuple[
+        Literal[1], Literal[22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
+    ]
     Version__1_21 = tuple[Literal[1], Literal[21]] | Literal["1.21", "1_21"]
     Version__1_20 = tuple[Literal[1], Literal[20]] | Literal["1.20", "1_20"]
     Version__1_19 = tuple[Literal[1], Literal[19]] | Literal["1.19", "1_19"]
@@ -100,6 +104,7 @@ def _select_session_type(
 def open_session(
     omc_command: Command | None = None,
     *,
+    version: Version__2_X | Version__1_X | None = None,
     asyncio: Literal[False] = False,
 ) -> latest.Session:
     ...
@@ -109,6 +114,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
+    version: Version__2_X | Version__1_X | None = None,
     asyncio: Literal[True],
 ) -> latest.aio.Session:
     ...
