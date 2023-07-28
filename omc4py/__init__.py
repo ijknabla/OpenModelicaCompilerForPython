@@ -1,4 +1,4 @@
-from __future__ import annotations
+__all__ = ("TypeName", "VariableName", "__license__", "__version__")
 
 __license__ = """
 /*
@@ -35,23 +35,4 @@ __license__ = """
 
 __version__ = "0.2.1"
 
-__OMC4PY_SETUP__: bool
-try:
-    __OMC4PY_SETUP__
-except NameError:
-    __OMC4PY_SETUP__ = False
-
-
-if not __OMC4PY_SETUP__:
-    __all__ = (
-        "__license__",
-        "__version__",
-        "Real",
-        "Integer",
-        "Boolean",
-        "String",
-        "VariableName",
-        "TypeName",
-    )
-
-    from .classes import Boolean, Integer, Real, String, TypeName, VariableName
+from .classes import TypeName, VariableName
