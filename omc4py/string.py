@@ -61,9 +61,9 @@ def to_omc_literal(obj: Any) -> str:
 
     if isinstance(obj, SupportsToOMCLiteral):
         return obj.__to_omc_literal__()
-    elif isinstance(obj, (classes.Boolean, bool)):
+    elif isinstance(obj, bool):
         return "true" if obj else "false"
-    elif isinstance(obj, (classes.String, str)):
+    elif isinstance(obj, str):
         return '"' + escape_py_string(obj) + '"'
     elif isinstance(obj, (Sequence, numpy.ndarray)):
         return "{" + ", ".join(map(to_omc_literal, obj)) + "}"
@@ -73,6 +73,3 @@ def to_omc_literal(obj: Any) -> str:
 
 def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:
     return reduce(lambda x, y: x.replace(y[0], y[1]), old_and_new, s)
-
-
-from . import classes  # noqa: E402
