@@ -5,14 +5,14 @@ from omc4py import TypeName, VariableName, open_session
 
 
 @pytest.mark.dependency()
-def test_open_session():
+def test_open_session() -> None:
     with open_session() as session:
         assert session is not None
         session.__check__()
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_loadString(session: latest.Session):
+def test_loadString(session: latest.Session) -> None:
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
     assert session.isType("MyEnumeration")
     assert session.isEnumeration("MyEnumeration")
@@ -25,7 +25,7 @@ def test_loadString(session: latest.Session):
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getClassNames(session: latest.Session):
+def test_getClassNames(session: latest.Session) -> None:
     assert session.loadString(
         """
 package Test_getClassNames
@@ -94,7 +94,7 @@ type B = enumeration(b);
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getComponents(session: latest.Session):
+def test_getComponents(session: latest.Session) -> None:
     assert session.loadString(
         """
 class Test_getComponents
@@ -214,5 +214,5 @@ end Test_getComponents;
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_OpenModelica(session: latest.Session):
+def test_OpenModelica(session: latest.Session) -> None:
     assert session.isPackage("OpenModelica")
