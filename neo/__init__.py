@@ -6,7 +6,7 @@ from typing import TYPE_CHECKING, Any, Union, overload
 
 from typing_extensions import Literal
 
-from omc4py.compiler import OMCInteractive
+from omc4py.compiler import AsyncOMCInteractive, OMCInteractive
 
 from .openmodelica import TypeName, VariableName
 
@@ -41,4 +41,7 @@ def open_session(
 ) -> Any:
     from . import latest
 
-    return latest.Session(OMCInteractive.open(omc_command))
+    if asyncio:
+        return latest.aio.Session(AsyncOMCInteractive.open(omc_command))
+    else:
+        return latest.Session(OMCInteractive.open(omc_command))
