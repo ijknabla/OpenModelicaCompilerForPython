@@ -1,4 +1,9 @@
-__all__ = ("TypeName", "VariableName", "__license__", "__version__")
+__all__ = (
+    # "TypeName",
+    # "VariableName",
+    "__license__",
+    "__version__",
+)
 
 __license__ = """
 /*
@@ -34,5 +39,3 @@ __license__ = """
 """
 
 __version__ = "0.2.1"
-
-from .classes import TypeName, VariableName

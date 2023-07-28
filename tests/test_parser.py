@@ -3,7 +3,7 @@ from typing import Any
 import pytest
 from numpy import array
 
-from omc4py.classes import TypeName, VariableName
+from neo import TypeName, VariableName
 from omc4py.parser import parse_components
 from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
 from omc4py.parser.visitor import ComponentTuple

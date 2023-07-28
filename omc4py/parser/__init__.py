@@ -13,7 +13,7 @@ import functools
 import re
 from collections.abc import Iterator
 from functools import lru_cache
-from typing import Any, NewType, Union, overload
+from typing import TYPE_CHECKING, Any, NewType, Union, overload
 
 from arpeggio import (
     EOF,
@@ -27,7 +27,6 @@ from modelicalang import ParsingExpressionLike, returns_parsing_expression
 from typing_extensions import Literal
 
 from .. import exception
-from ..classes import TypeName
 from .syntax import OMCDialectSyntax
 from .visitor import (
     ComponentArrayVisitor,
@@ -37,6 +36,9 @@ from .visitor import (
     OMCValueVisitor__v_1_13,
     TypeSpecifierVisitor,
 )
+
+if TYPE_CHECKING:
+    from neo.openmodelica import TypeName
 
 TypeSpecifierParseTreeNode = NewType(
     "TypeSpecifierParseTreeNode", ParseTreeNode

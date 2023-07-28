@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import operator
 from collections.abc import Iterator, Sequence
-from typing import Any, NamedTuple, TypeVar, Union
+from typing import TYPE_CHECKING, Any, NamedTuple, TypeVar, Union
 
 import numpy
 from arpeggio import NonTerminal, ParseTreeNode, PTNodeVisitor, Terminal
@@ -10,19 +10,17 @@ from numpy.typing import NDArray
 from typing_extensions import SupportsIndex
 
 from omc4py import string
-from omc4py.classes import (
-    TypeName,
-    VariableName,
-    _BaseTypeName,
-    _BaseVariableName,
-)
+
+if TYPE_CHECKING:
+    from neo.openmodelica import TypeName, VariableName
+
 
 T = TypeVar("T")
 
 
 OMCValue = Union[
-    VariableName,
-    TypeName,
+    "VariableName",
+    "TypeName",
     NDArray[Any],
     "tuple[Any, ...]",
     "dict[str, Any]",
@@ -52,9 +50,13 @@ class TypeSpecifierVisitor(PTNodeVisitor):
         node: Terminal,
         _: object,
     ) -> VariableName:
+        from neo.openmodelica import VariableName, _BaseVariableName
+
         return _BaseVariableName.__new__(VariableName, node.value)
 
     def visit_type_specifier(self, node: NonTerminal, _: object) -> TypeName:
+        from neo.openmodelica import TypeName, _BaseTypeName
+
         parts = tuple(
             s
             for i, s in enumerate(self.__iter_terminal_nodes(node))
@@ -204,6 +206,8 @@ class OMCValueVisitor__v_1_13(OMCValueVisitor):
     def visit_omc_record_literal(
         self, node: object, children: OMCValueChildren
     ) -> dict[str, OMCValue]:
+        from neo.openmodelica import TypeName
+
         className, _ = children.type_specifier
         record = super().visit_omc_record_literal(node, children)
 
