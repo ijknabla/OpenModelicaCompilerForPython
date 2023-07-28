@@ -1,5 +1,6 @@
 arpeggio==1.10.2 ; python_version >= "3.7" and python_version < "4.0"
 cffi==1.15.0 ; python_version >= "3.7" and python_version < "4.0" and implementation_name == "pypy"
+exceptiongroup==1.1.2 ; python_version >= "3.7" and python_version < "4.0"
 flake8==4.0.1 ; python_version >= "3.7" and python_version < "4.0"
 importlib-metadata==4.2.0 ; python_version >= "3.7" and python_version < "3.8"
 mccabe==0.6.1 ; python_version >= "3.7" and python_version < "4.0"
