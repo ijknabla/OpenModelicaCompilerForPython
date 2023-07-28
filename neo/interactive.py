@@ -7,15 +7,14 @@ import tempfile
 import uuid
 from asyncio import Lock
 from collections.abc import Callable, Generator
-from contextlib import ExitStack, contextmanager
+from contextlib import ExitStack, contextmanager, suppress
 from dataclasses import dataclass
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
+from typing import AnyStr
 
 import zmq.asyncio
-
-from omc4py._util import terminating, unlinking
 
 logger = logging.getLogger(__name__)
 
@@ -99,8 +98,8 @@ def _create_omc_interactive(
         ]
 
         stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
-        process = stack.enter_context(
-            terminating(
+        process: Popen[str] = stack.enter_context(
+            _terminating(
                 Popen(command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8")
             )
         )
@@ -110,7 +109,7 @@ def _create_omc_interactive(
         first_line = process.stdout.readline()
         logger.debug(f"(pid={process.pid}) >>> {first_line}")
 
-        with unlinking(
+        with _unlinking(
             _find_openmodelica_zmq_port_filepath(suffix)
         ) as port_filepath:
             logger.info(
@@ -153,3 +152,23 @@ def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
         )
 
     return candidates[0]
+
+
+@contextmanager
+def _terminating(
+    process: Popen[AnyStr],
+) -> Generator[Popen[AnyStr], None, None]:
+    try:
+        yield process
+    finally:
+        process.terminate()
+        process.wait()
+
+
+@contextmanager
+def _unlinking(path: Path) -> Generator[Path, None, None]:
+    try:
+        yield path
+    finally:
+        with suppress(FileNotFoundError):
+            path.unlink()
