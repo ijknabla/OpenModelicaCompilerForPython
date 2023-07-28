@@ -219,5 +219,8 @@ def test_OpenModelica(session: latest.Session) -> None:
 
 
 def test_getMessagesStringInternal(session: latest.Session) -> None:
-    session.__omc_interactive__.evaluate("XXX")
     session.getMessagesStringInternal()
+    for name in ["XXX", "YYY", "ZZZ"]:
+        session.__omc_interactive__.evaluate(name)
+        for message in session.getMessagesStringInternal():
+            assert message.message.startswith(f"Variable {name} not found")
