@@ -102,6 +102,15 @@ def test_session_types() -> None:
         a_21 = open_session(version=(1, 21))
         a_21 = open_session(version=(1, 21), asyncio=False)  # noqa: F841
         b_21 = open_session(version=(1, 21), asyncio=True)  # noqa: F841
+        a_21 = open_session(version=(1, 22))
+        a_21 = open_session(version=(1, 22), asyncio=False)  # noqa: F841
+        b_21 = open_session(version=(1, 22), asyncio=True)  # noqa: F841
+        a_21 = open_session(version=(1, 23))
+        a_21 = open_session(version=(1, 23), asyncio=False)  # noqa: F841
+        b_21 = open_session(version=(1, 23), asyncio=True)  # noqa: F841
+        a_21 = open_session(version=(2, 0))
+        a_21 = open_session(version=(2, 0), asyncio=False)  # noqa: F841
+        b_21 = open_session(version=(2, 0), asyncio=True)  # noqa: F841
 
         a_21 = open_session()
         a_21 = open_session(asyncio=False)  # noqa: F841
