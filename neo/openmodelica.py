@@ -4,11 +4,14 @@ __all__ = ("Component", "TypeName", "VariableName")
 
 import itertools
 from collections.abc import Callable, Iterable, Iterator
-from typing import Any, List, NamedTuple, TypeVar, Union
+from typing import TYPE_CHECKING, Any, List, NamedTuple, TypeVar, Union
 
 from typing_extensions import Literal, Protocol, runtime_checkable
 
 from omc4py.string import to_omc_literal
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 
 class Component(NamedTuple):
@@ -47,14 +50,12 @@ class SupportsToOMCLiteral(Protocol):
 
 # $Code classes OpenModelica.$Code.{VariableName, TypeName}
 
-T_bvn = TypeVar("T_bvn", bound="_BaseVariableName")
-
 
 class _BaseVariableName:
     __slots__ = ("__identifier",)
     __identifier: str
 
-    def __new__(cls: type[T_bvn], identifier: str) -> T_bvn:
+    def __new__(cls, identifier: str) -> Self:
         self = super(_BaseVariableName, cls).__new__(cls)
         self.__identifier = identifier
         return self
@@ -77,11 +78,8 @@ class _BaseVariableName:
     __to_omc_literal__ = __str__
 
 
-T_vn = TypeVar("T_vn", bound="VariableName")
-
-
 class VariableName(_BaseVariableName):
-    def __new__(cls: type[T_vn], obj: VariableNameLike) -> T_vn:
+    def __new__(cls, obj: VariableNameLike) -> Self:
         from omc4py import parser
 
         if isinstance(obj, cls):
@@ -105,15 +103,12 @@ class VariableName(_BaseVariableName):
         return _BaseVariableName.__new__(cls, identifier)
 
 
-T_btn = TypeVar("T_btn", bound="_BaseTypeName")
-
-
 class _BaseTypeName:
     __slots__ = ("parts",)
 
     parts: tuple[str, ...]
 
-    def __new__(cls: type[T_btn], parts: tuple[str, ...]) -> T_btn:
+    def __new__(cls, parts: tuple[str, ...]) -> Self:
         self = super(_BaseTypeName, cls).__new__(cls)
         self.parts = parts
         return self
@@ -122,7 +117,7 @@ class _BaseTypeName:
     def is_absolute(self) -> bool:
         return bool(self.parts) and self.parts[0] == "."
 
-    def as_absolute(self: T_btn) -> T_btn:
+    def as_absolute(self) -> Self:
         if self.is_absolute:
             return self
         else:
@@ -133,7 +128,7 @@ class _BaseTypeName:
         return VariableName(self.parts[-1])
 
     @property
-    def parents(self: T_btn) -> Iterator[T_btn]:
+    def parents(self) -> Iterator[Self]:
         for end in reversed(range(1, len(self.parts))):
             yield _BaseTypeName.__new__(
                 type(self),
@@ -141,7 +136,7 @@ class _BaseTypeName:
             )
 
     @property
-    def parent(self: T_btn) -> T_btn:
+    def parent(self) -> Self:
         for parent in self.parents:
             return parent
         else:
@@ -150,7 +145,7 @@ class _BaseTypeName:
     def __hash__(self) -> int:
         return hash(self.parts)
 
-    def __eq__(self: T_btn, other: Any) -> bool:
+    def __eq__(self, other: Any) -> bool:
         return isinstance(other, _BaseTypeName) and self.parts == other.parts
 
     def __repr__(self) -> str:
@@ -165,13 +160,8 @@ class _BaseTypeName:
     __to_omc_literal__ = __str__
 
 
-T_tn = TypeVar("T_tn", bound="TypeName")
-
-
 class TypeName(_BaseTypeName):
-    def __new__(
-        cls: type[T_tn], part: TypeNameLike, *parts: TypeNameLike
-    ) -> T_tn:
+    def __new__(cls, part: TypeNameLike, *parts: TypeNameLike) -> Self:
         if isinstance(part, cls) and not parts:
             return part
 
@@ -207,7 +197,7 @@ class TypeName(_BaseTypeName):
     def __repr__(self) -> str:
         return f"{type(self).__name__}({str(self)!r})"
 
-    def __truediv__(self: T_tn, other: TypeNameLike) -> T_tn:
+    def __truediv__(self, other: TypeNameLike) -> Self:
         return type(self)(self, other)
 
 
