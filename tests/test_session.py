@@ -216,3 +216,8 @@ end Test_getComponents;
 @pytest.mark.dependency(depends=["test_open_session"])
 def test_OpenModelica(session: latest.Session) -> None:
     assert session.isPackage("OpenModelica")
+
+
+def test_getMessagesStringInternal(session: latest.Session) -> None:
+    session.__omc_interactive__.evaluate("XXX")
+    session.getMessagesStringInternal()
