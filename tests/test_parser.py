@@ -19,8 +19,6 @@ from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
     "literal, expected",
     [
         ("()", ()),
-        ("record A a = 0 end A;", {"a": 0}),
-        ("record A a = 0, b = 1 end A;", {"a": 0, "b": 1}),
         (
             """\
 record OpenModelica.Scripting.SourceInfo
@@ -39,6 +37,17 @@ def test_parse_primitives(literal: str, expected: Any) -> None:
 class OneTwo(enumeration):
     One = 1
     Two = 2
+
+
+@dataclass
+class RecordA(record):
+    a: int
+
+
+@dataclass
+class RecordAB(record):
+    a: int
+    b: int
 
 
 @external(".ScalarRecord")
@@ -347,6 +356,12 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
                     dimensions=[],
                 ),
             ],
+        ),
+        (RecordA, "record A a = 0 end A;", RecordA(**{"a": 0})),
+        (
+            RecordAB,
+            "record AB a = 0, b = 1 end AB;",
+            RecordAB(**{"a": 0, "b": 1}),
         ),
         (TwoInt, "(0, 1)", (0, 1)),
         (
