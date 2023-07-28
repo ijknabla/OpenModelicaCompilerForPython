@@ -4,7 +4,11 @@ from contextlib import closing
 from dataclasses import dataclass
 from functools import partial
 from typing import TYPE_CHECKING, Any, List, Union
+from warnings import warn
 
+from exceptiongroup import ExceptionGroup
+
+import omc4py.exception
 from omc4py.string import to_omc_literal
 
 from ..algorithm import bind_to_awaitable
@@ -13,7 +17,11 @@ from ..parser import cast, parse
 from ..protocol import SupportsInteractive
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    from typing_extensions import Self, TypeAlias
+
+    from ..v_1_21._interface import OpenModelica
+
+    ErrorMessage: TypeAlias = OpenModelica.Scripting.ErrorMessage
 
 
 @dataclass
@@ -34,3 +42,35 @@ class Session:
         literal = self.__omc_interactive__.evaluate(expression)
         bound_parse = bind_to_awaitable(partial(parse, List[Component]))
         return bound_parse(literal)  # type: ignore
+
+    def __check__(self) -> None:
+        messages: list[ErrorMessage]
+        messages = getattr(
+            self,
+            "getMessagesStringInternal",
+            lambda: [],
+        )()  # type: ignore
+        return _check_messages(messages)  # type: ignore
+
+
+@bind_to_awaitable
+def _check_messages(messages: list[ErrorMessage]) -> None:
+    errors: list[omc4py.exception.OMCError] = []
+
+    for record in messages:
+        level = record.level.name
+        kind = record.kind.name
+        message = record.message
+
+        args = (f"[level={level}, kind={kind}] {message}",)
+        if level == "error":
+            errors.append(omc4py.exception.OMCError(*args))
+        else:
+            warn(omc4py.exception.OMCWarning(*args))
+
+    if len(errors) == 0:
+        return
+    elif len(errors) == 1:
+        raise errors[0]
+    else:
+        raise ExceptionGroup("Multiple OMCErrors raised", errors)
