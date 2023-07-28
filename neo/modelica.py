@@ -4,7 +4,7 @@ import enum
 import inspect
 from collections.abc import Callable, Generator
 from functools import partial, wraps
-from typing import TYPE_CHECKING, Any, Awaitable, ClassVar, Generic, TypeVar
+from typing import TYPE_CHECKING, Any, ClassVar, Generic, TypeVar
 
 from typing_extensions import (
     Annotated,
@@ -17,6 +17,7 @@ from typing_extensions import (
 from neo.protocol import SupportsAnyInteractive, SupportsInteractiveProperty
 from omc4py.string import to_omc_literal
 
+from .algorithm import bind_to_awaitable
 from .openmodelica import TypeName
 
 _T = TypeVar("_T")
@@ -82,17 +83,8 @@ def _create_function(
         literal = self.__omc_interactive__.evaluate(
             f"{class_name}({_get_argument(f, *args, **kwargs)})"
         )
-        if isinstance(literal, str):
-            return parse(return_type, literal)
-        else:
-
-            async def _wrapped(literal: Awaitable[str]) -> Any:
-                return parse(
-                    return_type,
-                    await literal,
-                )
-
-            return _wrapped(literal)
+        bound_parse = bind_to_awaitable(partial(parse, return_type))
+        return bound_parse(literal)
 
     _wrapped.__omc_class__ = TypeName(class_name)  # type: ignore
 
