@@ -1,7 +1,7 @@
 import pytest
 
-from neo import latest
-from omc4py import TypeName, VariableName, open_session
+from neo import latest, open_session
+from omc4py import TypeName, VariableName
 
 
 @pytest.mark.dependency()
