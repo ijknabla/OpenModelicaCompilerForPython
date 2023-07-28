@@ -300,7 +300,7 @@ def _create_interface(
         module_body = list[stmt]()
         package_bodies = dict[tuple[str, ...], list[stmt]]({(): []})
         root_packages = list[TypeNameString]()
-        scripting_functions = list[TypeNameString]()
+        scripting_functions = list[tuple[str, expr]]()
 
         for name, entity in entities.items():
             statement: stmt
@@ -331,7 +331,9 @@ def _create_interface(
                 )
 
                 if _parts(name)[:-1] == ("OpenModelica", "Scripting"):
-                    scripting_functions.append(name)
+                    scripting_functions.append(
+                        (_parts(name)[-1], _reference(*_parts(name)))
+                    )
 
             else:
                 continue
@@ -371,11 +373,6 @@ def _create_interface(
                 for package in root_packages
             )
         )
-
-        scripting_functions = [
-            (_parts(function)[-1], _reference(*_parts(function)))
-            for function in scripting_functions
-        ]
 
         if aio:
             session.body.extend(
