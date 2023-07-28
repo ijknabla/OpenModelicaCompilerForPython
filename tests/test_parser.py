@@ -6,29 +6,18 @@ from itertools import product
 from typing import Any, List, NamedTuple, Sequence, TypeVar, Union
 
 import pytest
-from numpy import array
 from typing_extensions import Annotated, Literal
 
 from neo import TypeName, VariableName
 from neo.modelica import alias, enumeration, external, record
 from neo.openmodelica import Component
 from neo.parser import cast, parse
-from omc4py.parser import parse_components
 from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
-from omc4py.parser.visitor import ComponentTuple
 
 
 @pytest.mark.parametrize(
     "literal, expected",
     [
-        ("+1.0", +1.0),
-        ("-1.0", -1.0),
-        ("+1", +1),
-        ("-1", -1),
-        ("true", True),
-        ("false", False),
-        ('"text"', "text"),
-        ("A.$a", TypeName("A.$a")),
         ("()", ()),
         ("(0, 1)", (0, 1)),
         ("record A a = 0 end A;", {"a": 0}),
@@ -45,60 +34,6 @@ end OpenModelica.Scripting.SourceInfo;
 )
 def test_parse_primitives(literal: str, expected: Any) -> None:
     assert parse_OMCValue(literal) == expected
-
-
-@pytest.mark.parametrize(
-    "literal, expected",
-    [
-        ("{}", []),
-        ("{0, 1}", [0, 1]),
-        ("{{0, 1}, {2, 3}}", [[0, 1], [2, 3]]),
-    ],
-)
-def test_parse_arrays(literal: str, expected: Any) -> None:
-    assert (parse_OMCValue(literal) == array(expected)).all()
-
-
-@pytest.mark.parametrize(
-    "literal, expected",
-    [
-        ("{}", []),
-        (
-            """\
-{
-    {
-        className,
-        name,
-        "comment",
-        "protected",
-        true, true, true, true,
-        "variability",
-        "innerOuter",
-        "inputOutput",
-        {:}
-    }
-}""",
-            [
-                ComponentTuple(
-                    className=TypeName("className"),
-                    name=VariableName("name"),
-                    comment="comment",
-                    protected="protected",
-                    isFinal=True,
-                    isFlow=True,
-                    isStream=True,
-                    isReplaceable=True,
-                    variability="variability",
-                    innerOuter="innerOuter",
-                    inputOutput="inputOutput",
-                    dimensions=(":",),
-                )
-            ],
-        ),
-    ],
-)
-def test_parse_omc_component_array(literal: str, expected: Any) -> None:
-    assert parse_components(literal) == expected
 
 
 @external(".OneTwo")
@@ -239,6 +174,51 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
 @pytest.mark.parametrize(
     "typ, literal, expected",
     [
+        (float, "+1.0", +1.0),
+        (float, "-1.0", -1.0),
+        (int, "+1", +1),
+        (int, "-1", -1),
+        (bool, "true", True),
+        (bool, "false", False),
+        (str, '"text"', "text"),
+        (TypeName, "A.$a", TypeName("A.$a")),
+        (List[int], "{}", []),
+        (List[int], "{0, 1}", [0, 1]),
+        (List[List[int]], "{{0, 1}, {2, 3}}", [[0, 1], [2, 3]]),
+        (List[Component], "{}", []),
+        (
+            List[Component],
+            """\
+{
+    {
+        className,
+        name,
+        "comment",
+        "protected",
+        true, true, true, true,
+        "variability",
+        "innerOuter",
+        "inputOutput",
+        {:}
+    }
+}""",
+            [
+                Component(
+                    className=TypeName("className"),
+                    name=VariableName("name"),
+                    comment="comment",
+                    protected="protected",
+                    isFinal=True,
+                    isFlow=True,
+                    isStream=True,
+                    isReplaceable=True,
+                    variability="variability",
+                    innerOuter="innerOuter",
+                    inputOutput="inputOutput",
+                    dimensions=[":"],
+                )
+            ],
+        ),
         (None, "", None),
         (type(None), "", None),
         (float, "1", 1),
