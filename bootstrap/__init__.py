@@ -1,7 +1,8 @@
-from omc4py.compiler import AsyncOMCInteractive
+from neo.interactive import open_interactives
 
 from .session import Session
 
 
 def open_session() -> Session:
-    return Session(AsyncOMCInteractive.open())
+    _, interactive = open_interactives("omc")
+    return Session(interactive)
