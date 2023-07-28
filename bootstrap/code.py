@@ -153,14 +153,8 @@ def _create_enumeration_module(
                     bases=[Name(id="enumeration", ctx=Load())],
                     keywords=[],
                     body=[
-                        Expr(
-                            value=Constant(
-                                value="\n"
-                                + interface[minimal_version][full_name][
-                                    "code"
-                                ].strip()
-                                + "\n"
-                            )
+                        *_code2doc(
+                            interface[minimal_version][full_name]["code"]
                         ),
                         *[
                             Assign(
@@ -223,6 +217,20 @@ def _categorize_enumerations(
         categories[n][es].append(v)
 
     return categories
+
+
+def _code2doc(code: str | None) -> list[Expr]:
+    if code is None:
+        return []
+    else:
+
+        def doc_lines() -> Generator[str, None, None]:
+            yield "```modelica"
+            yield from code.splitlines(keepends=False)
+            yield "```"
+            yield ""
+
+        return [Expr(value=Constant(value="\n".join(doc_lines())))]
 
 
 def _create_module(
@@ -300,7 +308,7 @@ def _create_interface(
         module_body = list[stmt]()
         package_bodies = dict[tuple[str, ...], list[stmt]]({(): []})
         root_packages = list[TypeNameString]()
-        scripting_functions = list[TypeNameString]()
+        scripting_functions = list[tuple[str, expr]]()
 
         for name, entity in entities.items():
             statement: stmt
@@ -331,7 +339,9 @@ def _create_interface(
                 )
 
                 if _parts(name)[:-1] == ("OpenModelica", "Scripting"):
-                    scripting_functions.append(name)
+                    scripting_functions.append(
+                        (_parts(name)[-1], _reference(*_parts(name)))
+                    )
 
             else:
                 continue
@@ -371,11 +381,6 @@ def _create_interface(
                 for package in root_packages
             )
         )
-
-        scripting_functions = [
-            (_parts(function)[-1], _reference(*_parts(function)))
-            for function in scripting_functions
-        ]
 
         if aio:
             session.body.extend(
@@ -618,15 +623,15 @@ def _create_function(
             kw_defaults=[],
             defaults=[Constant(value=Ellipsis)] * sum(inputs.values()),
         ),
-        body=([] if code is None else [Expr(value=Constant(value=code))])
-        + [
+        body=[
+            *_code2doc(code),
             Raise(
                 exc=Call(
                     func=Name(id="NotImplementedError", ctx=Load()),
                     args=[],
                     keywords=[],
                 )
-            )
+            ),
         ],
         decorator_list=[
             _external_decorator(name),
@@ -655,7 +660,7 @@ def _create_record(
         bases=[_reference("record")],
         keywords=[],
         body=[
-            Expr(value=Constant(value=code)),
+            *_code2doc(code),
             *(
                 AnnAssign(
                     target=Name(id=name, ctx=Store()),
