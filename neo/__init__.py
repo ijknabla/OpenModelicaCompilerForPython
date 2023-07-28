@@ -6,8 +6,7 @@ from typing import TYPE_CHECKING, Any, Union, overload
 
 from typing_extensions import Literal
 
-from omc4py.compiler import AsyncOMCInteractive, OMCInteractive
-
+from .interactive import open_interactives
 from .openmodelica import TypeName, VariableName
 
 if TYPE_CHECKING:
@@ -39,9 +38,13 @@ def open_session(
     *,
     asyncio: bool = False,
 ) -> Any:
+    interactive, aio_interactive = open_interactives(
+        "omc" if omc_command is None else omc_command
+    )
+
     from . import latest
 
     if asyncio:
-        return latest.aio.Session(AsyncOMCInteractive.open(omc_command))
+        return latest.aio.Session(aio_interactive)
     else:
-        return latest.Session(OMCInteractive.open(omc_command))
+        return latest.Session(interactive)
