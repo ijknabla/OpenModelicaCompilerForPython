@@ -3,6 +3,7 @@ from __future__ import annotations
 __all__ = (
     "TypeName",
     "VariableName",
+    "open_session",
 )
 import re
 from os import PathLike
