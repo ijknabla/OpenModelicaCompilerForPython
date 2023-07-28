@@ -12,24 +12,7 @@ from neo import TypeName, VariableName
 from neo.modelica import alias, enumeration, external, record
 from neo.openmodelica import Component
 from neo.parser import cast, parse
-from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
-
-
-@pytest.mark.parametrize(
-    "literal, expected",
-    [
-        (
-            """\
-record OpenModelica.Scripting.SourceInfo
-    filename = "filename"
-end OpenModelica.Scripting.SourceInfo;
-""",
-            {"fileName": "filename"},
-        ),
-    ],
-)
-def test_parse_primitives(literal: str, expected: Any) -> None:
-    assert parse_OMCValue(literal) == expected
+from neo.v_1_21._interface import OpenModelica
 
 
 @external(".OneTwo")
@@ -497,6 +480,50 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
                         [],
                     )
                 ],
+            ),
+        ),
+        (
+            OpenModelica.Scripting.SourceInfo,
+            """\
+record OpenModelica.Scripting.SourceInfo
+    filename = "filename",
+    readonly=false,
+    lineStart=1,
+    columnStart=2,
+    lineEnd=3,
+    columnEnd=4
+end OpenModelica.Scripting.SourceInfo;
+""",
+            OpenModelica.Scripting.SourceInfo(
+                **{
+                    "fileName": "filename",
+                    "readonly": False,
+                    "lineStart": 1,
+                    "columnStart": 2,
+                    "lineEnd": 3,
+                    "columnEnd": 4,
+                }
+            ),
+        ),
+        (
+            OpenModelica.Scripting.SourceInfo,
+            """\
+record OpenModelica.Scripting.SourceInfo
+    fileName = "fileName",
+    readonly=false,
+    lineStart=1,
+    columnStart=2,
+    lineEnd=3,
+    columnEnd=4
+end OpenModelica.Scripting.SourceInfo;
+""",
+            OpenModelica.Scripting.SourceInfo(
+                fileName="fileName",
+                readonly=False,
+                lineStart=1,
+                columnStart=2,
+                lineEnd=3,
+                columnEnd=4,
             ),
         ),
     ],
