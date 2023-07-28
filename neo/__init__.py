@@ -37,28 +37,28 @@ if TYPE_CHECKING:
     Version__1_X = tuple[
         Literal[1], Literal[22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
     ]
-    Version__1_21 = tuple[Literal[1], Literal[21]] | Literal["1.21", "1_21"]
-    Version__1_20 = tuple[Literal[1], Literal[20]] | Literal["1.20", "1_20"]
-    Version__1_19 = tuple[Literal[1], Literal[19]] | Literal["1.19", "1_19"]
-    Version__1_18 = tuple[Literal[1], Literal[18]] | Literal["1.18", "1_18"]
-    Version__1_17 = tuple[Literal[1], Literal[17]] | Literal["1.17", "1_17"]
-    Version__1_16 = tuple[Literal[1], Literal[16]] | Literal["1.16", "1_16"]
-    Version__1_15 = tuple[Literal[1], Literal[15]] | Literal["1.15", "1_15"]
-    Version__1_14 = tuple[Literal[1], Literal[14]] | Literal["1.14", "1_14"]
-    Version__1_13 = tuple[Literal[1], Literal[13]] | Literal["1.13", "1_13"]
-    Version__1_12 = tuple[Literal[1], Literal[12]] | Literal["1.12", "1_12"]
-    Version__1_11 = tuple[Literal[1], Literal[11]] | Literal["1.11", "1_11"]
-    Version__1_10 = tuple[Literal[1], Literal[10]] | Literal["1.10", "1_10"]
-    Version__1_9 = tuple[Literal[1], Literal[9]] | Literal["1.9", "1_9"]
-    Version__1_8 = tuple[Literal[1], Literal[8]] | Literal["1.8", "1_8"]
-    Version__1_7 = tuple[Literal[1], Literal[7]] | Literal["1.7", "1_7"]
-    Version__1_6 = tuple[Literal[1], Literal[6]] | Literal["1.6", "1_6"]
-    Version__1_5 = tuple[Literal[1], Literal[5]] | Literal["1.5", "1_5"]
-    Version__1_4 = tuple[Literal[1], Literal[4]] | Literal["1.4", "1_4"]
-    Version__1_3 = tuple[Literal[1], Literal[3]] | Literal["1.3", "1_3"]
-    Version__1_2 = tuple[Literal[1], Literal[2]] | Literal["1.2", "1_2"]
-    Version__1_1 = tuple[Literal[1], Literal[1]] | Literal["1.1", "1_1"]
-    Version__1_0 = tuple[Literal[1], Literal[0]] | Literal["1.0", "1_0"]
+    Version__1_21 = tuple[Literal[1], Literal[21]]
+    Version__1_20 = tuple[Literal[1], Literal[20]]
+    Version__1_19 = tuple[Literal[1], Literal[19]]
+    Version__1_18 = tuple[Literal[1], Literal[18]]
+    Version__1_17 = tuple[Literal[1], Literal[17]]
+    Version__1_16 = tuple[Literal[1], Literal[16]]
+    Version__1_15 = tuple[Literal[1], Literal[15]]
+    Version__1_14 = tuple[Literal[1], Literal[14]]
+    Version__1_13 = tuple[Literal[1], Literal[13]]
+    Version__1_12 = tuple[Literal[1], Literal[12]]
+    Version__1_11 = tuple[Literal[1], Literal[11]]
+    Version__1_10 = tuple[Literal[1], Literal[10]]
+    Version__1_9 = tuple[Literal[1], Literal[9]]
+    Version__1_8 = tuple[Literal[1], Literal[8]]
+    Version__1_7 = tuple[Literal[1], Literal[7]]
+    Version__1_6 = tuple[Literal[1], Literal[6]]
+    Version__1_5 = tuple[Literal[1], Literal[5]]
+    Version__1_4 = tuple[Literal[1], Literal[4]]
+    Version__1_3 = tuple[Literal[1], Literal[3]]
+    Version__1_2 = tuple[Literal[1], Literal[2]]
+    Version__1_1 = tuple[Literal[1], Literal[1]]
+    Version__1_0 = tuple[Literal[1], Literal[0]]
     Version__0_X = tuple[Literal[0], int]
 
 
@@ -319,7 +319,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: tuple[int, int] | str | None = None,
+    version: tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
     interactive, aio_interactive = open_interactives(
