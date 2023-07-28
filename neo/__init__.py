@@ -2,14 +2,16 @@ from __future__ import annotations
 
 __all__ = ("TypeName", "VariableName")
 from os import PathLike
-from typing import Any, Union, overload
+from typing import TYPE_CHECKING, Any, Union, overload
 
 from typing_extensions import Literal
 
 from omc4py.compiler import OMCInteractive
 
-from . import v_1_21 as latest
 from .openmodelica import TypeName, VariableName
+
+if TYPE_CHECKING:
+    from . import latest
 
 Command = Union[str, "PathLike[str]"]
 
@@ -37,4 +39,6 @@ def open_session(
     *,
     asyncio: bool = False,
 ) -> Any:
+    from . import latest
+
     return latest.Session(OMCInteractive.open(omc_command))
