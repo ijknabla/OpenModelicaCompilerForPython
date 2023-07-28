@@ -19,7 +19,6 @@ from omc4py.parser import parse_OMCValue__v_1_13 as parse_OMCValue
     "literal, expected",
     [
         ("()", ()),
-        ("(0, 1)", (0, 1)),
         ("record A a = 0 end A;", {"a": 0}),
         ("record A a = 0, b = 1 end A;", {"a": 0, "b": 1}),
         (
@@ -65,6 +64,11 @@ class SequenceRecord(record):
     type_: Sequence[TypeName]
     enumeration_: Sequence[OneTwo]
     record_: Sequence[ScalarRecord]
+
+
+class TwoInt(NamedTuple):
+    i: int
+    j: int
 
 
 class ScalarNamedTuple(NamedTuple):
@@ -344,6 +348,7 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
                 ),
             ],
         ),
+        (TwoInt, "(0, 1)", (0, 1)),
         (
             ScalarNamedTuple,
             (
