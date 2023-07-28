@@ -1,11 +1,6 @@
 from __future__ import annotations
 
 __all__ = (
-    # Primitive types
-    "Real",
-    "Integer",
-    "String",
-    "Boolean",
     # $Code types
     "VariableName",
     "TypeName",
@@ -13,21 +8,15 @@ __all__ = (
 
 import itertools
 from collections.abc import Callable, Iterable, Iterator
-from typing import TYPE_CHECKING, Any, TypeVar, Union
+from typing import Any, TypeVar, Union
 
-import numpy
-from typing_extensions import Literal, Protocol, runtime_checkable
+from typing_extensions import Protocol, runtime_checkable
 
 from .string import to_omc_literal
 
 # Type hints
 
 KT = TypeVar("KT")
-
-
-REQUIRED = Literal["required"]
-OPTIONAL = Literal["optional"]
-REQUIRED_or_OPTIONAL = Union[REQUIRED, OPTIONAL]
 
 VariableNameLike = Union[
     "TypeName",
@@ -36,23 +25,6 @@ VariableNameLike = Union[
 ]
 
 TypeNameLike = VariableNameLike
-
-if TYPE_CHECKING:
-    Parser = Callable[[str], Any]
-
-
-# Primitive classes {Real, Integer, Boolean, String}
-
-if TYPE_CHECKING:
-    Real = float
-    Integer = int
-    Boolean = bool
-    String = str
-else:
-    Real = numpy.double
-    Integer = numpy.intc
-    Boolean = numpy.bool_
-    String = numpy.str_
 
 
 @runtime_checkable

@@ -8,10 +8,9 @@ __all__ = (
 
 
 from collections.abc import Iterable, Sequence
-from functools import reduce
+from contextlib import suppress
+from functools import lru_cache, reduce
 from typing import Any
-
-import numpy
 
 modelica_char_escape_map = {
     "\\": r"\\",
@@ -65,10 +64,20 @@ def to_omc_literal(obj: Any) -> str:
         return "true" if obj else "false"
     elif isinstance(obj, str):
         return '"' + escape_py_string(obj) + '"'
-    elif isinstance(obj, (Sequence, numpy.ndarray)):
+    elif isinstance(obj, _sequence_types()):
         return "{" + ", ".join(map(to_omc_literal, obj)) + "}"
     else:
         return str(obj)
+
+
+@lru_cache(1)
+def _sequence_types() -> list[type[Any]]:
+    result = [Sequence]
+    with suppress(ImportError):
+        import numpy
+
+        result.append(numpy.ndarray)
+    return result
 
 
 def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:

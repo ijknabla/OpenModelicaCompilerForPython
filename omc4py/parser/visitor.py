@@ -11,10 +11,6 @@ from typing_extensions import SupportsIndex
 
 from omc4py import string
 from omc4py.classes import (
-    Boolean,
-    Integer,
-    Real,
-    String,
     TypeName,
     VariableName,
     _BaseTypeName,
@@ -25,10 +21,6 @@ T = TypeVar("T")
 
 
 OMCValue = Union[
-    Real,
-    Integer,
-    Boolean,
-    String,
     VariableName,
     TypeName,
     NDArray[Any],
@@ -83,7 +75,7 @@ class TypeSpecifierVisitor(PTNodeVisitor):
 class NumberChildren:
     sign: list[str]
     UNSIGNED_NUMBER: list[Union[int, float]]
-    number: list[Union[Integer, Real]]
+    number: list[Union[int, float]]
 
 
 class NumberVisitor(
@@ -102,7 +94,7 @@ class NumberVisitor(
 
     def visit_number(
         self, _: object, children: NumberChildren
-    ) -> Union[Integer, Real]:
+    ) -> Union[int, float]:
         sign = getitem_with_default(children.sign, 0, default="+")
         (unsigned,) = children.UNSIGNED_NUMBER
 
@@ -112,9 +104,9 @@ class NumberVisitor(
             signed = -unsigned
 
         if isinstance(signed, int):
-            return Integer(signed)
+            return int(signed)
         elif isinstance(signed, float):
-            return Real(signed)
+            return float(signed)
         else:
             raise NotImplementedError(
                 f"Unexpected number type, got {signed!r}: {type(signed)}"
