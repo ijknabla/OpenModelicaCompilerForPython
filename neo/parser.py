@@ -7,6 +7,7 @@ from functools import lru_cache, wraps
 from itertools import chain, islice
 from typing import TYPE_CHECKING, Any, Iterable, TypeVar, Union
 from typing import cast as typing_cast
+from warnings import warn
 
 from arpeggio import (
     EOF,
@@ -203,9 +204,17 @@ def _cast_record(val: Any, typ: type[record], hint: type[_T]) -> _T:
         return typing_cast(_T, val)
     elif isinstance(val, Mapping):
         type_hints = get_type_hints(typ)
+        keymap = {key.upper(): key for key in type_hints}
+
+        renamed = {}
+        for k_v, v in val.items():
+            k_t = keymap[k_v.upper()]
+            if k_t != k_v:
+                warn(Warning(f"Name mismatch for {typ} {k_t!r} != {k_v!r}"))
+            renamed[k_t] = v
 
         return typing_cast(
-            _T, typ(**{k: cast(type_hints[k], v) for k, v in val.items()})
+            _T, typ(**{k: cast(type_hints[k], v) for k, v in renamed.items()})
         )
 
     raise TypeError(val)
