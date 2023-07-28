@@ -16,6 +16,7 @@ from ast import (
     Constant,
     Expr,
     FunctionDef,
+    If,
     ImportFrom,
     Load,
     Module,
@@ -298,7 +299,8 @@ def _create_interface(
     for aio in [False, True]:
         module_body = list[stmt]()
         package_bodies = dict[tuple[str, ...], list[stmt]]({(): []})
-        session_body = list[stmt]()
+        root_packages = list[TypeNameString]()
+        scripting_functions = list[TypeNameString]()
 
         for name, entity in entities.items():
             statement: stmt
@@ -311,7 +313,7 @@ def _create_interface(
             elif entity.get("isPackage") and name in packages:
                 statement = _create_package(name)
                 if len(_parts(name)) <= 1:
-                    session_body.append(_create_package_assign(name))
+                    root_packages.append(name)
 
             elif entity.get("isFunction") and name in functions:
                 components = entity["components"]
@@ -329,7 +331,7 @@ def _create_interface(
                 )
 
                 if _parts(name)[:-1] == ("OpenModelica", "Scripting"):
-                    session_body.append(_create_function_assign(name))
+                    scripting_functions.append(name)
 
             else:
                 continue
@@ -353,15 +355,65 @@ def _create_interface(
             type_ignores=[],
         )
 
-        interface.body.append(
-            ClassDef(
-                name="Session",
-                bases=[_reference("BasicSession")],
-                keywords=[],
-                body=session_body,
-                decorator_list=[],
+        session = ClassDef(
+            name="Session",
+            bases=[_reference("BasicSession")],
+            keywords=[],
+            body=[],
+            decorator_list=[],
+        )
+
+        session.body.extend(
+            (
+                _create_assign(
+                    _parts(package)[-1], _reference(*_parts(package))
+                )
+                for package in root_packages
             )
         )
+
+        scripting_functions = [
+            (_parts(function)[-1], _reference(*_parts(function)))
+            for function in scripting_functions
+        ]
+
+        if aio:
+            session.body.extend(
+                [
+                    _create_assign(
+                        name,
+                        Call(
+                            func=_reference("staticmethod"),
+                            args=[value],
+                            keywords=[],
+                        ),
+                    )
+                    for name, value in scripting_functions
+                ]
+            )
+        else:
+            session.body.append(
+                If(
+                    test=_reference("TYPE_CHECKING"),
+                    body=[
+                        _create_assign(
+                            name,
+                            Call(
+                                func=_reference("staticmethod"),
+                                args=[value],
+                                keywords=[],
+                            ),
+                        )
+                        for name, value in scripting_functions
+                    ],
+                    orelse=[
+                        _create_assign(name, value)
+                        for name, value in scripting_functions
+                    ],
+                )
+            )
+
+        interface.body.append(session)
 
         if aio:
             result.append((package_dir / "aio.pyi", interface))
@@ -388,9 +440,9 @@ def _iter_imports(
     yield ImportFrom(
         module="typing",
         names=[
-            alias(name="List"),
-            alias(name="Sequence"),
-            alias(name="Union"),
+            alias(name=name)
+            for name in ([] if aio else ["TYPE_CHECKING"])
+            + ["List", "Sequence", "Union"]
         ],
         level=0,
     )
@@ -492,14 +544,6 @@ def _create_package(name: TypeNameString) -> ClassDef:
         keywords=[],
         body=[],
         decorator_list=[_external_decorator(name)],
-    )
-
-
-def _create_package_assign(name: TypeNameString) -> Assign:
-    return Assign(
-        targets=[Name(id=_parts(name)[-1], ctx=Store())],
-        value=_reference(_parts(name)[-1]),
-        lineno=None,
     )
 
 
@@ -625,6 +669,14 @@ def _create_record(
             _external_decorator(name),
             _reference("dataclass"),
         ],
+    )
+
+
+def _create_assign(target: str, value: expr) -> Assign:
+    return Assign(
+        targets=[Name(id=target, ctx=Store())],
+        value=value,
+        lineno=None,
     )
 
 
