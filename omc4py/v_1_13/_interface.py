@@ -1,5 +1,34 @@
 from __future__ import annotations
 
+__all__ = (
+    "Component",
+    "DiffFormat__v_1_13",
+    "ErrorKind__v_1_13",
+    "ErrorLevel__v_1_13",
+    "ExportKind__v_1_13",
+    "FileType__v_1_13",
+    "LinearSystemSolver__v_1_13",
+    "OpenModelica",
+    "SimulationResult",
+    "StandardStream__v_1_13",
+    "ThreadData",
+    "buildEncryptedPackage",
+    "convertUnits",
+    "countMessages",
+    "diffSimulationResults",
+    "dumpXMLDAE",
+    "generateScriptingAPI",
+    "getAvailableIndexReductionMethods",
+    "getAvailableMatchingAlgorithms",
+    "getAvailableTearingMethods",
+    "getClassInformation",
+    "getConfigFlagValidOptions",
+    "getSimulationOptions",
+    "getTimeStamp",
+    "regex",
+    "solveLinearSystem",
+    "stat",
+)
 from dataclasses import dataclass
 from typing import TYPE_CHECKING, List, Sequence, Union
 

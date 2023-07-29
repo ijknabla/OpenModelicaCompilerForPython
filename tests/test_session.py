@@ -7,7 +7,7 @@ from omc4py import TypeName, VariableName, latest, open_session
 def test_open_session() -> None:
     with open_session() as session:
         assert session is not None
-        session.__check__()
+        session.check()
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
