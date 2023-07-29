@@ -1,4 +1,5 @@
 from contextlib import AbstractContextManager as _AbstractContextManager
+from typing import Any
 from typing import Literal as _Literal
 
 PAIR: _Literal[0]
@@ -19,8 +20,7 @@ class Context:
     ) -> Socket: ...
 
 class Socket(_AbstractContextManager["Socket"]):
-    def connect(self, addr: str) -> _SocketContext:
-        _SocketContext: ...
+    def connect(self, addr: str) -> _SocketContext: ...
     def recv_string(
         self,
         flags: int | None = ...,
@@ -33,5 +33,6 @@ class Socket(_AbstractContextManager["Socket"]):
         copy: bool | None = ...,
         encoding: str = ...,
     ) -> None: ...
+    def __exit__(self, *exc_info: Any) -> None: ...
 
 class _SocketContext: ...
