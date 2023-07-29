@@ -3,7 +3,6 @@ from omc4py.modelica import external, package
 
 from . import one
 
-
 class EmptySession(BasicSession):
     @external(".empty")
     @classmethod

@@ -54,7 +54,7 @@ class ErrorLevel__v_1_13(enumeration):
 
 
 @external(".OpenModelica.Scripting.ErrorLevel")
-class ErrorLevel__v_1_16(enumeration):
+class ErrorLevel__v_1_15(enumeration):
     """```modelica
     type ErrorLevel = enumeration(internal, notification, warning, error);
     ```"""
@@ -124,7 +124,7 @@ class oms_causality__v_1_14(enumeration):
 
 
 @external(".OpenModelica.Scripting.oms_fault_type")
-class oms_fault_type__v_1_16(enumeration):
+class oms_fault_type__v_1_15(enumeration):
     """```modelica
     type oms_fault_type = enumeration(oms_fault_type_bias, oms_fault_type_gain, oms_fault_type_const);
     ```"""

@@ -8,6 +8,7 @@ def test_session_types() -> None:
         from omc4py import (
             v_1_13,
             v_1_14,
+            v_1_15,
             v_1_16,
             v_1_17,
             v_1_18,
@@ -20,6 +21,8 @@ def test_session_types() -> None:
         b_13: v_1_13.aio.Session
         a_14: v_1_14.Session
         b_14: v_1_14.aio.Session
+        a_15: v_1_15.Session
+        b_15: v_1_15.aio.Session
         a_16: v_1_16.Session
         b_16: v_1_16.aio.Session
         a_17: v_1_17.Session
@@ -81,11 +84,12 @@ def test_session_types() -> None:
         b_13 = open_session(version=(1, 13), asyncio=True)  # noqa: F841
 
         a_14 = open_session(version=(1, 14))
-        a_14 = open_session(version=(1, 14), asyncio=False)
-        b_14 = open_session(version=(1, 14), asyncio=True)
-        a_14 = open_session(version=(1, 15))
-        a_14 = open_session(version=(1, 15), asyncio=False)  # noqa: F841
-        b_14 = open_session(version=(1, 15), asyncio=True)  # noqa: F841
+        a_14 = open_session(version=(1, 14), asyncio=False)  # noqa: F841
+        b_14 = open_session(version=(1, 14), asyncio=True)  # noqa: F841
+
+        a_15 = open_session(version=(1, 15))
+        a_15 = open_session(version=(1, 15), asyncio=False)  # noqa: F841
+        b_15 = open_session(version=(1, 15), asyncio=True)  # noqa: F841
 
         a_16 = open_session(version=(1, 16))
         a_16 = open_session(version=(1, 16), asyncio=False)  # noqa: F841
