@@ -10,6 +10,12 @@ _T_evaluate = TypeVar(
 )
 
 
+@runtime_checkable
+class SupportsToOMCLiteral(Protocol):
+    def __to_omc_literal__(self) -> str:
+        ...
+
+
 class SupportsClose(Protocol):
     def close(self) -> None:
         ...
@@ -34,10 +40,4 @@ SupportsAnyInteractive = Union[SupportsInteractive, SupportsAsyncInteractive]
 class SupportsInteractiveProperty(Protocol[_T_evaluate]):
     @property
     def __omc_interactive__(self) -> _GenericInteractiveProtocol[_T_evaluate]:
-        ...
-
-
-@runtime_checkable
-class SupportsToOMCLiteral(Protocol):
-    def __to_omc_literal__(self) -> str:
         ...
