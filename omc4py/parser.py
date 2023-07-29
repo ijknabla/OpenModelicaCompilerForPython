@@ -5,7 +5,7 @@ import sys
 from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, Iterable, List, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterable, List, Tuple, TypeVar, Union
 from typing import cast as typing_cast
 
 from arpeggio import (
@@ -558,7 +558,7 @@ if TYPE_CHECKING:
     AnyPrimary = Union[List[Any], List[List[Any]]]
     BooleanPrimary = Union[List[bool], List[List[bool]]]
     StringPrimary = Union[List[str], List[List[str]]]
-    TuplePrimary = Union[tuple[Any, ...], List[List[tuple[Any, ...]]]]
+    TuplePrimary = Union[Tuple[Any, ...], List[List[Tuple[Any, ...]]]]
 
     class Children(Protocol, Iterable[Any]):
         DOT: List[str]

@@ -44,7 +44,7 @@ __all__ = (
 )
 import re
 from os import PathLike
-from typing import TYPE_CHECKING, Any, Union, overload
+from typing import TYPE_CHECKING, Any, Tuple, Union, overload
 
 from typing_extensions import Literal
 
@@ -70,38 +70,38 @@ if TYPE_CHECKING:
 
     Command = Union[str, PathLike[str]]
 
-    Version__2_X = tuple[Literal[2], int]
-    Version__1_X = tuple[
+    Version__2_X = Tuple[Literal[2], int]
+    Version__1_X = Tuple[
         Literal[1], Literal[22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
     ]
-    Version__1_21 = tuple[Literal[1], Literal[21]]
-    Version__1_20 = tuple[Literal[1], Literal[20]]
-    Version__1_19 = tuple[Literal[1], Literal[19]]
-    Version__1_18 = tuple[Literal[1], Literal[18]]
-    Version__1_17 = tuple[Literal[1], Literal[17]]
-    Version__1_16 = tuple[Literal[1], Literal[16]]
-    Version__1_15 = tuple[Literal[1], Literal[15]]
-    Version__1_14 = tuple[Literal[1], Literal[14]]
-    Version__1_13 = tuple[Literal[1], Literal[13]]
-    Version__1_12 = tuple[Literal[1], Literal[12]]
-    Version__1_11 = tuple[Literal[1], Literal[11]]
-    Version__1_10 = tuple[Literal[1], Literal[10]]
-    Version__1_9 = tuple[Literal[1], Literal[9]]
-    Version__1_8 = tuple[Literal[1], Literal[8]]
-    Version__1_7 = tuple[Literal[1], Literal[7]]
-    Version__1_6 = tuple[Literal[1], Literal[6]]
-    Version__1_5 = tuple[Literal[1], Literal[5]]
-    Version__1_4 = tuple[Literal[1], Literal[4]]
-    Version__1_3 = tuple[Literal[1], Literal[3]]
-    Version__1_2 = tuple[Literal[1], Literal[2]]
-    Version__1_1 = tuple[Literal[1], Literal[1]]
-    Version__1_0 = tuple[Literal[1], Literal[0]]
-    Version__0_X = tuple[Literal[0], int]
+    Version__1_21 = Tuple[Literal[1], Literal[21]]
+    Version__1_20 = Tuple[Literal[1], Literal[20]]
+    Version__1_19 = Tuple[Literal[1], Literal[19]]
+    Version__1_18 = Tuple[Literal[1], Literal[18]]
+    Version__1_17 = Tuple[Literal[1], Literal[17]]
+    Version__1_16 = Tuple[Literal[1], Literal[16]]
+    Version__1_15 = Tuple[Literal[1], Literal[15]]
+    Version__1_14 = Tuple[Literal[1], Literal[14]]
+    Version__1_13 = Tuple[Literal[1], Literal[13]]
+    Version__1_12 = Tuple[Literal[1], Literal[12]]
+    Version__1_11 = Tuple[Literal[1], Literal[11]]
+    Version__1_10 = Tuple[Literal[1], Literal[10]]
+    Version__1_9 = Tuple[Literal[1], Literal[9]]
+    Version__1_8 = Tuple[Literal[1], Literal[8]]
+    Version__1_7 = Tuple[Literal[1], Literal[7]]
+    Version__1_6 = Tuple[Literal[1], Literal[6]]
+    Version__1_5 = Tuple[Literal[1], Literal[5]]
+    Version__1_4 = Tuple[Literal[1], Literal[4]]
+    Version__1_3 = Tuple[Literal[1], Literal[3]]
+    Version__1_2 = Tuple[Literal[1], Literal[2]]
+    Version__1_1 = Tuple[Literal[1], Literal[1]]
+    Version__1_0 = Tuple[Literal[1], Literal[0]]
+    Version__0_X = Tuple[Literal[0], int]
 
 
 def _select_session_type(
-    version: tuple[int, int]
-) -> tuple[type[session.Session], type[session.aio.Session]]:
+    version: Tuple[int, int]
+) -> Tuple[type[session.Session], type[session.aio.Session]]:
     if (1, 21) <= version:
         from . import v_1_21
 
@@ -381,7 +381,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: tuple[int, int] | None = None,
+    version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
     interactive, aio_interactive = open_interactives(
@@ -403,7 +403,7 @@ def open_session(
         return session_type(interactive)
 
 
-def _get_version(interactive: SupportsInteractive) -> tuple[int, int]:
+def _get_version(interactive: SupportsInteractive) -> Tuple[int, int]:
     version = interactive.evaluate("getVersion()")
     matched = re.search(r"(\d+)\.(\d+)", version)
     if matched is None:
