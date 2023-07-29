@@ -30,6 +30,8 @@ class Session:
     def close(self) -> None:
         self.__omc_interactive__.close()
 
+    __close__ = close
+
     def __enter__(self) -> Self:
         return closing(self).__enter__()
 
@@ -42,7 +44,7 @@ class Session:
         bound_parse = bind_to_awaitable(partial(parse, List[Component]))
         return bound_parse(literal)  # type: ignore
 
-    def __check__(self) -> None:
+    def check(self) -> None:
         messages: list[ErrorMessage]
         messages = getattr(
             self,
@@ -50,6 +52,8 @@ class Session:
             lambda: [],
         )()  # type: ignore
         return _check_messages(messages)  # type: ignore
+
+    __check__ = check
 
 
 @bind_to_awaitable
