@@ -55,7 +55,7 @@ __all__ = (
     "Session",
     "aio",
 )
-from .v_1_21 import (
+from ..v_1_21 import (
     Access__v_1_14,
     Component,
     DiffFormat__v_1_13,
@@ -69,7 +69,6 @@ from .v_1_21 import (
     SimulationResult,
     StandardStream__v_1_13,
     ThreadData,
-    aio,
     convertUnits,
     countMessages,
     diffSimulationResults,
@@ -112,3 +111,4 @@ from .v_1_21 import (
     solveLinearSystem,
     stat,
 )
+from . import aio
