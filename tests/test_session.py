@@ -1,6 +1,6 @@
 import pytest
 
-from neo import TypeName, VariableName, latest, open_session
+from omc4py import TypeName, VariableName, latest, open_session
 
 
 @pytest.mark.dependency()

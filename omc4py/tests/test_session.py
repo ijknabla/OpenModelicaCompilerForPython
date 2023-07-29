@@ -4,10 +4,10 @@ from itertools import zip_longest
 
 import pytest
 
-import neo.session
-import neo.session.aio
-from neo import TypeName, VariableName
-from neo.openmodelica import Component
+import omc4py.session
+import omc4py.session.aio
+from omc4py import TypeName, VariableName
+from omc4py.openmodelica import Component
 
 from .session import Enum, one
 from .session.aio import EmptySession, NestedSession, OneSession
@@ -18,7 +18,7 @@ from .session.aio import EmptySession, NestedSession, OneSession
 )
 @pytest.mark.parametrize("use_typename", [False, True])
 def test_get_components(
-    session: neo.session.Session, name: TypeName | str, use_typename: bool
+    session: omc4py.session.Session, name: TypeName | str, use_typename: bool
 ) -> None:
     s = session
     if use_typename:
@@ -32,7 +32,7 @@ def test_get_components(
 )
 @pytest.mark.parametrize("use_typename", [False, True])
 async def test_async_get_components(
-    async_session: neo.session.aio.Session,
+    async_session: omc4py.session.aio.Session,
     name: TypeName | str,
     use_typename: bool,
 ) -> None:

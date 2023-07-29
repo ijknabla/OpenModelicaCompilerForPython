@@ -46,7 +46,7 @@ from keyword import iskeyword
 from pathlib import PurePath
 from typing import DefaultDict, NamedTuple
 
-from neo import TypeName
+from omc4py import TypeName
 
 from .interface import (
     Components,

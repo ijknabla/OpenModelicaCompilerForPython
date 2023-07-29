@@ -715,12 +715,12 @@ class TypeSpecifierVisitor(PTNodeVisitor):
         node: Terminal,
         _: object,
     ) -> VariableName:
-        from neo.openmodelica import VariableName, _BaseVariableName
+        from omc4py.openmodelica import VariableName, _BaseVariableName
 
         return _BaseVariableName.__new__(VariableName, node.value)
 
     def visit_type_specifier(self, node: NonTerminal, _: object) -> TypeName:
-        from neo.openmodelica import TypeName, _BaseTypeName
+        from omc4py.openmodelica import TypeName, _BaseTypeName
 
         parts = tuple(
             s

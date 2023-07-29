@@ -7,9 +7,9 @@ import pytest
 import pytest_asyncio
 from pkg_resources import resource_filename
 
-import neo.session
-import neo.session.aio
-from neo.interactive import open_interactives
+import omc4py.session
+import omc4py.session.aio
+from omc4py.interactive import open_interactives
 
 from .session.aio import EmptySession, NestedSession, OneSession
 
@@ -20,16 +20,16 @@ def event_loop() -> AbstractEventLoop:
 
 
 @pytest.fixture(scope="session")
-def session() -> Generator[neo.session.Session, None, None]:
+def session() -> Generator[omc4py.session.Session, None, None]:
     interactive, _ = open_interactives("omc")
-    with neo.session.Session(interactive) as session:
+    with omc4py.session.Session(interactive) as session:
         yield session
 
 
 @pytest.fixture(scope="session")
-def async_session() -> Generator[neo.session.aio.Session, None, None]:
+def async_session() -> Generator[omc4py.session.aio.Session, None, None]:
     _, interactive = open_interactives("omc")
-    with neo.session.aio.Session(interactive) as session:
+    with omc4py.session.aio.Session(interactive) as session:
         yield session
 
 

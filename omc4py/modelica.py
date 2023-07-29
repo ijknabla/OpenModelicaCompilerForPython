@@ -14,7 +14,7 @@ from typing_extensions import (
     get_type_hints,
 )
 
-from neo.protocol import SupportsAnyInteractive, SupportsInteractiveProperty
+from omc4py.protocol import SupportsAnyInteractive, SupportsInteractiveProperty
 
 from .algorithm import bind_to_awaitable
 from .openmodelica import TypeName

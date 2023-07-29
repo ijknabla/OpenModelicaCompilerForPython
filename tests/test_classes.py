@@ -4,7 +4,7 @@ from typing import Any, Optional
 
 import pytest
 
-from neo import TypeName, VariableName
+from omc4py import TypeName, VariableName
 
 
 @pytest.mark.parametrize(

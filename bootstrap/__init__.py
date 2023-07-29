@@ -1,4 +1,4 @@
-from neo.interactive import open_interactives
+from omc4py.interactive import open_interactives
 
 from .session import Session
 

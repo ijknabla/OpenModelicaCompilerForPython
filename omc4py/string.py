@@ -56,7 +56,7 @@ def unquote_modelica_string(modelica_string: str) -> str:
 
 
 def to_omc_literal(obj: Any) -> str:
-    from neo.openmodelica import SupportsToOMCLiteral
+    from omc4py.openmodelica import SupportsToOMCLiteral
 
     if isinstance(obj, SupportsToOMCLiteral):
         return obj.__to_omc_literal__()
