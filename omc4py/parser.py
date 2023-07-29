@@ -2,10 +2,10 @@ from __future__ import annotations
 
 import enum
 import sys
-from collections.abc import Callable, Iterator, Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, Iterable, NewType, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterable, TypeVar, Union
 from typing import cast as typing_cast
 
 from arpeggio import (
@@ -15,7 +15,6 @@ from arpeggio import (
     OneOrMore,
     Optional,
     ParserPython,
-    ParseTreeNode,
     PTNodeVisitor,
     RegExMatch,
     Terminal,
@@ -684,85 +683,3 @@ class TypeNameSplitVisitor(PTNodeVisitor):
 
     def visit_typename(self, _: Never, children: Children) -> tuple[str, ...]:
         return tuple(children.DOT + children.variablename)
-
-
-# TODO: sort order
-
-TypeSpecifierParseTreeNode = NewType(
-    "TypeSpecifierParseTreeNode", ParseTreeNode
-)
-
-
-def parse_typeName(type_specifier: str) -> TypeName:
-    try:
-        return _visit_parse_tree(
-            _parse("type_specifier", type_specifier),
-            TypeSpecifierVisitor(),
-        )
-    except NoMatch:
-        raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
-
-
-def _parse(
-    syntax: Literal["type_specifier"], text: str
-) -> TypeSpecifierParseTreeNode:
-    return __get_parser(syntax).parse(text)
-
-
-@lru_cache(None)
-def __get_parser(syntax: str) -> ParserPython:
-    @returns_parsing_expression
-    def _root_rule_() -> ParsingExpressionLike:
-        return getattr(OMCDialectSyntax, syntax), EOF
-
-    with OMCDialectSyntax:
-        return ParserPython(_root_rule_)
-
-
-def _visit_parse_tree(
-    parse_tree: TypeSpecifierParseTreeNode,
-    visitor: TypeSpecifierVisitor,
-) -> TypeName:
-    return visit_parse_tree(parse_tree, visitor)  # type: ignore
-
-
-class OMCDialectSyntax(v3_4.Syntax):
-    @classmethod
-    @returns_parsing_expression
-    def IDENT(cls) -> ParsingExpressionLike:
-        return [super().IDENT(), RegExMatch(r"\$\w*")]
-
-
-class TypeSpecifierChildren:
-    IDENT: list[VariableName]
-    type_specifier: list[TypeName]
-
-
-class TypeSpecifierVisitor(PTNodeVisitor):
-    def visit_IDENT(
-        self,
-        node: Terminal,
-        _: object,
-    ) -> VariableName:
-        from omc4py.openmodelica import VariableName, _BaseVariableName
-
-        return _BaseVariableName.__new__(VariableName, node.value)
-
-    def visit_type_specifier(self, node: NonTerminal, _: object) -> TypeName:
-        from omc4py.openmodelica import TypeName, _BaseTypeName
-
-        parts = tuple(
-            s
-            for i, s in enumerate(self.__iter_terminal_nodes(node))
-            if s != "." or i == 0
-        )
-
-        return _BaseTypeName.__new__(TypeName, parts)
-
-    @classmethod
-    def __iter_terminal_nodes(cls, node: NonTerminal) -> Iterator[str]:
-        for child in node:
-            if isinstance(child, Terminal):
-                yield child.value
-            elif isinstance(child, NonTerminal):
-                yield from cls.__iter_terminal_nodes(child)
