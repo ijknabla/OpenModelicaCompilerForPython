@@ -7,9 +7,7 @@ __all__ = (
     "ErrorKind__v_1_13",
     "ErrorLevel__v_1_15",
     "ExportKind__v_1_13",
-    "FileType__v_1_13",
     "License",
-    "LinearSystemSolver__v_1_13",
     "OpenModelica",
     "SimulationResult",
     "StandardStream__v_1_13",
@@ -46,7 +44,7 @@ __all__ = (
     "oms_importFile",
     "oms_list",
     "oms_listUnconnectedConnectors",
-    "oms_parseModelName",
+    "oms_loadSnapshot",
     "oms_signal_type__v_1_14",
     "oms_solver__v_1_14",
     "oms_system__v_1_14",
@@ -67,8 +65,6 @@ from ..enumeration import (
     ErrorKind__v_1_13,
     ErrorLevel__v_1_15,
     ExportKind__v_1_13,
-    FileType__v_1_13,
-    LinearSystemSolver__v_1_13,
     StandardStream__v_1_13,
     oms_causality__v_1_14,
     oms_fault_type__v_1_15,
@@ -196,19 +192,18 @@ class getTimeStamp:
 class Component(record):
     """```modelica
     record Component
-      String className;
-      // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
-      String name;
-      String comment;
-      Boolean isProtected;
-      Boolean isFinal;
-      Boolean isFlow;
-      Boolean isStream;
-      Boolean isReplaceable;
+      String className "the type of the component";
+      String name "the name of the component";
+      String comment "the comment of the component";
+      Boolean isProtected "true if component is protected";
+      Boolean isFinal "true if component is final";
+      Boolean isFlow "true if component is flow";
+      Boolean isStream "true if component is stream";
+      Boolean isReplaceable "true if component is replaceable";
       String variability "'constant', 'parameter', 'discrete', ''";
       String innerOuter "'inner', 'outer', ''";
       String inputOutput "'input', 'output', ''";
-      String dimensions[:];
+      String dimensions[:] "array with the dimensions of the component";
     end Component;
     ```"""
 
@@ -350,8 +345,8 @@ class oms_listUnconnectedConnectors:
     status: int
 
 
-class oms_parseModelName:
-    cref: str
+class oms_loadSnapshot:
+    newCref: str
     status: int
 
 
@@ -621,19 +616,6 @@ class OpenModelica(package):
                     end timerClear;
                     ```"""
                     raise NotImplementedError()
-
-            FileType = FileType__v_1_13
-
-            @external(".OpenModelica.Scripting.Internal.stat")
-            @classmethod
-            def stat(_, name: str) -> FileType__v_1_13:
-                """```modelica
-                function stat
-                  input String name;
-                  output FileType fileType;
-                end stat;
-                ```"""
-                raise NotImplementedError()
 
         @external(".OpenModelica.Scripting.checkSettings")
         @classmethod
@@ -1232,6 +1214,16 @@ class OpenModelica(package):
             function getModelicaPath
               output String modelicaPath;
             end getModelicaPath;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.getHomeDirectoryPath")
+        @classmethod
+        def getHomeDirectoryPath(_) -> str:
+            """```modelica
+            function getHomeDirectoryPath
+              output String homeDirectoryPath;
+            end getHomeDirectoryPath;
             ```"""
             raise NotImplementedError()
 
@@ -2021,35 +2013,6 @@ class OpenModelica(package):
             ```"""
             raise NotImplementedError()
 
-        @external(".OpenModelica.Scripting.buildOpenTURNSInterface")
-        @classmethod
-        def buildOpenTURNSInterface(
-            _,
-            className: Union[TypeName, str],
-            pythonTemplateFile: str,
-            showFlatModelica: bool = ...,
-        ) -> str:
-            """```modelica
-            function buildOpenTURNSInterface
-              input TypeName className;
-              input String pythonTemplateFile;
-              input Boolean showFlatModelica = false;
-              output String outPythonScript;
-            end buildOpenTURNSInterface;
-            ```"""
-            raise NotImplementedError()
-
-        @external(".OpenModelica.Scripting.runOpenTURNSPythonScript")
-        @classmethod
-        def runOpenTURNSPythonScript(_, pythonScriptFile: str) -> str:
-            """```modelica
-            function runOpenTURNSPythonScript
-              input String pythonScriptFile;
-              output String logOutputFile;
-            end runOpenTURNSPythonScript;
-            ```"""
-            raise NotImplementedError()
-
         @external(".OpenModelica.Scripting.generateCode")
         @classmethod
         def generateCode(_, className: Union[TypeName, str]) -> bool:
@@ -2116,6 +2079,7 @@ class OpenModelica(package):
             className: Union[TypeName, str],
             stripAnnotations: bool = ...,
             stripComments: bool = ...,
+            obfuscate: bool = ...,
         ) -> bool:
             """```modelica
             function saveTotalModel
@@ -2123,8 +2087,23 @@ class OpenModelica(package):
               input TypeName className;
               input Boolean stripAnnotations = false;
               input Boolean stripComments = false;
+              input Boolean obfuscate = false;
               output Boolean success;
             end saveTotalModel;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.saveTotalModelDebug")
+        @classmethod
+        def saveTotalModelDebug(
+            _, filename: str, className: Union[TypeName, str]
+        ) -> bool:
+            """```modelica
+            function saveTotalModelDebug
+              input String filename;
+              input TypeName className;
+              output Boolean success;
+            end saveTotalModelDebug;
             ```"""
             raise NotImplementedError()
 
@@ -2326,11 +2305,14 @@ class OpenModelica(package):
             diffFormat: Union[
                 DiffFormat__v_1_13, Literal["plain", 1, "color", 2, "xml", 3]
             ] = ...,
+            failOnSemanticsChange: bool = ...,
         ) -> str:
             """```modelica
             function diffModelicaFileListings
-              input String before, after;
+              input String before;
+              input String after;
               input DiffFormat diffFormat = DiffFormat.color;
+              input Boolean failOnSemanticsChange = false "Defaults to returning after instead of hard fail";
               output String result;
             end diffModelicaFileListings;
             ```"""
@@ -2430,25 +2412,15 @@ class OpenModelica(package):
             ```"""
             raise NotImplementedError()
 
-        LinearSystemSolver = LinearSystemSolver__v_1_13
-
         @external(".OpenModelica.Scripting.solveLinearSystem")
         @classmethod
         def solveLinearSystem(
-            _,
-            A: Sequence[Sequence[float]],
-            B: Sequence[float],
-            solver: Union[
-                LinearSystemSolver__v_1_13, Literal["dgesv", 1, "lpsolve55", 2]
-            ] = ...,
-            isInt: Sequence[int] = ...,
+            _, A: Sequence[Sequence[float]], B: Sequence[float]
         ) -> solveLinearSystem:
             """```modelica
             function solveLinearSystem
               input Real[size(B, 1), size(B, 1)] A;
               input Real[:] B;
-              input LinearSystemSolver solver = LinearSystemSolver.dgesv;
-              input Integer[:] isInt = {-1} "list of indices that are integers";
               output Real[size(B, 1)] X;
               output Integer info;
             end solveLinearSystem;
@@ -2595,7 +2567,7 @@ class OpenModelica(package):
             className: Union[TypeName, str],
             startTime: float = ...,
             stopTime: float = ...,
-            numberOfIntervals: float = ...,
+            numberOfIntervals: int = ...,
             tolerance: float = ...,
             method: str = ...,
             fileNamePrefix: str = ...,
@@ -2610,7 +2582,7 @@ class OpenModelica(package):
               input TypeName className "the class that should simulated";
               input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
               input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
               input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
               input String method = "<default>" "integration method used for simulation. <default> = dassl";
               input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
@@ -2644,7 +2616,7 @@ class OpenModelica(package):
             className: Union[TypeName, str],
             startTime: float = ...,
             stopTime: float = ...,
-            numberOfIntervals: float = ...,
+            numberOfIntervals: int = ...,
             tolerance: float = ...,
             method: str = ...,
             fileNamePrefix: str = ...,
@@ -2659,7 +2631,7 @@ class OpenModelica(package):
               input TypeName className "the class that should be built";
               input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
               input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
               input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
               input String method = "<default>" "integration method used for simulation. <default> = dassl";
               input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
@@ -2806,7 +2778,7 @@ class OpenModelica(package):
             className: Union[TypeName, str],
             startTime: float = ...,
             stopTime: float = ...,
-            numberOfIntervals: float = ...,
+            numberOfIntervals: int = ...,
             stepSize: float = ...,
             tolerance: float = ...,
             method: str = ...,
@@ -2824,7 +2796,7 @@ class OpenModelica(package):
               input TypeName className "the class that should simulated";
               input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
               input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
               input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
               input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
               input String method = "<default>" "integration method used for simulation. <default> = dassl";
@@ -2848,7 +2820,7 @@ class OpenModelica(package):
             className: Union[TypeName, str],
             startTime: float = ...,
             stopTime: float = ...,
-            numberOfIntervals: float = ...,
+            numberOfIntervals: int = ...,
             stepSize: float = ...,
             tolerance: float = ...,
             method: str = ...,
@@ -2866,7 +2838,7 @@ class OpenModelica(package):
               input TypeName className "the class that should simulated";
               input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
               input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-              input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+              input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
               input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
               input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
               input String method = DAE.SCONST("optimization") "optimize a modelica/optimica model.";
@@ -3074,7 +3046,7 @@ class OpenModelica(package):
               input Boolean externalWindow = false "Opens the plot in a new plot window";
               input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
               input String title = "" "This text will be used as the diagram title.";
-              input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+              input String grid = "simple" "Sets the grid for the plot i.e simple, detailed, none.";
               input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
               input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
               input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
@@ -3118,7 +3090,7 @@ class OpenModelica(package):
               input Boolean externalWindow = false "Opens the plot in a new plot window";
               input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
               input String title = "" "This text will be used as the diagram title.";
-              input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+              input String grid = "simple" "Sets the grid for the plot i.e simple, detailed, none.";
               input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
               input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
               input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
@@ -3166,10 +3138,10 @@ class OpenModelica(package):
               input Boolean externalWindow = false "Opens the plot in a new plot window";
               input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
               input String title = "" "This text will be used as the diagram title.";
-              input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+              input String grid = "simple" "Sets the grid for the plot i.e simple, detailed, none.";
               input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
               input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
-              input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+              input String xLabel = "" "This text will be used as the horizontal label in the diagram.";
               input String yLabel = "" "This text will be used as the vertical label in the diagram.";
               input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
               input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
@@ -3240,6 +3212,7 @@ class OpenModelica(package):
             vars: Sequence[str],
             numberOfIntervals: int = ...,
             removeDescription: bool = ...,
+            hintReadAllVars: bool = ...,
         ) -> bool:
             """```modelica
             function filterSimulationResults
@@ -3248,6 +3221,7 @@ class OpenModelica(package):
               input String[:] vars;
               input Integer numberOfIntervals = 0 "0=Do not resample";
               input Boolean removeDescription = false;
+              input Boolean hintReadAllVars = true;
               output Boolean success;
             end filterSimulationResults;
             ```"""
@@ -4306,19 +4280,18 @@ class OpenModelica(package):
               output Component[:] components;
 
               record Component
-                String className;
-                // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
-                String name;
-                String comment;
-                Boolean isProtected;
-                Boolean isFinal;
-                Boolean isFlow;
-                Boolean isStream;
-                Boolean isReplaceable;
+                String className "the type of the component";
+                String name "the name of the component";
+                String comment "the comment of the component";
+                Boolean isProtected "true if component is protected";
+                Boolean isFinal "true if component is final";
+                Boolean isFlow "true if component is flow";
+                Boolean isStream "true if component is stream";
+                Boolean isReplaceable "true if component is replaceable";
                 String variability "'constant', 'parameter', 'discrete', ''";
                 String innerOuter "'inner', 'outer', ''";
                 String inputOutput "'input', 'output', ''";
-                String dimensions[:];
+                String dimensions[:] "array with the dimensions of the component";
               end Component;
             end getComponentsTest;
             ```"""
@@ -4478,6 +4451,19 @@ class OpenModelica(package):
             ```"""
             raise NotImplementedError()
 
+        @external(".OpenModelica.Scripting.getAvailableLibraryVersions")
+        @classmethod
+        def getAvailableLibraryVersions(
+            _, libraryName: Union[TypeName, str]
+        ) -> List[str]:
+            """```modelica
+            function getAvailableLibraryVersions
+              input TypeName libraryName;
+              output String[:] librariesAndVersions;
+            end getAvailableLibraryVersions;
+            ```"""
+            raise NotImplementedError()
+
         @external(".OpenModelica.Scripting.installPackage")
         @classmethod
         def installPackage(
@@ -4503,6 +4489,48 @@ class OpenModelica(package):
             function updatePackageIndex
               output Boolean result;
             end updatePackageIndex;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.getAvailablePackageVersions")
+        @classmethod
+        def getAvailablePackageVersions(
+            _, pkg: Union[TypeName, str], version: str
+        ) -> List[str]:
+            """```modelica
+            function getAvailablePackageVersions
+              input TypeName pkg;
+              input String version;
+              output String[:] withoutConversion;
+            end getAvailablePackageVersions;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.getAvailablePackageConversionsTo")
+        @classmethod
+        def getAvailablePackageConversionsTo(
+            _, pkg: Union[TypeName, str], version: str
+        ) -> List[str]:
+            """```modelica
+            function getAvailablePackageConversionsTo
+              input TypeName pkg;
+              input String version;
+              output String[:] convertsTo;
+            end getAvailablePackageConversionsTo;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.getAvailablePackageConversionsFrom")
+        @classmethod
+        def getAvailablePackageConversionsFrom(
+            _, pkg: Union[TypeName, str], version: str
+        ) -> List[str]:
+            """```modelica
+            function getAvailablePackageConversionsFrom
+              input TypeName pkg;
+              input String version;
+              output String[:] convertsTo;
+            end getAvailablePackageConversionsFrom;
             ```"""
             raise NotImplementedError()
 
@@ -4838,6 +4866,73 @@ class OpenModelica(package):
             ```"""
             raise NotImplementedError()
 
+        @external(".OpenModelica.Scripting.runConversionScript")
+        @classmethod
+        def runConversionScript(
+            _, packageToConvert: Union[TypeName, str], scriptFile: str
+        ) -> bool:
+            """```modelica
+            function runConversionScript
+              input TypeName packageToConvert;
+              input String scriptFile;
+              output Boolean success;
+            end runConversionScript;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.convertPackageToLibrary")
+        @classmethod
+        def convertPackageToLibrary(
+            _,
+            packageToConvert: Union[TypeName, str],
+            library: Union[TypeName, str],
+            libraryVersion: str,
+        ) -> bool:
+            """```modelica
+            function convertPackageToLibrary
+              input TypeName packageToConvert;
+              input TypeName library;
+              input String libraryVersion;
+              output Boolean success;
+            end convertPackageToLibrary;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.getModelInstance")
+        @classmethod
+        def getModelInstance(
+            _, className: Union[TypeName, str], prettyPrint: bool = ...
+        ) -> str:
+            """```modelica
+            function getModelInstance
+              input TypeName className;
+              input Boolean prettyPrint = false;
+              output String result;
+            end getModelInstance;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.storeAST")
+        @classmethod
+        def storeAST(_) -> int:
+            """```modelica
+            function storeAST
+              output Integer id;
+            end storeAST;
+            ```"""
+            raise NotImplementedError()
+
+        @external(".OpenModelica.Scripting.restoreAST")
+        @classmethod
+        def restoreAST(_, id: int) -> bool:
+            """```modelica
+            function restoreAST
+              input Integer id;
+              output Boolean success;
+            end restoreAST;
+            ```"""
+            raise NotImplementedError()
+
         oms_system = oms_system__v_1_14
         oms_causality = oms_causality__v_1_14
         oms_signal_type = oms_signal_type__v_1_14
@@ -5152,17 +5247,6 @@ class OpenModelica(package):
               input Real angularimpedance;
               output Integer status;
             end oms_addTLMConnection;
-            ```"""
-            raise NotImplementedError()
-
-        @external(".OpenModelica.Scripting.oms_cancelSimulation_asynchronous")
-        @classmethod
-        def oms_cancelSimulation_asynchronous(_, cref: str) -> int:
-            """```modelica
-            function oms_cancelSimulation_asynchronous
-              input String cref;
-              output Integer status;
-            end oms_cancelSimulation_asynchronous;
             ```"""
             raise NotImplementedError()
 
@@ -5552,11 +5636,12 @@ class OpenModelica(package):
 
         @external(".OpenModelica.Scripting.oms_loadSnapshot")
         @classmethod
-        def oms_loadSnapshot(_, cref: str, snapshot: str) -> int:
+        def oms_loadSnapshot(_, cref: str, snapshot: str) -> oms_loadSnapshot:
             """```modelica
             function oms_loadSnapshot
               input String cref;
               input String snapshot;
+              output String newCref;
               output Integer status;
             end oms_loadSnapshot;
             ```"""
@@ -5570,18 +5655,6 @@ class OpenModelica(package):
               input String cref;
               output Integer status;
             end oms_newModel;
-            ```"""
-            raise NotImplementedError()
-
-        @external(".OpenModelica.Scripting.oms_parseModelName")
-        @classmethod
-        def oms_parseModelName(_, contents: str) -> oms_parseModelName:
-            """```modelica
-            function oms_parseModelName
-              input String contents;
-              output String cref;
-              output Integer status;
-            end oms_parseModelName;
             ```"""
             raise NotImplementedError()
 
@@ -6176,11 +6249,12 @@ class OpenModelica(package):
                 """```modelica
                 record choices "Defines a suitable redeclaration or modifications of the element."
                   Boolean checkBox = true "Display a checkbox to input the values false or true in the graphical user interface.";
-                  // TODO: how to handle choice?
+                  String choice[:] = fill("", 0) "the choices as an array of strings";
                 end choices;
                 ```"""
 
                 checkBox: bool
+                choice: List[str]
 
             @external(".OpenModelica.AutoCompletion.Annotations.derivative")
             @dataclass
@@ -6303,6 +6377,9 @@ class Session(BasicSession):
         )
         setModelicaPath = staticmethod(OpenModelica.Scripting.setModelicaPath)
         getModelicaPath = staticmethod(OpenModelica.Scripting.getModelicaPath)
+        getHomeDirectoryPath = staticmethod(
+            OpenModelica.Scripting.getHomeDirectoryPath
+        )
         setCompilerFlags = staticmethod(
             OpenModelica.Scripting.setCompilerFlags
         )
@@ -6450,17 +6527,14 @@ class Session(BasicSession):
         instantiateModel = staticmethod(
             OpenModelica.Scripting.instantiateModel
         )
-        buildOpenTURNSInterface = staticmethod(
-            OpenModelica.Scripting.buildOpenTURNSInterface
-        )
-        runOpenTURNSPythonScript = staticmethod(
-            OpenModelica.Scripting.runOpenTURNSPythonScript
-        )
         generateCode = staticmethod(OpenModelica.Scripting.generateCode)
         loadModel = staticmethod(OpenModelica.Scripting.loadModel)
         deleteFile = staticmethod(OpenModelica.Scripting.deleteFile)
         saveModel = staticmethod(OpenModelica.Scripting.saveModel)
         saveTotalModel = staticmethod(OpenModelica.Scripting.saveTotalModel)
+        saveTotalModelDebug = staticmethod(
+            OpenModelica.Scripting.saveTotalModelDebug
+        )
         save = staticmethod(OpenModelica.Scripting.save)
         saveTotalSCode = staticmethod(OpenModelica.Scripting.saveTotalSCode)
         translateGraphics = staticmethod(
@@ -6753,9 +6827,21 @@ class Session(BasicSession):
         getAvailableLibraries = staticmethod(
             OpenModelica.Scripting.getAvailableLibraries
         )
+        getAvailableLibraryVersions = staticmethod(
+            OpenModelica.Scripting.getAvailableLibraryVersions
+        )
         installPackage = staticmethod(OpenModelica.Scripting.installPackage)
         updatePackageIndex = staticmethod(
             OpenModelica.Scripting.updatePackageIndex
+        )
+        getAvailablePackageVersions = staticmethod(
+            OpenModelica.Scripting.getAvailablePackageVersions
+        )
+        getAvailablePackageConversionsTo = staticmethod(
+            OpenModelica.Scripting.getAvailablePackageConversionsTo
+        )
+        getAvailablePackageConversionsFrom = staticmethod(
+            OpenModelica.Scripting.getAvailablePackageConversionsFrom
         )
         upgradeInstalledPackages = staticmethod(
             OpenModelica.Scripting.upgradeInstalledPackages
@@ -6812,6 +6898,17 @@ class Session(BasicSession):
         generateScriptingAPI = staticmethod(
             OpenModelica.Scripting.generateScriptingAPI
         )
+        runConversionScript = staticmethod(
+            OpenModelica.Scripting.runConversionScript
+        )
+        convertPackageToLibrary = staticmethod(
+            OpenModelica.Scripting.convertPackageToLibrary
+        )
+        getModelInstance = staticmethod(
+            OpenModelica.Scripting.getModelInstance
+        )
+        storeAST = staticmethod(OpenModelica.Scripting.storeAST)
+        restoreAST = staticmethod(OpenModelica.Scripting.restoreAST)
         loadOMSimulator = staticmethod(OpenModelica.Scripting.loadOMSimulator)
         unloadOMSimulator = staticmethod(
             OpenModelica.Scripting.unloadOMSimulator
@@ -6852,9 +6949,6 @@ class Session(BasicSession):
         oms_addTLMBus = staticmethod(OpenModelica.Scripting.oms_addTLMBus)
         oms_addTLMConnection = staticmethod(
             OpenModelica.Scripting.oms_addTLMConnection
-        )
-        oms_cancelSimulation_asynchronous = staticmethod(
-            OpenModelica.Scripting.oms_cancelSimulation_asynchronous
         )
         oms_compareSimulationResults = staticmethod(
             OpenModelica.Scripting.oms_compareSimulationResults
@@ -6923,9 +7017,6 @@ class Session(BasicSession):
             OpenModelica.Scripting.oms_loadSnapshot
         )
         oms_newModel = staticmethod(OpenModelica.Scripting.oms_newModel)
-        oms_parseModelName = staticmethod(
-            OpenModelica.Scripting.oms_parseModelName
-        )
         oms_removeSignalsFromResults = staticmethod(
             OpenModelica.Scripting.oms_removeSignalsFromResults
         )
@@ -7043,6 +7134,7 @@ class Session(BasicSession):
         )
         setModelicaPath = OpenModelica.Scripting.setModelicaPath
         getModelicaPath = OpenModelica.Scripting.getModelicaPath
+        getHomeDirectoryPath = OpenModelica.Scripting.getHomeDirectoryPath
         setCompilerFlags = OpenModelica.Scripting.setCompilerFlags
         enableNewInstantiation = OpenModelica.Scripting.enableNewInstantiation
         disableNewInstantiation = (
@@ -7132,17 +7224,12 @@ class Session(BasicSession):
         )
         typeOf = OpenModelica.Scripting.typeOf
         instantiateModel = OpenModelica.Scripting.instantiateModel
-        buildOpenTURNSInterface = (
-            OpenModelica.Scripting.buildOpenTURNSInterface
-        )
-        runOpenTURNSPythonScript = (
-            OpenModelica.Scripting.runOpenTURNSPythonScript
-        )
         generateCode = OpenModelica.Scripting.generateCode
         loadModel = OpenModelica.Scripting.loadModel
         deleteFile = OpenModelica.Scripting.deleteFile
         saveModel = OpenModelica.Scripting.saveModel
         saveTotalModel = OpenModelica.Scripting.saveTotalModel
+        saveTotalModelDebug = OpenModelica.Scripting.saveTotalModelDebug
         save = OpenModelica.Scripting.save
         saveTotalSCode = OpenModelica.Scripting.saveTotalSCode
         translateGraphics = OpenModelica.Scripting.translateGraphics
@@ -7345,8 +7432,20 @@ class Session(BasicSession):
         loadModelica3D = OpenModelica.Scripting.loadModelica3D
         searchClassNames = OpenModelica.Scripting.searchClassNames
         getAvailableLibraries = OpenModelica.Scripting.getAvailableLibraries
+        getAvailableLibraryVersions = (
+            OpenModelica.Scripting.getAvailableLibraryVersions
+        )
         installPackage = OpenModelica.Scripting.installPackage
         updatePackageIndex = OpenModelica.Scripting.updatePackageIndex
+        getAvailablePackageVersions = (
+            OpenModelica.Scripting.getAvailablePackageVersions
+        )
+        getAvailablePackageConversionsTo = (
+            OpenModelica.Scripting.getAvailablePackageConversionsTo
+        )
+        getAvailablePackageConversionsFrom = (
+            OpenModelica.Scripting.getAvailablePackageConversionsFrom
+        )
         upgradeInstalledPackages = (
             OpenModelica.Scripting.upgradeInstalledPackages
         )
@@ -7380,6 +7479,13 @@ class Session(BasicSession):
         getInitialStates = OpenModelica.Scripting.getInitialStates
         deleteInitialState = OpenModelica.Scripting.deleteInitialState
         generateScriptingAPI = OpenModelica.Scripting.generateScriptingAPI
+        runConversionScript = OpenModelica.Scripting.runConversionScript
+        convertPackageToLibrary = (
+            OpenModelica.Scripting.convertPackageToLibrary
+        )
+        getModelInstance = OpenModelica.Scripting.getModelInstance
+        storeAST = OpenModelica.Scripting.storeAST
+        restoreAST = OpenModelica.Scripting.restoreAST
         loadOMSimulator = OpenModelica.Scripting.loadOMSimulator
         unloadOMSimulator = OpenModelica.Scripting.unloadOMSimulator
         oms_addBus = OpenModelica.Scripting.oms_addBus
@@ -7405,9 +7511,6 @@ class Session(BasicSession):
         oms_addTimeIndicator = OpenModelica.Scripting.oms_addTimeIndicator
         oms_addTLMBus = OpenModelica.Scripting.oms_addTLMBus
         oms_addTLMConnection = OpenModelica.Scripting.oms_addTLMConnection
-        oms_cancelSimulation_asynchronous = (
-            OpenModelica.Scripting.oms_cancelSimulation_asynchronous
-        )
         oms_compareSimulationResults = (
             OpenModelica.Scripting.oms_compareSimulationResults
         )
@@ -7451,7 +7554,6 @@ class Session(BasicSession):
         )
         oms_loadSnapshot = OpenModelica.Scripting.oms_loadSnapshot
         oms_newModel = OpenModelica.Scripting.oms_newModel
-        oms_parseModelName = OpenModelica.Scripting.oms_parseModelName
         oms_removeSignalsFromResults = (
             OpenModelica.Scripting.oms_removeSignalsFromResults
         )

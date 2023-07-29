@@ -5,7 +5,7 @@ __all__ = (
     "Component",
     "DiffFormat__v_1_13",
     "ErrorKind__v_1_13",
-    "ErrorLevel__v_1_16",
+    "ErrorLevel__v_1_15",
     "ExportKind__v_1_13",
     "FileType__v_1_13",
     "License",
@@ -30,7 +30,7 @@ __all__ = (
     "oms_causality__v_1_14",
     "oms_exportSnapshot",
     "oms_extractFMIKind",
-    "oms_fault_type__v_1_16",
+    "oms_fault_type__v_1_15",
     "oms_getBoolean",
     "oms_getFixedStepSize",
     "oms_getModelState",
@@ -64,13 +64,13 @@ from ..enumeration import (
     Access__v_1_14,
     DiffFormat__v_1_13,
     ErrorKind__v_1_13,
-    ErrorLevel__v_1_16,
+    ErrorLevel__v_1_15,
     ExportKind__v_1_13,
     FileType__v_1_13,
     LinearSystemSolver__v_1_13,
     StandardStream__v_1_13,
     oms_causality__v_1_14,
-    oms_fault_type__v_1_16,
+    oms_fault_type__v_1_15,
     oms_signal_type__v_1_14,
     oms_solver__v_1_14,
     oms_system__v_1_14,
@@ -1664,7 +1664,7 @@ class OpenModelica(package):
             columnEnd: int
 
         ErrorKind = ErrorKind__v_1_13
-        ErrorLevel = ErrorLevel__v_1_16
+        ErrorLevel = ErrorLevel__v_1_15
 
         @external(".OpenModelica.Scripting.ErrorMessage")
         @dataclass
@@ -1684,7 +1684,7 @@ class OpenModelica(package):
             info: OpenModelica.Scripting.SourceInfo
             message: str
             kind: ErrorKind__v_1_13
-            level: ErrorLevel__v_1_16
+            level: ErrorLevel__v_1_15
             id: int
 
         @external(".OpenModelica.Scripting.getMessagesStringInternal")
@@ -4827,7 +4827,7 @@ class OpenModelica(package):
         oms_solver = oms_solver__v_1_14
         oms_tlm_domain = oms_tlm_domain__v_1_14
         oms_tlm_interpolation = oms_tlm_interpolation__v_1_14
-        oms_fault_type = oms_fault_type__v_1_16
+        oms_fault_type = oms_fault_type__v_1_15
 
         @external(".OpenModelica.Scripting.loadOMSimulator")
         @classmethod
@@ -5428,7 +5428,7 @@ class OpenModelica(package):
             _,
             signal: str,
             faultType: Union[
-                oms_fault_type__v_1_16,
+                oms_fault_type__v_1_15,
                 Literal[
                     "oms_fault_type_bias",
                     1,
