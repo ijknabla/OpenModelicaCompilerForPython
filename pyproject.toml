@@ -74,9 +74,6 @@ per-file-ignores = """
     omc4py/v_*_*/*.py:E501,
 """
 
-# Ignore whitespace before colon
-extend-ignore = "E203,"
-
 [tool.isort]
 profile = "black"
 line_length = 79
