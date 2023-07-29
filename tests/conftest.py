@@ -22,12 +22,14 @@ def event_loop() -> AbstractEventLoop:
 def session() -> Generator[latest.Session, None, None]:
     with open_session() as session:
         yield session
+        session.__check__()
 
 
-@pytest.fixture(scope="session")
-def async_session() -> Generator[latest.aio.Session, None, None]:
+@pytest_asyncio.fixture(scope="session")
+async def async_session() -> Generator[latest.aio.Session, None, None]:
     with open_session(asyncio=True) as session:
         yield session
+        await session.__check__()
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -38,6 +40,7 @@ async def empty_session() -> AsyncGenerator[EmptySession, None]:
             resource_filename(__name__, "src/empty.mo")
         )
         yield session
+        await session.__check__()
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -48,6 +51,7 @@ async def one_session() -> AsyncGenerator[OneSession, None]:
             resource_filename(__name__, "src/one.mo")
         )
         yield session
+        await session.__check__()
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -58,3 +62,4 @@ async def nested_session() -> AsyncGenerator[NestedSession, None]:
             resource_filename(__name__, "src/Nested.mo")
         )
         yield session
+        await session.__check__()
