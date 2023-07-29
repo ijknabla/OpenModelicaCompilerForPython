@@ -495,14 +495,12 @@ record OpenModelica.Scripting.SourceInfo
 end OpenModelica.Scripting.SourceInfo;
 """,
             OpenModelica.Scripting.SourceInfo(
-                **{
-                    "fileName": "filename",
-                    "readonly": False,
-                    "lineStart": 1,
-                    "columnStart": 2,
-                    "lineEnd": 3,
-                    "columnEnd": 4,
-                }
+                fileName="filename",
+                readonly=False,
+                lineStart=1,
+                columnStart=2,
+                lineEnd=3,
+                columnEnd=4,
             ),
         ),
         (
