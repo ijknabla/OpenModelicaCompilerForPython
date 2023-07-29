@@ -35,9 +35,6 @@ if TYPE_CHECKING:
 TypeSpecifierParseTreeNode = NewType(
     "TypeSpecifierParseTreeNode", ParseTreeNode
 )
-OMCComponentArrayParseTreeNode = NewType(
-    "OMCComponentArrayParseTreeNode", ParseTreeNode
-)
 OMCValueParseTreeNode = NewType("OMCValueParseTreeNode", ParseTreeNode)
 
 
@@ -85,18 +82,6 @@ def _parse(syntax: Literal["IDENT"], text: str) -> ParseTreeNode:
 def _parse(
     syntax: Literal["type_specifier"], text: str
 ) -> TypeSpecifierParseTreeNode:
-    ...
-
-
-@overload
-def _parse(
-    syntax: Literal["omc_component_array"], text: str
-) -> OMCComponentArrayParseTreeNode:
-    ...
-
-
-@overload
-def _parse(syntax: Literal["omc_value"], text: str) -> OMCValueParseTreeNode:
     ...
 
 
