@@ -80,7 +80,7 @@ class _BaseVariableName:
 
 class VariableName(_BaseVariableName):
     def __new__(cls, obj: VariableNameLike) -> Self:
-        from omc4py import parser
+        from . import parser
 
         if isinstance(obj, cls):
             return obj
@@ -180,7 +180,7 @@ class TypeName(_BaseTypeName):
 
     @staticmethod
     def __split_part(part: TypeNameLike) -> Iterator[str]:
-        from omc4py import parser
+        from . import parser
 
         if isinstance(part, TypeName):
             yield from part.parts

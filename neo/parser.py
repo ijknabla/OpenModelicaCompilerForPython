@@ -1,12 +1,22 @@
 from __future__ import annotations
 
 import enum
+import operator
 import sys
-from collections.abc import Callable, Mapping, Sequence
+from collections.abc import Callable, Iterator, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, Iterable, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Iterable,
+    NewType,
+    SupportsIndex,
+    TypeVar,
+    Union,
+)
 from typing import cast as typing_cast
+from typing import overload
 
 from arpeggio import (
     EOF,
@@ -14,6 +24,7 @@ from arpeggio import (
     NonTerminal,
     Optional,
     ParserPython,
+    ParseTreeNode,
     PTNodeVisitor,
     RegExMatch,
     Terminal,
@@ -23,6 +34,7 @@ from arpeggio import (
 from modelicalang import (
     ParsingExpressionLike,
     returns_parsing_expression,
+    v3_4,
     v3_5,
 )
 from typing_extensions import (
@@ -606,3 +618,123 @@ class Visitor(PTNodeVisitor):
 
     def visit_record_array(self, _: Never, children: Children) -> AnyPrimary:
         return children.record_primary
+
+
+# TODO: sort order
+
+TypeSpecifierParseTreeNode = NewType(
+    "TypeSpecifierParseTreeNode", ParseTreeNode
+)
+
+
+def is_valid_identifier(ident: str) -> bool:
+    try:
+        _parse("IDENT", ident)
+        return True
+    except NoMatch:
+        return False
+
+
+def parse_typeName(type_specifier: str) -> TypeName:
+    try:
+        return _visit_parse_tree(
+            _parse("type_specifier", type_specifier),
+            TypeSpecifierVisitor(),
+        )
+    except NoMatch:
+        raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
+
+
+@overload
+def _parse(syntax: Literal["IDENT"], text: str) -> ParseTreeNode:
+    ...
+
+
+@overload
+def _parse(
+    syntax: Literal["type_specifier"], text: str
+) -> TypeSpecifierParseTreeNode:
+    ...
+
+
+def _parse(syntax: str, text: str) -> ParseTreeNode:
+    return __get_parser(syntax).parse(text)
+
+
+@lru_cache(None)
+def __get_parser(syntax: str) -> ParserPython:
+    @returns_parsing_expression
+    def _root_rule_() -> ParsingExpressionLike:
+        return getattr(OMCDialectSyntax, syntax), EOF
+
+    with OMCDialectSyntax:
+        return ParserPython(_root_rule_)
+
+
+@overload
+def _visit_parse_tree(
+    parse_tree: TypeSpecifierParseTreeNode,
+    visitor: TypeSpecifierVisitor,
+) -> TypeName:
+    ...
+
+
+def _visit_parse_tree(
+    parse_tree: ParseTreeNode,
+    visitor: PTNodeVisitor,
+) -> Any:
+    return visit_parse_tree(parse_tree, visitor)
+
+
+class OMCDialectSyntax(v3_4.Syntax):
+    @classmethod
+    @returns_parsing_expression
+    def IDENT(cls) -> ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+
+def getitem_with_default(
+    sequence: Sequence[_T],
+    index: SupportsIndex,
+    *,
+    default: _T,
+) -> _T:
+    try:
+        return operator.getitem(sequence, index)
+    except IndexError:
+        return default
+
+
+class TypeSpecifierChildren:
+    IDENT: list[VariableName]
+    type_specifier: list[TypeName]
+
+
+class TypeSpecifierVisitor(PTNodeVisitor):
+    def visit_IDENT(
+        self,
+        node: Terminal,
+        _: object,
+    ) -> VariableName:
+        from neo.openmodelica import VariableName, _BaseVariableName
+
+        return _BaseVariableName.__new__(VariableName, node.value)
+
+    def visit_type_specifier(self, node: NonTerminal, _: object) -> TypeName:
+        from neo.openmodelica import TypeName, _BaseTypeName
+
+        parts = tuple(
+            s
+            for i, s in enumerate(self.__iter_terminal_nodes(node))
+            if s != "." or i == 0
+        )
+
+        return _BaseTypeName.__new__(TypeName, parts)
+
+    @classmethod
+    def __iter_terminal_nodes(cls, node: NonTerminal) -> Iterator[str]:
+        for child in node:
+            if isinstance(child, Terminal):
+                yield child.value
+            elif isinstance(child, NonTerminal):
+                yield from cls.__iter_terminal_nodes(child)
