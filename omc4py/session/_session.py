@@ -46,11 +46,11 @@ class Session:
 
     def check(self) -> None:
         messages: list[ErrorMessage]
-        messages = getattr(
+        messages = getattr(  # type: ignore
             self,
             "getMessagesStringInternal",
             lambda: [],
-        )()  # type: ignore
+        )()
         return _check_messages(messages)  # type: ignore
 
     __check__ = check
