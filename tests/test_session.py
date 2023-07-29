@@ -1,24 +1,27 @@
+from __future__ import annotations
+
+from itertools import zip_longest
+
 import pytest
 
-from omc4py import TypeName, VariableName, open_session
+import omc4py.session
+import omc4py.session.aio
+from omc4py import TypeName, VariableName, latest, open_session
+from omc4py.openmodelica import Component
+
+from .session import Enum, one
+from .session.aio import EmptySession, NestedSession, OneSession
 
 
 @pytest.mark.dependency()
-def test_open_session():
+def test_open_session() -> None:
     with open_session() as session:
         assert session is not None
-        session.__check__()
-
-
-@pytest.fixture
-def session():
-    with open_session() as session:
-        yield session
-        session.__check__()
+        session.check()
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_loadString(session):  # fixture
+def test_loadString(session: latest.Session) -> None:
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
     assert session.isType("MyEnumeration")
     assert session.isEnumeration("MyEnumeration")
@@ -31,7 +34,7 @@ def test_loadString(session):  # fixture
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getClassNames(session):  # fixture
+def test_getClassNames(session: latest.Session) -> None:
     assert session.loadString(
         """
 package Test_getClassNames
@@ -47,24 +50,15 @@ within Test_getClassNames;
 type C = enumeration(c);
         """
     )
-    assert (
-        session.getClassNames("Test_getClassNames")
-        == [
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", sort=True)
-        == [
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", qualified=True)
-        == [
-            TypeName("Test_getClassNames.C"),
-        ]
-    ).all()
+    assert session.getClassNames("Test_getClassNames") == [
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", sort=True) == [
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", qualified=True) == [
+        TypeName("Test_getClassNames.C"),
+    ]
 
     assert session.loadString(
         """
@@ -72,27 +66,18 @@ within Test_getClassNames;
 type A = enumeration(a);
         """
     )
-    assert (
-        session.getClassNames("Test_getClassNames")
-        == [
-            TypeName("C"),
-            TypeName("A"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", sort=True)
-        == [
-            TypeName("A"),
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", qualified=True)
-        == [
-            TypeName("Test_getClassNames.C"),
-            TypeName("Test_getClassNames.A"),
-        ]
-    ).all()
+    assert session.getClassNames("Test_getClassNames") == [
+        TypeName("C"),
+        TypeName("A"),
+    ]
+    assert session.getClassNames("Test_getClassNames", sort=True) == [
+        TypeName("A"),
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", qualified=True) == [
+        TypeName("Test_getClassNames.C"),
+        TypeName("Test_getClassNames.A"),
+    ]
 
     assert session.loadString(
         """
@@ -100,36 +85,25 @@ within Test_getClassNames;
 type B = enumeration(b);
         """
     )
-    assert (
-        session.getClassNames("Test_getClassNames")
-        == [
-            TypeName("C"),
-            TypeName("A"),
-            TypeName("B"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", sort=True)
-        == [
-            TypeName("A"),
-            TypeName("B"),
-            TypeName("C"),
-        ]
-    ).all()
-    assert (
-        session.getClassNames("Test_getClassNames", qualified=True)
-        == [
-            TypeName("Test_getClassNames.C"),
-            TypeName("Test_getClassNames.A"),
-            TypeName("Test_getClassNames.B"),
-        ]
-    ).all()
+    assert session.getClassNames("Test_getClassNames") == [
+        TypeName("C"),
+        TypeName("A"),
+        TypeName("B"),
+    ]
+    assert session.getClassNames("Test_getClassNames", sort=True) == [
+        TypeName("A"),
+        TypeName("B"),
+        TypeName("C"),
+    ]
+    assert session.getClassNames("Test_getClassNames", qualified=True) == [
+        TypeName("Test_getClassNames.C"),
+        TypeName("Test_getClassNames.A"),
+        TypeName("Test_getClassNames.B"),
+    ]
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getComponents(
-    session,  # fixture
-):
+def test_getComponents(session: latest.Session) -> None:
     assert session.loadString(
         """
 class Test_getComponents
@@ -159,7 +133,6 @@ end Test_getComponents;
     )
 
     for component in session.getComponents("Test_getComponents"):
-
         assert component.className == TypeName("A")
 
         assert isinstance(component.name, VariableName)
@@ -219,34 +192,132 @@ end Test_getComponents;
             assert component.inputOutput == "unspecified"
 
         if component.name == VariableName("a_any"):
-            assert component.dimensions == (":",)
+            assert component.dimensions == [
+                ":",
+            ]
         elif component.name == VariableName("a_any_any"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 ":",
                 ":",
-            )
+            ]
         elif component.name == VariableName("a_any_any_any"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 ":",
                 ":",
                 ":",
-            )
+            ]
         elif component.name == VariableName("a_1_2_3"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 "1",
                 "2",
                 "3",
-            )
+            ]
         elif component.name == VariableName("a_3_2_1"):
-            assert component.dimensions == (
+            assert component.dimensions == [
                 "3",
                 "2",
                 "1",
-            )
+            ]
         else:
-            assert component.dimensions == ()
+            assert component.dimensions == []
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_OpenModelica(session):  # fixture
+def test_OpenModelica(session: latest.Session) -> None:
     assert session.isPackage("OpenModelica")
+
+
+def test_getMessagesStringInternal(session: latest.Session) -> None:
+    session.getMessagesStringInternal()
+    for name in ["XXX", "YYY", "ZZZ"]:
+        session.__omc_interactive__.evaluate(name)
+        for message in session.getMessagesStringInternal():
+            assert message.message.startswith(f"Variable {name} not found")
+
+
+@pytest.mark.parametrize(
+    "name", ["OpenModelica.Scripting.getComponentsTest.Component"]
+)
+@pytest.mark.parametrize("use_typename", [False, True])
+def test_get_components(
+    session: omc4py.session.Session, name: TypeName | str, use_typename: bool
+) -> None:
+    s = session
+    if use_typename:
+        name = TypeName(name)
+    _check_components(s.getComponents(name))
+
+
+@pytest.mark.asyncio
+@pytest.mark.parametrize(
+    "name", ["OpenModelica.Scripting.getComponentsTest.Component"]
+)
+@pytest.mark.parametrize("use_typename", [False, True])
+async def test_async_get_components(
+    async_session: omc4py.session.aio.Session,
+    name: TypeName | str,
+    use_typename: bool,
+) -> None:
+    s = async_session
+    if use_typename:
+        name = TypeName(name)
+    _check_components(await s.getComponents(name))
+
+
+def _check_components(components: list[Component]) -> None:
+    assert isinstance(components, list)
+    assert all(isinstance(component, Component) for component in components)
+    for component, (class_name, name, dimensions) in zip_longest(
+        components,
+        [
+            ("String", "className", []),
+            ("String", "name", []),
+            ("String", "comment", []),
+            ("Boolean", "isProtected", []),
+            ("Boolean", "isFinal", []),
+            ("Boolean", "isFlow", []),
+            ("Boolean", "isStream", []),
+            ("Boolean", "isReplaceable", []),
+            ("String", "variability", []),
+            ("String", "innerOuter", []),
+            ("String", "inputOutput", []),
+            ("String", "dimensions", [":"]),
+        ],
+    ):
+        assert component.className == TypeName(class_name)
+        assert component.name == VariableName(name)
+        assert isinstance(component.comment, str)
+        assert component.protected == "public"
+        assert component.isFinal is False
+        assert component.isFlow is False
+        assert component.isStream is False
+        assert component.isReplaceable is False
+        assert component.variability == "unspecified"
+        assert component.innerOuter == "none"
+        assert component.inputOutput == "unspecified"
+        assert component.dimensions == dimensions
+
+
+@pytest.mark.asyncio
+async def test_empty_session(empty_session: EmptySession) -> None:
+    s = empty_session
+    assert await s.empty() is None  # type: ignore
+
+
+@pytest.mark.asyncio
+async def test_one(one_session: OneSession) -> None:
+    s = one_session
+    result = await s.one()
+    assert isinstance(result, one)
+    assert result == (1.0, 1, True, "1", Enum.One)
+    assert result == one(
+        real=1.0, integer=1, boolean=True, string="1", enum=Enum.One
+    )
+
+
+@pytest.mark.asyncio
+async def test_nested(nested_session: NestedSession) -> None:
+    s = nested_session
+    assert await s.level_1() == await s.Nested.level()
+    assert await s.level_2() == await s.Nested.Nested.level()
+    assert await s.level_3() == await s.Nested.Nested.Nested.level()

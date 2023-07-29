@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 __all__ = (
     "escape_py_string",
     "unescape_modelica_string",
@@ -5,10 +7,15 @@ __all__ = (
 )
 
 
-import typing
-from functools import reduce
+from collections.abc import Iterable, Sequence
+from contextlib import suppress
+from functools import lru_cache, reduce
+from typing import TYPE_CHECKING, Any
 
-import numpy  # type: ignore
+from .protocol import SupportsToOMCLiteral
+
+if TYPE_CHECKING:
+    from builtins import _ClassInfo
 
 modelica_char_escape_map = {
     "\\": r"\\",
@@ -53,23 +60,28 @@ def unquote_modelica_string(modelica_string: str) -> str:
     return unescape_modelica_string(modelica_string[1:-1])
 
 
-def to_omc_literal(obj: typing.Any) -> str:
-    if hasattr(obj, "__to_omc_literal__"):
+def to_omc_literal(obj: Any) -> str:
+    if isinstance(obj, SupportsToOMCLiteral):
         return obj.__to_omc_literal__()
-    elif isinstance(obj, (classes.Boolean, bool)):
+    elif isinstance(obj, bool):
         return "true" if obj else "false"
-    elif isinstance(obj, (classes.String, str)):
+    elif isinstance(obj, str):
         return '"' + escape_py_string(obj) + '"'
-    elif isinstance(obj, (typing.Sequence, numpy.ndarray)):
+    elif isinstance(obj, _sequence_types()):
         return "{" + ", ".join(map(to_omc_literal, obj)) + "}"
     else:
         return str(obj)
 
 
-def _replace_all(
-    s: str, old_and_new: typing.Iterable[typing.Tuple[str, str]]
-) -> str:
+@lru_cache(1)
+def _sequence_types() -> _ClassInfo:
+    result = [Sequence]
+    with suppress(ImportError):
+        import numpy
+
+        result.append(numpy.ndarray)
+    return tuple(result)
+
+
+def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:
     return reduce(lambda x, y: x.replace(y[0], y[1]), old_and_new, s)
-
-
-from . import classes  # noqa: E402

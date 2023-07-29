@@ -1,0 +1,23 @@
+__all__ = ("Session",)
+
+from dataclasses import dataclass
+from typing import Any, Awaitable, List, Union
+
+from typing_extensions import Self
+
+from ..openmodelica import Component, TypeName
+from ..protocol import SupportsAsyncInteractive
+
+@dataclass
+class Session:
+    __omc_interactive__: SupportsAsyncInteractive
+
+    def close(self) -> None: ...
+    def __close__(self) -> None: ...
+    def __enter__(self) -> Self: ...
+    def __exit__(self, *exc_info: Any) -> None: ...
+    async def check(self) -> None: ...
+    async def __check__(self) -> None: ...
+    async def getComponents(
+        self, name: Union[TypeName, str]
+    ) -> List[Component]: ...

@@ -40,21 +40,35 @@ repos:
         name: Export requirements.lint.txt
         entry: poetry
         args:
-        -   run
-        -   python
-        -   .pre-commit/poetry_export_requirements.py
-        -   lint
+        -   export
+        -   --format=requirements.txt
+        -   --without-hashes
+        -   --only=lint,main
         -   --output=requirements.lint.txt
         language: system
-        files: ^(\.pre\-commit/poetry_export_requirements\.py|poetry\.lock)$
+        pass_filenames: false
+        files: ^poetry\.lock$
     -   id: poetry-export-test-requirements
         name: Export requirements.test.txt
         entry: poetry
         args:
-        -   run
-        -   python
-        -   .pre-commit/poetry_export_requirements.py
-        -   test
+        -   export
+        -   --format=requirements.txt
+        -   --without-hashes
+        -   --only=main,test
         -   --output=requirements.test.txt
         language: system
-        files: ^(\.pre\-commit/poetry_export_requirements\.py|poetry\.lock)$
+        pass_filenames: false
+        files: ^poetry\.lock$
+    -   id: poetry-export-bootstrap-requirements
+        name: Export requirements.bootstrap.txt
+        entry: poetry
+        args:
+        -   export
+        -   --format=requirements.txt
+        -   --without-hashes
+        -   --only=main,bootstrap
+        -   --output=requirements.bootstrap.txt
+        language: system
+        pass_filenames: false
+        files: ^poetry\.lock$
