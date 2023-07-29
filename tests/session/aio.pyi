@@ -1,5 +1,6 @@
-from ...modelica import external, package
-from ...session.aio import Session as BasicSession
+from omc4py.latest.aio import Session as BasicSession
+from omc4py.modelica import external, package
+
 from . import one
 
 class Session(BasicSession):

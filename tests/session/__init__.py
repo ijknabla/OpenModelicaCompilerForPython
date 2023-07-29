@@ -1,17 +1,10 @@
 from typing import TYPE_CHECKING, NamedTuple
 
-import omc4py.session
+from omc4py.latest import Session as BasicSession
 from omc4py.modelica import enumeration, external, package
 
 
-class Session(omc4py.session.Session):
-    @external(".OpenModelica.Scripting.loadFile")
-    @classmethod
-    def loadFile(_, fileName: str) -> bool:
-        raise NotImplementedError()
-
-
-class EmptySession(Session):
+class EmptySession(BasicSession):
     @external(".empty")
     @classmethod
     def empty(_) -> None:
@@ -31,7 +24,7 @@ class one(NamedTuple):
     enum: Enum
 
 
-class OneSession(Session):
+class OneSession(BasicSession):
     @external(".one")
     @classmethod
     def one(_) -> one:
@@ -60,7 +53,7 @@ class Nested(package):
                 raise NotImplementedError()
 
 
-class NestedSession(Session):
+class NestedSession(BasicSession):
     Nested = Nested
 
     if TYPE_CHECKING:
