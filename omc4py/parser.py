@@ -14,6 +14,7 @@ from arpeggio import (
     EOF,
     NoMatch,
     NonTerminal,
+    OneOrMore,
     Optional,
     ParserPython,
     ParseTreeNode,
@@ -338,6 +339,15 @@ def _isorigin(__cls: Any, __special_form: _SpecialForm) -> bool:
 
 
 class Syntax(v3_5.Syntax):
+    # Dialects
+
+    @classmethod
+    @returns_parsing_expression
+    def IDENT(cls) -> ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+    # Primitives
+
     @classmethod
     @returns_parsing_expression
     def real(cls) -> ParsingExpressionLike:
@@ -355,11 +365,26 @@ class Syntax(v3_5.Syntax):
 
     @classmethod
     @returns_parsing_expression
+    def variablename(cls) -> ParsingExpressionLike:
+        return [
+            RegExMatch(
+                "[A-Z_a-z][0-9A-Z_a-z]*|'([\\ -\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)*'"  # noqa: E501
+            ),
+            RegExMatch(r"\$\w*"),
+        ]
+
+    @classmethod
+    @returns_parsing_expression
+    def typename(cls) -> ParsingExpressionLike:
+        return Optional(cls.DOT), OneOrMore(cls.variablename, sep=".")
+
+    @classmethod
+    @returns_parsing_expression
     def component(cls) -> ParsingExpressionLike:
         return (
             "{",
             (
-                *(cls.type_specifier, ","),  # className
+                *(cls.typename, ","),  # className
                 *(cls.IDENT, ","),  # name
                 *(cls.STRING, ","),  # comment
                 *(cls.STRING, ","),  # protected
@@ -401,18 +426,19 @@ class Syntax(v3_5.Syntax):
     @returns_parsing_expression
     def record_expression(cls) -> ParsingExpressionLike:
         return [
+            cls.record_primary,
             cls.real_primary,
             cls.boolean_primary,
             cls.string_primary,
             cls.typename_primary,
-            cls.record_primary,
         ]
 
     # Additional rules
+
     @classmethod
     @returns_parsing_expression
-    def IDENT(cls) -> ParsingExpressionLike:
-        return [super().IDENT(), RegExMatch(r"\$\w*")]
+    def DOT(cls) -> ParsingExpressionLike:
+        return "."
 
     @classmethod
     @returns_parsing_expression
@@ -464,7 +490,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def variablename_primary(cls) -> ParsingExpressionLike:
-        return [cls.IDENT, cls.variablename_array]
+        return [cls.variablename, cls.variablename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -474,7 +500,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def typename_primary(cls) -> ParsingExpressionLike:
-        return [cls.type_specifier, cls.typename_array]
+        return [cls.typename, cls.typename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -540,6 +566,12 @@ class Visitor(PTNodeVisitor):
         else:
             return tuple(children)
 
+    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
+        return node.flat_str()
+
+    def visit_STRING(self, node: Terminal, _: Never) -> str:
+        return unquote_modelica_string(node.flat_str())
+
     def visit_real(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
@@ -565,15 +597,12 @@ class Visitor(PTNodeVisitor):
     ) -> BooleanPrimary:
         return children.boolean_primary
 
-    def visit_STRING(self, node: Terminal, _: Never) -> str:
-        return unquote_modelica_string(node.flat_str())
-
     def visit_string_array(
         self, _: Never, children: Children
     ) -> StringPrimary:
         return children.string_primary
 
-    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
+    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_variablename_array(
@@ -581,7 +610,7 @@ class Visitor(PTNodeVisitor):
     ) -> StringPrimary:
         return children.variablename_primary
 
-    def visit_type_specifier(self, node: NonTerminal, _: Never) -> str:
+    def visit_typename(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_typename_array(
