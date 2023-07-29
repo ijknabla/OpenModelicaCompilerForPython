@@ -1,22 +1,20 @@
 from __future__ import annotations
 
 import enum
-import operator
 import sys
-from collections.abc import Callable, Iterator, Mapping, Sequence
+from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, Iterable, NewType, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterable, TypeVar, Union
 from typing import cast as typing_cast
-from typing import overload
 
 from arpeggio import (
     EOF,
     NoMatch,
     NonTerminal,
+    OneOrMore,
     Optional,
     ParserPython,
-    ParseTreeNode,
     PTNodeVisitor,
     RegExMatch,
     Terminal,
@@ -27,7 +25,6 @@ from modelicalang import (
     ParsingExpressionLike,
     returns_parsing_expression,
     v3_4,
-    v3_5,
 )
 from typing_extensions import (
     Annotated,
@@ -48,13 +45,7 @@ if TYPE_CHECKING:
     from builtins import _ClassInfo
 
     import typing_extensions
-    from typing_extensions import (
-        Concatenate,
-        Never,
-        ParamSpec,
-        SupportsIndex,
-        TypeGuard,
-    )
+    from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
 
     _SpecialForm = typing._SpecialForm | typing_extensions._SpecialForm
 
@@ -78,6 +69,22 @@ _Scalar = Union[
     enumeration,
     record,
 ]
+
+
+def is_variablename(variablename: str) -> bool:
+    parser = _get_variablename_parser()
+    try:
+        parser.parse(variablename)
+        return True
+    except NoMatch:
+        return False
+
+
+def split_typename_parts(typename: str) -> tuple[str, ...]:
+    return visit_parse_tree(  # type: ignore
+        _get_typename_parser().parse(typename),
+        TypeNameSplitVisitor(),
+    )
 
 
 def parse(typ: type[_T], literal: str) -> _T:
@@ -139,6 +146,26 @@ class _Token(enum.Enum):
             return cls.record
 
         raise NotImplementedError(value_type)
+
+
+@lru_cache(1)
+def _get_variablename_parser() -> ParserPython:
+    @returns_parsing_expression
+    def root() -> ParsingExpressionLike:
+        return Syntax.variablename, EOF
+
+    with Syntax:
+        return ParserPython(root)
+
+
+@lru_cache(1)
+def _get_typename_parser() -> ParserPython:
+    @returns_parsing_expression
+    def root() -> ParsingExpressionLike:
+        return Syntax.typename, EOF
+
+    with Syntax:
+        return ParserPython(root)
 
 
 @lru_cache(None)
@@ -337,7 +364,16 @@ def _isorigin(__cls: Any, __special_form: _SpecialForm) -> bool:
     return get_origin(__cls) is __special_form
 
 
-class Syntax(v3_5.Syntax):
+class Syntax(v3_4.Syntax):
+    # Dialects
+
+    @classmethod
+    @returns_parsing_expression
+    def IDENT(cls) -> ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+    # Primitives
+
     @classmethod
     @returns_parsing_expression
     def real(cls) -> ParsingExpressionLike:
@@ -355,11 +391,26 @@ class Syntax(v3_5.Syntax):
 
     @classmethod
     @returns_parsing_expression
+    def variablename(cls) -> ParsingExpressionLike:
+        return [
+            RegExMatch(
+                "[A-Z_a-z][0-9A-Z_a-z]*|'([\\ !\\#-\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)([\\ -\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)*'"  # noqa: E501
+            ),
+            RegExMatch(r"\$\w*"),
+        ]
+
+    @classmethod
+    @returns_parsing_expression
+    def typename(cls) -> ParsingExpressionLike:
+        return Optional(cls.DOT), OneOrMore(cls.variablename, sep=".")
+
+    @classmethod
+    @returns_parsing_expression
     def component(cls) -> ParsingExpressionLike:
         return (
             "{",
             (
-                *(cls.type_specifier, ","),  # className
+                *(cls.typename, ","),  # className
                 *(cls.IDENT, ","),  # name
                 *(cls.STRING, ","),  # comment
                 *(cls.STRING, ","),  # protected
@@ -401,18 +452,19 @@ class Syntax(v3_5.Syntax):
     @returns_parsing_expression
     def record_expression(cls) -> ParsingExpressionLike:
         return [
+            cls.record_primary,
             cls.real_primary,
             cls.boolean_primary,
             cls.string_primary,
             cls.typename_primary,
-            cls.record_primary,
         ]
 
     # Additional rules
+
     @classmethod
     @returns_parsing_expression
-    def IDENT(cls) -> ParsingExpressionLike:
-        return [super().IDENT(), RegExMatch(r"\$\w*")]
+    def DOT(cls) -> ParsingExpressionLike:
+        return "."
 
     @classmethod
     @returns_parsing_expression
@@ -464,7 +516,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def variablename_primary(cls) -> ParsingExpressionLike:
-        return [cls.IDENT, cls.variablename_array]
+        return [cls.variablename, cls.variablename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -474,7 +526,7 @@ class Syntax(v3_5.Syntax):
     @classmethod
     @returns_parsing_expression
     def typename_primary(cls) -> ParsingExpressionLike:
-        return [cls.type_specifier, cls.typename_array]
+        return [cls.typename, cls.typename_array]
 
     @classmethod
     @returns_parsing_expression
@@ -515,11 +567,13 @@ else:
 
 
 class Children(Protocol, Iterable[Any]):
+    DOT: list[str]
     IDENT: list[str]
     real_primary: StringPrimary
     integer_primary: StringPrimary
     boolean_primary: BooleanPrimary
     string_primary: StringPrimary
+    variablename: list[str]
     variablename_primary: StringPrimary
     typename_primary: StringPrimary
     component_primary: TuplePrimary
@@ -539,6 +593,12 @@ class Visitor(PTNodeVisitor):
             return children[0]
         else:
             return tuple(children)
+
+    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
+        return node.flat_str()
+
+    def visit_STRING(self, node: Terminal, _: Never) -> str:
+        return unquote_modelica_string(node.flat_str())
 
     def visit_real(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
@@ -565,15 +625,12 @@ class Visitor(PTNodeVisitor):
     ) -> BooleanPrimary:
         return children.boolean_primary
 
-    def visit_STRING(self, node: Terminal, _: Never) -> str:
-        return unquote_modelica_string(node.flat_str())
-
     def visit_string_array(
         self, _: Never, children: Children
     ) -> StringPrimary:
         return children.string_primary
 
-    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
+    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_variablename_array(
@@ -581,7 +638,7 @@ class Visitor(PTNodeVisitor):
     ) -> StringPrimary:
         return children.variablename_primary
 
-    def visit_type_specifier(self, node: NonTerminal, _: Never) -> str:
+    def visit_typename(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
     def visit_typename_array(
@@ -617,113 +674,12 @@ class Visitor(PTNodeVisitor):
         return children.record_primary
 
 
-# TODO: sort order
+class TypeNameSplitVisitor(PTNodeVisitor):
+    def visit_DOT(self, node: Terminal, _: Never) -> str:
+        return node.flat_str()
 
-TypeSpecifierParseTreeNode = NewType(
-    "TypeSpecifierParseTreeNode", ParseTreeNode
-)
+    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
+        return node.flat_str()
 
-
-def is_valid_identifier(ident: str) -> bool:
-    try:
-        _parse("IDENT", ident)
-        return True
-    except NoMatch:
-        return False
-
-
-def parse_typeName(type_specifier: str) -> TypeName:
-    try:
-        return _visit_parse_tree(
-            _parse("type_specifier", type_specifier),
-            TypeSpecifierVisitor(),
-        )
-    except NoMatch:
-        raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
-
-
-@overload
-def _parse(syntax: Literal["IDENT"], text: str) -> ParseTreeNode:
-    ...
-
-
-@overload
-def _parse(
-    syntax: Literal["type_specifier"], text: str
-) -> TypeSpecifierParseTreeNode:
-    ...
-
-
-def _parse(syntax: str, text: str) -> ParseTreeNode:
-    return __get_parser(syntax).parse(text)
-
-
-@lru_cache(None)
-def __get_parser(syntax: str) -> ParserPython:
-    @returns_parsing_expression
-    def _root_rule_() -> ParsingExpressionLike:
-        return getattr(OMCDialectSyntax, syntax), EOF
-
-    with OMCDialectSyntax:
-        return ParserPython(_root_rule_)
-
-
-def _visit_parse_tree(
-    parse_tree: TypeSpecifierParseTreeNode,
-    visitor: TypeSpecifierVisitor,
-) -> TypeName:
-    return visit_parse_tree(parse_tree, visitor)  # type: ignore
-
-
-class OMCDialectSyntax(v3_4.Syntax):
-    @classmethod
-    @returns_parsing_expression
-    def IDENT(cls) -> ParsingExpressionLike:
-        return [super().IDENT(), RegExMatch(r"\$\w*")]
-
-
-def getitem_with_default(
-    sequence: Sequence[_T],
-    index: SupportsIndex,
-    *,
-    default: _T,
-) -> _T:
-    try:
-        return operator.getitem(sequence, index)
-    except IndexError:
-        return default
-
-
-class TypeSpecifierChildren:
-    IDENT: list[VariableName]
-    type_specifier: list[TypeName]
-
-
-class TypeSpecifierVisitor(PTNodeVisitor):
-    def visit_IDENT(
-        self,
-        node: Terminal,
-        _: object,
-    ) -> VariableName:
-        from omc4py.openmodelica import VariableName, _BaseVariableName
-
-        return _BaseVariableName.__new__(VariableName, node.value)
-
-    def visit_type_specifier(self, node: NonTerminal, _: object) -> TypeName:
-        from omc4py.openmodelica import TypeName, _BaseTypeName
-
-        parts = tuple(
-            s
-            for i, s in enumerate(self.__iter_terminal_nodes(node))
-            if s != "." or i == 0
-        )
-
-        return _BaseTypeName.__new__(TypeName, parts)
-
-    @classmethod
-    def __iter_terminal_nodes(cls, node: NonTerminal) -> Iterator[str]:
-        for child in node:
-            if isinstance(child, Terminal):
-                yield child.value
-            elif isinstance(child, NonTerminal):
-                yield from cls.__iter_terminal_nodes(child)
+    def visit_typename(self, _: Never, children: Children) -> tuple[str, ...]:
+        return tuple(children.DOT + children.variablename)

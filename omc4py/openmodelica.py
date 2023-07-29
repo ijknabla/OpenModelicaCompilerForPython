@@ -80,7 +80,7 @@ class _BaseVariableName:
 
 class VariableName(_BaseVariableName):
     def __new__(cls, obj: VariableNameLike) -> Self:
-        from . import parser
+        from .parser import is_variablename
 
         if isinstance(obj, cls):
             return obj
@@ -95,7 +95,7 @@ class VariableName(_BaseVariableName):
                 f"got {obj!r}: {type(obj)}"
             )
 
-        if not parser.is_valid_identifier(identifier):
+        if not is_variablename(identifier):
             raise ValueError(
                 f"Invalid modelica identifier, got {identifier!r}"
             )
@@ -180,7 +180,7 @@ class TypeName(_BaseTypeName):
 
     @staticmethod
     def __split_part(part: TypeNameLike) -> Iterator[str]:
-        from . import parser
+        from .parser import split_typename_parts
 
         if isinstance(part, TypeName):
             yield from part.parts
@@ -190,7 +190,7 @@ class TypeName(_BaseTypeName):
             if part == ".":
                 yield part
             else:
-                yield from parser.parse_typeName(part).parts
+                yield from split_typename_parts(part)
         else:
             raise TypeError(f"Unexpected part, got {part}: {type(part)}")
 

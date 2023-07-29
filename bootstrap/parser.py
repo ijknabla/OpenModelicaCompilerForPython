@@ -56,15 +56,15 @@ class Syntax(omc4py.parser.Syntax):
         .. code-block:: modelicapeg
 
             long-class-specifier :
-               IDENT [ generic ] description-string composition `end` IDENT
-               | `extends` IDENT [ class-modification ] description-string composition
-                 `end` IDENT
+               IDENT [ generic ] string-comment composition `end` IDENT
+               | `extends` IDENT [ class-modification ] string-comment composition
+               `end` IDENT
         """  # noqa: E501
         return [
             (
                 cls.IDENT,
                 Optional(cls.generic),
-                cls.description_string,
+                cls.string_comment,
                 cls.composition,
                 cls.END,
                 cls.IDENT,
@@ -73,7 +73,7 @@ class Syntax(omc4py.parser.Syntax):
                 cls.EXTENDS,
                 cls.IDENT,
                 Optional(cls.class_modification),
-                cls.description_string,
+                cls.string_comment,
                 cls.composition,
                 cls.END,
                 cls.IDENT,
@@ -104,12 +104,12 @@ class Children(Protocol):
     IDENT: list[VariableNameString]
     STRING: list[str]
     description: list[str]
-    description_string: list[str]
+    string_comment: list[str]
     modification: list[Token]
 
 
 class EnumeratorVisitor(omc4py.parser.Visitor):
-    def visit_description_string(
+    def visit_string_comment(
         self,
         _: Never,
         children: Children,
@@ -121,7 +121,7 @@ class EnumeratorVisitor(omc4py.parser.Visitor):
         _: Never,
         children: Children,
     ) -> str:
-        (description,) = children.description_string
+        (description,) = children.string_comment
         return description
 
     def visit_enumeration_literal(
