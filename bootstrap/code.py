@@ -305,6 +305,7 @@ def _create_interface(
 
     result = []
     for aio in [False, True]:
+        exports = list(enumeration_names)
         module_body = list[stmt]()
         package_bodies = dict[tuple[str, ...], list[stmt]]({(): []})
         root_packages = list[TypeNameString]()
@@ -317,10 +318,13 @@ def _create_interface(
 
             elif entity.get("isRecord"):
                 statement = _create_record(name, entity, references)
+                if not _in_package(entities, name):
+                    exports.append(_parts(name)[-1])
 
             elif entity.get("isPackage") and name in packages:
                 statement = _create_package(name)
                 if len(_parts(name)) <= 1:
+                    exports.append(name)
                     root_packages.append(name)
 
             elif entity.get("isFunction") and name in functions:
@@ -333,6 +337,7 @@ def _create_interface(
                     module_body.append(
                         _create_return_tuple(name, outputs, annotations)
                     )
+                    exports.append(_parts(name)[-1])
 
                 statement = _create_function(
                     name, code, inputs, outputs, annotations, aio
@@ -358,7 +363,7 @@ def _create_interface(
 
         interface = Module(
             body=[
-                *_iter_imports(enumeration_names, aio),
+                *_iter_headers(enumeration_names, sorted(exports), aio),
                 *module_body,
                 *package_bodies[()],
             ],
@@ -372,6 +377,7 @@ def _create_interface(
             body=[],
             decorator_list=[],
         )
+        exports.append("Session")
 
         session.body.extend(
             (
@@ -428,14 +434,22 @@ def _create_interface(
     return result
 
 
-def _iter_imports(
+def _iter_headers(
     enumeration_names: Iterable[str],
+    exports: Iterable[str],
     aio: bool,
-) -> Generator[ImportFrom, None, None]:
+) -> Generator[ImportFrom | Assign, None, None]:
     yield ImportFrom(
         module="__future__",
         names=[alias(name="annotations")],
         level=0,
+    )
+    yield Assign(
+        targets=[Name(id="__all__", ctx=Store())],
+        value=Tuple(
+            elts=[Constant(value=value) for value in exports], ctx=Load()
+        ),
+        lineno=None,
     )
     yield ImportFrom(
         module="dataclasses",
