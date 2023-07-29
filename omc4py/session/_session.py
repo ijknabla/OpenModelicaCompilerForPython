@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class Session:
-    __omc_interactive__: SupportsInteractive[str]
+    __omc_interactive__: SupportsInteractive
 
     def close(self) -> None:
         self.__omc_interactive__.close()

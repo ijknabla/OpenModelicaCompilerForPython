@@ -377,7 +377,7 @@ def open_session(
         return session_type(interactive)
 
 
-def _get_version(interactive: SupportsInteractive[str]) -> tuple[int, int]:
+def _get_version(interactive: SupportsInteractive) -> tuple[int, int]:
     version = interactive.evaluate("getVersion()")
     matched = re.search(r"(\d+)\.(\d+)", version)
     if matched is None:
