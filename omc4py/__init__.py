@@ -44,7 +44,7 @@ __all__ = (
 )
 import re
 from os import PathLike
-from typing import TYPE_CHECKING, Any, overload
+from typing import TYPE_CHECKING, Any, Union, overload
 
 from typing_extensions import Literal
 
@@ -68,7 +68,7 @@ if TYPE_CHECKING:
         v_1_21,
     )
 
-    Command = str | PathLike[str]
+    Command = Union[str, PathLike[str]]
 
     Version__2_X = tuple[Literal[2], int]
     Version__1_X = tuple[

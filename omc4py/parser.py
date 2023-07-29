@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     import typing_extensions
     from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
 
-    _SpecialForm = typing._SpecialForm | typing_extensions._SpecialForm
+_SpecialForm = Union["typing._SpecialForm", "typing_extensions._SpecialForm"]
 
 
 _T = TypeVar("_T")
@@ -555,10 +555,10 @@ class Syntax(v3_4.Syntax):
 
 
 if TYPE_CHECKING:
-    AnyPrimary = list[Any] | list[list[Any]]
-    BooleanPrimary = list[bool] | list[list[bool]]
-    StringPrimary = list[str] | list[list[str]]
-    TuplePrimary = list[tuple[Any, ...]] | list[list[tuple[Any, ...]]]
+    AnyPrimary = Union[list[Any], list[list[Any]]]
+    BooleanPrimary = Union[list[bool], list[list[bool]]]
+    StringPrimary = Union[list[str], list[list[str]]]
+    TuplePrimary = Union[tuple[Any, ...], list[list[tuple[Any, ...]]]]
 else:
     AnyPrimary = ...
     BooleanPrimary = ...
