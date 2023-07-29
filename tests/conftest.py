@@ -26,7 +26,7 @@ def session() -> Generator[latest.Session, None, None]:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def async_session() -> Generator[latest.aio.Session, None, None]:
+async def async_session() -> AsyncGenerator[latest.aio.Session, None]:
     with open_session(asyncio=True) as session:
         yield session
         await session.__check__()

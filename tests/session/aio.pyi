@@ -3,19 +3,14 @@ from omc4py.modelica import external, package
 
 from . import one
 
-class Session(BasicSession):
-    @external(".OpenModelica.Scripting.loadFile")
-    @classmethod
-    async def loadFile(_, fileName: str) -> bool:
-        raise NotImplementedError()
 
-class EmptySession(Session):
+class EmptySession(BasicSession):
     @external(".empty")
     @classmethod
     async def empty(_) -> None:
         raise NotImplementedError()
 
-class OneSession(Session):
+class OneSession(BasicSession):
     @external(".one")
     @classmethod
     async def one(_) -> one:
@@ -40,7 +35,7 @@ class Nested(package):
             async def level(_) -> int:
                 raise NotImplementedError()
 
-class NestedSession(Session):
+class NestedSession(BasicSession):
     Nested = Nested
 
     level_1 = staticmethod(Nested.level)
