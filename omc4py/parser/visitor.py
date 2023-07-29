@@ -2,12 +2,10 @@ from __future__ import annotations
 
 import operator
 from collections.abc import Iterator, Sequence
-from typing import TYPE_CHECKING, TypeVar, Union
+from typing import TYPE_CHECKING, TypeVar
 
 from arpeggio import NonTerminal, PTNodeVisitor, Terminal
 from typing_extensions import SupportsIndex
-
-from omc4py import string
 
 if TYPE_CHECKING:
     from neo.openmodelica import TypeName, VariableName
@@ -61,75 +59,3 @@ class TypeSpecifierVisitor(PTNodeVisitor):
                 yield child.value
             elif isinstance(child, NonTerminal):
                 yield from cls.__iter_terminal_nodes(child)
-
-
-class NumberChildren:
-    sign: list[str]
-    UNSIGNED_NUMBER: list[Union[int, float]]
-    number: list[Union[int, float]]
-
-
-class NumberVisitor(
-    PTNodeVisitor,
-):
-    def visit_sign(self, node: Terminal, _: object) -> str:
-        return node.value
-
-    def visit_UNSIGNED_NUMBER(
-        self, node: Terminal, _: object
-    ) -> Union[int, float]:
-        try:
-            return int(node.value)
-        except ValueError:
-            return float(node.value)
-
-    def visit_number(
-        self, _: object, children: NumberChildren
-    ) -> Union[int, float]:
-        sign = getitem_with_default(children.sign, 0, default="+")
-        (unsigned,) = children.UNSIGNED_NUMBER
-
-        if sign == "+":
-            signed = +unsigned
-        elif sign == "-":
-            signed = -unsigned
-
-        if isinstance(signed, int):
-            return int(signed)
-        elif isinstance(signed, float):
-            return float(signed)
-        else:
-            raise NotImplementedError(
-                f"Unexpected number type, got {signed!r}: {type(signed)}"
-            )
-
-
-class BooleanChildren:
-    TRUE: list[bool]
-    FALSE: list[bool]
-    boolean: list[bool]
-
-
-class BooleanVisitor(
-    PTNodeVisitor,
-):
-    def visit_TRUE(self, *_: object) -> bool:
-        return True
-
-    def visit_FALSE(self, *_: object) -> bool:
-        return False
-
-    def visit_boolean(self, _: object, children: BooleanChildren) -> bool:
-        (value,) = children.TRUE + children.FALSE
-        return value
-
-
-class StringChildren:
-    STRING: list[str]
-
-
-class StringVisitor(
-    PTNodeVisitor,
-):
-    def visit_STRING(self, node: Terminal, _: object) -> str:
-        return string.unquote_modelica_string(node.value)
