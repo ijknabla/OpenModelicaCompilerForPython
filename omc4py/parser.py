@@ -81,6 +81,13 @@ def is_variablename(variablename: str) -> bool:
         return False
 
 
+def split_typename_parts(typename: str) -> tuple[str, ...]:
+    return visit_parse_tree(  # type: ignore
+        _get_typename_parser().parse(typename),
+        TypeNameSplitVisitor(),
+    )
+
+
 def parse(typ: type[_T], literal: str) -> _T:
     parser = _get_parser(
         *map(_Token.from_value_type, _get_types(typ, keep_component=True))
@@ -147,6 +154,16 @@ def _get_variablename_parser() -> ParserPython:
     @returns_parsing_expression
     def root() -> ParsingExpressionLike:
         return Syntax.variablename, EOF
+
+    with Syntax:
+        return ParserPython(root)
+
+
+@lru_cache(1)
+def _get_typename_parser() -> ParserPython:
+    @returns_parsing_expression
+    def root() -> ParsingExpressionLike:
+        return Syntax.typename, EOF
 
     with Syntax:
         return ParserPython(root)
@@ -551,11 +568,13 @@ else:
 
 
 class Children(Protocol, Iterable[Any]):
+    DOT: list[str]
     IDENT: list[str]
     real_primary: StringPrimary
     integer_primary: StringPrimary
     boolean_primary: BooleanPrimary
     string_primary: StringPrimary
+    variablename: list[str]
     variablename_primary: StringPrimary
     typename_primary: StringPrimary
     component_primary: TuplePrimary
@@ -654,6 +673,17 @@ class Visitor(PTNodeVisitor):
 
     def visit_record_array(self, _: Never, children: Children) -> AnyPrimary:
         return children.record_primary
+
+
+class TypeNameSplitVisitor(PTNodeVisitor):
+    def visit_DOT(self, node: Terminal, _: Never) -> str:
+        return node.flat_str()
+
+    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
+        return node.flat_str()
+
+    def visit_typename(self, _: Never, children: Children) -> tuple[str, ...]:
+        return tuple(children.DOT + children.variablename)
 
 
 # TODO: sort order
