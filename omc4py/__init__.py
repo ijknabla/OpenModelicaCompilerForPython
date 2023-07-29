@@ -59,6 +59,7 @@ if TYPE_CHECKING:
         latest,
         v_1_13,
         v_1_14,
+        v_1_15,
         v_1_16,
         v_1_17,
         v_1_18,
@@ -125,6 +126,10 @@ def _select_session_type(
         from . import v_1_16
 
         return v_1_16.Session, v_1_16.aio.Session
+    elif (1, 15) <= version:
+        from . import v_1_15
+
+        return v_1_15.Session, v_1_15.aio.Session
     elif (1, 14) <= version:
         from . import v_1_14
 
@@ -282,12 +287,33 @@ def open_session(
     ...
 
 
+# v1.15
+@overload
+def open_session(
+    omc_command: Command | None = None,
+    *,
+    version: Version__1_15,
+    asyncio: Literal[False] = False,
+) -> v_1_15.Session:
+    ...
+
+
+@overload
+def open_session(
+    omc_command: Command | None = None,
+    *,
+    version: Version__1_15,
+    asyncio: Literal[True],
+) -> v_1_15.aio.Session:
+    ...
+
+
 # v1.14
 @overload
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_15 | Version__1_14,
+    version: Version__1_14,
     asyncio: Literal[False] = False,
 ) -> v_1_14.Session:
     ...
@@ -297,7 +323,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_15 | Version__1_14,
+    version: Version__1_14,
     asyncio: Literal[True],
 ) -> v_1_14.aio.Session:
     ...
