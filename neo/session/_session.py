@@ -8,10 +8,10 @@ from warnings import warn
 
 from exceptiongroup import ExceptionGroup
 
-import omc4py.exception
 from omc4py.string import to_omc_literal
 
 from ..algorithm import bind_to_awaitable
+from ..exception import OMCError, OMCWarning
 from ..openmodelica import Component, TypeName
 from ..parser import cast, parse
 from ..protocol import SupportsInteractive
@@ -55,7 +55,7 @@ class Session:
 
 @bind_to_awaitable
 def _check_messages(messages: list[ErrorMessage]) -> None:
-    errors: list[omc4py.exception.OMCError] = []
+    errors: list[OMCError] = []
 
     for record in messages:
         level = record.level.name
@@ -64,9 +64,9 @@ def _check_messages(messages: list[ErrorMessage]) -> None:
 
         args = (f"[level={level}, kind={kind}] {message}",)
         if level == "error":
-            errors.append(omc4py.exception.OMCError(*args))
+            errors.append(OMCError(*args))
         else:
-            warn(omc4py.exception.OMCWarning(*args))
+            warn(OMCWarning(*args))
 
     if len(errors) == 0:
         return

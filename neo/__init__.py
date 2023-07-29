@@ -11,9 +11,8 @@ from typing import TYPE_CHECKING, Any, overload
 
 from typing_extensions import Literal
 
-import omc4py.exception
-
 from . import session
+from .exception import OMCRuntimeError
 from .interactive import open_interactives
 from .openmodelica import TypeName, VariableName
 from .protocol import SupportsInteractive
@@ -345,7 +344,5 @@ def _get_version(interactive: SupportsInteractive[str]) -> tuple[int, int]:
     version = interactive.evaluate("getVersion()")
     matched = re.search(r"(\d+)\.(\d+)", version)
     if matched is None:
-        raise omc4py.exception.OMCRuntimeError(
-            f"Invalid version string {version!r}"
-        )
+        raise OMCRuntimeError(f"Invalid version string {version!r}")
     return tuple(map(int, matched.groups()))  # type: ignore
