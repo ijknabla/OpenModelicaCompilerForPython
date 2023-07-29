@@ -165,7 +165,7 @@ async def create_interface_by_docker(
                 [
                     f"cd {omc4py_t}",
                     f"{PYTHON} -m pip install -U pip",
-                    f"{PYTHON} -m pip install -r requirements.test.txt",
+                    f"{PYTHON} -m pip install -r requirements.bootstrap.txt",
                     f"{PYTHON} -m bootstrap interface -n {n} -o {output_t}",
                 ]
             ),
