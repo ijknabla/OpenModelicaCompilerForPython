@@ -1,10 +1,13 @@
 from contextlib import ExitStack
 from itertools import count
-from typing import Any, Optional
+from typing import TYPE_CHECKING, Any, Optional
 
 import pytest
 
 from omc4py import TypeName, VariableName
+
+if TYPE_CHECKING:
+    from _pytest._code import ExceptionInfo
 
 
 @pytest.mark.parametrize(
@@ -12,12 +15,14 @@ from omc4py import TypeName, VariableName
 )
 def test_variablename(obj: Any) -> None:
     variablename: Optional[VariableName] = None
-    expected_exception: Optional[pytest.ExceptionInfo] = None
+    expected_exception: ExceptionInfo[TypeError] | None = None
 
     with ExitStack() as stack:
         if not isinstance(obj, (str, VariableName, TypeName)):
             expected_exception = stack.enter_context(pytest.raises(TypeError))
         variablename = VariableName(obj)
+
+    print(expected_exception.__class__)
 
     if variablename is not None:
         assert expected_exception is None
@@ -59,7 +64,7 @@ def test_variablename(obj: Any) -> None:
     ],
 )
 def test_variablename_constructor(s: str) -> None:
-    excepted_exception: Optional[pytest.ExceptionInfo] = None
+    excepted_exception: ExceptionInfo[ValueError] | None = None
     with ExitStack() as stack:
         if not is_valid_identifer(s):
             excepted_exception = stack.enter_context(pytest.raises(ValueError))

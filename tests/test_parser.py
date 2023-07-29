@@ -236,9 +236,9 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
         "comment",
         "protected",
         true, true, true, true,
-        "variability",
-        "innerOuter",
-        "inputOutput",
+        "parameter",
+        "inner",
+        "input",
         {:}
     }
 }""",
@@ -252,9 +252,9 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
                     isFlow=True,
                     isStream=True,
                     isReplaceable=True,
-                    variability="variability",
-                    innerOuter="innerOuter",
-                    inputOutput="inputOutput",
+                    variability="parameter",
+                    innerOuter="inner",
+                    inputOutput="input",
                     dimensions=[":"],
                 )
             ],
@@ -495,14 +495,12 @@ record OpenModelica.Scripting.SourceInfo
 end OpenModelica.Scripting.SourceInfo;
 """,
             OpenModelica.Scripting.SourceInfo(
-                **{
-                    "fileName": "filename",
-                    "readonly": False,
-                    "lineStart": 1,
-                    "columnStart": 2,
-                    "lineEnd": 3,
-                    "columnEnd": 4,
-                }
+                fileName="filename",
+                readonly=False,
+                lineStart=1,
+                columnStart=2,
+                lineEnd=3,
+                columnEnd=4,
             ),
         ),
         (

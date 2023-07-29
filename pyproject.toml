@@ -77,3 +77,9 @@ per-file-ignores = """
 [tool.isort]
 profile = "black"
 line_length = 79
+
+[[tool.mypy.overrides]]
+module = [
+    "numpy",
+]
+ignore_missing_imports = true

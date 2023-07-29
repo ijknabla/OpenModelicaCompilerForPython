@@ -1,4 +1,5 @@
 from contextlib import AbstractContextManager as _AbstractContextManager
+from typing import Any
 
 import zmq as _zmq
 
@@ -23,3 +24,4 @@ class Socket(_AbstractContextManager["Socket"]):
         copy: bool | None = ...,
         encoding: str = ...,
     ) -> None: ...
+    def __exit__(self, *exc_info: Any) -> None: ...

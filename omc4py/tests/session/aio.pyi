@@ -1,9 +1,8 @@
-import neo.session.aio
-from neo.modelica import external, package
-
+from ...modelica import external, package
+from ...session.aio import Session as BasicSession
 from . import one
 
-class Session(neo.session.aio.Session):
+class Session(BasicSession):
     @external(".OpenModelica.Scripting.loadFile")
     @classmethod
     async def loadFile(_, fileName: str) -> bool:
