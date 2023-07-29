@@ -104,14 +104,15 @@ All session methods are _OpenModelica.Scripting.*_ functions. The names and type
 
 If you want to know more about each session method, you can display it with the `help ()` function.
 
-- [UserGuide for OpenModelica Scripting API (v1.14)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.14/scripting_api.html)
-- [UserGuide for OpenModelica Scripting API (v1.15)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.15/scripting_api.html)
-- [UserGuide for OpenModelica Scripting API (v1.16)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.16/scripting_api.html)
-- [UserGuide for OpenModelica Scripting API (v1.17)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.17/scripting_api.html)
-- [UserGuide for OpenModelica Scripting API (v1.18)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.18/scripting_api.html)
-
 - [UserGuide for OpenModelica Scripting API (latest)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
-
+- [UserGuide for OpenModelica Scripting API (v1.21)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.21/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.20)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.20/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.19)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.19/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.18)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.18/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.17)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.17/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.16)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.16/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.15)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.15/scripting_api.html)
+- [UserGuide for OpenModelica Scripting API (v1.14)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.14/scripting_api.html)
 
 [Documentation in OpenModelica build server](https://build.openmodelica.org/Documentation/OpenModelica.Scripting.html) shows exhaustive information about _OpenModelica.Scripting_. You will find sub-packages not explained user guide.
 
