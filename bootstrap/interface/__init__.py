@@ -23,10 +23,8 @@ from typing import Generic, Mapping, NamedTuple, NewType, TypeVar, overload
 from pkg_resources import resource_filename
 from typing_extensions import Literal, NotRequired, Self, TypedDict
 
-from omc4py import TypeName, VariableName, exception
-
-from .. import open_session
-from ..session import Session
+from omc4py import TypeName, VariableName, exception, open_session
+from omc4py.latest.aio import Session
 
 _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
@@ -74,9 +72,12 @@ Entities = Mapping[TypeNameString, Entity]
 Interface = Mapping[VersionString, Entities]
 
 
-async def create_interface(n: int) -> Interface:
+async def create_interface(n: int, exe: str | None) -> Interface:
     with ExitStack() as stack:
-        sessions = [stack.enter_context(open_session()) for _ in range(n)]
+        sessions = [
+            stack.enter_context(open_session(exe, asyncio=True))
+            for _ in range(n)
+        ]
 
         version = await _get_version(sessions[0])
 

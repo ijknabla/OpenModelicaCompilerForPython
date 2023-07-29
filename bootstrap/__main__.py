@@ -47,11 +47,15 @@ def main() -> None:
     type=click.File("w", encoding="utf-8", lazy=True),
     default=sys.stdout,
 )
+@click.option(
+    "--exe",
+    type=str,
+)
 @run_decorator
-async def interface(n: int, o: IO[str]) -> None:
+async def interface(n: int, o: IO[str], exe: str | None) -> None:
     n = max(1, n)
     yaml.safe_dump(
-        await create_interface(n),
+        await create_interface(n, exe),
         o,
         sort_keys=False,
     )
