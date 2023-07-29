@@ -10,14 +10,14 @@ _T_evaluate = TypeVar(
 )
 
 
-@runtime_checkable
-class SupportsToOMCLiteral(Protocol):
-    def __to_omc_literal__(self) -> str:
+class SupportsClose(Protocol):
+    def close(self) -> None:
         ...
 
 
-class SupportsClose(Protocol):
-    def close(self) -> None:
+@runtime_checkable
+class SupportsToOMCLiteral(Protocol):
+    def __to_omc_literal__(self) -> str:
         ...
 
 
