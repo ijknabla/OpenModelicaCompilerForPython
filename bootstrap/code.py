@@ -41,7 +41,6 @@ from collections.abc import (
 )
 from concurrent.futures import ProcessPoolExecutor
 from functools import lru_cache
-from itertools import product
 from keyword import iskeyword
 from pathlib import PurePath
 from typing import DefaultDict, NamedTuple
@@ -70,9 +69,6 @@ async def create_code(
     loop = get_running_loop()
     with ProcessPoolExecutor() as executor:
         pending = set(
-            loop.run_in_executor(executor, _create_module, v, aio)
-            for v, aio in product(interface, [False, True])
-        ) | set(
             loop.run_in_executor(
                 executor,
                 _create_interface,
@@ -233,46 +229,6 @@ def _code2doc(code: str | None) -> list[Expr]:
         return [Expr(value=Constant(value="\n".join(doc_lines())))]
 
 
-def _create_module(
-    version: VersionString, aio: bool
-) -> list[tuple[PurePath, Module]]:
-    if aio:
-        _all_ = ["Session"]
-        imports = [
-            ImportFrom(
-                module="_interface", names=[alias(name="Session")], level=1
-            ),
-        ]
-    else:
-        _all_ = ["Session", "aio"]
-        imports = [
-            ImportFrom(names=[alias(name="aio")], level=1),
-            ImportFrom(
-                module="_interface", names=[alias(name="Session")], level=1
-            ),
-        ]
-
-    module = Module(
-        body=[
-            Assign(
-                targets=[Name(id="__all__", ctx=Store())],
-                value=Tuple(
-                    elts=[Constant(value=item) for item in _all_], ctx=Load()
-                ),
-                lineno=None,
-            ),
-            *imports,
-        ],
-        type_ignores=[],
-    )
-
-    package_dir = PurePath(_format_version(version))
-    if aio:
-        return [(package_dir / "aio.py", module)]
-    else:
-        return [(package_dir / "__init__.py", module)]
-
-
 def _create_interface(
     version: VersionString,
     enumeration_names: list[str],
@@ -430,6 +386,47 @@ def _create_interface(
             result.append((package_dir / "aio.pyi", interface))
         else:
             result.append((package_dir / "_interface.py", interface))
+
+        if aio:
+            _all_ = exports
+            imports = [
+                ImportFrom(
+                    module="_interface",
+                    names=[alias(name=name) for name in exports],
+                    level=1,
+                ),
+            ]
+        else:
+            _all_ = exports + ["aio"]
+            imports = [
+                ImportFrom(names=[alias(name="aio")], level=1),
+                ImportFrom(
+                    module="_interface",
+                    names=[alias(name=name) for name in exports],
+                    level=1,
+                ),
+            ]
+
+        module = Module(
+            body=[
+                Assign(
+                    targets=[Name(id="__all__", ctx=Store())],
+                    value=Tuple(
+                        elts=[Constant(value=item) for item in _all_],
+                        ctx=Load(),
+                    ),
+                    lineno=None,
+                ),
+                *imports,
+            ],
+            type_ignores=[],
+        )
+
+        package_dir = PurePath(_format_version(version))
+        if aio:
+            result.append((package_dir / "aio.py", module))
+        else:
+            result.append((package_dir / "__init__.py", module))
 
     return result
 
