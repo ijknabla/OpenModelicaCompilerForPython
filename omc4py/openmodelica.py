@@ -180,7 +180,7 @@ class TypeName(_BaseTypeName):
 
     @staticmethod
     def __split_part(part: TypeNameLike) -> Iterator[str]:
-        from . import parser
+        from .parser import split_typename_parts
 
         if isinstance(part, TypeName):
             yield from part.parts
@@ -190,7 +190,7 @@ class TypeName(_BaseTypeName):
             if part == ".":
                 yield part
             else:
-                yield from parser.parse_typeName(part).parts
+                yield from split_typename_parts(part)
         else:
             raise TypeError(f"Unexpected part, got {part}: {type(part)}")
 
