@@ -74,10 +74,6 @@ per-file-ignores = """
     omc4py/v_*_*/*.py:E501,
 """
 
-# The current omc4py metaclass is inevitably complicated
-# to express the behavior of the Modelica class.
-max-complexity = 20
-
 # Ignore whitespace before colon
 extend-ignore = "E203,"
 
