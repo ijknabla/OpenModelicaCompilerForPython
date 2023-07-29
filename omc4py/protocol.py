@@ -32,3 +32,9 @@ class SupportsInteractiveProperty(Protocol[_T_evaluate]):
     @property
     def __omc_interactive__(self) -> SupportsInteractive[_T_evaluate]:
         ...
+
+
+@runtime_checkable
+class SupportsToOMCLiteral(Protocol):
+    def __to_omc_literal__(self) -> str:
+        ...

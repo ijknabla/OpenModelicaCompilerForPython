@@ -6,7 +6,7 @@ import itertools
 from collections.abc import Callable, Iterable, Iterator
 from typing import TYPE_CHECKING, Any, List, NamedTuple, TypeVar, Union
 
-from typing_extensions import Literal, Protocol, runtime_checkable
+from typing_extensions import Literal
 
 from .string import to_omc_literal
 
@@ -40,12 +40,6 @@ VariableNameLike = Union[
 ]
 
 TypeNameLike = VariableNameLike
-
-
-@runtime_checkable
-class SupportsToOMCLiteral(Protocol):
-    def __to_omc_literal__(self) -> str:
-        ...
 
 
 # $Code classes OpenModelica.$Code.{VariableName, TypeName}

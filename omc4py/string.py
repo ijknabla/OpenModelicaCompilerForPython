@@ -12,6 +12,8 @@ from contextlib import suppress
 from functools import lru_cache, reduce
 from typing import TYPE_CHECKING, Any
 
+from .protocol import SupportsToOMCLiteral
+
 if TYPE_CHECKING:
     from builtins import _ClassInfo
 
@@ -59,8 +61,6 @@ def unquote_modelica_string(modelica_string: str) -> str:
 
 
 def to_omc_literal(obj: Any) -> str:
-    from omc4py.openmodelica import SupportsToOMCLiteral
-
     if isinstance(obj, SupportsToOMCLiteral):
         return obj.__to_omc_literal__()
     elif isinstance(obj, bool):
