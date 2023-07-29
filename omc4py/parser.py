@@ -668,19 +668,11 @@ def __get_parser(syntax: str) -> ParserPython:
         return ParserPython(_root_rule_)
 
 
-@overload
 def _visit_parse_tree(
     parse_tree: TypeSpecifierParseTreeNode,
     visitor: TypeSpecifierVisitor,
 ) -> TypeName:
-    ...
-
-
-def _visit_parse_tree(
-    parse_tree: ParseTreeNode,
-    visitor: PTNodeVisitor,
-) -> Any:
-    return visit_parse_tree(parse_tree, visitor)
+    return visit_parse_tree(parse_tree, visitor)  # type: ignore
 
 
 class OMCDialectSyntax(v3_4.Syntax):
