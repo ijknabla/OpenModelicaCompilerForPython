@@ -1,11 +1,11 @@
 from typing import TYPE_CHECKING
 
-from neo import open_session
+from omc4py import open_session
 
 
 def test_session_types() -> None:
     if TYPE_CHECKING:
-        from neo import (
+        from omc4py import (
             v_1_13,
             v_1_14,
             v_1_16,

@@ -22,7 +22,7 @@ from arpeggio import (
 from modelicalang import ParsingExpressionLike, returns_parsing_expression
 from typing_extensions import Never, Protocol
 
-import neo.parser
+import omc4py.parser
 
 from .interface import VariableNameString
 
@@ -43,7 +43,7 @@ def get_optionals(stored_definition: str) -> tuple[VariableNameString, ...]:
     )
 
 
-class Syntax(neo.parser.Syntax):
+class Syntax(omc4py.parser.Syntax):
     @classmethod
     @returns_parsing_expression
     def root(cls) -> ParsingExpressionLike:
@@ -108,7 +108,7 @@ class Children(Protocol):
     modification: list[Token]
 
 
-class EnumeratorVisitor(neo.parser.Visitor):
+class EnumeratorVisitor(omc4py.parser.Visitor):
     def visit_description_string(
         self,
         _: Never,
@@ -153,7 +153,7 @@ class EnumeratorVisitor(neo.parser.Visitor):
         return list(flatten(children))
 
 
-class OptionalVisitor(neo.parser.Visitor):
+class OptionalVisitor(omc4py.parser.Visitor):
     def visit_modification(self, node: NonTerminal, _: Never) -> Token | None:
         for child in node:
             if isinstance(child, Terminal) and child.flat_str() in {"=", ":="}:

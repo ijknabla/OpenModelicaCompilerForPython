@@ -4,7 +4,7 @@ from collections.abc import Generator
 
 import pytest
 
-from neo import latest, open_session
+from omc4py import latest, open_session
 
 
 @pytest.fixture(scope="session")

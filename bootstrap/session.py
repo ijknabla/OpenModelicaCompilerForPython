@@ -1,11 +1,11 @@
 from typing import List, Union
 
-import neo.session.aio
-from neo import TypeName
-from neo.modelica import external
+import omc4py.session.aio
+from omc4py import TypeName
+from omc4py.modelica import external
 
 
-class Session(neo.session.aio.Session):
+class Session(omc4py.session.aio.Session):
     @external(".OpenModelica.Scripting.getVersion")
     @classmethod
     async def getVersion(_) -> str:

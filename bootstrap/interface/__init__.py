@@ -23,8 +23,7 @@ from typing import Generic, Mapping, NamedTuple, NewType, TypeVar, overload
 from pkg_resources import resource_filename
 from typing_extensions import Literal, NotRequired, Self, TypedDict
 
-from neo import TypeName, VariableName
-from omc4py import exception
+from omc4py import TypeName, VariableName, exception
 
 from .. import open_session
 from ..session import Session

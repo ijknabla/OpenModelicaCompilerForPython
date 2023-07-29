@@ -1,10 +1,10 @@
 from typing import TYPE_CHECKING, NamedTuple
 
-import neo.session
-from neo.modelica import enumeration, external, package
+import omc4py.session
+from omc4py.modelica import enumeration, external, package
 
 
-class Session(neo.session.Session):
+class Session(omc4py.session.Session):
     @external(".OpenModelica.Scripting.loadFile")
     @classmethod
     def loadFile(_, fileName: str) -> bool:

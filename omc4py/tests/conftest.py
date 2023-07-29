@@ -7,9 +7,9 @@ import pytest
 import pytest_asyncio
 from pkg_resources import resource_filename
 
-import neo.session
-import neo.session.aio
-from omc4py.compiler import AsyncOMCInteractive, OMCInteractive
+import omc4py.session
+import omc4py.session.aio
+from omc4py.interactive import open_interactives
 
 from .session.aio import EmptySession, NestedSession, OneSession
 
@@ -20,20 +20,23 @@ def event_loop() -> AbstractEventLoop:
 
 
 @pytest.fixture(scope="session")
-def session() -> Generator[neo.session.Session, None, None]:
-    with neo.session.Session(OMCInteractive.open()) as session:
+def session() -> Generator[omc4py.session.Session, None, None]:
+    interactive, _ = open_interactives("omc")
+    with omc4py.session.Session(interactive) as session:
         yield session
 
 
 @pytest.fixture(scope="session")
-def async_session() -> Generator[neo.session.aio.Session, None, None]:
-    with neo.session.aio.Session(AsyncOMCInteractive.open()) as session:
+def async_session() -> Generator[omc4py.session.aio.Session, None, None]:
+    _, interactive = open_interactives("omc")
+    with omc4py.session.aio.Session(interactive) as session:
         yield session
 
 
 @pytest_asyncio.fixture(scope="session")
 async def empty_session() -> AsyncGenerator[EmptySession, None]:
-    with EmptySession(AsyncOMCInteractive.open()) as session:
+    _, interactive = open_interactives("omc")
+    with EmptySession(interactive) as session:
         assert await session.loadFile(
             resource_filename(__name__, "src/empty.mo")
         )
@@ -42,7 +45,8 @@ async def empty_session() -> AsyncGenerator[EmptySession, None]:
 
 @pytest_asyncio.fixture(scope="session")
 async def one_session() -> AsyncGenerator[OneSession, None]:
-    with OneSession(AsyncOMCInteractive.open()) as session:
+    _, interactive = open_interactives("omc")
+    with OneSession(interactive) as session:
         assert await session.loadFile(
             resource_filename(__name__, "src/one.mo")
         )
@@ -51,7 +55,8 @@ async def one_session() -> AsyncGenerator[OneSession, None]:
 
 @pytest_asyncio.fixture(scope="session")
 async def nested_session() -> AsyncGenerator[NestedSession, None]:
-    with NestedSession(AsyncOMCInteractive.open()) as session:
+    _, interactive = open_interactives("omc")
+    with NestedSession(interactive) as session:
         assert await session.loadFile(
             resource_filename(__name__, "src/Nested.mo")
         )
