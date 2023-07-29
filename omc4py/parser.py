@@ -1,14 +1,12 @@
 from __future__ import annotations
 
 import enum
-import operator
 import sys
 from collections.abc import Callable, Iterator, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
 from typing import TYPE_CHECKING, Any, Iterable, NewType, TypeVar, Union
 from typing import cast as typing_cast
-from typing import overload
 
 from arpeggio import (
     EOF,
@@ -28,7 +26,6 @@ from modelicalang import (
     ParsingExpressionLike,
     returns_parsing_expression,
     v3_4,
-    v3_5,
 )
 from typing_extensions import (
     Annotated,
@@ -49,13 +46,7 @@ if TYPE_CHECKING:
     from builtins import _ClassInfo
 
     import typing_extensions
-    from typing_extensions import (
-        Concatenate,
-        Never,
-        ParamSpec,
-        SupportsIndex,
-        TypeGuard,
-    )
+    from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
 
     _SpecialForm = typing._SpecialForm | typing_extensions._SpecialForm
 
@@ -79,6 +70,15 @@ _Scalar = Union[
     enumeration,
     record,
 ]
+
+
+def is_variablename(variablename: str) -> bool:
+    parser = _get_variablename_parser()
+    try:
+        parser.parse(variablename)
+        return True
+    except NoMatch:
+        return False
 
 
 def parse(typ: type[_T], literal: str) -> _T:
@@ -140,6 +140,16 @@ class _Token(enum.Enum):
             return cls.record
 
         raise NotImplementedError(value_type)
+
+
+@lru_cache(1)
+def _get_variablename_parser() -> ParserPython:
+    @returns_parsing_expression
+    def root() -> ParsingExpressionLike:
+        return Syntax.variablename, EOF
+
+    with Syntax:
+        return ParserPython(root)
 
 
 @lru_cache(None)
@@ -338,7 +348,7 @@ def _isorigin(__cls: Any, __special_form: _SpecialForm) -> bool:
     return get_origin(__cls) is __special_form
 
 
-class Syntax(v3_5.Syntax):
+class Syntax(v3_4.Syntax):
     # Dialects
 
     @classmethod
@@ -368,7 +378,7 @@ class Syntax(v3_5.Syntax):
     def variablename(cls) -> ParsingExpressionLike:
         return [
             RegExMatch(
-                "[A-Z_a-z][0-9A-Z_a-z]*|'([\\ -\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)*'"  # noqa: E501
+                "[A-Z_a-z][0-9A-Z_a-z]*|'([\\ !\\#-\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)([\\ -\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)*'"  # noqa: E501
             ),
             RegExMatch(r"\$\w*"),
         ]
@@ -653,14 +663,6 @@ TypeSpecifierParseTreeNode = NewType(
 )
 
 
-def is_valid_identifier(ident: str) -> bool:
-    try:
-        _parse("IDENT", ident)
-        return True
-    except NoMatch:
-        return False
-
-
 def parse_typeName(type_specifier: str) -> TypeName:
     try:
         return _visit_parse_tree(
@@ -671,19 +673,9 @@ def parse_typeName(type_specifier: str) -> TypeName:
         raise ValueError(f"Invalid type_specifier, got {type_specifier!r}")
 
 
-@overload
-def _parse(syntax: Literal["IDENT"], text: str) -> ParseTreeNode:
-    ...
-
-
-@overload
 def _parse(
     syntax: Literal["type_specifier"], text: str
 ) -> TypeSpecifierParseTreeNode:
-    ...
-
-
-def _parse(syntax: str, text: str) -> ParseTreeNode:
     return __get_parser(syntax).parse(text)
 
 
@@ -709,18 +701,6 @@ class OMCDialectSyntax(v3_4.Syntax):
     @returns_parsing_expression
     def IDENT(cls) -> ParsingExpressionLike:
         return [super().IDENT(), RegExMatch(r"\$\w*")]
-
-
-def getitem_with_default(
-    sequence: Sequence[_T],
-    index: SupportsIndex,
-    *,
-    default: _T,
-) -> _T:
-    try:
-        return operator.getitem(sequence, index)
-    except IndexError:
-        return default
 
 
 class TypeSpecifierChildren:

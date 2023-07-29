@@ -80,7 +80,7 @@ class _BaseVariableName:
 
 class VariableName(_BaseVariableName):
     def __new__(cls, obj: VariableNameLike) -> Self:
-        from . import parser
+        from .parser import is_variablename
 
         if isinstance(obj, cls):
             return obj
@@ -95,7 +95,7 @@ class VariableName(_BaseVariableName):
                 f"got {obj!r}: {type(obj)}"
             )
 
-        if not parser.is_valid_identifier(identifier):
+        if not is_variablename(identifier):
             raise ValueError(
                 f"Invalid modelica identifier, got {identifier!r}"
             )
