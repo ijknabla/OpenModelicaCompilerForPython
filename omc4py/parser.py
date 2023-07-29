@@ -6,15 +6,7 @@ import sys
 from collections.abc import Callable, Iterator, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import (
-    TYPE_CHECKING,
-    Any,
-    Iterable,
-    NewType,
-    SupportsIndex,
-    TypeVar,
-    Union,
-)
+from typing import TYPE_CHECKING, Any, Iterable, NewType, TypeVar, Union
 from typing import cast as typing_cast
 from typing import overload
 
@@ -56,7 +48,13 @@ if TYPE_CHECKING:
     from builtins import _ClassInfo
 
     import typing_extensions
-    from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
+    from typing_extensions import (
+        Concatenate,
+        Never,
+        ParamSpec,
+        SupportsIndex,
+        TypeGuard,
+    )
 
     _SpecialForm = typing._SpecialForm | typing_extensions._SpecialForm
 
