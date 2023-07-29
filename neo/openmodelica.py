@@ -8,7 +8,7 @@ from typing import TYPE_CHECKING, Any, List, NamedTuple, TypeVar, Union
 
 from typing_extensions import Literal, Protocol, runtime_checkable
 
-from omc4py.string import to_omc_literal
+from .string import to_omc_literal
 
 if TYPE_CHECKING:
     from typing_extensions import Self

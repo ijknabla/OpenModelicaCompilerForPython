@@ -15,10 +15,10 @@ from typing_extensions import (
 )
 
 from neo.protocol import SupportsAnyInteractive, SupportsInteractiveProperty
-from omc4py.string import to_omc_literal
 
 from .algorithm import bind_to_awaitable
 from .openmodelica import TypeName
+from .string import to_omc_literal
 
 _T = TypeVar("_T")
 

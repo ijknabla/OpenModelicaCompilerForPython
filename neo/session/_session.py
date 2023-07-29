@@ -8,13 +8,12 @@ from warnings import warn
 
 from exceptiongroup import ExceptionGroup
 
-from omc4py.string import to_omc_literal
-
 from ..algorithm import bind_to_awaitable
 from ..exception import OMCError, OMCWarning
 from ..openmodelica import Component, TypeName
 from ..parser import cast, parse
 from ..protocol import SupportsInteractive
+from ..string import to_omc_literal
 
 if TYPE_CHECKING:
     from typing_extensions import Self, TypeAlias

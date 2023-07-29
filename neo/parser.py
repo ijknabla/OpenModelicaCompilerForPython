@@ -46,11 +46,10 @@ from typing_extensions import (
     get_type_hints,
 )
 
-from omc4py.string import unquote_modelica_string
-
 from .exception import OMCRuntimeError
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
+from .string import unquote_modelica_string
 
 if TYPE_CHECKING:
     import typing
