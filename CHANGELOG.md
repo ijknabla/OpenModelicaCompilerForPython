@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Added
 
+- `omc4py.v_1_21` Support of _OpenModelica 1.21.x_
 - Add Type-hints for session class
 - Support asyncio (coroutine) in session class
 
