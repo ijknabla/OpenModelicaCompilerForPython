@@ -33,7 +33,7 @@ __license__ = """
  */
 """
 
-__version__ = "0.2.1"
+__version__ = "0.3.0a0"
 
 __all__ = (
     "TypeName",
