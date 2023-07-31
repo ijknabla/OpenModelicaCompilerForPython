@@ -5,7 +5,7 @@ import sys
 from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, Iterable, TypeVar, Union
+from typing import TYPE_CHECKING, Any, Iterable, List, Tuple, TypeVar, Union
 from typing import cast as typing_cast
 
 from arpeggio import (
@@ -47,7 +47,7 @@ if TYPE_CHECKING:
     import typing_extensions
     from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
 
-    _SpecialForm = typing._SpecialForm | typing_extensions._SpecialForm
+_SpecialForm = Union["typing._SpecialForm", "typing_extensions._SpecialForm"]
 
 
 _T = TypeVar("_T")
@@ -555,32 +555,26 @@ class Syntax(v3_4.Syntax):
 
 
 if TYPE_CHECKING:
-    AnyPrimary = list[Any] | list[list[Any]]
-    BooleanPrimary = list[bool] | list[list[bool]]
-    StringPrimary = list[str] | list[list[str]]
-    TuplePrimary = list[tuple[Any, ...]] | list[list[tuple[Any, ...]]]
-else:
-    AnyPrimary = ...
-    BooleanPrimary = ...
-    StringPrimary = ...
-    TuplePrimary = ...
+    AnyPrimary = Union[List[Any], List[List[Any]]]
+    BooleanPrimary = Union[List[bool], List[List[bool]]]
+    StringPrimary = Union[List[str], List[List[str]]]
+    TuplePrimary = Union[Tuple[Any, ...], List[List[Tuple[Any, ...]]]]
 
-
-class Children(Protocol, Iterable[Any]):
-    DOT: list[str]
-    IDENT: list[str]
-    real_primary: StringPrimary
-    integer_primary: StringPrimary
-    boolean_primary: BooleanPrimary
-    string_primary: StringPrimary
-    variablename: list[str]
-    variablename_primary: StringPrimary
-    typename_primary: StringPrimary
-    component_primary: TuplePrimary
-    record_primary: AnyPrimary
-    record_element: list[tuple[str, Any]]
-    record_expression: list[Any]
-    subscript: list[str]
+    class Children(Protocol, Iterable[Any]):
+        DOT: List[str]
+        IDENT: List[str]
+        real_primary: StringPrimary
+        integer_primary: StringPrimary
+        boolean_primary: BooleanPrimary
+        string_primary: StringPrimary
+        variablename: List[str]
+        variablename_primary: StringPrimary
+        typename_primary: StringPrimary
+        component_primary: TuplePrimary
+        record_primary: AnyPrimary
+        record_element: List[tuple[str, Any]]
+        record_expression: List[Any]
+        subscript: List[str]
 
 
 class Visitor(PTNodeVisitor):
@@ -649,7 +643,7 @@ class Visitor(PTNodeVisitor):
     def visit_subscript(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()
 
-    def visit_subscript_list(self, _: Never, children: Children) -> list[str]:
+    def visit_subscript_list(self, _: Never, children: Children) -> List[str]:
         return children.subscript
 
     def visit_component(self, _: Never, children: Children) -> tuple[Any, ...]:
