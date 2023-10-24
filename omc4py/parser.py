@@ -21,11 +21,7 @@ from arpeggio import (
     ZeroOrMore,
     visit_parse_tree,
 )
-from modelicalang import (
-    ParsingExpressionLike,
-    returns_parsing_expression,
-    v3_4,
-)
+from modelicalang import ParsingExpressionLike, v3_4
 from typing_extensions import (
     Annotated,
     Literal,
@@ -150,7 +146,6 @@ class _Token(enum.Enum):
 
 @lru_cache(1)
 def _get_variablename_parser() -> ParserPython:
-    @returns_parsing_expression
     def root() -> ParsingExpressionLike:
         return Syntax.variablename, EOF
 
@@ -160,7 +155,6 @@ def _get_variablename_parser() -> ParserPython:
 
 @lru_cache(1)
 def _get_typename_parser() -> ParserPython:
-    @returns_parsing_expression
     def root() -> ParsingExpressionLike:
         return Syntax.typename, EOF
 
@@ -170,7 +164,6 @@ def _get_typename_parser() -> ParserPython:
 
 @lru_cache(None)
 def _get_parser(*tokens: _Token) -> ParserPython:
-    @returns_parsing_expression
     def root() -> ParsingExpressionLike:
         if len(tokens) < 2:
             L = R = []
@@ -179,7 +172,6 @@ def _get_parser(*tokens: _Token) -> ParserPython:
 
         return (*L, primary_list, *R, EOF)
 
-    @returns_parsing_expression
     def primary_list() -> ParsingExpressionLike:
         primaries = (token.primary for token in tokens)
         return (
@@ -368,29 +360,24 @@ class Syntax(v3_4.Syntax):
     # Dialects
 
     @classmethod
-    @returns_parsing_expression
     def IDENT(cls) -> ParsingExpressionLike:
         return [super().IDENT(), RegExMatch(r"\$\w*")]
 
     # Primitives
 
     @classmethod
-    @returns_parsing_expression
     def real(cls) -> ParsingExpressionLike:
         return Optional(cls.SIGN), cls.UNSIGNED_NUMBER
 
     @classmethod
-    @returns_parsing_expression
     def integer(cls) -> ParsingExpressionLike:
         return Optional(cls.SIGN), cls.UNSIGNED_INTEGER
 
     @classmethod
-    @returns_parsing_expression
     def boolean(cls) -> ParsingExpressionLike:
         return [cls.TRUE, cls.FALSE]
 
     @classmethod
-    @returns_parsing_expression
     def variablename(cls) -> ParsingExpressionLike:
         return [
             RegExMatch(
@@ -400,12 +387,10 @@ class Syntax(v3_4.Syntax):
         ]
 
     @classmethod
-    @returns_parsing_expression
     def typename(cls) -> ParsingExpressionLike:
         return Optional(cls.DOT), OneOrMore(cls.variablename, sep=".")
 
     @classmethod
-    @returns_parsing_expression
     def component(cls) -> ParsingExpressionLike:
         return (
             "{",
@@ -427,12 +412,10 @@ class Syntax(v3_4.Syntax):
         )
 
     @classmethod
-    @returns_parsing_expression
     def subscript_list(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.subscript, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def record(cls) -> ParsingExpressionLike:
         return (
             cls.RECORD,
@@ -444,12 +427,10 @@ class Syntax(v3_4.Syntax):
         )
 
     @classmethod
-    @returns_parsing_expression
     def record_element(cls) -> ParsingExpressionLike:
         return cls.IDENT, "=", cls.record_expression
 
     @classmethod
-    @returns_parsing_expression
     def record_expression(cls) -> ParsingExpressionLike:
         return [
             cls.record_primary,
@@ -462,94 +443,76 @@ class Syntax(v3_4.Syntax):
     # Additional rules
 
     @classmethod
-    @returns_parsing_expression
     def DOT(cls) -> ParsingExpressionLike:
         return "."
 
     @classmethod
-    @returns_parsing_expression
     def SIGN(cls) -> ParsingExpressionLike:
         return RegExMatch(r"[+-]")
 
     # Primary & Array
 
     @classmethod
-    @returns_parsing_expression
     def real_primary(cls) -> ParsingExpressionLike:
         return [cls.real, cls.real_array]
 
     @classmethod
-    @returns_parsing_expression
     def real_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.real_primary, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def integer_primary(cls) -> ParsingExpressionLike:
         return [cls.integer, cls.integer_array]
 
     @classmethod
-    @returns_parsing_expression
     def integer_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.integer_primary, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def boolean_primary(cls) -> ParsingExpressionLike:
         return [cls.boolean, cls.boolean_array]
 
     @classmethod
-    @returns_parsing_expression
     def boolean_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.boolean_primary, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def string_primary(cls) -> ParsingExpressionLike:
         return [cls.STRING, cls.string_array]
 
     @classmethod
-    @returns_parsing_expression
     def string_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.string_primary, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def variablename_primary(cls) -> ParsingExpressionLike:
         return [cls.variablename, cls.variablename_array]
 
     @classmethod
-    @returns_parsing_expression
     def variablename_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.variablename_primary, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def typename_primary(cls) -> ParsingExpressionLike:
         return [cls.typename, cls.typename_array]
 
     @classmethod
-    @returns_parsing_expression
     def typename_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.typename_primary, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def component_primary(cls) -> ParsingExpressionLike:
         return [cls.component, cls.component_array]
 
     @classmethod
-    @returns_parsing_expression
     def component_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.component_primary, sep=","), "}"
 
     @classmethod
-    @returns_parsing_expression
     def record_primary(cls) -> ParsingExpressionLike:
         return [cls.record, cls.record_array]
 
     @classmethod
-    @returns_parsing_expression
     def record_array(cls) -> ParsingExpressionLike:
         return "{", ZeroOrMore(cls.record_primary, sep=","), "}"
 
