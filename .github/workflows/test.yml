@@ -62,11 +62,11 @@ jobs:
           curl -sSL https://install.python-poetry.org | sudo -u user python - --version=1.5.1
           alias poetry='sudo -u user /home/user/.local/bin/poetry'
           poetry install --only=main,test
-      # - name: Check version
-      #   run: |
-      #     sudo -u user poetry run omc --version
-      #     sudo -u user poetry run python --version
-      #     sudo -u user poetry run pytest --version
-      # - name: Test python sources
-      #   run: |
-      #     sudo -u user poetry run pytest -v
+      - name: Check version
+        run: |
+          poetry run omc --version
+          poetry run python --version
+          poetry run pytest --version
+      - name: Test python sources
+        run: |
+          poetry run pytest -v
