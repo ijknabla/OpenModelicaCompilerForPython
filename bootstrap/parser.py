@@ -19,7 +19,7 @@ from arpeggio import (
     Terminal,
     visit_parse_tree,
 )
-from modelicalang import ParsingExpressionLike, returns_parsing_expression
+from modelicalang import ParsingExpressionLike
 from typing_extensions import Never, Protocol
 
 import omc4py.parser
@@ -45,12 +45,10 @@ def get_optionals(stored_definition: str) -> tuple[VariableNameString, ...]:
 
 class Syntax(omc4py.parser.Syntax):
     @classmethod
-    @returns_parsing_expression
     def root(cls) -> ParsingExpressionLike:
         return cls.stored_definition, EOF
 
     @classmethod
-    @returns_parsing_expression
     def long_class_specifier(cls) -> ParsingExpressionLike:
         """
         .. code-block:: modelicapeg
@@ -81,7 +79,6 @@ class Syntax(omc4py.parser.Syntax):
         ]
 
     @classmethod
-    @returns_parsing_expression
     def generic(cls) -> ParsingExpressionLike:
         """
         .. code-block:: modelicapeg
