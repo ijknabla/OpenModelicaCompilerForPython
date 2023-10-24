@@ -31,8 +31,8 @@ pyyaml = "^6.0.1"
 tqdm = "^4.66.1"
 
 [tool.poetry.group.dev.dependencies]
-isort = "^5.8"
-black = ">=23"
+black = "^23.10.1"
+isort = "^5.12.0"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "^1"
