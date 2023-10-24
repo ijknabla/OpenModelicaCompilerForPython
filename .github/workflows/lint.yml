@@ -35,3 +35,4 @@ jobs:
       - name: Lint python sources
         run: |
           poetry run pflake8 --count --show-source --statistics
+          poetry run mypy --strict omc4py
