@@ -59,15 +59,14 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          sudo -u user pip install --no-cache-dir --upgrade pip
-          sudo -u user pip install --no-cache-dir --requirement requirements.test.txt
+          curl -sSL https://install.python-poetry.org | python - --version=1.5.1
+          sudo -u user poetry run pip install --no-cache-dir --upgrade pip
+          sudo -u user poetry run pip install --no-cache-dir --requirement requirements.test.txt
       - name: Check version
         run: |
-          sudo -u user which omc
-          sudo -u user omc --version
-          sudo -u user which python
-          sudo -u user python --version
-          sudo -u user python -m pytest --version
+          sudo -u user poetry run omc --version
+          sudo -u user poetry run python --version
+          sudo -u user poetry run pytest --version
       - name: Test python sources
         run: |
-          sudo -u user python -m pytest -v
+          sudo -u user poetry run pytest -v
