@@ -26,9 +26,9 @@ typing-extensions = ">=3.7.4"
 modelicalang = "^0.1.0a2"
 
 [tool.poetry.group.bootstrap.dependencies]
-click = "^8.1.3"
-pyyaml = "^6.0"
-tqdm = "^4.62.3"
+click = "^8.1.7"
+pyyaml = "^6.0.1"
+tqdm = "^4.66.1"
 
 [tool.poetry.group.dev.dependencies]
 isort = "^5.8"
