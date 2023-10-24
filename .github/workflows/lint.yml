@@ -26,8 +26,7 @@ jobs:
       - name: Install dependencies
         run: |
           curl -sSL https://install.python-poetry.org | python - --version=1.5.1
-          poetry run pip install --no-cache-dir --upgrade pip
-          poetry run pip install --no-cache-dir --requirement requirements.lint.txt
+          poetry install --only=lint,main
       - name: Check version
         run: |
           poetry run python --version
