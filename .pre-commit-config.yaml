@@ -36,30 +36,6 @@ repos:
         -   pflake8
         language: system
         pass_filenames: false
-    -   id: poetry-export-lint-requirements
-        name: Export requirements.lint.txt
-        entry: poetry
-        args:
-        -   export
-        -   --format=requirements.txt
-        -   --without-hashes
-        -   --only=lint,main
-        -   --output=requirements.lint.txt
-        language: system
-        pass_filenames: false
-        files: ^poetry\.lock$
-    -   id: poetry-export-test-requirements
-        name: Export requirements.test.txt
-        entry: poetry
-        args:
-        -   export
-        -   --format=requirements.txt
-        -   --without-hashes
-        -   --only=main,test
-        -   --output=requirements.test.txt
-        language: system
-        pass_filenames: false
-        files: ^poetry\.lock$
     -   id: poetry-export-bootstrap-requirements
         name: Export requirements.bootstrap.txt
         entry: poetry
