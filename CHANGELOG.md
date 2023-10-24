@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Removed
+
+- `python==3.7` support
+
 ## [0.3.0a0] - 2023-07-30
 
 ### Added
