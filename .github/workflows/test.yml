@@ -64,9 +64,11 @@ jobs:
           poetry install --only=main,test
       - name: Check version
         run: |
+          alias poetry='sudo -u user /home/user/.local/bin/poetry'
           poetry run omc --version
           poetry run python --version
           poetry run pytest --version
       - name: Test python sources
         run: |
+          alias poetry='sudo -u user /home/user/.local/bin/poetry'
           poetry run pytest -v
