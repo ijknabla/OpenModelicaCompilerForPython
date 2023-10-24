@@ -61,8 +61,8 @@ jobs:
         run: |
           curl -sSL https://install.python-poetry.org | sudo -u user python - --version=1.5.1
           alias poetry='sudo -u user /home/user/.local/bin/poetry'
-          sudo -u user poetry run pip install --no-cache-dir --upgrade pip
-          sudo -u user poetry run pip install --no-cache-dir --requirement requirements.test.txt
+          poetry run pip install --no-cache-dir --upgrade pip
+          poetry run pip install --no-cache-dir --requirement requirements.test.txt
       - name: Check version
         run: |
           sudo -u user poetry run omc --version
