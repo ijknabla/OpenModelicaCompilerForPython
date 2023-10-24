@@ -20,37 +20,37 @@ jobs:
             python-version: py3.8
             os: buster
           - omc-version: omc1.14
-            python-version: py3.9
+            python-version: py3.10
             os: buster
           - omc-version: omc1.16
             python-version: py3.8
             os: buster
           - omc-version: omc1.16
-            python-version: py3.9
+            python-version: py3.10
             os: buster
           - omc-version: omc1.17
             python-version: py3.8
             os: buster
           - omc-version: omc1.17
-            python-version: py3.9
+            python-version: py3.10
             os: buster
           - omc-version: omc1.18
             python-version: py3.8
             os: bullseye
           - omc-version: omc1.18
-            python-version: py3.9
+            python-version: py3.10
             os: bullseye
           - omc-version: omc1.19
             python-version: py3.8
             os: bullseye
           - omc-version: omc1.19
-            python-version: py3.9
+            python-version: py3.10
             os: bullseye
           - omc-version: omc1.20
             python-version: py3.8
             os: bullseye
           - omc-version: omc1.20
-            python-version: py3.9
+            python-version: py3.10
             os: bullseye
 
     container:
