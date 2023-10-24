@@ -25,16 +25,14 @@ jobs:
           python-version: ${{ matrix.python-version }}
       - name: Install dependencies
         run: |
-          pip install --no-cache-dir --upgrade pip
-          pip install --no-cache-dir --requirement requirements.lint.txt
+          curl -sSL https://install.python-poetry.org | python - --version=1.5.1
+          poetry run pip install --no-cache-dir --upgrade pip
+          poetry run pip install --no-cache-dir --requirement requirements.lint.txt
       - name: Check version
         run: |
-          which python
-          python --version
-          which pflake8
-          pflake8 --version
-          which mypy
-          mypy --version
+          poetry run python --version
+          poetry run pflake8 --version
+          poetry run mypy --version
       - name: Lint python sources
         run: |
-          pflake8 --verbose --count --show-source --statistics
+          poetry run pflake8 --count --show-source --statistics
