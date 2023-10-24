@@ -35,12 +35,12 @@ black = "^23.10.1"
 isort = "^5.12.0"
 
 [tool.poetry.group.lint.dependencies]
-mypy = "^1"
-pyproject-flake8 = "^0.0.1-alpha.2"
+mypy = "^1.6.1"
+pyproject-flake8 = "^5.0.4"
 types-arpeggio = {git = "https://github.com/ijknabla/types-arpeggio.git", rev = "0.2.0.0a0.dev3"}
-types-pyyaml = "^6.0.12.10"
-types-setuptools = "^65.7.0.3"
-types-tqdm = "^4.65.0.1"
+types-pyyaml = "^6.0.12.12"
+types-setuptools = "^68.2.0.0"
+types-tqdm = "^4.66.0.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2"
