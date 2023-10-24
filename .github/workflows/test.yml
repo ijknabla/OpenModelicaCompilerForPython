@@ -2,14 +2,17 @@
 name: Pytest
 
 on:
+  # Runs on pushes targeting the master, develop branch
   push:
     branches: [ master, develop ]
+  # Runs on pull-request targeting the master, develop branch
   pull_request:
     branches: [ master, develop ]
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
     strategy:
       matrix:
         include:
@@ -52,6 +55,7 @@ jobs:
           - omc-version: omc1.20
             python-version: py3.9
             os: bullseye
+
     container:
       image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
 
@@ -68,7 +72,7 @@ jobs:
           poetry run omc --version
           poetry run python --version
           poetry run pytest --version
-      - name: Test python sources
+      - name: Test python code
         run: |
           alias poetry='sudo -u user /home/user/.local/bin/poetry'
           poetry run pytest -v
