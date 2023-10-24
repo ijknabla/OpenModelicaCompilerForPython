@@ -23,7 +23,7 @@ Arpeggio = ">=1.6"
 exceptiongroup = ">=1.0"
 pyzmq = ">=17.0.0"
 typing-extensions = ">=3.7.4.2"
-modelicalang = "^0.1.0a0"
+modelicalang = "^0.1.0a2"
 
 [tool.poetry.group.bootstrap.dependencies]
 click = "^8.1.3"

@@ -336,14 +336,14 @@ files = [
 ]
 
 [[package]]
-name = "modelicalang"
-version = "0.1.0a1"
+name = "ModelicaLang"
+version = "0.1.0a2"
 description = "Modelica parser and class representation for Python"
 optional = false
-python-versions = ">=3.6,<4.0"
+python-versions = ">=3.7,<4.0"
 files = [
-    {file = "modelicalang-0.1.0a1-py3-none-any.whl", hash = "sha256:0dd666b76667b426b4e16a2b214289e4cfce35ec9e593404ed897f2483ea2634"},
-    {file = "modelicalang-0.1.0a1.tar.gz", hash = "sha256:ca7695eed4bb312a1c6db8970e27ddb1e641d38409cbae91a0366e53aecb4680"},
+    {file = "modelicalang-0.1.0a2-py3-none-any.whl", hash = "sha256:a436c477e925e369008e5c72f5b6532ae6f106cfe12496f5d5af502f43f13ac9"},
+    {file = "modelicalang-0.1.0a2.tar.gz", hash = "sha256:a39d219b0d769b3a6a7a593a6be55dd6a5f9c381e3d6262ee6e18316c6876835"},
 ]
 
 [package.dependencies]
@@ -870,4 +870,4 @@ testing = ["func-timeout", "jaraco.itertools", "pytest (>=4.6)", "pytest-black (
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "0dffb0cd926bb487e899db92493a594d10ecfd6c550ee2e69954b836c859db6a"
+content-hash = "03530cc59f693df486dae6f1a22b26741ee47653ef5e82f240b3cb1d1c8cca97"
