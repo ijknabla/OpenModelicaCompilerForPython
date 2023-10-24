@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from contextlib import ExitStack
 from itertools import count
 from typing import TYPE_CHECKING, Any, Optional
