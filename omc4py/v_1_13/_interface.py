@@ -30,9 +30,9 @@ __all__ = (
     "stat",
 )
 from dataclasses import dataclass
-from typing import TYPE_CHECKING, List, Sequence, Union
+from typing import TYPE_CHECKING, List, Literal, Sequence, Union
 
-from typing_extensions import Annotated, Literal
+from typing_extensions import Annotated
 
 from ..enumeration import (
     DiffFormat__v_1_13,

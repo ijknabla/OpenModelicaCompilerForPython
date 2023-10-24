@@ -53,9 +53,9 @@ __all__ = (
     "stat",
 )
 from dataclasses import dataclass
-from typing import List, Sequence, Union
+from typing import List, Literal, Sequence, Union
 
-from typing_extensions import Annotated, Literal
+from typing_extensions import Annotated
 
 from ..enumeration import (
     Access__v_1_14,
