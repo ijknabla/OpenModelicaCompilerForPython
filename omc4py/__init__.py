@@ -45,12 +45,11 @@ __all__ = (
 import re
 from os import PathLike
 from typing import TYPE_CHECKING, Any
+from typing import Literal
+from typing import Literal as L
 from typing import Tuple
 from typing import Tuple as T
 from typing import Union, overload
-
-from typing_extensions import Literal
-from typing_extensions import Literal as L
 
 from . import session
 from .exception import OMCRuntimeError

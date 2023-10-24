@@ -1,9 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Hashable
-from typing import Any, Coroutine, TypeVar, Union
-
-from typing_extensions import Protocol, runtime_checkable
+from typing import Any, Coroutine, Protocol, TypeVar, Union, runtime_checkable
 
 _T_evaluate = TypeVar(
     "_T_evaluate", str, Coroutine[Any, Any, str], covariant=True

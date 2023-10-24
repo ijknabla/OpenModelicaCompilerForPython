@@ -4,9 +4,15 @@ __all__ = ("Component", "TypeName", "VariableName")
 
 import itertools
 from collections.abc import Callable, Iterable, Iterator
-from typing import TYPE_CHECKING, Any, List, NamedTuple, TypeVar, Union
-
-from typing_extensions import Literal
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    List,
+    Literal,
+    NamedTuple,
+    TypeVar,
+    Union,
+)
 
 from .string import to_omc_literal
 
