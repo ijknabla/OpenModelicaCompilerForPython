@@ -9,4 +9,4 @@ pycparser==2.21 ; python_version >= "3.8" and python_version < "4.0" and impleme
 pyyaml==6.0.1 ; python_version >= "3.8" and python_version < "4.0"
 pyzmq==22.3.0 ; python_version >= "3.8" and python_version < "4.0"
 tqdm==4.62.3 ; python_version >= "3.8" and python_version < "4.0"
-typing-extensions==4.5.0 ; python_version >= "3.8" and python_version < "4.0"
+typing-extensions==4.8.0 ; python_version >= "3.8" and python_version < "4.0"
