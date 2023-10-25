@@ -458,13 +458,13 @@ def _iter_headers(
         names=[
             alias(name=name)
             for name in ([] if aio else ["TYPE_CHECKING"])
-            + ["List", "Sequence", "Union"]
+            + ["List", "Literal", "Sequence", "Union"]
         ],
         level=0,
     )
     yield ImportFrom(
         module="typing_extensions",
-        names=[alias(name="Annotated"), alias(name="Literal")],
+        names=[alias(name="Annotated")],
         level=0,
     )
     yield ImportFrom(

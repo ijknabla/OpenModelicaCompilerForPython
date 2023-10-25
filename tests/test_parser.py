@@ -3,10 +3,10 @@ from __future__ import annotations
 from collections.abc import Iterable
 from dataclasses import dataclass
 from itertools import product
-from typing import Any, List, NamedTuple, Sequence, TypeVar, Union
+from typing import Any, List, Literal, NamedTuple, Sequence, TypeVar, Union
 
 import pytest
-from typing_extensions import Annotated, Literal
+from typing_extensions import Annotated
 
 from omc4py import TypeName, VariableName
 from omc4py.latest import OpenModelica

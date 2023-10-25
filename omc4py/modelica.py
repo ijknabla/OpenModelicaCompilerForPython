@@ -4,15 +4,19 @@ import enum
 import inspect
 from collections.abc import Callable, Generator
 from functools import partial, wraps
-from typing import TYPE_CHECKING, Any, ClassVar, Generic, TypeVar
-
-from typing_extensions import (
-    Annotated,
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    ClassVar,
+    Generic,
     Literal,
+    TypeVar,
     get_args,
     get_origin,
     get_type_hints,
 )
+
+from typing_extensions import Annotated
 
 from omc4py.protocol import SupportsAnyInteractive, SupportsInteractiveProperty
 

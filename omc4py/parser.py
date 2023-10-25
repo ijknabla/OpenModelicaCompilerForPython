@@ -5,8 +5,19 @@ import sys
 from collections.abc import Callable, Mapping, Sequence
 from functools import lru_cache, wraps
 from itertools import chain, islice
-from typing import TYPE_CHECKING, Any, Iterable, List, Tuple, TypeVar, Union
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Iterable,
+    List,
+    Literal,
+    Protocol,
+    Tuple,
+    TypeVar,
+    Union,
+)
 from typing import cast as typing_cast
+from typing import get_args, get_origin, get_type_hints
 
 from arpeggio import (
     EOF,
@@ -22,14 +33,7 @@ from arpeggio import (
     visit_parse_tree,
 )
 from modelicalang import ParsingExpressionLike, v3_4
-from typing_extensions import (
-    Annotated,
-    Literal,
-    Protocol,
-    get_args,
-    get_origin,
-    get_type_hints,
-)
+from typing_extensions import Annotated
 
 from .exception import OMCRuntimeError
 from .modelica import enumeration, record
