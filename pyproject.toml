@@ -19,7 +19,7 @@ packages = [
 
 [tool.poetry.dependencies]
 python = "^3.8"
-Arpeggio = ">=1.6"
+arpeggio = ">=1.6"
 exceptiongroup = ">=1.0"
 pyzmq = ">=17.0.0"
 typing-extensions = ">=3.7.4"

@@ -2,13 +2,13 @@
 
 [[package]]
 name = "arpeggio"
-version = "1.10.2"
+version = "2.0.2"
 description = "Packrat parser interpreter"
 optional = false
 python-versions = "*"
 files = [
-    {file = "Arpeggio-1.10.2-py2.py3-none-any.whl", hash = "sha256:fed68a1cb7f529cbd4d725597cc811b7506885fcdef17d4cdcf564341a1e210b"},
-    {file = "Arpeggio-1.10.2.tar.gz", hash = "sha256:bfe349f252f82f82d84cb886f1d5081d1a31451e6045275e9f90b65d0daa06f1"},
+    {file = "Arpeggio-2.0.2-py2.py3-none-any.whl", hash = "sha256:f7c8ae4f4056a89e020c24c7202ac8df3e2bc84e416746f20b0da35bb1de0250"},
+    {file = "Arpeggio-2.0.2.tar.gz", hash = "sha256:c790b2b06e226d2dd468e4fbfb5b7f506cec66416031fde1441cf1de2a0ba700"},
 ]
 
 [package.extras]
@@ -744,4 +744,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "40d3c37f5c96c3ab0508a625a3193e8f8e8c247983ea873e87762a2d97a11667"
+content-hash = "de0e362fa771a1b959eb35eb3545f483987e00846e124dbd9d1a7b3c5ed14b78"
