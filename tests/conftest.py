@@ -8,7 +8,8 @@ import pytest_asyncio
 from pkg_resources import resource_filename
 
 from omc4py import latest, open_session
-from omc4py.interactive import open_interactives
+from omc4py.interactive import Interactive
+from omc4py.protocol import asynchronous
 
 from .session.aio import EmptySession, NestedSession, OneSession
 
@@ -34,7 +35,7 @@ async def async_session() -> AsyncGenerator[latest.aio.Session, None]:
 
 @pytest_asyncio.fixture(scope="session")
 async def empty_session() -> AsyncGenerator[EmptySession, None]:
-    _, interactive = open_interactives("omc")
+    interactive = Interactive.open("omc", asynchronous)
     with EmptySession(interactive) as session:
         assert await session.loadFile(
             resource_filename(__name__, "src/empty.mo")
@@ -45,7 +46,7 @@ async def empty_session() -> AsyncGenerator[EmptySession, None]:
 
 @pytest_asyncio.fixture(scope="session")
 async def one_session() -> AsyncGenerator[OneSession, None]:
-    _, interactive = open_interactives("omc")
+    interactive = Interactive.open("omc", asynchronous)
     with OneSession(interactive) as session:
         assert await session.loadFile(
             resource_filename(__name__, "src/one.mo")
@@ -56,7 +57,7 @@ async def one_session() -> AsyncGenerator[OneSession, None]:
 
 @pytest_asyncio.fixture(scope="session")
 async def nested_session() -> AsyncGenerator[NestedSession, None]:
-    _, interactive = open_interactives("omc")
+    interactive = Interactive.open("omc", asynchronous)
     with NestedSession(interactive) as session:
         assert await session.loadFile(
             resource_filename(__name__, "src/Nested.mo")

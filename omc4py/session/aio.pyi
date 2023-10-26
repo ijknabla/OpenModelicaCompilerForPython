@@ -6,11 +6,11 @@ from typing import Any, Awaitable, List, Union
 from typing_extensions import Self
 
 from ..openmodelica import Component, TypeName
-from ..protocol import SupportsAsyncInteractive
+from ..protocol import Asynchronous, SupportsInteractive
 
 @dataclass
 class Session:
-    __omc_interactive__: SupportsAsyncInteractive
+    __omc_interactive__: SupportsInteractive[Asynchronous]
 
     def close(self) -> None: ...
     def __close__(self) -> None: ...

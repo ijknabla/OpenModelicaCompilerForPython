@@ -1,11 +1,20 @@
 from __future__ import annotations
 
+import enum
 from collections.abc import Hashable
-from typing import Any, Coroutine, Protocol, TypeVar, Union, runtime_checkable
-
-_T_evaluate = TypeVar(
-    "_T_evaluate", str, Coroutine[Any, Any, str], covariant=True
+from typing import (
+    TYPE_CHECKING,
+    Literal,
+    Protocol,
+    TypeVar,
+    overload,
+    runtime_checkable,
 )
+
+if TYPE_CHECKING:
+    from typing_extensions import TypeAlias
+else:
+    TypeAlias = ...
 
 
 class SupportsClose(Protocol):
@@ -19,23 +28,49 @@ class SupportsToOMCLiteral(Protocol):
         ...
 
 
+class Calling(enum.Enum):
+    synchronous = enum.auto()
+    asynchronous = enum.auto()
+
+
+Synchronous = Literal[Calling.synchronous]
+Asynchronous = Literal[Calling.asynchronous]
+
+synchronous: Synchronous = Calling.synchronous
+asynchronous: Asynchronous = Calling.asynchronous
+
+T_Calling = TypeVar(
+    "T_Calling",
+    Synchronous,
+    Asynchronous,
+    covariant=True,
+)
+
+
 @runtime_checkable
-class _GenericInteractiveProtocol(
-    SupportsClose, Hashable, Protocol[_T_evaluate]
-):
-    def evaluate(self, expression: str) -> _T_evaluate:
+class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
+    @overload
+    def evaluate(
+        self: SupportsInteractive[Synchronous],
+        expression: str,
+    ) -> str:
+        ...
+
+    @overload
+    async def evaluate(
+        self: SupportsInteractive[Asynchronous],
+        expression: str,
+    ) -> str:
         ...
 
 
-SupportsInteractive = _GenericInteractiveProtocol[str]
-SupportsAsyncInteractive = _GenericInteractiveProtocol[
-    Coroutine[Any, Any, str]
-]
-SupportsAnyInteractive = Union[SupportsInteractive, SupportsAsyncInteractive]
+SupportsAnyInteractive: TypeAlias = (
+    "SupportsInteractive[Synchronous] | SupportsInteractive[Asynchronous]"
+)
 
 
 @runtime_checkable
-class SupportsInteractiveProperty(Protocol[_T_evaluate]):
+class SupportsInteractiveProperty(Protocol[T_Calling]):
     @property
-    def __omc_interactive__(self) -> _GenericInteractiveProtocol[_T_evaluate]:
+    def __omc_interactive__(self) -> SupportsInteractive[T_Calling]:
         ...

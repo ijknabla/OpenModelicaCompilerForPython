@@ -53,9 +53,9 @@ from typing import Union, overload
 
 from . import session
 from .exception import OMCRuntimeError
-from .interactive import open_interactives
+from .interactive import Interactive
 from .openmodelica import TypeName, VariableName
-from .protocol import SupportsInteractive
+from .protocol import SupportsInteractive, Synchronous, synchronous
 
 if TYPE_CHECKING:
     from . import (
@@ -311,8 +311,9 @@ def open_session(
     version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
-    interactive, aio_interactive = open_interactives(
-        "omc" if omc_command is None else omc_command
+    interactive = Interactive.open(
+        "omc" if omc_command is None else omc_command,
+        synchronous,
     )
 
     try:
@@ -321,16 +322,17 @@ def open_session(
         )
     except Exception:
         interactive.close()
-        aio_interactive.close()
         raise
 
     if asyncio:
-        return aio_session_type(aio_interactive)
+        return aio_session_type(interactive.asynchronous)
     else:
         return session_type(interactive)
 
 
-def _get_version(interactive: SupportsInteractive) -> Tuple[int, int]:
+def _get_version(
+    interactive: SupportsInteractive[Synchronous],
+) -> Tuple[int, int]:
     version = interactive.evaluate("getVersion()")
     matched = re.search(r"(\d+)\.(\d+)", version)
     if matched is None:
