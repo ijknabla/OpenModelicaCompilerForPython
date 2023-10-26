@@ -6,15 +6,23 @@ import shutil
 import tempfile
 import uuid
 from asyncio import Lock
-from collections.abc import Callable, Generator
+from collections.abc import Callable, Coroutine, Generator
 from contextlib import ExitStack, contextmanager, suppress
 from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, AnyStr
+from typing import TYPE_CHECKING, AnyStr, Generic, overload
 
 import zmq.asyncio
+
+from .protocol import (
+    Asynchronous,
+    Synchronous,
+    T_Calling,
+    asynchronous,
+    synchronous,
+)
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -84,6 +92,74 @@ class OldAsyncInteractive:
             result = await self.socket.recv_string()
             logger.debug(f"(pid={self.pid}) {result}")
         return result
+
+
+@dataclass(frozen=True)
+class Interactive(Generic[T_Calling]):
+    _exit_stack: ExitStack
+    _dual_interactive: _DualInteractive
+    calling: T_Calling
+
+    @classmethod
+    def open(
+        cls,
+        omc_command: str | PathLike[str],
+        calling: T_Calling,
+    ) -> Self:
+        exit_stack = ExitStack()
+        atexit.register(exit_stack.close)
+
+        try:
+            return cls(
+                exit_stack,
+                exit_stack.enter_context(_DualInteractive.open(omc_command)),
+                calling,
+            )
+
+        except Exception:
+            exit_stack.close()
+            raise
+
+    def close(self) -> None:
+        self._exit_stack.close()
+
+    @property
+    def synchronous(
+        self: Interactive[Asynchronous],
+    ) -> Interactive[Synchronous]:
+        return Interactive(
+            _exit_stack=self._exit_stack,
+            _dual_interactive=self._dual_interactive,
+            calling=synchronous,
+        )
+
+    @property
+    def asynchronous(self) -> Interactive[Asynchronous]:
+        return Interactive(
+            _exit_stack=self._exit_stack,
+            _dual_interactive=self._dual_interactive,
+            calling=asynchronous,
+        )
+
+    @overload
+    def evaluate(
+        self: Interactive[Synchronous],
+        expression: str,
+    ) -> str:
+        ...
+
+    @overload
+    async def evaluate(
+        self: Interactive[Asynchronous],
+        expression: str,
+    ) -> str:
+        ...
+
+    def evaluate(self, expression: str) -> str | Coroutine[None, None, str]:
+        if self.calling is asynchronous:
+            return self._dual_interactive.asynchronous_evaluate(expression)
+        else:
+            return self._dual_interactive.synchronous_evaluate(expression)
 
 
 @dataclass(frozen=True)
