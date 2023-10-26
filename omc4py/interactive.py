@@ -21,7 +21,7 @@ logger = logging.getLogger(__name__)
 
 def open_interactives(
     omc_command: str | PathLike[str],
-) -> tuple[Interactive, AsyncInteractive]:
+) -> tuple[OldInteractive, OldAsyncInteractive]:
     stack = ExitStack()
     atexit.register(stack.close)
 
@@ -44,8 +44,8 @@ def open_interactives(
         lock = Lock()
 
         return (
-            Interactive(stack.close, pid, socket),
-            AsyncInteractive(stack.close, pid, async_socket, lock),
+            OldInteractive(stack.close, pid, socket),
+            OldAsyncInteractive(stack.close, pid, async_socket, lock),
         )
 
     except Exception:
@@ -54,7 +54,7 @@ def open_interactives(
 
 
 @dataclass(frozen=True)
-class Interactive:
+class OldInteractive:
     close: Callable[[], None]
     pid: int
     socket: zmq.Socket
@@ -68,7 +68,7 @@ class Interactive:
 
 
 @dataclass(frozen=True)
-class AsyncInteractive:
+class OldAsyncInteractive:
     close: Callable[[], None]
     pid: int
     socket: zmq.asyncio.Socket
