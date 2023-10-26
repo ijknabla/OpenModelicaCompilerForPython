@@ -1,7 +1,16 @@
 from __future__ import annotations
 
+import enum
 from collections.abc import Hashable
-from typing import Any, Coroutine, Protocol, TypeVar, Union, runtime_checkable
+from typing import (
+    Any,
+    Coroutine,
+    Literal,
+    Protocol,
+    TypeVar,
+    Union,
+    runtime_checkable,
+)
 
 _T_evaluate = TypeVar(
     "_T_evaluate", str, Coroutine[Any, Any, str], covariant=True
@@ -39,3 +48,22 @@ class SupportsInteractiveProperty(Protocol[_T_evaluate]):
     @property
     def __omc_interactive__(self) -> _GenericInteractiveProtocol[_T_evaluate]:
         ...
+
+
+class Calling(enum.Enum):
+    synchronous = enum.auto()
+    asynchronous = enum.auto()
+
+
+Synchronous = Literal[Calling.synchronous]
+Asynchronous = Literal[Calling.asynchronous]
+
+synchronous: Synchronous = Calling.synchronous
+asynchronous: Asynchronous = Calling.asynchronous
+
+T_Calling = TypeVar(
+    "T_Calling",
+    Synchronous,
+    Asynchronous,
+    covariant=True,
+)
