@@ -84,11 +84,12 @@ def _create_function(
             raise ValueError(f"{self} is not SupportsInteractiveProperty")
 
         return_type = get_type_hints(f)["return"]
-        literal = self.__omc_interactive__.evaluate(
+        literal: str = self.__omc_interactive__.evaluate(
             f"{class_name}({_get_argument(f, *args, **kwargs)})"
         )
         bound_parse = bind_to_awaitable(partial(parse, return_type))
-        return bound_parse(literal)
+        # > TODO: check complicated type
+        return bound_parse(literal)  # type: ignore
 
     _wrapped.__omc_class__ = TypeName(class_name)  # type: ignore
 

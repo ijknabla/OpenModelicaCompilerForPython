@@ -12,7 +12,7 @@ from ..algorithm import bind_to_awaitable
 from ..exception import OMCError, OMCWarning
 from ..openmodelica import Component, TypeName
 from ..parser import cast, parse
-from ..protocol import SupportsInteractive
+from ..protocol import SupportsInteractive, Synchronous
 from ..string import to_omc_literal
 
 if TYPE_CHECKING:
@@ -25,7 +25,7 @@ if TYPE_CHECKING:
 
 @dataclass
 class Session:
-    __omc_interactive__: SupportsInteractive
+    __omc_interactive__: SupportsInteractive[Synchronous]
 
     def close(self) -> None:
         self.__omc_interactive__.close()

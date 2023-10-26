@@ -55,7 +55,7 @@ from . import session
 from .exception import OMCRuntimeError
 from .interactive import Interactive
 from .openmodelica import TypeName, VariableName
-from .protocol import SupportsInteractive, synchronous
+from .protocol import SupportsInteractive, Synchronous, synchronous
 
 if TYPE_CHECKING:
     from . import (
@@ -330,7 +330,9 @@ def open_session(
         return session_type(interactive)
 
 
-def _get_version(interactive: SupportsInteractive) -> Tuple[int, int]:
+def _get_version(
+    interactive: SupportsInteractive[Synchronous],
+) -> Tuple[int, int]:
     version = interactive.evaluate("getVersion()")
     matched = re.search(r"(\d+)\.(\d+)", version)
     if matched is None:

@@ -3,18 +3,18 @@ from __future__ import annotations
 import enum
 from collections.abc import Hashable
 from typing import (
-    Any,
-    Coroutine,
+    TYPE_CHECKING,
     Literal,
     Protocol,
     TypeVar,
-    Union,
+    overload,
     runtime_checkable,
 )
 
-_T_evaluate = TypeVar(
-    "_T_evaluate", str, Coroutine[Any, Any, str], covariant=True
-)
+if TYPE_CHECKING:
+    from typing_extensions import TypeAlias
+else:
+    TypeAlias = ...
 
 
 class SupportsClose(Protocol):
@@ -25,28 +25,6 @@ class SupportsClose(Protocol):
 @runtime_checkable
 class SupportsToOMCLiteral(Protocol):
     def __to_omc_literal__(self) -> str:
-        ...
-
-
-@runtime_checkable
-class _GenericInteractiveProtocol(
-    SupportsClose, Hashable, Protocol[_T_evaluate]
-):
-    def evaluate(self, expression: str) -> _T_evaluate:
-        ...
-
-
-SupportsInteractive = _GenericInteractiveProtocol[str]
-SupportsAsyncInteractive = _GenericInteractiveProtocol[
-    Coroutine[Any, Any, str]
-]
-SupportsAnyInteractive = Union[SupportsInteractive, SupportsAsyncInteractive]
-
-
-@runtime_checkable
-class SupportsInteractiveProperty(Protocol[_T_evaluate]):
-    @property
-    def __omc_interactive__(self) -> _GenericInteractiveProtocol[_T_evaluate]:
         ...
 
 
@@ -67,3 +45,32 @@ T_Calling = TypeVar(
     Asynchronous,
     covariant=True,
 )
+
+
+@runtime_checkable
+class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
+    @overload
+    def evaluate(
+        self: SupportsInteractive[Synchronous],
+        expression: str,
+    ) -> str:
+        ...
+
+    @overload
+    async def evaluate(
+        self: SupportsInteractive[Asynchronous],
+        expression: str,
+    ) -> str:
+        ...
+
+
+SupportsAnyInteractive: TypeAlias = (
+    "SupportsInteractive[Synchronous] | SupportsInteractive[Asynchronous]"
+)
+
+
+@runtime_checkable
+class SupportsInteractiveProperty(Protocol[T_Calling]):
+    @property
+    def __omc_interactive__(self) -> SupportsInteractive[T_Calling]:
+        ...
