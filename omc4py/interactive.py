@@ -6,7 +6,7 @@ import shutil
 import tempfile
 import uuid
 from asyncio import Lock
-from collections.abc import Callable, Coroutine, Generator
+from collections.abc import Coroutine, Generator
 from contextlib import ExitStack, contextmanager, suppress
 from dataclasses import dataclass, field
 from os import PathLike
@@ -28,70 +28,6 @@ if TYPE_CHECKING:
     from typing_extensions import Self
 
 logger = logging.getLogger(__name__)
-
-
-def open_interactives(
-    omc_command: str | PathLike[str],
-) -> tuple[OldInteractive, OldAsyncInteractive]:
-    stack = ExitStack()
-    atexit.register(stack.close)
-
-    try:
-        process, port = stack.enter_context(
-            _create_omc_interactive(omc_command)
-        )
-        pid = process.pid
-
-        stack.callback(lambda: logger.info(f"(pid={pid}) Close zmq sokcet"))
-
-        socket = stack.enter_context(zmq.Context().socket(zmq.REQ))
-        socket.connect(port)
-        async_socket = stack.enter_context(
-            zmq.asyncio.Context().socket(zmq.REQ)
-        )
-        async_socket.connect(port)
-        logger.info(f"(pid={pid}) Connect zmq sokcet via {port}")
-
-        lock = Lock()
-
-        return (
-            OldInteractive(stack.close, pid, socket),
-            OldAsyncInteractive(stack.close, pid, async_socket, lock),
-        )
-
-    except Exception:
-        stack.close()
-        raise
-
-
-@dataclass(frozen=True)
-class OldInteractive:
-    close: Callable[[], None]
-    pid: int
-    socket: zmq.Socket
-
-    def evaluate(self, expression: str) -> str:
-        logger.debug(f"(pid={self.pid}) >>> {expression}")
-        self.socket.send_string(expression)
-        result = self.socket.recv_string()
-        logger.debug(f"(pid={self.pid}) {result}")
-        return result
-
-
-@dataclass(frozen=True)
-class OldAsyncInteractive:
-    close: Callable[[], None]
-    pid: int
-    socket: zmq.asyncio.Socket
-    lock: Lock
-
-    async def evaluate(self, expression: str) -> str:
-        async with self.lock:
-            logger.debug(f"(pid={self.pid}) >>> {expression}")
-            await self.socket.send_string(expression)
-            result = await self.socket.recv_string()
-            logger.debug(f"(pid={self.pid}) {result}")
-        return result
 
 
 @dataclass(frozen=True)
