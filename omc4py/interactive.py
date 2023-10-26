@@ -8,13 +8,16 @@ import uuid
 from asyncio import Lock
 from collections.abc import Callable, Generator
 from contextlib import ExitStack, contextmanager, suppress
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import AnyStr
+from typing import TYPE_CHECKING, AnyStr
 
 import zmq.asyncio
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 logger = logging.getLogger(__name__)
 
@@ -80,6 +83,68 @@ class OldAsyncInteractive:
             await self.socket.send_string(expression)
             result = await self.socket.recv_string()
             logger.debug(f"(pid={self.pid}) {result}")
+        return result
+
+
+@dataclass(frozen=True)
+class _DualInteractive:
+    synchronous: zmq.Socket
+    asynchronous: zmq.asyncio.Socket
+    process: Popen[str]
+    lock: Lock = field(default_factory=Lock)
+
+    @classmethod
+    @contextmanager
+    def open(
+        cls,
+        omc_command: str | PathLike[str],
+    ) -> Generator[Self, None, None]:
+        with ExitStack() as stack:
+            enter = stack.enter_context
+
+            process, port = enter(_create_omc_interactive(omc_command))
+
+            yield cls(
+                *enter(cls.__open_socket(process=process, port=port)),
+                process,
+                Lock(),
+            )
+
+    @staticmethod
+    @contextmanager
+    def __open_socket(
+        process: Popen[str], port: str
+    ) -> Generator[tuple[zmq.Socket, zmq.asyncio.Socket], None, None]:
+        try:
+            with ExitStack() as stack:
+                enter = stack.enter_context
+                synchronous = enter(zmq.Context().socket(zmq.REQ))
+                synchronous.connect(port)
+                asynchronous = enter(zmq.asyncio.Context().socket(zmq.REQ))
+                asynchronous.connect(port)
+
+                logger.info(
+                    f"(pid={process.pid}) Connect zmq sokcet via {port}"
+                )
+                yield synchronous, asynchronous
+        finally:
+            logger.info(f"(pid={process.pid}) Close zmq sokcet")
+
+    def synchronous_evaluate(self, expression: str) -> str:
+        socket = self.synchronous
+        logger.debug(f"(pid={self.process.pid}) >>> {expression}")
+        socket.send_string(expression)
+        result = socket.recv_string()
+        logger.debug(f"(pid={self.process.pid}) {result}")
+        return result
+
+    async def asynchronous_evaluate(self, expression: str) -> str:
+        socket = self.asynchronous
+        async with self.lock:
+            logger.debug(f"(pid={self.process.pid}) >>> {expression}")
+            await socket.send_string(expression)
+            result = await socket.recv_string()
+            logger.debug(f"(pid={self.process.pid}) {result}")
         return result
 
 
