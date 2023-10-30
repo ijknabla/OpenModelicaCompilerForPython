@@ -26,6 +26,8 @@ from typing_extensions import Literal, NotRequired, Self, TypedDict
 from omc4py import TypeName, VariableName, exception, open_session
 from omc4py.latest.aio import Session
 
+from ..util import aterminating
+
 _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
 _T_value = TypeVar("_T_value")
@@ -212,19 +214,17 @@ async def _docker_run(
         image,
         *args,
     ]
-    process = await create_subprocess_exec(
-        *cmd,
-        stdout=PIPE if pipe else None,
-    )
-    try:
+    async with aterminating(
+        await create_subprocess_exec(
+            *cmd,
+            stdout=PIPE if pipe else None,
+        )
+    ) as process:
         o, _ = await process.communicate()
         if pipe:
             return o.decode("utf-8")
         if process.returncode:
             raise CalledProcessError(process.returncode, cmd)
-    finally:
-        if process.returncode is None:
-            process.terminate()
 
     return None
 
