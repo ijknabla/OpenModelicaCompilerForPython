@@ -1,5 +1,23 @@
 from __future__ import annotations
 
+try:
+    import sys
+    from typing import TYPE_CHECKING
+
+    if not TYPE_CHECKING:
+        if sys.version_info < (3, 8):
+            import typing
+
+            import typing_extensions
+
+            typing.Literal = typing_extensions.Literal
+            typing.Protocol = typing_extensions.Protocol
+            typing.runtime_checkable = typing_extensions.runtime_checkable
+            typing.get_args = typing_extensions.get_args
+            typing.get_origin = typing_extensions.get_origin
+except Exception:
+    raise
+
 import os
 import sys
 from asyncio import run
