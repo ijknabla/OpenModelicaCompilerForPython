@@ -103,20 +103,25 @@ async def create_interface(n: int, exe: str | None) -> Interface:
 
 
 async def create_interface_by_docker(
-    image: Iterable[str] | str,
+    image: Iterable[str],
     n: int,
     output_dir: Path,
     pip_cache_dir: Path | None,
 ) -> None:
-    if not isinstance(image, str):
-        await gather(
-            *(
-                create_interface_by_docker(i, n, output_dir, pip_cache_dir)
-                for i in image
-            )
+    await gather(
+        *(
+            _create_interface_by_docker(i, n, output_dir, pip_cache_dir)
+            for i in image
         )
-        return
+    )
 
+
+async def _create_interface_by_docker(
+    image: str,
+    n: int,
+    output_dir: Path,
+    pip_cache_dir: Path | None,
+) -> None:
     omc_version_match = re.search(
         r"(\d+)\.(\d+)\.\d",
         await _docker_run(
