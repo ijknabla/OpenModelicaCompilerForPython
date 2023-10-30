@@ -4,7 +4,7 @@ import typing
 import typing_extensions
 
 
-def _monkey_patch_typing():
+def _monkey_patch_typing() -> None:
     if sys.version_info < (3, 8):
         for extension in [
             "Literal",
