@@ -110,9 +110,27 @@ async def create_interface_by_docker(
     output_dir: Path,
     pip_cache_dir: Path | None,
 ) -> None:
+    requirements: list[str] = []
+
+    async with aterminating(
+        await create_subprocess_exec(
+            "poetry",
+            "export",
+            "--only=main,bootstrap",
+            "--without-hashes",
+            cwd=Path(__file__).parent,
+            stdout=PIPE,
+        )
+    ) as process:
+        async for line in process.stdout:
+            requirement, *_ = line.split(b";")
+            requirements.append(requirement.decode("utf-8").strip())
+
     await gather(
         *(
-            _create_interface_by_docker(i, n, output_dir, pip_cache_dir)
+            _create_interface_by_docker(
+                i, n, output_dir, pip_cache_dir, requirements
+            )
             for i in image
         )
     )
@@ -123,9 +141,26 @@ async def _create_interface_by_docker(
     n: int,
     output_dir: Path,
     pip_cache_dir: Path | None,
+    requirements: Iterable[str],
 ) -> None:
+    py_version_match = re.search(
+        r"(\d+)\.(\d+)\.\d+",
+        await _docker_run(
+            image,
+            [],
+            ["python", "--version"],
+            pipe=True,
+        ),
+    )
+    assert py_version_match is not None
+    py_major, py_minor = map(int, py_version_match.groups())
+    if (py_major, py_minor) < (3, 8):
+        requirements = [
+            requirement.split("==")[0] for requirement in requirements
+        ]
+
     omc_version_match = re.search(
-        r"(\d+)\.(\d+)\.\d",
+        r"(\d+)\.(\d+)\.\d+",
         await _docker_run(
             image,
             [],
@@ -134,12 +169,12 @@ async def _create_interface_by_docker(
         ),
     )
     assert omc_version_match is not None
-    major, minor = map(int, omc_version_match.groups())
+    omc_major, omc_minor = map(int, omc_version_match.groups())
 
     omc4py_s = Path(resource_filename("bootstrap", "..")).resolve()
     omc4py_t = PurePosixPath("/omc4py")
     output_s = output_dir.resolve()
-    output_t = PurePosixPath("/output") / f"v_{major}_{minor}.yaml"
+    output_t = PurePosixPath("/output") / f"v_{omc_major}_{omc_minor}.yaml"
 
     docker_args = [
         "--mount",
@@ -172,7 +207,7 @@ async def _create_interface_by_docker(
                 [
                     f"cd {omc4py_t}",
                     f"{PYTHON} -m pip install -U pip",
-                    f"{PYTHON} -m pip install -r requirements.bootstrap.txt",
+                    f"{PYTHON} -m pip install " + " ".join(requirements),
                     f"{PYTHON} -m bootstrap interface -n {n} -o {output_t}",
                 ]
             ),
