@@ -122,6 +122,7 @@ async def create_interface_by_docker(
             stdout=PIPE,
         )
     ) as process:
+        assert process.stdout is not None
         async for line in process.stdout:
             requirement, *_ = line.split(b";")
             requirements.append(requirement.decode("utf-8").strip())
