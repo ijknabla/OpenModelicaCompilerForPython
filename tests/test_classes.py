@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import pickle
 from contextlib import ExitStack
 from itertools import count
 from typing import TYPE_CHECKING, Any, Optional
@@ -38,6 +39,7 @@ def test_variablename(obj: Any) -> None:
         assert variablename != "a"
         assert isinstance(hash(variablename), int)
         assert str(variablename) in repr(variablename)
+        assert pickle.loads(pickle.dumps(variablename)) == variablename
     else:
         assert expected_exception is not None
         (arg,) = expected_exception.value.args
@@ -81,6 +83,7 @@ def test_variablename_constructor(s: str) -> None:
 def test_typename() -> None:
     typename = TypeName("A")
     assert TypeName(typename) is typename
+    assert pickle.loads(pickle.dumps(typename)) == typename
 
 
 def test_typename_combine() -> None:
