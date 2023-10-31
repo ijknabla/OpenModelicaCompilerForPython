@@ -55,7 +55,7 @@ def main() -> None:
 async def interface(n: int, o: IO[str], exe: str | None) -> None:
     n = max(1, n)
     yaml.safe_dump(
-        await create_interface(n, exe),
+        (await create_interface(n, exe)).model_dump(),
         o,
         sort_keys=False,
     )

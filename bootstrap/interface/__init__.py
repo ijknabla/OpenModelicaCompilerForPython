@@ -30,7 +30,7 @@ from typing import (
 )
 
 from pkg_resources import resource_filename
-from pydantic import PlainSerializer, PlainValidator
+from pydantic import PlainSerializer, PlainValidator, RootModel
 from typing_extensions import Annotated, Literal, NotRequired, Self, TypedDict
 
 from omc4py import TypeName, VariableName, exception, open_session
@@ -134,7 +134,11 @@ EntitiesDict = Dict[TypeNameString, EntityDict]
 InterfaceDict = Dict[VersionString, EntitiesDict]
 
 
-async def create_interface(n: int, exe: str | None) -> InterfaceDict:
+class Interface(RootModel[Mapping[AnnotatedVersion, EntitiesDict]]):
+    ...
+
+
+async def create_interface(n: int, exe: str | None) -> Interface:
     with ExitStack() as stack:
         sessions = [
             stack.enter_context(open_session(exe, asyncio=True))
@@ -157,11 +161,13 @@ async def create_interface(n: int, exe: str | None) -> InterfaceDict:
             ),
         )
 
-    return {
-        version: {
-            _dump_key(n): e for n, e in entities.items() if e is not None
+    return Interface.model_validate(
+        {
+            version: {
+                _dump_key(n): e for n, e in entities.items() if e is not None
+            }
         }
-    }
+    )
 
 
 async def create_interface_by_docker(
