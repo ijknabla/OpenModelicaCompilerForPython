@@ -190,7 +190,30 @@ class RecordEntity(BaseModel):
         )
 
 
-Entity = Union[TypeEntity, PackageEntity, RecordEntity]
+class FunctionEntity(BaseModel):
+    restriction: str
+    code: Union[str, None] = None
+    components: Components
+    isType: Literal[False] = False
+    isPackage: Literal[False] = False
+    isRecord: Literal[False] = False
+    isFunction: Literal[True] = True
+    isEnumeration: Literal[False] = False
+
+    @model_serializer
+    def __serialize(self) -> EntityDict:
+        result = EntityDict(
+            restriction=self.restriction,
+            isFunction=self.isFunction,
+            code=self.code,
+            components=self.components.model_dump(),
+        )
+        if not result["code"]:
+            del result["code"]
+        return result
+
+
+Entity = Union[TypeEntity, PackageEntity, RecordEntity, FunctionEntity]
 
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
@@ -525,7 +548,12 @@ async def _get_entities(
             )
             entity_dict = entity.model_dump()
         if await session.isFunction(name):
-            entity_dict["isFunction"] = True
+            entity = FunctionEntity(
+                restriction=restriction,
+                code=code_interface_only,
+                components=Components.model_validate(components),
+            )
+            entity_dict = entity.model_dump()
         if await session.isEnumeration(name):
             entity_dict["isEnumeration"] = True
 
@@ -535,7 +563,9 @@ async def _get_entities(
             "isEnumeration",
         }:
             code = code_not_interface_only
-        elif entity_dict.keys() & {"isFunction"}:
+        elif entity_dict.keys() & {
+            # "isFunction",
+        }:
             code = code_interface_only
 
         if code:
@@ -543,7 +573,7 @@ async def _get_entities(
 
         if entity_dict.keys() & {
             # "isRecord",
-            "isFunction",
+            # "isFunction",
         }:
             entity_dict["components"] = components
 
