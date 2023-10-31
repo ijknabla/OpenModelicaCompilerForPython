@@ -490,11 +490,11 @@ async def _get_entities(
         entity: Entity
 
         if await session.isType(name):
-            entity_dict["isType"] = True
-            entity = TypeEntity(restriction=restriction)  # noqa: F841
+            entity = TypeEntity(restriction=restriction)
+            entity_dict = entity.model_dump()
         if await session.isPackage(name):
-            entity_dict["isPackage"] = True
-            entity = PackageEntity(restriction=restriction)  # noqa: F841
+            entity = PackageEntity(restriction=restriction)
+            entity_dict = entity.model_dump()
         if await session.isRecord(name):
             entity_dict["isRecord"] = True
         if await session.isFunction(name):
