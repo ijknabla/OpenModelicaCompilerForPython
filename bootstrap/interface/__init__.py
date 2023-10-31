@@ -21,6 +21,7 @@ from subprocess import CalledProcessError
 from typing import (
     Dict,
     Generic,
+    Literal,
     Mapping,
     NamedTuple,
     NewType,
@@ -30,8 +31,14 @@ from typing import (
 )
 
 from pkg_resources import resource_filename
-from pydantic import PlainSerializer, PlainValidator, RootModel
-from typing_extensions import Annotated, Literal, NotRequired, Self, TypedDict
+from pydantic import (
+    BaseModel,
+    PlainSerializer,
+    PlainValidator,
+    RootModel,
+    model_serializer,
+)
+from typing_extensions import Annotated, NotRequired, Self, TypedDict
 
 from omc4py import TypeName, VariableName, exception, open_session
 from omc4py.latest.aio import Session
@@ -126,6 +133,22 @@ class EntityDict(TypedDict):
     isEnumeration: NotRequired[Literal[True]]
     code: NotRequired[str]
     components: NotRequired[ComponentsDict]
+
+
+class TypeEntity(BaseModel):
+    restriction: str
+    isType: Literal[True] = True
+    isPackage: Literal[False] = False
+    isRecord: Literal[False] = False
+    isFunction: Literal[False] = False
+    isEnumeration: Literal[False] = False
+
+    @model_serializer
+    def __serialize(self) -> EntityDict:
+        return EntityDict(
+            restriction=self.restriction,
+            isType=True,
+        )
 
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
