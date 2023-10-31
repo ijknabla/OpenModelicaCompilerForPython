@@ -147,8 +147,11 @@ class TypeEntity(BaseModel):
     def __serialize(self) -> EntityDict:
         return EntityDict(
             restriction=self.restriction,
-            isType=True,
+            isType=self.isType,
         )
+
+
+Entity = TypeEntity
 
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
@@ -439,31 +442,33 @@ async def _get_entities(
         except exception.OMCError:
             continue
 
-        entity = EntityDict(
+        entity_dict = EntityDict(
             restriction=restriction,
         )
+        entity: Entity
 
         if await session.isType(name):
-            entity["isType"] = True
+            entity_dict["isType"] = True
+            entity = TypeEntity(restriction=restriction)  # noqa: F841
         if await session.isPackage(name):
-            entity["isPackage"] = True
+            entity_dict["isPackage"] = True
         if await session.isRecord(name):
-            entity["isRecord"] = True
+            entity_dict["isRecord"] = True
         if await session.isFunction(name):
-            entity["isFunction"] = True
+            entity_dict["isFunction"] = True
         if await session.isEnumeration(name):
-            entity["isEnumeration"] = True
+            entity_dict["isEnumeration"] = True
 
         code: str | None = None
-        if entity.keys() & {"isRecord", "isEnumeration"}:
+        if entity_dict.keys() & {"isRecord", "isEnumeration"}:
             code = await session.list(name, interfaceOnly=False)
-        elif entity.keys() & {"isFunction"}:
+        elif entity_dict.keys() & {"isFunction"}:
             code = await session.list(name, interfaceOnly=True)
 
         if code:
-            entity["code"] = code
+            entity_dict["code"] = code
 
-        if entity.keys() & {"isRecord", "isFunction"}:
+        if entity_dict.keys() & {"isRecord", "isFunction"}:
             component_tuples = []
             with suppress(exception.OMCError):
                 component_tuples = await session.getComponents(name)
@@ -486,9 +491,9 @@ async def _get_entities(
 
                     components[_dump_key(component_tuple.name)] = component
 
-            entity["components"] = components
+            entity_dict["components"] = components
 
-        result[name] = entity
+        result[name] = entity_dict
 
     return result
 
