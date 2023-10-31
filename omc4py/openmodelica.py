@@ -117,7 +117,7 @@ class _BaseTypeName:
 
     parts: tuple[str, ...]
 
-    def __new__(cls, parts: tuple[str, ...]) -> Self:
+    def __new__(cls, parts: tuple[str, ...] = ()) -> Self:
         self = super(_BaseTypeName, cls).__new__(cls)
         self.parts = parts
         return self
@@ -134,15 +134,20 @@ class _BaseTypeName:
 
     @property
     def last_identifier(self) -> VariableName:
-        return VariableName(self.parts[-1])
+        if self.parts in {(), (".",)}:
+            return VariableName()
+        else:
+            return VariableName(self.parts[-1])
 
     @property
-    def parents(self) -> Iterator[Self]:
-        for end in reversed(range(1, len(self.parts))):
-            yield _BaseTypeName.__new__(
+    def parents(self) -> tuple[Self, ...]:
+        return tuple(
+            _BaseTypeName.__new__(
                 type(self),
                 self.parts[:end],
             )
+            for end in range(1 if self.is_absolute else 0, len(self.parts))
+        )[::-1]
 
     @property
     def parent(self) -> Self:
@@ -158,10 +163,15 @@ class _BaseTypeName:
         return isinstance(other, _BaseTypeName) and self.parts == other.parts
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self.parts})"
+        if not self.parts:
+            return f"{type(self).__name__}()"
+        else:
+            return f"{type(self).__name__}({str(self)!r})"
 
     def __str__(self) -> str:
-        if self.is_absolute:
+        if not self.parts:
+            return ""
+        elif self.parts[0] == ".":
             return self.parts[0] + ".".join(self.parts[1:])
         else:
             return ".".join(self.parts)
@@ -170,13 +180,13 @@ class _BaseTypeName:
 
 
 class TypeName(_BaseTypeName):
-    def __new__(cls, part: TypeNameLike, *parts: TypeNameLike) -> Self:
-        if isinstance(part, cls) and not parts:
-            return part
+    def __new__(cls, *parts: TypeNameLike) -> Self:
+        if len(parts) == 1:
+            (part,) = parts
+            if isinstance(part, cls):
+                return part
 
-        return _BaseTypeName.__new__(
-            cls, tuple(TypeName.__split_parts((part, *parts)))
-        )
+        return _BaseTypeName.__new__(cls, tuple(TypeName.__split_parts(parts)))
 
     @staticmethod
     def __split_parts(parts: Iterable[TypeNameLike]) -> Iterator[str]:
@@ -202,9 +212,6 @@ class TypeName(_BaseTypeName):
                 yield from split_typename_parts(part)
         else:
             raise TypeError(f"Unexpected part, got {part}: {type(part)}")
-
-    def __repr__(self) -> str:
-        return f"{type(self).__name__}({str(self)!r})"
 
     def __truediv__(self, other: TypeNameLike) -> Self:
         return type(self)(self, other)
