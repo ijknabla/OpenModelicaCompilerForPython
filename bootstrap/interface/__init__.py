@@ -124,6 +124,8 @@ class ComponentDict(TypedDict):
 
 ComponentsDict = Dict[VariableNameString, ComponentDict]
 
+Components = RootModel[Dict[AnnotatedVariableName, ComponentDict]]
+
 
 class EntityDict(TypedDict):
     restriction: str
@@ -168,7 +170,27 @@ class PackageEntity(BaseModel):
         )
 
 
-Entity = Union[TypeEntity, PackageEntity]
+class RecordEntity(BaseModel):
+    restriction: str
+    code: str
+    components: Components
+    isType: Literal[False] = False
+    isPackage: Literal[False] = False
+    isRecord: Literal[True] = True
+    isFunction: Literal[False] = False
+    isEnumeration: Literal[False] = False
+
+    @model_serializer
+    def __serialize(self) -> EntityDict:
+        return EntityDict(
+            restriction=self.restriction,
+            isRecord=self.isRecord,
+            code=self.code,
+            components=self.components.model_dump(),
+        )
+
+
+Entity = Union[TypeEntity, PackageEntity, RecordEntity]
 
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
@@ -496,14 +518,22 @@ async def _get_entities(
             entity = PackageEntity(restriction=restriction)
             entity_dict = entity.model_dump()
         if await session.isRecord(name):
-            entity_dict["isRecord"] = True
+            entity = RecordEntity(
+                restriction=restriction,
+                code=code_not_interface_only,
+                components=Components.model_validate(components),
+            )
+            entity_dict = entity.model_dump()
         if await session.isFunction(name):
             entity_dict["isFunction"] = True
         if await session.isEnumeration(name):
             entity_dict["isEnumeration"] = True
 
         code: str | None = None
-        if entity_dict.keys() & {"isRecord", "isEnumeration"}:
+        if entity_dict.keys() & {
+            # "isRecord",
+            "isEnumeration",
+        }:
             code = code_not_interface_only
         elif entity_dict.keys() & {"isFunction"}:
             code = code_interface_only
@@ -511,7 +541,10 @@ async def _get_entities(
         if code:
             entity_dict["code"] = code
 
-        if entity_dict.keys() & {"isRecord", "isFunction"}:
+        if entity_dict.keys() & {
+            # "isRecord",
+            "isFunction",
+        }:
             entity_dict["components"] = components
 
         result[name] = entity_dict
