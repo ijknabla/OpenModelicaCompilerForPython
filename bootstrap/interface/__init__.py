@@ -130,11 +130,12 @@ class EntityDict(TypedDict):
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
 
+Entities = Mapping[AnnotatedTypeName, EntityDict]
 
 InterfaceDict = Dict[VersionString, EntitiesDict]
 
 
-class Interface(RootModel[Mapping[AnnotatedVersion, EntitiesDict]]):
+class Interface(RootModel[Mapping[AnnotatedVersion, Entities]]):
     ...
 
 
