@@ -3,7 +3,6 @@ from __future__ import annotations
 import pickle
 from contextlib import ExitStack
 from itertools import count
-from types import NoneType
 from typing import TYPE_CHECKING, Any, Optional
 
 import pytest
@@ -23,7 +22,7 @@ def test_variablename(obj: Any) -> None:
     expected_exception: ExceptionInfo[TypeError] | None = None
 
     with ExitStack() as stack:
-        if not isinstance(obj, (str, VariableName, TypeName, NoneType)):
+        if not (isinstance(obj, (str, VariableName, TypeName)) or obj is None):
             expected_exception = stack.enter_context(pytest.raises(TypeError))
         variablename = VariableName(obj)
 
