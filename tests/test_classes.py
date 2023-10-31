@@ -114,6 +114,11 @@ def test_typename_parts(
     for i, parent in enumerate(typename.parents, start=1):
         assert parent.parts == typename.parts[:-i]
 
+    if not typename.parents:
+        assert typename.parent == typename
+    else:
+        assert typename.parent == typename.parents[0]
+
 
 def test_absolute_typename() -> None:
     typename = TypeName("A.B.C.D")
