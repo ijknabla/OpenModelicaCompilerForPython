@@ -213,7 +213,28 @@ class FunctionEntity(BaseModel):
         return result
 
 
-Entity = Union[TypeEntity, PackageEntity, RecordEntity, FunctionEntity]
+class EnumerationEntity(BaseModel):
+    restriction: str
+    code: str
+    isType: Literal[True] = True
+    isPackage: Literal[False] = False
+    isRecord: Literal[False] = False
+    isFunction: Literal[False] = False
+    isEnumeration: Literal[True] = True
+
+    @model_serializer
+    def __serialize(self) -> EntityDict:
+        return EntityDict(
+            restriction=self.restriction,
+            isType=self.isType,
+            isEnumeration=self.isEnumeration,
+            code=self.code,
+        )
+
+
+Entity = Union[
+    TypeEntity, PackageEntity, RecordEntity, FunctionEntity, EnumerationEntity
+]
 
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
@@ -555,12 +576,15 @@ async def _get_entities(
             )
             entity_dict = entity.model_dump()
         if await session.isEnumeration(name):
-            entity_dict["isEnumeration"] = True
+            entity = EnumerationEntity(
+                restriction=restriction, code=code_not_interface_only
+            )
+            entity_dict = entity.model_dump()
 
         code: str | None = None
         if entity_dict.keys() & {
             # "isRecord",
-            "isEnumeration",
+            # "isEnumeration",
         }:
             code = code_not_interface_only
         elif entity_dict.keys() & {
