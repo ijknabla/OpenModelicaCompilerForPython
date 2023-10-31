@@ -29,7 +29,8 @@ from typing import (
 )
 
 from pkg_resources import resource_filename
-from typing_extensions import Literal, NotRequired, Self, TypedDict
+from pydantic import PlainSerializer, PlainValidator
+from typing_extensions import Annotated, Literal, NotRequired, Self, TypedDict
 
 from omc4py import TypeName, VariableName, exception, open_session
 from omc4py.latest.aio import Session
@@ -44,6 +45,36 @@ InputOutput = Literal["input", "output"]
 TypeNameString = NewType("TypeNameString", str)
 VariableNameString = NewType("VariableNameString", str)
 VersionString = NewType("VersionString", str)
+
+
+@PlainValidator
+def _typename_validator(typename: str | TypeName) -> TypeName:
+    return TypeName(typename)
+
+
+@PlainSerializer
+def _typename_serializer(typename: TypeName) -> str:
+    return f"{typename}"
+
+
+AnnotatedTypeName = Annotated[
+    TypeName, _typename_validator, _typename_serializer
+]
+
+
+@PlainValidator
+def _variablename_validator(variablename: str | VariableName) -> VariableName:
+    return VariableName(variablename)
+
+
+@PlainSerializer
+def _variablename_serializer(variablename: VariableName) -> str:
+    return f"{variablename}"
+
+
+AnnotatedVariableName = Annotated[
+    VariableName, _variablename_validator, _variablename_serializer
+]
 
 
 class Version(NamedTuple):
