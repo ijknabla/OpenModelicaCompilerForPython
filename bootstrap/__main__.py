@@ -15,7 +15,7 @@ from tqdm import tqdm
 from typing_extensions import ParamSpec
 
 from .interface import (
-    Interface,
+    InterfaceDict,
     Version,
     create_interface,
     create_interface_by_docker,
@@ -126,7 +126,7 @@ if sys.version_info >= (3, 10):
         inputs: Sequence[IO[str]],
         output_dir: Path,
     ) -> None:
-        interface: Interface
+        interface: InterfaceDict
         interface = dict(
             sorted(
                 chain.from_iterable(

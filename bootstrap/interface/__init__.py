@@ -19,6 +19,7 @@ from functools import reduce
 from pathlib import Path, PurePosixPath
 from subprocess import CalledProcessError
 from typing import (
+    Dict,
     Generic,
     Mapping,
     NamedTuple,
@@ -107,16 +108,16 @@ def _version_serializer(version: Version) -> str:
 AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 
 
-class Component(TypedDict):
+class ComponentDict(TypedDict):
     className: TypeNameString
     inputOutput: NotRequired[InputOutput]
     dimensions: NotRequired[Sequence[str]]
 
 
-Components = Mapping[VariableNameString, Component]
+ComponentsDict = Dict[VariableNameString, ComponentDict]
 
 
-class Entity(TypedDict):
+class EntityDict(TypedDict):
     restriction: str
     isType: NotRequired[Literal[True]]
     isPackage: NotRequired[Literal[True]]
@@ -124,16 +125,16 @@ class Entity(TypedDict):
     isFunction: NotRequired[Literal[True]]
     isEnumeration: NotRequired[Literal[True]]
     code: NotRequired[str]
-    components: NotRequired[Components]
+    components: NotRequired[ComponentsDict]
 
 
-Entities = Mapping[TypeNameString, Entity]
+EntitiesDict = Dict[TypeNameString, EntityDict]
 
 
-Interface = Mapping[VersionString, Entities]
+InterfaceDict = Dict[VersionString, EntitiesDict]
 
 
-async def create_interface(n: int, exe: str | None) -> Interface:
+async def create_interface(n: int, exe: str | None) -> InterfaceDict:
     with ExitStack() as stack:
         sessions = [
             stack.enter_context(open_session(exe, asyncio=True))
@@ -144,7 +145,7 @@ async def create_interface(n: int, exe: str | None) -> Interface:
 
         iterator = QueueingIteration[TypeName]()
 
-        entities: dict[TypeName, Entity | None] = reduce(
+        entities: dict[TypeName, EntityDict | None] = reduce(
             _union,
             await gather(
                 *(
@@ -394,8 +395,8 @@ class QueueingIteration(Generic[_T]):
 
 async def _get_entities(
     session: Session, iterator: QueueingIteration[TypeName], put: bool
-) -> dict[TypeName, Entity | None]:
-    result: dict[TypeName, Entity | None] = {}
+) -> dict[TypeName, EntityDict | None]:
+    result: dict[TypeName, EntityDict | None] = {}
     if put:
         async for name in _iter_recursive(session, TypeName("OpenModelica")):
             result[name] = None
@@ -408,7 +409,7 @@ async def _get_entities(
         except exception.OMCError:
             continue
 
-        entity = Entity(
+        entity = EntityDict(
             restriction=restriction,
         )
 
@@ -437,10 +438,10 @@ async def _get_entities(
             with suppress(exception.OMCError):
                 component_tuples = await session.getComponents(name)
 
-            components: dict[VariableNameString, Component] = {}
+            components: dict[VariableNameString, ComponentDict] = {}
             for component_tuple in component_tuples:
                 if component_tuple.protected == "public":
-                    component = Component(
+                    component = ComponentDict(
                         className=_dump_key(component_tuple.className),
                     )
 
