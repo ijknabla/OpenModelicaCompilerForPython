@@ -95,10 +95,21 @@ def test_typename_combine() -> None:
     assert (TypeName(*parts_a) / TypeName(*parts_b)).parts == parts_a + parts_b
 
 
-def test_typename_parts() -> None:
-    typename = TypeName("A.B.C.D")
-
-    assert typename.last_identifier == VariableName(typename.parts[-1])
+@pytest.mark.parametrize(
+    "typename," "last_identifier,",
+    [
+        (TypeName(), VariableName()),
+        (TypeName("."), VariableName()),
+        (TypeName("A"), VariableName("A")),
+        (TypeName(".A"), VariableName("A")),
+        (TypeName("A.B.C.D"), VariableName("D")),
+        (TypeName(".A.B.C.D"), VariableName("D")),
+    ],
+)
+def test_typename_parts(
+    typename: TypeName, last_identifier: VariableName
+) -> None:
+    assert typename.last_identifier == last_identifier
 
     for i, parent in enumerate(typename.parents, start=1):
         assert parent.parts == typename.parts[:-i]
