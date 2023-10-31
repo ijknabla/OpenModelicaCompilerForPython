@@ -550,58 +550,30 @@ async def _get_entities(
 
                 components[_dump_key(component_tuple.name)] = component
 
-        entity_dict = EntityDict(
-            restriction=restriction,
-        )
         entity: Entity
 
         if await session.isType(name):
             entity = TypeEntity(restriction=restriction)
-            entity_dict = entity.model_dump()
         if await session.isPackage(name):
             entity = PackageEntity(restriction=restriction)
-            entity_dict = entity.model_dump()
         if await session.isRecord(name):
             entity = RecordEntity(
                 restriction=restriction,
                 code=code_not_interface_only,
                 components=Components.model_validate(components),
             )
-            entity_dict = entity.model_dump()
         if await session.isFunction(name):
             entity = FunctionEntity(
                 restriction=restriction,
                 code=code_interface_only,
                 components=Components.model_validate(components),
             )
-            entity_dict = entity.model_dump()
         if await session.isEnumeration(name):
             entity = EnumerationEntity(
                 restriction=restriction, code=code_not_interface_only
             )
-            entity_dict = entity.model_dump()
 
-        code: str | None = None
-        if entity_dict.keys() & {
-            # "isRecord",
-            # "isEnumeration",
-        }:
-            code = code_not_interface_only
-        elif entity_dict.keys() & {
-            # "isFunction",
-        }:
-            code = code_interface_only
-
-        if code:
-            entity_dict["code"] = code
-
-        if entity_dict.keys() & {
-            # "isRecord",
-            # "isFunction",
-        }:
-            entity_dict["components"] = components
-
-        result[name] = entity_dict
+        result[name] = entity.model_dump()
 
     return result
 
