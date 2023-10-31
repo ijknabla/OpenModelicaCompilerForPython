@@ -82,9 +82,29 @@ class Version(NamedTuple):
     minor: int
 
     @classmethod
-    def parse(cls, s: VersionString) -> Self:
+    def parse(cls, s: str) -> Self:
         major, minor = map(int, s.split("."))
         return cls(major=major, minor=minor)
+
+    def unparse(self) -> str:
+        return f"{self.major}.{self.minor}"
+
+
+@PlainValidator
+def _version_validator(version: str | Version) -> Version:
+    if isinstance(version, str):
+        return Version.parse(version)
+    elif isinstance(version, Version):
+        return version
+    raise ValueError(version)
+
+
+@PlainSerializer
+def _version_serializer(version: Version) -> str:
+    return version.unparse()
+
+
+AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 
 
 class Component(TypedDict):
