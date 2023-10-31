@@ -82,13 +82,6 @@ def test_variablename_constructor(s: str) -> None:
         assert repr(s) in arg
 
 
-def test_typename() -> None:
-    typename = TypeName("A")
-    isinstance(hash(typename), int)
-    assert TypeName(typename) is typename
-    assert pickle.loads(pickle.dumps(typename)) == typename
-
-
 def test_typename_combine() -> None:
     parts_a = ("A1", "A2")
     parts_b = ("B1", "B2")
@@ -107,9 +100,11 @@ def test_typename_combine() -> None:
         (TypeName(".A.B.C.D"), VariableName("D")),
     ],
 )
-def test_typename_parts(
-    typename: TypeName, last_identifier: VariableName
-) -> None:
+def test_typename(typename: TypeName, last_identifier: VariableName) -> None:
+    isinstance(hash(typename), int)
+    assert TypeName(typename) is typename
+    assert pickle.loads(pickle.dumps(typename)) == typename
+
     assert typename.last_identifier == last_identifier
 
     for i, parent in enumerate(typename.parents, start=1):
