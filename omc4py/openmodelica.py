@@ -53,9 +53,9 @@ TypeNameLike = VariableNameLike
 
 class _BaseVariableName:
     __slots__ = ("__identifier",)
-    __identifier: str
+    __identifier: str | None
 
-    def __new__(cls, identifier: str) -> Self:
+    def __new__(cls, identifier: str | None = None) -> Self:
         self = super(_BaseVariableName, cls).__new__(cls)
         self.__identifier = identifier
         return self
@@ -70,17 +70,26 @@ class _BaseVariableName:
         return hash(self.__identifier)
 
     def __str__(self) -> str:
-        return self.__identifier
+        if self.__identifier is None:
+            return ""
+        else:
+            return self.__identifier
 
     def __repr__(self) -> str:
-        return f"{type(self).__name__}({self.__identifier!r})"
+        if self.__identifier is None:
+            return f"{type(self).__name__}()"
+        else:
+            return f"{type(self).__name__}({self.__identifier!r})"
 
     __to_omc_literal__ = __str__
 
 
 class VariableName(_BaseVariableName):
-    def __new__(cls, obj: VariableNameLike) -> Self:
+    def __new__(cls, obj: VariableNameLike | None = None) -> Self:
         from .parser import is_variablename
+
+        if obj is None:
+            return _BaseVariableName.__new__(cls)
 
         if isinstance(obj, cls):
             return obj
