@@ -27,6 +27,7 @@ from typing import (
     NewType,
     Sequence,
     TypeVar,
+    Union,
     overload,
 )
 
@@ -151,7 +152,23 @@ class TypeEntity(BaseModel):
         )
 
 
-Entity = TypeEntity
+class PackageEntity(BaseModel):
+    restriction: str
+    isType: Literal[False] = False
+    isPackage: Literal[True] = True
+    isRecord: Literal[False] = False
+    isFunction: Literal[False] = False
+    isEnumeration: Literal[False] = False
+
+    @model_serializer
+    def __serialize(self) -> EntityDict:
+        return EntityDict(
+            restriction=self.restriction,
+            isPackage=self.isPackage,
+        )
+
+
+Entity = Union[TypeEntity, PackageEntity]
 
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
@@ -452,6 +469,7 @@ async def _get_entities(
             entity = TypeEntity(restriction=restriction)  # noqa: F841
         if await session.isPackage(name):
             entity_dict["isPackage"] = True
+            entity = PackageEntity(restriction=restriction)  # noqa: F841
         if await session.isRecord(name):
             entity_dict["isRecord"] = True
         if await session.isFunction(name):
