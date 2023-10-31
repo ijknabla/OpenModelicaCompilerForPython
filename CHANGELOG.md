@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Support pickle serialize for `omc4py.TypeName`, `omc4py.VariableName`
+
 ### Removed
 
 - `python==3.7` support

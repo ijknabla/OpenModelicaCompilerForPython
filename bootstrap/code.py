@@ -715,6 +715,8 @@ def _parts(name: TypeNameString) -> tuple[str, ...]:
 
 def _parents(name: TypeNameString) -> Generator[TypeNameString, None, None]:
     for parent in TypeName(name).parents:
+        if parent == TypeName():
+            return
         yield TypeNameString(f"{parent}")
 
 
