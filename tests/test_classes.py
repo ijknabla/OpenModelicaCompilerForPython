@@ -84,6 +84,7 @@ def test_variablename_constructor(s: str) -> None:
 
 def test_typename() -> None:
     typename = TypeName("A")
+    isinstance(hash(typename), int)
     assert TypeName(typename) is typename
     assert pickle.loads(pickle.dumps(typename)) == typename
 
