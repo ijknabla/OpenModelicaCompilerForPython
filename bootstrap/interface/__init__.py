@@ -459,6 +459,9 @@ async def _get_entities(
         except exception.OMCError:
             continue
 
+        code_not_interface_only = await session.list(name, interfaceOnly=False)
+        code_interface_only = await session.list(name, interfaceOnly=True)
+
         entity_dict = EntityDict(
             restriction=restriction,
         )
@@ -479,9 +482,9 @@ async def _get_entities(
 
         code: str | None = None
         if entity_dict.keys() & {"isRecord", "isEnumeration"}:
-            code = await session.list(name, interfaceOnly=False)
+            code = code_not_interface_only
         elif entity_dict.keys() & {"isFunction"}:
-            code = await session.list(name, interfaceOnly=True)
+            code = code_interface_only
 
         if code:
             entity_dict["code"] = code
