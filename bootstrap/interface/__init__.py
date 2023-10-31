@@ -462,6 +462,28 @@ async def _get_entities(
         code_not_interface_only = await session.list(name, interfaceOnly=False)
         code_interface_only = await session.list(name, interfaceOnly=True)
 
+        component_tuples = []
+        with suppress(exception.OMCError):
+            component_tuples = await session.getComponents(name)
+
+        components: dict[VariableNameString, ComponentDict] = {}
+        for component_tuple in component_tuples:
+            if component_tuple.protected == "public":
+                component = ComponentDict(
+                    className=_dump_key(component_tuple.className),
+                )
+
+                if (
+                    component_tuple.inputOutput == "input"
+                    or component_tuple.inputOutput == "output"
+                ):
+                    component["inputOutput"] = component_tuple.inputOutput
+
+                if component_tuple.dimensions:
+                    component["dimensions"] = component_tuple.dimensions
+
+                components[_dump_key(component_tuple.name)] = component
+
         entity_dict = EntityDict(
             restriction=restriction,
         )
@@ -490,28 +512,6 @@ async def _get_entities(
             entity_dict["code"] = code
 
         if entity_dict.keys() & {"isRecord", "isFunction"}:
-            component_tuples = []
-            with suppress(exception.OMCError):
-                component_tuples = await session.getComponents(name)
-
-            components: dict[VariableNameString, ComponentDict] = {}
-            for component_tuple in component_tuples:
-                if component_tuple.protected == "public":
-                    component = ComponentDict(
-                        className=_dump_key(component_tuple.className),
-                    )
-
-                    if (
-                        component_tuple.inputOutput == "input"
-                        or component_tuple.inputOutput == "output"
-                    ):
-                        component["inputOutput"] = component_tuple.inputOutput
-
-                    if component_tuple.dimensions:
-                        component["dimensions"] = component_tuple.dimensions
-
-                    components[_dump_key(component_tuple.name)] = component
-
             entity_dict["components"] = components
 
         result[name] = entity_dict
