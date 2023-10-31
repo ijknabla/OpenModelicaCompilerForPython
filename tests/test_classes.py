@@ -105,6 +105,8 @@ def test_typename(typename: TypeName, last_identifier: VariableName) -> None:
     assert eval(repr(typename)) == typename
     assert pickle.loads(pickle.dumps(typename)) == typename
 
+    assert bool(typename.parts) == bool(str(typename))
+
     isinstance(hash(typename), int)
 
     assert typename.last_identifier == last_identifier
