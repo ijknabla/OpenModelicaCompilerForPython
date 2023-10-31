@@ -3,6 +3,7 @@ from __future__ import annotations
 import pickle
 from contextlib import ExitStack
 from itertools import count
+from types import NoneType
 from typing import TYPE_CHECKING, Any, Optional
 
 import pytest
@@ -14,14 +15,15 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.parametrize(
-    "obj", ["a", "b", VariableName("a"), TypeName("a"), 0, 0.0, lambda: None]
+    "obj",
+    [None, "a", "b", VariableName("a"), TypeName("a"), 0, 0.0, lambda: None],
 )
 def test_variablename(obj: Any) -> None:
     variablename: Optional[VariableName] = None
     expected_exception: ExceptionInfo[TypeError] | None = None
 
     with ExitStack() as stack:
-        if not isinstance(obj, (str, VariableName, TypeName)):
+        if not isinstance(obj, (str, VariableName, TypeName, NoneType)):
             expected_exception = stack.enter_context(pytest.raises(TypeError))
         variablename = VariableName(obj)
 
