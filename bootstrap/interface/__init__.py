@@ -12,13 +12,21 @@ from asyncio import (
     wait,
 )
 from asyncio.subprocess import PIPE
-from collections.abc import AsyncGenerator, AsyncIterator, Iterable, Sequence
+from collections.abc import AsyncGenerator, AsyncIterator, Iterable
 from contextlib import ExitStack, suppress
 from dataclasses import dataclass, field
 from functools import reduce
 from pathlib import Path, PurePosixPath
 from subprocess import CalledProcessError
-from typing import Generic, Mapping, NamedTuple, NewType, TypeVar, overload
+from typing import (
+    Generic,
+    Mapping,
+    NamedTuple,
+    NewType,
+    Sequence,
+    TypeVar,
+    overload,
+)
 
 from pkg_resources import resource_filename
 from typing_extensions import Literal, NotRequired, Self, TypedDict
