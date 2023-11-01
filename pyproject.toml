@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "OpenModelicaCompiler"
-version = "0.2.1"
+version = "0.2.2"
 description = "OpenModelica compiler (omc) interface for Python"
 repository = "https://github.com/ijknabla/OpenModelicaCompilerForPython"
 authors = ["ijknabla <ijknabla@gmail.com>"]
