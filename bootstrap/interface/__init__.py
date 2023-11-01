@@ -484,22 +484,6 @@ async def _get_version(session: Session) -> Version:
     return Version.parse(matched.group(1))
 
 
-@overload
-def _dump_key(key: TypeName) -> TypeNameString:
-    ...
-
-
-@overload
-def _dump_key(key: VariableName) -> VariableNameString:
-    ...
-
-
-def _dump_key(
-    key: TypeName | VariableName,
-) -> TypeNameString | VariableNameString:
-    return f"{key!s}"  # type: ignore
-
-
 @dataclass(frozen=True)
 class QueueingIteration(Generic[_T]):
     _queue: Queue[_T] = field(default_factory=Queue)
