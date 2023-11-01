@@ -148,10 +148,10 @@ class EntityDict(TypedDict):
 class TypeEntity(BaseModel):
     restriction: str
     isType: Literal[True]
-    isPackage: Literal[False]
-    isRecord: Literal[False]
-    isFunction: Literal[False]
-    isEnumeration: Literal[False]
+    isPackage: Literal[False] = False
+    isRecord: Literal[False] = False
+    isFunction: Literal[False] = False
+    isEnumeration: Literal[False] = False
 
     @model_serializer
     def __serialize(self) -> EntityDict:
@@ -160,11 +160,11 @@ class TypeEntity(BaseModel):
 
 class PackageEntity(BaseModel):
     restriction: str
-    isType: Literal[False]
+    isType: Literal[False] = False
     isPackage: Literal[True]
-    isRecord: Literal[False]
-    isFunction: Literal[False]
-    isEnumeration: Literal[False]
+    isRecord: Literal[False] = False
+    isFunction: Literal[False] = False
+    isEnumeration: Literal[False] = False
 
     @model_serializer
     def __serialize(self) -> EntityDict:
@@ -173,11 +173,11 @@ class PackageEntity(BaseModel):
 
 class RecordEntity(BaseModel):
     restriction: str
-    isType: Literal[False]
-    isPackage: Literal[False]
+    isType: Literal[False] = False
+    isPackage: Literal[False] = False
     isRecord: Literal[True]
-    isFunction: Literal[False]
-    isEnumeration: Literal[False]
+    isFunction: Literal[False] = False
+    isEnumeration: Literal[False] = False
     code: str
     components: Components
 
@@ -191,7 +191,7 @@ class FunctionEntity(BaseModel):
     isType: Literal[False] = False
     isPackage: Literal[False] = False
     isRecord: Literal[False] = False
-    isFunction: Literal[True] = True
+    isFunction: Literal[True]
     isEnumeration: Literal[False] = False
     code: Union[str, None] = None
     components: Components
@@ -203,11 +203,11 @@ class FunctionEntity(BaseModel):
 
 class EnumerationEntity(BaseModel):
     restriction: str
-    isType: Literal[True] = True
+    isType: Literal[True]
     isPackage: Literal[False] = False
     isRecord: Literal[False] = False
     isFunction: Literal[False] = False
-    isEnumeration: Literal[True] = True
+    isEnumeration: Literal[True]
     code: str
 
     @model_serializer
