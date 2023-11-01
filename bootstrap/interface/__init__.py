@@ -267,22 +267,12 @@ async def create_interface(n: int, exe: str | None) -> Interface:
 
         version = await _get_version(sessions[0])
 
-        async def put(iterator: QueueingIteration[TypeName]) -> list[TypeName]:
-            result: list[TypeName] = []
-
-            async for typename in _iter_recursive(
-                sessions[0], TypeName("OpenModelica")
-            ):
-                await iterator.put(typename)
-                result.append(typename)
-            iterator.put_done()
-
-            return result
-
         typenames_iterator = QueueingIteration[TypeName]()
 
         put_task = await stack.enter_async_context(
-            ensure_cancel(create_task(put(typenames_iterator)))
+            ensure_cancel(
+                create_task(_put_recursive(sessions[0], typenames_iterator))
+            )
         )
 
         entities: Mapping[TypeName, EntityDict]
@@ -690,6 +680,19 @@ async def _get_entity(
         )
 
     return None
+
+
+async def _put_recursive(
+    session: Session, iterator: QueueingIteration[TypeName]
+) -> list[TypeName]:
+    result: list[TypeName] = []
+
+    async for typename in _iter_recursive(session, TypeName("OpenModelica")):
+        await iterator.put(typename)
+        result.append(typename)
+    iterator.put_done()
+
+    return result
 
 
 async def _iter_recursive(
