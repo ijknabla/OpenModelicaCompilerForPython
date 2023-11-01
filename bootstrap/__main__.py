@@ -15,8 +15,10 @@ from tqdm import tqdm
 from typing_extensions import ParamSpec
 
 from .interface import (
-    Interface,
+    EntityDict,
+    TypeNameString,
     Version,
+    VersionString,
     create_interface,
     create_interface_by_docker,
 )
@@ -53,12 +55,8 @@ def main() -> None:
 )
 @run_decorator
 async def interface(n: int, o: IO[str], exe: str | None) -> None:
-    n = max(1, n)
-    yaml.safe_dump(
-        await create_interface(n, exe),
-        o,
-        sort_keys=False,
-    )
+    interface_model = await create_interface(max(1, n), exe)
+    yaml.safe_dump(interface_model.model_dump(), o, sort_keys=False)
 
 
 @main.command()
@@ -126,7 +124,7 @@ if sys.version_info >= (3, 10):
         inputs: Sequence[IO[str]],
         output_dir: Path,
     ) -> None:
-        interface: Interface
+        interface: dict[VersionString, dict[TypeNameString, EntityDict]]
         interface = dict(
             sorted(
                 chain.from_iterable(

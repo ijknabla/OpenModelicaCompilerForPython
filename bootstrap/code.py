@@ -48,10 +48,8 @@ from typing import DefaultDict, NamedTuple
 from omc4py import TypeName
 
 from .interface import (
-    Components,
-    Entities,
-    Entity,
-    Interface,
+    ComponentDict,
+    EntityDict,
     TypeNameString,
     VariableNameString,
     Version,
@@ -59,9 +57,23 @@ from .interface import (
 )
 from .parser import get_enumerators, get_optionals
 
+ComponentsDict = dict[VariableNameString, ComponentDict]
+
+
+class Reference(NamedTuple):
+    input: expr
+    output: expr
+
+
+References = dict[TypeNameString, Reference]
+
+EntitiesDict = dict[TypeNameString, EntityDict]
+
+InterfaceDict = dict[VersionString, EntitiesDict]
+
 
 async def create_code(
-    interface: Interface,
+    interface: InterfaceDict,
 ) -> AsyncGenerator[tuple[PurePath, Module], None]:
     path, module, enum_names, enum_refs = _create_enumeration_module(interface)
     yield path, module
@@ -86,16 +98,8 @@ async def create_code(
                     yield path, module
 
 
-class Reference(NamedTuple):
-    input: expr
-    output: expr
-
-
-References = dict[TypeNameString, Reference]
-
-
 def _create_enumeration_module(
-    interface: Interface,
+    interface: InterfaceDict,
 ) -> tuple[
     PurePath,
     Module,
@@ -179,7 +183,7 @@ def _create_enumeration_module(
 
 
 def _categorize_enumerations(
-    interface: Interface,
+    interface: InterfaceDict,
 ) -> Mapping[
     TypeNameString,
     Mapping[tuple[VariableNameString, ...], list[VersionString]],
@@ -233,7 +237,7 @@ def _create_interface(
     version: VersionString,
     enumeration_names: list[str],
     enumeration_references: References,
-    entities: Entities,
+    entities: EntitiesDict,
 ) -> list[tuple[PurePath, Module]]:
     references = (
         _builtin_references()
@@ -539,7 +543,7 @@ def _builtin_references() -> dict[TypeNameString, Reference]:
 
 
 def _record_references(
-    entities: Entities,
+    entities: EntitiesDict,
 ) -> Generator[tuple[TypeNameString, Reference], None, None]:
     for name, entity in entities.items():
         if entity.get("isRecord"):
@@ -662,7 +666,7 @@ def _create_function_assign(name: TypeNameString) -> Assign:
 
 
 def _create_record(
-    name: TypeNameString, entity: Entity, references: References
+    name: TypeNameString, entity: EntityDict, references: References
 ) -> ClassDef:
     code = entity["code"]
     annotations = dict(_get_annotations(references, entity["components"]))
@@ -720,12 +724,12 @@ def _parents(name: TypeNameString) -> Generator[TypeNameString, None, None]:
         yield TypeNameString(f"{parent}")
 
 
-def _in_package(entities: Entities, name: TypeNameString) -> bool:
+def _in_package(entities: EntitiesDict, name: TypeNameString) -> bool:
     return all(entities[parent].get("isPackage") for parent in _parents(name))
 
 
 def _inputs_outputs(
-    code: str | None, components: Components
+    code: str | None, components: ComponentsDict
 ) -> tuple[dict[VariableNameString, bool], list[VariableNameString]]:
     if code is not None:
         optionals = get_optionals(code)
@@ -745,7 +749,7 @@ def _inputs_outputs(
 
 
 def _get_annotations(
-    references: dict[TypeNameString, Reference], components: Components
+    references: dict[TypeNameString, Reference], components: ComponentsDict
 ) -> Generator[tuple[VariableNameString, expr], None, None]:
     for name, component in components.items():
         io = component.get("inputOutput", "output")

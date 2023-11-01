@@ -18,3 +18,8 @@ python -m bootstrap interface-docker \
   -o bootstrap/interface/ \
   --pip-cache-dir ~/.cache/pip
 ```
+
+## To generate code from interface files
+```
+python -m bootstrap code bootstrap/interface/*.yaml -o omc4py/
+```
