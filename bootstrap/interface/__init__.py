@@ -275,7 +275,7 @@ async def create_interface(n: int, exe: str | None) -> Interface:
             )
         )
 
-        entities: Mapping[TypeName, EntityDict]
+        entities: Mapping[TypeName, Entity]
         entities = ChainMap(
             *await gather(
                 *(
@@ -300,7 +300,9 @@ async def create_interface(n: int, exe: str | None) -> Interface:
     return Interface.model_validate(
         {
             version: {
-                _dump_key(n): e for n, e in entities.items() if e is not None
+                _dump_key(n): e.model_dump()
+                for n, e in entities.items()
+                if e is not None
             }
         }
     )
@@ -537,9 +539,9 @@ class QueueingIteration(Generic[_T]):
 
 async def _get_entities(
     session: Session, typenames: AsyncIterable[TypeName]
-) -> dict[TypeName, EntityDict]:
+) -> dict[TypeName, Entity]:
     return {
-        typename: entity.model_dump()
+        typename: entity
         async for typename in typenames
         for entity in [await _get_entity(session, typename)]
         if entity is not None
