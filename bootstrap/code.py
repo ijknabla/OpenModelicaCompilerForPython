@@ -48,7 +48,7 @@ from typing import DefaultDict, NamedTuple
 from omc4py import TypeName
 
 from .interface import (
-    ComponentsDict,
+    ComponentDict,
     EntitiesDict,
     EntityDict,
     InterfaceDict,
@@ -84,6 +84,9 @@ async def create_code(
             for future in done:
                 for path, module in future.result():
                     yield path, module
+
+
+ComponentsDict = dict[VariableNameString, ComponentDict]
 
 
 class Reference(NamedTuple):

@@ -130,8 +130,6 @@ class Component(BaseModel):
         return result
 
 
-ComponentsDict = Dict[VariableNameString, ComponentDict]
-
 Components = Mapping[AnnotatedVariableName, Component]
 
 
@@ -143,7 +141,7 @@ class EntityDict(TypedDict):
     isFunction: NotRequired[Literal[True]]
     isEnumeration: NotRequired[Literal[True]]
     code: NotRequired[str]
-    components: NotRequired[ComponentsDict]
+    components: NotRequired[Dict[VariableNameString, ComponentDict]]
 
 
 class TypeEntity(BaseModel):
