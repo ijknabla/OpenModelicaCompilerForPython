@@ -18,28 +18,6 @@ from typing import Generic, TypeVar
 _T = TypeVar("_T")
 
 
-@asynccontextmanager
-async def aterminating(
-    process: Process,
-) -> AsyncGenerator[Process, None]:
-    try:
-        yield process
-    finally:
-        if process.returncode is None:
-            process.terminate()
-        await process.wait()
-
-
-@asynccontextmanager
-async def ensure_cancel(task: Task[_T]) -> AsyncGenerator[Task[_T], None]:
-    try:
-        yield task
-    finally:
-        task.cancel()
-        with suppress(CancelledError):
-            await task
-
-
 @dataclass(frozen=True)
 class QueueingIteration(Generic[_T]):
     _queue: Queue[_T] = field(default_factory=Queue)
@@ -74,3 +52,25 @@ class QueueingIteration(Generic[_T]):
     async def __wait_stop(self) -> None:
         await self._put_done.wait()
         await self._queue.join()
+
+
+@asynccontextmanager
+async def ensure_cancel(task: Task[_T]) -> AsyncGenerator[Task[_T], None]:
+    try:
+        yield task
+    finally:
+        task.cancel()
+        with suppress(CancelledError):
+            await task
+
+
+@asynccontextmanager
+async def aterminating(
+    process: Process,
+) -> AsyncGenerator[Process, None]:
+    try:
+        yield process
+    finally:
+        if process.returncode is None:
+            process.terminate()
+        await process.wait()
