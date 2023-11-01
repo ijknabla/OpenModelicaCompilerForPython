@@ -12,21 +12,21 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
     - `0.1.0a0`
     - `0.1.0a1`
 
-## [0.2.1] - 2023-02-09
+## [0.2.1] - 2023-02-09 [YANKED]
 
 ### Added
 
 - `omc4py.v_1_20` Support of _OpenModelica 1.20.x_
 - `omc4py.v_1_19` Support of _OpenModelica 1.19.x_
 
-## [0.2.0] - 2023-02-02
+## [0.2.0] - 2023-02-02 [YANKED]
 
 ### Fixed
 
 - (development environment) Fix tests by GitHub Actions
 - Fix status badges to latest
 
-## [0.2.0a0] - 2023-02-01
+## [0.2.0a0] - 2023-02-01 [YANKED]
 
 ### Changed
 
