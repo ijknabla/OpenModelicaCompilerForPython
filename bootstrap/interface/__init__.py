@@ -24,6 +24,7 @@ from dataclasses import dataclass, field
 from pathlib import Path, PurePosixPath
 from subprocess import CalledProcessError
 from typing import (
+    Any,
     Dict,
     Generic,
     Literal,
@@ -154,7 +155,7 @@ class TypeEntity(BaseModel):
     isEnumeration: Literal[False] = False
 
     @model_serializer
-    def __serialize(self) -> EntityDict:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -167,7 +168,7 @@ class PackageEntity(BaseModel):
     isEnumeration: Literal[False] = False
 
     @model_serializer
-    def __serialize(self) -> EntityDict:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -182,7 +183,7 @@ class RecordEntity(BaseModel):
     components: Components
 
     @model_serializer
-    def __serialize(self) -> EntityDict:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -197,7 +198,7 @@ class FunctionEntity(BaseModel):
     components: Components
 
     @model_serializer
-    def __serialize(self) -> EntityDict:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -211,7 +212,7 @@ class EnumerationEntity(BaseModel):
     code: str
 
     @model_serializer
-    def __serialize(self) -> EntityDict:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
