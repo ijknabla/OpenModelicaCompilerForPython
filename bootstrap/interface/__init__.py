@@ -552,25 +552,98 @@ async def _get_entities(
 
         entity: Entity
 
-        if await session.isType(name):
-            entity = TypeEntity(restriction=restriction)
-        if await session.isPackage(name):
-            entity = PackageEntity(restriction=restriction)
-        if await session.isRecord(name):
+        isType, isPackage, isRecord, isFunction, isEnumeration = await gather(
+            session.isType(name),
+            session.isPackage(name),
+            session.isRecord(name),
+            session.isFunction(name),
+            session.isEnumeration(name),
+        )
+
+        if (
+            True
+            and isType
+            and not isPackage
+            and not isRecord
+            and not isFunction
+            and not isEnumeration
+        ):
+            entity = TypeEntity(
+                restriction=restriction,
+                isType=isType,
+                isPackage=isPackage,
+                isRecord=isRecord,
+                isFunction=isFunction,
+                isEnumeration=isEnumeration,
+            )
+        if (
+            True
+            and not isType
+            and isPackage
+            and not isRecord
+            and not isFunction
+            and not isEnumeration
+        ):
+            entity = PackageEntity(
+                restriction=restriction,
+                isType=isType,
+                isPackage=isPackage,
+                isRecord=isRecord,
+                isFunction=isFunction,
+                isEnumeration=isEnumeration,
+            )
+        if (
+            True
+            and not isType
+            and not isPackage
+            and isRecord
+            and not isFunction
+            and not isEnumeration
+        ):
             entity = RecordEntity(
                 restriction=restriction,
                 code=code_not_interface_only,
                 components=Components.model_validate(components),
+                isType=isType,
+                isPackage=isPackage,
+                isRecord=isRecord,
+                isFunction=isFunction,
+                isEnumeration=isEnumeration,
             )
-        if await session.isFunction(name):
+        if (
+            True
+            and not isType
+            and not isPackage
+            and not isRecord
+            and isFunction
+            and not isEnumeration
+        ):
             entity = FunctionEntity(
                 restriction=restriction,
                 code=code_interface_only,
                 components=Components.model_validate(components),
+                isType=isType,
+                isPackage=isPackage,
+                isRecord=isRecord,
+                isFunction=isFunction,
+                isEnumeration=isEnumeration,
             )
-        if await session.isEnumeration(name):
+        if (
+            True
+            and isType
+            and not isPackage
+            and not isRecord
+            and not isFunction
+            and isEnumeration
+        ):
             entity = EnumerationEntity(
-                restriction=restriction, code=code_not_interface_only
+                restriction=restriction,
+                code=code_not_interface_only,
+                isType=isType,
+                isPackage=isPackage,
+                isRecord=isRecord,
+                isFunction=isFunction,
+                isEnumeration=isEnumeration,
             )
 
         result[name] = entity.model_dump()
