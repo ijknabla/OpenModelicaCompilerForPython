@@ -14,21 +14,29 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Add Type-hints for session class
 - Support asyncio (coroutine) in session class
 
-## [0.2.1] - 2023-02-09
+## [0.2.2] - 2023-11-01
+
+### Fixed
+
+- Dependencies for `modelicalang`
+    - `0.1.0a0`
+    - `0.1.0a1`
+
+## [0.2.1] - 2023-02-09 [YANKED]
 
 ### Added
 
 - `omc4py.v_1_20` Support of _OpenModelica 1.20.x_
 - `omc4py.v_1_19` Support of _OpenModelica 1.19.x_
 
-## [0.2.0] - 2023-02-02
+## [0.2.0] - 2023-02-02 [YANKED]
 
 ### Fixed
 
 - (development environment) Fix tests by GitHub Actions
 - Fix status badges to latest
 
-## [0.2.0a0] - 2023-02-01
+## [0.2.0a0] - 2023-02-01 [YANKED]
 
 ### Changed
 
@@ -68,7 +76,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
 [Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a0...HEAD
-[0.3.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.1...v0.3.0a0
+[0.3.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.2...v0.3.0a0
+[0.2.2]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0a0...v0.2.0
 [0.2.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.1...v0.2.0a0
