@@ -256,7 +256,7 @@ async def create_interface(n: int, exe: str | None) -> Interface:
     async with AsyncExitStack() as stack:
         sessions = [
             stack.enter_context(open_session(exe, asyncio=True))
-            for _ in range(min(1, n))
+            for _ in range(n)
         ]
 
         version = await _get_version(sessions[0])
