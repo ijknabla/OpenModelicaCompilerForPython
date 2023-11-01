@@ -537,6 +537,34 @@ class QueueingIteration(Generic[_T]):
         await self._queue.join()
 
 
+async def _put_recursive(
+    session: Session, iterator: QueueingIteration[TypeName]
+) -> list[TypeName]:
+    result: list[TypeName] = []
+
+    async for typename in _iter_recursive(session, TypeName("OpenModelica")):
+        await iterator.put(typename)
+        result.append(typename)
+    iterator.put_done()
+
+    return result
+
+
+async def _iter_recursive(
+    session: Session, name: TypeName
+) -> AsyncGenerator[TypeName, None]:
+    yield name
+    try:
+        children = await session.getClassNames(
+            name, builtin=True, showProtected=True
+        )
+    except exception.OMCError:
+        return
+    for child in children:
+        async for child_item in _iter_recursive(session, name / child):
+            yield child_item
+
+
 async def _get_entities(
     session: Session, typenames: AsyncIterable[TypeName]
 ) -> dict[TypeName, Entity]:
@@ -685,31 +713,3 @@ async def _iter_components(
                     component.dimensions = component_tuple.dimensions
 
                 yield component_tuple.name, component
-
-
-async def _put_recursive(
-    session: Session, iterator: QueueingIteration[TypeName]
-) -> list[TypeName]:
-    result: list[TypeName] = []
-
-    async for typename in _iter_recursive(session, TypeName("OpenModelica")):
-        await iterator.put(typename)
-        result.append(typename)
-    iterator.put_done()
-
-    return result
-
-
-async def _iter_recursive(
-    session: Session, name: TypeName
-) -> AsyncGenerator[TypeName, None]:
-    yield name
-    try:
-        children = await session.getClassNames(
-            name, builtin=True, showProtected=True
-        )
-    except exception.OMCError:
-        return
-    for child in children:
-        async for child_item in _iter_recursive(session, name / child):
-            yield child_item
