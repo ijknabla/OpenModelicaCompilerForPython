@@ -519,146 +519,156 @@ async def _get_entities(
 ) -> dict[TypeName, EntityDict | None]:
     result: dict[TypeName, EntityDict | None] = {}
     if put:
-        async for name in _iter_recursive(session, TypeName("OpenModelica")):
-            result[name] = None
-            await iterator.put(name)
+        async for typename in _iter_recursive(
+            session, TypeName("OpenModelica")
+        ):
+            result[typename] = None
+            await iterator.put(typename)
         iterator.put_done()
 
-    async for name in iterator:
-        try:
-            restriction = await session.getClassRestriction(name)
-        except exception.OMCError:
-            continue
+    async for typename in iterator:
+        entity = await _get_entity(session, typename)
 
-        code = await session.list(name, interfaceOnly=False)
-        code_kwargs = {"code": code} if code else {}
-
-        interface_only_code = await session.list(name, interfaceOnly=True)
-        interface_only_code_kwargs = (
-            {"code": interface_only_code} if interface_only_code else {}
-        )
-
-        component_tuples = []
-        with suppress(exception.OMCError):
-            component_tuples = await session.getComponents(name)
-
-        components: dict[VariableNameString, ComponentDict] = {}
-        for component_tuple in component_tuples:
-            if component_tuple.protected == "public":
-                component = ComponentDict(
-                    className=_dump_key(component_tuple.className),
-                )
-
-                if (
-                    component_tuple.inputOutput == "input"
-                    or component_tuple.inputOutput == "output"
-                ):
-                    component["inputOutput"] = component_tuple.inputOutput
-
-                if component_tuple.dimensions:
-                    component["dimensions"] = component_tuple.dimensions
-
-                components[_dump_key(component_tuple.name)] = component
-
-        entity: Entity
-
-        isType, isPackage, isRecord, isFunction, isEnumeration = await gather(
-            session.isType(name),
-            session.isPackage(name),
-            session.isRecord(name),
-            session.isFunction(name),
-            session.isEnumeration(name),
-        )
-
-        if (
-            True
-            and isType
-            and not isPackage
-            and not isRecord
-            and not isFunction
-            and not isEnumeration
-        ):
-            entity = TypeEntity(
-                restriction=restriction,
-                isType=isType,
-                isPackage=isPackage,
-                isRecord=isRecord,
-                isFunction=isFunction,
-                isEnumeration=isEnumeration,
-            )
-        if (
-            True
-            and not isType
-            and isPackage
-            and not isRecord
-            and not isFunction
-            and not isEnumeration
-        ):
-            entity = PackageEntity(
-                restriction=restriction,
-                isType=isType,
-                isPackage=isPackage,
-                isRecord=isRecord,
-                isFunction=isFunction,
-                isEnumeration=isEnumeration,
-            )
-        if (
-            True
-            and not isType
-            and not isPackage
-            and isRecord
-            and not isFunction
-            and not isEnumeration
-        ):
-            entity = RecordEntity(
-                restriction=restriction,
-                **code_kwargs,
-                components=Components.model_validate(components),
-                isType=isType,
-                isPackage=isPackage,
-                isRecord=isRecord,
-                isFunction=isFunction,
-                isEnumeration=isEnumeration,
-            )
-        if (
-            True
-            and not isType
-            and not isPackage
-            and not isRecord
-            and isFunction
-            and not isEnumeration
-        ):
-            entity = FunctionEntity(
-                restriction=restriction,
-                **interface_only_code_kwargs,
-                components=Components.model_validate(components),
-                isType=isType,
-                isPackage=isPackage,
-                isRecord=isRecord,
-                isFunction=isFunction,
-                isEnumeration=isEnumeration,
-            )
-        if (
-            True
-            and isType
-            and not isPackage
-            and not isRecord
-            and not isFunction
-            and isEnumeration
-        ):
-            entity = EnumerationEntity(
-                restriction=restriction,
-                **code_kwargs,
-                isType=isType,
-                isPackage=isPackage,
-                isRecord=isRecord,
-                isFunction=isFunction,
-                isEnumeration=isEnumeration,
-            )
-
-        result[name] = entity.model_dump()
+        if entity is not None:
+            result[typename] = entity.model_dump()
 
     return result
+
+
+async def _get_entity(
+    session: Session,
+    name: TypeName,
+) -> Entity | None:
+    try:
+        restriction = await session.getClassRestriction(name)
+    except exception.OMCError:
+        return None
+
+    code = await session.list(name, interfaceOnly=False)
+    code_kwargs = {"code": code} if code else {}
+
+    interface_only_code = await session.list(name, interfaceOnly=True)
+    interface_only_code_kwargs = (
+        {"code": interface_only_code} if interface_only_code else {}
+    )
+
+    component_tuples = []
+    with suppress(exception.OMCError):
+        component_tuples = await session.getComponents(name)
+
+    components: dict[VariableNameString, ComponentDict] = {}
+    for component_tuple in component_tuples:
+        if component_tuple.protected == "public":
+            component = ComponentDict(
+                className=_dump_key(component_tuple.className),
+            )
+
+            if (
+                component_tuple.inputOutput == "input"
+                or component_tuple.inputOutput == "output"
+            ):
+                component["inputOutput"] = component_tuple.inputOutput
+
+            if component_tuple.dimensions:
+                component["dimensions"] = component_tuple.dimensions
+
+            components[_dump_key(component_tuple.name)] = component
+
+    isType, isPackage, isRecord, isFunction, isEnumeration = await gather(
+        session.isType(name),
+        session.isPackage(name),
+        session.isRecord(name),
+        session.isFunction(name),
+        session.isEnumeration(name),
+    )
+
+    if (
+        True
+        and isType
+        and not isPackage
+        and not isRecord
+        and not isFunction
+        and not isEnumeration
+    ):
+        return TypeEntity(
+            restriction=restriction,
+            isType=isType,
+            isPackage=isPackage,
+            isRecord=isRecord,
+            isFunction=isFunction,
+            isEnumeration=isEnumeration,
+        )
+    if (
+        True
+        and not isType
+        and isPackage
+        and not isRecord
+        and not isFunction
+        and not isEnumeration
+    ):
+        return PackageEntity(
+            restriction=restriction,
+            isType=isType,
+            isPackage=isPackage,
+            isRecord=isRecord,
+            isFunction=isFunction,
+            isEnumeration=isEnumeration,
+        )
+    if (
+        True
+        and not isType
+        and not isPackage
+        and isRecord
+        and not isFunction
+        and not isEnumeration
+    ):
+        return RecordEntity(
+            restriction=restriction,
+            **code_kwargs,
+            components=Components.model_validate(components),
+            isType=isType,
+            isPackage=isPackage,
+            isRecord=isRecord,
+            isFunction=isFunction,
+            isEnumeration=isEnumeration,
+        )
+    if (
+        True
+        and not isType
+        and not isPackage
+        and not isRecord
+        and isFunction
+        and not isEnumeration
+    ):
+        return FunctionEntity(
+            restriction=restriction,
+            **interface_only_code_kwargs,
+            components=Components.model_validate(components),
+            isType=isType,
+            isPackage=isPackage,
+            isRecord=isRecord,
+            isFunction=isFunction,
+            isEnumeration=isEnumeration,
+        )
+    if (
+        True
+        and isType
+        and not isPackage
+        and not isRecord
+        and not isFunction
+        and isEnumeration
+    ):
+        return EnumerationEntity(
+            restriction=restriction,
+            **code_kwargs,
+            isType=isType,
+            isPackage=isPackage,
+            isRecord=isRecord,
+            isFunction=isFunction,
+            isEnumeration=isEnumeration,
+        )
+
+    return None
 
 
 async def _iter_recursive(
