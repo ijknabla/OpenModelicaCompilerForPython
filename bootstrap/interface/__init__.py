@@ -150,10 +150,7 @@ class TypeEntity(BaseModel):
 
     @model_serializer
     def __serialize(self) -> EntityDict:
-        return EntityDict(
-            restriction=self.restriction,
-            isType=self.isType,
-        )
+        return _entity_serializer(self)
 
 
 class PackageEntity(BaseModel):
@@ -166,10 +163,7 @@ class PackageEntity(BaseModel):
 
     @model_serializer
     def __serialize(self) -> EntityDict:
-        return EntityDict(
-            restriction=self.restriction,
-            isPackage=self.isPackage,
-        )
+        return _entity_serializer(self)
 
 
 class RecordEntity(BaseModel):
@@ -184,12 +178,7 @@ class RecordEntity(BaseModel):
 
     @model_serializer
     def __serialize(self) -> EntityDict:
-        return EntityDict(
-            restriction=self.restriction,
-            isRecord=self.isRecord,
-            code=self.code,
-            components=self.components.model_dump(),
-        )
+        return _entity_serializer(self)
 
 
 class FunctionEntity(BaseModel):
@@ -204,15 +193,7 @@ class FunctionEntity(BaseModel):
 
     @model_serializer
     def __serialize(self) -> EntityDict:
-        result = EntityDict(
-            restriction=self.restriction,
-            isFunction=self.isFunction,
-            code=self.code,
-            components=self.components.model_dump(),
-        )
-        if not result["code"]:
-            del result["code"]
-        return result
+        return _entity_serializer(self)
 
 
 class EnumerationEntity(BaseModel):
@@ -226,16 +207,10 @@ class EnumerationEntity(BaseModel):
 
     @model_serializer
     def __serialize(self) -> EntityDict:
-        return EntityDict(
-            restriction=self.restriction,
-            isType=self.isType,
-            isEnumeration=self.isEnumeration,
-            code=self.code,
-        )
+        return _entity_serializer(self)
 
 
-@PlainSerializer
-def _entity_serializer(entity: AnnotatedEntity) -> EntityDict:
+def _entity_serializer(entity: Entity) -> EntityDict:
     result = EntityDict(restriction=entity.restriction)
 
     IsAttribute = Literal[
@@ -264,17 +239,6 @@ def _entity_serializer(entity: AnnotatedEntity) -> EntityDict:
 
 Entity = Union[
     TypeEntity, PackageEntity, RecordEntity, FunctionEntity, EnumerationEntity
-]
-
-AnnotatedEntity = Annotated[
-    Union[
-        TypeEntity,
-        PackageEntity,
-        RecordEntity,
-        FunctionEntity,
-        EnumerationEntity,
-    ],
-    _entity_serializer,
 ]
 
 
