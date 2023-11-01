@@ -47,6 +47,7 @@ repos:
         -   --output=requirements.lint.txt
         language: system
         files: ^(\.pre\-commit/poetry_export_requirements\.py|poetry\.lock)$
+        pass_filenames: false
     -   id: poetry-export-test-requirements
         name: Export requirements.test.txt
         entry: poetry
@@ -58,3 +59,4 @@ repos:
         -   --output=requirements.test.txt
         language: system
         files: ^(\.pre\-commit/poetry_export_requirements\.py|poetry\.lock)$
+        pass_filenames: false
