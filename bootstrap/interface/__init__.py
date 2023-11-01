@@ -314,7 +314,7 @@ async def create_interface(n: int, exe: str | None) -> Interface:
             if typename in entities
         }
 
-    return Interface({version: entities})
+    return Interface(root={version: entities})
 
 
 async def create_interface_by_docker(
