@@ -28,6 +28,8 @@ from typing import (
     Sequence,
     TypeVar,
     Union,
+    cast,
+    get_args,
     overload,
 )
 
@@ -232,8 +234,47 @@ class EnumerationEntity(BaseModel):
         )
 
 
+@PlainSerializer
+def _entity_serializer(entity: AnnotatedEntity) -> EntityDict:
+    result = EntityDict(restriction=entity.restriction)
+
+    IsAttribute = Literal[
+        "isType", "isPackage", "isRecord", "isFunction", "isEnumeration"
+    ]
+    is_attribute: IsAttribute
+    for is_attribute in get_args(IsAttribute):
+        value = getattr(entity, is_attribute, False)
+        if value:
+            result[is_attribute] = value
+
+    code: str | None = None
+    if not isinstance(entity, (TypeEntity, PackageEntity)):
+        code = entity.code
+    if code is not None:
+        result["code"] = code
+
+    components: ComponentsDict | None = None
+    if not isinstance(entity, (TypeEntity, PackageEntity, EnumerationEntity)):
+        components = cast(ComponentsDict, entity.components.model_dump())
+    if components is not None:
+        result["components"] = components
+
+    return result
+
+
 Entity = Union[
     TypeEntity, PackageEntity, RecordEntity, FunctionEntity, EnumerationEntity
+]
+
+AnnotatedEntity = Annotated[
+    Union[
+        TypeEntity,
+        PackageEntity,
+        RecordEntity,
+        FunctionEntity,
+        EnumerationEntity,
+    ],
+    _entity_serializer,
 ]
 
 
