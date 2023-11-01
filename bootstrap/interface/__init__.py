@@ -525,8 +525,13 @@ async def _get_entities(
         except exception.OMCError:
             continue
 
-        code_not_interface_only = await session.list(name, interfaceOnly=False)
-        code_interface_only = await session.list(name, interfaceOnly=True)
+        code = await session.list(name, interfaceOnly=False)
+        code_kwargs = {"code": code} if code else {}
+
+        interface_only_code = await session.list(name, interfaceOnly=True)
+        interface_only_code_kwargs = (
+            {"code": interface_only_code} if interface_only_code else {}
+        )
 
         component_tuples = []
         with suppress(exception.OMCError):
@@ -602,7 +607,7 @@ async def _get_entities(
         ):
             entity = RecordEntity(
                 restriction=restriction,
-                code=code_not_interface_only,
+                **code_kwargs,
                 components=Components.model_validate(components),
                 isType=isType,
                 isPackage=isPackage,
@@ -620,7 +625,7 @@ async def _get_entities(
         ):
             entity = FunctionEntity(
                 restriction=restriction,
-                code=code_interface_only,
+                **interface_only_code_kwargs,
                 components=Components.model_validate(components),
                 isType=isType,
                 isPackage=isPackage,
@@ -638,7 +643,7 @@ async def _get_entities(
         ):
             entity = EnumerationEntity(
                 restriction=restriction,
-                code=code_not_interface_only,
+                **code_kwargs,
                 isType=isType,
                 isPackage=isPackage,
                 isRecord=isRecord,
