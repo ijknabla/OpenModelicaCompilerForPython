@@ -246,14 +246,9 @@ Entity = Union[
 ]
 
 
-EntitiesDict = Dict[TypeNameString, EntityDict]
-
-Entities = Mapping[AnnotatedTypeName, Entity]
-
-InterfaceDict = Dict[VersionString, EntitiesDict]
-
-
-class Interface(RootModel[Mapping[AnnotatedVersion, Entities]]):
+class Interface(
+    RootModel[Mapping[AnnotatedVersion, Mapping[AnnotatedTypeName, Entity]]]
+):
     ...
 
 

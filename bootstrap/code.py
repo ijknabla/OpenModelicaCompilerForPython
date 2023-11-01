@@ -49,15 +49,27 @@ from omc4py import TypeName
 
 from .interface import (
     ComponentDict,
-    EntitiesDict,
     EntityDict,
-    InterfaceDict,
     TypeNameString,
     VariableNameString,
     Version,
     VersionString,
 )
 from .parser import get_enumerators, get_optionals
+
+ComponentsDict = dict[VariableNameString, ComponentDict]
+
+
+class Reference(NamedTuple):
+    input: expr
+    output: expr
+
+
+References = dict[TypeNameString, Reference]
+
+EntitiesDict = dict[TypeNameString, EntityDict]
+
+InterfaceDict = dict[VersionString, EntitiesDict]
 
 
 async def create_code(
@@ -84,17 +96,6 @@ async def create_code(
             for future in done:
                 for path, module in future.result():
                     yield path, module
-
-
-ComponentsDict = dict[VariableNameString, ComponentDict]
-
-
-class Reference(NamedTuple):
-    input: expr
-    output: expr
-
-
-References = dict[TypeNameString, Reference]
 
 
 def _create_enumeration_module(
