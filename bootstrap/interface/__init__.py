@@ -36,7 +36,7 @@ from typing_extensions import Annotated, NotRequired, Self, TypedDict
 from omc4py import TypeName, VariableName, exception, open_session
 from omc4py.latest.aio import Session
 
-from ..util import QueueingIteration, aterminating, ensure_cancel
+from ..util import QueueingIteration, ensure_cancel, ensure_terminate
 
 _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
@@ -302,7 +302,7 @@ async def create_interface_by_docker(
 ) -> None:
     requirements: list[str] = []
 
-    async with aterminating(
+    async with ensure_terminate(
         await create_subprocess_exec(
             "poetry",
             "export",
@@ -440,7 +440,7 @@ async def _docker_run(
         image,
         *args,
     ]
-    async with aterminating(
+    async with ensure_terminate(
         await create_subprocess_exec(
             *cmd,
             stdout=PIPE if pipe else None,

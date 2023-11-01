@@ -65,7 +65,7 @@ async def ensure_cancel(task: Task[_T]) -> AsyncGenerator[Task[_T], None]:
 
 
 @asynccontextmanager
-async def aterminating(
+async def ensure_terminate(
     process: Process,
 ) -> AsyncGenerator[Process, None]:
     try:
