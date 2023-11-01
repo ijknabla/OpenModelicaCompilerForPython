@@ -565,27 +565,9 @@ async def _get_entity(
         {"code": interface_only_code} if interface_only_code else {}
     )
 
-    async def iter_components() -> AsyncGenerator[
-        tuple[VariableName, Component], None
-    ]:
-        with suppress(exception.OMCError):
-            for component_tuple in await session.getComponents(name):
-                if component_tuple.protected == "public":
-                    component = Component(
-                        className=component_tuple.className,
-                    )
-                    if (
-                        component_tuple.inputOutput == "input"
-                        or component_tuple.inputOutput == "output"
-                    ):
-                        component.inputOutput = component_tuple.inputOutput
-
-                    if component_tuple.dimensions:
-                        component.dimensions = component_tuple.dimensions
-
-                    yield component_tuple.name, component
-
-    components: Components = {k: v async for k, v in iter_components()}
+    components: Components = {
+        k: v async for k, v in _iter_components(session, name)
+    }
 
     isType, isPackage, isRecord, isFunction, isEnumeration = await gather(
         session.isType(name),
@@ -682,6 +664,27 @@ async def _get_entity(
         )
 
     return None
+
+
+async def _iter_components(
+    session: Session, typename: TypeName
+) -> AsyncGenerator[tuple[VariableName, Component], None]:
+    with suppress(exception.OMCError):
+        for component_tuple in await session.getComponents(typename):
+            if component_tuple.protected == "public":
+                component = Component(
+                    className=component_tuple.className,
+                )
+                if (
+                    component_tuple.inputOutput == "input"
+                    or component_tuple.inputOutput == "output"
+                ):
+                    component.inputOutput = component_tuple.inputOutput
+
+                if component_tuple.dimensions:
+                    component.dimensions = component_tuple.dimensions
+
+                yield component_tuple.name, component
 
 
 async def _put_recursive(
