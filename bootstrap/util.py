@@ -11,33 +11,11 @@ from asyncio import (
 )
 from asyncio.subprocess import Process
 from collections.abc import AsyncGenerator, AsyncIterator
-from contextlib import asynccontextmanager, suppress
+from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from dataclasses import dataclass, field
 from typing import Generic, TypeVar
 
 _T = TypeVar("_T")
-
-
-@asynccontextmanager
-async def aterminating(
-    process: Process,
-) -> AsyncGenerator[Process, None]:
-    try:
-        yield process
-    finally:
-        if process.returncode is None:
-            process.terminate()
-        await process.wait()
-
-
-@asynccontextmanager
-async def ensure_cancel(task: Task[_T]) -> AsyncGenerator[Task[_T], None]:
-    try:
-        yield task
-    finally:
-        task.cancel()
-        with suppress(CancelledError):
-            await task
 
 
 @dataclass(frozen=True)
@@ -52,26 +30,47 @@ class QueueingIteration(Generic[_T]):
         self._put_done.set()
 
     async def __aiter__(self) -> AsyncIterator[_T]:
-        stop_task = create_task(self.__wait_stop())
-
-        while True:
-            get_task = create_task(self._queue.get())
-            done, pending = await wait(
-                [get_task, stop_task], return_when=FIRST_COMPLETED
+        async with AsyncExitStack() as stack:
+            enter = stack.enter_async_context
+            stop_task = await enter(
+                ensure_cancel(create_task(self.__wait_stop()))
             )
-            if get_task in done:
-                try:
-                    yield get_task.result()
-                finally:
+
+            while True:
+                get_task = await enter(
+                    ensure_cancel(create_task(self._queue.get()))
+                )
+                done, _ = await wait(
+                    {get_task, stop_task}, return_when=FIRST_COMPLETED
+                )
+                if get_task in done:
                     self._queue.task_done()
-            else:
-                for task in pending:
-                    task.cancel()
-                for task in pending:
-                    with suppress(CancelledError):
-                        await task
-                break
+                    yield get_task.result()
+                else:
+                    break
 
     async def __wait_stop(self) -> None:
         await self._put_done.wait()
         await self._queue.join()
+
+
+@asynccontextmanager
+async def ensure_cancel(task: Task[_T]) -> AsyncGenerator[Task[_T], None]:
+    try:
+        yield task
+    finally:
+        task.cancel()
+        with suppress(CancelledError):
+            await task
+
+
+@asynccontextmanager
+async def ensure_terminate(
+    process: Process,
+) -> AsyncGenerator[Process, None]:
+    try:
+        yield process
+    finally:
+        if process.returncode is None:
+            process.terminate()
+        await process.wait()
