@@ -478,10 +478,10 @@ async def _docker_run(
     return None
 
 
-async def _get_version(session: Session) -> VersionString:
+async def _get_version(session: Session) -> Version:
     matched = re.search(r"(\d+\.\d+)\.\d+", await session.getVersion())
     assert matched is not None
-    return VersionString(matched.group(1))
+    return Version.parse(matched.group(1))
 
 
 @overload
