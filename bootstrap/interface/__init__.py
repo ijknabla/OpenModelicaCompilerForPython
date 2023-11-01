@@ -130,9 +130,25 @@ class ComponentDict(TypedDict):
     dimensions: NotRequired[Sequence[str]]
 
 
+class Component(BaseModel):
+    className: AnnotatedTypeName
+    inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
+    dimensions: Union[Sequence[str], None] = None
+
+    @model_serializer
+    def __serialize(self) -> Dict[str, Any]:
+        result = ComponentDict(className=TypeNameString(f"{self.className}"))
+        if self.inputOutput != "unspecified":
+            result["inputOutput"] = self.inputOutput
+        if self.dimensions is not None:
+            result["dimensions"] = self.dimensions
+
+        return result
+
+
 ComponentsDict = Dict[VariableNameString, ComponentDict]
 
-Components = RootModel[Dict[AnnotatedVariableName, ComponentDict]]
+Components = RootModel[Dict[AnnotatedVariableName, Component]]
 
 
 class EntityDict(TypedDict):
