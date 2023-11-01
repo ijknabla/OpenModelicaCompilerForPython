@@ -469,15 +469,6 @@ async def _docker_run(
     return None
 
 
-def _union(
-    mapping_a: Mapping[_T_key, _T_value], mapping_b: Mapping[_T_key, _T_value]
-) -> dict[_T_key, _T_value]:
-    result = dict(mapping_a)
-    for k, v in mapping_b.items():
-        result[k] = v
-    return result
-
-
 async def _get_version(session: Session) -> VersionString:
     matched = re.search(r"(\d+\.\d+)\.\d+", await session.getVersion())
     assert matched is not None
