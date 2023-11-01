@@ -136,7 +136,7 @@ class Component(BaseModel):
     dimensions: Union[Sequence[str], None] = None
 
     @model_serializer
-    def __serialize(self) -> Dict[str, Any]:
+    def __serialize(self) -> Any:
         result = ComponentDict(className=TypeNameString(f"{self.className}"))
         if self.inputOutput != "unspecified":
             result["inputOutput"] = self.inputOutput
@@ -171,7 +171,7 @@ class TypeEntity(BaseModel):
     isEnumeration: Literal[False] = False
 
     @model_serializer
-    def __serialize(self) -> Dict[str, Any]:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -184,7 +184,7 @@ class PackageEntity(BaseModel):
     isEnumeration: Literal[False] = False
 
     @model_serializer
-    def __serialize(self) -> Dict[str, Any]:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -199,7 +199,7 @@ class RecordEntity(BaseModel):
     components: Components
 
     @model_serializer
-    def __serialize(self) -> Dict[str, Any]:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -214,7 +214,7 @@ class FunctionEntity(BaseModel):
     components: Components
 
     @model_serializer
-    def __serialize(self) -> Dict[str, Any]:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
@@ -228,7 +228,7 @@ class EnumerationEntity(BaseModel):
     code: str
 
     @model_serializer
-    def __serialize(self) -> Dict[str, Any]:
+    def __serialize(self) -> Any:
         return _entity_serializer(self)
 
 
