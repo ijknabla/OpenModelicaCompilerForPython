@@ -55,12 +55,8 @@ def main() -> None:
 )
 @run_decorator
 async def interface(n: int, o: IO[str], exe: str | None) -> None:
-    n = max(1, n)
-    yaml.safe_dump(
-        (await create_interface(n, exe)).model_dump(),
-        o,
-        sort_keys=False,
-    )
+    interface_model = await create_interface(max(1, n), exe)
+    yaml.safe_dump(interface_model.model_dump(), o, sort_keys=False)
 
 
 @main.command()
