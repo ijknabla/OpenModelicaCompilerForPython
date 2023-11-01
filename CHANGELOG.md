@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.2.2] - 2023-11-01
+
 ### Fixed
 
 - Dependencies for `modelicalang`
@@ -65,7 +67,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
-[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.1...HEAD
+[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0a0...v0.2.0
 [0.2.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.1.1...v0.2.0a0
