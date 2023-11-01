@@ -250,7 +250,7 @@ Entity = Union[
 
 EntitiesDict = Dict[TypeNameString, EntityDict]
 
-Entities = Mapping[AnnotatedTypeName, EntityDict]
+Entities = Mapping[AnnotatedTypeName, Entity]
 
 InterfaceDict = Dict[VersionString, EntitiesDict]
 
@@ -298,15 +298,7 @@ async def create_interface(n: int, exe: str | None) -> Interface:
             if typename in entities
         }
 
-    return Interface.model_validate(
-        {
-            version: {
-                _dump_key(n): e.model_dump()
-                for n, e in entities.items()
-                if e is not None
-            }
-        }
-    )
+    return Interface({version: entities})
 
 
 async def create_interface_by_docker(
