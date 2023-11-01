@@ -148,7 +148,7 @@ class Component(BaseModel):
 
 ComponentsDict = Dict[VariableNameString, ComponentDict]
 
-Components = RootModel[Dict[AnnotatedVariableName, Component]]
+Components = Mapping[AnnotatedVariableName, Component]
 
 
 class EntityDict(TypedDict):
@@ -250,11 +250,11 @@ def _entity_serializer(entity: Entity) -> EntityDict:
     if code is not None:
         result["code"] = code
 
-    components: ComponentsDict | None = None
     if not isinstance(entity, (TypeEntity, PackageEntity, EnumerationEntity)):
-        components = cast(ComponentsDict, entity.components.model_dump())
-    if components is not None:
-        result["components"] = components
+        result["components"] = {
+            VariableNameString(f"{k}"): cast(ComponentDict, v.model_dump())
+            for k, v in entity.components.items()
+        }
 
     return result
 
@@ -565,27 +565,27 @@ async def _get_entity(
         {"code": interface_only_code} if interface_only_code else {}
     )
 
-    component_tuples = []
-    with suppress(exception.OMCError):
-        component_tuples = await session.getComponents(name)
+    async def iter_components() -> AsyncGenerator[
+        tuple[VariableName, Component], None
+    ]:
+        with suppress(exception.OMCError):
+            for component_tuple in await session.getComponents(name):
+                if component_tuple.protected == "public":
+                    component = Component(
+                        className=component_tuple.className,
+                    )
+                    if (
+                        component_tuple.inputOutput == "input"
+                        or component_tuple.inputOutput == "output"
+                    ):
+                        component.inputOutput = component_tuple.inputOutput
 
-    components: dict[VariableNameString, ComponentDict] = {}
-    for component_tuple in component_tuples:
-        if component_tuple.protected == "public":
-            component = ComponentDict(
-                className=_dump_key(component_tuple.className),
-            )
+                    if component_tuple.dimensions:
+                        component.dimensions = component_tuple.dimensions
 
-            if (
-                component_tuple.inputOutput == "input"
-                or component_tuple.inputOutput == "output"
-            ):
-                component["inputOutput"] = component_tuple.inputOutput
+                    yield component_tuple.name, component
 
-            if component_tuple.dimensions:
-                component["dimensions"] = component_tuple.dimensions
-
-            components[_dump_key(component_tuple.name)] = component
+    components: Components = {k: v async for k, v in iter_components()}
 
     isType, isPackage, isRecord, isFunction, isEnumeration = await gather(
         session.isType(name),
@@ -638,7 +638,7 @@ async def _get_entity(
         return RecordEntity(
             restriction=restriction,
             **code_kwargs,
-            components=Components.model_validate(components),
+            components=components,
             isType=isType,
             isPackage=isPackage,
             isRecord=isRecord,
@@ -656,7 +656,7 @@ async def _get_entity(
         return FunctionEntity(
             restriction=restriction,
             **interface_only_code_kwargs,
-            components=Components.model_validate(components),
+            components=components,
             isType=isType,
             isPackage=isPackage,
             isRecord=isRecord,
