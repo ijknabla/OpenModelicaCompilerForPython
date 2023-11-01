@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Dependencies for `modelicalang`
+    - `0.1.0a0`
+    - `0.1.0a1`
+
 ## [0.2.1] - 2023-02-09
 
 ### Added
