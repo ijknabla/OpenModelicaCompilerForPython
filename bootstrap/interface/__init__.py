@@ -12,10 +12,15 @@ from asyncio import (
     wait,
 )
 from asyncio.subprocess import PIPE
-from collections.abc import AsyncGenerator, AsyncIterator, Iterable
-from contextlib import ExitStack, suppress
+from collections import ChainMap
+from collections.abc import (
+    AsyncGenerator,
+    AsyncIterable,
+    AsyncIterator,
+    Iterable,
+)
+from contextlib import AsyncExitStack, suppress
 from dataclasses import dataclass, field
-from functools import reduce
 from pathlib import Path, PurePosixPath
 from subprocess import CalledProcessError
 from typing import (
@@ -46,7 +51,7 @@ from typing_extensions import Annotated, NotRequired, Self, TypedDict
 from omc4py import TypeName, VariableName, exception, open_session
 from omc4py.latest.aio import Session
 
-from ..util import aterminating
+from ..util import aterminating, ensure_cancel
 
 _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
@@ -254,27 +259,53 @@ class Interface(RootModel[Mapping[AnnotatedVersion, Entities]]):
 
 
 async def create_interface(n: int, exe: str | None) -> Interface:
-    with ExitStack() as stack:
+    async with AsyncExitStack() as stack:
         sessions = [
             stack.enter_context(open_session(exe, asyncio=True))
-            for _ in range(n)
+            for _ in range(min(1, n))
         ]
 
         version = await _get_version(sessions[0])
 
-        iterator = QueueingIteration[TypeName]()
+        async def put(iterator: QueueingIteration[TypeName]) -> list[TypeName]:
+            result: list[TypeName] = []
 
-        entities: dict[TypeName, EntityDict | None] = reduce(
-            _union,
-            await gather(
+            async for typename in _iter_recursive(
+                sessions[0], TypeName("OpenModelica")
+            ):
+                await iterator.put(typename)
+                result.append(typename)
+            iterator.put_done()
+
+            return result
+
+        typenames_iterator = QueueingIteration[TypeName]()
+
+        put_task = await stack.enter_async_context(
+            ensure_cancel(create_task(put(typenames_iterator)))
+        )
+
+        entities: Mapping[TypeName, EntityDict]
+        entities = ChainMap(
+            *await gather(
                 *(
                     _get_entities(
-                        session, iterator, put=session is sessions[0]
+                        session,
+                        typenames_iterator,
                     )
                     for session in sessions
                 )
-            ),
+            )
         )
+
+        await put_task
+        typename_order = put_task.result()
+
+        entities = {
+            typename: entities[typename]
+            for typename in typename_order
+            if typename in entities
+        }
 
     return Interface.model_validate(
         {
@@ -515,24 +546,14 @@ class QueueingIteration(Generic[_T]):
 
 
 async def _get_entities(
-    session: Session, iterator: QueueingIteration[TypeName], put: bool
-) -> dict[TypeName, EntityDict | None]:
-    result: dict[TypeName, EntityDict | None] = {}
-    if put:
-        async for typename in _iter_recursive(
-            session, TypeName("OpenModelica")
-        ):
-            result[typename] = None
-            await iterator.put(typename)
-        iterator.put_done()
-
-    async for typename in iterator:
-        entity = await _get_entity(session, typename)
-
-        if entity is not None:
-            result[typename] = entity.model_dump()
-
-    return result
+    session: Session, typenames: AsyncIterable[TypeName]
+) -> dict[TypeName, EntityDict]:
+    return {
+        typename: entity.model_dump()
+        async for typename in typenames
+        for entity in [await _get_entity(session, typename)]
+        if entity is not None
+    }
 
 
 async def _get_entity(
