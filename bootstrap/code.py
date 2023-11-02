@@ -48,16 +48,16 @@ from typing import DefaultDict, NamedTuple
 from omc4py import TypeName
 
 from .interface import (
-    ComponentDict,
-    EntityDict,
     TypeNameString,
     VariableNameString,
     Version,
     VersionString,
 )
+from .interface import _Component as Component
+from .interface import _Entity as Entity
 from .parser import get_enumerators, get_optionals
 
-ComponentsDict = dict[VariableNameString, ComponentDict]
+ComponentsDict = dict[VariableNameString, Component]
 
 
 class Reference(NamedTuple):
@@ -67,7 +67,7 @@ class Reference(NamedTuple):
 
 References = dict[TypeNameString, Reference]
 
-EntitiesDict = dict[TypeNameString, EntityDict]
+EntitiesDict = dict[TypeNameString, Entity]
 
 InterfaceDict = dict[VersionString, EntitiesDict]
 
@@ -666,7 +666,7 @@ def _create_function_assign(name: TypeNameString) -> Assign:
 
 
 def _create_record(
-    name: TypeNameString, entity: EntityDict, references: References
+    name: TypeNameString, entity: Entity, references: References
 ) -> ClassDef:
     code = entity["code"]
     annotations = dict(_get_annotations(references, entity["components"]))

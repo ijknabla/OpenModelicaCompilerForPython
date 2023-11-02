@@ -14,7 +14,11 @@ import yaml
 from tqdm import tqdm
 from typing_extensions import ParamSpec
 
-from .interface import Interface, create_interface, create_interface_by_docker
+from .interface import (
+    InterfaceRoot,
+    create_interface,
+    create_interface_by_docker,
+)
 
 _P = ParamSpec("_P")
 _T = TypeVar("_T")
@@ -117,7 +121,7 @@ if sys.version_info >= (3, 10):
         inputs: Sequence[IO[str]],
         output_dir: Path,
     ) -> None:
-        interface = Interface(
+        interface = InterfaceRoot(
             root=ChainMap(
                 *(yaml.safe_load(i) for i in tqdm(inputs)),
             )
