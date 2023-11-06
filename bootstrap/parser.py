@@ -100,9 +100,9 @@ class Token(enum.Flag):
 class Children(Protocol):
     IDENT: list[VariableNameString]
     STRING: list[str]
-    description: list[str]
-    string_comment: list[str]
+    comment: list[str]
     modification: list[Token]
+    string_comment: list[str]
 
 
 class EnumeratorVisitor(omc4py.parser.Visitor):
@@ -113,13 +113,13 @@ class EnumeratorVisitor(omc4py.parser.Visitor):
     ) -> str:
         return "".join(children.STRING)
 
-    def visit_description(
+    def visit_comment(
         self,
         _: Never,
         children: Children,
     ) -> str:
-        (description,) = children.string_comment
-        return description
+        (comment,) = children.string_comment
+        return comment
 
     def visit_enumeration_literal(
         self,
@@ -127,8 +127,8 @@ class EnumeratorVisitor(omc4py.parser.Visitor):
         children: Children,
     ) -> Enumerator:
         (name,) = children.IDENT
-        if children.description:
-            (comment,) = children.description
+        if children.comment:
+            (comment,) = children.comment
         else:
             comment = None
 
