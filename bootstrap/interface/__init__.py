@@ -16,6 +16,7 @@ from typing import (
     NamedTuple,
     NewType,
     Sequence,
+    Tuple,
     TypeVar,
     Union,
     cast,
@@ -117,7 +118,7 @@ class ComponentDict(TypedDict):
 class Component(BaseModel):
     className: AnnotatedTypeName
     inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
-    dimensions: Union[Sequence[str], None] = None
+    dimensions: Union[Tuple[str, ...], None] = None
 
     @model_serializer
     def __serialize(self) -> Any:
@@ -634,6 +635,6 @@ async def _iter_components(
                     component.inputOutput = component_tuple.inputOutput
 
                 if component_tuple.dimensions:
-                    component.dimensions = component_tuple.dimensions
+                    component.dimensions = tuple(component_tuple.dimensions)
 
                 yield component_tuple.name, component
