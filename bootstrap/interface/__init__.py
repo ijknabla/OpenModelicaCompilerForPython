@@ -16,6 +16,7 @@ from typing import (
     NamedTuple,
     NewType,
     Sequence,
+    Tuple,
     TypeVar,
     Union,
     cast,
@@ -108,20 +109,14 @@ def _version_serializer(version: Version) -> str:
 AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 
 
-class ComponentDict(TypedDict):
-    className: TypeNameString
-    inputOutput: NotRequired[InputOutput]
-    dimensions: NotRequired[Sequence[str]]
-
-
 class Component(BaseModel):
     className: AnnotatedTypeName
     inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
-    dimensions: Union[Sequence[str], None] = None
+    dimensions: Union[Tuple[str, ...], None] = None
 
     @model_serializer
     def __serialize(self) -> Any:
-        result = ComponentDict(className=TypeNameString(f"{self.className}"))
+        result = _Component(className=TypeNameString(f"{self.className}"))
         if self.inputOutput != "unspecified":
             result["inputOutput"] = self.inputOutput
         if self.dimensions is not None:
@@ -130,18 +125,13 @@ class Component(BaseModel):
         return result
 
 
+class _Component(TypedDict):
+    className: TypeNameString
+    inputOutput: NotRequired[InputOutput]
+    dimensions: NotRequired[Sequence[str]]
+
+
 Components = Mapping[AnnotatedVariableName, Component]
-
-
-class EntityDict(TypedDict):
-    restriction: str
-    isType: NotRequired[Literal[True]]
-    isPackage: NotRequired[Literal[True]]
-    isRecord: NotRequired[Literal[True]]
-    isFunction: NotRequired[Literal[True]]
-    isEnumeration: NotRequired[Literal[True]]
-    code: NotRequired[str]
-    components: NotRequired[Dict[VariableNameString, ComponentDict]]
 
 
 class TypeEntity(BaseModel):
@@ -214,8 +204,19 @@ class EnumerationEntity(BaseModel):
         return _entity_serializer(self)
 
 
-def _entity_serializer(entity: Entity) -> EntityDict:
-    result = EntityDict(restriction=entity.restriction)
+class _Entity(TypedDict):
+    restriction: str
+    isType: NotRequired[Literal[True]]
+    isPackage: NotRequired[Literal[True]]
+    isRecord: NotRequired[Literal[True]]
+    isFunction: NotRequired[Literal[True]]
+    isEnumeration: NotRequired[Literal[True]]
+    code: NotRequired[str]
+    components: NotRequired[Dict[VariableNameString, _Component]]
+
+
+def _entity_serializer(entity: Entity) -> _Entity:
+    result = _Entity(restriction=entity.restriction)
 
     IsAttribute = Literal[
         "isType", "isPackage", "isRecord", "isFunction", "isEnumeration"
@@ -234,7 +235,7 @@ def _entity_serializer(entity: Entity) -> EntityDict:
 
     if not isinstance(entity, (TypeEntity, PackageEntity, EnumerationEntity)):
         result["components"] = {
-            VariableNameString(f"{k}"): cast(ComponentDict, v.model_dump())
+            VariableNameString(f"{k}"): cast(_Component, v.model_dump())
             for k, v in entity.components.items()
         }
 
@@ -245,14 +246,16 @@ Entity = Union[
     TypeEntity, PackageEntity, RecordEntity, FunctionEntity, EnumerationEntity
 ]
 
+Entities = Mapping[AnnotatedTypeName, Entity]
 
-class Interface(
-    RootModel[Mapping[AnnotatedVersion, Mapping[AnnotatedTypeName, Entity]]]
-):
+Interface = Mapping[AnnotatedVersion, Entities]
+
+
+class InterfaceRoot(RootModel[Interface]):
     ...
 
 
-async def create_interface(n: int, exe: str | None) -> Interface:
+async def create_interface(n: int, exe: str | None) -> InterfaceRoot:
     async with AsyncExitStack() as stack:
         sessions = [
             stack.enter_context(open_session(exe, asyncio=True))
@@ -291,7 +294,7 @@ async def create_interface(n: int, exe: str | None) -> Interface:
             if typename in entities
         }
 
-    return Interface(root={version: entities})
+    return InterfaceRoot(root={version: entities})
 
 
 async def create_interface_by_docker(
@@ -634,6 +637,6 @@ async def _iter_components(
                     component.inputOutput = component_tuple.inputOutput
 
                 if component_tuple.dimensions:
-                    component.dimensions = component_tuple.dimensions
+                    component.dimensions = tuple(component_tuple.dimensions)
 
                 yield component_tuple.name, component

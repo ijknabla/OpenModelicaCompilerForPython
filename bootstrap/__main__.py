@@ -3,9 +3,9 @@ from __future__ import annotations
 import os
 import sys
 from asyncio import run
+from collections import ChainMap
 from collections.abc import Callable, Coroutine, Sequence
 from functools import wraps
-from itertools import chain
 from pathlib import Path
 from typing import IO, Any, TypeVar
 
@@ -15,10 +15,7 @@ from tqdm import tqdm
 from typing_extensions import ParamSpec
 
 from .interface import (
-    EntityDict,
-    TypeNameString,
-    Version,
-    VersionString,
+    InterfaceRoot,
     create_interface,
     create_interface_by_docker,
 )
@@ -124,16 +121,14 @@ if sys.version_info >= (3, 10):
         inputs: Sequence[IO[str]],
         output_dir: Path,
     ) -> None:
-        interface: dict[VersionString, dict[TypeNameString, EntityDict]]
-        interface = dict(
-            sorted(
-                chain.from_iterable(
-                    yaml.safe_load(i).items() for i in tqdm(inputs)
-                ),
-                key=lambda item: Version.parse(item[0]),
+        interface = InterfaceRoot(
+            root=ChainMap(
+                *(yaml.safe_load(i) for i in tqdm(inputs)),
             )
         )
-        async for rel_path, module in create_code(interface):
+        async for rel_path, module in create_code(
+            interface.model_dump(),  # type: ignore
+        ):
             path = output_dir / rel_path
             os.makedirs(path.parent, exist_ok=True)
             with path.open("w", encoding="utf-8") as o:
