@@ -112,14 +112,14 @@ AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 class Component(BaseModel):
     className: AnnotatedTypeName
     inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
-    dimensions: Union[Tuple[str, ...], None] = None
+    dimensions: Tuple[str, ...] = ()
 
     @model_serializer
     def __serialize(self) -> Any:
         result = _Component(className=TypeNameString(f"{self.className}"))
         if self.inputOutput != "unspecified":
             result["inputOutput"] = self.inputOutput
-        if self.dimensions is not None:
+        if self.dimensions:
             result["dimensions"] = self.dimensions
 
         return result
