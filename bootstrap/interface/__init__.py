@@ -112,14 +112,14 @@ AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 class Component(BaseModel):
     className: AnnotatedTypeName
     inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
-    dimensions: Union[Tuple[str, ...], None] = None
+    dimensions: Tuple[str, ...] = ()
 
     @model_serializer
     def __serialize(self) -> Any:
         result = _Component(className=TypeNameString(f"{self.className}"))
         if self.inputOutput != "unspecified":
             result["inputOutput"] = self.inputOutput
-        if self.dimensions is not None:
+        if self.dimensions:
             result["dimensions"] = self.dimensions
 
         return result
@@ -303,8 +303,6 @@ async def create_interface_by_docker(
     output_dir: Path,
     pip_cache_dir: Path | None,
 ) -> None:
-    requirements: list[str] = []
-
     async with ensure_terminate(
         await create_subprocess_exec(
             "poetry",
@@ -315,6 +313,7 @@ async def create_interface_by_docker(
             stdout=PIPE,
         )
     ) as process:
+        requirements: list[str] = []
         assert process.stdout is not None
         async for line in process.stdout:
             requirement, *_ = line.split(b";")
@@ -349,9 +348,7 @@ async def _create_interface_by_docker(
     assert py_version_match is not None
     py_major, py_minor = map(int, py_version_match.groups())
     if (py_major, py_minor) < (3, 8):
-        requirements = [
-            requirement.split("==")[0] for requirement in requirements
-        ]
+        requirements = _to_compatible_requirements(requirements)
 
     omc_version_match = re.search(
         r"(\d+)\.(\d+)\.\d+",
@@ -456,6 +453,18 @@ async def _docker_run(
             raise CalledProcessError(process.returncode, cmd)
 
     return None
+
+
+COMPATIBILITIES = {"pydantic-core": "pydantic-core==2.10.1"}
+
+
+def _to_compatible_requirements(requirements: Iterable[str]) -> list[str]:
+    result: list[str] = []
+    for item in requirements:
+        requirement, *_ = item.split("==")
+        result.append(COMPATIBILITIES.get(requirement, requirement))
+
+    return result
 
 
 async def _get_version(session: Session) -> Version:
