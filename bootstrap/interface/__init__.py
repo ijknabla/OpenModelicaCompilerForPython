@@ -24,6 +24,7 @@ from typing import (
     overload,
 )
 
+from frozendict import frozendict
 from pkg_resources import resource_filename
 from pydantic import (
     BaseModel,
@@ -109,7 +110,7 @@ def _version_serializer(version: Version) -> str:
 AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 
 
-class Component(BaseModel):
+class Component(BaseModel, frozen=True):
     className: AnnotatedTypeName
     inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
     dimensions: Tuple[str, ...] = ()
@@ -131,10 +132,22 @@ class _Component(TypedDict):
     dimensions: NotRequired[Sequence[str]]
 
 
-Components = Mapping[AnnotatedVariableName, Component]
+@PlainValidator
+def _components_validator(
+    components: Mapping[Any, Any]
+) -> frozendict[VariableName, Component]:
+    return frozendict(
+        (VariableName(k), Component.model_validate(v))
+        for k, v in components.items()
+    )
 
 
-class TypeEntity(BaseModel):
+Components = Annotated[
+    Mapping[AnnotatedVariableName, Component], _components_validator
+]
+
+
+class TypeEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[True]
     isPackage: Literal[False] = False
@@ -147,7 +160,7 @@ class TypeEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class PackageEntity(BaseModel):
+class PackageEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[False] = False
     isPackage: Literal[True]
@@ -160,7 +173,7 @@ class PackageEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class RecordEntity(BaseModel):
+class RecordEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[False] = False
     isPackage: Literal[False] = False
@@ -175,7 +188,7 @@ class RecordEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class FunctionEntity(BaseModel):
+class FunctionEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[False] = False
     isPackage: Literal[False] = False
@@ -190,7 +203,7 @@ class FunctionEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class EnumerationEntity(BaseModel):
+class EnumerationEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[True]
     isPackage: Literal[False] = False
@@ -636,16 +649,8 @@ async def _iter_components(
     with suppress(exception.OMCError):
         for component_tuple in await session.getComponents(typename):
             if component_tuple.protected == "public":
-                component = Component(
+                yield component_tuple.name, Component(
                     className=component_tuple.className,
+                    inputOutput=component_tuple.inputOutput,
+                    dimensions=tuple(component_tuple.dimensions),
                 )
-                if (
-                    component_tuple.inputOutput == "input"
-                    or component_tuple.inputOutput == "output"
-                ):
-                    component.inputOutput = component_tuple.inputOutput
-
-                if component_tuple.dimensions:
-                    component.dimensions = tuple(component_tuple.dimensions)
-
-                yield component_tuple.name, component
