@@ -636,16 +636,8 @@ async def _iter_components(
     with suppress(exception.OMCError):
         for component_tuple in await session.getComponents(typename):
             if component_tuple.protected == "public":
-                component = Component(
+                yield component_tuple.name, Component(
                     className=component_tuple.className,
+                    inputOutput=component_tuple.inputOutput,
+                    dimensions=tuple(component_tuple.dimensions),
                 )
-                if (
-                    component_tuple.inputOutput == "input"
-                    or component_tuple.inputOutput == "output"
-                ):
-                    component.inputOutput = component_tuple.inputOutput
-
-                if component_tuple.dimensions:
-                    component.dimensions = tuple(component_tuple.dimensions)
-
-                yield component_tuple.name, component
