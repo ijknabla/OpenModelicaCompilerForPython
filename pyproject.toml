@@ -30,6 +30,7 @@ click = "^8.1.7"
 pyyaml = "^6.0.1"
 tqdm = "^4.66.1"
 pydantic = "^2.4.2"
+frozendict = "^2.3.8"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.10.1"
