@@ -24,6 +24,7 @@ from typing import (
     overload,
 )
 
+from frozendict import frozendict
 from pkg_resources import resource_filename
 from pydantic import (
     BaseModel,
@@ -131,7 +132,19 @@ class _Component(TypedDict):
     dimensions: NotRequired[Sequence[str]]
 
 
-Components = Mapping[AnnotatedVariableName, Component]
+@PlainValidator
+def _components_validator(
+    components: Mapping[Any, Any]
+) -> frozendict[VariableName, Component]:
+    return frozendict(
+        (VariableName(k), Component.model_validate(v))
+        for k, v in components.items()
+    )
+
+
+Components = Annotated[
+    Mapping[AnnotatedVariableName, Component], _components_validator
+]
 
 
 class TypeEntity(BaseModel):
