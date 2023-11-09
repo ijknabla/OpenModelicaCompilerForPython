@@ -110,7 +110,7 @@ def _version_serializer(version: Version) -> str:
 AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 
 
-class Component(BaseModel):
+class Component(BaseModel, frozen=True):
     className: AnnotatedTypeName
     inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
     dimensions: Tuple[str, ...] = ()
@@ -147,7 +147,7 @@ Components = Annotated[
 ]
 
 
-class TypeEntity(BaseModel):
+class TypeEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[True]
     isPackage: Literal[False] = False
@@ -160,7 +160,7 @@ class TypeEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class PackageEntity(BaseModel):
+class PackageEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[False] = False
     isPackage: Literal[True]
@@ -173,7 +173,7 @@ class PackageEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class RecordEntity(BaseModel):
+class RecordEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[False] = False
     isPackage: Literal[False] = False
@@ -188,7 +188,7 @@ class RecordEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class FunctionEntity(BaseModel):
+class FunctionEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[False] = False
     isPackage: Literal[False] = False
@@ -203,7 +203,7 @@ class FunctionEntity(BaseModel):
         return _entity_serializer(self)
 
 
-class EnumerationEntity(BaseModel):
+class EnumerationEntity(BaseModel, frozen=True):
     restriction: str
     isType: Literal[True]
     isPackage: Literal[False] = False
