@@ -21,7 +21,8 @@ from typing import Literal
 
 from omc4py import TypeName
 
-from .interface import Entities, Interface, PackageEntity
+from .interface import Entities, EnumerationEntity, Interface, PackageEntity
+from .parser import get_enumerators
 from .util import ensure_terminate
 
 
@@ -44,6 +45,10 @@ async def _save_code(directory: Path, entities: Entities) -> None:
     for typename, entity in entities.items():
         if isinstance(entity, PackageEntity):
             factories[typename] = PackageFactory(typename=typename)
+        elif isinstance(entity, EnumerationEntity):
+            factories[typename] = EnumerationFactory(
+                typename=typename, entity=entity
+            )
 
     root = PackageFactory(typename=TypeName())
     factories[root.typename] = root
@@ -262,9 +267,55 @@ class PackageFactory(HasTypeName):
                     ),
                     lineno=None,
                 )
+            else:
+                yield ast.Assign(
+                    targets=[ast.Name(id=child.name, ctx=ast.Store())],
+                    value=reference,
+                    lineno=None,
+                )
 
 
-Factory = PackageFactory
+@dataclass
+class EnumerationFactory(HasTypeName):
+    entity: EnumerationEntity
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="omc4py.modelica", name="enumeration")
+        yield ImportFrom(module="omc4py.openmodelica", name="TypeName")
+
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        yield ast.ClassDef(
+            name=self.name,
+            bases=[ast.Name(id="enumeration", ctx=ast.Load())],
+            keywords=[],
+            body=[*self._iter_class_def_body()],
+            decorator_list=[],
+        )
+
+    def _iter_class_def_body(self) -> Generator[ast.stmt, None, None]:
+        yield ast.Expr(value=ast.Constant(value=_to_doc(self.entity.code)))
+        yield ast.Assign(
+            targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
+            value=ast.Call(
+                func=ast.Name(id="TypeName", ctx=ast.Load()),
+                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                keywords=[],
+            ),
+            lineno=None,
+        )
+        for value, (name, comment) in enumerate(
+            get_enumerators(self.entity.code), start=1
+        ):
+            yield ast.Assign(
+                targets=[ast.Name(id=f"{name}", ctx=ast.Store())],
+                value=ast.Constant(value=value),
+                lineno=None,
+            )
+            if comment is not None:
+                yield ast.Expr(value=ast.Constant(value=comment))
+
+
+Factory = PackageFactory | EnumerationFactory
 
 
 @dataclass(frozen=True)
@@ -285,3 +336,14 @@ class ImportFrom:
 
 def _to_camel_case(s: str) -> str:
     return s[:1].lower() + s[1:]
+
+
+def _to_doc(code: str) -> str:
+    return "\n".join(
+        [
+            "",
+            ".. code-block:: modelica",
+            "",
+            *(f"    {line}" for line in code.splitlines(keepends=False)),
+        ]
+    )
