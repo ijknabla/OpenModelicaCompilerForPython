@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import sys
 from asyncio import run
 from collections import ChainMap
@@ -99,7 +98,11 @@ async def interface_docker(
     "-o",
     "--output-dir",
     type=click.Path(
-        exists=True, dir_okay=True, file_okay=False, path_type=Path
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        resolve_path=True,
+        path_type=Path,
     ),
     default=Path("."),
 )
@@ -114,22 +117,14 @@ async def code(
     inputs: Sequence[IO[str]],
     output_dir: Path,
 ) -> None:
-    from ast import unparse
-
-    from .code import create_code
+    from .code import save_code
 
     interface = InterfaceRoot(
         root=ChainMap(
             *(yaml.safe_load(i) for i in tqdm(inputs)),
         )
     )
-    async for rel_path, module in create_code(
-        interface.model_dump(),  # type: ignore
-    ):
-        path = output_dir / rel_path
-        os.makedirs(path.parent, exist_ok=True)
-        with path.open("w", encoding="utf-8") as o:
-            print(unparse(module), file=o)
+    await save_code(output_dir, interface.root)
 
 
 if __name__ == "__main__":
