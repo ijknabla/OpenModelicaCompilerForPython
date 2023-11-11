@@ -9,7 +9,10 @@ if sys.version_info < (3, 10):
     )
 
 import ast
+import enum
 import os
+
+# import re
 from asyncio import create_subprocess_exec, gather
 from collections.abc import Generator
 from contextlib import AsyncExitStack
@@ -19,9 +22,16 @@ from operator import attrgetter
 from pathlib import Path
 from typing import Literal
 
-from omc4py import TypeName
+from omc4py import TypeName, VariableName
 
-from .interface import Entities, EnumerationEntity, Interface, PackageEntity
+from .interface import (
+    Entities,
+    Entity,
+    EnumerationEntity,
+    InputOutput,
+    Interface,
+    PackageEntity,
+)
 from .parser import get_enumerators
 from .util import ensure_terminate
 
@@ -332,6 +342,194 @@ class ImportFrom:
             names=[ast.alias(name=self.name, asname=self.asname)],
             level=self.level,
         )
+
+
+class TypeKind(enum.Enum):
+    real = enum.auto()
+    integer = enum.auto()
+    boolean = enum.auto()
+    string = enum.auto()
+    # path = enum.auto()
+    typename = enum.auto()
+    variablename = enum.auto()
+
+    @classmethod
+    def resolve(
+        cls,
+        variablename: VariableName,
+        typename: TypeName,
+        entity: Entity | None,
+    ) -> TypeKind:
+        # path_pattern = re.compile(
+        #     r"(file|header|dir|directory|(?<!modelica)path)(name|names)?$",
+        #     re.IGNORECASE,
+        # )
+        match f"{typename}", entity:
+            case "Real", None:
+                return TypeKind.real
+            case "Integer", None:
+                return TypeKind.integer
+            case "Boolean", None:
+                return TypeKind.boolean
+            case "String", None:
+                return TypeKind.string
+                # if path_pattern.search(f"{variablename}") is None:
+                #     return TypeKind.string
+                # else:
+                #     return TypeKind.path
+            case (
+                "OpenModelica.$Code.TypeName" | "OpenModelica.$Code.TypeNames"
+            ), None:
+                return TypeKind.typename
+            case (
+                "OpenModelica.$Code.VariableName"
+                | "OpenModelica.$Code.VariableNames"
+            ), None:
+                return TypeKind.variablename
+
+        raise ValueError(typename, entity)
+
+
+@dataclass
+class BuiltinTypeHint:
+    kind: TypeKind
+    input_output: InputOutput
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        match self.kind, self.input_output:
+            # case (TypeKind.path, "input"):
+            #     yield ImportFrom(module="typing", name="Union")
+            #     yield ImportFrom(module="omc4py.protocol", name="PathLike")
+            case (TypeKind.typename, _):
+                yield ImportFrom(module="omc4py.openmodelica", name="TypeName")
+                if self.input_output == "input":
+                    ImportFrom(module="typing", name="Union")
+            case (TypeKind.variablename, _):
+                yield ImportFrom(
+                    module="omc4py.openmodelica", name="VariableName"
+                )
+                if self.input_output == "input":
+                    ImportFrom(module="typing", name="Union")
+
+    @property
+    def annotation(self) -> ast.expr:
+        match self.kind, self.input_output:
+            case (TypeKind.real, _):
+                return ast.Name(id="float", ctx=ast.Load())
+            case (TypeKind.integer, _):
+                return ast.Name(id="int", ctx=ast.Load())
+            case (TypeKind.boolean, _):
+                return ast.Name(id="bool", ctx=ast.Load())
+            case (
+                (TypeKind.string, _)
+                # | (
+                #     TypeKind.path,
+                #     "output" | "unspecified",
+                # )
+            ):
+                return ast.Name(id="str", ctx=ast.Load())
+            # case (TypeKind.path, "input"):
+            #     return ast.Subscript(
+            #         value=ast.Name(id="Union", ctx=ast.Load()),
+            #         slice=ast.Tuple(
+            #             elts=[
+            #                 ast.Name(id="PathLike", ctx=ast.Load()),
+            #                 ast.Name(id="str", ctx=ast.Load()),
+            #             ],
+            #             ctx=ast.Load(),
+            #         ),
+            #         ctx=ast.Load(),
+            #     )
+            case (TypeKind.typename, "input"):
+                return ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            ast.Name(id="TypeName", ctx=ast.Load()),
+                            ast.Name(id="str", ctx=ast.Load()),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+            case (TypeKind.typename, _):
+                return ast.Name(id="TypeName", ctx=ast.Load())
+            case (TypeKind.variablename, "input"):
+                return ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            ast.Name(id="VariableName", ctx=ast.Load()),
+                            ast.Name(id="str", ctx=ast.Load()),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+            case (TypeKind.variablename, _):
+                return ast.Name(id="VariableName", ctx=ast.Load())
+
+        raise NotImplementedError(self)
+
+
+@dataclass
+class EnumerationTypeHint(HasTypeName):
+    input_output: InputOutput
+    entity: EnumerationEntity
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        match self.input_output:
+            case "input":
+                yield ImportFrom(module="typing", name="Literal")
+                yield ImportFrom(module="typing", name="Union")
+
+    @property
+    def annotation(self) -> ast.expr:
+        match self.input_output:
+            case "input":
+                return ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            ast.Name(
+                                id=self.name,
+                                ctx=ast.Load(),
+                            ),
+                            ast.Subscript(
+                                value=ast.Name(id="Literal", ctx=ast.Load()),
+                                slice=ast.Tuple(
+                                    elts=[
+                                        ast.Constant(value=f"{value}")
+                                        for value, _ in get_enumerators(
+                                            self.entity.code
+                                        )
+                                    ],
+                                    ctx=ast.Load(),
+                                ),
+                                ctx=ast.Load(),
+                            ),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+            case _:
+                return ast.Name(id=self.name, ctx=ast.Load())
+
+
+@dataclass
+class AliasTypeHint(HasTypeName):
+    input_output: InputOutput
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield from []
+
+    @property
+    def annotation(self) -> ast.expr:
+        return ast.Name(id=self.name, ctx=ast.Load())
+
+
+TypeHint = BuiltinTypeHint | EnumerationTypeHint | AliasTypeHint
 
 
 def _to_camel_case(s: str) -> str:
