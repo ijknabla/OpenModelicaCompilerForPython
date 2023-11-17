@@ -18,7 +18,12 @@ from typing import (
 
 from typing_extensions import Annotated
 
-from omc4py.protocol import SupportsAnyInteractive, SupportsInteractiveProperty
+from omc4py.protocol import (
+    Asynchronous,
+    SupportsInteractive,
+    SupportsInteractiveProperty,
+    Synchronous,
+)
 
 from .algorithm import bind_to_awaitable
 from .openmodelica import TypeName
@@ -53,7 +58,9 @@ class PackageMeta(type):
 
 class package(metaclass=PackageMeta):
     __omc_class__: ClassVar[TypeName]
-    __omc_interactive__: SupportsAnyInteractive
+    __omc_interactive__: (
+        SupportsInteractive[Synchronous] | SupportsInteractive[Asynchronous]
+    )
 
 
 class record:

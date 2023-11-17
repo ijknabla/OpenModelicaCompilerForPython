@@ -2,19 +2,7 @@ from __future__ import annotations
 
 import enum
 from collections.abc import Hashable
-from typing import (
-    TYPE_CHECKING,
-    Literal,
-    Protocol,
-    TypeVar,
-    overload,
-    runtime_checkable,
-)
-
-if TYPE_CHECKING:
-    from typing_extensions import TypeAlias
-else:
-    TypeAlias = ...
+from typing import Literal, Protocol, TypeVar, overload, runtime_checkable
 
 
 @runtime_checkable
@@ -61,11 +49,6 @@ class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
         self: SupportsInteractive[Asynchronous], expression: str
     ) -> str:
         ...
-
-
-SupportsAnyInteractive: TypeAlias = (
-    "SupportsInteractive[Synchronous] | SupportsInteractive[Asynchronous]"
-)
 
 
 @runtime_checkable
