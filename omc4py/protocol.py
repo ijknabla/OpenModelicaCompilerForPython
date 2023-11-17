@@ -17,6 +17,7 @@ else:
     TypeAlias = ...
 
 
+@runtime_checkable
 class SupportsClose(Protocol):
     def close(self) -> None:
         ...
