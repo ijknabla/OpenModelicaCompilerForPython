@@ -51,15 +51,13 @@ T_Calling = TypeVar(
 class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
     @overload
     def evaluate(
-        self: SupportsInteractive[Synchronous],
-        expression: str,
+        self: SupportsInteractive[Synchronous], expression: str
     ) -> str:
         ...
 
     @overload
     async def evaluate(
-        self: SupportsInteractive[Asynchronous],
-        expression: str,
+        self: SupportsInteractive[Asynchronous], expression: str
     ) -> str:
         ...
 
