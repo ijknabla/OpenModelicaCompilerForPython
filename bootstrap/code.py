@@ -89,6 +89,12 @@ async def _save_code(directory: Path, entities: Entities) -> None:
                 parent.children[typename] = child
                 break
 
+        match typename.parts:
+            case "OpenModelica", "Scripting", _ if isinstance(
+                child, FunctionFactory
+            ):
+                root.children[typename] = AliasFactory(typename)
+
     await gather(
         *(
             factory.save_module(directory)
@@ -251,10 +257,17 @@ class PackageFactory(HasTypeName):
             )
 
         for child in self.children.values():
-            if self.is_root:
-                parts = [child.name]
+            if isinstance(child, AliasFactory):
+                i = len(self.typename.parts)
+                parts = [
+                    *map(_to_camel_case, child.typename.parts[i:-1]),
+                    child.typename.parts[-1],
+                ]
             else:
-                parts = [_to_camel_case(self.name), child.name]
+                if self.is_root:
+                    parts = [child.name]
+                else:
+                    parts = [_to_camel_case(self.name), child.name]
 
             reference: ast.expr
             reference = ast.Name(id=parts[0], ctx=ast.Load())
@@ -633,7 +646,21 @@ class EnumerationFactory(HasTypeName):
                 yield ast.Expr(value=ast.Constant(value=comment))
 
 
-Factory = PackageFactory | RecordFactory | FunctionFactory | EnumerationFactory
+class AliasFactory(HasTypeName):
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield from []
+
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        yield from []
+
+
+Factory = (
+    PackageFactory
+    | RecordFactory
+    | FunctionFactory
+    | EnumerationFactory
+    | AliasFactory
+)
 
 
 @dataclass(frozen=True)
