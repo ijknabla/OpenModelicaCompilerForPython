@@ -65,6 +65,14 @@ async def _save_code(directory: Path, entities: Entities) -> None:
             factories[typename] = RecordFactory(
                 typename=typename, code=entity.code, components=components
             )
+        elif isinstance(entity, FunctionEntity):
+            try:
+                components = dict(Component.iter_from_entity(entity, entities))
+            except Exception:
+                continue
+            factories[typename] = FunctionFactory(
+                typename=typename, code=entity.code, components=components
+            )
         elif isinstance(entity, EnumerationEntity):
             factories[typename] = EnumerationFactory(
                 typename=typename, entity=entity
@@ -118,7 +126,12 @@ class PackageFactory(HasTypeName):
         path = Path(directory, *self.typename.parts, "__init__.py")
         os.makedirs(path.parent, exist_ok=True)
         with path.open("w", encoding="utf-8") as o:
-            print(ast.unparse(self._get_module()), file=o)
+            print(
+                ast.unparse(self._get_module()).replace(
+                    "__RETURN_TYPE_IGNORE__", "return ... # type: ignore"
+                ),
+                file=o,
+            )
 
         await self._lint_python_code(path)
 
@@ -348,6 +361,239 @@ class RecordFactory(HasTypeName):
 
 
 @dataclass
+class FunctionFactory(HasTypeName):
+    code: str | None
+    components: dict[VariableName, Component]
+
+    @property
+    def required_inputs(self) -> list[VariableName]:
+        return [
+            variablename
+            for variablename, component in self.components.items()
+            if component.input_output == "input" and not component.is_optional
+        ]
+
+    @property
+    def optional_inputs(self) -> list[VariableName]:
+        return [
+            variablename
+            for variablename, component in self.components.items()
+            if component.input_output == "input" and component.is_optional
+        ]
+
+    @property
+    def outputs(self) -> dict[VariableName, Component]:
+        return {
+            variablename: component
+            for variablename, component in self.components.items()
+            if component.input_output == "output"
+        }
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="omc4py.modelica2", name="external")
+        yield ImportFrom(module="omc4py.protocol", name="Asynchronous")
+        yield ImportFrom(module="omc4py.protocol", name="Synchronous")
+        yield ImportFrom(
+            module="omc4py.protocol", name="SupportsInteractiveProperty"
+        )
+        match len(self.outputs):
+            case 0 | 1:
+                pass
+            case _:
+                yield ImportFrom(module="typing", name="NamedTuple")
+        yield ImportFrom(module="typing", name="Coroutine")
+        yield ImportFrom(module="typing", name="Union")
+        yield ImportFrom(module="typing", name="overload")
+        for component in self.components.values():
+            yield from component.iter_imports()
+
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        py_modelica = dict[str, str]()
+
+        args = list[ast.arg]()
+        for variablename in self.required_inputs + self.optional_inputs:
+            component = self.components[variablename]
+            modelica = f"{variablename}"
+            py = _avoid_keyword(modelica)
+            if py != modelica:
+                py_modelica[py] = modelica
+            match component.input_output:
+                case "input":
+                    args.append(
+                        ast.arg(
+                            arg=py,
+                            annotation=component.annotation,
+                        )
+                    )
+
+        basic_returns: ast.expr
+        match len(self.outputs):
+            case 0:
+                basic_returns = ast.Constant(value=None)
+            case 1:
+                (component,) = self.outputs.values()
+                basic_returns = component.annotation
+            case _:
+                yield ast.ClassDef(
+                    name=self.name.capitalize(),
+                    bases=[ast.Name(id="NamedTuple", ctx=ast.Load())],
+                    keywords=[],
+                    body=[
+                        ast.AnnAssign(
+                            target=ast.Name(
+                                id=f"{variablename}", ctx=ast.Store()
+                            ),
+                            annotation=component.annotation,
+                            simple=1,
+                        )
+                        for variablename, component in self.outputs.items()
+                    ],
+                    decorator_list=[],
+                )
+                basic_returns = ast.Name(
+                    id=self.name.capitalize(), ctx=ast.Load()
+                )
+
+        defaults = [ast.Constant(value=None)] * len(self.optional_inputs)
+
+        for mode in ("sync_overload", "async_overload", "impl"):
+            function_def_type: (
+                type[ast.FunctionDef] | type[ast.AsyncFunctionDef]
+            )
+            match mode:
+                case "async_overload":
+                    function_def_type = ast.AsyncFunctionDef
+                case _:
+                    function_def_type = ast.FunctionDef
+
+            decorator_list: list[ast.expr]
+            match mode:
+                case "impl":
+                    match self.typename.parts:
+                        case "OpenModelica", "Scripting", name:
+                            funcname = name
+                        case _:
+                            funcname = f"{self.typename.as_absolute()}"
+
+                    decorator_list = [
+                        ast.Call(
+                            func=ast.Name(id="external", ctx=ast.Load()),
+                            args=[ast.Constant(value=funcname)],
+                            keywords=[],
+                        )
+                    ]
+                case _:
+                    decorator_list = [ast.Name(id="overload", ctx=ast.Load())]
+
+            synchronous_self_annotation = ast.Subscript(
+                value=ast.Name(
+                    id="SupportsInteractiveProperty", ctx=ast.Load()
+                ),
+                slice=ast.Name(id="Synchronous", ctx=ast.Load()),
+                ctx=ast.Load(),
+            )
+            asynchronous_self_annotation = ast.Subscript(
+                value=ast.Name(
+                    id="SupportsInteractiveProperty", ctx=ast.Load()
+                ),
+                slice=ast.Name(id="Asynchronous", ctx=ast.Load()),
+                ctx=ast.Load(),
+            )
+
+            self_annotation: ast.expr
+            match mode:
+                case "sync_overload":
+                    self_annotation = synchronous_self_annotation
+                case "async_overload":
+                    self_annotation = asynchronous_self_annotation
+                case "impl":
+                    self_annotation = ast.Subscript(
+                        value=ast.Name(id="Union", ctx=ast.Load()),
+                        slice=ast.Tuple(
+                            elts=[
+                                synchronous_self_annotation,
+                                asynchronous_self_annotation,
+                            ],
+                            ctx=ast.Load(),
+                        ),
+                        ctx=ast.Load(),
+                    )
+
+            returns: ast.expr
+            match mode:
+                case "impl":
+                    returns = ast.Subscript(
+                        value=ast.Name(id="Union", ctx=ast.Load()),
+                        slice=ast.Tuple(
+                            elts=[
+                                basic_returns,
+                                ast.Subscript(
+                                    value=ast.Name(
+                                        id="Coroutine", ctx=ast.Load()
+                                    ),
+                                    slice=ast.Tuple(
+                                        elts=[
+                                            ast.Constant(value=None),
+                                            ast.Constant(value=None),
+                                            basic_returns,
+                                        ],
+                                        ctx=ast.Load(),
+                                    ),
+                                    ctx=ast.Load(),
+                                ),
+                            ],
+                            ctx=ast.Load(),
+                        ),
+                        ctx=ast.Load(),
+                    )
+                case _:
+                    returns = basic_returns
+
+            body = list[ast.stmt]()
+            match mode, self.code:
+                case "impl", code if isinstance(code, str):
+                    body.append(
+                        ast.Expr(value=ast.Constant(value=_to_doc(code)))
+                    )
+
+            match mode, len(self.outputs):
+                case "impl", 0:
+                    pass
+                case "impl", _:
+                    body.append(
+                        ast.Expr(
+                            value=ast.Name(
+                                id="__RETURN_TYPE_IGNORE__", ctx=ast.Load()
+                            )
+                        )
+                    )
+
+            if not body:
+                body.append(ast.Expr(value=ast.Constant(value=Ellipsis)))
+
+            yield function_def_type(
+                name=self.name,
+                args=ast.arguments(
+                    posonlyargs=[],
+                    args=[
+                        ast.arg(
+                            arg="self",
+                            annotation=self_annotation,
+                        ),
+                        *args,
+                    ],
+                    kwonlyargs=[],
+                    kw_defaults=[],
+                    defaults=defaults,
+                ),
+                body=body,
+                decorator_list=decorator_list,
+                returns=returns,
+                lineno=None,
+            )
+
+
+@dataclass
 class EnumerationFactory(HasTypeName):
     entity: EnumerationEntity
 
@@ -387,7 +633,7 @@ class EnumerationFactory(HasTypeName):
                 yield ast.Expr(value=ast.Constant(value=comment))
 
 
-Factory = PackageFactory | RecordFactory | EnumerationFactory
+Factory = PackageFactory | RecordFactory | FunctionFactory | EnumerationFactory
 
 
 @dataclass(frozen=True)
