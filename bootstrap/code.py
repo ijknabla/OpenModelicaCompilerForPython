@@ -11,8 +11,7 @@ if sys.version_info < (3, 10):
 import ast
 import enum
 import os
-
-# import re
+import re
 from asyncio import create_subprocess_exec, gather
 from collections.abc import Generator
 from contextlib import AsyncExitStack
@@ -60,6 +59,11 @@ async def _save_code(directory: Path, entities: Entities) -> None:
     for typename, entity in entities.items():
         if isinstance(entity, PackageEntity):
             factories[typename] = PackageFactory(typename=typename)
+        elif isinstance(entity, RecordEntity):
+            components = dict(Component.iter_from_entity(entity, entities))
+            factories[typename] = RecordFactory(
+                typename=typename, code=entity.code, components=components
+            )
         elif isinstance(entity, EnumerationEntity):
             factories[typename] = EnumerationFactory(
                 typename=typename, entity=entity
@@ -72,7 +76,7 @@ async def _save_code(directory: Path, entities: Entities) -> None:
         for parent in (
             factories.get(i) for i in typename.parents if i != typename
         ):
-            if isinstance(parent, PackageFactory):
+            if isinstance(parent, (PackageFactory, RecordFactory)):
                 parent.children[typename] = child
                 break
 
@@ -95,7 +99,7 @@ class HasTypeName:
 
     @property
     def name(self) -> str:
-        return f"{self.typename.last_identifier}"
+        return re.sub(r"^__", "_", f"{self.typename.last_identifier}")
 
 
 @dataclass
@@ -291,6 +295,58 @@ class PackageFactory(HasTypeName):
 
 
 @dataclass
+class RecordFactory(HasTypeName):
+    code: str
+    components: dict[VariableName, Component]
+    children: dict[TypeName, Factory] = field(default_factory=dict, init=False)
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="omc4py.modelica", name="record")
+        yield ImportFrom(module="dataclasses", name="dataclass")
+
+        for component in self.components.values():
+            yield from component.iter_imports()
+
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        yield ast.ClassDef(
+            name=self.name,
+            bases=[ast.Name(id="record", ctx=ast.Load())],
+            keywords=[],
+            body=[*self._iter_class_def_body()],
+            decorator_list=[
+                ast.Call(
+                    func=ast.Name(id="dataclass", ctx=ast.Load()),
+                    args=[],
+                    keywords=[
+                        ast.keyword(
+                            arg="frozen", value=ast.Constant(value=True)
+                        )
+                    ],
+                )
+            ],
+        )
+
+    def _iter_class_def_body(self) -> Generator[ast.stmt, None, None]:
+        yield ast.Expr(value=ast.Constant(value=_to_doc(self.code)))
+        yield ast.Assign(
+            targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
+            value=ast.Call(
+                func=ast.Name(id="TypeName", ctx=ast.Load()),
+                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                keywords=[],
+            ),
+            lineno=None,
+        )
+
+        for variablename, component in self.components.items():
+            yield ast.AnnAssign(
+                target=ast.Name(id=f"{variablename}", ctx=ast.Store()),
+                annotation=component.annotation,
+                simple=1,
+            )
+
+
+@dataclass
 class EnumerationFactory(HasTypeName):
     entity: EnumerationEntity
 
@@ -330,7 +386,7 @@ class EnumerationFactory(HasTypeName):
                 yield ast.Expr(value=ast.Constant(value=comment))
 
 
-Factory = PackageFactory | EnumerationFactory
+Factory = PackageFactory | RecordFactory | EnumerationFactory
 
 
 @dataclass(frozen=True)
