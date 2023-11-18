@@ -17,6 +17,7 @@ from collections.abc import Generator
 from contextlib import AsyncExitStack
 from dataclasses import dataclass, field
 from itertools import chain
+from keyword import iskeyword
 from operator import attrgetter
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
@@ -709,3 +710,9 @@ def _to_doc(code: str) -> str:
             *(f"    {line}" for line in code.splitlines(keepends=False)),
         ]
     )
+
+
+def _avoid_keyword(s: str) -> str:
+    while iskeyword(s):
+        s = f"{s}_"
+    return s
