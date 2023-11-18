@@ -20,7 +20,10 @@ from dataclasses import dataclass, field
 from itertools import chain
 from operator import attrgetter
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 from omc4py import TypeName, VariableName
 
@@ -28,11 +31,13 @@ from .interface import (
     Entities,
     Entity,
     EnumerationEntity,
+    FunctionEntity,
     InputOutput,
     Interface,
     PackageEntity,
+    RecordEntity,
 )
-from .parser import get_enumerators
+from .parser import get_enumerators, get_optionals
 from .util import ensure_terminate
 
 
@@ -530,6 +535,109 @@ class AliasTypeHint(HasTypeName):
 
 
 TypeHint = BuiltinTypeHint | EnumerationTypeHint | AliasTypeHint
+
+
+@dataclass
+class Component:
+    type_hint: TypeHint
+    ndim: int
+    is_optional: bool
+
+    @classmethod
+    def iter_from_entity(
+        cls,
+        entity: RecordEntity | FunctionEntity,
+        entities: Entities,
+    ) -> Generator[tuple[VariableName, Self], None, None]:
+        if entity.code is None:
+            optionals = set[VariableName]()
+        else:
+            optionals = set(
+                map(VariableName, get_optionals(entity.code))
+            )  # TODO:
+
+        for variablename, component in entity.components.items():
+            typename = component.className
+            component_entity = entities.get(typename)
+
+            type_hint: TypeHint
+            if isinstance(component_entity, EnumerationEntity):
+                type_hint = EnumerationTypeHint(
+                    typename, component.inputOutput, component_entity
+                )
+            elif isinstance(component_entity, RecordEntity):
+                type_hint = AliasTypeHint(typename, component.inputOutput)
+            else:
+                type_hint = BuiltinTypeHint(
+                    TypeKind.resolve(variablename, typename, component_entity),
+                    component.inputOutput,
+                )
+
+            ndim = len(component.dimensions)
+            if f"{typename}" in {
+                "OpenModelica.$Code.TypeNames",
+                "OpenModelica.$Code.VariableNames",
+            }:
+                ndim += 1
+
+            yield variablename, cls(
+                type_hint=type_hint,
+                ndim=ndim,
+                is_optional=variablename in optionals,
+            )
+
+    @property
+    def input_output(self) -> InputOutput:
+        return self.type_hint.input_output
+
+    @property
+    def sequence_type(self) -> str:
+        match self.input_output:
+            case "input":
+                return "Sequence"
+            case _:
+                return "List"
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield from self.type_hint.iter_imports()
+        if 0 < self.ndim:
+            yield ImportFrom(module="typing", name=self.sequence_type)
+        if self.is_optional:
+            yield ImportFrom(module="typing", name="Union")
+
+    @property
+    def annotation(self) -> ast.expr:
+        annotation = self.type_hint.annotation
+
+        for _ in range(self.ndim):
+            annotation = ast.Subscript(
+                value=ast.Name(id=self.sequence_type, ctx=ast.Load()),
+                slice=annotation,
+                ctx=ast.Load(),
+            )
+
+        if self.is_optional:
+            if (
+                isinstance(annotation, ast.Subscript)
+                and isinstance(annotation.value, ast.Name)
+                and annotation.value.id == "Union"
+                and isinstance(annotation.slice, ast.Tuple)
+            ):
+                annotation.slice.elts.append(ast.Constant(value=None))
+            else:
+                annotation = ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            annotation,
+                            ast.Constant(value=None),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+
+        return annotation
 
 
 def _to_camel_case(s: str) -> str:
