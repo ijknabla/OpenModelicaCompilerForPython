@@ -342,4 +342,5 @@ def _get_version(
     matched = re.search(r"(\d+)\.(\d+)", version)
     if matched is None:
         raise OMCRuntimeError(f"Invalid version string {version!r}")
-    return tuple(map(int, matched.groups()))  # type: ignore
+    major, minor = tuple(map(int, matched.groups()))
+    return major, minor
