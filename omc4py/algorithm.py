@@ -26,3 +26,16 @@ def bind_to_awaitable(
             return f(x)
 
     return wrapped  # type: ignore
+
+
+def fmap(
+    f: Callable[[T_a], T_b], a: T_a | Coroutine[None, None, T_a]
+) -> T_b | Coroutine[None, None, T_b]:
+    if isinstance(a, Coroutine):
+        return _fmap(f, a)
+    else:
+        return f(a)
+
+
+async def _fmap(f: Callable[[T_a], T_b], a: Coroutine[None, None, T_a]) -> T_b:
+    return f(await a)
