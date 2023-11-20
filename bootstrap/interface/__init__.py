@@ -44,7 +44,7 @@ _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
 _T_value = TypeVar("_T_value")
 
-InputOutput = Literal["input", "output"]
+InputOutput = Literal["input", "output", "unspecified"]
 TypeNameString = NewType("TypeNameString", str)
 VariableNameString = NewType("VariableNameString", str)
 VersionString = NewType("VersionString", str)
@@ -112,7 +112,7 @@ AnnotatedVersion = Annotated[Version, _version_validator, _version_serializer]
 
 class Component(BaseModel, frozen=True):
     className: AnnotatedTypeName
-    inputOutput: Literal["input", "output", "unspecified"] = "unspecified"
+    inputOutput: InputOutput = "unspecified"
     dimensions: Tuple[str, ...] = ()
 
     @model_serializer
@@ -128,7 +128,7 @@ class Component(BaseModel, frozen=True):
 
 class _Component(TypedDict):
     className: TypeNameString
-    inputOutput: NotRequired[InputOutput]
+    inputOutput: NotRequired[Literal["input", "output"]]
     dimensions: NotRequired[Sequence[str]]
 
 

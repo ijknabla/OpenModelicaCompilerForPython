@@ -2,8 +2,9 @@ from __future__ import annotations
 
 import enum
 from collections.abc import Hashable
+from dataclasses import InitVar, dataclass, field
 from typing import (
-    TYPE_CHECKING,
+    Generic,
     Literal,
     Protocol,
     TypeVar,
@@ -11,12 +12,8 @@ from typing import (
     runtime_checkable,
 )
 
-if TYPE_CHECKING:
-    from typing_extensions import TypeAlias
-else:
-    TypeAlias = ...
 
-
+@runtime_checkable
 class SupportsClose(Protocol):
     def close(self) -> None:
         ...
@@ -51,22 +48,15 @@ T_Calling = TypeVar(
 class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
     @overload
     def evaluate(
-        self: SupportsInteractive[Synchronous],
-        expression: str,
+        self: SupportsInteractive[Synchronous], expression: str
     ) -> str:
         ...
 
     @overload
     async def evaluate(
-        self: SupportsInteractive[Asynchronous],
-        expression: str,
+        self: SupportsInteractive[Asynchronous], expression: str
     ) -> str:
         ...
-
-
-SupportsAnyInteractive: TypeAlias = (
-    "SupportsInteractive[Synchronous] | SupportsInteractive[Asynchronous]"
-)
 
 
 @runtime_checkable
@@ -74,3 +64,14 @@ class SupportsInteractiveProperty(Protocol[T_Calling]):
     @property
     def __omc_interactive__(self) -> SupportsInteractive[T_Calling]:
         ...
+
+
+@dataclass(frozen=True)
+class HasInteractive(Generic[T_Calling]):
+    interactive: InitVar[SupportsInteractive[T_Calling]]
+    __omc_interactive__: SupportsInteractive[T_Calling] = field(init=False)
+
+    def __post_init__(
+        self, interactive: SupportsInteractive[T_Calling]
+    ) -> None:
+        super().__setattr__("__omc_interactive__", interactive)

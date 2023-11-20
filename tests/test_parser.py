@@ -10,33 +10,37 @@ from typing_extensions import Annotated
 
 from omc4py import TypeName, VariableName
 from omc4py.latest import OpenModelica
-from omc4py.modelica import alias, enumeration, external, record
+from omc4py.modelica import alias, enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.parser import cast, parse
 
 
-@external(".OneTwo")
 class OneTwo(enumeration):
+    __omc_class__ = TypeName(".OneTwo")
+
     One = 1
     Two = 2
 
 
-@external(".RecordA")
 @dataclass
 class RecordA(record):
+    __omc_class__ = TypeName(".RecordA")
+
     a: int
 
 
-@external(".RecordAB")
 @dataclass
 class RecordAB(record):
+    __omc_class__ = TypeName(".RecordAB")
+
     a: int
     b: int
 
 
-@external(".ScalarRecord")
 @dataclass
 class ScalarRecord(record):
+    __omc_class__ = TypeName(".ScalarRecord")
+
     real: float
     integer: int
     boolean: bool
@@ -46,9 +50,10 @@ class ScalarRecord(record):
     enumeration_: OneTwo
 
 
-@external(".SequenceRecord")
 @dataclass
 class SequenceRecord(record):
+    __omc_class__ = TypeName(".SequenceRecord")
+
     real: Sequence[float]
     integer: Sequence[int]
     boolean: Sequence[bool]
