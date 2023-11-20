@@ -292,8 +292,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: T[L[1], L[13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]]
-    | T[L[0], int],
+    version: T[L[1], L[13]],
     asyncio: Literal[False] = False,
 ) -> v_1_13.Session:
     ...
@@ -303,8 +302,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: T[L[1], L[13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]]
-    | T[L[0], int],
+    version: T[L[1], L[13]],
     asyncio: Literal[True],
 ) -> v_1_13.AsyncSession:
     ...
