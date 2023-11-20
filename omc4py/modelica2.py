@@ -29,45 +29,39 @@ from .protocol import (
 )
 from .string import to_omc_literal
 
-if TYPE_CHECKING:
-    _T = TypeVar("_T")
-    _P = ParamSpec("_P")
-
-    SupportsAnyInteractiveProperty = (
-        SupportsInteractiveProperty[Synchronous]
-        | SupportsInteractiveProperty[Asynchronous]
-    )
-
 
 class package(HasInteractive[T_Calling]):
     __omc_class__: ClassVar[TypeName]
 
 
 if TYPE_CHECKING:
+    T = TypeVar("T")
+    P = ParamSpec("P")
+
     SelfType = Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ]
-    ReturnType = Union[_T, Coroutine[None, None, _T]]
+    ReturnType = Union[T, Coroutine[None, None, T]]
     MethodType = Callable[
-        Concatenate[SelfType, _P],
-        Union[_T, Coroutine[None, None, _T]],
+        Concatenate[SelfType, P],
+        Union[T, Coroutine[None, None, T]],
     ]
 
 
 def external(
     funcname: str, rename: dict[str, str] | None = None
-) -> Callable[[_T], _T]:
+) -> Callable[[T], T]:
     if rename is None:
         rename = {}
 
-    def decorator(f: MethodType[_P, _T]) -> MethodType[_P, _T]:
+    def decorator(f: MethodType[P, T]) -> MethodType[P, T]:
         @wraps(f)
         def wrapped(
             self: SelfType,
-            *args: _P.args,
-            **kwargs: _P.kwargs,
-        ) -> ReturnType[_T]:
+            *args: P.args,
+            **kwargs: P.kwargs,
+        ) -> ReturnType[T]:
             return _call(f, funcname, rename, self, *args, **kwargs)
 
         return wrapped  # type: ignore
@@ -76,13 +70,16 @@ def external(
 
 
 def _call(
-    f: MethodType[_P, _T],
+    f: MethodType[P, T],
     funcname: str,
     rename: dict[str, str],
-    self: SupportsAnyInteractiveProperty,
-    *args: _P.args,
-    **kwargs: _P.kwargs,
-) -> ReturnType[_T]:
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    *args: P.args,
+    **kwargs: P.kwargs,
+) -> ReturnType[T]:
     signature = inspect.signature(f)
     type_hints = get_type_hints(f)
 
