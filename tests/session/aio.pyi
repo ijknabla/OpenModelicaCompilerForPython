@@ -3,12 +3,6 @@ from omc4py.modelica import external, package
 
 from . import one
 
-class EmptySession(BasicSession):
-    @external(".empty")
-    @classmethod
-    async def empty(_) -> None:
-        raise NotImplementedError()
-
 class OneSession(BasicSession):
     @external(".one")
     @classmethod

@@ -1,3 +1,3 @@
-__all__ = ("EmptySession", "NestedSession", "OneSession")
+__all__ = ("NestedSession", "OneSession")
 
-from . import EmptySession, NestedSession, OneSession
+from . import NestedSession, OneSession

@@ -9,8 +9,8 @@ import omc4py.session.aio
 from omc4py import TypeName, VariableName, latest, open_session
 from omc4py.openmodelica import Component
 
-from .session import Enum, one
-from .session.aio import EmptySession, NestedSession, OneSession
+from .session import AsyncEmptySession, Enum, one
+from .session.aio import NestedSession, OneSession
 
 
 @pytest.mark.dependency()
@@ -299,9 +299,9 @@ def _check_components(components: list[Component]) -> None:
 
 
 @pytest.mark.asyncio
-async def test_empty_session(empty_session: EmptySession) -> None:
+async def test_empty_session(empty_session: AsyncEmptySession) -> None:
     s = empty_session
-    assert await s.empty() is None  # type: ignore
+    await s.empty()
 
 
 @pytest.mark.asyncio

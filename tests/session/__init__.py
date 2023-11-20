@@ -3,13 +3,14 @@ from __future__ import annotations
 from collections.abc import Coroutine
 from typing import TYPE_CHECKING, List, NamedTuple, Union, overload
 
-from omc4py import modelica2
+from omc4py import modelica2, openmodelica2
 from omc4py.latest import Session as BasicSession
 from omc4py.modelica import enumeration, external, package
 from omc4py.protocol import (
     Asynchronous,
     SupportsInteractiveProperty,
     Synchronous,
+    T_Calling,
 )
 from omc4py.v_1_21._interface import OpenModelica  # NOTE: update to latest
 
@@ -67,11 +68,34 @@ def getMessagesStringInternal(
     return ...  # type: ignore
 
 
-class EmptySession(BasicSession):
-    @external(".empty")
-    @classmethod
-    def empty(_) -> None:
-        raise NotImplementedError()
+@overload
+def empty(self: SupportsInteractiveProperty[Synchronous]) -> None:
+    ...
+
+
+@overload
+async def empty(self: SupportsInteractiveProperty[Asynchronous]) -> None:
+    ...
+
+
+@modelica2.external(".empty")
+def empty(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[None, Coroutine[None, None, None]]:
+    ...
+
+
+class GenericEmptySession(openmodelica2.BasicSession[T_Calling]):
+    loadFile = loadFile
+    getMessagesStringInternal = getMessagesStringInternal
+    empty = empty
+
+
+EmptySession = GenericEmptySession[Synchronous]
+AsyncEmptySession = GenericEmptySession[Asynchronous]
 
 
 @external(".one.Enum")
