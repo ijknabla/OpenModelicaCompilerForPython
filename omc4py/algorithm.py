@@ -4,22 +4,21 @@ from collections.abc import Awaitable, Callable, Coroutine
 from functools import wraps
 from typing import Any, TypeVar
 
-_T_1 = TypeVar("_T_1")
-_T_2 = TypeVar("_T_2")
+T_a = TypeVar("T_a")
+T_b = TypeVar("T_b")
 
 
 def bind_to_awaitable(
-    f: Callable[[_T_1], _T_2]
+    f: Callable[[T_a], T_b]
 ) -> (
-    Callable[[_T_1], _T_2]
-    | Callable[[Awaitable[_T_1]], Coroutine[Any, Any, _T_2]]
+    Callable[[T_a], T_b] | Callable[[Awaitable[T_a]], Coroutine[Any, Any, T_b]]
 ):
     @wraps(f)
-    def wrapped(x: _T_1 | Awaitable[_T_1]) -> _T_2 | Coroutine[Any, Any, _T_2]:
+    def wrapped(x: T_a | Awaitable[T_a]) -> T_b | Coroutine[Any, Any, T_b]:
         if isinstance(x, Awaitable):
 
             @wraps(f)
-            async def bind(x: Awaitable[_T_1]) -> _T_2:
+            async def bind(x: Awaitable[T_a]) -> T_b:
                 return f(await x)
 
             return bind(x)
