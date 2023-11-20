@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, NamedTuple, Union, overload
+from typing import TYPE_CHECKING, List, NamedTuple, Union, overload
 
 from omc4py import modelica2
 from omc4py.latest import Session as BasicSession
@@ -11,6 +11,7 @@ from omc4py.protocol import (
     SupportsInteractiveProperty,
     Synchronous,
 )
+from omc4py.v_1_21._interface import OpenModelica  # NOTE: update to latest
 
 
 @overload
@@ -35,6 +36,34 @@ def loadFile(
     ],
     fileName: str,
 ) -> Union[bool, Coroutine[None, None, bool]]:
+    return ...  # type: ignore
+
+
+@overload
+def getMessagesStringInternal(
+    self: SupportsInteractiveProperty[Synchronous], unique: bool | None = None
+) -> List[OpenModelica.Scripting.ErrorMessage]:
+    ...
+
+
+@overload
+async def getMessagesStringInternal(
+    self: SupportsInteractiveProperty[Asynchronous], unique: bool | None = None
+) -> List[OpenModelica.Scripting.ErrorMessage]:
+    ...
+
+
+@modelica2.external("getMessagesStringInternal")
+def getMessagesStringInternal(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    unique: bool | None = None,
+) -> Union[
+    List[OpenModelica.Scripting.ErrorMessage],
+    Coroutine[None, None, List[OpenModelica.Scripting.ErrorMessage]],
+]:
     return ...  # type: ignore
 
 
