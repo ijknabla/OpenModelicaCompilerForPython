@@ -181,7 +181,7 @@ class PackageFactory(HasTypeName):
                 for typevar in ["Asynchronous", "Synchronous"]
             )
             imports.add(
-                ImportFrom(module="omc4py.openmodelica2", name="BasicSession")
+                ImportFrom(module="omc4py.session", name="BasicSession")
             )
         for child in self.children.values():
             if isinstance(child, PackageFactory) and child.children:
