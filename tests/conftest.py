@@ -1,12 +1,15 @@
 from __future__ import annotations
 
 from asyncio import AbstractEventLoop, get_event_loop
-from collections.abc import AsyncGenerator, Generator
+from collections.abc import AsyncGenerator, Callable, Generator
+from functools import wraps
+from typing import TYPE_CHECKING, TypeVar
 
 import pytest
 import pytest_asyncio
 from pkg_resources import resource_filename
 
+import omc4py.modelica
 from omc4py import open_session
 from omc4py.interactive import Interactive
 from omc4py.protocol import asynchronous
@@ -14,10 +17,49 @@ from omc4py.v_1_22 import AsyncSession, Session  # NOTE: update to latest
 
 from .session import AsyncEmptySession, AsyncNestedSession, AsyncOneSession
 
+if TYPE_CHECKING:
+    from typing_extensions import Concatenate, ParamSpec
+
+    from omc4py.modelica import MethodType, ReturnType, SelfType
+
+    P = ParamSpec("P")
+    T = TypeVar("T")
+
+    Call = Callable[
+        Concatenate[MethodType[P, T], str, dict[str, str], SelfType, P],
+        ReturnType[T],
+    ]
+
 
 @pytest.fixture(scope="session")
 def event_loop() -> AbstractEventLoop:
     return get_event_loop()
+
+
+@pytest.fixture(scope="session")
+def function_coverage() -> Generator[None, None, None]:
+    with pytest.MonkeyPatch().context() as _monkeypatch:
+        _monkeypatch.setattr(
+            omc4py.modelica, "_call", wrap_call(omc4py.modelica._call)
+        )
+        yield
+
+
+def wrap_call(call: Call[P, T]) -> Call[P, T]:
+    @wraps(call)
+    def wrapped(
+        f: MethodType[P, T],
+        funcname: str,
+        rename: dict[str, str],
+        self: SelfType,
+        /,
+        *args: P.args,
+        **kwargs: P.kwargs,
+    ) -> ReturnType[T]:
+        f(self, *args, **kwargs)
+        return call(f, funcname, rename, self, *args, **kwargs)
+
+    return wrapped
 
 
 @pytest.fixture(scope="session")
