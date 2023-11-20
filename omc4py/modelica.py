@@ -20,7 +20,6 @@ if TYPE_CHECKING:
 
 from .algorithm import bind_to_awaitable
 from .openmodelica import TypeName
-from .parser import cast, parse
 from .protocol import (
     Asynchronous,
     HasInteractive,
@@ -89,6 +88,8 @@ def _call(
     *args: P.args,
     **kwargs: P.kwargs,
 ) -> ReturnType[T]:
+    from .parser import cast, parse
+
     signature = inspect.signature(f)
     type_hints = get_type_hints(f)
 
