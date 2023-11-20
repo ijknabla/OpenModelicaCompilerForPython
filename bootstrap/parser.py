@@ -19,7 +19,7 @@ from arpeggio import (
     Terminal,
     visit_parse_tree,
 )
-from modelicalang import ParsingExpressionLike, returns_parsing_expression
+from modelicalang import ParsingExpressionLike
 from typing_extensions import Never, Protocol
 
 import omc4py.parser
@@ -45,12 +45,10 @@ def get_optionals(stored_definition: str) -> tuple[VariableNameString, ...]:
 
 class Syntax(omc4py.parser.Syntax):
     @classmethod
-    @returns_parsing_expression
     def root(cls) -> ParsingExpressionLike:
         return cls.stored_definition, EOF
 
     @classmethod
-    @returns_parsing_expression
     def long_class_specifier(cls) -> ParsingExpressionLike:
         """
         .. code-block:: modelicapeg
@@ -81,7 +79,6 @@ class Syntax(omc4py.parser.Syntax):
         ]
 
     @classmethod
-    @returns_parsing_expression
     def generic(cls) -> ParsingExpressionLike:
         """
         .. code-block:: modelicapeg
@@ -103,9 +100,9 @@ class Token(enum.Flag):
 class Children(Protocol):
     IDENT: list[VariableNameString]
     STRING: list[str]
-    description: list[str]
-    string_comment: list[str]
+    comment: list[str]
     modification: list[Token]
+    string_comment: list[str]
 
 
 class EnumeratorVisitor(omc4py.parser.Visitor):
@@ -116,13 +113,13 @@ class EnumeratorVisitor(omc4py.parser.Visitor):
     ) -> str:
         return "".join(children.STRING)
 
-    def visit_description(
+    def visit_comment(
         self,
         _: Never,
         children: Children,
     ) -> str:
-        (description,) = children.string_comment
-        return description
+        (comment,) = children.string_comment
+        return comment
 
     def visit_enumeration_literal(
         self,
@@ -130,8 +127,8 @@ class EnumeratorVisitor(omc4py.parser.Visitor):
         children: Children,
     ) -> Enumerator:
         (name,) = children.IDENT
-        if children.description:
-            (comment,) = children.description
+        if children.comment:
+            (comment,) = children.comment
         else:
             comment = None
 

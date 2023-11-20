@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-import os
 import sys
 from asyncio import run
+from collections import ChainMap
 from collections.abc import Callable, Coroutine, Sequence
 from functools import wraps
-from itertools import chain
 from pathlib import Path
 from typing import IO, Any, TypeVar
 
@@ -15,8 +14,7 @@ from tqdm import tqdm
 from typing_extensions import ParamSpec
 
 from .interface import (
-    Interface,
-    Version,
+    InterfaceRoot,
     create_interface,
     create_interface_by_docker,
 )
@@ -53,12 +51,8 @@ def main() -> None:
 )
 @run_decorator
 async def interface(n: int, o: IO[str], exe: str | None) -> None:
-    n = max(1, n)
-    yaml.safe_dump(
-        await create_interface(n, exe),
-        o,
-        sort_keys=False,
-    )
+    interface_model = await create_interface(max(1, n), exe)
+    yaml.safe_dump(interface_model.model_dump(), o, sort_keys=False)
 
 
 @main.command()
@@ -99,47 +93,38 @@ async def interface_docker(
     )
 
 
-if sys.version_info >= (3, 10):
-    from ast import unparse
+@main.command()
+@click.option(
+    "-o",
+    "--output-dir",
+    type=click.Path(
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        resolve_path=True,
+        path_type=Path,
+    ),
+    default=Path("."),
+)
+@click.argument(
+    "inputs",
+    metavar="INPUTS",
+    type=click.File("r", encoding="utf-8", lazy=True),
+    nargs=-1,
+)
+@run_decorator
+async def code(
+    inputs: Sequence[IO[str]],
+    output_dir: Path,
+) -> None:
+    from .code import save_code
 
-    from .code import create_code
-
-    global code
-
-    @main.command()
-    @click.option(
-        "-o",
-        "--output-dir",
-        type=click.Path(
-            exists=True, dir_okay=True, file_okay=False, path_type=Path
-        ),
-        default=Path("."),
-    )
-    @click.argument(
-        "inputs",
-        metavar="INPUTS",
-        type=click.File("r", encoding="utf-8", lazy=True),
-        nargs=-1,
-    )
-    @run_decorator
-    async def code(
-        inputs: Sequence[IO[str]],
-        output_dir: Path,
-    ) -> None:
-        interface: Interface
-        interface = dict(
-            sorted(
-                chain.from_iterable(
-                    yaml.safe_load(i).items() for i in tqdm(inputs)
-                ),
-                key=lambda item: Version.parse(item[0]),
-            )
+    interface = InterfaceRoot(
+        root=ChainMap(
+            *(yaml.safe_load(i) for i in tqdm(inputs)),
         )
-        async for rel_path, module in create_code(interface):
-            path = output_dir / rel_path
-            os.makedirs(path.parent, exist_ok=True)
-            with path.open("w", encoding="utf-8") as o:
-                print(unparse(module), file=o)
+    )
+    await save_code(output_dir, interface.root)
 
 
 if __name__ == "__main__":

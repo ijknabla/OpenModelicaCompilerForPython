@@ -1,3 +1,6 @@
+from __future__ import annotations
+
+import pickle
 from contextlib import ExitStack
 from itertools import count
 from typing import TYPE_CHECKING, Any, Optional
@@ -11,14 +14,15 @@ if TYPE_CHECKING:
 
 
 @pytest.mark.parametrize(
-    "obj", ["a", "b", VariableName("a"), TypeName("a"), 0, 0.0, lambda: None]
+    "obj",
+    [None, "a", "b", VariableName("a"), TypeName("a"), 0, 0.0, lambda: None],
 )
 def test_variablename(obj: Any) -> None:
     variablename: Optional[VariableName] = None
     expected_exception: ExceptionInfo[TypeError] | None = None
 
     with ExitStack() as stack:
-        if not isinstance(obj, (str, VariableName, TypeName)):
+        if not (isinstance(obj, (str, VariableName, TypeName)) or obj is None):
             expected_exception = stack.enter_context(pytest.raises(TypeError))
         variablename = VariableName(obj)
 
@@ -36,6 +40,7 @@ def test_variablename(obj: Any) -> None:
         assert variablename != "a"
         assert isinstance(hash(variablename), int)
         assert str(variablename) in repr(variablename)
+        assert pickle.loads(pickle.dumps(variablename)) == variablename
     else:
         assert expected_exception is not None
         (arg,) = expected_exception.value.args
@@ -76,11 +81,6 @@ def test_variablename_constructor(s: str) -> None:
         assert repr(s) in arg
 
 
-def test_typename() -> None:
-    typename = TypeName("A")
-    assert TypeName(typename) is typename
-
-
 def test_typename_combine() -> None:
     parts_a = ("A1", "A2")
     parts_b = ("B1", "B2")
@@ -88,13 +88,35 @@ def test_typename_combine() -> None:
     assert (TypeName(*parts_a) / TypeName(*parts_b)).parts == parts_a + parts_b
 
 
-def test_typename_parts() -> None:
-    typename = TypeName("A.B.C.D")
+@pytest.mark.parametrize(
+    "typename," "last_identifier,",
+    [
+        (TypeName(), VariableName()),
+        (TypeName("."), VariableName()),
+        (TypeName("A"), VariableName("A")),
+        (TypeName(".A"), VariableName("A")),
+        (TypeName("A.B.C.D"), VariableName("D")),
+        (TypeName(".A.B.C.D"), VariableName("D")),
+    ],
+)
+def test_typename(typename: TypeName, last_identifier: VariableName) -> None:
+    assert TypeName(typename) is typename
+    assert eval(repr(typename)) == typename
+    assert pickle.loads(pickle.dumps(typename)) == typename
 
-    assert typename.last_identifier == VariableName(typename.parts[-1])
+    assert bool(typename.parts) == bool(str(typename))
+
+    isinstance(hash(typename), int)
+
+    assert typename.last_identifier == last_identifier
 
     for i, parent in enumerate(typename.parents, start=1):
         assert parent.parts == typename.parts[:-i]
+
+    if not typename.parents:
+        assert typename.parent == typename
+    else:
+        assert typename.parent == typename.parents[0]
 
 
 def test_absolute_typename() -> None:

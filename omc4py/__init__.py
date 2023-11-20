@@ -44,19 +44,26 @@ __all__ = (
 )
 import re
 from os import PathLike
-from typing import TYPE_CHECKING, Any, overload
+from typing import TYPE_CHECKING, Any
+from typing import Literal
+from typing import Literal as L
+from typing import Tuple
+from typing import Tuple as T
+from typing import Union, overload
 
-from typing_extensions import Literal
-
-from . import session
 from .exception import OMCRuntimeError
-from .interactive import open_interactives
+from .interactive import Interactive
 from .openmodelica import TypeName, VariableName
-from .protocol import SupportsInteractive
+from .protocol import (
+    Asynchronous,
+    SupportsInteractive,
+    Synchronous,
+    synchronous,
+)
+from .session import BasicSession
 
 if TYPE_CHECKING:
     from . import (
-        latest,
         v_1_13,
         v_1_14,
         v_1_15,
@@ -66,78 +73,57 @@ if TYPE_CHECKING:
         v_1_19,
         v_1_20,
         v_1_21,
+        v_1_22,
     )
 
-    Command = str | PathLike[str]
-
-    Version__2_X = tuple[Literal[2], int]
-    Version__1_X = tuple[
-        Literal[1], Literal[22, 23, 24, 25, 26, 27, 28, 29, 30, 31]
-    ]
-    Version__1_21 = tuple[Literal[1], Literal[21]]
-    Version__1_20 = tuple[Literal[1], Literal[20]]
-    Version__1_19 = tuple[Literal[1], Literal[19]]
-    Version__1_18 = tuple[Literal[1], Literal[18]]
-    Version__1_17 = tuple[Literal[1], Literal[17]]
-    Version__1_16 = tuple[Literal[1], Literal[16]]
-    Version__1_15 = tuple[Literal[1], Literal[15]]
-    Version__1_14 = tuple[Literal[1], Literal[14]]
-    Version__1_13 = tuple[Literal[1], Literal[13]]
-    Version__1_12 = tuple[Literal[1], Literal[12]]
-    Version__1_11 = tuple[Literal[1], Literal[11]]
-    Version__1_10 = tuple[Literal[1], Literal[10]]
-    Version__1_9 = tuple[Literal[1], Literal[9]]
-    Version__1_8 = tuple[Literal[1], Literal[8]]
-    Version__1_7 = tuple[Literal[1], Literal[7]]
-    Version__1_6 = tuple[Literal[1], Literal[6]]
-    Version__1_5 = tuple[Literal[1], Literal[5]]
-    Version__1_4 = tuple[Literal[1], Literal[4]]
-    Version__1_3 = tuple[Literal[1], Literal[3]]
-    Version__1_2 = tuple[Literal[1], Literal[2]]
-    Version__1_1 = tuple[Literal[1], Literal[1]]
-    Version__1_0 = tuple[Literal[1], Literal[0]]
-    Version__0_X = tuple[Literal[0], int]
+    Command = Union[str, PathLike[str]]
 
 
 def _select_session_type(
-    version: tuple[int, int]
-) -> tuple[type[session.Session], type[session.aio.Session]]:
-    if (1, 21) <= version:
+    version: Tuple[int, int]
+) -> Tuple[type[BasicSession[Synchronous]], type[BasicSession[Asynchronous]]]:
+    if False:
+        pass
+    elif (1, 22) <= version:
+        from . import v_1_22
+
+        return v_1_22.Session, v_1_22.AsyncSession
+    elif (1, 21) <= version:
         from . import v_1_21
 
-        return v_1_21.Session, v_1_21.aio.Session
+        return v_1_21.Session, v_1_21.AsyncSession
     elif (1, 20) <= version:
         from . import v_1_20
 
-        return v_1_20.Session, v_1_20.aio.Session
+        return v_1_20.Session, v_1_20.AsyncSession
     elif (1, 19) <= version:
         from . import v_1_19
 
-        return v_1_19.Session, v_1_19.aio.Session
+        return v_1_19.Session, v_1_19.AsyncSession
     elif (1, 18) <= version:
         from . import v_1_18
 
-        return v_1_18.Session, v_1_18.aio.Session
+        return v_1_18.Session, v_1_18.AsyncSession
     elif (1, 17) <= version:
         from . import v_1_17
 
-        return v_1_17.Session, v_1_17.aio.Session
+        return v_1_17.Session, v_1_17.AsyncSession
     elif (1, 16) <= version:
         from . import v_1_16
 
-        return v_1_16.Session, v_1_16.aio.Session
+        return v_1_16.Session, v_1_16.AsyncSession
     elif (1, 15) <= version:
         from . import v_1_15
 
-        return v_1_15.Session, v_1_15.aio.Session
+        return v_1_15.Session, v_1_15.AsyncSession
     elif (1, 14) <= version:
         from . import v_1_14
 
-        return v_1_14.Session, v_1_14.aio.Session
+        return v_1_14.Session, v_1_14.AsyncSession
     else:
         from . import v_1_13
 
-        return v_1_13.Session, v_1_13.aio.Session
+        return v_1_13.Session, v_1_13.AsyncSession
 
 
 # Latest
@@ -145,9 +131,9 @@ def _select_session_type(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__2_X | Version__1_X | None = None,
+    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
     asyncio: Literal[False] = False,
-) -> latest.Session:
+) -> v_1_22.Session:
     ...
 
 
@@ -155,9 +141,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__2_X | Version__1_X | None = None,
+    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
     asyncio: Literal[True],
-) -> latest.aio.Session:
+) -> v_1_22.AsyncSession:
     ...
 
 
@@ -166,7 +152,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_21,
+    version: T[L[1], L[21]],
     asyncio: Literal[False] = False,
 ) -> v_1_21.Session:
     ...
@@ -176,9 +162,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_21,
+    version: T[L[1], L[21]],
     asyncio: Literal[True],
-) -> v_1_21.aio.Session:
+) -> v_1_21.AsyncSession:
     ...
 
 
@@ -187,7 +173,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_20,
+    version: T[L[1], L[20]],
     asyncio: Literal[False] = False,
 ) -> v_1_20.Session:
     ...
@@ -197,9 +183,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_20,
+    version: T[L[1], L[20]],
     asyncio: Literal[True],
-) -> v_1_20.aio.Session:
+) -> v_1_20.AsyncSession:
     ...
 
 
@@ -208,7 +194,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_19,
+    version: T[L[1], L[19]],
     asyncio: Literal[False] = False,
 ) -> v_1_19.Session:
     ...
@@ -218,9 +204,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_19,
+    version: T[L[1], L[19]],
     asyncio: Literal[True],
-) -> v_1_19.aio.Session:
+) -> v_1_19.AsyncSession:
     ...
 
 
@@ -229,7 +215,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_18,
+    version: T[L[1], L[18]],
     asyncio: Literal[False] = False,
 ) -> v_1_18.Session:
     ...
@@ -239,9 +225,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_18,
+    version: T[L[1], L[18]],
     asyncio: Literal[True],
-) -> v_1_18.aio.Session:
+) -> v_1_18.AsyncSession:
     ...
 
 
@@ -250,7 +236,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_17,
+    version: T[L[1], L[17]],
     asyncio: Literal[False] = False,
 ) -> v_1_17.Session:
     ...
@@ -260,9 +246,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_17,
+    version: T[L[1], L[17]],
     asyncio: Literal[True],
-) -> v_1_17.aio.Session:
+) -> v_1_17.AsyncSession:
     ...
 
 
@@ -271,7 +257,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_16,
+    version: T[L[1], L[16]],
     asyncio: Literal[False] = False,
 ) -> v_1_16.Session:
     ...
@@ -281,9 +267,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_16,
+    version: T[L[1], L[16]],
     asyncio: Literal[True],
-) -> v_1_16.aio.Session:
+) -> v_1_16.AsyncSession:
     ...
 
 
@@ -292,7 +278,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_15,
+    version: T[L[1], L[15]],
     asyncio: Literal[False] = False,
 ) -> v_1_15.Session:
     ...
@@ -302,9 +288,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_15,
+    version: T[L[1], L[15]],
     asyncio: Literal[True],
-) -> v_1_15.aio.Session:
+) -> v_1_15.AsyncSession:
     ...
 
 
@@ -313,7 +299,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_14,
+    version: T[L[1], L[14]],
     asyncio: Literal[False] = False,
 ) -> v_1_14.Session:
     ...
@@ -323,9 +309,9 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_14,
+    version: T[L[1], L[14]],
     asyncio: Literal[True],
-) -> v_1_14.aio.Session:
+) -> v_1_14.AsyncSession:
     ...
 
 
@@ -334,21 +320,7 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_13
-    | Version__1_12
-    | Version__1_11
-    | Version__1_10
-    | Version__1_9
-    | Version__1_8
-    | Version__1_7
-    | Version__1_6
-    | Version__1_5
-    | Version__1_4
-    | Version__1_3
-    | Version__1_2
-    | Version__1_1
-    | Version__1_0
-    | Version__0_X,
+    version: T[L[1], L[13]],
     asyncio: Literal[False] = False,
 ) -> v_1_13.Session:
     ...
@@ -358,34 +330,21 @@ def open_session(
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: Version__1_13
-    | Version__1_12
-    | Version__1_11
-    | Version__1_10
-    | Version__1_9
-    | Version__1_8
-    | Version__1_7
-    | Version__1_6
-    | Version__1_5
-    | Version__1_4
-    | Version__1_3
-    | Version__1_2
-    | Version__1_1
-    | Version__1_0
-    | Version__0_X,
+    version: T[L[1], L[13]],
     asyncio: Literal[True],
-) -> v_1_13.aio.Session:
+) -> v_1_13.AsyncSession:
     ...
 
 
 def open_session(
     omc_command: Command | None = None,
     *,
-    version: tuple[int, int] | None = None,
+    version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
-    interactive, aio_interactive = open_interactives(
-        "omc" if omc_command is None else omc_command
+    interactive = Interactive.open(
+        "omc" if omc_command is None else omc_command,
+        synchronous,
     )
 
     try:
@@ -394,18 +353,20 @@ def open_session(
         )
     except Exception:
         interactive.close()
-        aio_interactive.close()
         raise
 
     if asyncio:
-        return aio_session_type(aio_interactive)
+        return aio_session_type(interactive.asynchronous)
     else:
         return session_type(interactive)
 
 
-def _get_version(interactive: SupportsInteractive) -> tuple[int, int]:
+def _get_version(
+    interactive: SupportsInteractive[Synchronous],
+) -> Tuple[int, int]:
     version = interactive.evaluate("getVersion()")
     matched = re.search(r"(\d+)\.(\d+)", version)
     if matched is None:
         raise OMCRuntimeError(f"Invalid version string {version!r}")
-    return tuple(map(int, matched.groups()))  # type: ignore
+    major, minor = tuple(map(int, matched.groups()))
+    return major, minor
