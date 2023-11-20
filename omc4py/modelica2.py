@@ -42,16 +42,6 @@ if TYPE_CHECKING:
 class package(HasInteractive[T_Calling]):
     __omc_class__: ClassVar[TypeName]
 
-    if TYPE_CHECKING:
-
-        @property
-        def synchronous(self) -> package[Synchronous]:
-            ...
-
-        @property
-        def asynchronous(self) -> package[Asynchronous]:
-            ...
-
 
 if TYPE_CHECKING:
     SelfType = Union[
