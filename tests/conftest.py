@@ -18,7 +18,7 @@ from omc4py.v_1_22 import AsyncSession, Session  # NOTE: update to latest
 from .session import AsyncEmptySession, AsyncNestedSession, AsyncOneSession
 
 if TYPE_CHECKING:
-    from typing_extensions import Concatenate, ParamSpec
+    from typing_extensions import Concatenate, Never, ParamSpec
 
     from omc4py.modelica import MethodType, ReturnType, SelfType
 
@@ -99,7 +99,9 @@ async def one_session() -> AsyncGenerator[AsyncOneSession, None]:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def nested_session() -> AsyncGenerator[AsyncNestedSession, None]:
+async def nested_session(
+    function_coverage: Never,
+) -> AsyncGenerator[AsyncNestedSession, None]:
     interactive = Interactive.open("omc", asynchronous)
     with AsyncNestedSession(interactive) as session:
         assert await session.loadFile(
