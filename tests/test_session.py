@@ -6,7 +6,7 @@ import pytest
 
 from omc4py import TypeName, VariableName, open_session
 from omc4py.openmodelica import Component
-from omc4py.v_1_21 import AsyncSession, Session  # NOTE: update to latest
+from omc4py.v_1_22 import AsyncSession, Session  # NOTE: update to latest
 
 from .session import (
     AsyncEmptySession,

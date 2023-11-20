@@ -14,6 +14,7 @@ python -m bootstrap interface-docker \
   omc1.19-py3.8-bullseye \
   omc1.20-py3.8-bullseye \
   omc1.21-py3.8-bullseye \
+  omc1.22-py3.8-bookworm \
   -o bootstrap/interface/ \
   --pip-cache-dir ~/.cache/pip
 ```
