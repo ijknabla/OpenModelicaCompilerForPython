@@ -9,10 +9,10 @@ import pytest
 from typing_extensions import Annotated
 
 from omc4py import TypeName, VariableName
-from omc4py.latest import OpenModelica
 from omc4py.modelica import alias, enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.parser import cast, parse
+from omc4py.v_1_21 import OpenModelica  # NOTE: update to latest
 
 
 class OneTwo(enumeration):

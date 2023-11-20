@@ -36,7 +36,7 @@ from pydantic import (
 from typing_extensions import Annotated, NotRequired, Self, TypedDict
 
 from omc4py import TypeName, VariableName, exception, open_session
-from omc4py.latest.aio import Session
+from omc4py.v_1_21.aio import Session  # NOTE: update to latest
 
 from ..util import QueueingIteration, ensure_cancel, ensure_terminate
 
