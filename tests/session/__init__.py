@@ -3,9 +3,10 @@ from __future__ import annotations
 from collections.abc import Coroutine
 from typing import List, NamedTuple, Union, overload
 
-from omc4py import modelica2, openmodelica2
 from omc4py.modelica import enumeration
+from omc4py.modelica2 import external, package
 from omc4py.openmodelica import TypeName
+from omc4py.openmodelica2 import BasicSession
 from omc4py.protocol import (
     Asynchronous,
     SupportsInteractiveProperty,
@@ -31,7 +32,7 @@ async def loadFile(
     ...
 
 
-@modelica2.external("loadFile")
+@external("loadFile")
 def loadFile(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -56,7 +57,7 @@ async def getMessagesStringInternal(
     ...
 
 
-@modelica2.external("getMessagesStringInternal")
+@external("getMessagesStringInternal")
 def getMessagesStringInternal(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -80,7 +81,7 @@ async def empty(self: SupportsInteractiveProperty[Asynchronous]) -> None:
     ...
 
 
-@modelica2.external(".empty")
+@external(".empty")
 def empty(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -90,7 +91,7 @@ def empty(
     ...
 
 
-class GenericEmptySession(openmodelica2.BasicSession[T_Calling]):
+class GenericEmptySession(BasicSession[T_Calling]):
     loadFile = loadFile
     getMessagesStringInternal = getMessagesStringInternal
     empty = empty
@@ -124,7 +125,7 @@ async def one(self: SupportsInteractiveProperty[Asynchronous]) -> One:
     ...
 
 
-@modelica2.external(".one")
+@external(".one")
 def one(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -134,7 +135,7 @@ def one(
     return ...  # type: ignore
 
 
-class GenericOneSession(openmodelica2.BasicSession[T_Calling]):
+class GenericOneSession(BasicSession[T_Calling]):
     loadFile = loadFile
     getMessagesStringInternal = getMessagesStringInternal
     one = one
@@ -144,7 +145,7 @@ OneSession = GenericOneSession[Synchronous]
 AsyncOneSession = GenericOneSession[Asynchronous]
 
 
-class Nested(modelica2.package[T_Calling]):
+class Nested(package[T_Calling]):
     __omc_class__ = TypeName(".Nested")
 
     level = nested.level
@@ -154,7 +155,7 @@ class Nested(modelica2.package[T_Calling]):
         return nested.Nested(self.__omc_interactive__)
 
 
-class GenericNestedSession(openmodelica2.BasicSession[T_Calling]):
+class GenericNestedSession(BasicSession[T_Calling]):
     loadFile = loadFile
     getMessagesStringInternal = getMessagesStringInternal
 
