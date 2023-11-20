@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - `python==3.7` support
 - `omc4py.latest` module
+- `omc<=1.12` support
 
 ## [0.3.0a0] - 2023-07-30
 
