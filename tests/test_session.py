@@ -4,11 +4,9 @@ from itertools import zip_longest
 
 import pytest
 
-import omc4py.session
-import omc4py.session.aio
 from omc4py import TypeName, VariableName, open_session
 from omc4py.openmodelica import Component
-from omc4py.v_1_21 import Session  # NOTE: update to latest
+from omc4py.v_1_21 import AsyncSession, Session  # NOTE: update to latest
 
 from .session import (
     AsyncEmptySession,
@@ -246,7 +244,7 @@ def test_getMessagesStringInternal(session: Session) -> None:
 )
 @pytest.mark.parametrize("use_typename", [False, True])
 def test_get_components(
-    session: omc4py.session.Session, name: TypeName | str, use_typename: bool
+    session: Session, name: TypeName | str, use_typename: bool
 ) -> None:
     s = session
     if use_typename:
@@ -260,7 +258,7 @@ def test_get_components(
 )
 @pytest.mark.parametrize("use_typename", [False, True])
 async def test_async_get_components(
-    async_session: omc4py.session.aio.Session,
+    async_session: AsyncSession,
     name: TypeName | str,
     use_typename: bool,
 ) -> None:

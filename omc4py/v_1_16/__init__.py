@@ -2,8 +2,8 @@ from __future__ import annotations as _
 
 from omc4py.modelica import package
 from omc4py.openmodelica import TypeName
-from omc4py.openmodelica2 import BasicSession
 from omc4py.protocol import Asynchronous, Synchronous, T_Calling
+from omc4py.session import BasicSession
 
 from . import OpenModelica as openModelica
 
