@@ -46,14 +46,16 @@ def loadFile(
 
 @overload
 def getMessagesStringInternal(
-    self: SupportsInteractiveProperty[Synchronous], unique: bool | None = None
+    self: SupportsInteractiveProperty[Synchronous],
+    unique: Union[bool, None] = None,
 ) -> List[ErrorMessage]:
     ...
 
 
 @overload
 async def getMessagesStringInternal(
-    self: SupportsInteractiveProperty[Asynchronous], unique: bool | None = None
+    self: SupportsInteractiveProperty[Asynchronous],
+    unique: Union[bool, None] = None,
 ) -> List[ErrorMessage]:
     ...
 
@@ -64,7 +66,7 @@ def getMessagesStringInternal(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    unique: bool | None = None,
+    unique: Union[bool, None] = None,
 ) -> Union[List[ErrorMessage], Coroutine[None, None, List[ErrorMessage]]]:
     return ...  # type: ignore
 
