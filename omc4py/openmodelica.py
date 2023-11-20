@@ -3,7 +3,7 @@ from __future__ import annotations
 __all__ = ("Component", "TypeName", "VariableName")
 
 import itertools
-from collections.abc import Callable, Iterable, Iterator
+from collections.abc import Iterable, Iterator
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -215,16 +215,3 @@ class TypeName(_BaseTypeName):
 
     def __truediv__(self, other: TypeNameLike) -> Self:
         return type(self)(self, other)
-
-
-def split_dict(
-    dictionary: dict[KT, Any],
-    condition: Callable[[Any], bool],
-) -> tuple[dict[KT, Any], dict[KT, Any]]:
-    yes, no = {}, {}
-    for k, v in dictionary.items():
-        if condition(v):
-            yes[k] = v
-        else:
-            no[k] = v
-    return yes, no
