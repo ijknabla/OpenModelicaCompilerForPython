@@ -6,10 +6,9 @@ from itertools import product
 from typing import Any, List, Literal, NamedTuple, Sequence, TypeVar, Union
 
 import pytest
-from typing_extensions import Annotated
 
 from omc4py import TypeName, VariableName
-from omc4py.modelica import alias, enumeration, record
+from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.parser import cast, parse
 from omc4py.v_1_21.OpenModelica.Scripting import (  # NOTE: update to latest
@@ -151,7 +150,6 @@ def _iter_enumeration_values(
 @pytest.mark.parametrize(
     "typ, val, expected",
     [
-        (Annotated[str, alias[Literal["from"]]], "from", "from"),
         *_iter_namelike_values(
             TypeName,
             [
