@@ -10,8 +10,7 @@ from pkg_resources import resource_filename
 from omc4py import open_session
 from omc4py.interactive import Interactive
 from omc4py.protocol import asynchronous
-from omc4py.v_1_21 import Session  # NOTE: update to latest
-from omc4py.v_1_21.aio import Session as AsyncSession  # NOTE: update to latest
+from omc4py.v_1_21 import AsyncSession, Session  # NOTE: update to latest
 
 from .session import AsyncEmptySession, AsyncNestedSession, AsyncOneSession
 
