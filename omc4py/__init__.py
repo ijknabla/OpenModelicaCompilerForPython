@@ -73,6 +73,7 @@ if TYPE_CHECKING:
         v_1_19,
         v_1_20,
         v_1_21,
+        v_1_22,
     )
 
     Command = Union[str, PathLike[str]]
@@ -81,7 +82,13 @@ if TYPE_CHECKING:
 def _select_session_type(
     version: Tuple[int, int]
 ) -> Tuple[type[BasicSession[Synchronous]], type[BasicSession[Asynchronous]]]:
-    if (1, 21) <= version:
+    if False:
+        pass
+    elif (1, 22) <= version:
+        from . import v_1_22
+
+        return v_1_22.Session, v_1_22.AsyncSession
+    elif (1, 21) <= version:
         from . import v_1_21
 
         return v_1_21.Session, v_1_21.AsyncSession
@@ -120,6 +127,27 @@ def _select_session_type(
 
 
 # Latest
+@overload
+def open_session(
+    omc_command: Command | None = None,
+    *,
+    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
+    asyncio: Literal[False] = False,
+) -> v_1_22.Session:
+    ...
+
+
+@overload
+def open_session(
+    omc_command: Command | None = None,
+    *,
+    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
+    asyncio: Literal[True],
+) -> v_1_22.AsyncSession:
+    ...
+
+
+# v1.21
 @overload
 def open_session(
     omc_command: Command | None = None,
