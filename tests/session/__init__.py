@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING, List, NamedTuple, Union, overload
 from omc4py import modelica2, openmodelica2
 from omc4py.latest import Session as BasicSession
 from omc4py.modelica import enumeration, external, package
+from omc4py.openmodelica import TypeName
 from omc4py.protocol import (
     Asynchronous,
     SupportsInteractiveProperty,
@@ -13,6 +14,8 @@ from omc4py.protocol import (
     T_Calling,
 )
 from omc4py.v_1_21._interface import OpenModelica  # NOTE: update to latest
+
+from . import Nested as nested
 
 
 @overload
@@ -116,6 +119,16 @@ class OneSession(BasicSession):
     @classmethod
     def one(_) -> one:
         raise NotImplementedError()
+
+
+class _Nested(modelica2.package[T_Calling]):
+    __omc_class__ = TypeName(".Nested")
+
+    level = nested.level
+
+    @property
+    def Nested(self) -> nested.Nested[T_Calling]:
+        return nested.Nested(self.__omc_interactive__)
 
 
 @external(".Nested")
