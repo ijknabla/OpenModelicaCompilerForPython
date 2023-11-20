@@ -80,10 +80,8 @@ def _call(
     f: MethodType[P, T],
     funcname: str,
     rename: dict[str, str],
-    self: Union[
-        SupportsInteractiveProperty[Synchronous],
-        SupportsInteractiveProperty[Asynchronous],
-    ],
+    self: SelfType,
+    /,
     *args: P.args,
     **kwargs: P.kwargs,
 ) -> ReturnType[T]:
