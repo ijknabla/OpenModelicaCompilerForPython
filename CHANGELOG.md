@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.3.0a1] - 2023-11-21
+
 ### Added
 
 - Support pickle serialize for `omc4py.TypeName`, `omc4py.VariableName`
@@ -94,7 +96,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Security
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
-[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a0...HEAD
+[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a1...HEAD
+[0.3.0a1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a0...v0.3.0a1
 [0.3.0a0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.2...v0.3.0a0
 [0.2.2]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.2.0...v0.2.1
