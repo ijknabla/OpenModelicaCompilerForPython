@@ -77,7 +77,9 @@ async def async_session() -> AsyncGenerator[AsyncSession, None]:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def empty_session() -> AsyncGenerator[AsyncEmptySession, None]:
+async def empty_session(
+    function_coverage: Never,
+) -> AsyncGenerator[AsyncEmptySession, None]:
     interactive = Interactive.open("omc", asynchronous)
     with AsyncEmptySession(interactive) as session:
         assert await session.loadFile(
@@ -88,7 +90,9 @@ async def empty_session() -> AsyncGenerator[AsyncEmptySession, None]:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def one_session() -> AsyncGenerator[AsyncOneSession, None]:
+async def one_session(
+    function_coverage: Never,
+) -> AsyncGenerator[AsyncOneSession, None]:
     interactive = Interactive.open("omc", asynchronous)
     with AsyncOneSession(interactive) as session:
         assert await session.loadFile(
