@@ -359,9 +359,6 @@ async def _create_interface_by_docker(
         ),
     )
     assert py_version_match is not None
-    py_major, py_minor = map(int, py_version_match.groups())
-    if (py_major, py_minor) < (3, 8):
-        requirements = _to_compatible_requirements(requirements)
 
     omc_version_match = re.search(
         r"(\d+)\.(\d+)\.\d+",
@@ -466,18 +463,6 @@ async def _docker_run(
             raise CalledProcessError(process.returncode, cmd)
 
     return None
-
-
-COMPATIBILITIES = {"pydantic-core": "pydantic-core==2.10.1"}
-
-
-def _to_compatible_requirements(requirements: Iterable[str]) -> list[str]:
-    result: list[str] = []
-    for item in requirements:
-        requirement, *_ = item.split("==")
-        result.append(COMPATIBILITIES.get(requirement, requirement))
-
-    return result
 
 
 async def _get_version(session: AsyncSession) -> Version:
