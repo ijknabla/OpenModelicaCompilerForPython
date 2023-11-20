@@ -9,8 +9,8 @@ import omc4py.session.aio
 from omc4py import TypeName, VariableName, latest, open_session
 from omc4py.openmodelica import Component
 
-from .session import AsyncEmptySession, Enum, one
-from .session.aio import NestedSession, OneSession
+from .session import AsyncEmptySession, AsyncNestedSession, Enum, one
+from .session.aio import OneSession
 
 
 @pytest.mark.dependency()
@@ -316,8 +316,8 @@ async def test_one(one_session: OneSession) -> None:
 
 
 @pytest.mark.asyncio
-async def test_nested(nested_session: NestedSession) -> None:
+async def test_nested(nested_session: AsyncNestedSession) -> None:
     s = nested_session
-    assert await s.level_1() == await s.Nested.level()
-    assert await s.level_2() == await s.Nested.Nested.level()
-    assert await s.level_3() == await s.Nested.Nested.Nested.level()
+    assert 1 == await s.Nested.level()
+    assert 2 == await s.Nested.Nested.level()
+    assert 3 == await s.Nested.Nested.Nested.level()

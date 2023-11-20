@@ -11,8 +11,8 @@ from omc4py import latest, open_session
 from omc4py.interactive import Interactive
 from omc4py.protocol import asynchronous
 
-from .session import AsyncEmptySession
-from .session.aio import NestedSession, OneSession
+from .session import AsyncEmptySession, AsyncNestedSession
+from .session.aio import OneSession
 
 
 @pytest.fixture(scope="session")
@@ -57,9 +57,9 @@ async def one_session() -> AsyncGenerator[OneSession, None]:
 
 
 @pytest_asyncio.fixture(scope="session")
-async def nested_session() -> AsyncGenerator[NestedSession, None]:
+async def nested_session() -> AsyncGenerator[AsyncNestedSession, None]:
     interactive = Interactive.open("omc", asynchronous)
-    with NestedSession(interactive) as session:
+    with AsyncNestedSession(interactive) as session:
         assert await session.loadFile(
             resource_filename(__name__, "src/Nested.mo")
         )

@@ -1,11 +1,11 @@
 from __future__ import annotations
 
 from collections.abc import Coroutine
-from typing import TYPE_CHECKING, List, NamedTuple, Union, overload
+from typing import List, NamedTuple, Union, overload
 
 from omc4py import modelica2, openmodelica2
 from omc4py.latest import Session as BasicSession
-from omc4py.modelica import enumeration, external, package
+from omc4py.modelica import enumeration, external
 from omc4py.openmodelica import TypeName
 from omc4py.protocol import (
     Asynchronous,
@@ -121,7 +121,7 @@ class OneSession(BasicSession):
         raise NotImplementedError()
 
 
-class _Nested(modelica2.package[T_Calling]):
+class Nested(modelica2.package[T_Calling]):
     __omc_class__ = TypeName(".Nested")
 
     level = nested.level
@@ -131,36 +131,14 @@ class _Nested(modelica2.package[T_Calling]):
         return nested.Nested(self.__omc_interactive__)
 
 
-@external(".Nested")
-class Nested(package):
-    @external(".Nested.level")
-    @classmethod
-    def level(_) -> int:
-        raise NotImplementedError()
+class GenericNestedSession(openmodelica2.BasicSession[T_Calling]):
+    loadFile = loadFile
+    getMessagesStringInternal = getMessagesStringInternal
 
-    @external(".Nested.Nested")
-    class Nested(package):
-        @external(".Nested.Nested.level")
-        @classmethod
-        def level(_) -> int:
-            raise NotImplementedError()
-
-        @external(".Nested.Nested.Nested")
-        class Nested(package):
-            @external(".Nested.Nested.Nested.level")
-            @classmethod
-            def level(_) -> int:
-                raise NotImplementedError()
+    @property
+    def Nested(self) -> Nested[T_Calling]:
+        return Nested(self.__omc_interactive__)
 
 
-class NestedSession(BasicSession):
-    Nested = Nested
-
-    if TYPE_CHECKING:
-        level_1 = staticmethod(Nested.level)
-        level_2 = staticmethod(Nested.Nested.level)
-        level_3 = staticmethod(Nested.Nested.Nested.level)
-    else:
-        level_1 = Nested.level
-        level_2 = Nested.Nested.level
-        level_3 = Nested.Nested.Nested.level
+NestedSession = GenericNestedSession[Synchronous]
+AsyncNestedSession = GenericNestedSession[Asynchronous]
