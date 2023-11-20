@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Added
 
 - Support pickle serialize for `omc4py.TypeName`, `omc4py.VariableName`
+- `omc4py.v_1_22` Support of _OpenModelica 1.22.x_
 
 ### Changed
 
@@ -22,7 +23,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - `python==3.7` support
 - `omc4py.latest` module
-- `omc<=1.12` support
+- Support of _OpenModelica<1.13.0_
 
 ## [0.3.0a0] - 2023-07-30
 
