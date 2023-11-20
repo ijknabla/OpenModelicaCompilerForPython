@@ -16,11 +16,9 @@ from ..protocol import SupportsInteractive, Synchronous
 from ..string import to_omc_literal
 
 if TYPE_CHECKING:
-    from typing_extensions import Self, TypeAlias
+    from typing_extensions import Self
 
-    from ..v_1_21._interface import OpenModelica
-
-    ErrorMessage: TypeAlias = OpenModelica.Scripting.ErrorMessage
+    from ..v_1_21.OpenModelica.Scripting import ErrorMessage
 
 
 @dataclass

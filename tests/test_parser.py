@@ -9,10 +9,12 @@ import pytest
 from typing_extensions import Annotated
 
 from omc4py import TypeName, VariableName
-from omc4py.latest import OpenModelica
 from omc4py.modelica import alias, enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.parser import cast, parse
+from omc4py.v_1_21.OpenModelica.Scripting import (  # NOTE: update to latest
+    SourceInfo,
+)
 
 
 class OneTwo(enumeration):
@@ -488,7 +490,7 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
             ),
         ),
         (
-            OpenModelica.Scripting.SourceInfo,
+            SourceInfo,
             """\
 record OpenModelica.Scripting.SourceInfo
     filename = "filename",
@@ -499,7 +501,7 @@ record OpenModelica.Scripting.SourceInfo
     columnEnd=4
 end OpenModelica.Scripting.SourceInfo;
 """,
-            OpenModelica.Scripting.SourceInfo(
+            SourceInfo(
                 fileName="filename",
                 readonly=False,
                 lineStart=1,
@@ -509,7 +511,7 @@ end OpenModelica.Scripting.SourceInfo;
             ),
         ),
         (
-            OpenModelica.Scripting.SourceInfo,
+            SourceInfo,
             """\
 record OpenModelica.Scripting.SourceInfo
     fileName = "fileName",
@@ -520,7 +522,7 @@ record OpenModelica.Scripting.SourceInfo
     columnEnd=4
 end OpenModelica.Scripting.SourceInfo;
 """,
-            OpenModelica.Scripting.SourceInfo(
+            SourceInfo(
                 fileName="fileName",
                 readonly=False,
                 lineStart=1,

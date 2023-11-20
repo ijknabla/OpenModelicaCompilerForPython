@@ -36,7 +36,7 @@ from pydantic import (
 from typing_extensions import Annotated, NotRequired, Self, TypedDict
 
 from omc4py import TypeName, VariableName, exception, open_session
-from omc4py.latest.aio import Session
+from omc4py.v_1_21 import AsyncSession  # NOTE: update to latest
 
 from ..util import QueueingIteration, ensure_cancel, ensure_terminate
 
@@ -480,14 +480,14 @@ def _to_compatible_requirements(requirements: Iterable[str]) -> list[str]:
     return result
 
 
-async def _get_version(session: Session) -> Version:
+async def _get_version(session: AsyncSession) -> Version:
     matched = re.search(r"(\d+\.\d+)\.\d+", await session.getVersion())
     assert matched is not None
     return Version.parse(matched.group(1))
 
 
 async def _put_recursive(
-    session: Session, iterator: QueueingIteration[TypeName]
+    session: AsyncSession, iterator: QueueingIteration[TypeName]
 ) -> list[TypeName]:
     result: list[TypeName] = []
 
@@ -500,7 +500,7 @@ async def _put_recursive(
 
 
 async def _iter_recursive(
-    session: Session, name: TypeName
+    session: AsyncSession, name: TypeName
 ) -> AsyncGenerator[TypeName, None]:
     yield name
     try:
@@ -515,7 +515,7 @@ async def _iter_recursive(
 
 
 async def _get_entities(
-    session: Session, typenames: AsyncIterable[TypeName]
+    session: AsyncSession, typenames: AsyncIterable[TypeName]
 ) -> dict[TypeName, Entity]:
     return {
         typename: entity
@@ -526,7 +526,7 @@ async def _get_entities(
 
 
 async def _get_entity(
-    session: Session,
+    session: AsyncSession,
     name: TypeName,
 ) -> Entity | None:
     try:
@@ -644,7 +644,7 @@ async def _get_entity(
 
 
 async def _iter_components(
-    session: Session, typename: TypeName
+    session: AsyncSession, typename: TypeName
 ) -> AsyncGenerator[tuple[VariableName, Component], None]:
     with suppress(exception.OMCError):
         for component_tuple in await session.getComponents(typename):

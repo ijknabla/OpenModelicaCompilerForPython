@@ -6,8 +6,9 @@ import pytest
 
 import omc4py.session
 import omc4py.session.aio
-from omc4py import TypeName, VariableName, latest, open_session
+from omc4py import TypeName, VariableName, open_session
 from omc4py.openmodelica import Component
+from omc4py.v_1_21 import Session  # NOTE: update to latest
 
 from .session import (
     AsyncEmptySession,
@@ -26,7 +27,7 @@ def test_open_session() -> None:
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_loadString(session: latest.Session) -> None:
+def test_loadString(session: Session) -> None:
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
     assert session.isType("MyEnumeration")
     assert session.isEnumeration("MyEnumeration")
@@ -39,7 +40,7 @@ def test_loadString(session: latest.Session) -> None:
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getClassNames(session: latest.Session) -> None:
+def test_getClassNames(session: Session) -> None:
     assert session.loadString(
         """
 package Test_getClassNames
@@ -108,7 +109,7 @@ type B = enumeration(b);
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getComponents(session: latest.Session) -> None:
+def test_getComponents(session: Session) -> None:
     assert session.loadString(
         """
 class Test_getComponents
@@ -228,11 +229,11 @@ end Test_getComponents;
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_OpenModelica(session: latest.Session) -> None:
+def test_OpenModelica(session: Session) -> None:
     assert session.isPackage("OpenModelica")
 
 
-def test_getMessagesStringInternal(session: latest.Session) -> None:
+def test_getMessagesStringInternal(session: Session) -> None:
     session.getMessagesStringInternal()
     for name in ["XXX", "YYY", "ZZZ"]:
         session.__omc_interactive__.evaluate(name)

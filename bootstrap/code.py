@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import sys
 
 if sys.version_info < (3, 10):
@@ -6,796 +8,984 @@ if sys.version_info < (3, 10):
         " not supported!"
     )
 
-from ast import (
-    AnnAssign,
-    Assign,
-    AsyncFunctionDef,
-    Attribute,
-    Call,
-    ClassDef,
-    Constant,
-    Expr,
-    FunctionDef,
-    If,
-    ImportFrom,
-    Load,
-    Module,
-    Name,
-    Raise,
-    Store,
-    Subscript,
-    Tuple,
-    alias,
-    arg,
-    arguments,
-    expr,
-    stmt,
-)
-from asyncio import FIRST_COMPLETED, get_running_loop, wait
-from collections.abc import (
-    AsyncGenerator,
-    Generator,
-    Iterable,
-    Mapping,
-    Sequence,
-)
-from concurrent.futures import ProcessPoolExecutor
-from functools import lru_cache
+import ast
+import enum
+import os
+import re
+from asyncio import create_subprocess_exec, gather
+from collections.abc import Generator
+from contextlib import AsyncExitStack
+from dataclasses import dataclass, field
+from itertools import chain
 from keyword import iskeyword
-from pathlib import PurePath
-from typing import DefaultDict, NamedTuple
+from operator import attrgetter
+from pathlib import Path
+from typing import TYPE_CHECKING, Literal
 
-from omc4py import TypeName
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+from omc4py import TypeName, VariableName
 
 from .interface import (
-    TypeNameString,
-    VariableNameString,
-    Version,
-    VersionString,
+    Entities,
+    Entity,
+    EnumerationEntity,
+    FunctionEntity,
+    InputOutput,
+    Interface,
+    PackageEntity,
+    RecordEntity,
 )
-from .interface import _Component as Component
-from .interface import _Entity as Entity
 from .parser import get_enumerators, get_optionals
-
-ComponentsDict = dict[VariableNameString, Component]
-
-
-class Reference(NamedTuple):
-    input: expr
-    output: expr
+from .util import ensure_terminate
 
 
-References = dict[TypeNameString, Reference]
-
-EntitiesDict = dict[TypeNameString, Entity]
-
-InterfaceDict = dict[VersionString, EntitiesDict]
-
-
-async def create_code(
-    interface: InterfaceDict,
-) -> AsyncGenerator[tuple[PurePath, Module], None]:
-    path, module, enum_names, enum_refs = _create_enumeration_module(interface)
-    yield path, module
-
-    loop = get_running_loop()
-    with ProcessPoolExecutor() as executor:
-        pending = set(
-            loop.run_in_executor(
-                executor,
-                _create_interface,
-                v,
-                enum_names[v],
-                enum_refs[v],
-                interface[v],
+async def save_code(
+    directory: Path,
+    interface: Interface,
+) -> None:
+    await gather(
+        *(
+            _save_code(
+                directory / f"v_{version.major}_{version.minor}", entities
             )
-            for v in interface
+            for version, entities in interface.items()
         )
-        while pending:
-            done, pending = await wait(pending, return_when=FIRST_COMPLETED)
-            for future in done:
-                for path, module in future.result():
-                    yield path, module
-
-
-def _create_enumeration_module(
-    interface: InterfaceDict,
-) -> tuple[
-    PurePath,
-    Module,
-    Mapping[VersionString, list[str]],
-    Mapping[VersionString, References],
-]:
-    categories = _categorize_enumerations(interface)
-
-    names = DefaultDict[VersionString, list[str]](list)
-    references = DefaultDict[VersionString, References](dict)
-
-    module = Module(
-        body=[
-            ImportFrom(
-                module="modelica",
-                names=[alias(name="enumeration"), alias(name="external")],
-                level=1,
-            ),
-        ],
-        type_ignores=[],
     )
-    for full_name, es_vs in categories.items():
-        for enumerators, vs in es_vs.items():
-            *_, part = _parts(full_name)
-            minimal_version = min(vs, key=Version.parse)
-            name = f"{part}__{_format_version(minimal_version)}"
 
-            literals = []
-            for i, enumerator in enumerate(enumerators, start=1):
-                literals.append(Constant(value=enumerator))
-                literals.append(Constant(value=i))
 
-            reference = Reference(
-                _subscript(
-                    "Union",
-                    [
-                        _reference(name),
-                        _subscript("Literal", literals),
-                    ],
-                ),
-                _reference(name),
+async def _save_code(directory: Path, entities: Entities) -> None:
+    factories = dict[TypeName, Factory]()
+    for typename, entity in entities.items():
+        if isinstance(entity, PackageEntity):
+            factories[typename] = PackageFactory(typename=typename)
+        elif isinstance(entity, RecordEntity):
+            components = dict(Component.iter_from_entity(entity, entities))
+            factories[typename] = RecordFactory(
+                typename=typename, code=entity.code, components=components
             )
-
-            for v in vs:
-                names[v].append(name)
-                references[v][full_name] = reference
-
-            module.body.append(
-                ClassDef(
-                    name=name,
-                    bases=[Name(id="enumeration", ctx=Load())],
-                    keywords=[],
-                    body=[
-                        *_code2doc(
-                            interface[minimal_version][full_name]["code"]
-                        ),
-                        *[
-                            Assign(
-                                targets=[
-                                    Name(id=f"{enumerator!s}", ctx=Store())
-                                ],
-                                value=Constant(value=i),
-                                lineno=None,
-                            )
-                            for i, enumerator in enumerate(
-                                enumerators, start=1
-                            )
-                        ],
-                    ],
-                    decorator_list=[
-                        Call(
-                            func=Name(id="external", ctx=Load()),
-                            args=[Constant(value=_as_absolute(full_name))],
-                            keywords=[],
-                        )
-                    ],
-                )
-            )
-
-    return PurePath("enumeration.py"), module, names, references
-
-
-def _categorize_enumerations(
-    interface: InterfaceDict,
-) -> Mapping[
-    TypeNameString,
-    Mapping[tuple[VariableNameString, ...], list[VersionString]],
-]:
-    enumerations = list[
-        tuple[TypeNameString, VersionString, tuple[VariableNameString, ...]]
-    ]()
-
-    for version, entities in interface.items():
-        for name, entity in entities.items():
-            if entity.get("isEnumeration", False):
-                enumerators = tuple(
-                    name for name, _ in get_enumerators(entity["code"])
-                )
-                enumerations.append((name, version, enumerators))
-    enumerations.sort(
-        key=lambda item: (TypeName(item[0]).parts, Version.parse(item[1]))
-    )
-
-    names = set(n for n, *_ in enumerations)
-    assert len(names) == len({TypeName(n).last_identifier for n in names})
-
-    Compatibilities = DefaultDict[
-        tuple[VariableNameString, ...], list[VersionString]
-    ]
-
-    categories = DefaultDict[TypeNameString, Compatibilities](
-        lambda: Compatibilities(list)
-    )
-    for n, v, es in enumerations:
-        categories[n][es].append(v)
-
-    return categories
-
-
-def _code2doc(code: str | None) -> list[Expr]:
-    if code is None:
-        return []
-    else:
-
-        def doc_lines() -> Generator[str, None, None]:
-            yield "```modelica"
-            yield from code.splitlines(keepends=False)
-            yield "```"
-            yield ""
-
-        return [Expr(value=Constant(value="\n".join(doc_lines())))]
-
-
-def _create_interface(
-    version: VersionString,
-    enumeration_names: list[str],
-    enumeration_references: References,
-    entities: EntitiesDict,
-) -> list[tuple[PurePath, Module]]:
-    references = (
-        _builtin_references()
-        | enumeration_references
-        | dict(_record_references(entities))
-    )
-
-    functions = set(
-        name
-        for name, entity in entities.items()
-        if entity.get("isFunction")
-        if set(c["className"] for c in entity["components"].values())
-        <= references.keys()
-    )
-
-    packages = set(
-        name for name, entity in entities.items() if entity.get("isPackage")
-    ) & set(
-        parent
-        for name in references.keys() | functions
-        for parent in _parents(name)
-    )
-
-    package_dir = PurePath(_format_version(version))
-
-    result = []
-    for aio in [False, True]:
-        exports = list(enumeration_names)
-        module_body = list[stmt]()
-        package_bodies = dict[tuple[str, ...], list[stmt]]({(): []})
-        root_packages = list[TypeNameString]()
-        scripting_functions = list[tuple[str, expr]]()
-
-        for name, entity in entities.items():
-            statement: stmt
-            if entity.get("isEnumeration"):
-                statement = _create_enumeration(name, references)
-
-            elif entity.get("isRecord"):
-                statement = _create_record(name, entity, references)
-                if not _in_package(entities, name):
-                    exports.append(_parts(name)[-1])
-
-            elif entity.get("isPackage") and name in packages:
-                statement = _create_package(name)
-                if len(_parts(name)) <= 1:
-                    exports.append(name)
-                    root_packages.append(name)
-
-            elif entity.get("isFunction") and name in functions:
-                components = entity["components"]
-                code = entity.get("code")
-                inputs, outputs = _inputs_outputs(code, components)
-                annotations = dict(_get_annotations(references, components))
-
-                if 1 < len(outputs):
-                    module_body.append(
-                        _create_return_tuple(name, outputs, annotations)
-                    )
-                    exports.append(_parts(name)[-1])
-
-                statement = _create_function(
-                    name, code, inputs, outputs, annotations, aio
-                )
-
-                if _parts(name)[:-1] == ("OpenModelica", "Scripting"):
-                    scripting_functions.append(
-                        (_parts(name)[-1], _reference(*_parts(name)))
-                    )
-
-            else:
+        elif isinstance(entity, FunctionEntity):
+            try:
+                components = dict(Component.iter_from_entity(entity, entities))
+            except Exception:
                 continue
+            factories[typename] = FunctionFactory(
+                typename=typename, code=entity.code, components=components
+            )
+        elif isinstance(entity, EnumerationEntity):
+            factories[typename] = EnumerationFactory(
+                typename=typename, entity=entity
+            )
 
-            if hasattr(statement, "body"):
-                package_bodies[_parts(name)] = statement.body
+    root = PackageFactory(typename=TypeName())
+    factories[root.typename] = root
 
-            if _in_package(entities, name):
-                parent_body = package_bodies[_parts(name)[:-1]]
-            else:
-                parent_body = module_body
+    for typename, child in factories.items():
+        for parent in (
+            factories.get(i) for i in typename.parents if i != typename
+        ):
+            if isinstance(parent, (PackageFactory, RecordFactory)):
+                parent.children[typename] = child
+                break
 
-            parent_body.append(statement)
+        match typename.parts:
+            case "OpenModelica", "Scripting", _ if isinstance(
+                child, FunctionFactory
+            ):
+                root.children[typename] = AliasFactory(typename)
 
-        interface = Module(
+    await gather(
+        *(
+            factory.save_module(directory)
+            for factory in factories.values()
+            if isinstance(factory, PackageFactory)
+        )
+    )
+
+
+@dataclass
+class HasTypeName:
+    typename: TypeName
+
+    @property
+    def is_root(self) -> bool:
+        return self.typename == TypeName()
+
+    @property
+    def name(self) -> str:
+        return re.sub(r"^__", "_", f"{self.typename.last_identifier}")
+
+
+@dataclass
+class PackageFactory(HasTypeName):
+    children: dict[TypeName, Factory] = field(default_factory=dict)
+
+    @property
+    def name(self) -> str:
+        if self.is_root:
+            return "GenericSession"
+        else:
+            return super().name
+
+    async def save_module(self, directory: Path) -> None:
+        path = Path(directory, *self.typename.parts, "__init__.py")
+        os.makedirs(path.parent, exist_ok=True)
+        with path.open("w", encoding="utf-8") as o:
+            print(
+                ast.unparse(self._get_module()).replace(
+                    "__RETURN_TYPE_IGNORE__", "return ... # type: ignore"
+                ),
+                file=o,
+            )
+
+        await self._lint_python_code(path)
+
+    def _get_module(self) -> ast.Module:
+        return ast.Module(
             body=[
-                *_iter_headers(enumeration_names, sorted(exports), aio),
-                *module_body,
-                *package_bodies[()],
+                *map(attrgetter("stmt"), self._iter_module_imports()),
+                *self._iter_module_stmts(),
             ],
             type_ignores=[],
         )
 
-        session = ClassDef(
-            name="Session",
-            bases=[_reference("BasicSession")],
-            keywords=[],
-            body=[],
-            decorator_list=[],
-        )
-        exports.append("Session")
-
-        session.body.extend(
-            (
-                _create_assign(
-                    _parts(package)[-1], _reference(*_parts(package))
+    @staticmethod
+    async def _lint_python_code(path: Path) -> None:
+        async with AsyncExitStack() as stack:
+            isort = await stack.enter_async_context(
+                ensure_terminate(
+                    await create_subprocess_exec("isort", f"{path}")
                 )
-                for package in root_packages
+            )
+            await isort.wait()
+
+            black = await stack.enter_async_context(
+                ensure_terminate(
+                    await create_subprocess_exec("black", f"{path}")
+                )
+            )
+            await black.wait()
+
+    def _iter_module_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="__future__", name="annotations", asname="_")
+
+        imports = set(
+            chain.from_iterable(
+                child.iter_imports() for child in self.children.values()
             )
         )
-
-        if aio:
-            session.body.extend(
-                [
-                    _create_assign(
-                        name,
-                        Call(
-                            func=_reference("staticmethod"),
-                            args=[value],
-                            keywords=[],
-                        ),
+        if self.is_root:
+            imports.update(
+                ImportFrom(module="omc4py.protocol", name=typevar)
+                for typevar in ["Asynchronous", "Synchronous"]
+            )
+            imports.add(
+                ImportFrom(module="omc4py.openmodelica2", name="BasicSession")
+            )
+        for child in self.children.values():
+            if isinstance(child, PackageFactory) and child.children:
+                imports.add(
+                    ImportFrom(
+                        name=child.name,
+                        asname=_to_camel_case(child.name),
+                        level=1,
                     )
-                    for name, value in scripting_functions
-                ]
-            )
-        else:
-            session.body.append(
-                If(
-                    test=_reference("TYPE_CHECKING"),
-                    body=[
-                        _create_assign(
-                            name,
-                            Call(
-                                func=_reference("staticmethod"),
-                                args=[value],
-                                keywords=[],
-                            ),
-                        )
-                        for name, value in scripting_functions
-                    ],
-                    orelse=[
-                        _create_assign(name, value)
-                        for name, value in scripting_functions
-                    ],
                 )
-            )
 
-        interface.body.append(session)
+        yield from imports
 
-        if aio:
-            result.append((package_dir / "aio.pyi", interface))
-        else:
-            result.append((package_dir / "_interface.py", interface))
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="omc4py.modelica2", name="package")
+        yield ImportFrom(module="omc4py.openmodelica", name="TypeName")
+        yield ImportFrom(module="omc4py.protocol", name="T_Calling")
 
-        if aio:
-            _all_ = exports
-            imports = [
-                ImportFrom(
-                    module="_interface",
-                    names=[alias(name=name) for name in exports],
-                    level=1,
-                ),
-            ]
-        else:
-            _all_ = exports + ["aio"]
-            imports = [
-                ImportFrom(names=[alias(name="aio")], level=1),
-                ImportFrom(
-                    module="_interface",
-                    names=[alias(name=name) for name in exports],
-                    level=1,
-                ),
-            ]
+    def _iter_module_stmts(self) -> Generator[ast.stmt, None, None]:
+        for child in self.children.values():
+            yield from child.iter_stmts()
 
-        module = Module(
-            body=[
-                Assign(
-                    targets=[Name(id="__all__", ctx=Store())],
-                    value=Tuple(
-                        elts=[Constant(value=item) for item in _all_],
-                        ctx=Load(),
+        if self.is_root:
+            yield from self.iter_stmts()
+            for name, typevar in [
+                ("Session", "Synchronous"),
+                ("AsyncSession", "Asynchronous"),
+            ]:
+                yield ast.Assign(
+                    targets=[ast.Name(id=name, ctx=ast.Store())],
+                    value=ast.Subscript(
+                        value=ast.Name(id="GenericSession", ctx=ast.Load()),
+                        slice=ast.Name(id=typevar, ctx=ast.Load()),
+                        ctx=ast.Load(),
                     ),
                     lineno=None,
-                ),
-                *imports,
-            ],
-            type_ignores=[],
-        )
+                )
 
-        package_dir = PurePath(_format_version(version))
-        if aio:
-            result.append((package_dir / "aio.py", module))
-        else:
-            result.append((package_dir / "__init__.py", module))
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        yield self._class_def
 
-    return result
-
-
-def _iter_headers(
-    enumeration_names: Iterable[str],
-    exports: Iterable[str],
-    aio: bool,
-) -> Generator[ImportFrom | Assign, None, None]:
-    yield ImportFrom(
-        module="__future__",
-        names=[alias(name="annotations")],
-        level=0,
-    )
-    yield Assign(
-        targets=[Name(id="__all__", ctx=Store())],
-        value=Tuple(
-            elts=[Constant(value=value) for value in exports], ctx=Load()
-        ),
-        lineno=None,
-    )
-    yield ImportFrom(
-        module="dataclasses",
-        names=[alias(name="dataclass")],
-        level=0,
-    )
-    yield ImportFrom(
-        module="typing",
-        names=[
-            alias(name=name)
-            for name in ([] if aio else ["TYPE_CHECKING"])
-            + ["List", "Literal", "Sequence", "Union"]
-        ],
-        level=0,
-    )
-    yield ImportFrom(
-        module="typing_extensions",
-        names=[alias(name="Annotated")],
-        level=0,
-    )
-    yield ImportFrom(
-        module="enumeration",
-        names=[alias(name=name) for name in enumeration_names],
-        level=2,
-    )
-    yield ImportFrom(
-        module="modelica",
-        names=[
-            alias(name="alias"),
-            alias(name="external"),
-            alias(name="package"),
-            alias(name="record"),
-        ],
-        level=2,
-    )
-    yield ImportFrom(
-        module="openmodelica",
-        names=[
-            alias(name="TypeName"),
-            alias(name="VariableName"),
-        ],
-        level=2,
-    )
-    if aio:
-        yield ImportFrom(
-            module="session.aio",
-            names=[alias(name="Session", asname="BasicSession")],
-            level=2,
-        )
-    else:
-        yield ImportFrom(
-            module="session",
-            names=[alias(name="Session", asname="BasicSession")],
-            level=2,
-        )
-
-
-@lru_cache(1)
-def _builtin_references() -> dict[TypeNameString, Reference]:
-    return (
-        {
-            TypeNameString(n): Reference(i, i)
-            for n, i in [
-                ("Real", _reference("float")),
-                ("Integer", _reference("int")),
-                ("Boolean", _reference("bool")),
-                ("String", _reference("str")),
-            ]
-        }
-        | {
-            TypeNameString(f"OpenModelica.$Code.{n}"): Reference(
-                _subscript("Union", [_reference(n), _reference("str")]),
-                _reference(n),
-            )
-            for n in ["TypeName", "VariableName"]
-        }
-        | {
-            TypeNameString("OpenModelica.$Code.VariableNames"): Reference(
-                _subscript(
-                    "Sequence",
-                    _subscript(
-                        "Union",
-                        [_reference("VariableName"), _reference("str")],
+    @property
+    def _class_def(self) -> ast.ClassDef:
+        return ast.ClassDef(
+            name=self.name,
+            bases=[
+                ast.Subscript(
+                    value=ast.Name(
+                        id="BasicSession" if self.is_root else "package",
+                        ctx=ast.Load(),
                     ),
+                    slice=ast.Name(id="T_Calling", ctx=ast.Load()),
+                    ctx=ast.Load(),
+                )
+            ],
+            keywords=[],
+            body=[*self._iter_class_def_body()],
+            decorator_list=[],
+        )
+
+    def _iter_class_def_body(self) -> Generator[ast.stmt, None, None]:
+        if not self.is_root:
+            yield ast.Assign(
+                targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
+                value=ast.Call(
+                    func=ast.Name(id="TypeName", ctx=ast.Load()),
+                    args=[
+                        ast.Constant(value=f"{self.typename.as_absolute()}")
+                    ],
+                    keywords=[],
                 ),
-                _subscript("List", _reference("VariableName")),
+                lineno=None,
             )
-        }
-    )
+
+        for child in self.children.values():
+            if isinstance(child, AliasFactory):
+                i = len(self.typename.parts)
+                parts = [
+                    *map(_to_camel_case, child.typename.parts[i:-1]),
+                    child.typename.parts[-1],
+                ]
+            else:
+                if self.is_root:
+                    parts = [child.name]
+                else:
+                    parts = [_to_camel_case(self.name), child.name]
+
+            reference: ast.expr
+            reference = ast.Name(id=parts[0], ctx=ast.Load())
+            for part in parts[1:]:
+                reference = ast.Attribute(
+                    value=reference,
+                    attr=part,
+                    ctx=ast.Load(),
+                )
+
+            if isinstance(child, PackageFactory):
+                yield ast.FunctionDef(
+                    name=child.name,
+                    args=ast.arguments(
+                        posonlyargs=[],
+                        args=[ast.arg(arg="self")],
+                        kwonlyargs=[],
+                        kw_defaults=[],
+                        defaults=[],
+                    ),
+                    body=[
+                        ast.Return(
+                            value=ast.Call(
+                                func=reference,
+                                args=[
+                                    ast.Attribute(
+                                        value=ast.Name(
+                                            id="self", ctx=ast.Load()
+                                        ),
+                                        attr="__omc_interactive__",
+                                        ctx=ast.Load(),
+                                    )
+                                ],
+                                keywords=[],
+                            )
+                        )
+                    ],
+                    decorator_list=[ast.Name(id="property", ctx=ast.Load())],
+                    returns=ast.Subscript(
+                        value=reference,
+                        slice=ast.Name(id="T_Calling", ctx=ast.Load()),
+                        ctx=ast.Load(),
+                    ),
+                    lineno=None,
+                )
+            else:
+                yield ast.Assign(
+                    targets=[ast.Name(id=child.name, ctx=ast.Store())],
+                    value=reference,
+                    lineno=None,
+                )
 
 
-def _record_references(
-    entities: EntitiesDict,
-) -> Generator[tuple[TypeNameString, Reference], None, None]:
-    for name, entity in entities.items():
-        if entity.get("isRecord"):
-            parts = _parts(name)
-            expr = (
-                _reference(*parts)
-                if _in_package(entities, name)
-                else _reference(parts[-1])
-            )
-            yield name, Reference(expr, expr)
+@dataclass
+class RecordFactory(HasTypeName):
+    code: str
+    components: dict[VariableName, Component]
+    children: dict[TypeName, Factory] = field(default_factory=dict, init=False)
 
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="omc4py.modelica", name="record")
+        yield ImportFrom(module="dataclasses", name="dataclass")
 
-def _create_package(name: TypeNameString) -> ClassDef:
-    parts = _parts(name)
-    return ClassDef(
-        name=parts[-1],
-        bases=[_reference("package")],
-        keywords=[],
-        body=[],
-        decorator_list=[_external_decorator(name)],
-    )
+        for component in self.components.values():
+            yield from component.iter_imports()
 
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        yield ast.ClassDef(
+            name=self.name,
+            bases=[ast.Name(id="record", ctx=ast.Load())],
+            keywords=[],
+            body=[*self._iter_class_def_body()],
+            decorator_list=[
+                ast.Call(
+                    func=ast.Name(id="dataclass", ctx=ast.Load()),
+                    args=[],
+                    keywords=[
+                        ast.keyword(
+                            arg="frozen", value=ast.Constant(value=True)
+                        )
+                    ],
+                )
+            ],
+        )
 
-def _create_enumeration(
-    name: TypeNameString, references: References
-) -> Assign:
-    return Assign(
-        targets=[Name(id=_parts(name)[-1], ctx=Store())],
-        value=references[name].output,
-        lineno=None,
-    )
+    def _iter_class_def_body(self) -> Generator[ast.stmt, None, None]:
+        yield ast.Expr(value=ast.Constant(value=_to_doc(self.code)))
+        yield ast.Assign(
+            targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
+            value=ast.Call(
+                func=ast.Name(id="TypeName", ctx=ast.Load()),
+                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                keywords=[],
+            ),
+            lineno=None,
+        )
 
-
-def _create_return_tuple(
-    name: TypeNameString,
-    outputs: list[VariableNameString],
-    annotations: dict[VariableNameString, expr],
-) -> ClassDef:
-    return ClassDef(
-        name=_parts(name)[-1],
-        bases=[],
-        keywords=[],
-        body=[
-            AnnAssign(
-                target=Name(id=output, ctx=Store()),
-                annotation=annotations[output],
+        for variablename, component in self.components.items():
+            yield ast.AnnAssign(
+                target=ast.Name(id=f"{variablename}", ctx=ast.Store()),
+                annotation=component.annotation,
                 simple=1,
             )
-            for output in outputs
-        ],
-        decorator_list=[],
-    )
 
 
-def _create_function(
-    name: TypeNameString,
-    code: str | None,
-    inputs: dict[VariableNameString, bool],
-    outputs: list[VariableNameString],
-    annotations: dict[VariableNameString, expr],
-    aio: bool,
-) -> FunctionDef | AsyncFunctionDef:
-    parts = _parts(name)
+@dataclass
+class FunctionFactory(HasTypeName):
+    code: str | None
+    components: dict[VariableName, Component]
 
-    returns: expr
-    if len(outputs) == 0:
-        returns = Constant(value=None)
-    elif len(outputs) == 1:
-        (output,) = outputs
-        returns = annotations[output]
-    else:
-        returns = _reference(parts[-1])
+    @property
+    def required_inputs(self) -> list[VariableName]:
+        return [
+            variablename
+            for variablename, component in self.components.items()
+            if component.input_output == "input" and not component.is_optional
+        ]
 
-    function_type: type[AsyncFunctionDef] | type[FunctionDef]
-    function_type = AsyncFunctionDef if aio else FunctionDef
+    @property
+    def optional_inputs(self) -> list[VariableName]:
+        return [
+            variablename
+            for variablename, component in self.components.items()
+            if component.input_output == "input" and component.is_optional
+        ]
 
-    return function_type(
-        name=parts[-1],
-        args=arguments(
-            posonlyargs=[],
-            args=[
-                arg(arg="_"),
-                *(
-                    arg(
-                        arg=_avoid_keyword(input),
-                        annotation=annotations[input],
+    @property
+    def outputs(self) -> dict[VariableName, Component]:
+        return {
+            variablename: component
+            for variablename, component in self.components.items()
+            if component.input_output == "output"
+        }
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="omc4py.modelica2", name="external")
+        yield ImportFrom(module="omc4py.protocol", name="Asynchronous")
+        yield ImportFrom(module="omc4py.protocol", name="Synchronous")
+        yield ImportFrom(
+            module="omc4py.protocol", name="SupportsInteractiveProperty"
+        )
+        match len(self.outputs):
+            case 0 | 1:
+                pass
+            case _:
+                yield ImportFrom(module="typing", name="NamedTuple")
+        yield ImportFrom(module="typing", name="Coroutine")
+        yield ImportFrom(module="typing", name="Union")
+        yield ImportFrom(module="typing", name="overload")
+        for component in self.components.values():
+            yield from component.iter_imports()
+
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        py_modelica = dict[str, str]()
+
+        args = list[ast.arg]()
+        for variablename in self.required_inputs + self.optional_inputs:
+            component = self.components[variablename]
+            modelica = f"{variablename}"
+            py = _avoid_keyword(modelica)
+            if py != modelica:
+                py_modelica[py] = modelica
+            match component.input_output:
+                case "input":
+                    args.append(
+                        ast.arg(
+                            arg=py,
+                            annotation=component.annotation,
+                        )
                     )
-                    for input in inputs
-                ),
-            ],
-            kwonlyargs=[],
-            kw_defaults=[],
-            defaults=[Constant(value=Ellipsis)] * sum(inputs.values()),
-        ),
-        body=[
-            *_code2doc(code),
-            Raise(
-                exc=Call(
-                    func=Name(id="NotImplementedError", ctx=Load()),
-                    args=[],
+
+        basic_returns: ast.expr
+        match len(self.outputs):
+            case 0:
+                basic_returns = ast.Constant(value=None)
+            case 1:
+                (component,) = self.outputs.values()
+                basic_returns = component.annotation
+            case _:
+                yield ast.ClassDef(
+                    name=self.name.capitalize(),
+                    bases=[ast.Name(id="NamedTuple", ctx=ast.Load())],
                     keywords=[],
+                    body=[
+                        ast.AnnAssign(
+                            target=ast.Name(
+                                id=f"{variablename}", ctx=ast.Store()
+                            ),
+                            annotation=component.annotation,
+                            simple=1,
+                        )
+                        for variablename, component in self.outputs.items()
+                    ],
+                    decorator_list=[],
                 )
-            ),
-        ],
-        decorator_list=[
-            _external_decorator(name),
-            _reference("classmethod"),
-        ],
-        returns=returns,
-        lineno=None,
-    )
-
-
-def _create_function_assign(name: TypeNameString) -> Assign:
-    return Assign(
-        targets=[Name(id=_parts(name)[-1], ctx=Store())],
-        value=_reference(*_parts(name)),
-        lineno=None,
-    )
-
-
-def _create_record(
-    name: TypeNameString, entity: Entity, references: References
-) -> ClassDef:
-    code = entity["code"]
-    annotations = dict(_get_annotations(references, entity["components"]))
-    return ClassDef(
-        name=_parts(name)[-1],
-        bases=[_reference("record")],
-        keywords=[],
-        body=[
-            *_code2doc(code),
-            *(
-                AnnAssign(
-                    target=Name(id=name, ctx=Store()),
-                    annotation=annotation,
-                    simple=1,
+                basic_returns = ast.Name(
+                    id=self.name.capitalize(), ctx=ast.Load()
                 )
-                for name, annotation in annotations.items()
+
+        defaults = [ast.Constant(value=None)] * len(self.optional_inputs)
+
+        for mode in ("sync_overload", "async_overload", "impl"):
+            function_def_type: (
+                type[ast.FunctionDef] | type[ast.AsyncFunctionDef]
+            )
+            match mode:
+                case "async_overload":
+                    function_def_type = ast.AsyncFunctionDef
+                case _:
+                    function_def_type = ast.FunctionDef
+
+            decorator_list: list[ast.expr]
+            match mode:
+                case "impl":
+                    match self.typename.parts:
+                        case "OpenModelica", "Scripting", name:
+                            funcname = name
+                        case _:
+                            funcname = f"{self.typename.as_absolute()}"
+
+                    decorator_list = [
+                        ast.Call(
+                            func=ast.Name(id="external", ctx=ast.Load()),
+                            args=[ast.Constant(value=funcname)],
+                            keywords=[],
+                        )
+                    ]
+                case _:
+                    decorator_list = [ast.Name(id="overload", ctx=ast.Load())]
+
+            synchronous_self_annotation = ast.Subscript(
+                value=ast.Name(
+                    id="SupportsInteractiveProperty", ctx=ast.Load()
+                ),
+                slice=ast.Name(id="Synchronous", ctx=ast.Load()),
+                ctx=ast.Load(),
+            )
+            asynchronous_self_annotation = ast.Subscript(
+                value=ast.Name(
+                    id="SupportsInteractiveProperty", ctx=ast.Load()
+                ),
+                slice=ast.Name(id="Asynchronous", ctx=ast.Load()),
+                ctx=ast.Load(),
+            )
+
+            self_annotation: ast.expr
+            match mode:
+                case "sync_overload":
+                    self_annotation = synchronous_self_annotation
+                case "async_overload":
+                    self_annotation = asynchronous_self_annotation
+                case "impl":
+                    self_annotation = ast.Subscript(
+                        value=ast.Name(id="Union", ctx=ast.Load()),
+                        slice=ast.Tuple(
+                            elts=[
+                                synchronous_self_annotation,
+                                asynchronous_self_annotation,
+                            ],
+                            ctx=ast.Load(),
+                        ),
+                        ctx=ast.Load(),
+                    )
+
+            returns: ast.expr
+            match mode:
+                case "impl":
+                    returns = ast.Subscript(
+                        value=ast.Name(id="Union", ctx=ast.Load()),
+                        slice=ast.Tuple(
+                            elts=[
+                                basic_returns,
+                                ast.Subscript(
+                                    value=ast.Name(
+                                        id="Coroutine", ctx=ast.Load()
+                                    ),
+                                    slice=ast.Tuple(
+                                        elts=[
+                                            ast.Constant(value=None),
+                                            ast.Constant(value=None),
+                                            basic_returns,
+                                        ],
+                                        ctx=ast.Load(),
+                                    ),
+                                    ctx=ast.Load(),
+                                ),
+                            ],
+                            ctx=ast.Load(),
+                        ),
+                        ctx=ast.Load(),
+                    )
+                case _:
+                    returns = basic_returns
+
+            body = list[ast.stmt]()
+            match mode, self.code:
+                case "impl", code if isinstance(code, str):
+                    body.append(
+                        ast.Expr(value=ast.Constant(value=_to_doc(code)))
+                    )
+
+            match mode, len(self.outputs):
+                case "impl", 0:
+                    pass
+                case "impl", _:
+                    body.append(
+                        ast.Expr(
+                            value=ast.Name(
+                                id="__RETURN_TYPE_IGNORE__", ctx=ast.Load()
+                            )
+                        )
+                    )
+
+            if not body:
+                body.append(ast.Expr(value=ast.Constant(value=Ellipsis)))
+
+            yield function_def_type(
+                name=self.name,
+                args=ast.arguments(
+                    posonlyargs=[],
+                    args=[
+                        ast.arg(
+                            arg="self",
+                            annotation=self_annotation,
+                        ),
+                        *args,
+                    ],
+                    kwonlyargs=[],
+                    kw_defaults=[],
+                    defaults=defaults,
+                ),
+                body=body,
+                decorator_list=decorator_list,
+                returns=returns,
+                lineno=None,
+            )
+
+
+@dataclass
+class EnumerationFactory(HasTypeName):
+    entity: EnumerationEntity
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield ImportFrom(module="omc4py.modelica", name="enumeration")
+        yield ImportFrom(module="omc4py.openmodelica", name="TypeName")
+
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        yield ast.ClassDef(
+            name=self.name,
+            bases=[ast.Name(id="enumeration", ctx=ast.Load())],
+            keywords=[],
+            body=[*self._iter_class_def_body()],
+            decorator_list=[],
+        )
+
+    def _iter_class_def_body(self) -> Generator[ast.stmt, None, None]:
+        yield ast.Expr(value=ast.Constant(value=_to_doc(self.entity.code)))
+        yield ast.Assign(
+            targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
+            value=ast.Call(
+                func=ast.Name(id="TypeName", ctx=ast.Load()),
+                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                keywords=[],
             ),
-        ],
-        decorator_list=[
-            _external_decorator(name),
-            _reference("dataclass"),
-        ],
-    )
+            lineno=None,
+        )
+        for value, (name, comment) in enumerate(
+            get_enumerators(self.entity.code), start=1
+        ):
+            yield ast.Assign(
+                targets=[ast.Name(id=f"{name}", ctx=ast.Store())],
+                value=ast.Constant(value=value),
+                lineno=None,
+            )
+            if comment is not None:
+                yield ast.Expr(value=ast.Constant(value=comment))
 
 
-def _create_assign(target: str, value: expr) -> Assign:
-    return Assign(
-        targets=[Name(id=target, ctx=Store())],
-        value=value,
-        lineno=None,
-    )
+class AliasFactory(HasTypeName):
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield from []
+
+    def iter_stmts(self) -> Generator[ast.stmt, None, None]:
+        yield from []
 
 
-def _external_decorator(name: TypeNameString) -> Call:
-    return Call(
-        func=_reference("external"),
-        args=[Constant(value=f"{TypeName(name).as_absolute()}")],
-        keywords=[],
-    )
+Factory = (
+    PackageFactory
+    | RecordFactory
+    | FunctionFactory
+    | EnumerationFactory
+    | AliasFactory
+)
 
 
-def _as_absolute(name: TypeNameString) -> TypeNameString:
-    return TypeNameString(f"{TypeName(name).as_absolute()}")
+@dataclass(frozen=True)
+class ImportFrom:
+    name: str
+    module: str | None = None
+    asname: str | None = None
+    level: Literal[0, 1] = 0
+
+    @property
+    def stmt(self) -> ast.ImportFrom:
+        return ast.ImportFrom(
+            module=self.module,
+            names=[ast.alias(name=self.name, asname=self.asname)],
+            level=self.level,
+        )
 
 
-@lru_cache(1)
-def _parts(name: TypeNameString) -> tuple[str, ...]:
-    return TypeName(name).parts
+class TypeKind(enum.Enum):
+    real = enum.auto()
+    integer = enum.auto()
+    boolean = enum.auto()
+    string = enum.auto()
+    # path = enum.auto()
+    typename = enum.auto()
+    variablename = enum.auto()
+
+    @classmethod
+    def resolve(
+        cls,
+        variablename: VariableName,
+        typename: TypeName,
+        entity: Entity | None,
+    ) -> TypeKind:
+        # path_pattern = re.compile(
+        #     r"(file|header|dir|directory|(?<!modelica)path)(name|names)?$",
+        #     re.IGNORECASE,
+        # )
+        match f"{typename}", entity:
+            case "Real", None:
+                return TypeKind.real
+            case "Integer", None:
+                return TypeKind.integer
+            case "Boolean", None:
+                return TypeKind.boolean
+            case "String", None:
+                return TypeKind.string
+                # if path_pattern.search(f"{variablename}") is None:
+                #     return TypeKind.string
+                # else:
+                #     return TypeKind.path
+            case (
+                "OpenModelica.$Code.TypeName" | "OpenModelica.$Code.TypeNames"
+            ), None:
+                return TypeKind.typename
+            case (
+                "OpenModelica.$Code.VariableName"
+                | "OpenModelica.$Code.VariableNames"
+            ), None:
+                return TypeKind.variablename
+
+        raise ValueError(typename, entity)
 
 
-def _parents(name: TypeNameString) -> Generator[TypeNameString, None, None]:
-    for parent in TypeName(name).parents:
-        if parent == TypeName():
-            return
-        yield TypeNameString(f"{parent}")
+@dataclass
+class BuiltinTypeHint:
+    kind: TypeKind
+    input_output: InputOutput
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        match self.kind, self.input_output:
+            # case (TypeKind.path, "input"):
+            #     yield ImportFrom(module="typing", name="Union")
+            #     yield ImportFrom(module="omc4py.protocol", name="PathLike")
+            case (TypeKind.typename, _):
+                yield ImportFrom(module="omc4py.openmodelica", name="TypeName")
+                if self.input_output == "input":
+                    ImportFrom(module="typing", name="Union")
+            case (TypeKind.variablename, _):
+                yield ImportFrom(
+                    module="omc4py.openmodelica", name="VariableName"
+                )
+                if self.input_output == "input":
+                    ImportFrom(module="typing", name="Union")
+
+    @property
+    def annotation(self) -> ast.expr:
+        match self.kind, self.input_output:
+            case (TypeKind.real, _):
+                return ast.Name(id="float", ctx=ast.Load())
+            case (TypeKind.integer, _):
+                return ast.Name(id="int", ctx=ast.Load())
+            case (TypeKind.boolean, _):
+                return ast.Name(id="bool", ctx=ast.Load())
+            case (
+                (TypeKind.string, _)
+                # | (
+                #     TypeKind.path,
+                #     "output" | "unspecified",
+                # )
+            ):
+                return ast.Name(id="str", ctx=ast.Load())
+            # case (TypeKind.path, "input"):
+            #     return ast.Subscript(
+            #         value=ast.Name(id="Union", ctx=ast.Load()),
+            #         slice=ast.Tuple(
+            #             elts=[
+            #                 ast.Name(id="PathLike", ctx=ast.Load()),
+            #                 ast.Name(id="str", ctx=ast.Load()),
+            #             ],
+            #             ctx=ast.Load(),
+            #         ),
+            #         ctx=ast.Load(),
+            #     )
+            case (TypeKind.typename, "input"):
+                return ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            ast.Name(id="TypeName", ctx=ast.Load()),
+                            ast.Name(id="str", ctx=ast.Load()),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+            case (TypeKind.typename, _):
+                return ast.Name(id="TypeName", ctx=ast.Load())
+            case (TypeKind.variablename, "input"):
+                return ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            ast.Name(id="VariableName", ctx=ast.Load()),
+                            ast.Name(id="str", ctx=ast.Load()),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+            case (TypeKind.variablename, _):
+                return ast.Name(id="VariableName", ctx=ast.Load())
+
+        raise NotImplementedError(self)
 
 
-def _in_package(entities: EntitiesDict, name: TypeNameString) -> bool:
-    return all(entities[parent].get("isPackage") for parent in _parents(name))
+@dataclass
+class EnumerationTypeHint(HasTypeName):
+    input_output: InputOutput
+    entity: EnumerationEntity
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        match self.input_output:
+            case "input":
+                yield ImportFrom(module="typing", name="Literal")
+                yield ImportFrom(module="typing", name="Union")
+
+    @property
+    def annotation(self) -> ast.expr:
+        match self.input_output:
+            case "input":
+                return ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            ast.Name(
+                                id=self.name,
+                                ctx=ast.Load(),
+                            ),
+                            ast.Subscript(
+                                value=ast.Name(id="Literal", ctx=ast.Load()),
+                                slice=ast.Tuple(
+                                    elts=[
+                                        ast.Constant(value=f"{value}")
+                                        for value, _ in get_enumerators(
+                                            self.entity.code
+                                        )
+                                    ],
+                                    ctx=ast.Load(),
+                                ),
+                                ctx=ast.Load(),
+                            ),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+            case _:
+                return ast.Name(id=self.name, ctx=ast.Load())
 
 
-def _inputs_outputs(
-    code: str | None, components: ComponentsDict
-) -> tuple[dict[VariableNameString, bool], list[VariableNameString]]:
-    if code is not None:
-        optionals = get_optionals(code)
-    else:
-        optionals = ()
+@dataclass
+class AliasTypeHint(HasTypeName):
+    input_output: InputOutput
 
-    inputs, outputs = {}, []
-    for name, component in components.items():
-        if component["inputOutput"] == "input":
-            inputs[name] = name in optionals
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield from []
+
+    @property
+    def annotation(self) -> ast.expr:
+        return ast.Name(id=self.name, ctx=ast.Load())
+
+
+TypeHint = BuiltinTypeHint | EnumerationTypeHint | AliasTypeHint
+
+
+@dataclass
+class Component:
+    type_hint: TypeHint
+    ndim: int
+    is_optional: bool
+
+    @classmethod
+    def iter_from_entity(
+        cls,
+        entity: RecordEntity | FunctionEntity,
+        entities: Entities,
+    ) -> Generator[tuple[VariableName, Self], None, None]:
+        if entity.code is None:
+            optionals = set[VariableName]()
         else:
-            outputs.append(name)
+            optionals = set(
+                map(VariableName, get_optionals(entity.code))
+            )  # TODO:
 
-    inputs = dict(sorted(inputs.items(), key=lambda item: item[-1]))
+        for variablename, component in entity.components.items():
+            typename = component.className
+            component_entity = entities.get(typename)
 
-    return inputs, outputs
+            type_hint: TypeHint
+            if isinstance(component_entity, EnumerationEntity):
+                type_hint = EnumerationTypeHint(
+                    typename, component.inputOutput, component_entity
+                )
+            elif isinstance(component_entity, RecordEntity):
+                type_hint = AliasTypeHint(typename, component.inputOutput)
+            else:
+                type_hint = BuiltinTypeHint(
+                    TypeKind.resolve(variablename, typename, component_entity),
+                    component.inputOutput,
+                )
+
+            ndim = len(component.dimensions)
+            if f"{typename}" in {
+                "OpenModelica.$Code.TypeNames",
+                "OpenModelica.$Code.VariableNames",
+            }:
+                ndim += 1
+
+            yield variablename, cls(
+                type_hint=type_hint,
+                ndim=ndim,
+                is_optional=variablename in optionals,
+            )
+
+    @property
+    def input_output(self) -> InputOutput:
+        return self.type_hint.input_output
+
+    @property
+    def sequence_type(self) -> str:
+        match self.input_output:
+            case "input":
+                return "Sequence"
+            case _:
+                return "List"
+
+    def iter_imports(self) -> Generator[ImportFrom, None, None]:
+        yield from self.type_hint.iter_imports()
+        if 0 < self.ndim:
+            yield ImportFrom(module="typing", name=self.sequence_type)
+        if self.is_optional:
+            yield ImportFrom(module="typing", name="Union")
+
+    @property
+    def annotation(self) -> ast.expr:
+        annotation = self.type_hint.annotation
+
+        for _ in range(self.ndim):
+            annotation = ast.Subscript(
+                value=ast.Name(id=self.sequence_type, ctx=ast.Load()),
+                slice=annotation,
+                ctx=ast.Load(),
+            )
+
+        if self.is_optional:
+            if (
+                isinstance(annotation, ast.Subscript)
+                and isinstance(annotation.value, ast.Name)
+                and annotation.value.id == "Union"
+                and isinstance(annotation.slice, ast.Tuple)
+            ):
+                annotation.slice.elts.append(ast.Constant(value=None))
+            else:
+                annotation = ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            annotation,
+                            ast.Constant(value=None),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
+
+        return annotation
 
 
-def _get_annotations(
-    references: dict[TypeNameString, Reference], components: ComponentsDict
-) -> Generator[tuple[VariableNameString, expr], None, None]:
-    for name, component in components.items():
-        io = component.get("inputOutput", "output")
-        reference = getattr(references[component["className"]], io)
-        sequence_type = "Sequence" if io == "input" else "List"
-        for _ in component.get("dimensions", []):
-            reference = _subscript(sequence_type, reference)
-
-        if iskeyword(name):
-            reference = _mark_alias(reference, name)
-
-        yield name, reference
+def _to_camel_case(s: str) -> str:
+    return s[:1].lower() + s[1:]
 
 
-def _mark_alias(reference: expr, alias: VariableNameString) -> Subscript:
-    return _subscript(
-        "Annotated",
+def _to_doc(code: str) -> str:
+    return "\n".join(
         [
-            reference,
-            _subscript(
-                "alias",
-                _subscript("Literal", Constant(value=alias)),
-            ),
-        ],
+            "",
+            ".. code-block:: modelica",
+            "",
+            *(f"    {line}" for line in code.splitlines(keepends=False)),
+        ]
     )
-
-
-def _reference(part: str, *parts: str) -> Name | Attribute:
-    if not parts:
-        return Name(id=part, ctx=Load())
-    else:
-        *body, tail = part, *parts
-        return Attribute(value=_reference(*body), attr=tail, ctx=Load())
-
-
-def _subscript(value: str, slice: expr | Sequence[expr]) -> Subscript:
-    slice = Tuple(elts=slice, ctx=Load()) if isinstance(slice, list) else slice
-    return Subscript(value=_reference(value), slice=slice, ctx=Load())
-
-
-def _format_version(version: VersionString) -> str:
-    v = Version.parse(version)
-    return f"v_{v.major}_{v.minor}"
 
 
 def _avoid_keyword(s: str) -> str:
     while iskeyword(s):
-        s += "_"
+        s = f"{s}_"
     return s

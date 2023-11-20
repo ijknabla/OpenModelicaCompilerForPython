@@ -13,7 +13,9 @@ from omc4py.protocol import (
     Synchronous,
     T_Calling,
 )
-from omc4py.v_1_21._interface import OpenModelica  # NOTE: update to latest
+from omc4py.v_1_21.OpenModelica.Scripting import (  # NOTE: update to latest
+    ErrorMessage,
+)
 
 from . import Nested as nested
 
@@ -46,14 +48,14 @@ def loadFile(
 @overload
 def getMessagesStringInternal(
     self: SupportsInteractiveProperty[Synchronous], unique: bool | None = None
-) -> List[OpenModelica.Scripting.ErrorMessage]:
+) -> List[ErrorMessage]:
     ...
 
 
 @overload
 async def getMessagesStringInternal(
     self: SupportsInteractiveProperty[Asynchronous], unique: bool | None = None
-) -> List[OpenModelica.Scripting.ErrorMessage]:
+) -> List[ErrorMessage]:
     ...
 
 
@@ -64,10 +66,7 @@ def getMessagesStringInternal(
         SupportsInteractiveProperty[Asynchronous],
     ],
     unique: bool | None = None,
-) -> Union[
-    List[OpenModelica.Scripting.ErrorMessage],
-    Coroutine[None, None, List[OpenModelica.Scripting.ErrorMessage]],
-]:
+) -> Union[List[ErrorMessage], Coroutine[None, None, List[ErrorMessage]]]:
     return ...  # type: ignore
 
 
