@@ -51,11 +51,16 @@ from typing import Tuple
 from typing import Tuple as T
 from typing import Union, overload
 
-from . import session
 from .exception import OMCRuntimeError
 from .interactive import Interactive
 from .openmodelica import TypeName, VariableName
-from .protocol import SupportsInteractive, Synchronous, synchronous
+from .openmodelica2 import BasicSession
+from .protocol import (
+    Asynchronous,
+    SupportsInteractive,
+    Synchronous,
+    synchronous,
+)
 
 if TYPE_CHECKING:
     from . import (
@@ -75,43 +80,43 @@ if TYPE_CHECKING:
 
 def _select_session_type(
     version: Tuple[int, int]
-) -> Tuple[type[session.Session], type[session.aio.Session]]:
+) -> Tuple[type[BasicSession[Synchronous]], type[BasicSession[Asynchronous]]]:
     if (1, 21) <= version:
         from . import v_1_21
 
-        return v_1_21.Session, v_1_21.aio.Session
+        return v_1_21.Session, v_1_21.AsyncSession
     elif (1, 20) <= version:
         from . import v_1_20
 
-        return v_1_20.Session, v_1_20.aio.Session
+        return v_1_20.Session, v_1_20.AsyncSession
     elif (1, 19) <= version:
         from . import v_1_19
 
-        return v_1_19.Session, v_1_19.aio.Session
+        return v_1_19.Session, v_1_19.AsyncSession
     elif (1, 18) <= version:
         from . import v_1_18
 
-        return v_1_18.Session, v_1_18.aio.Session
+        return v_1_18.Session, v_1_18.AsyncSession
     elif (1, 17) <= version:
         from . import v_1_17
 
-        return v_1_17.Session, v_1_17.aio.Session
+        return v_1_17.Session, v_1_17.AsyncSession
     elif (1, 16) <= version:
         from . import v_1_16
 
-        return v_1_16.Session, v_1_16.aio.Session
+        return v_1_16.Session, v_1_16.AsyncSession
     elif (1, 15) <= version:
         from . import v_1_15
 
-        return v_1_15.Session, v_1_15.aio.Session
+        return v_1_15.Session, v_1_15.AsyncSession
     elif (1, 14) <= version:
         from . import v_1_14
 
-        return v_1_14.Session, v_1_14.aio.Session
+        return v_1_14.Session, v_1_14.AsyncSession
     else:
         from . import v_1_13
 
-        return v_1_13.Session, v_1_13.aio.Session
+        return v_1_13.Session, v_1_13.AsyncSession
 
 
 # Latest
@@ -131,7 +136,7 @@ def open_session(
     *,
     version: T[L[1], L[23, 22, 21]] | None = None,
     asyncio: Literal[True],
-) -> v_1_21.aio.Session:
+) -> v_1_21.AsyncSession:
     ...
 
 
@@ -152,7 +157,7 @@ def open_session(
     *,
     version: T[L[1], L[20]],
     asyncio: Literal[True],
-) -> v_1_20.aio.Session:
+) -> v_1_20.AsyncSession:
     ...
 
 
@@ -173,7 +178,7 @@ def open_session(
     *,
     version: T[L[1], L[19]],
     asyncio: Literal[True],
-) -> v_1_19.aio.Session:
+) -> v_1_19.AsyncSession:
     ...
 
 
@@ -194,7 +199,7 @@ def open_session(
     *,
     version: T[L[1], L[18]],
     asyncio: Literal[True],
-) -> v_1_18.aio.Session:
+) -> v_1_18.AsyncSession:
     ...
 
 
@@ -215,7 +220,7 @@ def open_session(
     *,
     version: T[L[1], L[17]],
     asyncio: Literal[True],
-) -> v_1_17.aio.Session:
+) -> v_1_17.AsyncSession:
     ...
 
 
@@ -236,7 +241,7 @@ def open_session(
     *,
     version: T[L[1], L[16]],
     asyncio: Literal[True],
-) -> v_1_16.aio.Session:
+) -> v_1_16.AsyncSession:
     ...
 
 
@@ -257,7 +262,7 @@ def open_session(
     *,
     version: T[L[1], L[15]],
     asyncio: Literal[True],
-) -> v_1_15.aio.Session:
+) -> v_1_15.AsyncSession:
     ...
 
 
@@ -278,7 +283,7 @@ def open_session(
     *,
     version: T[L[1], L[14]],
     asyncio: Literal[True],
-) -> v_1_14.aio.Session:
+) -> v_1_14.AsyncSession:
     ...
 
 
@@ -301,7 +306,7 @@ def open_session(
     version: T[L[1], L[13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0]]
     | T[L[0], int],
     asyncio: Literal[True],
-) -> v_1_13.aio.Session:
+) -> v_1_13.AsyncSession:
     ...
 
 

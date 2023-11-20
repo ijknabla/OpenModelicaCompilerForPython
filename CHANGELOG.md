@@ -10,9 +10,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - Support pickle serialize for `omc4py.TypeName`, `omc4py.VariableName`
 
+### Changed
+
+- Rename `async` session
+    - `omc4py.v_1_21.aio.Session` => `omc4py.v_1_21.AsyncSession`
+    - `omc4py.v_1_20.aio.Session` => `omc4py.v_1_20.AsyncSession`
+    - ...
+    - `omc4py.v_1_13.aio.Session` => `omc4py.v_1_13.AsyncSession`
+
 ### Removed
 
 - `python==3.7` support
+- `omc4py.latest` module
 
 ## [0.3.0a0] - 2023-07-30
 

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import sys
 from asyncio import run
 from collections import ChainMap
@@ -94,45 +93,38 @@ async def interface_docker(
     )
 
 
-if sys.version_info >= (3, 10):
-    from ast import unparse
+@main.command()
+@click.option(
+    "-o",
+    "--output-dir",
+    type=click.Path(
+        exists=True,
+        dir_okay=True,
+        file_okay=False,
+        resolve_path=True,
+        path_type=Path,
+    ),
+    default=Path("."),
+)
+@click.argument(
+    "inputs",
+    metavar="INPUTS",
+    type=click.File("r", encoding="utf-8", lazy=True),
+    nargs=-1,
+)
+@run_decorator
+async def code(
+    inputs: Sequence[IO[str]],
+    output_dir: Path,
+) -> None:
+    from .code import save_code
 
-    from .code import create_code
-
-    global code
-
-    @main.command()
-    @click.option(
-        "-o",
-        "--output-dir",
-        type=click.Path(
-            exists=True, dir_okay=True, file_okay=False, path_type=Path
-        ),
-        default=Path("."),
-    )
-    @click.argument(
-        "inputs",
-        metavar="INPUTS",
-        type=click.File("r", encoding="utf-8", lazy=True),
-        nargs=-1,
-    )
-    @run_decorator
-    async def code(
-        inputs: Sequence[IO[str]],
-        output_dir: Path,
-    ) -> None:
-        interface = InterfaceRoot(
-            root=ChainMap(
-                *(yaml.safe_load(i) for i in tqdm(inputs)),
-            )
+    interface = InterfaceRoot(
+        root=ChainMap(
+            *(yaml.safe_load(i) for i in tqdm(inputs)),
         )
-        async for rel_path, module in create_code(
-            interface.model_dump(),  # type: ignore
-        ):
-            path = output_dir / rel_path
-            os.makedirs(path.parent, exist_ok=True)
-            with path.open("w", encoding="utf-8") as o:
-                print(unparse(module), file=o)
+    )
+    await save_code(output_dir, interface.root)
 
 
 if __name__ == "__main__":

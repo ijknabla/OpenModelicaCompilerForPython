@@ -325,8 +325,12 @@ def _select_type(typs: Iterable[type[Any]]) -> type[Any]:
 
 
 def _priority(typ: type[_Scalar]) -> int:
+    if _is_none(typ):
+        return 0
     for i, base in reversed(
-        list(enumerate([int, str, VariableName, TypeName, enumeration]))
+        list(
+            enumerate([int, str, VariableName, TypeName, enumeration], start=1)
+        )
     ):
         if _issubclass(typ, base):
             return i

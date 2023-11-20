@@ -18,23 +18,23 @@ def test_session_types() -> None:
         )
 
         a_13: v_1_13.Session
-        b_13: v_1_13.aio.Session
+        b_13: v_1_13.AsyncSession
         a_14: v_1_14.Session
-        b_14: v_1_14.aio.Session
+        b_14: v_1_14.AsyncSession
         a_15: v_1_15.Session
-        b_15: v_1_15.aio.Session
+        b_15: v_1_15.AsyncSession
         a_16: v_1_16.Session
-        b_16: v_1_16.aio.Session
+        b_16: v_1_16.AsyncSession
         a_17: v_1_17.Session
-        b_17: v_1_17.aio.Session
+        b_17: v_1_17.AsyncSession
         a_18: v_1_18.Session
-        b_18: v_1_18.aio.Session
+        b_18: v_1_18.AsyncSession
         a_19: v_1_19.Session
-        b_19: v_1_19.aio.Session
+        b_19: v_1_19.AsyncSession
         a_20: v_1_20.Session
-        b_20: v_1_20.aio.Session
+        b_20: v_1_20.AsyncSession
         a_21: v_1_21.Session
-        b_21: v_1_21.aio.Session
+        b_21: v_1_21.AsyncSession
 
         a_13 = open_session(version=(0, 0))
         a_13 = open_session(version=(0, 0), asyncio=False)
