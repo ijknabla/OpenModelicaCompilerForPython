@@ -2,13 +2,12 @@ from __future__ import annotations
 
 from collections.abc import Coroutine
 from contextlib import closing
-from functools import partial
 from typing import TYPE_CHECKING, Any, List, Union, overload
 from warnings import warn
 
 from exceptiongroup import ExceptionGroup
 
-from .algorithm import bind_to_awaitable
+from .algorithm import fmap
 from .exception import OMCError, OMCWarning
 from .openmodelica import Component, TypeName
 from .parser import cast, parse
@@ -65,10 +64,12 @@ class BasicSession(HasInteractive[T_Calling]):
         self: BasicSession[Synchronous] | BasicSession[Asynchronous],
         name: Union[TypeName, str],
     ) -> List[Component] | Coroutine[None, None, List[Component]]:
-        expression = f"getComponents({to_omc_literal(cast(TypeName, name))})"
-        literal = self.__omc_interactive__.evaluate(expression)
-        bound_parse = bind_to_awaitable(partial(parse, List[Component]))
-        return bound_parse(literal)  # type: ignore
+        return fmap(
+            lambda x: parse(List[Component], x),
+            self.__omc_interactive__.evaluate(
+                f"getComponents({to_omc_literal(cast(TypeName, name))})"
+            ),
+        )
 
     @overload
     def getMessagesStringInternal(
@@ -99,14 +100,14 @@ class BasicSession(HasInteractive[T_Calling]):
         ...
 
     def check(self) -> None | Coroutine[None, None, None]:
-        return _check_messages(
-            self.getMessagesStringInternal(),  # type: ignore
+        return fmap(
+            _check_messages,
+            self.getMessagesStringInternal(),
         )
 
     __check__ = check
 
 
-@bind_to_awaitable
 def _check_messages(messages: list[ErrorMessage]) -> None:
     errors: list[OMCError] = []
 
