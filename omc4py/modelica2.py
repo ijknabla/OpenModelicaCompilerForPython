@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import enum
 import inspect
 from collections.abc import Callable, Coroutine, Generator
 from functools import lru_cache, partial, wraps
@@ -31,6 +32,14 @@ from .string import to_omc_literal
 
 
 class package(HasInteractive[T_Calling]):
+    __omc_class__: ClassVar[TypeName]
+
+
+class record:
+    __omc_class__: ClassVar[TypeName]
+
+
+class enumeration(enum.Enum):
     __omc_class__: ClassVar[TypeName]
 
 
