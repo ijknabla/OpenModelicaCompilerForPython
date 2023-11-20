@@ -66,13 +66,11 @@ def external(
     def decorator(f: MethodType[P, T]) -> MethodType[P, T]:
         @wraps(f)
         def wrapped(
-            self: SelfType,
-            *args: P.args,
-            **kwargs: P.kwargs,
+            self: SelfType, /, *args: P.args, **kwargs: P.kwargs
         ) -> ReturnType[T]:
             return _call(f, funcname, rename, self, *args, **kwargs)
 
-        return wrapped  # type: ignore
+        return wrapped
 
     return decorator  # type: ignore
 
