@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Coroutine
-from typing import Union, overload
+from typing import Coroutine, Union, overload
 
 from omc4py.modelica2 import external
 from omc4py.protocol import (

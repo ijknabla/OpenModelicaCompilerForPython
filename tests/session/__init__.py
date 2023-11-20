@@ -1,7 +1,6 @@
 from __future__ import annotations
 
-from collections.abc import Coroutine
-from typing import List, NamedTuple, Union, overload
+from typing import Coroutine, List, NamedTuple, Union, overload
 
 from omc4py.modelica import enumeration
 from omc4py.modelica2 import external, package
