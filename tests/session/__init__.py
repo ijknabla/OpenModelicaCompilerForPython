@@ -4,8 +4,7 @@ from collections.abc import Coroutine
 from typing import List, NamedTuple, Union, overload
 
 from omc4py import modelica2, openmodelica2
-from omc4py.latest import Session as BasicSession
-from omc4py.modelica import enumeration, external
+from omc4py.modelica import enumeration
 from omc4py.openmodelica import TypeName
 from omc4py.protocol import (
     Asynchronous,
@@ -101,12 +100,13 @@ EmptySession = GenericEmptySession[Synchronous]
 AsyncEmptySession = GenericEmptySession[Asynchronous]
 
 
-@external(".one.Enum")
 class Enum(enumeration):
+    __omc_class__ = TypeName(".one.Enum")
+
     One = 1
 
 
-class one(NamedTuple):
+class One(NamedTuple):
     real: float
     integer: int
     boolean: bool
@@ -114,11 +114,34 @@ class one(NamedTuple):
     enum: Enum
 
 
-class OneSession(BasicSession):
-    @external(".one")
-    @classmethod
-    def one(_) -> one:
-        raise NotImplementedError()
+@overload
+def one(self: SupportsInteractiveProperty[Synchronous]) -> One:
+    ...
+
+
+@overload
+async def one(self: SupportsInteractiveProperty[Asynchronous]) -> One:
+    ...
+
+
+@modelica2.external(".one")
+def one(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[One, Coroutine[None, None, One]]:
+    return ...  # type: ignore
+
+
+class GenericOneSession(openmodelica2.BasicSession[T_Calling]):
+    loadFile = loadFile
+    getMessagesStringInternal = getMessagesStringInternal
+    one = one
+
+
+OneSession = GenericOneSession[Synchronous]
+AsyncOneSession = GenericOneSession[Asynchronous]
 
 
 class Nested(modelica2.package[T_Calling]):
