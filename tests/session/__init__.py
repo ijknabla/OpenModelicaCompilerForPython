@@ -11,7 +11,7 @@ from omc4py.protocol import (
     T_Calling,
 )
 from omc4py.session import BasicSession
-from omc4py.v_1_21.OpenModelica.Scripting import (  # NOTE: update to latest
+from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
     ErrorMessage,
 )
 

@@ -11,7 +11,7 @@ from omc4py import TypeName, VariableName
 from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.parser import cast, parse
-from omc4py.v_1_21.OpenModelica.Scripting import (  # NOTE: update to latest
+from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
     SourceInfo,
 )
 
