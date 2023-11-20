@@ -2,16 +2,15 @@ from __future__ import annotations
 
 from typing import Coroutine, List, NamedTuple, Union, overload
 
-from omc4py.modelica import enumeration
-from omc4py.modelica2 import external, package
+from omc4py.modelica import enumeration, external, package
 from omc4py.openmodelica import TypeName
-from omc4py.openmodelica2 import BasicSession
 from omc4py.protocol import (
     Asynchronous,
     SupportsInteractiveProperty,
     Synchronous,
     T_Calling,
 )
+from omc4py.session import BasicSession
 from omc4py.v_1_21.OpenModelica.Scripting import (  # NOTE: update to latest
     ErrorMessage,
 )

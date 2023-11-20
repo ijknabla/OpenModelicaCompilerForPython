@@ -11,8 +11,7 @@ from typing import (
     overload,
 )
 
-from omc4py.modelica import enumeration, record
-from omc4py.modelica2 import external, package
+from omc4py.modelica import enumeration, external, package, record
 from omc4py.openmodelica import TypeName, VariableName
 from omc4py.protocol import (
     Asynchronous,

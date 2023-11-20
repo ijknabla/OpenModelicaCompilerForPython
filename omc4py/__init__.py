@@ -54,13 +54,13 @@ from typing import Union, overload
 from .exception import OMCRuntimeError
 from .interactive import Interactive
 from .openmodelica import TypeName, VariableName
-from .openmodelica2 import BasicSession
 from .protocol import (
     Asynchronous,
     SupportsInteractive,
     Synchronous,
     synchronous,
 )
+from .session import BasicSession
 
 if TYPE_CHECKING:
     from . import (

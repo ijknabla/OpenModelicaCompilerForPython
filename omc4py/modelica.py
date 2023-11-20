@@ -2,113 +2,96 @@ from __future__ import annotations
 
 import enum
 import inspect
-from collections.abc import Callable, Generator
-from functools import partial, wraps
+from collections.abc import Callable, Coroutine, Generator
+from functools import lru_cache, partial, wraps
 from typing import (
     TYPE_CHECKING,
     Any,
     ClassVar,
-    Generic,
-    Literal,
     TypeVar,
+    Union,
     get_args,
     get_origin,
     get_type_hints,
 )
 
-from typing_extensions import Annotated
-
-from omc4py.protocol import (
-    Asynchronous,
-    SupportsInteractive,
-    SupportsInteractiveProperty,
-    Synchronous,
-)
+if TYPE_CHECKING:
+    from typing_extensions import ParamSpec, Concatenate
 
 from .algorithm import bind_to_awaitable
 from .openmodelica import TypeName
+from .protocol import (
+    Asynchronous,
+    HasInteractive,
+    SupportsInteractiveProperty,
+    Synchronous,
+    T_Calling,
+)
 from .string import to_omc_literal
 
-_T = TypeVar("_T")
 
-
-def external(class_name: str) -> Callable[[_T], _T]:
-    return partial(_external, class_name=class_name)
-
-
-class alias(Generic[_T]):
-    ...
-
-
-class enumeration(enum.Enum):
+class package(HasInteractive[T_Calling]):
     __omc_class__: ClassVar[TypeName]
-
-
-class PackageMeta(type):
-    if not TYPE_CHECKING:
-
-        def __get__(cls, obj, objtype=None):
-            if isinstance(obj, SupportsInteractiveProperty):
-                package = cls()
-                package.__omc_interactive__ = obj.__omc_interactive__
-                return package
-            else:
-                return cls
-
-
-class package(metaclass=PackageMeta):
-    __omc_class__: ClassVar[TypeName]
-    __omc_interactive__: (
-        SupportsInteractive[Synchronous] | SupportsInteractive[Asynchronous]
-    )
 
 
 class record:
     __omc_class__: ClassVar[TypeName]
 
 
-def _external(obj: _T, class_name: str) -> _T:
-    if isinstance(obj, type) and issubclass(
-        obj, (enumeration, package, record)
-    ):
-        obj.__omc_class__ = TypeName(class_name)
-        return obj  # type: ignore
-    elif isinstance(obj, classmethod):
-        return _create_function(class_name, obj.__func__)  # type: ignore
-
-    raise NotImplementedError(obj)
+class enumeration(enum.Enum):
+    __omc_class__: ClassVar[TypeName]
 
 
-def _create_function(
-    class_name: str, f: Callable[..., Any]
-) -> Callable[..., Any]:
-    from .parser import parse
+if TYPE_CHECKING:
+    T = TypeVar("T")
+    P = ParamSpec("P")
 
-    @wraps(f)
-    def _wrapped(_: Any, *args: Any, **kwargs: Any) -> Any:
-        self = _
-        if not isinstance(self, SupportsInteractiveProperty):
-            raise ValueError(f"{self} is not SupportsInteractiveProperty")
-
-        return_type = get_type_hints(f)["return"]
-        literal: str = self.__omc_interactive__.evaluate(
-            f"{class_name}({_get_argument(f, *args, **kwargs)})"
-        )
-        bound_parse = bind_to_awaitable(partial(parse, return_type))
-        # > TODO: check complicated type
-        return bound_parse(literal)  # type: ignore
-
-    _wrapped.__omc_class__ = TypeName(class_name)  # type: ignore
-
-    return _wrapped
+    SelfType = Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+    ReturnType = Union[T, Coroutine[None, None, T]]
+    MethodType = Callable[
+        Concatenate[SelfType, P],
+        Union[T, Coroutine[None, None, T]],
+    ]
 
 
-def _get_argument(f: Callable[..., Any], *args: Any, **kwargs: Any) -> str:
-    from .parser import cast
+def external(
+    funcname: str, rename: dict[str, str] | None = None
+) -> Callable[[T], T]:
+    if rename is None:
+        rename = {}
 
-    type_hints = get_type_hints(f)
+    def decorator(f: MethodType[P, T]) -> MethodType[P, T]:
+        @wraps(f)
+        def wrapped(
+            self: SelfType,
+            *args: P.args,
+            **kwargs: P.kwargs,
+        ) -> ReturnType[T]:
+            return _call(f, funcname, rename, self, *args, **kwargs)
+
+        return wrapped  # type: ignore
+
+    return decorator  # type: ignore
+
+
+def _call(
+    f: MethodType[P, T],
+    funcname: str,
+    rename: dict[str, str],
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    *args: P.args,
+    **kwargs: P.kwargs,
+) -> ReturnType[T]:
+    from .parser import cast, parse
+
     signature = inspect.signature(f)
-    paraphrases = _get_paraphrases(signature)
+    type_hints = get_type_hints(f)
 
     def _iter_arguments() -> Generator[str, None, None]:
         for key, value in signature.bind(
@@ -116,27 +99,23 @@ def _get_argument(f: Callable[..., Any], *args: Any, **kwargs: Any) -> str:
         ).arguments.items():
             if value is None:
                 continue
-            name = paraphrases[key]
+            name = rename.get(key, key)
             literal = to_omc_literal(cast(type_hints[key], value))
 
             yield f"{name}={literal}"
 
-    return ",".join(_iter_arguments())
+    bound_parse = bind_to_awaitable(
+        partial(parse, _extract_return_type(type_hints["return"]))
+    )
+    return bound_parse(  # type: ignore
+        self.__omc_interactive__.evaluate(  # type: ignore
+            f"{funcname}({','.join(_iter_arguments())})"
+        )
+    )
 
 
-def _get_paraphrases(signature: inspect.Signature) -> dict[str, str]:
-    def _find_value(key: str, annotation: Any) -> str:
-        if get_origin(annotation) is Annotated:
-            for alias_ in get_args(annotation)[1:]:
-                if get_origin(alias_) is alias:
-                    literal, *_ = get_args(alias)
-                    if get_origin(literal) is Literal:
-                        string, *_ = get_args(literal)
-                        if isinstance(string, str):
-                            return string
-        return key
-
-    return {
-        key: _find_value(key, parameter.annotation)
-        for key, parameter in signature.parameters.items()
-    }
+@lru_cache(None)
+def _extract_return_type(type_hint: Any) -> Any:
+    for arg in get_args(type_hint):
+        if not isinstance(get_origin(arg), Coroutine):
+            return arg

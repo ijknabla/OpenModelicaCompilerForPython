@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Coroutine, Union, overload
 
-from omc4py.modelica2 import external, package
+from omc4py.modelica import external, package
 from omc4py.openmodelica import TypeName
 from omc4py.protocol import (
     Asynchronous,

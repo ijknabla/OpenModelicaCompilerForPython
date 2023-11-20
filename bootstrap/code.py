@@ -181,7 +181,7 @@ class PackageFactory(HasTypeName):
                 for typevar in ["Asynchronous", "Synchronous"]
             )
             imports.add(
-                ImportFrom(module="omc4py.openmodelica2", name="BasicSession")
+                ImportFrom(module="omc4py.session", name="BasicSession")
             )
         for child in self.children.values():
             if isinstance(child, PackageFactory) and child.children:
@@ -196,7 +196,7 @@ class PackageFactory(HasTypeName):
         yield from imports
 
     def iter_imports(self) -> Generator[ImportFrom, None, None]:
-        yield ImportFrom(module="omc4py.modelica2", name="package")
+        yield ImportFrom(module="omc4py.modelica", name="package")
         yield ImportFrom(module="omc4py.openmodelica", name="TypeName")
         yield ImportFrom(module="omc4py.protocol", name="T_Calling")
 
@@ -403,7 +403,7 @@ class FunctionFactory(HasTypeName):
         }
 
     def iter_imports(self) -> Generator[ImportFrom, None, None]:
-        yield ImportFrom(module="omc4py.modelica2", name="external")
+        yield ImportFrom(module="omc4py.modelica", name="external")
         yield ImportFrom(module="omc4py.protocol", name="Asynchronous")
         yield ImportFrom(module="omc4py.protocol", name="Synchronous")
         yield ImportFrom(

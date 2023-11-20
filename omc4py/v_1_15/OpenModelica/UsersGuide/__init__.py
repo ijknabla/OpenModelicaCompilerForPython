@@ -1,6 +1,6 @@
 from __future__ import annotations as _
 
-from omc4py.modelica2 import package
+from omc4py.modelica import package
 from omc4py.openmodelica import TypeName
 from omc4py.protocol import T_Calling
 
