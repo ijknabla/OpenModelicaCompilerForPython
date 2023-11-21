@@ -4,6 +4,7 @@ import enum
 import inspect
 from collections.abc import Callable, Coroutine, Generator
 from functools import lru_cache, wraps
+from itertools import islice
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -80,10 +81,8 @@ def _call(
     f: MethodType[P, T],
     funcname: str,
     rename: dict[str, str],
-    self: Union[
-        SupportsInteractiveProperty[Synchronous],
-        SupportsInteractiveProperty[Asynchronous],
-    ],
+    self: SelfType,
+    /,
     *args: P.args,
     **kwargs: P.kwargs,
 ) -> ReturnType[T]:
@@ -91,6 +90,12 @@ def _call(
 
     signature = inspect.signature(f)
     type_hints = get_type_hints(f)
+
+    positional = set(
+        k
+        for k, v in islice(signature.parameters.items(), 1, None)
+        if v.default is v.empty
+    )
 
     def _iter_arguments() -> Generator[str, None, None]:
         for key, value in signature.bind(
@@ -101,7 +106,10 @@ def _call(
             name = rename.get(key, key)
             literal = to_omc_literal(parser.cast(type_hints[key], value))
 
-            yield f"{name}={literal}"
+            if len(positional) == 1 and key in positional:
+                yield f"{literal}"
+            else:
+                yield f"{name}={literal}"
 
     return fmap(
         lambda x: parser.parse(
