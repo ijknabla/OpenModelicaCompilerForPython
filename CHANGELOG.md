@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- float, record input argument
+
 ## [0.3.0a2] - 2023-11-21
 
 ### Fixed
