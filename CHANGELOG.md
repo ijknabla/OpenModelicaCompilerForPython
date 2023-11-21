@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- Fixed an expression for a function that has only one argument with no default value. s.t. `buildModel`
+
 ## [0.3.0a1] - 2023-11-21
 
 ### Added
