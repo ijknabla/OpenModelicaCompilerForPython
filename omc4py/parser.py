@@ -329,7 +329,10 @@ def _priority(typ: type[_Scalar]) -> int:
         return 0
     for i, base in reversed(
         list(
-            enumerate([int, str, VariableName, TypeName, enumeration], start=1)
+            enumerate(
+                [float, int, str, VariableName, TypeName, enumeration, record],
+                start=1,
+            )
         )
     ):
         if _issubclass(typ, base):
