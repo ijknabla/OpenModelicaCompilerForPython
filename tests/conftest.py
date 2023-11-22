@@ -7,14 +7,9 @@ from typing import TYPE_CHECKING, TypeVar
 
 import pytest
 import pytest_asyncio
-from pkg_resources import resource_filename
 
 import omc4py.modelica
 from omc4py import AsyncSession, Session, open_session
-from omc4py.interactive import Interactive
-from omc4py.protocol import asynchronous
-
-from .session import AsyncEmptySession, AsyncNestedSession, AsyncOneSession
 
 if TYPE_CHECKING:
     from typing_extensions import Concatenate, Never, ParamSpec
@@ -66,45 +61,6 @@ async def async_session(
 ) -> AsyncGenerator[AsyncSession, None]:
     yield _async_session
     await _async_session.__check__()
-
-
-@pytest_asyncio.fixture(scope="session")
-async def empty_session(
-    _function_coverage: Never,
-) -> AsyncGenerator[AsyncEmptySession, None]:
-    interactive = Interactive.open("omc", asynchronous)
-    with AsyncEmptySession(interactive) as session:
-        assert await session.loadFile(
-            resource_filename(__name__, "src/empty.mo")
-        )
-        yield session
-        await session.__check__()
-
-
-@pytest_asyncio.fixture(scope="session")
-async def one_session(
-    _function_coverage: Never,
-) -> AsyncGenerator[AsyncOneSession, None]:
-    interactive = Interactive.open("omc", asynchronous)
-    with AsyncOneSession(interactive) as session:
-        assert await session.loadFile(
-            resource_filename(__name__, "src/one.mo")
-        )
-        yield session
-        await session.__check__()
-
-
-@pytest_asyncio.fixture(scope="session")
-async def nested_session(
-    _function_coverage: Never,
-) -> AsyncGenerator[AsyncNestedSession, None]:
-    interactive = Interactive.open("omc", asynchronous)
-    with AsyncNestedSession(interactive) as session:
-        assert await session.loadFile(
-            resource_filename(__name__, "src/Nested.mo")
-        )
-        yield session
-        await session.__check__()
 
 
 @pytest.fixture(scope="session")
