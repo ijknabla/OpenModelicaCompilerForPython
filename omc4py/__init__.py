@@ -342,10 +342,7 @@ def open_session(
     version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
-    interactive = Interactive.open(
-        "omc" if omc_command is None else omc_command,
-        synchronous,
-    )
+    interactive = Interactive.open(omc_command, synchronous)
 
     try:
         session_type, async_session_type = _select_session_type(

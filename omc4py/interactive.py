@@ -39,9 +39,12 @@ class Interactive(Generic[T_Calling]):
     @classmethod
     def open(
         cls,
-        omc_command: str | PathLike[str],
+        omc_command: str | PathLike[str] | None,
         calling: T_Calling,
     ) -> Self:
+        if omc_command is None:
+            omc_command = "omc"
+
         exit_stack = ExitStack()
         atexit.register(exit_stack.close)
 
