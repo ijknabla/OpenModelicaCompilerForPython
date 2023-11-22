@@ -348,7 +348,7 @@ def open_session(
     )
 
     try:
-        session_type, aio_session_type = _select_session_type(
+        session_type, async_session_type = _select_session_type(
             _get_version(interactive)
         )
     except Exception:
@@ -356,7 +356,7 @@ def open_session(
         raise
 
     if asyncio:
-        return aio_session_type(interactive.asynchronous)
+        return async_session_type(interactive.asynchronous)
     else:
         return session_type(interactive)
 
