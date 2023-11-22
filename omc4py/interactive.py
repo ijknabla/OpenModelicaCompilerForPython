@@ -42,7 +42,7 @@ class Interactive(Generic[T_Calling]):
         omc_command: str | PathLike[str] | None,
         calling: T_Calling,
     ) -> Self:
-        omc_command = _resolve_command(
+        omc_command = _resolve_omc(
             "omc" if omc_command is None else omc_command
         )
 
@@ -201,14 +201,19 @@ def _create_omc_interactive(
         yield process, port
 
 
-def _resolve_command(
-    command: str | PathLike[str],
+def _resolve_omc(
+    omc: str | PathLike[str] | None,
 ) -> Path:
-    executable = shutil.which(command)
-    if executable is None:
-        raise FileNotFoundError(f"Can't find executable of {command}")
+    if isinstance(omc, PathLike):
+        omc = omc.__fspath__()
+    elif omc is None:
+        omc = "omc"
 
-    return Path(executable).resolve()
+    resolved = shutil.which(omc)
+
+    if resolved is None:
+        raise FileNotFoundError(f"Can't find executable of {omc}")
+    return Path(resolved)
 
 
 def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
