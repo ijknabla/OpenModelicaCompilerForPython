@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import atexit
 import logging
+import platform
+import re
 import shutil
 import tempfile
 import uuid
@@ -9,6 +11,7 @@ from asyncio import Lock
 from collections.abc import Coroutine, Generator
 from contextlib import ExitStack, contextmanager, suppress
 from dataclasses import dataclass, field
+from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
@@ -210,10 +213,35 @@ def _resolve_omc(
         omc = "omc"
 
     resolved = shutil.which(omc)
+    if resolved is None and platform.system() == "Windows":
+        resolved = max(
+            glob("C:\\Program Files\\OpenModelica*\\bin\\omc.exe"),
+            key=_search_openmodelica_version,
+            default=None,
+        )
 
     if resolved is None:
         raise FileNotFoundError(f"Can't find executable of {omc}")
     return Path(resolved)
+
+
+def _search_openmodelica_version(s: str | None) -> tuple[int, int, int]:
+    major, minor, patch = -1, -1, -1
+
+    if s is not None:
+        matched = re.search(
+            "OpenModelica"
+            r"(?P<major>\d+)(\.(?P<minor>\d+)(\.(?P<patch>\d+))?)?",
+            s,
+        )
+        if matched is not None:
+            major = int(matched.group("major"))
+            with suppress(TypeError):
+                minor = int(matched.group("minor"))
+            with suppress(TypeError):
+                patch = int(matched.group("patch"))
+
+    return major, minor, patch
 
 
 def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
