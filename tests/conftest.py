@@ -62,21 +62,30 @@ def wrap_call(call: Call[P, T]) -> Call[P, T]:
 
 
 @pytest.fixture(scope="session")
-def session(
-    function_coverage: Never,
-) -> Generator[Session, None, None]:
+def _session(function_coverage: Never) -> Generator[Session, None, None]:
     with open_session() as session:
         yield session
-        session.__check__()
+
+
+@pytest.fixture
+def session(
+    _session: Session,
+) -> Generator[Session, None, None]:
+    yield _session
+    _session.__check__()
+
+
+@pytest.fixture(scope="session")
+def _async_session(_session: Session) -> AsyncSession:
+    return _session.asynchronous
 
 
 @pytest_asyncio.fixture(scope="session")
 async def async_session(
-    function_coverage: Never,
+    _async_session: AsyncSession,
 ) -> AsyncGenerator[AsyncSession, None]:
-    with open_session(asyncio=True) as session:
-        yield session
-        await session.__check__()
+    yield _async_session
+    await _async_session.__check__()
 
 
 @pytest_asyncio.fixture(scope="session")
