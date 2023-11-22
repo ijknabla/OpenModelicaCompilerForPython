@@ -111,14 +111,11 @@ class _DualInteractive:
 
     @classmethod
     @contextmanager
-    def open(
-        cls,
-        omc_command: Path,
-    ) -> Generator[Self, None, None]:
+    def open(cls, omc: Path) -> Generator[Self, None, None]:
         with ExitStack() as stack:
             enter = stack.enter_context
 
-            process, port = enter(_create_omc_interactive(omc_command))
+            process, port = enter(_create_omc_interactive(omc))
 
             yield cls(
                 *enter(cls.__open_socket(process=process, port=port)),
@@ -166,13 +163,13 @@ class _DualInteractive:
 
 @contextmanager
 def _create_omc_interactive(
-    omc_command: Path,
+    omc: Path,
 ) -> Generator[tuple[Popen[str], str], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
         command = [
-            omc_command.__fspath__(),
+            omc.__fspath__(),
             "--interactive=zmq",
             "--locale=C",
             f"-z={suffix}",
