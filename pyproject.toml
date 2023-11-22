@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "OpenModelicaCompiler"
-version = "0.3.0a3"
+version = "0.3.0a4"
 description = "OpenModelica compiler (omc) interface for Python"
 repository = "https://github.com/ijknabla/OpenModelicaCompilerForPython"
 authors = ["ijknabla <ijknabla@gmail.com>"]
@@ -24,6 +24,9 @@ exceptiongroup = ">=1.0"
 pyzmq = ">=17.0.0"
 typing-extensions = ">=3.7.4"
 modelicalang = "^0.1.0a2"
+tornado = [
+    { platform ="win32", version = ">=6.1" },
+]
 
 [tool.poetry.group.bootstrap.dependencies]
 click = "^8.1.7"

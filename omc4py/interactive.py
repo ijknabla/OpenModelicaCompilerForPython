@@ -2,6 +2,8 @@ from __future__ import annotations
 
 import atexit
 import logging
+import platform
+import re
 import shutil
 import tempfile
 import uuid
@@ -9,6 +11,7 @@ from asyncio import Lock
 from collections.abc import Coroutine, Generator
 from contextlib import ExitStack, contextmanager, suppress
 from dataclasses import dataclass, field
+from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
@@ -39,9 +42,13 @@ class Interactive(Generic[T_Calling]):
     @classmethod
     def open(
         cls,
-        omc_command: str | PathLike[str],
+        omc_command: str | PathLike[str] | None,
         calling: T_Calling,
     ) -> Self:
+        omc_command = _resolve_omc(
+            "omc" if omc_command is None else omc_command
+        )
+
         exit_stack = ExitStack()
         atexit.register(exit_stack.close)
 
@@ -107,14 +114,11 @@ class _DualInteractive:
 
     @classmethod
     @contextmanager
-    def open(
-        cls,
-        omc_command: str | PathLike[str],
-    ) -> Generator[Self, None, None]:
+    def open(cls, omc: Path) -> Generator[Self, None, None]:
         with ExitStack() as stack:
             enter = stack.enter_context
 
-            process, port = enter(_create_omc_interactive(omc_command))
+            process, port = enter(_create_omc_interactive(omc))
 
             yield cls(
                 *enter(cls.__open_socket(process=process, port=port)),
@@ -162,13 +166,13 @@ class _DualInteractive:
 
 @contextmanager
 def _create_omc_interactive(
-    omc_command: str | PathLike[str],
+    omc: Path,
 ) -> Generator[tuple[Popen[str], str], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
         command = [
-            f"{_resolve_command(omc_command)}",
+            omc.__fspath__(),
             "--interactive=zmq",
             "--locale=C",
             f"-z={suffix}",
@@ -200,14 +204,44 @@ def _create_omc_interactive(
         yield process, port
 
 
-def _resolve_command(
-    command: str | PathLike[str],
+def _resolve_omc(
+    omc: str | PathLike[str] | None,
 ) -> Path:
-    executable = shutil.which(command)
-    if executable is None:
-        raise FileNotFoundError(f"Can't find executable of {command}")
+    if isinstance(omc, PathLike):
+        omc = omc.__fspath__()
+    elif omc is None:
+        omc = "omc"
 
-    return Path(executable).resolve()
+    resolved = shutil.which(omc)
+    if resolved is None and platform.system() == "Windows":
+        resolved = max(
+            glob("C:\\Program Files\\OpenModelica*\\bin\\omc.exe"),
+            key=_search_openmodelica_version,
+            default=None,
+        )
+
+    if resolved is None:
+        raise FileNotFoundError(f"Can't find executable of {omc}")
+    return Path(resolved)
+
+
+def _search_openmodelica_version(s: str | None) -> tuple[int, int, int]:
+    major, minor, patch = -1, -1, -1
+
+    if s is not None:
+        matched = re.search(
+            "OpenModelica"
+            r"(?P<major>\d+)(\.(?P<minor>\d+)(\.(?P<patch>\d+))?)?",
+            s,
+        )
+        if matched is not None:
+            major = int(matched.group("major"))
+            with suppress(TypeError):
+                minor = int(matched.group("minor"))
+            with suppress(TypeError):
+                patch = int(matched.group("patch"))
+
+    return major, minor, patch
 
 
 def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
