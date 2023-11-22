@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Added
+
+- Windows support
+    - Auto search latest omc.exe form `C:\Program Files\OpenModelica*\bin\omc.exe`
+    - Add tornado dependency support async zmq call
+
 ## [0.3.0a3] - 2023-11-21
 
 ### Fixed
