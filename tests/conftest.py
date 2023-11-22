@@ -35,15 +35,6 @@ def event_loop() -> AbstractEventLoop:
     return get_event_loop()
 
 
-@pytest.fixture(scope="session")
-def function_coverage() -> Generator[None, None, None]:
-    with pytest.MonkeyPatch().context() as _monkeypatch:
-        _monkeypatch.setattr(
-            omc4py.modelica, "_call", wrap_call(omc4py.modelica._call)
-        )
-        yield
-
-
 def wrap_call(call: Call[P, T]) -> Call[P, T]:
     @wraps(call)
     def wrapped(
@@ -61,23 +52,12 @@ def wrap_call(call: Call[P, T]) -> Call[P, T]:
     return wrapped
 
 
-@pytest.fixture(scope="session")
-def _session(function_coverage: Never) -> Generator[Session, None, None]:
-    with open_session() as session:
-        yield session
-
-
 @pytest.fixture
 def session(
     _session: Session,
 ) -> Generator[Session, None, None]:
     yield _session
     _session.__check__()
-
-
-@pytest.fixture(scope="session")
-def _async_session(_session: Session) -> AsyncSession:
-    return _session.asynchronous
 
 
 @pytest_asyncio.fixture(scope="session")
@@ -90,7 +70,7 @@ async def async_session(
 
 @pytest_asyncio.fixture(scope="session")
 async def empty_session(
-    function_coverage: Never,
+    _function_coverage: Never,
 ) -> AsyncGenerator[AsyncEmptySession, None]:
     interactive = Interactive.open("omc", asynchronous)
     with AsyncEmptySession(interactive) as session:
@@ -103,7 +83,7 @@ async def empty_session(
 
 @pytest_asyncio.fixture(scope="session")
 async def one_session(
-    function_coverage: Never,
+    _function_coverage: Never,
 ) -> AsyncGenerator[AsyncOneSession, None]:
     interactive = Interactive.open("omc", asynchronous)
     with AsyncOneSession(interactive) as session:
@@ -116,7 +96,7 @@ async def one_session(
 
 @pytest_asyncio.fixture(scope="session")
 async def nested_session(
-    function_coverage: Never,
+    _function_coverage: Never,
 ) -> AsyncGenerator[AsyncNestedSession, None]:
     interactive = Interactive.open("omc", asynchronous)
     with AsyncNestedSession(interactive) as session:
@@ -125,3 +105,26 @@ async def nested_session(
         )
         yield session
         await session.__check__()
+
+
+@pytest.fixture(scope="session")
+def _function_coverage() -> Generator[None, None, None]:
+    with pytest.MonkeyPatch().context() as _monkeypatch:
+        _monkeypatch.setattr(
+            omc4py.modelica, "_call", wrap_call(omc4py.modelica._call)
+        )
+        yield
+
+
+@pytest.fixture(scope="session")
+def _session(_function_coverage: Never) -> Generator[Session, None, None]:
+    with open_session() as session:
+        yield session
+
+
+@pytest.fixture(scope="session")
+def _async_session(
+    _function_coverage: Never,
+) -> Generator[AsyncSession, None, None]:
+    with open_session(asyncio=True) as session:
+        yield session
