@@ -42,8 +42,9 @@ class Interactive(Generic[T_Calling]):
         omc_command: str | PathLike[str] | None,
         calling: T_Calling,
     ) -> Self:
-        if omc_command is None:
-            omc_command = "omc"
+        omc_command = _resolve_command(
+            "omc" if omc_command is None else omc_command
+        )
 
         exit_stack = ExitStack()
         atexit.register(exit_stack.close)
@@ -112,7 +113,7 @@ class _DualInteractive:
     @contextmanager
     def open(
         cls,
-        omc_command: str | PathLike[str],
+        omc_command: Path,
     ) -> Generator[Self, None, None]:
         with ExitStack() as stack:
             enter = stack.enter_context
@@ -165,13 +166,13 @@ class _DualInteractive:
 
 @contextmanager
 def _create_omc_interactive(
-    omc_command: str | PathLike[str],
+    omc_command: Path,
 ) -> Generator[tuple[Popen[str], str], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
         command = [
-            f"{_resolve_command(omc_command)}",
+            omc_command.__fspath__(),
             "--interactive=zmq",
             "--locale=C",
             f"-z={suffix}",
