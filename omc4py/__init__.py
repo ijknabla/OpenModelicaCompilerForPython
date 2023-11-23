@@ -146,7 +146,7 @@ def _select_session_type(
 # Latest
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
     asyncio: Literal[False] = False,
@@ -156,7 +156,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
     asyncio: Literal[True],
@@ -167,7 +167,7 @@ def open_session(
 # v1.21
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[21]],
     asyncio: Literal[False] = False,
@@ -177,7 +177,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[21]],
     asyncio: Literal[True],
@@ -188,7 +188,7 @@ def open_session(
 # v1.20
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[20]],
     asyncio: Literal[False] = False,
@@ -198,7 +198,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[20]],
     asyncio: Literal[True],
@@ -209,7 +209,7 @@ def open_session(
 # v1.19
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[19]],
     asyncio: Literal[False] = False,
@@ -219,7 +219,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[19]],
     asyncio: Literal[True],
@@ -230,7 +230,7 @@ def open_session(
 # v1.18
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[18]],
     asyncio: Literal[False] = False,
@@ -240,7 +240,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[18]],
     asyncio: Literal[True],
@@ -251,7 +251,7 @@ def open_session(
 # v1.17
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[17]],
     asyncio: Literal[False] = False,
@@ -261,7 +261,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[17]],
     asyncio: Literal[True],
@@ -272,7 +272,7 @@ def open_session(
 # v1.16
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[16]],
     asyncio: Literal[False] = False,
@@ -282,7 +282,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[16]],
     asyncio: Literal[True],
@@ -293,7 +293,7 @@ def open_session(
 # v1.15
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[15]],
     asyncio: Literal[False] = False,
@@ -303,7 +303,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[15]],
     asyncio: Literal[True],
@@ -314,7 +314,7 @@ def open_session(
 # v1.14
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[14]],
     asyncio: Literal[False] = False,
@@ -324,7 +324,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[14]],
     asyncio: Literal[True],
@@ -335,7 +335,7 @@ def open_session(
 # v1.13
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[13]],
     asyncio: Literal[False] = False,
@@ -345,7 +345,7 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: T[L[1], L[13]],
     asyncio: Literal[True],
@@ -354,12 +354,12 @@ def open_session(
 
 
 def open_session(
-    omc_command: str | PathLike[str] | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
     version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
-    interactive = Interactive.open(omc_command, Calling.synchronous)
+    interactive = Interactive.open(omc, Calling.synchronous)
 
     try:
         session_type, async_session_type = _select_session_type(
