@@ -50,6 +50,14 @@ async def test_load_string(open_session: OpenSession) -> None:
     assert await get_class_names(s) == {"A"}
 
 
+# # TOOD: EncryptedPackage features
+# File not Found: /usr/bin/omc-semla/packagetool.
+# Compile OpenModelica with Encryption support.
+# - parseEncryptedPackage
+# - loadEncryptedPackage
+# - buildEncryptedPackage
+
+
 async def get_class_names(
     session: AsyncSession, class_: TypeName | str | None = None
 ) -> set[str]:
