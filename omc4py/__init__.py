@@ -58,6 +58,7 @@ from .protocol import (
     Asynchronous,
     SupportsInteractive,
     Synchronous,
+    T_Calling,
     synchronous,
 )
 from .session import BasicSession
@@ -77,6 +78,25 @@ if TYPE_CHECKING:
     )
 
     Command = Union[str, PathLike[str]]
+
+if TYPE_CHECKING:
+    GenericSession = Union[
+        v_1_22.GenericSession[T_Calling],  # NOTE: update to latest
+        v_1_21.GenericSession[T_Calling],
+        v_1_20.GenericSession[T_Calling],
+        v_1_19.GenericSession[T_Calling],
+        v_1_18.GenericSession[T_Calling],
+        v_1_17.GenericSession[T_Calling],
+        v_1_16.GenericSession[T_Calling],
+        v_1_15.GenericSession[T_Calling],
+        v_1_14.GenericSession[T_Calling],
+        v_1_13.GenericSession[T_Calling],
+    ]
+else:
+    GenericSession = BasicSession
+
+Session = GenericSession[Synchronous]
+AsyncSession = GenericSession[Asynchronous]
 
 
 def _select_session_type(
