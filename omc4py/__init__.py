@@ -45,12 +45,7 @@ __all__ = (
 )
 import re
 from os import PathLike
-from typing import TYPE_CHECKING, Any
-from typing import Literal
-from typing import Literal as L
-from typing import Tuple
-from typing import Tuple as T
-from typing import Union, overload
+from typing import TYPE_CHECKING, Any, Literal, Tuple, Union, overload
 
 from .exception import OMCRuntimeError
 from .interactive import Interactive
@@ -91,7 +86,10 @@ if TYPE_CHECKING:
         v_1_13.GenericSession[T_Calling],
     ]
 
-    _1_22 = tuple[Literal[1], Literal[22]]
+    _1_24 = tuple[Literal[1], Literal[24]]
+    _1_23 = tuple[Literal[1], Literal[23]]
+
+    _1_22 = tuple[Literal[1], Literal[22]]  # NOTE: update to latest
     _1_21 = tuple[Literal[1], Literal[21]]
     _1_20 = tuple[Literal[1], Literal[20]]
     _1_19 = tuple[Literal[1], Literal[19]]
@@ -161,7 +159,7 @@ def _select_session_type(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
+    version: _1_22 | _1_23 | _1_24 | None = None,
     asyncio: Literal[False] = False,
 ) -> v_1_22.Session:
     ...
@@ -171,7 +169,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
+    version: _1_22 | _1_23 | _1_24 | None = None,
     asyncio: Literal[True],
 ) -> v_1_22.AsyncSession:
     ...
@@ -182,7 +180,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[21]],
+    version: _1_21,
     asyncio: Literal[False] = False,
 ) -> v_1_21.Session:
     ...
@@ -192,7 +190,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[21]],
+    version: _1_21,
     asyncio: Literal[True],
 ) -> v_1_21.AsyncSession:
     ...
@@ -203,7 +201,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[20]],
+    version: _1_20,
     asyncio: Literal[False] = False,
 ) -> v_1_20.Session:
     ...
@@ -213,7 +211,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[20]],
+    version: _1_20,
     asyncio: Literal[True],
 ) -> v_1_20.AsyncSession:
     ...
@@ -224,7 +222,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[19]],
+    version: _1_19,
     asyncio: Literal[False] = False,
 ) -> v_1_19.Session:
     ...
@@ -234,7 +232,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[19]],
+    version: _1_19,
     asyncio: Literal[True],
 ) -> v_1_19.AsyncSession:
     ...
@@ -245,7 +243,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[18]],
+    version: _1_18,
     asyncio: Literal[False] = False,
 ) -> v_1_18.Session:
     ...
@@ -255,7 +253,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[18]],
+    version: _1_18,
     asyncio: Literal[True],
 ) -> v_1_18.AsyncSession:
     ...
@@ -266,7 +264,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[17]],
+    version: _1_17,
     asyncio: Literal[False] = False,
 ) -> v_1_17.Session:
     ...
@@ -276,7 +274,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[17]],
+    version: _1_17,
     asyncio: Literal[True],
 ) -> v_1_17.AsyncSession:
     ...
@@ -287,7 +285,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[16]],
+    version: _1_16,
     asyncio: Literal[False] = False,
 ) -> v_1_16.Session:
     ...
@@ -297,7 +295,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[16]],
+    version: _1_16,
     asyncio: Literal[True],
 ) -> v_1_16.AsyncSession:
     ...
@@ -308,7 +306,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[15]],
+    version: _1_15,
     asyncio: Literal[False] = False,
 ) -> v_1_15.Session:
     ...
@@ -318,7 +316,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[15]],
+    version: _1_15,
     asyncio: Literal[True],
 ) -> v_1_15.AsyncSession:
     ...
@@ -329,7 +327,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[14]],
+    version: _1_14,
     asyncio: Literal[False] = False,
 ) -> v_1_14.Session:
     ...
@@ -339,7 +337,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[14]],
+    version: _1_14,
     asyncio: Literal[True],
 ) -> v_1_14.AsyncSession:
     ...
@@ -350,7 +348,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[13]],
+    version: _1_13,
     asyncio: Literal[False] = False,
 ) -> v_1_13.Session:
     ...
@@ -360,7 +358,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[13]],
+    version: _1_13,
     asyncio: Literal[True],
 ) -> v_1_13.AsyncSession:
     ...
