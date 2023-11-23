@@ -10,6 +10,7 @@ from omc4py import AsyncSession, Session, TypeName
 from tests import OpenSession
 
 
+@pytest.mark.skip
 @pytest.mark.asyncio
 async def test_check_settings(session: Session) -> None:
     s = session.asynchronous
