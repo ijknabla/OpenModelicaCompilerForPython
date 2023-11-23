@@ -36,6 +36,9 @@ __license__ = """
 __version__ = "0.3.0a4.dev0"
 
 __all__ = (
+    "AsyncSession",
+    "GenericSession",
+    "Session",
     "TypeName",
     "VariableName",
     "open_session",
