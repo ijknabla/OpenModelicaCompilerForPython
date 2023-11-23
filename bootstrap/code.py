@@ -233,7 +233,7 @@ class PackageFactory(HasTypeName):
                     test=ast.Name(id="TYPE_CHECKING", ctx=ast.Load()),
                     body=[
                         ast.FunctionDef(
-                            name="synchronous",
+                            name=name,
                             args=ast.arguments(
                                 posonlyargs=[],
                                 args=[ast.arg(arg="self")],
@@ -257,43 +257,13 @@ class PackageFactory(HasTypeName):
                                     id="GenericSession", ctx=ast.Load()
                                 ),
                                 slice=ast.Name(
-                                    id="Synchronous", ctx=ast.Load()
+                                    id=name.capitalize(), ctx=ast.Load()
                                 ),
                                 ctx=ast.Load(),
                             ),
                             lineno=None,
-                        ),
-                        ast.FunctionDef(
-                            name="asynchronous",
-                            args=ast.arguments(
-                                posonlyargs=[],
-                                args=[ast.arg(arg="self")],
-                                kwonlyargs=[],
-                                kw_defaults=[],
-                                defaults=[],
-                            ),
-                            body=[
-                                ast.Expr(
-                                    value=ast.Name(
-                                        id="__RETURN_TYPE_IGNORE__",
-                                        ctx=ast.Load(),
-                                    )
-                                )
-                            ],
-                            decorator_list=[
-                                ast.Name(id="property", ctx=ast.Load())
-                            ],
-                            returns=ast.Subscript(
-                                value=ast.Name(
-                                    id="GenericSession", ctx=ast.Load()
-                                ),
-                                slice=ast.Name(
-                                    id="Asynchronous", ctx=ast.Load()
-                                ),
-                                ctx=ast.Load(),
-                            ),
-                            lineno=None,
-                        ),
+                        )
+                        for name in ["synchronous", "asynchronous"]
                     ],
                     orelse=[],
                 )
