@@ -2,13 +2,15 @@ from __future__ import annotations
 
 from asyncio import AbstractEventLoop, get_event_loop
 from collections.abc import Callable, Generator
+from contextlib import ExitStack
 from functools import wraps
 from typing import TYPE_CHECKING, TypeVar
 
 import pytest
 
 import omc4py.modelica
-from omc4py import Session, open_session
+from omc4py import Session
+from tests import OpenSession
 
 if TYPE_CHECKING:
     from typing_extensions import Concatenate, Never, ParamSpec
@@ -54,6 +56,22 @@ def session(
     _session.__check__()
 
 
+@pytest.fixture
+def open_session(
+    _function_coverage: Never,
+) -> Generator[OpenSession, None, None]:
+    with ExitStack() as stack:
+
+        def open_session() -> Session:
+            from omc4py import open_session
+
+            session = stack.enter_context(open_session())
+            stack.callback(session.__check__)
+            return session
+
+        yield open_session
+
+
 @pytest.fixture(scope="session")
 def _function_coverage() -> Generator[None, None, None]:
     with pytest.MonkeyPatch().context() as _monkeypatch:
@@ -65,5 +83,7 @@ def _function_coverage() -> Generator[None, None, None]:
 
 @pytest.fixture(scope="session")
 def _session(_function_coverage: Never) -> Generator[Session, None, None]:
+    from omc4py import open_session
+
     with open_session() as session:
         yield session
