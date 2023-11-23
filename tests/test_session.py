@@ -4,15 +4,15 @@ from itertools import zip_longest
 
 import pytest
 
-from omc4py import Session, TypeName, VariableName, open_session
+from omc4py import Session, TypeName, VariableName
 from omc4py.openmodelica import Component
+from tests import OpenSession
 
 
 @pytest.mark.dependency()
-def test_open_session() -> None:
-    with open_session() as session:
-        assert session is not None
-        session.check()
+def test_open_session(open_session: OpenSession) -> None:
+    session = open_session()
+    assert session is not None
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
