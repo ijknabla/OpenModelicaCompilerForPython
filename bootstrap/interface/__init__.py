@@ -35,8 +35,13 @@ from pydantic import (
 )
 from typing_extensions import Annotated, NotRequired, Self, TypedDict
 
-from omc4py import TypeName, VariableName, exception, open_session
-from omc4py.v_1_22 import AsyncSession  # NOTE: update to latest
+from omc4py import (
+    AsyncSession,
+    TypeName,
+    VariableName,
+    exception,
+    open_session,
+)
 
 from ..util import QueueingIteration, ensure_cancel, ensure_terminate
 
