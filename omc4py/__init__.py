@@ -56,10 +56,10 @@ from .interactive import Interactive
 from .openmodelica import TypeName, VariableName
 from .protocol import (
     Asynchronous,
+    Calling,
     SupportsInteractive,
     Synchronous,
     T_Calling,
-    synchronous,
 )
 from .session import BasicSession
 
@@ -362,7 +362,7 @@ def open_session(
     version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
-    interactive = Interactive.open(omc_command, synchronous)
+    interactive = Interactive.open(omc_command, Calling.synchronous)
 
     try:
         session_type, async_session_type = _select_session_type(
