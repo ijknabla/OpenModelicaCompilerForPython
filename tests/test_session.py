@@ -4,7 +4,7 @@ from itertools import zip_longest
 
 import pytest
 
-from omc4py import AsyncSession, Session, TypeName, VariableName, open_session
+from omc4py import Session, TypeName, VariableName, open_session
 from omc4py.openmodelica import Component
 
 
@@ -249,11 +249,11 @@ def test_get_components(
 )
 @pytest.mark.parametrize("use_typename", [False, True])
 async def test_async_get_components(
-    async_session: AsyncSession,
+    session: Session,
     name: TypeName | str,
     use_typename: bool,
 ) -> None:
-    s = async_session
+    s = session.asynchronous
     if use_typename:
         name = TypeName(name)
     _check_components(await s.getComponents(name))
