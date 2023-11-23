@@ -1,5 +1,7 @@
 from __future__ import annotations as _
 
+from typing import TYPE_CHECKING
+
 from omc4py.modelica import package
 from omc4py.openmodelica import TypeName
 from omc4py.protocol import Asynchronous, Synchronous, T_Calling
@@ -27,6 +29,16 @@ class OpenModelica(package[T_Calling]):
 
 
 class GenericSession(BasicSession[T_Calling]):
+    if TYPE_CHECKING:
+
+        @property
+        def synchronous(self) -> GenericSession[Synchronous]:
+            return ...  # type: ignore
+
+        @property
+        def asynchronous(self) -> GenericSession[Asynchronous]:
+            return ...  # type: ignore
+
     @property
     def OpenModelica(self) -> OpenModelica[T_Calling]:
         return OpenModelica(self.__omc_interactive__)
