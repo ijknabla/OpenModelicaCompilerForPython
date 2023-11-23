@@ -90,6 +90,18 @@ if TYPE_CHECKING:
         v_1_14.GenericSession[T_Calling],
         v_1_13.GenericSession[T_Calling],
     ]
+
+    _1_22 = tuple[Literal[1], Literal[22]]
+    _1_21 = tuple[Literal[1], Literal[21]]
+    _1_20 = tuple[Literal[1], Literal[20]]
+    _1_19 = tuple[Literal[1], Literal[19]]
+    _1_18 = tuple[Literal[1], Literal[18]]
+    _1_17 = tuple[Literal[1], Literal[17]]
+    _1_16 = tuple[Literal[1], Literal[16]]
+    _1_15 = tuple[Literal[1], Literal[15]]
+    _1_14 = tuple[Literal[1], Literal[14]]
+    _1_13 = tuple[Literal[1], Literal[13]]
+
 else:
     GenericSession = BasicSession
 
