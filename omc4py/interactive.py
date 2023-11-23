@@ -42,12 +42,10 @@ class Interactive(Generic[T_Calling]):
     @classmethod
     def open(
         cls,
-        omc_command: str | PathLike[str] | None,
+        omc: str | PathLike[str] | None,
         calling: T_Calling,
     ) -> Self:
-        omc_command = _resolve_omc(
-            "omc" if omc_command is None else omc_command
-        )
+        omc = _resolve_omc("omc" if omc is None else omc)
 
         exit_stack = ExitStack()
         atexit.register(exit_stack.close)
@@ -55,7 +53,7 @@ class Interactive(Generic[T_Calling]):
         try:
             return cls(
                 exit_stack,
-                exit_stack.enter_context(_DualInteractive.open(omc_command)),
+                exit_stack.enter_context(_DualInteractive.open(omc)),
                 calling,
             )
 
