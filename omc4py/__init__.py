@@ -38,8 +38,6 @@ __version__ = "0.3.0a4.dev0"
 __all__ = (
     "TypeName",
     "VariableName",
-    "__license__",
-    "__version__",
     "open_session",
 )
 import re
