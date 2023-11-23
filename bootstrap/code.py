@@ -176,6 +176,7 @@ class PackageFactory(HasTypeName):
             )
         )
         if self.is_root:
+            imports.add(ImportFrom(module="typing", name="TYPE_CHECKING"))
             imports.update(
                 ImportFrom(module="omc4py.protocol", name=typevar)
                 for typevar in ["Asynchronous", "Synchronous"]
@@ -225,6 +226,81 @@ class PackageFactory(HasTypeName):
 
     @property
     def _class_def(self) -> ast.ClassDef:
+        body = list[ast.stmt]()
+        if self.is_root:
+            body.append(
+                ast.If(
+                    test=ast.Name(id="TYPE_CHECKING", ctx=ast.Load()),
+                    body=[
+                        ast.FunctionDef(
+                            name="synchronous",
+                            args=ast.arguments(
+                                posonlyargs=[],
+                                args=[ast.arg(arg="self")],
+                                kwonlyargs=[],
+                                kw_defaults=[],
+                                defaults=[],
+                            ),
+                            body=[
+                                ast.Expr(
+                                    value=ast.Name(
+                                        id="__RETURN_TYPE_IGNORE__",
+                                        ctx=ast.Load(),
+                                    )
+                                )
+                            ],
+                            decorator_list=[
+                                ast.Name(id="property", ctx=ast.Load())
+                            ],
+                            returns=ast.Subscript(
+                                value=ast.Name(
+                                    id="GenericSession", ctx=ast.Load()
+                                ),
+                                slice=ast.Name(
+                                    id="Synchronous", ctx=ast.Load()
+                                ),
+                                ctx=ast.Load(),
+                            ),
+                            lineno=None,
+                        ),
+                        ast.FunctionDef(
+                            name="asynchronous",
+                            args=ast.arguments(
+                                posonlyargs=[],
+                                args=[ast.arg(arg="self")],
+                                kwonlyargs=[],
+                                kw_defaults=[],
+                                defaults=[],
+                            ),
+                            body=[
+                                ast.Expr(
+                                    value=ast.Name(
+                                        id="__RETURN_TYPE_IGNORE__",
+                                        ctx=ast.Load(),
+                                    )
+                                )
+                            ],
+                            decorator_list=[
+                                ast.Name(id="property", ctx=ast.Load())
+                            ],
+                            returns=ast.Subscript(
+                                value=ast.Name(
+                                    id="GenericSession", ctx=ast.Load()
+                                ),
+                                slice=ast.Name(
+                                    id="Asynchronous", ctx=ast.Load()
+                                ),
+                                ctx=ast.Load(),
+                            ),
+                            lineno=None,
+                        ),
+                    ],
+                    orelse=[],
+                )
+            )
+
+        body += self._iter_class_def_body()
+
         return ast.ClassDef(
             name=self.name,
             bases=[
@@ -238,7 +314,7 @@ class PackageFactory(HasTypeName):
                 )
             ],
             keywords=[],
-            body=[*self._iter_class_def_body()],
+            body=body,
             decorator_list=[],
         )
 
