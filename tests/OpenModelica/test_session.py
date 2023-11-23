@@ -31,7 +31,7 @@ async def test_load_files(open_session: OpenSession) -> None:
     assert await get_class_names(s) == set()
 
     with ExitStack() as stack:
-        mos = list[str]()
+        mos: list[str] = []
         for name in "ABC":
             mo = Path(stack.enter_context(TemporaryDirectory())) / "{name}.mo"
             mo.write_text(f"model {name} end {name};")
