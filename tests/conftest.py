@@ -1,15 +1,14 @@
 from __future__ import annotations
 
 from asyncio import AbstractEventLoop, get_event_loop
-from collections.abc import AsyncGenerator, Callable, Generator
+from collections.abc import Callable, Generator
 from functools import wraps
 from typing import TYPE_CHECKING, TypeVar
 
 import pytest
-import pytest_asyncio
 
 import omc4py.modelica
-from omc4py import AsyncSession, Session, open_session
+from omc4py import Session, open_session
 
 if TYPE_CHECKING:
     from typing_extensions import Concatenate, Never, ParamSpec
@@ -25,7 +24,7 @@ if TYPE_CHECKING:
     ]
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="session")  # TODO: remove this fixture
 def event_loop() -> AbstractEventLoop:
     return get_event_loop()
 
@@ -55,14 +54,6 @@ def session(
     _session.__check__()
 
 
-@pytest_asyncio.fixture(scope="session")
-async def async_session(
-    _async_session: AsyncSession,
-) -> AsyncGenerator[AsyncSession, None]:
-    yield _async_session
-    await _async_session.__check__()
-
-
 @pytest.fixture(scope="session")
 def _function_coverage() -> Generator[None, None, None]:
     with pytest.MonkeyPatch().context() as _monkeypatch:
@@ -75,12 +66,4 @@ def _function_coverage() -> Generator[None, None, None]:
 @pytest.fixture(scope="session")
 def _session(_function_coverage: Never) -> Generator[Session, None, None]:
     with open_session() as session:
-        yield session
-
-
-@pytest.fixture(scope="session")
-def _async_session(
-    _function_coverage: Never,
-) -> Generator[AsyncSession, None, None]:
-    with open_session(asyncio=True) as session:
         yield session
