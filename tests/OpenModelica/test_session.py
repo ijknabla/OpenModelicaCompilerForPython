@@ -6,8 +6,14 @@ from tempfile import TemporaryDirectory
 
 import pytest
 
-from omc4py import AsyncSession, TypeName
+from omc4py import AsyncSession, Session, TypeName
 from tests import OpenSession
+
+
+@pytest.mark.asyncio
+async def test_check_settings(session: Session) -> None:
+    s = session.asynchronous
+    await s.checkSettings()
 
 
 @pytest.mark.asyncio
