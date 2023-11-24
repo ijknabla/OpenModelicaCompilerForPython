@@ -1065,7 +1065,11 @@ def _patch_check_settings(
             REMOVED = VariableName("SENDDATALIBS")
             ADDED = VariableName("RTLIBS")
 
-            code = re.sub(rf"{REMOVED}", f"{ADDED}", entity.code)
+            code = re.sub(
+                rf"(\s+)(.*?){REMOVED}(.*)",
+                (rf"\1// \2{REMOVED}\3" rf"\1   \2{ADDED}\3"),
+                entity.code,
+            )
             components = {
                 {REMOVED: ADDED}.get(k, k): v
                 for k, v in entity.components.items()
