@@ -34,7 +34,8 @@ class CheckSettingsResult(record):
           Boolean OMC_FOUND;
           String MODELICAUSERCFLAGS, WORKING_DIRECTORY;
           Boolean CREATE_FILE_WORKS, REMOVE_FILE_WORKS;
-          String OS, SYSTEM_INFO, SENDDATALIBS, C_COMPILER, C_COMPILER_VERSION;
+          // String OS, SYSTEM_INFO, SENDDATALIBS, C_COMPILER, C_COMPILER_VERSION;
+             String OS, SYSTEM_INFO, RTLIBS, C_COMPILER, C_COMPILER_VERSION;
           Boolean C_COMPILER_RESPONDING, HAVE_CORBA;
           String CONFIGURE_CMDLINE;
           annotation(
@@ -54,7 +55,7 @@ class CheckSettingsResult(record):
     REMOVE_FILE_WORKS: bool
     OS: str
     SYSTEM_INFO: str
-    SENDDATALIBS: str
+    RTLIBS: str
     C_COMPILER: str
     C_COMPILER_VERSION: str
     C_COMPILER_RESPONDING: bool
