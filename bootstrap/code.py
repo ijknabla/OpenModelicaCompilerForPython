@@ -13,7 +13,7 @@ import enum
 import os
 import re
 from asyncio import create_subprocess_exec, gather
-from collections.abc import Generator
+from collections.abc import Generator, Iterable
 from contextlib import AsyncExitStack
 from dataclasses import dataclass, field
 from itertools import chain
@@ -36,6 +36,7 @@ from .interface import (
     Interface,
     PackageEntity,
     RecordEntity,
+    Version,
 )
 from .parser import get_enumerators, get_optionals
 from .util import ensure_terminate
@@ -45,6 +46,7 @@ async def save_code(
     directory: Path,
     interface: Interface,
 ) -> None:
+    interface = patch(interface)
     await gather(
         *(
             _save_code(
@@ -1035,3 +1037,45 @@ def _avoid_keyword(s: str) -> str:
     while iskeyword(s):
         s = f"{s}_"
     return s
+
+
+# Patches
+
+EntitiesItems = Iterable[tuple[TypeName, Entity]]
+
+
+def patch(interface: Interface) -> Interface:
+    return {
+        version: dict(_patch(version, entities.items()))
+        for version, entities in interface.items()
+    }
+
+
+def _patch(version: Version, entities: EntitiesItems) -> EntitiesItems:
+    yield from _patch_check_settings(version, entities)
+
+
+def _patch_check_settings(
+    version: Version, entities: EntitiesItems
+) -> EntitiesItems:
+    for typename, entity in entities:
+        if typename == TypeName(
+            "OpenModelica.Scripting.CheckSettingsResult"
+        ) and isinstance(entity, RecordEntity):
+            REMOVED = VariableName("SENDDATALIBS")
+            ADDED = VariableName("RTLIBS")
+
+            code = re.sub(
+                rf"(\s+)(.*?){REMOVED}(.*)",
+                (rf"\1// \2{REMOVED}\3" rf"\1   \2{ADDED}\3"),
+                entity.code,
+            )
+            components = {
+                {REMOVED: ADDED}.get(k, k): v
+                for k, v in entity.components.items()
+            }
+            yield typename, entity.model_copy(
+                update={"code": code, "components": components}
+            )
+        else:
+            yield typename, entity
