@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+### Fixed
+
+- `OpenModelica.Scripting.CheckSettingsResult`
+    - Rename `SENDDATALIBS` => `RTLIBS`
+
 ## [0.3.0a4] - 2023-11-22
 
 ### Added
