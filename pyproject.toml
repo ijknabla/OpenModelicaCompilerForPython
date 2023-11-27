@@ -77,7 +77,7 @@ exclude = ".venv"
 
 # Allow too-long line in auto-generated modules
 per-file-ignores = """
-    omc4py/v_*_*/*.py:E501,
+    omc4py/v_*_*/:E501,
 """
 
 [tool.isort]

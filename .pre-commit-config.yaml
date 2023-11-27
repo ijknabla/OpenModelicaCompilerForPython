@@ -34,7 +34,7 @@ repos:
         args:
         -   run
         -   pflake8
-        -   --exclude=.venv,*/v_*_*/*
+        -   --exclude=.venv,omc4py/v_*_*/
         language: system
         pass_filenames: false
     -   id: poetry-mypy
