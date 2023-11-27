@@ -53,6 +53,9 @@ def session(
     _session: Session,
 ) -> Generator[Session, None, None]:
     yield _session
+    assert {
+        f"{cl}": _session.getVersion(cl) for cl in _session.getClassNames()
+    } == {}
     _session.__check__()
 
 
