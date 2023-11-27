@@ -16,6 +16,10 @@ jobs:
     strategy:
       matrix:
         include:
+          - omc-version: 1.13.2
+            python-version: 3.8
+          - omc-version: 1.13.2
+            python-version: 3.11
           - omc-version: 1.14.2
             python-version: 3.8
           # - omc-version: omc1.14
