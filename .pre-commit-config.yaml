@@ -34,5 +34,16 @@ repos:
         args:
         -   run
         -   pflake8
+        -   --exclude=.venv,omc4py/v_*_*/
+        language: system
+        pass_filenames: false
+    -   id: poetry-mypy
+        name: Check python code by mypy
+        entry: poetry
+        args:
+        -   run
+        -   mypy
+        -   --strict
+        -   .
         language: system
         pass_filenames: false

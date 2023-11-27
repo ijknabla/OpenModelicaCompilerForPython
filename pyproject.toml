@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "OpenModelicaCompiler"
-version = "0.3.0a5.dev0"
+version = "0"
 description = "OpenModelica compiler (omc) interface for Python"
 repository = "https://github.com/ijknabla/OpenModelicaCompilerForPython"
 authors = ["ijknabla <ijknabla@gmail.com>"]
@@ -77,16 +77,9 @@ exclude = ".venv"
 
 # Allow too-long line in auto-generated modules
 per-file-ignores = """
-    omc4py/enumeration.py:E501,
-    omc4py/v_*_*/*.py:E501,
+    omc4py/v_*_*/:E501,
 """
 
 [tool.isort]
 profile = "black"
 line_length = 79
-
-[[tool.mypy.overrides]]
-module = [
-    "numpy",
-]
-ignore_missing_imports = true
