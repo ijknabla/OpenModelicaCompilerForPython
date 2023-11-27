@@ -22,51 +22,36 @@ jobs:
             python-version: 3.11
           - omc-version: 1.14.2
             python-version: 3.8
-          # - omc-version: omc1.14
-          #   python-version: py3.10
-          #   os: buster
-          # - omc-version: omc1.16
-          #   python-version: py3.8
-          #   os: buster
-          # - omc-version: omc1.16
-          #   python-version: py3.10
-          #   os: buster
-          # - omc-version: omc1.17
-          #   python-version: py3.8
-          #   os: buster
-          # - omc-version: omc1.17
-          #   python-version: py3.10
-          #   os: buster
-          # - omc-version: omc1.18
-          #   python-version: py3.8
-          #   os: bullseye
-          # - omc-version: omc1.18
-          #   python-version: py3.10
-          #   os: bullseye
-          # - omc-version: omc1.19
-          #   python-version: py3.8
-          #   os: bullseye
-          # - omc-version: omc1.19
-          #   python-version: py3.10
-          #   os: bullseye
-          # - omc-version: omc1.20
-          #   python-version: py3.8
-          #   os: bullseye
-          # - omc-version: omc1.20
-          #   python-version: py3.10
-          #   os: bullseye
-          # - omc-version: omc1.21
-          #   python-version: py3.8
-          #   os: bullseye
-          # - omc-version: omc1.21
-          #   python-version: py3.10
-          #   os: bullseye
-          # - omc-version: omc1.22
-          #   python-version: py3.8
-          #   os: bookworm
-          # - omc-version: omc1.22
-          #   python-version: py3.10
-          #   os: bookworm
+          # - omc-version: 1.14
+          #   python-version: 3.10
+          # - omc-version: 1.16
+          #   python-version: 3.8
+          # - omc-version: 1.16
+          #   python-version: 3.10
+          # - omc-version: 1.17
+          #   python-version: 3.8
+          # - omc-version: 1.17
+          #   python-version: 3.10
+          # - omc-version: 1.18
+          #   python-version: 3.8
+          # - omc-version: 1.18
+          #   python-version: 3.10
+          # - omc-version: 1.19
+          #   python-version: 3.8
+          # - omc-version: 1.19
+          #   python-version: 3.10
+          # - omc-version: 1.20
+          #   python-version: 3.8
+          # - omc-version: 1.20
+          #   python-version: 3.10
+          # - omc-version: 1.21
+          #   python-version: 3.8
+          # - omc-version: 1.21
+          #   python-version: 3.10
+          # - omc-version: 1.22
+          #   python-version: 3.8
+          # - omc-version: 1.22
+          #   python-version: 3.10
 
     container:
       image: ijknabla/openmodelica:v${{ matrix.omc-version }}-python${{ matrix.python-version }}
