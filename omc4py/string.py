@@ -77,7 +77,7 @@ def to_omc_literal(obj: Any) -> str:
 def _sequence_types() -> _ClassInfo:
     result = [Sequence]
     with suppress(ImportError):
-        import numpy
+        import numpy  # type: ignore
 
         result.append(numpy.ndarray)
     return tuple(result)
