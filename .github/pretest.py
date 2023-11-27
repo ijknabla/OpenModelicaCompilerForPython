@@ -1,33 +1,39 @@
 import asyncio
 import logging
+from contextlib import suppress
 from subprocess import CalledProcessError, run
 
-from omc4py import open_session
+from omc4py import AsyncSession, open_session
 
 
 async def main() -> None:
     with open_session(asyncio=True) as session:
-        if not await session.loadModel("Modelica"):
-            if hasattr(session, "installPackage"):
-                await session.installPackage("Modelica")
-        if not await session.loadModel("Modelica"):
-            run(["sudo", "apt", "update"], check=True)
-            for version in ["4.0.0", "3.2.3", "3.2.2"]:
-                try:
-                    run(
-                        [
-                            "sudo",
-                            "apt",
-                            "install",
-                            "-qy",
-                            f"omlib-modelica-{version}",
-                        ],
-                        check=True,
-                    )
-                except CalledProcessError:
-                    continue
-
+        assert await ensure_package(session, "Modelica", "3.2.2")
         assert await session.loadModel("Modelica")
+
+
+async def ensure_package(
+    session: AsyncSession,
+    pkg: str,
+    version: str,
+) -> bool:
+    with suppress(CalledProcessError):
+        run(["sudo", "apt", "update"], check=True)
+        run(
+            [
+                "sudo",
+                "apt",
+                "install",
+                "-qy",
+                f"omlib-{pkg.lower()}-{version}",
+            ],
+            check=True,
+        )
+        return True
+
+    return await session.installPackage(
+        pkg=pkg, version=version, exactMatch=True
+    )
 
 
 if __name__ == "__main__":
