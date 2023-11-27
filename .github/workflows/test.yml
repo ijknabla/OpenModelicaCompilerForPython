@@ -78,7 +78,6 @@ jobs:
           omc --version
           python${{ matrix.python-version }} --version
           python${{ matrix.python-version }} -m pytest --version
-      # - name: Test python code
-      #   run: |
-      #     alias poetry='sudo -u user /home/user/.local/bin/poetry'
-      #     poetry run pytest -v
+      - name: Test python code
+        run: |
+          sudo -u user python${{ matrix.python-version }} -m pytest -v
