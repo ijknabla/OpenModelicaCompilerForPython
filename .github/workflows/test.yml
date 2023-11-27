@@ -69,11 +69,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-      # - name: Install dependencies
-      #   run: |
-      #     curl -sSL https://install.python-poetry.org | sudo -u user python - --version=1.5.1
-      #     alias poetry='sudo -u user /home/user/.local/bin/poetry'
-      #     poetry install --only=main,test
+      - name: Install dependencies
+        run: |
+          python${{ matrix.python-version }} -m pip install -U pip
+          python${{ matrix.python-version }} -m pip install ./ pytest pytest-asyncio pytest-cov typing-extensions
       # - name: Check version
       #   run: |
       #     alias poetry='sudo -u user /home/user/.local/bin/poetry'
