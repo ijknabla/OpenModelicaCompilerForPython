@@ -27,6 +27,8 @@ async def main() -> None:
                 except CalledProcessError:
                     continue
 
+        assert await session.loadModel("Modelica")
+
 
 if __name__ == "__main__":
     logging.root.setLevel(logging.DEBUG)
