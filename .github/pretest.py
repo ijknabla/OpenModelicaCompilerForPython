@@ -11,17 +11,19 @@ from omc4py import AsyncSession, open_session
 
 async def main() -> None:
     with open_session(asyncio=True) as session:
-        assert await ensure_package(session, "Modelica")
+        assert await ensure_package(
+            session, "Modelica", ("4.0.0", "3.2.3", "3.2.2")
+        )
         assert await session.loadModel("Modelica")
 
 
 async def ensure_package(
     session: AsyncSession,
     pkg: str,
-    versions: Iterable[str] = ("4.0.0", "3.2.3", "3.2.2"),
+    versions: Iterable[str],
 ) -> bool:
     if hasattr(session, "installPackage") and await session.installPackage(
-        pkg=pkg
+        pkg
     ):
         return True
 
