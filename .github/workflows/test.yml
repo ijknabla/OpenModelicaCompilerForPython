@@ -16,72 +16,57 @@ jobs:
     strategy:
       matrix:
         include:
-          - omc-version: omc1.14
-            python-version: py3.8
-            os: buster
-          - omc-version: omc1.14
-            python-version: py3.10
-            os: buster
-          - omc-version: omc1.16
-            python-version: py3.8
-            os: buster
-          - omc-version: omc1.16
-            python-version: py3.10
-            os: buster
-          - omc-version: omc1.17
-            python-version: py3.8
-            os: buster
-          - omc-version: omc1.17
-            python-version: py3.10
-            os: buster
-          - omc-version: omc1.18
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.18
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.19
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.19
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.20
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.20
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.21
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.21
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.22
-            python-version: py3.8
-            os: bookworm
-          - omc-version: omc1.22
-            python-version: py3.10
-            os: bookworm
+          - omc-version: 1.13.2
+            python-version: 3.8
+          - omc-version: 1.13.2
+            python-version: 3.11
+          - omc-version: 1.14.2
+            python-version: 3.8
+          - omc-version: 1.14.2
+            python-version: 3.11
+          - omc-version: 1.16.2
+            python-version: 3.8
+          - omc-version: 1.16.2
+            python-version: 3.11
+          - omc-version: 1.17.0
+            python-version: 3.8
+          - omc-version: 1.17.0
+            python-version: 3.11
+          - omc-version: 1.18.0
+            python-version: 3.8
+          - omc-version: 1.18.0
+            python-version: 3.11
+          - omc-version: 1.19.2
+            python-version: 3.8
+          - omc-version: 1.19.2
+            python-version: 3.11
+          - omc-version: 1.20.0
+            python-version: 3.8
+          - omc-version: 1.20.0
+            python-version: 3.11
+          - omc-version: 1.21.0
+            python-version: 3.8
+          - omc-version: 1.21.0
+            python-version: 3.11
+          - omc-version: 1.22.0
+            python-version: 3.8
+          - omc-version: 1.22.0
+            python-version: 3.11
 
     container:
-      image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
+      image: ijknabla/openmodelica:v${{ matrix.omc-version }}-python${{ matrix.python-version }}
 
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          curl -sSL https://install.python-poetry.org | sudo -u user python - --version=1.5.1
-          alias poetry='sudo -u user /home/user/.local/bin/poetry'
-          poetry install --only=main,test
+          python${{ matrix.python-version }} -m pip install -U pip
+          python${{ matrix.python-version }} -m pip install ./ pytest pytest-asyncio pytest-cov typing-extensions
       - name: Check version
         run: |
-          alias poetry='sudo -u user /home/user/.local/bin/poetry'
-          poetry run omc --version
-          poetry run python --version
-          poetry run pytest --version
+          omc --version
+          python${{ matrix.python-version }} --version
+          python${{ matrix.python-version }} -m pytest --version
       - name: Test python code
         run: |
-          alias poetry='sudo -u user /home/user/.local/bin/poetry'
-          poetry run pytest -v
+          sudo -u user python${{ matrix.python-version }} -m pytest -v
