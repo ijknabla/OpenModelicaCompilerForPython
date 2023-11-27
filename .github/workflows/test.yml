@@ -61,7 +61,7 @@ jobs:
       - name: Install dependencies
         run: |
           python${{ matrix.python-version }} -m pip install -U pip
-          python${{ matrix.python-version }} -m pip install ./ pytest pytest-asyncio pytest-cov typing-extensions
+          python${{ matrix.python-version }} -m pip install ./ pytest pytest-asyncio
       - name: Check version
         run: |
           omc --version

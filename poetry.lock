@@ -709,19 +709,6 @@ pytest = ">=4.6"
 testing = ["fields", "hunter", "process-tests", "pytest-xdist", "six", "virtualenv"]
 
 [[package]]
-name = "pytest-dependency"
-version = "0.5.1"
-description = "Manage dependencies of tests"
-optional = false
-python-versions = "*"
-files = [
-    {file = "pytest-dependency-0.5.1.tar.gz", hash = "sha256:c2a892906192663f85030a6ab91304e508e546cddfe557d692d61ec57a1d946b"},
-]
-
-[package.dependencies]
-pytest = ">=3.6.0"
-
-[[package]]
 name = "pyyaml"
 version = "6.0.1"
 description = "YAML parser and emitter for Python"
@@ -998,4 +985,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "e8737600de3fad53ba1436e42be1a07bc3fb57380c64c79a07d31999e424f9ae"
+content-hash = "07719b4644519aec81f28abcf5a037e41f5b231a4d9e6a7b6595a68b5424057c"
