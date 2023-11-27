@@ -7,6 +7,7 @@ from tempfile import TemporaryDirectory
 import pytest
 
 from omc4py import AsyncSession, Session, TypeName
+from omc4py.exception import OMCError
 from tests import OpenSession
 
 
@@ -65,6 +66,18 @@ async def test_load_string(open_session: OpenSession) -> None:
 # - parseEncryptedPackage
 # - loadEncryptedPackage
 # - buildEncryptedPackage
+
+
+@pytest.mark.asyncio
+async def test_reload_model(open_session: OpenSession) -> None:
+    session = open_session().asynchronous
+
+    assert not await session.reloadClass("Modelica")
+    with pytest.raises(OMCError):
+        await session.__check__()
+
+    assert await session.loadModel("Modelica")
+    assert await session.reloadClass("Modelica")
 
 
 async def get_class_names(
