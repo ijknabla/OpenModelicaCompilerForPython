@@ -16,7 +16,8 @@ def test_open_session(open_session: OpenSession) -> None:
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_loadString(session: Session) -> None:
+def test_loadString(open_session: OpenSession) -> None:
+    session = open_session()
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
     assert session.isType("MyEnumeration")
     assert session.isEnumeration("MyEnumeration")
@@ -29,7 +30,8 @@ def test_loadString(session: Session) -> None:
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getClassNames(session: Session) -> None:
+def test_getClassNames(open_session: OpenSession) -> None:
+    session = open_session()
     assert session.loadString(
         """
 package Test_getClassNames
@@ -98,7 +100,8 @@ type B = enumeration(b);
 
 
 @pytest.mark.dependency(depends=["test_open_session"])
-def test_getComponents(session: Session) -> None:
+def test_getComponents(open_session: OpenSession) -> None:
+    session = open_session()
     assert session.loadString(
         """
 class Test_getComponents
