@@ -40,18 +40,18 @@ jobs:
             python-version: 3.8
           - omc-version: 1.19.2
             python-version: 3.11
-          # - omc-version: 1.20
-          #   python-version: 3.8
-          # - omc-version: 1.20
-          #   python-version: 3.10
-          # - omc-version: 1.21
-          #   python-version: 3.8
-          # - omc-version: 1.21
-          #   python-version: 3.10
-          # - omc-version: 1.22
-          #   python-version: 3.8
-          # - omc-version: 1.22
-          #   python-version: 3.10
+          - omc-version: 1.20.0
+            python-version: 3.8
+          - omc-version: 1.20.0
+            python-version: 3.11
+          - omc-version: 1.21.0
+            python-version: 3.8
+          - omc-version: 1.21.0
+            python-version: 3.11
+          - omc-version: 1.22.0
+            python-version: 3.8
+          - omc-version: 1.22.0
+            python-version: 3.11
 
     container:
       image: ijknabla/openmodelica:v${{ matrix.omc-version }}-python${{ matrix.python-version }}
