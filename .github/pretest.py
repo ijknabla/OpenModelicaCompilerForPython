@@ -17,23 +17,27 @@ async def ensure_package(
     pkg: str,
     version: str,
 ) -> bool:
-    with suppress(CalledProcessError):
-        run(["sudo", "apt", "update"], check=True)
-        run(
-            [
-                "sudo",
-                "apt",
-                "install",
-                "-qy",
-                f"omlib-{pkg.lower()}-{version}",
-            ],
-            check=True,
+    if hasattr(session, "installPackage"):
+        return await session.installPackage(
+            pkg=pkg, version=version, exactMatch=True
         )
-        return True
 
-    return await session.installPackage(
-        pkg=pkg, version=version, exactMatch=True
-    )
+    run(["sudo", "apt", "update"], check=True)
+    for version in ["4.0.0", "3.2.3", "3.2.2"]:
+        with suppress(CalledProcessError):
+            run(
+                [
+                    "sudo",
+                    "apt",
+                    "install",
+                    "-qy",
+                    f"omlib-{pkg.lower()}-{version}",
+                ],
+                check=True,
+            )
+            return True
+
+    return False
 
 
 if __name__ == "__main__":
