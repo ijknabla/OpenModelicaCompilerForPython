@@ -20,8 +20,10 @@ async def ensure_package(
     pkg: str,
     versions: Iterable[str] = ("4.0.0", "3.2.3", "3.2.2"),
 ) -> bool:
-    if hasattr(session, "installPackage"):
-        return await session.installPackage(pkg=pkg)
+    if hasattr(session, "installPackage") and await session.installPackage(
+        pkg=pkg
+    ):
+        return True
 
     run(["sudo", "apt", "update"], check=True)
     for version in versions:
