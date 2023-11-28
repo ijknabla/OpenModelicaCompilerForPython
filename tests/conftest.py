@@ -4,7 +4,7 @@ from asyncio import AbstractEventLoop, get_event_loop
 from collections.abc import Callable, Generator
 from contextlib import ExitStack
 from functools import wraps
-from typing import TYPE_CHECKING, TypeVar
+from typing import TYPE_CHECKING, TypeVar, cast
 
 import pytest
 
@@ -70,7 +70,7 @@ def open_session(
         def open_session() -> Session:
             from omc4py import open_session
 
-            session = stack.enter_context(open_session())
+            session = cast(Session, stack.enter_context(open_session()))
             stack.callback(session.__check__)
             return session
 
