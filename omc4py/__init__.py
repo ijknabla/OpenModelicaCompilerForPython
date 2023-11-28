@@ -175,6 +175,15 @@ def open_session(
     ...
 
 
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_22 | _1_23 | _1_24,
+) -> v_1_22.GenericSession[T_Calling]:
+    ...
+
+
 # v1.21
 @overload
 def open_session(
@@ -193,6 +202,15 @@ def open_session(
     version: _1_21,
     asyncio: Literal[True],
 ) -> v_1_21.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_21,
+) -> v_1_21.GenericSession[T_Calling]:
     ...
 
 
@@ -217,6 +235,15 @@ def open_session(
     ...
 
 
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_20,
+) -> v_1_20.GenericSession[T_Calling]:
+    ...
+
+
 # v1.19
 @overload
 def open_session(
@@ -235,6 +262,15 @@ def open_session(
     version: _1_19,
     asyncio: Literal[True],
 ) -> v_1_19.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_19,
+) -> v_1_19.GenericSession[T_Calling]:
     ...
 
 
@@ -259,6 +295,15 @@ def open_session(
     ...
 
 
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_18,
+) -> v_1_18.GenericSession[T_Calling]:
+    ...
+
+
 # v1.17
 @overload
 def open_session(
@@ -277,6 +322,15 @@ def open_session(
     version: _1_17,
     asyncio: Literal[True],
 ) -> v_1_17.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_17,
+) -> v_1_17.GenericSession[T_Calling]:
     ...
 
 
@@ -301,6 +355,15 @@ def open_session(
     ...
 
 
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_16,
+) -> v_1_16.GenericSession[T_Calling]:
+    ...
+
+
 # v1.15
 @overload
 def open_session(
@@ -319,6 +382,15 @@ def open_session(
     version: _1_15,
     asyncio: Literal[True],
 ) -> v_1_15.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_15,
+) -> v_1_15.GenericSession[T_Calling]:
     ...
 
 
@@ -343,6 +415,15 @@ def open_session(
     ...
 
 
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_14,
+) -> v_1_14.GenericSession[T_Calling]:
+    ...
+
+
 # v1.13
 @overload
 def open_session(
@@ -361,6 +442,15 @@ def open_session(
     version: _1_13,
     asyncio: Literal[True],
 ) -> v_1_13.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_13,
+) -> v_1_13.GenericSession[T_Calling]:
     ...
 
 
@@ -385,26 +475,44 @@ def open_session(
     ...
 
 
+@overload
 def open_session(
-    omc: str | PathLike[str] | None = None,
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: None = None,
+) -> GenericSession[T_Calling]:
+    ...
+
+
+def open_session(
+    omc: str | PathLike[str] | SupportsInteractive[T_Calling] | None = None,
     *,
     version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
-    interactive = Interactive.open(omc, Calling.synchronous)
+    interactive: SupportsInteractive[Synchronous] | SupportsInteractive[
+        Asynchronous
+    ]
+    if isinstance(omc, SupportsInteractive):
+        interactive = omc
+    elif not asyncio:
+        interactive = Interactive.open(omc, Calling.synchronous)
+    else:
+        interactive = Interactive.open(omc, Calling.asynchronous)
 
     try:
         session_type, async_session_type = _select_session_type(
-            _get_version(interactive)
+            _get_version(interactive.synchronous)  # type: ignore
         )
     except Exception:
-        interactive.close()
+        if interactive is not omc:
+            interactive.close()
         raise
 
-    if asyncio:
-        return async_session_type(interactive.asynchronous)
-    else:
+    if interactive.calling is Calling.synchronous:
         return session_type(interactive)
+    else:
+        return async_session_type(interactive)
 
 
 def _get_version(
