@@ -25,8 +25,8 @@ async def empty_session(
     with ExitStack() as stack:
         enter = stack.enter_context
         session = enter(AsyncEmptySession(interactive))
-        ref = resources.files("tests.session") / "src/empty.mo"
-        assert await session.loadFile(enter(resources.as_file(ref)))
+        path = enter(resources.path("tests.session.src", "empty.mo"))
+        assert await session.loadFile(path)
         yield session
         await session.__check__()
 
@@ -39,8 +39,8 @@ async def one_session(
     with ExitStack() as stack:
         enter = stack.enter_context
         session = enter(AsyncOneSession(interactive))
-        ref = resources.files("tests.session") / "src/one.mo"
-        assert await session.loadFile(enter(resources.as_file(ref)))
+        path = enter(resources.path("tests.session.src", "one.mo"))
+        assert await session.loadFile(path)
         yield session
         await session.__check__()
 
@@ -53,7 +53,7 @@ async def nested_session(
     with ExitStack() as stack:
         enter = stack.enter_context
         session = enter(AsyncNestedSession(interactive))
-        ref = resources.files("tests.session") / "src/Nested.mo"
-        assert await session.loadFile(enter(resources.as_file(ref)))
+        path = enter(resources.path("tests.session.src", "Nested.mo"))
+        assert await session.loadFile(path)
         yield session
         await session.__check__()
