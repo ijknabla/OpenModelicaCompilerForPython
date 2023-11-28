@@ -7,6 +7,7 @@
 python -m bootstrap interface-docker \
   -n 4 \
   -i ijknabla/openmodelica \
+  v1.13.2-python3.8 \
   v1.14.2-python3.8 \
   v1.16.2-python3.8 \
   v1.17.0-python3.8 \
