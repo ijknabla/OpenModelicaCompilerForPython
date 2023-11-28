@@ -15,6 +15,7 @@ from omc4py.modelica import enumeration, external, package, record
 from omc4py.openmodelica import TypeName, VariableName
 from omc4py.protocol import (
     Asynchronous,
+    PathLike,
     SupportsInteractiveProperty,
     Synchronous,
     T_Calling,
@@ -107,7 +108,7 @@ def checkSettings(
 @overload
 def loadFile(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
@@ -119,7 +120,7 @@ def loadFile(
 @overload
 async def loadFile(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
@@ -134,7 +135,7 @@ def loadFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
@@ -157,7 +158,7 @@ def loadFile(
 @overload
 def loadFiles(
     self: SupportsInteractiveProperty[Synchronous],
-    fileNames: Sequence[str],
+    fileNames: Sequence[Union[PathLike[str], str]],
     encoding: Union[str, None] = None,
     numThreads: Union[int, None] = None,
     uses: Union[bool, None] = None,
@@ -170,7 +171,7 @@ def loadFiles(
 @overload
 async def loadFiles(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileNames: Sequence[str],
+    fileNames: Sequence[Union[PathLike[str], str]],
     encoding: Union[str, None] = None,
     numThreads: Union[int, None] = None,
     uses: Union[bool, None] = None,
@@ -186,7 +187,7 @@ def loadFiles(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileNames: Sequence[str],
+    fileNames: Sequence[Union[PathLike[str], str]],
     encoding: Union[str, None] = None,
     numThreads: Union[int, None] = None,
     uses: Union[bool, None] = None,
@@ -211,7 +212,7 @@ def loadFiles(
 @overload
 def parseEncryptedPackage(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
 ) -> List[TypeName]:
     ...
@@ -220,7 +221,7 @@ def parseEncryptedPackage(
 @overload
 async def parseEncryptedPackage(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
 ) -> List[TypeName]:
     ...
@@ -232,7 +233,7 @@ def parseEncryptedPackage(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
 ) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
     """
@@ -249,7 +250,7 @@ def parseEncryptedPackage(
 @overload
 def loadEncryptedPackage(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     skipUnzip: Union[bool, None] = None,
     uses: Union[bool, None] = None,
@@ -262,7 +263,7 @@ def loadEncryptedPackage(
 @overload
 async def loadEncryptedPackage(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     skipUnzip: Union[bool, None] = None,
     uses: Union[bool, None] = None,
@@ -278,7 +279,7 @@ def loadEncryptedPackage(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     skipUnzip: Union[bool, None] = None,
     uses: Union[bool, None] = None,
@@ -342,7 +343,7 @@ def reloadClass(
 def loadString(
     self: SupportsInteractiveProperty[Synchronous],
     data: str,
-    filename: Union[str, None] = None,
+    filename: Union[PathLike[str], str, None] = None,
     encoding: Union[str, None] = None,
     merge: Union[bool, None] = None,
 ) -> bool:
@@ -353,7 +354,7 @@ def loadString(
 async def loadString(
     self: SupportsInteractiveProperty[Asynchronous],
     data: str,
-    filename: Union[str, None] = None,
+    filename: Union[PathLike[str], str, None] = None,
     encoding: Union[str, None] = None,
     merge: Union[bool, None] = None,
 ) -> bool:
@@ -367,7 +368,7 @@ def loadString(
         SupportsInteractiveProperty[Asynchronous],
     ],
     data: str,
-    filename: Union[str, None] = None,
+    filename: Union[PathLike[str], str, None] = None,
     encoding: Union[str, None] = None,
     merge: Union[bool, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
@@ -388,7 +389,7 @@ def loadString(
 def parseString(
     self: SupportsInteractiveProperty[Synchronous],
     data: str,
-    filename: Union[str, None] = None,
+    filename: Union[PathLike[str], str, None] = None,
 ) -> List[TypeName]:
     ...
 
@@ -397,7 +398,7 @@ def parseString(
 async def parseString(
     self: SupportsInteractiveProperty[Asynchronous],
     data: str,
-    filename: Union[str, None] = None,
+    filename: Union[PathLike[str], str, None] = None,
 ) -> List[TypeName]:
     ...
 
@@ -409,7 +410,7 @@ def parseString(
         SupportsInteractiveProperty[Asynchronous],
     ],
     data: str,
-    filename: Union[str, None] = None,
+    filename: Union[PathLike[str], str, None] = None,
 ) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
     """
     .. code-block:: modelica
@@ -425,7 +426,7 @@ def parseString(
 @overload
 def parseFile(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
 ) -> List[TypeName]:
     ...
@@ -434,7 +435,7 @@ def parseFile(
 @overload
 async def parseFile(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
 ) -> List[TypeName]:
     ...
@@ -446,7 +447,7 @@ def parseFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
 ) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
     """
@@ -463,7 +464,7 @@ def parseFile(
 @overload
 def loadFileInteractiveQualified(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
@@ -475,7 +476,7 @@ def loadFileInteractiveQualified(
 @overload
 async def loadFileInteractiveQualified(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
@@ -490,7 +491,7 @@ def loadFileInteractiveQualified(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
@@ -513,7 +514,7 @@ def loadFileInteractiveQualified(
 @overload
 def loadFileInteractive(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
 ) -> List[TypeName]:
     ...
@@ -522,7 +523,7 @@ def loadFileInteractive(
 @overload
 async def loadFileInteractive(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
 ) -> List[TypeName]:
     ...
@@ -534,7 +535,7 @@ def loadFileInteractive(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
 ) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
     """
@@ -552,7 +553,7 @@ def loadFileInteractive(
 def system(
     self: SupportsInteractiveProperty[Synchronous],
     callStr: str,
-    outputFile: Union[str, None] = None,
+    outputFile: Union[PathLike[str], str, None] = None,
 ) -> int:
     ...
 
@@ -561,7 +562,7 @@ def system(
 async def system(
     self: SupportsInteractiveProperty[Asynchronous],
     callStr: str,
-    outputFile: Union[str, None] = None,
+    outputFile: Union[PathLike[str], str, None] = None,
 ) -> int:
     ...
 
@@ -573,7 +574,7 @@ def system(
         SupportsInteractiveProperty[Asynchronous],
     ],
     callStr: str,
-    outputFile: Union[str, None] = None,
+    outputFile: Union[PathLike[str], str, None] = None,
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -626,14 +627,16 @@ def system_parallel(
 
 @overload
 def saveAll(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
 
 @overload
 async def saveAll(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -644,7 +647,7 @@ def saveAll(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -774,14 +777,16 @@ def clearVariables(
 
 @overload
 def generateHeader(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
 
 @overload
 async def generateHeader(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -792,7 +797,7 @@ def generateHeader(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -806,14 +811,16 @@ def generateHeader(
 
 @overload
 def generateJuliaHeader(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
 
 @overload
 async def generateJuliaHeader(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -824,7 +831,7 @@ def generateJuliaHeader(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -911,7 +918,7 @@ def generateSeparateCodeDependencies(
 @overload
 def generateSeparateCodeDependenciesMakefile(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     directory: Union[str, None] = None,
     suffix: Union[str, None] = None,
 ) -> bool:
@@ -921,7 +928,7 @@ def generateSeparateCodeDependenciesMakefile(
 @overload
 async def generateSeparateCodeDependenciesMakefile(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     directory: Union[str, None] = None,
     suffix: Union[str, None] = None,
 ) -> bool:
@@ -934,7 +941,7 @@ def generateSeparateCodeDependenciesMakefile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
     directory: Union[str, None] = None,
     suffix: Union[str, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
@@ -2427,14 +2434,16 @@ def getVersion(
 
 @overload
 def regularFileExists(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
 
 @overload
 async def regularFileExists(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -2445,7 +2454,7 @@ def regularFileExists(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -2497,14 +2506,16 @@ class Stat(NamedTuple):
 
 @overload
 def stat(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> Stat:
     ...
 
 
 @overload
 async def stat(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> Stat:
     ...
 
@@ -2515,7 +2526,7 @@ def stat(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[Stat, Coroutine[None, None, Stat]]:
     """
     .. code-block:: modelica
@@ -2531,14 +2542,16 @@ def stat(
 
 @overload
 def readFile(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> str:
     ...
 
 
 @overload
 async def readFile(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> str:
     ...
 
@@ -2549,7 +2562,7 @@ def readFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -2564,7 +2577,7 @@ def readFile(
 @overload
 def writeFile(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     data: str,
     append: Union[bool, None] = None,
 ) -> bool:
@@ -2574,7 +2587,7 @@ def writeFile(
 @overload
 async def writeFile(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     data: str,
     append: Union[bool, None] = None,
 ) -> bool:
@@ -2587,7 +2600,7 @@ def writeFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     data: str,
     append: Union[bool, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
@@ -2605,14 +2618,18 @@ def writeFile(
 
 @overload
 def compareFilesAndMove(
-    self: SupportsInteractiveProperty[Synchronous], newFile: str, oldFile: str
+    self: SupportsInteractiveProperty[Synchronous],
+    newFile: Union[PathLike[str], str],
+    oldFile: Union[PathLike[str], str],
 ) -> bool:
     ...
 
 
 @overload
 async def compareFilesAndMove(
-    self: SupportsInteractiveProperty[Asynchronous], newFile: str, oldFile: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    newFile: Union[PathLike[str], str],
+    oldFile: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -2623,8 +2640,8 @@ def compareFilesAndMove(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    newFile: str,
-    oldFile: str,
+    newFile: Union[PathLike[str], str],
+    oldFile: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -2837,14 +2854,16 @@ def testsuiteFriendlyName(
 
 @overload
 def readFileNoNumeric(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> str:
     ...
 
 
 @overload
 async def readFileNoNumeric(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> str:
     ...
 
@@ -2855,7 +2874,7 @@ def readFileNoNumeric(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -3115,14 +3134,16 @@ def clearMessages(
 
 @overload
 def runScript(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> str:
     ...
 
 
 @overload
 async def runScript(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> str:
     ...
 
@@ -3133,7 +3154,7 @@ def runScript(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -3638,7 +3659,7 @@ def getLanguageStandard(
 @overload
 def getAstAsCorbaString(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
 ) -> str:
     ...
 
@@ -3646,7 +3667,7 @@ def getAstAsCorbaString(
 @overload
 async def getAstAsCorbaString(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
 ) -> str:
     ...
 
@@ -3657,7 +3678,7 @@ def getAstAsCorbaString(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -3947,7 +3968,7 @@ def instantiateModel(
 def buildOpenTURNSInterface(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-    pythonTemplateFile: str,
+    pythonTemplateFile: Union[PathLike[str], str],
     showFlatModelica: Union[bool, None] = None,
 ) -> str:
     ...
@@ -3957,7 +3978,7 @@ def buildOpenTURNSInterface(
 async def buildOpenTURNSInterface(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-    pythonTemplateFile: str,
+    pythonTemplateFile: Union[PathLike[str], str],
     showFlatModelica: Union[bool, None] = None,
 ) -> str:
     ...
@@ -3970,7 +3991,7 @@ def buildOpenTURNSInterface(
         SupportsInteractiveProperty[Asynchronous],
     ],
     className: Union[TypeName, str],
-    pythonTemplateFile: str,
+    pythonTemplateFile: Union[PathLike[str], str],
     showFlatModelica: Union[bool, None] = None,
 ) -> Union[str, Coroutine[None, None, str]]:
     """
@@ -3987,14 +4008,16 @@ def buildOpenTURNSInterface(
 
 @overload
 def runOpenTURNSPythonScript(
-    self: SupportsInteractiveProperty[Synchronous], pythonScriptFile: str
+    self: SupportsInteractiveProperty[Synchronous],
+    pythonScriptFile: Union[PathLike[str], str],
 ) -> str:
     ...
 
 
 @overload
 async def runOpenTURNSPythonScript(
-    self: SupportsInteractiveProperty[Asynchronous], pythonScriptFile: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    pythonScriptFile: Union[PathLike[str], str],
 ) -> str:
     ...
 
@@ -4005,7 +4028,7 @@ def runOpenTURNSPythonScript(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    pythonScriptFile: str,
+    pythonScriptFile: Union[PathLike[str], str],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -4103,14 +4126,16 @@ def loadModel(
 
 @overload
 def deleteFile(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
 
 @overload
 async def deleteFile(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -4121,7 +4146,7 @@ def deleteFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -4136,7 +4161,7 @@ def deleteFile(
 @overload
 def saveModel(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
 ) -> bool:
     ...
@@ -4145,7 +4170,7 @@ def saveModel(
 @overload
 async def saveModel(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
 ) -> bool:
     ...
@@ -4157,7 +4182,7 @@ def saveModel(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
@@ -4174,7 +4199,7 @@ def saveModel(
 @overload
 def saveTotalModel(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
@@ -4185,7 +4210,7 @@ def saveTotalModel(
 @overload
 async def saveTotalModel(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
@@ -4199,7 +4224,7 @@ def saveTotalModel(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
@@ -4322,7 +4347,7 @@ def dumpXMLDAE(
     addMathMLCode: Union[bool, None] = None,
     dumpResiduals: Union[bool, None] = None,
     fileNamePrefix: Union[str, None] = None,
-    rewriteRulesFile: Union[str, None] = None,
+    rewriteRulesFile: Union[PathLike[str], str, None] = None,
 ) -> Dumpxmldae:
     ...
 
@@ -4337,7 +4362,7 @@ async def dumpXMLDAE(
     addMathMLCode: Union[bool, None] = None,
     dumpResiduals: Union[bool, None] = None,
     fileNamePrefix: Union[str, None] = None,
-    rewriteRulesFile: Union[str, None] = None,
+    rewriteRulesFile: Union[PathLike[str], str, None] = None,
 ) -> Dumpxmldae:
     ...
 
@@ -4355,7 +4380,7 @@ def dumpXMLDAE(
     addMathMLCode: Union[bool, None] = None,
     dumpResiduals: Union[bool, None] = None,
     fileNamePrefix: Union[str, None] = None,
-    rewriteRulesFile: Union[str, None] = None,
+    rewriteRulesFile: Union[PathLike[str], str, None] = None,
 ) -> Union[Dumpxmldae, Coroutine[None, None, Dumpxmldae]]:
     """
     .. code-block:: modelica
@@ -5135,7 +5160,7 @@ class StandardStream(enumeration):
 def reopenStandardStream(
     self: SupportsInteractiveProperty[Synchronous],
     _stream: Union[StandardStream, Literal["stdin", "stdout", "stderr"]],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -5144,7 +5169,7 @@ def reopenStandardStream(
 async def reopenStandardStream(
     self: SupportsInteractiveProperty[Asynchronous],
     _stream: Union[StandardStream, Literal["stdin", "stdout", "stderr"]],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -5156,7 +5181,7 @@ def reopenStandardStream(
         SupportsInteractiveProperty[Asynchronous],
     ],
     _stream: Union[StandardStream, Literal["stdin", "stdout", "stderr"]],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -5172,7 +5197,7 @@ def reopenStandardStream(
 @overload
 def importFMU(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     loglevel: Union[int, None] = None,
     fullPath: Union[bool, None] = None,
@@ -5186,7 +5211,7 @@ def importFMU(
 @overload
 async def importFMU(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     loglevel: Union[int, None] = None,
     fullPath: Union[bool, None] = None,
@@ -5203,7 +5228,7 @@ def importFMU(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     loglevel: Union[int, None] = None,
     fullPath: Union[bool, None] = None,
@@ -5230,7 +5255,7 @@ def importFMU(
 @overload
 def importFMUModelDescription(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     loglevel: Union[int, None] = None,
     fullPath: Union[bool, None] = None,
@@ -5244,7 +5269,7 @@ def importFMUModelDescription(
 @overload
 async def importFMUModelDescription(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     loglevel: Union[int, None] = None,
     fullPath: Union[bool, None] = None,
@@ -5261,7 +5286,7 @@ def importFMUModelDescription(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
     workdir: Union[str, None] = None,
     loglevel: Union[int, None] = None,
     fullPath: Union[bool, None] = None,
@@ -6155,7 +6180,7 @@ def getSourceFile(
 def setSourceFile(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -6164,7 +6189,7 @@ def setSourceFile(
 async def setSourceFile(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -6176,7 +6201,7 @@ def setSourceFile(
         SupportsInteractiveProperty[Asynchronous],
     ],
     class_: Union[TypeName, str],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -6227,7 +6252,7 @@ def isShortDefinition(
 def setClassComment(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -6236,7 +6261,7 @@ def setClassComment(
 async def setClassComment(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -6248,7 +6273,7 @@ def setClassComment(
         SupportsInteractiveProperty[Asynchronous],
     ],
     class_: Union[TypeName, str],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -6440,7 +6465,7 @@ def getAllSubtypeOf(
 @overload
 def basePlotFunction(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     interpolation: Union[str, None] = None,
     title: Union[str, None] = None,
     legend: Union[bool, None] = None,
@@ -6459,7 +6484,7 @@ def basePlotFunction(
 @overload
 async def basePlotFunction(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     interpolation: Union[str, None] = None,
     title: Union[str, None] = None,
     legend: Union[bool, None] = None,
@@ -6481,7 +6506,7 @@ def basePlotFunction(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     interpolation: Union[str, None] = None,
     title: Union[str, None] = None,
     legend: Union[bool, None] = None,
@@ -6523,7 +6548,7 @@ def plot(
     self: SupportsInteractiveProperty[Synchronous],
     vars: Sequence[Union[VariableName, str]],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6547,7 +6572,7 @@ async def plot(
     self: SupportsInteractiveProperty[Asynchronous],
     vars: Sequence[Union[VariableName, str]],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6574,7 +6599,7 @@ def plot(
     ],
     vars: Sequence[Union[VariableName, str]],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6620,7 +6645,7 @@ def plot(
 def plotAll(
     self: SupportsInteractiveProperty[Synchronous],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6643,7 +6668,7 @@ def plotAll(
 async def plotAll(
     self: SupportsInteractiveProperty[Asynchronous],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6669,7 +6694,7 @@ def plotAll(
         SupportsInteractiveProperty[Asynchronous],
     ],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6716,7 +6741,7 @@ def plotParametric(
     xVariable: Union[VariableName, str],
     yVariable: Union[VariableName, str],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6741,7 +6766,7 @@ async def plotParametric(
     xVariable: Union[VariableName, str],
     yVariable: Union[VariableName, str],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6769,7 +6794,7 @@ def plotParametric(
     xVariable: Union[VariableName, str],
     yVariable: Union[VariableName, str],
     externalWindow: Union[bool, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
     title: Union[str, None] = None,
     grid: Union[str, None] = None,
     logX: Union[bool, None] = None,
@@ -6815,7 +6840,7 @@ def plotParametric(
 @overload
 def readSimulationResult(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     variables: Sequence[Union[VariableName, str]],
     size: Union[int, None] = None,
 ) -> List[List[float]]:
@@ -6825,7 +6850,7 @@ def readSimulationResult(
 @overload
 async def readSimulationResult(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
+    filename: Union[PathLike[str], str],
     variables: Sequence[Union[VariableName, str]],
     size: Union[int, None] = None,
 ) -> List[List[float]]:
@@ -6838,7 +6863,7 @@ def readSimulationResult(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
     variables: Sequence[Union[VariableName, str]],
     size: Union[int, None] = None,
 ) -> Union[List[List[float]], Coroutine[None, None, List[List[float]]]]:
@@ -6856,14 +6881,16 @@ def readSimulationResult(
 
 @overload
 def readSimulationResultSize(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> int:
     ...
 
 
 @overload
 async def readSimulationResultSize(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> int:
     ...
 
@@ -6874,7 +6901,7 @@ def readSimulationResultSize(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -6889,7 +6916,7 @@ def readSimulationResultSize(
 @overload
 def readSimulationResultVars(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     readParameters: Union[bool, None] = None,
     openmodelicaStyle: Union[bool, None] = None,
 ) -> List[str]:
@@ -6899,7 +6926,7 @@ def readSimulationResultVars(
 @overload
 async def readSimulationResultVars(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     readParameters: Union[bool, None] = None,
     openmodelicaStyle: Union[bool, None] = None,
 ) -> List[str]:
@@ -6912,7 +6939,7 @@ def readSimulationResultVars(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     readParameters: Union[bool, None] = None,
     openmodelicaStyle: Union[bool, None] = None,
 ) -> Union[List[str], Coroutine[None, None, List[str]]]:
@@ -6931,8 +6958,8 @@ def readSimulationResultVars(
 @overload
 def filterSimulationResults(
     self: SupportsInteractiveProperty[Synchronous],
-    inFile: str,
-    outFile: str,
+    inFile: Union[PathLike[str], str],
+    outFile: Union[PathLike[str], str],
     vars: Sequence[str],
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
@@ -6943,8 +6970,8 @@ def filterSimulationResults(
 @overload
 async def filterSimulationResults(
     self: SupportsInteractiveProperty[Asynchronous],
-    inFile: str,
-    outFile: str,
+    inFile: Union[PathLike[str], str],
+    outFile: Union[PathLike[str], str],
     vars: Sequence[str],
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
@@ -6958,8 +6985,8 @@ def filterSimulationResults(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    inFile: str,
-    outFile: str,
+    inFile: Union[PathLike[str], str],
+    outFile: Union[PathLike[str], str],
     vars: Sequence[str],
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
@@ -6981,9 +7008,9 @@ def filterSimulationResults(
 @overload
 def compareSimulationResults(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
-    reffilename: str,
-    logfilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
+    logfilename: Union[PathLike[str], str],
     relTol: Union[float, None] = None,
     absTol: Union[float, None] = None,
     vars: Union[Sequence[str], None] = None,
@@ -6994,9 +7021,9 @@ def compareSimulationResults(
 @overload
 async def compareSimulationResults(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
-    reffilename: str,
-    logfilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
+    logfilename: Union[PathLike[str], str],
     relTol: Union[float, None] = None,
     absTol: Union[float, None] = None,
     vars: Union[Sequence[str], None] = None,
@@ -7010,9 +7037,9 @@ def compareSimulationResults(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
-    reffilename: str,
-    logfilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
+    logfilename: Union[PathLike[str], str],
     relTol: Union[float, None] = None,
     absTol: Union[float, None] = None,
     vars: Union[Sequence[str], None] = None,
@@ -7035,8 +7062,8 @@ def compareSimulationResults(
 @overload
 def deltaSimulationResults(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
-    reffilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
     method: str,
     vars: Union[Sequence[str], None] = None,
 ) -> float:
@@ -7046,8 +7073,8 @@ def deltaSimulationResults(
 @overload
 async def deltaSimulationResults(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
-    reffilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
     method: str,
     vars: Union[Sequence[str], None] = None,
 ) -> float:
@@ -7060,8 +7087,8 @@ def deltaSimulationResults(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
-    reffilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
     method: str,
     vars: Union[Sequence[str], None] = None,
 ) -> Union[float, Coroutine[None, None, float]]:
@@ -7086,8 +7113,8 @@ class Diffsimulationresults(NamedTuple):
 @overload
 def diffSimulationResults(
     self: SupportsInteractiveProperty[Synchronous],
-    actualFile: str,
-    expectedFile: str,
+    actualFile: Union[PathLike[str], str],
+    expectedFile: Union[PathLike[str], str],
     diffPrefix: str,
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
@@ -7101,8 +7128,8 @@ def diffSimulationResults(
 @overload
 async def diffSimulationResults(
     self: SupportsInteractiveProperty[Asynchronous],
-    actualFile: str,
-    expectedFile: str,
+    actualFile: Union[PathLike[str], str],
+    expectedFile: Union[PathLike[str], str],
     diffPrefix: str,
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
@@ -7119,8 +7146,8 @@ def diffSimulationResults(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    actualFile: str,
-    expectedFile: str,
+    actualFile: Union[PathLike[str], str],
+    expectedFile: Union[PathLike[str], str],
     diffPrefix: str,
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
@@ -7152,8 +7179,8 @@ def diffSimulationResults(
 def diffSimulationResultsHtml(
     self: SupportsInteractiveProperty[Synchronous],
     var: str,
-    actualFile: str,
-    expectedFile: str,
+    actualFile: Union[PathLike[str], str],
+    expectedFile: Union[PathLike[str], str],
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
     rangeDelta: Union[float, None] = None,
@@ -7165,8 +7192,8 @@ def diffSimulationResultsHtml(
 async def diffSimulationResultsHtml(
     self: SupportsInteractiveProperty[Asynchronous],
     var: str,
-    actualFile: str,
-    expectedFile: str,
+    actualFile: Union[PathLike[str], str],
+    expectedFile: Union[PathLike[str], str],
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
     rangeDelta: Union[float, None] = None,
@@ -7181,8 +7208,8 @@ def diffSimulationResultsHtml(
         SupportsInteractiveProperty[Asynchronous],
     ],
     var: str,
-    actualFile: str,
-    expectedFile: str,
+    actualFile: Union[PathLike[str], str],
+    expectedFile: Union[PathLike[str], str],
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
     rangeDelta: Union[float, None] = None,
@@ -7205,8 +7232,8 @@ def diffSimulationResultsHtml(
 @overload
 def checkTaskGraph(
     self: SupportsInteractiveProperty[Synchronous],
-    filename: str,
-    reffilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
 ) -> List[str]:
     ...
 
@@ -7214,8 +7241,8 @@ def checkTaskGraph(
 @overload
 async def checkTaskGraph(
     self: SupportsInteractiveProperty[Asynchronous],
-    filename: str,
-    reffilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
 ) -> List[str]:
     ...
 
@@ -7226,8 +7253,8 @@ def checkTaskGraph(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
-    reffilename: str,
+    filename: Union[PathLike[str], str],
+    reffilename: Union[PathLike[str], str],
 ) -> Union[List[str], Coroutine[None, None, List[str]]]:
     """
     .. code-block:: modelica
@@ -7243,8 +7270,8 @@ def checkTaskGraph(
 @overload
 def checkCodeGraph(
     self: SupportsInteractiveProperty[Synchronous],
-    graphfile: str,
-    codefile: str,
+    graphfile: Union[PathLike[str], str],
+    codefile: Union[PathLike[str], str],
 ) -> List[str]:
     ...
 
@@ -7252,8 +7279,8 @@ def checkCodeGraph(
 @overload
 async def checkCodeGraph(
     self: SupportsInteractiveProperty[Asynchronous],
-    graphfile: str,
-    codefile: str,
+    graphfile: Union[PathLike[str], str],
+    codefile: Union[PathLike[str], str],
 ) -> List[str]:
     ...
 
@@ -7264,8 +7291,8 @@ def checkCodeGraph(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    graphfile: str,
-    codefile: str,
+    graphfile: Union[PathLike[str], str],
+    codefile: Union[PathLike[str], str],
 ) -> Union[List[str], Coroutine[None, None, List[str]]]:
     """
     .. code-block:: modelica
@@ -7283,7 +7310,7 @@ def val(
     self: SupportsInteractiveProperty[Synchronous],
     var: Union[VariableName, str],
     timePoint: Union[float, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
 ) -> float:
     ...
 
@@ -7293,7 +7320,7 @@ async def val(
     self: SupportsInteractiveProperty[Asynchronous],
     var: Union[VariableName, str],
     timePoint: Union[float, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
 ) -> float:
     ...
 
@@ -7306,7 +7333,7 @@ def val(
     ],
     var: Union[VariableName, str],
     timePoint: Union[float, None] = None,
-    fileName: Union[str, None] = None,
+    fileName: Union[PathLike[str], str, None] = None,
 ) -> Union[float, Coroutine[None, None, float]]:
     """
     .. code-block:: modelica
@@ -9623,10 +9650,10 @@ def getBuiltinType(
 @overload
 def setInitXmlStartValue(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     variableName: str,
     startValue: str,
-    outputFile: str,
+    outputFile: Union[PathLike[str], str],
 ) -> Union[bool, None]:
     ...
 
@@ -9634,10 +9661,10 @@ def setInitXmlStartValue(
 @overload
 async def setInitXmlStartValue(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     variableName: str,
     startValue: str,
-    outputFile: str,
+    outputFile: Union[PathLike[str], str],
 ) -> Union[bool, None]:
     ...
 
@@ -9648,10 +9675,10 @@ def setInitXmlStartValue(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     variableName: str,
     startValue: str,
-    outputFile: str,
+    outputFile: Union[PathLike[str], str],
 ) -> Union[Union[bool, None], Coroutine[None, None, Union[bool, None]]]:
     """
     .. code-block:: modelica
@@ -9668,14 +9695,16 @@ def setInitXmlStartValue(
 
 @overload
 def ngspicetoModelica(
-    self: SupportsInteractiveProperty[Synchronous], netlistfileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    netlistfileName: Union[PathLike[str], str],
 ) -> Union[bool, None]:
     ...
 
 
 @overload
 async def ngspicetoModelica(
-    self: SupportsInteractiveProperty[Asynchronous], netlistfileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    netlistfileName: Union[PathLike[str], str],
 ) -> Union[bool, None]:
     ...
 
@@ -9686,7 +9715,7 @@ def ngspicetoModelica(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    netlistfileName: str,
+    netlistfileName: Union[PathLike[str], str],
 ) -> Union[Union[bool, None], Coroutine[None, None, Union[bool, None]]]:
     """
     .. code-block:: modelica
@@ -10498,7 +10527,7 @@ def getDerivedClassModifierValue(
 @overload
 def generateEntryPoint(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     entryPoint: Union[TypeName, str],
     url: Union[str, None] = None,
 ) -> None:
@@ -10508,7 +10537,7 @@ def generateEntryPoint(
 @overload
 async def generateEntryPoint(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     entryPoint: Union[TypeName, str],
     url: Union[str, None] = None,
 ) -> None:
@@ -10521,7 +10550,7 @@ def generateEntryPoint(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     entryPoint: Union[TypeName, str],
     url: Union[str, None] = None,
 ) -> Union[None, Coroutine[None, None, None]]:
@@ -11182,7 +11211,7 @@ def generateScriptingAPI(
 def convertPackage(
     self: SupportsInteractiveProperty[Synchronous],
     cl: Union[TypeName, str],
-    scriptFile: str,
+    scriptFile: Union[PathLike[str], str],
 ) -> None:
     ...
 
@@ -11191,7 +11220,7 @@ def convertPackage(
 async def convertPackage(
     self: SupportsInteractiveProperty[Asynchronous],
     cl: Union[TypeName, str],
-    scriptFile: str,
+    scriptFile: Union[PathLike[str], str],
 ) -> None:
     ...
 
@@ -11203,7 +11232,7 @@ def convertPackage(
         SupportsInteractiveProperty[Asynchronous],
     ],
     cl: Union[TypeName, str],
-    scriptFile: str,
+    scriptFile: Union[PathLike[str], str],
 ) -> Union[None, Coroutine[None, None, None]]:
     """
     .. code-block:: modelica
@@ -12330,14 +12359,18 @@ def oms_deleteConnectorFromTLMBus(
 
 @overload
 def oms_export(
-    self: SupportsInteractiveProperty[Synchronous], cref: str, filename: str
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    filename: Union[PathLike[str], str],
 ) -> int:
     ...
 
 
 @overload
 async def oms_export(
-    self: SupportsInteractiveProperty[Asynchronous], cref: str, filename: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    filename: Union[PathLike[str], str],
 ) -> int:
     ...
 
@@ -12349,7 +12382,7 @@ def oms_export(
         SupportsInteractiveProperty[Asynchronous],
     ],
     cref: str,
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -12453,14 +12486,16 @@ class Oms_extractfmikind(NamedTuple):
 
 @overload
 def oms_extractFMIKind(
-    self: SupportsInteractiveProperty[Synchronous], filename: str
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
 ) -> Oms_extractfmikind:
     ...
 
 
 @overload
 async def oms_extractFMIKind(
-    self: SupportsInteractiveProperty[Asynchronous], filename: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
 ) -> Oms_extractfmikind:
     ...
 
@@ -12471,7 +12506,7 @@ def oms_extractFMIKind(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[Oms_extractfmikind, Coroutine[None, None, Oms_extractfmikind]]:
     """
     .. code-block:: modelica
@@ -13014,14 +13049,16 @@ class Oms_importfile(NamedTuple):
 
 @overload
 def oms_importFile(
-    self: SupportsInteractiveProperty[Synchronous], filename: str
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
 ) -> Oms_importfile:
     ...
 
 
 @overload
 async def oms_importFile(
-    self: SupportsInteractiveProperty[Asynchronous], filename: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
 ) -> Oms_importfile:
     ...
 
@@ -13032,7 +13069,7 @@ def oms_importFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[Oms_importfile, Coroutine[None, None, Oms_importfile]]:
     """
     .. code-block:: modelica
@@ -13396,14 +13433,16 @@ def oms_reset(
 
 @overload
 def oms_RunFile(
-    self: SupportsInteractiveProperty[Synchronous], filename: str
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
 ) -> int:
     ...
 
 
 @overload
 async def oms_RunFile(
-    self: SupportsInteractiveProperty[Asynchronous], filename: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
 ) -> int:
     ...
 
@@ -13414,7 +13453,7 @@ def oms_RunFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -13562,14 +13601,16 @@ def oms_setInteger(
 
 @overload
 def oms_setLogFile(
-    self: SupportsInteractiveProperty[Synchronous], filename: str
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
 ) -> int:
     ...
 
 
 @overload
 async def oms_setLogFile(
-    self: SupportsInteractiveProperty[Asynchronous], filename: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
 ) -> int:
     ...
 
@@ -13580,7 +13621,7 @@ def oms_setLogFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    filename: str,
+    filename: Union[PathLike[str], str],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -13734,7 +13775,7 @@ def oms_setRealInputDerivative(
 def oms_setResultFile(
     self: SupportsInteractiveProperty[Synchronous],
     cref: str,
-    filename: str,
+    filename: Union[PathLike[str], str],
     bufferSize: int,
 ) -> int:
     ...
@@ -13744,7 +13785,7 @@ def oms_setResultFile(
 async def oms_setResultFile(
     self: SupportsInteractiveProperty[Asynchronous],
     cref: str,
-    filename: str,
+    filename: Union[PathLike[str], str],
     bufferSize: int,
 ) -> int:
     ...
@@ -13757,7 +13798,7 @@ def oms_setResultFile(
         SupportsInteractiveProperty[Asynchronous],
     ],
     cref: str,
-    filename: str,
+    filename: Union[PathLike[str], str],
     bufferSize: int,
 ) -> Union[int, Coroutine[None, None, int]]:
     """
