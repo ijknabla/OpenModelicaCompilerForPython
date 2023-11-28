@@ -49,7 +49,11 @@ if TYPE_CHECKING:
     import typing_extensions
     from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
 
-_SpecialForm = Union["typing._SpecialForm", "typing_extensions._SpecialForm"]
+_SpecialForm = Union[
+    "typing._SpecialForm",
+    "typing_extensions._SpecialForm",
+    "type[PathLike]",
+]
 
 
 _T = TypeVar("_T")
@@ -64,6 +68,7 @@ _Scalar = Union[
     float,
     int,
     bool,
+    PathLike,
     str,
     VariableName,
     TypeName,
@@ -304,6 +309,8 @@ def _get_cast_type(typ: Any) -> type[None | _Scalar | tuple[Any, ...]]:
         return _select_type(map(_get_cast_type, get_args(typ)))
     elif _isorigin(typ, Literal):
         return _select_type(map(_get_cast_type, map(type, get_args(typ))))
+    elif _is_path_like(typ):
+        return PathLike
     elif _issubclass(typ, get_args(_Scalar)):
         return typ  # type: ignore
     else:
@@ -319,6 +326,16 @@ def _is_union(typ: Any) -> bool:
         if isinstance(typ, UnionType):
             return True
 
+    return False
+
+
+def _is_path_like(typ: Any) -> bool:
+    import os
+
+    if _isorigin(typ, PathLike) or _isorigin(typ, os.PathLike):
+        return True
+    if _issubclass(typ, PathLike) or _issubclass(typ, os.PathLike):
+        return True
     return False
 
 
