@@ -330,15 +330,17 @@ async def create_interface_by_docker(
             "export",
             "--only=main,bootstrap",
             "--without-hashes",
-            cwd=Path(__file__).parent,
+            cwd=Path(__file__).parents[2],
             stdout=PIPE,
         )
     ) as process:
         requirements: list[str] = []
         assert process.stdout is not None
         async for line in process.stdout:
+            if line.startswith(b"poetry-version-plugin:"):
+                continue
             requirement, *_ = line.split(b";")
-            requirements.append(requirement.decode("utf-8").strip())
+            requirements.append(requirement.strip().decode("utf-8"))
 
     await gather(
         *(
@@ -357,16 +359,10 @@ async def _create_interface_by_docker(
     pip_cache_dir: Path | None,
     requirements: Iterable[str],
 ) -> None:
-    py_version_match = re.search(
-        r"(\d+)\.(\d+)\.\d+",
-        await _docker_run(
-            image,
-            [],
-            ["python", "--version"],
-            pipe=True,
-        ),
-    )
+    py_version_match = re.search(r"python\d+\.\d+", image)
     assert py_version_match is not None
+
+    PYTHON = py_version_match.group(0)
 
     omc_version_match = re.search(
         r"(\d+)\.(\d+)\.\d+",
@@ -390,9 +386,8 @@ async def _create_interface_by_docker(
         f"type=bind,source={omc4py_s},target={omc4py_t}",
         "--mount",
         f"type=bind,source={output_s},target={output_t.parent}",
+        "--user=1000:1000",
     ]
-
-    PYTHON = "sudo -u user python"
 
     if pip_cache_dir is not None:
         pip_cache_s = pip_cache_dir.resolve()
@@ -404,7 +399,7 @@ async def _create_interface_by_docker(
                 f"type=bind,source={pip_cache_s},target={pip_cache_t}",
             ]
         )
-        PYTHON = f"sudo -u user env PIP_CACHE_DIR={pip_cache_t} python"
+        PYTHON = f"env PIP_CACHE_DIR={pip_cache_t} {PYTHON}"
 
     await _docker_run(
         image,
