@@ -22,7 +22,7 @@ from . import Nested as nested
 @overload
 def loadFile(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: Union[str, PathLike[str]],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -30,7 +30,7 @@ def loadFile(
 @overload
 async def loadFile(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: Union[str, PathLike[str]],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -41,7 +41,7 @@ def loadFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: Union[str, PathLike[str]],
+    fileName: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     return ...  # type: ignore
 
