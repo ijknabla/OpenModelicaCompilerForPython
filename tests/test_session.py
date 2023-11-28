@@ -9,13 +9,11 @@ from omc4py.openmodelica import Component
 from tests import OpenSession
 
 
-@pytest.mark.dependency()
 def test_open_session(open_session: OpenSession) -> None:
     session = open_session()
     assert session is not None
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
 def test_loadString(open_session: OpenSession) -> None:
     session = open_session()
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
@@ -29,7 +27,6 @@ def test_loadString(open_session: OpenSession) -> None:
     assert session.isFunction("MyFunction")
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
 def test_getClassNames(open_session: OpenSession) -> None:
     session = open_session()
     assert session.loadString(
@@ -99,7 +96,6 @@ type B = enumeration(b);
     ]
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
 def test_getComponents(open_session: OpenSession) -> None:
     session = open_session()
     assert session.loadString(
@@ -220,7 +216,6 @@ end Test_getComponents;
             assert component.dimensions == []
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
 def test_OpenModelica(session: Session) -> None:
     assert session.isPackage("OpenModelica")
 
