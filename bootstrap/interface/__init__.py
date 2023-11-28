@@ -276,7 +276,10 @@ class InterfaceRoot(RootModel[Interface]):
 async def create_interface(n: int, exe: str | None) -> InterfaceRoot:
     async with AsyncExitStack() as stack:
         sessions = [
-            stack.enter_context(open_session(exe, asyncio=True))
+            cast(
+                AsyncSession,
+                stack.enter_context(open_session(exe, asyncio=True)),
+            )
             for _ in range(n)
         ]
 

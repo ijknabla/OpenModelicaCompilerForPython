@@ -6,6 +6,8 @@ from omc4py import open_session
 def test_session_types() -> None:
     if TYPE_CHECKING:
         from omc4py import (
+            AsyncSession,
+            Session,
             v_1_13,
             v_1_14,
             v_1_15,
@@ -18,6 +20,8 @@ def test_session_types() -> None:
             v_1_22,
         )
 
+        a: Session
+        b: AsyncSession
         a_13: v_1_13.Session
         b_13: v_1_13.AsyncSession
         a_14: v_1_14.Session
@@ -85,6 +89,6 @@ def test_session_types() -> None:
         a_22 = open_session(version=(1, 24), asyncio=False)  # noqa: F841
         b_22 = open_session(version=(1, 24), asyncio=True)  # noqa: F841
 
-        a_22 = open_session()
-        a_22 = open_session(asyncio=False)  # noqa: F841
-        b_22 = open_session(asyncio=True)  # noqa: F841
+        a = open_session()
+        a = open_session(asyncio=False)  # noqa: F841
+        b = open_session(asyncio=True)  # noqa: F841
