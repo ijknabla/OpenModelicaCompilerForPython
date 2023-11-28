@@ -36,15 +36,19 @@ class BasicSession(HasInteractive[T_Calling]):
 
     @property
     def synchronous(self) -> BasicSession[Synchronous]:
-        return type(self)(
-            self.__omc_interactive__.synchronous,  # type: ignore
-        )
+        if TYPE_CHECKING:
+            cls = BasicSession[Synchronous]
+        else:
+            cls = type(self)
+        return cls(self.__omc_interactive__.synchronous)
 
     @property
     def asynchronous(self) -> BasicSession[Asynchronous]:
-        return type(self)(
-            self.__omc_interactive__.asynchronous,  # type: ignore
-        )
+        if TYPE_CHECKING:
+            cls = BasicSession[Asynchronous]
+        else:
+            cls = type(self)
+        return cls(self.__omc_interactive__.asynchronous)
 
     @overload
     def getComponents(
