@@ -35,6 +35,8 @@ from arpeggio import (
 from modelicalang import ParsingExpressionLike, v3_4
 from typing_extensions import Annotated
 
+from omc4py.protocol import PathLike
+
 from .exception import OMCRuntimeError
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
@@ -330,7 +332,16 @@ def _priority(typ: type[_Scalar]) -> int:
     for i, base in reversed(
         list(
             enumerate(
-                [float, int, str, VariableName, TypeName, enumeration, record],
+                [
+                    float,
+                    int,
+                    PathLike,
+                    str,
+                    VariableName,
+                    TypeName,
+                    enumeration,
+                    record,
+                ],
                 start=1,
             )
         )

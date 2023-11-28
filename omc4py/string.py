@@ -12,6 +12,8 @@ from contextlib import suppress
 from functools import lru_cache, reduce
 from typing import TYPE_CHECKING, Any
 
+from omc4py.protocol import PathLike
+
 from .protocol import SupportsToOMCLiteral
 
 if TYPE_CHECKING:
@@ -65,6 +67,8 @@ def to_omc_literal(obj: Any) -> str:
         return obj.__to_omc_literal__()
     elif isinstance(obj, bool):
         return "true" if obj else "false"
+    elif isinstance(obj, PathLike):
+        return to_omc_literal(obj.__fspath__())
     elif isinstance(obj, str):
         return '"' + escape_py_string(obj) + '"'
     elif isinstance(obj, _sequence_types()):
