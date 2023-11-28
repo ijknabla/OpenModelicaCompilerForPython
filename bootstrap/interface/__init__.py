@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.resources
 import re
 from asyncio import create_subprocess_exec, create_task, gather
 from asyncio.subprocess import PIPE
@@ -324,16 +325,21 @@ async def create_interface_by_docker(
     output_dir: Path,
     pip_cache_dir: Path | None,
 ) -> None:
-    async with ensure_terminate(
-        await create_subprocess_exec(
-            "poetry",
-            "export",
-            "--only=main,bootstrap",
-            "--without-hashes",
-            cwd=Path(__file__).parents[2],
-            stdout=PIPE,
+    async with AsyncExitStack() as stack:
+        process = await stack.enter_async_context(
+            ensure_terminate(
+                await create_subprocess_exec(
+                    "poetry",
+                    "export",
+                    "--only=main,bootstrap",
+                    "--without-hashes",
+                    cwd=stack.enter_context(
+                        importlib.resources.path("bootstrap", "..")
+                    ).resolve(),
+                    stdout=PIPE,
+                )
+            )
         )
-    ) as process:
         requirements: list[str] = []
         assert process.stdout is not None
         async for line in process.stdout:
