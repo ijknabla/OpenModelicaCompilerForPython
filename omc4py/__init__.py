@@ -159,7 +159,7 @@ def _select_session_type(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: _1_22 | _1_23 | _1_24 | None = None,
+    version: _1_22 | _1_23 | _1_24,
     asyncio: Literal[False] = False,
 ) -> v_1_22.Session:
     ...
@@ -169,7 +169,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: _1_22 | _1_23 | _1_24 | None = None,
+    version: _1_22 | _1_23 | _1_24,
     asyncio: Literal[True],
 ) -> v_1_22.AsyncSession:
     ...
@@ -361,6 +361,27 @@ def open_session(
     version: _1_13,
     asyncio: Literal[True],
 ) -> v_1_13.AsyncSession:
+    ...
+
+
+# Default
+@overload
+def open_session(
+    omc: str | PathLike[str] | None = None,
+    *,
+    version: None = None,
+    asyncio: Literal[False] = False,
+) -> Session:
+    ...
+
+
+@overload
+def open_session(
+    omc: str | PathLike[str] | None = None,
+    *,
+    version: None = None,
+    asyncio: Literal[True],
+) -> AsyncSession:
     ...
 
 
