@@ -47,6 +47,10 @@ T_Calling = TypeVar(
 @runtime_checkable
 class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
     @property
+    def calling(self) -> T_Calling:
+        ...
+
+    @property
     def synchronous(self) -> SupportsInteractive[Synchronous]:
         ...
 
