@@ -6,6 +6,7 @@ from omc4py.modelica import enumeration, external, package
 from omc4py.openmodelica import TypeName
 from omc4py.protocol import (
     Asynchronous,
+    PathLike,
     SupportsInteractiveProperty,
     Synchronous,
     T_Calling,
@@ -20,14 +21,16 @@ from . import Nested as nested
 
 @overload
 def loadFile(
-    self: SupportsInteractiveProperty[Synchronous], fileName: str
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
 
 @overload
 async def loadFile(
-    self: SupportsInteractiveProperty[Asynchronous], fileName: str
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
 ) -> bool:
     ...
 
@@ -38,7 +41,7 @@ def loadFile(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     return ...  # type: ignore
 
