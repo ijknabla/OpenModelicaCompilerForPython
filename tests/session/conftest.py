@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+import sys
 from collections.abc import AsyncGenerator
 from typing import TYPE_CHECKING
-
-import importlib_resources as resources
 
 if TYPE_CHECKING:
     from typing_extensions import Never
@@ -16,6 +15,11 @@ from omc4py.interactive import Interactive
 from omc4py.protocol import asynchronous
 
 from . import AsyncEmptySession, AsyncNestedSession, AsyncOneSession
+
+if (3, 9) <= sys.version_info:
+    from importlib import resources
+else:
+    import importlib_resources as resources
 
 
 @pytest_asyncio.fixture(scope="session")
