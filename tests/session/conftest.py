@@ -1,8 +1,9 @@
 from __future__ import annotations
 
 from collections.abc import AsyncGenerator
-from importlib import resources
 from typing import TYPE_CHECKING
+
+import importlib_resources as resources
 
 if TYPE_CHECKING:
     from typing_extensions import Never
@@ -25,8 +26,8 @@ async def empty_session(
     with ExitStack() as stack:
         enter = stack.enter_context
         session = enter(AsyncEmptySession(interactive))
-        path = enter(resources.path("tests.session.src", "empty.mo"))
-        assert await session.loadFile(path)
+        ref = resources.files("tests.session") / "src/empty.mo"
+        assert await session.loadFile(enter(resources.as_file(ref)))
         yield session
         await session.__check__()
 
@@ -39,8 +40,8 @@ async def one_session(
     with ExitStack() as stack:
         enter = stack.enter_context
         session = enter(AsyncOneSession(interactive))
-        path = enter(resources.path("tests.session.src", "one.mo"))
-        assert await session.loadFile(path)
+        ref = resources.files("tests.session") / "src/one.mo"
+        assert await session.loadFile(enter(resources.as_file(ref)))
         yield session
         await session.__check__()
 
@@ -53,7 +54,7 @@ async def nested_session(
     with ExitStack() as stack:
         enter = stack.enter_context
         session = enter(AsyncNestedSession(interactive))
-        path = enter(resources.path("tests.session.src", "Nested.mo"))
-        assert await session.loadFile(path)
+        ref = resources.files("tests.session") / "src/Nested.mo"
+        assert await session.loadFile(enter(resources.as_file(ref)))
         yield session
         await session.__check__()
