@@ -16,19 +16,19 @@ from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, Any, Generic, NewType, TypeVar, overload
+from typing import TYPE_CHECKING, Any, Generic, NewType, overload
 
 import zmq.asyncio
 
 from .protocol import Asynchronous, Calling, Synchronous, T_Calling
 
 if TYPE_CHECKING:
-    from typing_extensions import ParamSpec, Self
+    from typing_extensions import Self
 
-    P = ParamSpec("P")
-    T = TypeVar("T")
+    Process = Popen[str]
+else:
+    Process = ...
 
-Process = Popen[str]
 Port = NewType("Port", str)
 
 logger = logging.getLogger(__name__)
@@ -59,7 +59,7 @@ class Interactive(Generic[T_Calling]):
                 calling,
                 exit_stack,
                 *exit_stack.enter_context(
-                    _create_omc_interactive(_resolve_omc(omc), user=user)
+                    _open_process_and_socket(_resolve_omc(omc), user=user)
                 ),
             )
         except Exception:
@@ -176,7 +176,7 @@ def _search_openmodelica_version(s: str | None) -> tuple[int, int, int]:
 
 
 @contextmanager
-def _create_omc_interactive(
+def _open_process_and_socket(
     omc: str,
     user: str | None = None,
 ) -> Generator[
