@@ -41,5 +41,7 @@ repos:
         -   run
         -   mypy
         -   --strict
+        -   .
         language: system
         files: \.pyi?$
+        pass_filenames: false
