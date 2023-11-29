@@ -16,7 +16,7 @@ from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, Any, AnyStr, Generic, overload
+from typing import TYPE_CHECKING, Any, Generic, TypeVar, overload
 
 import zmq.asyncio
 
@@ -29,7 +29,10 @@ from .protocol import (
 )
 
 if TYPE_CHECKING:
-    from typing_extensions import Self
+    from typing_extensions import ParamSpec, Self
+
+    P = ParamSpec("P")
+    T = TypeVar("T")
 
     Process = Popen[str]
 
@@ -185,25 +188,14 @@ def _create_omc_interactive(
             "--locale=C",
             f"-z={suffix}",
         ]
-        kwargs = {}
-        if user is not None:
-            if (3, 9) <= sys.version_info:
-                kwargs["user"] = user
-            else:
-                command = ["sudo", "-u", user] + command
+        if user is not None and sys.version_info <= (3, 8):
+            process = _popen("sudo", "-u", user, *command)
+        else:
+            process = _popen(*command, user=user)
 
-        process: Process = stack.enter_context(
-            _terminating(
-                Popen(  # type: ignore
-                    command,
-                    stdout=PIPE,
-                    stderr=DEVNULL,
-                    encoding="utf-8",
-                    **kwargs,
-                )
-            )
-        )
         stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
+        stack.enter_context(_terminating(process))
+
         assert process.stdout is not None
         logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
 
@@ -222,6 +214,15 @@ def _create_omc_interactive(
         )
 
         yield process, port
+
+
+def _popen(*command: str, user: str | None = None) -> Process:
+    if user is None:
+        return Popen(command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8")
+    else:
+        return Popen(
+            command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8", user=user
+        )
 
 
 def _resolve_omc(
@@ -287,8 +288,8 @@ def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
 
 @contextmanager
 def _terminating(
-    process: Popen[AnyStr],
-) -> Generator[Popen[AnyStr], None, None]:
+    process: Process,
+) -> Generator[Process, None, None]:
     try:
         yield process
     finally:
