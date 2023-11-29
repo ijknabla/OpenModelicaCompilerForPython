@@ -16,10 +16,8 @@ repos:
         args:
         -   run
         -   black
-        -   .
         language: system
         files: \.pyi?$
-        pass_filenames: false
     -   id: poetry-isort
         name: Format python code by isort
         entry: poetry
