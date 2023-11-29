@@ -4,6 +4,8 @@ import enum
 from collections.abc import Hashable
 from dataclasses import InitVar, dataclass, field
 from typing import (
+    TYPE_CHECKING,
+    Any,
     Generic,
     Literal,
     Protocol,
@@ -11,6 +13,9 @@ from typing import (
     overload,
     runtime_checkable,
 )
+
+if TYPE_CHECKING:
+    from typing_extensions import Self
 
 AnyStr = TypeVar("AnyStr", str, bytes, covariant=True)
 
@@ -24,6 +29,12 @@ class PathLike(Protocol[AnyStr]):
 @runtime_checkable
 class SupportsClose(Protocol):
     def close(self) -> None:
+        ...
+
+    def __enter__(self) -> Self:
+        ...
+
+    def __exit__(self, *exc_info: Any) -> None:
         ...
 
 

@@ -78,5 +78,5 @@ jobs:
           python${{ matrix.python }} -m pytest --version
       - name: Test python code
         run: |
-          sudo -u user python${{ matrix.python }} .github/pretest.py
+          python${{ matrix.python }} .github/pretest.py --user=user
           sudo -u user python${{ matrix.python }} -m pytest -v

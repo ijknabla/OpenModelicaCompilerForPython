@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import asyncio
 import logging
 from collections.abc import Iterable
@@ -7,10 +8,21 @@ from contextlib import suppress
 from subprocess import CalledProcessError, run
 
 from omc4py import AsyncSession, open_session
+from omc4py.interactive import Interactive
+from omc4py.protocol import Calling
 
 
 async def main() -> None:
-    with open_session(asyncio=True) as session:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--user", type=str, default=None)
+
+    args = parser.parse_args()
+
+    user: str | None = args.user
+
+    with open_session(
+        Interactive.open(omc=None, calling=Calling.asynchronous, user=user)
+    ) as session:
         assert await ensure_package(
             session, "Modelica", ("4.0.0", "3.2.3", "3.2.2")
         )
@@ -27,12 +39,11 @@ async def ensure_package(
     ):
         return True
 
-    run(["sudo", "apt", "update"], check=True)
+    run(["apt", "update"], check=True)
     for version in versions:
         with suppress(CalledProcessError):
             run(
                 [
-                    "sudo",
                     "apt",
                     "install",
                     "-qy",
