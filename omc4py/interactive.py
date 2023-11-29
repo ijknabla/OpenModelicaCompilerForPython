@@ -5,6 +5,7 @@ import logging
 import platform
 import re
 import shutil
+import sys
 import tempfile
 import uuid
 from asyncio import Lock
@@ -171,7 +172,7 @@ class _DualInteractive:
 @contextmanager
 def _create_omc_interactive(
     omc: Path,
-    user: str | int | None = None,
+    user: str | None = None,
 ) -> Generator[tuple[Popen[str], str], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
@@ -182,15 +183,21 @@ def _create_omc_interactive(
             "--locale=C",
             f"-z={suffix}",
         ]
+        kwargs = {}
+        if user is not None:
+            if (3, 9) <= sys.version_info:
+                kwargs["user"] = user
+            else:
+                command = ["sudo", "-u", user] + command
 
         process: Popen[str] = stack.enter_context(
             _terminating(
-                Popen(
+                Popen(  # type: ignore
                     command,
                     stdout=PIPE,
                     stderr=DEVNULL,
                     encoding="utf-8",
-                    user=user,
+                    **kwargs,
                 )
             )
         )
