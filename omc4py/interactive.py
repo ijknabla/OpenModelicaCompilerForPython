@@ -11,7 +11,7 @@ import uuid
 from asyncio import Lock
 from collections.abc import Coroutine, Generator
 from contextlib import ExitStack, closing, contextmanager, suppress
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from glob import glob
 from os import PathLike
 from pathlib import Path
@@ -34,8 +34,8 @@ if TYPE_CHECKING:
     P = ParamSpec("P")
     T = TypeVar("T")
 
-    Process = Popen[str]
-    Port = NewType("Port", str)
+Process = Popen[str]
+Port = NewType("Port", str)
 
 logger = logging.getLogger(__name__)
 
@@ -43,27 +43,31 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class Interactive(Generic[T_Calling]):
     _exit_stack: ExitStack
-    _dual_interactive: _DualInteractive
     calling: T_Calling
+    process: Process
+    port: Port
+    socket: zmq.Socket
+    asyncio_socket: zmq.asyncio.Socket
+    lock: Lock = field(default_factory=Lock)
 
     @classmethod
     def open(
         cls,
         omc: str | PathLike[str] | None,
         calling: T_Calling,
+        user: str | None = None,
     ) -> Self:
-        omc = _resolve_omc("omc" if omc is None else omc)
-
         exit_stack = ExitStack()
         atexit.register(exit_stack.close)
 
         try:
             return cls(
                 exit_stack,
-                exit_stack.enter_context(_DualInteractive.open(omc)),
                 calling,
+                *exit_stack.enter_context(
+                    _create_omc_interactive(_resolve_omc(omc), user=user)
+                ),
             )
-
         except Exception:
             exit_stack.close()
             raise
@@ -78,20 +82,24 @@ class Interactive(Generic[T_Calling]):
         self._exit_stack.close()
 
     @property
-    def synchronous(
-        self: Interactive[Asynchronous],
-    ) -> Interactive[Synchronous]:
-        return Interactive(
-            _exit_stack=self._exit_stack,
-            _dual_interactive=self._dual_interactive,
+    def synchronous(self) -> Interactive[Synchronous]:
+        if TYPE_CHECKING:
+            _self: Interactive[Synchronous]
+        else:
+            _self = self
+        return replace(
+            _self,
             calling=synchronous,
         )
 
     @property
     def asynchronous(self) -> Interactive[Asynchronous]:
-        return Interactive(
-            _exit_stack=self._exit_stack,
-            _dual_interactive=self._dual_interactive,
+        if TYPE_CHECKING:
+            _self: Interactive[Asynchronous]
+        else:
+            _self = self
+        return replace(
+            _self,
             calling=asynchronous,
         )
 
@@ -110,61 +118,21 @@ class Interactive(Generic[T_Calling]):
         ...
 
     def evaluate(self, expression: str) -> str | Coroutine[None, None, str]:
-        if self.calling is asynchronous:
-            return self._dual_interactive.asynchronous_evaluate(expression)
+        if self.calling is synchronous:
+            return self.__synchronous_evaluate(expression)
         else:
-            return self._dual_interactive.synchronous_evaluate(expression)
+            return self.__asynchronous_evaluate(expression)
 
-
-@dataclass(frozen=True)
-class _DualInteractive:
-    synchronous: zmq.Socket
-    asynchronous: zmq.asyncio.Socket
-    process: Process
-    lock: Lock = field(default_factory=Lock)
-
-    @classmethod
-    @contextmanager
-    def open(cls, omc: Path) -> Generator[Self, None, None]:
-        with ExitStack() as stack:
-            enter = stack.enter_context
-
-            process, port = enter(_create_omc_interactive(omc))
-
-            yield cls(
-                *enter(cls.__open_socket(process=process, port=port)),
-                process,
-                Lock(),
-            )
-
-    @staticmethod
-    @contextmanager
-    def __open_socket(
-        process: Process, port: Port
-    ) -> Generator[tuple[zmq.Socket, zmq.asyncio.Socket], None, None]:
-        try:
-            with ExitStack() as stack:
-                enter = stack.enter_context
-                synchronous = enter(_open_socket(zmq.Context(), port))
-                asynchronous = enter(_open_socket(zmq.asyncio.Context(), port))
-
-                logger.info(
-                    f"(pid={process.pid}) Connect zmq sokcet via {port}"
-                )
-                yield synchronous, asynchronous
-        finally:
-            logger.info(f"(pid={process.pid}) Close zmq sokcet")
-
-    def synchronous_evaluate(self, expression: str) -> str:
-        socket = self.synchronous
+    def __synchronous_evaluate(self, expression: str) -> str:
+        socket = self.socket
         logger.debug(f"(pid={self.process.pid}) >>> {expression}")
         socket.send_string(expression)
         result = socket.recv_string()
         logger.debug(f"(pid={self.process.pid}) {result}")
         return result
 
-    async def asynchronous_evaluate(self, expression: str) -> str:
-        socket = self.asynchronous
+    async def __asynchronous_evaluate(self, expression: str) -> str:
+        socket = self.asyncio_socket
         async with self.lock:
             logger.debug(f"(pid={self.process.pid}) >>> {expression}")
             await socket.send_string(expression)
@@ -173,16 +141,58 @@ class _DualInteractive:
         return result
 
 
+def _resolve_omc(
+    omc: str | PathLike[str] | None,
+) -> str:
+    if isinstance(omc, PathLike):
+        omc = omc.__fspath__()
+    elif omc is None:
+        omc = "omc"
+
+    resolved = shutil.which(omc)
+    if resolved is None and platform.system() == "Windows":
+        resolved = max(
+            glob("C:\\Program Files\\OpenModelica*\\bin\\omc.exe"),
+            key=_search_openmodelica_version,
+            default=None,
+        )
+
+    if resolved is None:
+        raise FileNotFoundError(f"Can't find executable of {omc}")
+    return resolved
+
+
+def _search_openmodelica_version(s: str | None) -> tuple[int, int, int]:
+    major, minor, patch = -1, -1, -1
+
+    if s is not None:
+        matched = re.search(
+            "OpenModelica"
+            r"(?P<major>\d+)(\.(?P<minor>\d+)(\.(?P<patch>\d+))?)?",
+            s,
+        )
+        if matched is not None:
+            major = int(matched.group("major"))
+            with suppress(TypeError):
+                minor = int(matched.group("minor"))
+            with suppress(TypeError):
+                patch = int(matched.group("patch"))
+
+    return major, minor, patch
+
+
 @contextmanager
 def _create_omc_interactive(
-    omc: Path,
+    omc: str,
     user: str | None = None,
-) -> Generator[tuple[Process, Port], None, None]:
+) -> Generator[
+    tuple[Process, Port, zmq.Socket, zmq.asyncio.Socket], None, None
+]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
         command = [
-            omc.__fspath__(),
+            omc,
             "--interactive=zmq",
             "--locale=C",
             f"-z={suffix}",
@@ -211,7 +221,14 @@ def _create_omc_interactive(
             f"(pid={process.pid}) Remove zmq port file at {port_filepath}"
         )
 
-        yield process, port
+        stack.callback(
+            lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
+        )
+        synchronous, asynchronous = stack.enter_context(
+            _open_socket(zmq.Context(), port)
+        ), stack.enter_context(_open_socket(zmq.asyncio.Context(), port))
+
+        yield process, port, synchronous, asynchronous
 
 
 def _popen(*command: str, user: str | None = None) -> Process:
@@ -221,6 +238,27 @@ def _popen(*command: str, user: str | None = None) -> Process:
         return Popen(
             command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8", user=user
         )
+
+
+def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
+    temp_dir = Path(tempfile.gettempdir())
+
+    pattern_of_name = "openmodelica*.port"
+    if suffix is not None:
+        pattern_of_name += f".{suffix}"
+
+    candidates = tuple(temp_dir.glob(pattern_of_name))
+
+    if not candidates:
+        raise ValueError(
+            f"Can't find openmodelica port file " f"at {temp_dir}"
+        )
+    elif len(candidates) >= 2:
+        raise ValueError(
+            f"Ambiguous openmodelica port file {candidates}" f"at {temp_dir}"
+        )
+
+    return candidates[0]
 
 
 @overload
@@ -246,67 +284,6 @@ def _open_socket(
     with context.socket(zmq.REQ) as socket:
         socket.connect(port)
         yield socket
-
-
-def _resolve_omc(
-    omc: str | PathLike[str] | None,
-) -> Path:
-    if isinstance(omc, PathLike):
-        omc = omc.__fspath__()
-    elif omc is None:
-        omc = "omc"
-
-    resolved = shutil.which(omc)
-    if resolved is None and platform.system() == "Windows":
-        resolved = max(
-            glob("C:\\Program Files\\OpenModelica*\\bin\\omc.exe"),
-            key=_search_openmodelica_version,
-            default=None,
-        )
-
-    if resolved is None:
-        raise FileNotFoundError(f"Can't find executable of {omc}")
-    return Path(resolved)
-
-
-def _search_openmodelica_version(s: str | None) -> tuple[int, int, int]:
-    major, minor, patch = -1, -1, -1
-
-    if s is not None:
-        matched = re.search(
-            "OpenModelica"
-            r"(?P<major>\d+)(\.(?P<minor>\d+)(\.(?P<patch>\d+))?)?",
-            s,
-        )
-        if matched is not None:
-            major = int(matched.group("major"))
-            with suppress(TypeError):
-                minor = int(matched.group("minor"))
-            with suppress(TypeError):
-                patch = int(matched.group("patch"))
-
-    return major, minor, patch
-
-
-def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
-    temp_dir = Path(tempfile.gettempdir())
-
-    pattern_of_name = "openmodelica*.port"
-    if suffix is not None:
-        pattern_of_name += f".{suffix}"
-
-    candidates = tuple(temp_dir.glob(pattern_of_name))
-
-    if not candidates:
-        raise ValueError(
-            f"Can't find openmodelica port file " f"at {temp_dir}"
-        )
-    elif len(candidates) >= 2:
-        raise ValueError(
-            f"Ambiguous openmodelica port file {candidates}" f"at {temp_dir}"
-        )
-
-    return candidates[0]
 
 
 @contextmanager
