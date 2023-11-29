@@ -191,7 +191,7 @@ def _open_process_and_socket(
             "--locale=C",
             f"-z={suffix}",
         ]
-        if user is not None and sys.version_info <= (3, 8):
+        if user is not None and sys.version_info < (3, 9):
             process = _popen("sudo", "-u", user, *command)
         else:
             process = _popen(*command, user=user)
