@@ -183,7 +183,6 @@ def _create_omc_interactive(
             f"-z={suffix}",
         ]
 
-        stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
         process: Popen[str] = stack.enter_context(
             _terminating(
                 Popen(
@@ -195,6 +194,7 @@ def _create_omc_interactive(
                 )
             )
         )
+        stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
         assert process.stdout is not None
         logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
 
