@@ -171,6 +171,7 @@ class _DualInteractive:
 @contextmanager
 def _create_omc_interactive(
     omc: Path,
+    user: str | int | None = None,
 ) -> Generator[tuple[Popen[str], str], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
@@ -185,7 +186,13 @@ def _create_omc_interactive(
         stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
         process: Popen[str] = stack.enter_context(
             _terminating(
-                Popen(command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8")
+                Popen(
+                    command,
+                    stdout=PIPE,
+                    stderr=DEVNULL,
+                    encoding="utf-8",
+                    user=user,
+                )
             )
         )
         assert process.stdout is not None
