@@ -31,6 +31,8 @@ from .protocol import (
 if TYPE_CHECKING:
     from typing_extensions import Self
 
+    Process = Popen[str]
+
 logger = logging.getLogger(__name__)
 
 
@@ -114,7 +116,7 @@ class Interactive(Generic[T_Calling]):
 class _DualInteractive:
     synchronous: zmq.Socket
     asynchronous: zmq.asyncio.Socket
-    process: Popen[str]
+    process: Process
     lock: Lock = field(default_factory=Lock)
 
     @classmethod
@@ -134,7 +136,7 @@ class _DualInteractive:
     @staticmethod
     @contextmanager
     def __open_socket(
-        process: Popen[str], port: str
+        process: Process, port: str
     ) -> Generator[tuple[zmq.Socket, zmq.asyncio.Socket], None, None]:
         try:
             with ExitStack() as stack:
@@ -173,7 +175,7 @@ class _DualInteractive:
 def _create_omc_interactive(
     omc: Path,
     user: str | None = None,
-) -> Generator[tuple[Popen[str], str], None, None]:
+) -> Generator[tuple[Process, str], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
@@ -190,7 +192,7 @@ def _create_omc_interactive(
             else:
                 command = ["sudo", "-u", user] + command
 
-        process: Popen[str] = stack.enter_context(
+        process: Process = stack.enter_context(
             _terminating(
                 Popen(  # type: ignore
                     command,
