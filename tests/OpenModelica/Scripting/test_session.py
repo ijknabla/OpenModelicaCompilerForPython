@@ -19,3 +19,20 @@ async def test_load_file(
         class_names.add(name)
         assert await s.loadFile(fileName=path)
         assert set(await s.getClassNames()) == class_names
+
+
+@pytest.mark.asyncio
+async def test_load_files(
+    open_session: OpenSession, paths: list[tuple[TypeName, Path]]
+) -> None:
+    s = open_session().asynchronous
+    class_names: set[TypeName] = set()
+
+    added, fileNames = zip(*paths)
+
+    assert set(await s.getClassNames()) == class_names
+
+    class_names.update(added)
+    assert await s.loadFiles(fileNames=fileNames)
+
+    assert set(await s.getClassNames()) == class_names
