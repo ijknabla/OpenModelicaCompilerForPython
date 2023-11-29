@@ -140,15 +140,13 @@ class _DualInteractive:
     @staticmethod
     @contextmanager
     def __open_socket(
-        process: Process, port: str
+        process: Process, port: Port
     ) -> Generator[tuple[zmq.Socket, zmq.asyncio.Socket], None, None]:
         try:
             with ExitStack() as stack:
                 enter = stack.enter_context
-                synchronous = enter(zmq.Context().socket(zmq.REQ))
-                synchronous.connect(port)
-                asynchronous = enter(zmq.asyncio.Context().socket(zmq.REQ))
-                asynchronous.connect(port)
+                synchronous = enter(_open_socket(zmq.Context(), port))
+                asynchronous = enter(_open_socket(zmq.asyncio.Context(), port))
 
                 logger.info(
                     f"(pid={process.pid}) Connect zmq sokcet via {port}"
@@ -223,6 +221,31 @@ def _popen(*command: str, user: str | None = None) -> Process:
         return Popen(
             command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8", user=user
         )
+
+
+@overload
+@contextmanager
+def _open_socket(
+    context: zmq.Context, port: Port
+) -> Generator[zmq.Socket, None, None]:
+    ...
+
+
+@overload
+@contextmanager
+def _open_socket(
+    context: zmq.asyncio.Context, port: Port
+) -> Generator[zmq.asyncio.Socket, None, None]:
+    ...
+
+
+@contextmanager
+def _open_socket(
+    context: zmq.Context | zmq.asyncio.Context, port: Port
+) -> Generator[zmq.Socket | zmq.asyncio.Socket, None, None]:
+    with context.socket(zmq.REQ) as socket:
+        socket.connect(port)
+        yield socket
 
 
 def _resolve_omc(
