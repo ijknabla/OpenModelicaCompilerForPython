@@ -35,6 +35,8 @@ from arpeggio import (
 from modelicalang import ParsingExpressionLike, v3_4
 from typing_extensions import Annotated
 
+from omc4py.protocol import PathLike
+
 from .exception import OMCRuntimeError
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
@@ -47,7 +49,11 @@ if TYPE_CHECKING:
     import typing_extensions
     from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
 
-_SpecialForm = Union["typing._SpecialForm", "typing_extensions._SpecialForm"]
+_SpecialForm = Union[
+    "typing._SpecialForm",
+    "typing_extensions._SpecialForm",
+    "type[PathLike]",
+]
 
 
 _T = TypeVar("_T")
@@ -62,6 +68,7 @@ _Scalar = Union[
     float,
     int,
     bool,
+    PathLike,
     str,
     VariableName,
     TypeName,
@@ -302,6 +309,8 @@ def _get_cast_type(typ: Any) -> type[None | _Scalar | tuple[Any, ...]]:
         return _select_type(map(_get_cast_type, get_args(typ)))
     elif _isorigin(typ, Literal):
         return _select_type(map(_get_cast_type, map(type, get_args(typ))))
+    elif _is_path_like(typ):
+        return PathLike
     elif _issubclass(typ, get_args(_Scalar)):
         return typ  # type: ignore
     else:
@@ -320,6 +329,16 @@ def _is_union(typ: Any) -> bool:
     return False
 
 
+def _is_path_like(typ: Any) -> bool:
+    import os
+
+    if _isorigin(typ, PathLike) or _isorigin(typ, os.PathLike):
+        return True
+    if _issubclass(typ, PathLike) or _issubclass(typ, os.PathLike):
+        return True
+    return False
+
+
 def _select_type(typs: Iterable[type[Any]]) -> type[Any]:
     return max(typs, key=_priority)
 
@@ -330,7 +349,16 @@ def _priority(typ: type[_Scalar]) -> int:
     for i, base in reversed(
         list(
             enumerate(
-                [float, int, str, VariableName, TypeName, enumeration, record],
+                [
+                    float,
+                    int,
+                    PathLike,
+                    str,
+                    VariableName,
+                    TypeName,
+                    enumeration,
+                    record,
+                ],
                 start=1,
             )
         )

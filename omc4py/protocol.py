@@ -12,6 +12,14 @@ from typing import (
     runtime_checkable,
 )
 
+AnyStr = TypeVar("AnyStr", str, bytes, covariant=True)
+
+
+@runtime_checkable
+class PathLike(Protocol[AnyStr]):
+    def __fspath__(self) -> AnyStr:
+        ...
+
 
 @runtime_checkable
 class SupportsClose(Protocol):

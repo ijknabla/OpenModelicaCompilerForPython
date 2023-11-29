@@ -16,58 +16,67 @@ jobs:
     strategy:
       matrix:
         include:
-          - omc-version: 1.13.2
-            python-version: 3.8
-          - omc-version: 1.13.2
-            python-version: 3.11
-          - omc-version: 1.14.2
-            python-version: 3.8
-          - omc-version: 1.14.2
-            python-version: 3.11
-          - omc-version: 1.16.2
-            python-version: 3.8
-          - omc-version: 1.16.2
-            python-version: 3.11
-          - omc-version: 1.17.0
-            python-version: 3.8
-          - omc-version: 1.17.0
-            python-version: 3.11
-          - omc-version: 1.18.0
-            python-version: 3.8
-          - omc-version: 1.18.0
-            python-version: 3.11
-          - omc-version: 1.19.2
-            python-version: 3.8
-          - omc-version: 1.19.2
-            python-version: 3.11
-          - omc-version: 1.20.0
-            python-version: 3.8
-          - omc-version: 1.20.0
-            python-version: 3.11
-          - omc-version: 1.21.0
-            python-version: 3.8
-          - omc-version: 1.21.0
-            python-version: 3.11
-          - omc-version: 1.22.0
-            python-version: 3.8
-          - omc-version: 1.22.0
-            python-version: 3.11
+          # NOTE: update to latest
+          - openmodelica: "1.22.0"
+            python: "3.12"
+          - openmodelica: "1.22.0"
+            python: "3.11"
+          - openmodelica: "1.22.0"
+            python: "3.10"
+          - openmodelica: "1.22.0"
+            python: "3.9"
+          - openmodelica: "1.22.0"
+            python: "3.8"
+
+          - openmodelica: "1.21.0"
+            python: "3.12"
+          - openmodelica: "1.21.0"
+            python: "3.8"
+          - openmodelica: "1.20.0"
+            python: "3.12"
+          - openmodelica: "1.20.0"
+            python: "3.8"
+          - openmodelica: "1.19.2"
+            python: "3.12"
+          - openmodelica: "1.19.2"
+            python: "3.8"
+          - openmodelica: "1.18.0"
+            python: "3.12"
+          - openmodelica: "1.18.0"
+            python: "3.8"
+          - openmodelica: "1.17.0"
+            python: "3.12"
+          - openmodelica: "1.17.0"
+            python: "3.8"
+          - openmodelica: "1.16.2"
+            python: "3.12"
+          - openmodelica: "1.16.2"
+            python: "3.8"
+          - openmodelica: "1.14.2"
+            python: "3.12"
+          - openmodelica: "1.14.2"
+            python: "3.8"
+          - openmodelica: "1.13.2"
+            python: "3.12"
+          - openmodelica: "1.13.2"
+            python: "3.8"
 
     container:
-      image: ijknabla/openmodelica:v${{ matrix.omc-version }}-python${{ matrix.python-version }}
+      image: ijknabla/openmodelica:v${{ matrix.openmodelica }}-python${{ matrix.python }}
 
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          python${{ matrix.python-version }} -m pip install -U pip
-          python${{ matrix.python-version }} -m pip install ./ pytest pytest-asyncio
+          python${{ matrix.python }} -m pip install -U pip
+          python${{ matrix.python }} -m pip install \
+            ./ importlib-resources pytest pytest-asyncio
       - name: Check version
         run: |
           omc --version
-          python${{ matrix.python-version }} --version
-          python${{ matrix.python-version }} -m pytest --version
+          python${{ matrix.python }} --version
+          python${{ matrix.python }} -m pytest --version
       - name: Test python code
         run: |
-          sudo -u user python${{ matrix.python-version }} .github/pretest.py
-          sudo -u user python${{ matrix.python-version }} -m pytest -v
+          sudo -u user python${{ matrix.python }} .github/pretest.py
+          sudo -u user python${{ matrix.python }} -m pytest -v
