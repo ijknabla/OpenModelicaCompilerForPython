@@ -20,13 +20,7 @@ from typing import TYPE_CHECKING, Any, Generic, NewType, TypeVar, overload
 
 import zmq.asyncio
 
-from .protocol import (
-    Asynchronous,
-    Synchronous,
-    T_Calling,
-    asynchronous,
-    synchronous,
-)
+from .protocol import Asynchronous, Calling, Synchronous, T_Calling
 
 if TYPE_CHECKING:
     from typing_extensions import ParamSpec, Self
@@ -42,8 +36,8 @@ logger = logging.getLogger(__name__)
 
 @dataclass(frozen=True)
 class Interactive(Generic[T_Calling]):
-    _exit_stack: ExitStack
     calling: T_Calling
+    exit_stack: ExitStack
     process: Process
     port: Port
     socket: zmq.Socket
@@ -62,8 +56,8 @@ class Interactive(Generic[T_Calling]):
 
         try:
             return cls(
-                exit_stack,
                 calling,
+                exit_stack,
                 *exit_stack.enter_context(
                     _create_omc_interactive(_resolve_omc(omc), user=user)
                 ),
@@ -79,7 +73,7 @@ class Interactive(Generic[T_Calling]):
         return closing(self).__exit__(*exc_info)
 
     def close(self) -> None:
-        self._exit_stack.close()
+        self.exit_stack.close()
 
     @property
     def synchronous(self) -> Interactive[Synchronous]:
@@ -89,7 +83,7 @@ class Interactive(Generic[T_Calling]):
             _self = self
         return replace(
             _self,
-            calling=synchronous,
+            calling=Calling.synchronous,
         )
 
     @property
@@ -100,7 +94,7 @@ class Interactive(Generic[T_Calling]):
             _self = self
         return replace(
             _self,
-            calling=asynchronous,
+            calling=Calling.asynchronous,
         )
 
     @overload
@@ -118,7 +112,7 @@ class Interactive(Generic[T_Calling]):
         ...
 
     def evaluate(self, expression: str) -> str | Coroutine[None, None, str]:
-        if self.calling is synchronous:
+        if self.calling is Calling.synchronous:
             return self.__synchronous_evaluate(expression)
         else:
             return self.__asynchronous_evaluate(expression)
@@ -224,11 +218,12 @@ def _create_omc_interactive(
         stack.callback(
             lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
         )
-        synchronous, asynchronous = stack.enter_context(
-            _open_socket(zmq.Context(), port)
-        ), stack.enter_context(_open_socket(zmq.asyncio.Context(), port))
+        socket, asyncio_socket = (
+            stack.enter_context(_open_socket(zmq.Context(), port)),
+            stack.enter_context(_open_socket(zmq.asyncio.Context(), port)),
+        )
 
-        yield process, port, synchronous, asynchronous
+        yield process, port, socket, asyncio_socket
 
 
 def _popen(*command: str, user: str | None = None) -> Process:
