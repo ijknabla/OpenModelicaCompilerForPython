@@ -24,9 +24,8 @@ repos:
         args:
         -   run
         -   isort
-        -   .
         language: system
-        pass_filenames: false
+        files: \.pyi?$
     -   id: poetry-pflake8
         name: Check python code by pflake8
         entry: poetry
