@@ -16,27 +16,24 @@ repos:
         args:
         -   run
         -   black
-        -   .
         language: system
-        pass_filenames: false
+        files: \.pyi?$
     -   id: poetry-isort
         name: Format python code by isort
         entry: poetry
         args:
         -   run
         -   isort
-        -   .
         language: system
-        pass_filenames: false
+        files: \.pyi?$
     -   id: poetry-pflake8
         name: Check python code by pflake8
         entry: poetry
         args:
         -   run
         -   pflake8
-        -   --exclude=.venv,omc4py/v_*_*/
         language: system
-        pass_filenames: false
+        files: \.pyi?$
     -   id: poetry-mypy
         name: Check python code by mypy
         entry: poetry
@@ -44,6 +41,5 @@ repos:
         -   run
         -   mypy
         -   --strict
-        -   .
         language: system
-        pass_filenames: false
+        files: \.pyi?$
