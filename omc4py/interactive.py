@@ -16,7 +16,7 @@ from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, Any, Generic, TypeVar, overload
+from typing import TYPE_CHECKING, Any, Generic, NewType, TypeVar, overload
 
 import zmq.asyncio
 
@@ -35,6 +35,7 @@ if TYPE_CHECKING:
     T = TypeVar("T")
 
     Process = Popen[str]
+    Port = NewType("Port", str)
 
 logger = logging.getLogger(__name__)
 
@@ -178,7 +179,7 @@ class _DualInteractive:
 def _create_omc_interactive(
     omc: Path,
     user: str | None = None,
-) -> Generator[tuple[Process, str], None, None]:
+) -> Generator[tuple[Process, Port], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
@@ -193,12 +194,11 @@ def _create_omc_interactive(
         else:
             process = _popen(*command, user=user)
 
+        logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
         stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
         stack.enter_context(_terminating(process))
 
         assert process.stdout is not None
-        logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
-
         first_line = process.stdout.readline()
         logger.debug(f"(pid={process.pid}) >>> {first_line}")
 
@@ -208,7 +208,7 @@ def _create_omc_interactive(
             logger.info(
                 f"(pid={process.pid}) Find zmq port file at {port_filepath}"
             )
-            port = port_filepath.read_text()
+            port = Port(port_filepath.read_text())
         logger.info(
             f"(pid={process.pid}) Remove zmq port file at {port_filepath}"
         )
