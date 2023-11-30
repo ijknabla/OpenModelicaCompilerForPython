@@ -10,7 +10,7 @@ import uuid
 from asyncio import Lock
 from collections.abc import Coroutine, Generator
 from contextlib import ExitStack, contextmanager, suppress
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, replace
 from glob import glob
 from os import PathLike
 from pathlib import Path
@@ -61,22 +61,20 @@ class Interactive(Generic[T_Calling]):
         self._exit_stack.close()
 
     @property
-    def synchronous(
-        self: Interactive[Asynchronous],
-    ) -> Interactive[Synchronous]:
-        return Interactive(
-            _exit_stack=self._exit_stack,
-            _dual_interactive=self._dual_interactive,
-            calling=Calling.synchronous,
-        )
+    def synchronous(self) -> Interactive[Synchronous]:
+        if TYPE_CHECKING:
+            synchronous: Interactive[Synchronous]
+        else:
+            synchronous = self
+        return replace(synchronous, calling=Calling.synchronous)
 
     @property
     def asynchronous(self) -> Interactive[Asynchronous]:
-        return Interactive(
-            _exit_stack=self._exit_stack,
-            _dual_interactive=self._dual_interactive,
-            calling=Calling.asynchronous,
-        )
+        if TYPE_CHECKING:
+            asynchronous: Interactive[Asynchronous]
+        else:
+            asynchronous = self
+        return replace(asynchronous, calling=Calling.asynchronous)
 
     @overload
     def evaluate(
