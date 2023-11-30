@@ -47,9 +47,17 @@ class Interactive(Generic[T_Calling]):
         atexit.register(exit_stack.close)
 
         try:
+            process, _, socket, asyncio_socket = exit_stack.enter_context(
+                _create_omc_interactive(omc)
+            )
+
             return cls(
                 exit_stack,
-                exit_stack.enter_context(_DualInteractive.open(omc)),
+                _DualInteractive(
+                    synchronous=socket,
+                    asynchronous=asyncio_socket,
+                    process=process,
+                ),
                 calling,
             )
 
