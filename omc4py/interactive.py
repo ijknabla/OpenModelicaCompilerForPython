@@ -112,37 +112,6 @@ class _DualInteractive:
     process: Popen[str]
     lock: Lock = field(default_factory=Lock)
 
-    @classmethod
-    @contextmanager
-    def open(cls, omc: Path) -> Generator[Self, None, None]:
-        with ExitStack() as stack:
-            enter = stack.enter_context
-
-            process, port, *_ = enter(_create_omc_interactive(omc))
-
-            yield cls(
-                *enter(cls.__open_socket(process=process, port=port)),
-                process,
-                Lock(),
-            )
-
-    @staticmethod
-    @contextmanager
-    def __open_socket(
-        process: Popen[str], port: str
-    ) -> Generator[tuple[zmq.Socket, zmq.asyncio.Socket], None, None]:
-        try:
-            with ExitStack() as stack:
-                enter = stack.enter_context
-                synchronous = enter(zmq.Context().socket(zmq.REQ))
-                synchronous.connect(port)
-                asynchronous = enter(zmq.asyncio.Context().socket(zmq.REQ))
-                asynchronous.connect(port)
-
-                yield synchronous, asynchronous
-        finally:
-            pass
-
     def synchronous_evaluate(self, expression: str) -> str:
         socket = self.synchronous
         logger.debug(f"(pid={self.process.pid}) >>> {expression}")
