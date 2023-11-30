@@ -15,7 +15,7 @@ from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, AnyStr, Generic, overload
+from typing import TYPE_CHECKING, AnyStr, Generic, Literal, NewType, overload
 
 import zmq.asyncio
 
@@ -29,6 +29,8 @@ from .protocol import (
 
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+Port = NewType("Port", str)
 
 logger = logging.getLogger(__name__)
 
@@ -259,6 +261,36 @@ def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
         )
 
     return candidates[0]
+
+
+@overload
+@contextmanager
+def _open_zmq_socket(
+    port: Port, asyncio: Literal[False]
+) -> Generator[zmq.Socket, None, None]:
+    ...
+
+
+@overload
+@contextmanager
+def _open_zmq_socket(
+    port: Port, asyncio: Literal[True]
+) -> Generator[zmq.asyncio.Socket, None, None]:
+    ...
+
+
+@contextmanager
+def _open_zmq_socket(
+    port: Port, asyncio: bool
+) -> Generator[zmq.Socket | zmq.asyncio.Socket, None, None]:
+    context: zmq.Context | zmq.asyncio.Context
+    if asyncio:
+        context = zmq.asyncio.Context()
+    else:
+        context = zmq.Context()
+    with context.socket(zmq.REQ) as socket:
+        socket.connect(port)
+        yield socket
 
 
 @contextmanager
