@@ -9,13 +9,13 @@ import tempfile
 import uuid
 from asyncio import Lock
 from collections.abc import Coroutine, Generator
-from contextlib import ExitStack, contextmanager, suppress
+from contextlib import ExitStack, closing, contextmanager, suppress
 from dataclasses import dataclass, replace
 from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, AnyStr, Generic, NewType, overload
+from typing import TYPE_CHECKING, Any, AnyStr, Generic, NewType, overload
 from weakref import WeakKeyDictionary
 
 import zmq.asyncio
@@ -57,6 +57,12 @@ class Interactive(Generic[T_Calling]):
         except Exception:
             exit_stack.close()
             raise
+
+    def __enter__(self) -> Self:
+        return closing(self).__enter__()
+
+    def __exit__(self, *exc_info: Any) -> None:
+        return closing(self).__exit__(*exc_info)
 
     def close(self) -> None:
         self._exit_stack.close()
