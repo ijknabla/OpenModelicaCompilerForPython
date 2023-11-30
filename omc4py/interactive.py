@@ -118,7 +118,7 @@ class _DualInteractive:
         with ExitStack() as stack:
             enter = stack.enter_context
 
-            process, port = enter(_create_omc_interactive(omc))
+            process, port, *_ = enter(_create_omc_interactive(omc))
 
             yield cls(
                 *enter(cls.__open_socket(process=process, port=port)),
@@ -139,12 +139,9 @@ class _DualInteractive:
                 asynchronous = enter(zmq.asyncio.Context().socket(zmq.REQ))
                 asynchronous.connect(port)
 
-                logger.info(
-                    f"(pid={process.pid}) Connect zmq sokcet via {port}"
-                )
                 yield synchronous, asynchronous
         finally:
-            logger.info(f"(pid={process.pid}) Close zmq sokcet")
+            pass
 
     def synchronous_evaluate(self, expression: str) -> str:
         socket = self.synchronous
@@ -167,7 +164,9 @@ class _DualInteractive:
 @contextmanager
 def _create_omc_interactive(
     omc: Path,
-) -> Generator[tuple[Popen[str], str], None, None]:
+) -> Generator[
+    tuple[Popen[str], Port, zmq.Socket, zmq.asyncio.Socket], None, None
+]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
@@ -194,12 +193,21 @@ def _create_omc_interactive(
             logger.info(
                 f"(pid={process.pid}) Find zmq port file at {port_filepath}"
             )
-            port = port_filepath.read_text()
+            port = Port(port_filepath.read_text())
         logger.info(
             f"(pid={process.pid}) Remove zmq port file at {port_filepath}"
         )
 
-        yield process, port
+        socket, asyncio_socket = (
+            stack.enter_context(_open_zmq_socket(port, False)),
+            stack.enter_context(_open_zmq_socket(port, True)),
+        )
+        logger.info(f"(pid={process.pid}) Connect zmq sokcet via {port}")
+        stack.callback(
+            lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
+        )
+
+        yield process, port, socket, asyncio_socket
 
 
 def _resolve_omc(
