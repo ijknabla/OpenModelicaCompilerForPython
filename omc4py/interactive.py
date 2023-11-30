@@ -15,7 +15,7 @@ from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, AnyStr, Generic, Literal, NewType, overload
+from typing import TYPE_CHECKING, AnyStr, Generic, NewType, overload
 
 import zmq.asyncio
 
@@ -47,15 +47,15 @@ class Interactive(Generic[T_Calling]):
         atexit.register(exit_stack.close)
 
         try:
-            process, _, socket, asyncio_socket = exit_stack.enter_context(
+            process, _, sockets = exit_stack.enter_context(
                 _create_omc_interactive(omc)
             )
 
             return cls(
                 exit_stack,
                 _DualInteractive(
-                    synchronous=socket,
-                    asynchronous=asyncio_socket,
+                    synchronous=sockets.synchronous,
+                    asynchronous=sockets.asynchronous,
                     process=process,
                 ),
                 calling,
@@ -133,9 +133,7 @@ class _DualInteractive:
 @contextmanager
 def _create_omc_interactive(
     omc: Path,
-) -> Generator[
-    tuple[Popen[str], Port, zmq.Socket, zmq.asyncio.Socket], None, None
-]:
+) -> Generator[tuple[Popen[str], Port, _Sockets], None, None]:
     with ExitStack() as stack:
         suffix = str(uuid.uuid4())
 
@@ -167,16 +165,13 @@ def _create_omc_interactive(
             f"(pid={process.pid}) Remove zmq port file at {port_filepath}"
         )
 
-        socket, asyncio_socket = (
-            stack.enter_context(_open_zmq_socket(port, False)),
-            stack.enter_context(_open_zmq_socket(port, True)),
-        )
+        sockets = stack.enter_context(_Sockets.open(port))
         logger.info(f"(pid={process.pid}) Connect zmq sokcet via {port}")
         stack.callback(
             lambda: logger.info(f"(pid={process.pid}) Close zmq sokcet")
         )
 
-        yield process, port, socket, asyncio_socket
+        yield process, port, sockets
 
 
 def _resolve_omc(
@@ -240,34 +235,20 @@ def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
     return candidates[0]
 
 
-@overload
-@contextmanager
-def _open_zmq_socket(
-    port: Port, asyncio: Literal[False]
-) -> Generator[zmq.Socket, None, None]:
-    ...
+@dataclass(frozen=True)
+class _Sockets:
+    synchronous: zmq.Socket
+    asynchronous: zmq.asyncio.Socket
 
-
-@overload
-@contextmanager
-def _open_zmq_socket(
-    port: Port, asyncio: Literal[True]
-) -> Generator[zmq.asyncio.Socket, None, None]:
-    ...
-
-
-@contextmanager
-def _open_zmq_socket(
-    port: Port, asyncio: bool
-) -> Generator[zmq.Socket | zmq.asyncio.Socket, None, None]:
-    context: zmq.Context | zmq.asyncio.Context
-    if asyncio:
-        context = zmq.asyncio.Context()
-    else:
-        context = zmq.Context()
-    with context.socket(zmq.REQ) as socket:
-        socket.connect(port)
-        yield socket
+    @classmethod
+    @contextmanager
+    def open(cls, port: Port) -> Generator[Self, None, None]:
+        synchronous = zmq.Context().socket(zmq.REQ)
+        asynchronous = zmq.asyncio.Context().socket(zmq.REQ)
+        with synchronous, asynchronous:
+            synchronous.connect(port)
+            asynchronous.connect(port)
+            yield cls(synchronous=synchronous, asynchronous=asynchronous)
 
 
 @contextmanager
