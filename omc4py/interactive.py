@@ -176,15 +176,13 @@ def _create_omc_interactive(
             f"-z={suffix}",
         ]
 
-        stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
-        process: Popen[str] = stack.enter_context(
-            _terminating(
-                Popen(command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8")
-            )
-        )
-        assert process.stdout is not None
+        process = Popen(command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8")
         logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
 
+        stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
+        stack.enter_context(_terminating(process))
+
+        assert process.stdout is not None
         first_line = process.stdout.readline()
         logger.debug(f"(pid={process.pid}) >>> {first_line}")
 
