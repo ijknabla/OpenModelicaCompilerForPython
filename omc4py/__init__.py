@@ -502,7 +502,7 @@ def open_session(
 
     try:
         session_type, async_session_type = _select_session_type(
-            _get_version(interactive.synchronous)  # type: ignore
+            _get_version(interactive.synchronous)
         )
     except Exception:
         if interactive is not omc:
