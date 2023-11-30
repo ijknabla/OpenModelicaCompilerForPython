@@ -19,13 +19,7 @@ from typing import TYPE_CHECKING, AnyStr, Generic, Literal, NewType, overload
 
 import zmq.asyncio
 
-from .protocol import (
-    Asynchronous,
-    Synchronous,
-    T_Calling,
-    asynchronous,
-    synchronous,
-)
+from .protocol import Asynchronous, Calling, Synchronous, T_Calling
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -73,7 +67,7 @@ class Interactive(Generic[T_Calling]):
         return Interactive(
             _exit_stack=self._exit_stack,
             _dual_interactive=self._dual_interactive,
-            calling=synchronous,
+            calling=Calling.synchronous,
         )
 
     @property
@@ -81,7 +75,7 @@ class Interactive(Generic[T_Calling]):
         return Interactive(
             _exit_stack=self._exit_stack,
             _dual_interactive=self._dual_interactive,
-            calling=asynchronous,
+            calling=Calling.asynchronous,
         )
 
     @overload
@@ -99,7 +93,7 @@ class Interactive(Generic[T_Calling]):
         ...
 
     def evaluate(self, expression: str) -> str | Coroutine[None, None, str]:
-        if self.calling is asynchronous:
+        if self.calling is Calling.asynchronous:
             return self._dual_interactive.asynchronous_evaluate(expression)
         else:
             return self._dual_interactive.synchronous_evaluate(expression)
