@@ -1,8 +1,10 @@
 from __future__ import annotations
 
 import types
+from collections.abc import Generator
 from contextlib import suppress
 from functools import lru_cache
+from itertools import chain
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -33,6 +35,30 @@ PrimitiveType = Union[
     Type[Component],
 ]
 SupportedType = Union[PrimitiveType, None]
+
+
+def _unpack(obj: Any) -> Generator[Any, None, None]:
+    """
+    Unpack Literal and Union
+
+    match:
+        case Literal[*args]:
+            for arg in args:
+                yield from _unpack(typ(arg))
+        case Union[*args]:
+            for arg in args:
+                yield from _unpack(arg)
+        case T:
+            yield T
+    """
+    if _is_literal(obj):
+        yield from chain.from_iterable(
+            _unpack(type(arg)) for arg in get_args(obj)
+        )
+    elif _is_union(obj):
+        yield from chain.from_iterable(_unpack(arg) for arg in get_args(obj))
+    else:
+        yield obj
 
 
 def _is_none(obj: Any) -> TypeGuard[None]:
