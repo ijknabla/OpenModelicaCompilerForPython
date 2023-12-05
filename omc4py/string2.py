@@ -12,6 +12,7 @@ from typing import (
     Union,
     get_args,
     get_origin,
+    get_type_hints,
 )
 
 if TYPE_CHECKING:
@@ -60,6 +61,14 @@ def _is_primitive(obj: Any) -> TypeGuard[type[_Primitive]]:
 @lru_cache
 def _primitive_types() -> tuple[type[_Primitive], ...]:
     return tuple(get_args(_Primitive))
+
+
+def _is_named_tuple(obj: Any) -> TypeGuard[type[tuple[Any, ...]]]:
+    return (
+        _issubclass(obj, (tuple,))
+        and bool(get_type_hints(obj))
+        and not _issubclass(obj, (Component,))
+    )
 
 
 def _issubclass(
