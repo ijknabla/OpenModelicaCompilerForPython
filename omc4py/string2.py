@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import types
-from collections.abc import Generator, Sequence
+from collections.abc import Coroutine, Generator, Sequence
 from contextlib import suppress
 from functools import lru_cache
 from itertools import chain
@@ -93,7 +93,7 @@ def _get_ndims(obj: Any, ndim: int) -> Generator[int, None, None]:
 
 def _unpack(obj: Any) -> Generator[Any, None, None]:
     """
-    Unpack Literal and Union
+    Unpack Literal, Union and Coroutine
 
     match:
         case Literal[*args]:
@@ -102,6 +102,8 @@ def _unpack(obj: Any) -> Generator[Any, None, None]:
         case Union[*args]:
             for arg in args:
                 yield from _unpack(arg)
+        case Coroutine[Any, Any, T]:
+            yield from _unpack(T)
         case T:
             yield T
     """
@@ -111,6 +113,8 @@ def _unpack(obj: Any) -> Generator[Any, None, None]:
         )
     elif _is_union(obj):
         yield from chain.from_iterable(_unpack(arg) for arg in get_args(obj))
+    elif _is_coroutine(obj):
+        yield from _unpack(get_args(obj)[2])
     else:
         yield obj
 
@@ -151,6 +155,10 @@ def _is_sequence(obj: Any) -> TypeGuard[Type[Sequence[Any]]]:
         and not _issubclass(obj, (Component,))
         and not _is_named_tuple(obj)
     )
+
+
+def _is_coroutine(obj: Any) -> TypeGuard[Type[Coroutine[Any, Any, Any]]]:
+    return _issubclass(get_origin(obj), (Coroutine,))
 
 
 def _is_named_tuple(obj: Any) -> TypeGuard[NamedTupleType]:
