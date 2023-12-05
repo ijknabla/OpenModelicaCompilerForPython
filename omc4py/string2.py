@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import types
-from collections.abc import Sequence
+from collections.abc import Coroutine, Sequence
 from contextlib import suppress
 from functools import lru_cache
 from typing import (
@@ -82,6 +82,10 @@ def _is_sequence(obj: Any) -> TypeGuard[type[Sequence[Any]]]:
         and not _is_component(obj)
         and not _is_named_tuple(obj)
     )
+
+
+def _is_coroutine(obj: Any) -> TypeGuard[type[Coroutine[Any, Any, Any]]]:
+    return _issubclass(get_origin(obj), (Coroutine,))
 
 
 def _issubclass(
