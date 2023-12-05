@@ -37,6 +37,28 @@ PrimitiveType = Union[
 SupportedType = Union[PrimitiveType, None]
 
 
+def get_type(obj: Any) -> SupportedType:
+    types = set(_get_types(obj))
+    if any(_issubclass(typ, (TypeName, VariableName)) for typ in types):
+        types -= {str}
+    if types - {None}:
+        types -= {None}
+
+    if len(types) == 1:
+        (typ,) = types
+        return typ
+
+    raise TypeError(f"Types are ambigious or undefinable. got {types}")
+
+
+def _get_types(obj: Any) -> Generator[PrimitiveType | None, None, None]:
+    for unpacked in _unpack(obj):
+        if _is_none(unpacked):
+            yield None
+        elif _is_primitive(unpacked):
+            yield unpacked
+
+
 def _unpack(obj: Any) -> Generator[Any, None, None]:
     """
     Unpack Literal and Union
