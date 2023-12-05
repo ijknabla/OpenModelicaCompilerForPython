@@ -1,7 +1,9 @@
 from __future__ import annotations
 
+import collections.abc
 import os
 import types
+import typing
 from collections.abc import Generator
 from contextlib import suppress
 from typing import Any, Literal, NamedTuple, Union
@@ -17,6 +19,7 @@ from omc4py.string2 import (
     _is_none,
     _is_path_like,
     _is_primitive,
+    _is_sequence,
     _is_union,
     get_ndim,
     get_type,
@@ -153,6 +156,58 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
             is_path_like=True,
         )
 
+    # Sequence
+    yield TestCase(
+        annotation=typing.List[int],
+        type=int,
+        ndim=1,
+        is_sequence=True,
+    )
+    yield TestCase(
+        annotation=typing.List[typing.List[int]],
+        type=int,
+        ndim=2,
+        is_sequence=True,
+    )
+    yield TestCase(
+        annotation=typing.Sequence[int],
+        type=int,
+        ndim=1,
+        is_sequence=True,
+    )
+    yield TestCase(
+        annotation=typing.Sequence[typing.Sequence[int]],
+        type=int,
+        ndim=2,
+        is_sequence=True,
+    )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=list[int],
+            type=int,
+            ndim=1,
+            is_sequence=True,
+        )
+        yield TestCase(
+            annotation=list[list[int]],
+            type=int,
+            ndim=2,
+            is_sequence=True,
+        )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=collections.abc.Sequence[int],
+            type=int,
+            ndim=1,
+            is_sequence=True,
+        )
+        yield TestCase(
+            annotation=collections.abc.Sequence[collections.abc.Sequence[int]],
+            type=int,
+            ndim=2,
+            is_sequence=True,
+        )
+
     # NamedTuple
     class Output(NamedTuple):
         real: float
@@ -175,6 +230,7 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_union(x.annotation) == x.is_union
     assert _is_primitive(x.annotation) == x.is_primitive
     assert _is_path_like(x.annotation) == x.is_path_like
+    assert _is_sequence(x.annotation) == x.is_sequence
     assert _is_named_tuple(x.annotation) == x.is_named_tuple
 
 
