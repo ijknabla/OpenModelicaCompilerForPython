@@ -62,14 +62,14 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
 
     # Literal
     yield TestCase(
-        annotation=Literal[0],
-        type=int,
+        annotation=Literal["a"],
+        type=str,
         is_literal=True,
     )
 
     yield TestCase(
-        annotation=Literal[0, 1, 2],
-        type=int,
+        annotation=Literal["a", "b"],
+        type=str,
         is_literal=True,
     )
 
