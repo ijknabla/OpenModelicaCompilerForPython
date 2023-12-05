@@ -7,7 +7,14 @@ from typing import Any, Literal, NamedTuple, Union
 
 import pytest
 
-from omc4py.string2 import SupportedType, _is_literal, _is_none, _is_union
+from omc4py import TypeName, VariableName
+from omc4py.string2 import (
+    SupportedType,
+    _is_literal,
+    _is_none,
+    _is_primitive,
+    _is_union,
+)
 
 
 class TestCase(NamedTuple):
@@ -69,6 +76,54 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
             is_union=True,
         )
 
+    # float, int
+    yield TestCase(
+        annotation=float,
+        type=float,
+        is_primitive=True,
+    )
+    yield TestCase(
+        annotation=int,
+        type=int,
+        is_primitive=True,
+    )
+
+    # TypeName
+    yield TestCase(
+        annotation=TypeName,
+        type=TypeName,
+        is_primitive=True,
+    )
+    yield TestCase(
+        annotation=Union[TypeName, str],
+        type=TypeName,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=TypeName | str,
+            type=TypeName,
+            is_union=True,
+        )
+
+    # VariableName
+    yield TestCase(
+        annotation=VariableName,
+        type=VariableName,
+        is_primitive=True,
+    )
+    yield TestCase(
+        annotation=Union[VariableName, str],
+        type=VariableName,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=VariableName | str,
+            type=VariableName,
+            is_union=True,
+        )
+
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
 def test_annotation_checker(test_case: TestCase) -> None:
@@ -76,3 +131,4 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_none(x.annotation) == x.is_none
     assert _is_literal(x.annotation) == x.is_literal
     assert _is_union(x.annotation) == x.is_union
+    assert _is_primitive(x.annotation) == x.is_primitive
