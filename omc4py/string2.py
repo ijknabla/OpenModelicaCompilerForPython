@@ -13,12 +13,25 @@ from typing import (
     get_origin,
 )
 
+from .modelica import enumeration, record
+from .openmodelica import Component, TypeName, VariableName
+
 if TYPE_CHECKING:
     from typing import _SpecialForm
 
     from typing_extensions import TypeGuard
 
-PrimitiveType = Type[int]
+PrimitiveType = Union[
+    Type[int],
+    Type[float],
+    Type[bool],
+    Type[str],
+    Type[VariableName],
+    Type[TypeName],
+    Type[record],
+    Type[enumeration],
+    Type[Component],
+]
 SupportedType = Union[PrimitiveType, None]
 
 
