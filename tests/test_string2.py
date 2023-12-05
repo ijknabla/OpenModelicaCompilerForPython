@@ -3,11 +3,11 @@ from __future__ import annotations
 import types
 from collections.abc import Generator
 from contextlib import suppress
-from typing import Any, Literal, NamedTuple
+from typing import Any, Literal, NamedTuple, Union
 
 import pytest
 
-from omc4py.string2 import _is_literal, _is_none, _StringableType
+from omc4py.string2 import _is_literal, _is_none, _is_union, _StringableType
 
 
 class TestCase(NamedTuple):
@@ -16,6 +16,7 @@ class TestCase(NamedTuple):
     ndim: int = 0
     is_none: bool = False
     is_literal: bool = False
+    is_union: bool = False
 
 
 def _iter_test_cases() -> Generator[TestCase, None, None]:
@@ -50,9 +51,23 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
         is_literal=True,
     )
 
+    # Union
+    yield TestCase(
+        annotation=Union[int, None],
+        type=int,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=int | None,
+            type=int,
+            is_union=True,
+        )
+
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
 def test_annotation_checker(test_case: TestCase) -> None:
     x = test_case
     assert _is_none(x.annotation) == x.is_none
     assert _is_literal(x.annotation) == x.is_literal
+    assert _is_union(x.annotation) == x.is_union
