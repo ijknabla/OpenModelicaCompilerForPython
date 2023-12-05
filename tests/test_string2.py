@@ -13,6 +13,7 @@ from omc4py import TypeName, VariableName
 from omc4py.string2 import (
     SupportedType,
     _is_literal,
+    _is_named_tuple,
     _is_none,
     _is_path_like,
     _is_primitive,
@@ -152,6 +153,19 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
             is_path_like=True,
         )
 
+    # NamedTuple
+    class Output(NamedTuple):
+        real: float
+        integer: int
+        boolean: bool
+        string: str
+
+    yield TestCase(
+        Output,
+        type=Output,
+        is_named_tuple=True,
+    )
+
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
 def test_annotation_checker(test_case: TestCase) -> None:
@@ -161,6 +175,7 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_union(x.annotation) == x.is_union
     assert _is_primitive(x.annotation) == x.is_primitive
     assert _is_path_like(x.annotation) == x.is_path_like
+    assert _is_named_tuple(x.annotation) == x.is_named_tuple
 
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
