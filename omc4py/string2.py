@@ -59,6 +59,22 @@ def _get_types(obj: Any) -> Generator[PrimitiveType | None, None, None]:
             yield unpacked
 
 
+def get_ndim(obj: Any) -> int:
+    ndims = set(_get_ndims(obj, ndim=0))
+
+    if len(ndims) == 1:
+        (ndim,) = ndims
+        return ndim
+
+    raise TypeError(f"Dimensions are ambigious or undefinable. got {ndims}")
+
+
+def _get_ndims(obj: Any, ndim: int) -> Generator[int, None, None]:
+    for unpacked in _unpack(obj):
+        if _is_none(unpacked) or _is_primitive(unpacked):
+            yield ndim
+
+
 def _unpack(obj: Any) -> Generator[Any, None, None]:
     """
     Unpack Literal and Union
