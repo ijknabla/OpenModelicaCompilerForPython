@@ -14,6 +14,7 @@ import omc4py.protocol
 from omc4py import TypeName, VariableName
 from omc4py.string2 import (
     SupportedType,
+    _is_coroutine,
     _is_literal,
     _is_named_tuple,
     _is_none,
@@ -208,6 +209,30 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
             is_sequence=True,
         )
 
+    # Coroutine
+    yield TestCase(
+        annotation=typing.Coroutine[None, None, int],
+        type=int,
+        is_coroutine=True,
+    )
+    yield TestCase(
+        annotation=Union[int, typing.Coroutine[None, None, int]],
+        type=int,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=collections.abc.Coroutine[None, None, int],
+            type=int,
+            is_coroutine=True,
+        )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=int | collections.abc.Coroutine[None, None, int],
+            type=int,
+            is_union=True,
+        )
+
     # NamedTuple
     class Output(NamedTuple):
         real: float
@@ -231,6 +256,7 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_primitive(x.annotation) == x.is_primitive
     assert _is_path_like(x.annotation) == x.is_path_like
     assert _is_sequence(x.annotation) == x.is_sequence
+    assert _is_coroutine(x.annotation) == x.is_coroutine
     assert _is_named_tuple(x.annotation) == x.is_named_tuple
 
 
