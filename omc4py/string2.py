@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 import types
-from collections.abc import Generator
+from collections.abc import Generator, Sequence
 from contextlib import suppress
 from functools import lru_cache
 from itertools import chain
@@ -66,6 +66,8 @@ def _get_types(obj: Any) -> Generator[PrimitiveType | None, None, None]:
             yield unpacked
         elif _is_path_like(unpacked):
             yield str
+        elif _is_sequence(unpacked):
+            yield from _get_types(get_args(unpacked)[0])
 
 
 def get_ndim(obj: Any) -> int:
@@ -83,7 +85,10 @@ def get_ndim(obj: Any) -> int:
 
 def _get_ndims(obj: Any, ndim: int) -> Generator[int, None, None]:
     for unpacked in _unpack(obj):
-        yield ndim
+        if _is_sequence(unpacked):
+            yield from _get_ndims(get_args(unpacked)[0], ndim=ndim + 1)
+        else:
+            yield ndim
 
 
 def _unpack(obj: Any) -> Generator[Any, None, None]:
@@ -137,6 +142,14 @@ def _primitive_types() -> tuple[PrimitiveType, ...]:
 def _is_path_like(obj: Any) -> bool:
     return _issubclass(get_origin(obj), (protocol.PathLike,)) or _issubclass(
         obj, (protocol.PathLike,)
+    )
+
+
+def _is_sequence(obj: Any) -> TypeGuard[Type[Sequence[Any]]]:
+    return (
+        _issubclass(get_origin(obj), (Sequence,))
+        and not _issubclass(obj, (Component,))
+        and not _is_named_tuple(obj)
     )
 
 
