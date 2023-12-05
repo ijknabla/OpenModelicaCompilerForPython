@@ -16,6 +16,7 @@ from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.string2 import (
     _is_component,
+    _is_coroutine,
     _is_defined,
     _is_literal,
     _is_named_tuple,
@@ -41,6 +42,7 @@ class TestCase(NamedTuple):
     is_named_tuple: bool = False
     is_defined: bool = False
     is_sequence: bool = False
+    is_coroutine: bool = False
 
 
 def _iter_test_cases() -> Generator[TestCase, None, None]:
@@ -246,6 +248,30 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
             is_sequence=True,
         )
 
+    # Coroutine
+    yield TestCase(
+        annotation=typing.Coroutine[None, None, int],
+        type=int,
+        is_coroutine=True,
+    )
+    yield TestCase(
+        annotation=Union[int, typing.Coroutine[None, None, int]],
+        type=int,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=collections.abc.Coroutine[None, None, int],
+            type=int,
+            is_coroutine=True,
+        )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=int | collections.abc.Coroutine[None, None, int],
+            type=int,
+            is_union=True,
+        )
+
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
 def test_annotation_checker(test_case: TestCase) -> None:
@@ -259,3 +285,4 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_named_tuple(x.annotation) == x.is_named_tuple
     assert _is_defined(x.annotation) == x.is_defined
     assert _is_sequence(x.annotation) == x.is_sequence
+    assert _is_coroutine(x.annotation) == x.is_coroutine
