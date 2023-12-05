@@ -1,14 +1,15 @@
 from __future__ import annotations
 
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, Literal, get_origin
+from typing import TYPE_CHECKING, Any, Literal, Type, Union, get_origin
 
 if TYPE_CHECKING:
     from typing import _SpecialForm
 
-    from typing_extensions import TypeAlias, TypeGuard
+    from typing_extensions import TypeGuard
 
-SupportedType: TypeAlias = None
+PrimitiveType = Type[int]
+SupportedType = Union[PrimitiveType, None]
 
 
 def _is_none(obj: Any) -> TypeGuard[None]:
