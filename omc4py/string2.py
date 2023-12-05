@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
+from .protocol import PathLike
 
 _Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
 _Defined = Union[record, enumeration, Tuple[Any, ...]]
@@ -30,6 +31,12 @@ def _is_union(obj: Any) -> bool:
         return _issubclass(get_origin(obj), (Union, types.UnionType))
     except AttributeError:
         return _issubclass(get_origin(obj), (Union,))
+
+
+def _is_path_like(obj: Any) -> TypeGuard[type[PathLike[Any]]]:
+    return _issubclass(get_origin(obj), (PathLike,)) or _issubclass(
+        obj, (PathLike,)
+    )
 
 
 def _issubclass(
