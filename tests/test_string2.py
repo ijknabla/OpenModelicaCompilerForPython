@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import types
 from collections.abc import Generator
 from contextlib import suppress
@@ -7,11 +8,13 @@ from typing import Any, Literal, NamedTuple, Union
 
 import pytest
 
+import omc4py.protocol
 from omc4py import TypeName, VariableName
 from omc4py.string2 import (
     SupportedType,
     _is_literal,
     _is_none,
+    _is_path_like,
     _is_primitive,
     _is_union,
     get_ndim,
@@ -126,6 +129,29 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
             is_union=True,
         )
 
+    # PathLike
+    yield TestCase(
+        annotation=omc4py.protocol.PathLike,
+        type=str,
+        is_path_like=True,
+    )
+    yield TestCase(
+        annotation=omc4py.protocol.PathLike[str],
+        type=str,
+        is_path_like=True,
+    )
+    yield TestCase(
+        annotation=os.PathLike,
+        type=str,
+        is_path_like=True,
+    )
+    with suppress(TypeError):
+        yield TestCase(
+            annotation=os.PathLike[str],
+            type=str,
+            is_path_like=True,
+        )
+
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
 def test_annotation_checker(test_case: TestCase) -> None:
@@ -134,6 +160,7 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_literal(x.annotation) == x.is_literal
     assert _is_union(x.annotation) == x.is_union
     assert _is_primitive(x.annotation) == x.is_primitive
+    assert _is_path_like(x.annotation) == x.is_path_like
 
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
