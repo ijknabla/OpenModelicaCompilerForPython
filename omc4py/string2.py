@@ -9,10 +9,12 @@ from typing import (
     TYPE_CHECKING,
     Any,
     Literal,
+    Tuple,
     Type,
     Union,
     get_args,
     get_origin,
+    get_type_hints,
 )
 
 from . import protocol
@@ -35,10 +37,14 @@ PrimitiveType = Union[
     Type[enumeration],
     Type[Component],
 ]
-SupportedType = Union[PrimitiveType, None]
+NamedTupleType = Type[Tuple[Any, ...]]
+SupportedType = Union[PrimitiveType, NamedTupleType, None]
 
 
 def get_type(obj: Any) -> SupportedType:
+    if _is_named_tuple(obj):
+        return obj
+
     types = set(_get_types(obj))
     if any(_issubclass(typ, (TypeName, VariableName)) for typ in types):
         types -= {str}
@@ -63,6 +69,9 @@ def _get_types(obj: Any) -> Generator[PrimitiveType | None, None, None]:
 
 
 def get_ndim(obj: Any) -> int:
+    if _is_named_tuple(obj):
+        return 0
+
     ndims = set(_get_ndims(obj, ndim=0))
 
     if len(ndims) == 1:
@@ -128,6 +137,14 @@ def _primitive_types() -> tuple[PrimitiveType, ...]:
 def _is_path_like(obj: Any) -> bool:
     return _issubclass(get_origin(obj), (protocol.PathLike,)) or _issubclass(
         obj, (protocol.PathLike,)
+    )
+
+
+def _is_named_tuple(obj: Any) -> TypeGuard[NamedTupleType]:
+    return (
+        _issubclass(obj, (tuple,))
+        and bool(get_type_hints(obj))
+        and not _issubclass(obj, (Component,))
     )
 
 
