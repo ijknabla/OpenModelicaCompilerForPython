@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import types
 from contextlib import suppress
 from typing import TYPE_CHECKING, Any, Literal, Tuple, Type, Union, get_origin
 
@@ -22,6 +23,13 @@ def _is_none(obj: Any) -> TypeGuard[None | type[None]]:
 
 def _is_literal(obj: Any) -> bool:
     return _issubclass(get_origin(obj), (Literal,))
+
+
+def _is_union(obj: Any) -> bool:
+    try:
+        return _issubclass(get_origin(obj), (Union, types.UnionType))
+    except AttributeError:
+        return _issubclass(get_origin(obj), (Union,))
 
 
 def _issubclass(
