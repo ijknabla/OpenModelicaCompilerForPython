@@ -31,6 +31,32 @@ _Defined = Union[record, enumeration, Tuple[Any, ...]]
 _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
 
 
+def _get_type(obj: Any) -> _StringableType:
+    types = set(_iter_types(obj))
+    if types > {str}:
+        types -= {str}
+    if types > {None}:
+        types -= {None}
+
+    if len(types) == 1:
+        (typ,) = types
+        return typ
+
+    raise TypeError(f"Types are ambigious or undefinable. got {types}")
+
+
+def _iter_types(obj: Any) -> Generator[_StringableType, None, None]:
+    for unpacked in _unpack(obj):
+        if _is_none(unpacked):
+            yield None
+        elif _is_path_like(unpacked):
+            yield str
+        elif _is_primitive(unpacked) or _is_defined(unpacked):
+            yield unpacked
+        elif _is_sequence(unpacked):
+            yield from _iter_types(get_args(unpacked)[0])
+
+
 def _unpack(obj: Any) -> Generator[Any, None, None]:
     """
     Unpack Literal, Union and Coroutine
