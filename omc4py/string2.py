@@ -57,6 +57,24 @@ def _iter_types(obj: Any) -> Generator[_StringableType, None, None]:
             yield from _iter_types(get_args(unpacked)[0])
 
 
+def _get_ndim(obj: Any) -> int:
+    ndims = set(_iter_ndims(obj, ndim=0))
+
+    if len(ndims) == 1:
+        (ndim,) = ndims
+        return ndim
+
+    raise TypeError(f"Dimensions are ambigious or undefinable. got {ndims}")
+
+
+def _iter_ndims(obj: Any, ndim: int) -> Generator[int, None, None]:
+    for unpacked in _unpack(obj):
+        if _is_sequence(unpacked):
+            yield from _iter_ndims(get_args(unpacked)[0], ndim=ndim + 1)
+        else:
+            yield ndim
+
+
 def _unpack(obj: Any) -> Generator[Any, None, None]:
     """
     Unpack Literal, Union and Coroutine
