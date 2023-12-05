@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import types
+from collections.abc import Sequence
 from contextlib import suppress
 from functools import lru_cache
 from typing import (
@@ -73,6 +74,14 @@ def _is_named_tuple(obj: Any) -> TypeGuard[type[tuple[Any, ...]]]:
 
 def _is_defined(obj: Any) -> TypeGuard[type[_Defined]]:
     return _issubclass(obj, (record, enumeration)) or _is_named_tuple(obj)
+
+
+def _is_sequence(obj: Any) -> TypeGuard[type[Sequence[Any]]]:
+    return (
+        _issubclass(get_origin(obj), (Sequence,))
+        and not _is_component(obj)
+        and not _is_named_tuple(obj)
+    )
 
 
 def _issubclass(
