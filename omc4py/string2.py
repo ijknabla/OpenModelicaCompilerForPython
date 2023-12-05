@@ -2,7 +2,16 @@ from __future__ import annotations
 
 import types
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, Literal, Type, Union, get_origin
+from functools import lru_cache
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Literal,
+    Type,
+    Union,
+    get_args,
+    get_origin,
+)
 
 if TYPE_CHECKING:
     from typing import _SpecialForm
@@ -26,6 +35,15 @@ def _is_union(obj: Any) -> bool:
         return _issubclass(get_origin(obj), (Union, types.UnionType))
     except AttributeError:
         return _issubclass(get_origin(obj), (Union,))
+
+
+def _is_primitive(obj: Any) -> TypeGuard[PrimitiveType]:
+    return _issubclass(obj, _primitive_types())
+
+
+@lru_cache
+def _primitive_types() -> tuple[PrimitiveType, ...]:
+    return tuple(j for i in get_args(PrimitiveType) for j in get_args(i))
 
 
 def _issubclass(
