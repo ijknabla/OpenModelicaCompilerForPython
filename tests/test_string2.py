@@ -14,6 +14,7 @@ from omc4py.string2 import (
     _is_none,
     _is_primitive,
     _is_union,
+    get_type,
 )
 
 
@@ -132,3 +133,9 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_literal(x.annotation) == x.is_literal
     assert _is_union(x.annotation) == x.is_union
     assert _is_primitive(x.annotation) == x.is_primitive
+
+
+@pytest.mark.parametrize("test_case", _iter_test_cases())
+def test_type(test_case: TestCase) -> None:
+    x = test_case
+    assert get_type(x.annotation) is x.type
