@@ -15,6 +15,7 @@ from typing import (
     get_origin,
 )
 
+from . import protocol
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
 
@@ -57,6 +58,8 @@ def _get_types(obj: Any) -> Generator[PrimitiveType | None, None, None]:
             yield None
         elif _is_primitive(unpacked):
             yield unpacked
+        elif _is_path_like(unpacked):
+            yield str
 
 
 def get_ndim(obj: Any) -> int:
@@ -71,8 +74,7 @@ def get_ndim(obj: Any) -> int:
 
 def _get_ndims(obj: Any, ndim: int) -> Generator[int, None, None]:
     for unpacked in _unpack(obj):
-        if _is_none(unpacked) or _is_primitive(unpacked):
-            yield ndim
+        yield ndim
 
 
 def _unpack(obj: Any) -> Generator[Any, None, None]:
@@ -121,6 +123,12 @@ def _is_primitive(obj: Any) -> TypeGuard[PrimitiveType]:
 @lru_cache
 def _primitive_types() -> tuple[PrimitiveType, ...]:
     return tuple(j for i in get_args(PrimitiveType) for j in get_args(i))
+
+
+def _is_path_like(obj: Any) -> bool:
+    return _issubclass(get_origin(obj), (protocol.PathLike,)) or _issubclass(
+        obj, (protocol.PathLike,)
+    )
 
 
 def _issubclass(
