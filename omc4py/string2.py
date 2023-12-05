@@ -2,7 +2,17 @@ from __future__ import annotations
 
 import types
 from contextlib import suppress
-from typing import TYPE_CHECKING, Any, Literal, Tuple, Type, Union, get_origin
+from functools import lru_cache
+from typing import (
+    TYPE_CHECKING,
+    Any,
+    Literal,
+    Tuple,
+    Type,
+    Union,
+    get_args,
+    get_origin,
+)
 
 if TYPE_CHECKING:
     from typing import _SpecialForm
@@ -41,6 +51,15 @@ def _is_path_like(obj: Any) -> TypeGuard[type[PathLike[Any]]]:
 
 def _is_component(obj: Any) -> TypeGuard[type[Component]]:
     return _issubclass(obj, (Component,))
+
+
+def _is_primitive(obj: Any) -> TypeGuard[type[_Primitive]]:
+    return _issubclass(obj, _primitive_types())
+
+
+@lru_cache
+def _primitive_types() -> tuple[type[_Primitive], ...]:
+    return tuple(get_args(_Primitive))
 
 
 def _issubclass(
