@@ -15,6 +15,7 @@ from omc4py import TypeName, VariableName
 from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.string2 import (
+    _get_ndim,
     _get_type,
     _is_component,
     _is_coroutine,
@@ -290,6 +291,7 @@ def test_annotation_checker(test_case: TestCase) -> None:
 
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
-def test_type(test_case: TestCase) -> None:
+def test_type_and_ndim(test_case: TestCase) -> None:
     x = test_case
     assert _get_type(x.annotation) is x.type
+    assert _get_ndim(x.annotation) == x.ndim
