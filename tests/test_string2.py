@@ -15,6 +15,7 @@ from omc4py import TypeName, VariableName
 from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.string2 import (
+    _get_type,
     _is_component,
     _is_coroutine,
     _is_defined,
@@ -286,3 +287,9 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_defined(x.annotation) == x.is_defined
     assert _is_sequence(x.annotation) == x.is_sequence
     assert _is_coroutine(x.annotation) == x.is_coroutine
+
+
+@pytest.mark.parametrize("test_case", _iter_test_cases())
+def test_type(test_case: TestCase) -> None:
+    x = test_case
+    assert _get_type(x.annotation) is x.type
