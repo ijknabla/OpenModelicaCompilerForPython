@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from asyncio import AbstractEventLoop, get_event_loop
 from collections.abc import Callable, Generator
 from contextlib import ExitStack
 from functools import wraps
@@ -24,11 +23,6 @@ if TYPE_CHECKING:
         Concatenate[MethodType[P, T], str, dict[str, str], SelfType, P],
         ReturnType[T],
     ]
-
-
-@pytest.fixture(scope="session")  # TODO: remove this fixture
-def event_loop() -> AbstractEventLoop:
-    return get_event_loop()
 
 
 def wrap_call(call: Call[P, T]) -> Call[P, T]:

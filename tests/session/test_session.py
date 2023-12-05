@@ -5,13 +5,13 @@ import pytest
 from . import AsyncEmptySession, AsyncNestedSession, AsyncOneSession, Enum, One
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_empty_session(empty_session: AsyncEmptySession) -> None:
     s = empty_session
     await s.empty()
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_one(one_session: AsyncOneSession) -> None:
     s = one_session
     result = await s.one()
@@ -22,7 +22,7 @@ async def test_one(one_session: AsyncOneSession) -> None:
     )
 
 
-@pytest.mark.asyncio
+@pytest.mark.asyncio(scope="session")
 async def test_nested(nested_session: AsyncNestedSession) -> None:
     s = nested_session
     assert 1 == await s.Nested.level()
