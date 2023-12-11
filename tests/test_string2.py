@@ -9,7 +9,9 @@ from typing import Any, Literal, NamedTuple, Union
 import pytest
 
 import omc4py.protocol
+from omc4py.openmodelica import Component
 from omc4py.string2 import (
+    _is_component,
     _is_literal,
     _is_none,
     _is_path_like,
@@ -26,6 +28,7 @@ class TestCase(NamedTuple):
     is_literal: bool = False
     is_union: bool = False
     is_path_like: bool = False
+    is_component: bool = False
 
 
 def _iter_test_cases() -> Generator[TestCase, None, None]:
@@ -96,6 +99,13 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
             is_path_like=True,
         )
 
+    # Component
+    yield TestCase(
+        annotation=Component,
+        type=Component,
+        is_component=True,
+    )
+
 
 @pytest.mark.parametrize("test_case", _iter_test_cases())
 def test_annotation_checker(test_case: TestCase) -> None:
@@ -104,3 +114,4 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_literal(x.annotation) == x.is_literal
     assert _is_union(x.annotation) == x.is_union
     assert _is_path_like(x.annotation) == x.is_path_like
+    assert _is_component(x.annotation) == x.is_component
