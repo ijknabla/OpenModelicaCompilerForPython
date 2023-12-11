@@ -71,6 +71,10 @@ def _is_named_tuple(obj: Any) -> TypeGuard[type[tuple[Any, ...]]]:
     )
 
 
+def _is_defined(obj: Any) -> TypeGuard[type[_Defined]]:
+    return _issubclass(obj, (record, enumeration)) or _is_named_tuple(obj)
+
+
 def _issubclass(
     obj: Any, class_: tuple[type[Any] | _SpecialForm, ...], /
 ) -> bool:
