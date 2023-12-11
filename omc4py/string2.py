@@ -39,6 +39,10 @@ def _is_path_like(obj: Any) -> TypeGuard[type[PathLike[Any]]]:
     )
 
 
+def _is_component(obj: Any) -> TypeGuard[type[Component]]:
+    return _issubclass(obj, (Component,))
+
+
 def _issubclass(
     obj: Any, class_: tuple[type[Any] | _SpecialForm, ...], /
 ) -> bool:
