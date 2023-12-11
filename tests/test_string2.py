@@ -10,9 +10,11 @@ import pytest
 
 import omc4py.protocol
 from omc4py import TypeName, VariableName
+from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.string2 import (
     _is_component,
+    _is_defined,
     _is_literal,
     _is_named_tuple,
     _is_none,
@@ -34,6 +36,7 @@ class TestCase(NamedTuple):
     is_component: bool = False
     is_primitive: bool = False
     is_named_tuple: bool = False
+    is_defined: bool = False
 
 
 def _iter_test_cases() -> Generator[TestCase, None, None]:
@@ -171,6 +174,20 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
         _NamedTuple,
         type=_NamedTuple,
         is_named_tuple=True,
+        is_defined=True,
+    )
+
+    # record, enumeration
+    yield TestCase(
+        record,
+        type=record,
+        is_defined=True,
+    )
+
+    yield TestCase(
+        enumeration,
+        type=enumeration,
+        is_defined=True,
     )
 
 
@@ -184,3 +201,4 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_component(x.annotation) == x.is_component
     assert _is_primitive(x.annotation) == x.is_primitive
     assert _is_named_tuple(x.annotation) == x.is_named_tuple
+    assert _is_defined(x.annotation) == x.is_defined
