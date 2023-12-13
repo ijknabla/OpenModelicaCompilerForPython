@@ -8,6 +8,8 @@ from itertools import chain
 from typing import (
     TYPE_CHECKING,
     Any,
+    ClassVar,
+    DefaultDict,
     Literal,
     Tuple,
     Type,
@@ -29,6 +31,34 @@ from .protocol import PathLike
 _Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
 _Defined = Union[record, enumeration, Tuple[Any, ...]]
 _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
+
+
+def _iter_all_types(
+    _type: _StringableType, ndim: int
+) -> Generator[tuple[_StringableType, int], None, None]:
+    result = DefaultDict[_StringableType, set[int]](set)
+    queue = [(_type, ndim)]
+    while queue:
+        t, n = queue.pop(0)
+        if t not in result:
+            for _, (tt, nn) in _iter_attribute_types(t):
+                queue.append((tt, nn))
+        result[t].add(n)
+
+    for k, vs in result.items():
+        for v in range(max(vs) + 1):
+            yield k, v
+
+
+def _iter_attribute_types(
+    typ: _StringableType,
+) -> Generator[tuple[str, tuple[_StringableType, int]], None, None]:
+    if typ is None or _issubclass(typ, (TypeName, VariableName)):
+        return
+    for k, v in get_type_hints(typ).items():
+        if _issubclass(get_origin(v), (ClassVar,)):
+            continue
+        yield k, (_get_type(v), _get_ndim(v))
 
 
 def _get_type(obj: Any) -> _StringableType:
