@@ -149,6 +149,31 @@ class _Syntax(v3_4.Syntax):
     def variablename(cls) -> _ParsingExpressionLike:
         return cls.IDENT
 
+    @classmethod
+    def component(cls) -> _ParsingExpressionLike:
+        return (
+            "{",
+            (
+                *(cls.typename, ","),  # className
+                *(cls.variablename, ","),  # name
+                *(cls.STRING, ","),  # comment
+                *(cls.STRING, ","),  # protected
+                *(cls.boolean, ","),  # isFinal
+                *(cls.boolean, ","),  # isFlow
+                *(cls.boolean, ","),  # isStream
+                *(cls.boolean, ","),  # isReplaceable
+                *(cls.STRING, ","),  # variability
+                *(cls.STRING, ","),  # innerOuter
+                *(cls.STRING, ","),  # inputOutput
+                cls.subscript_list,  # dimensions
+            ),
+            "}",
+        )
+
+    @classmethod
+    def subscript_list(cls) -> _ParsingExpressionLike:
+        return "{", ZeroOrMore(cls.subscript, sep=","), "}"
+
 
 if TYPE_CHECKING:
 
@@ -239,6 +264,12 @@ class _Visistor(PTNodeVisitor):
     ) -> VariableName:
         (identifier,) = children
         return _BaseVariableName.__new__(VariableName, identifier)
+
+    def visit_component(self, _: Never, children: _Children) -> Component:
+        return Component(*children)
+
+    def visit_subscript_list(self, node: NonTerminal, _: Never) -> list[str]:
+        return [n.flat_str() for n in node[1::2]]  # type: ignore
 
 
 @overload
