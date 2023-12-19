@@ -3,6 +3,7 @@ from __future__ import annotations
 import types
 from collections.abc import Coroutine, Generator, Sequence
 from contextlib import suppress
+from dataclasses import dataclass
 from functools import lru_cache
 from itertools import chain
 from typing import (
@@ -20,10 +21,14 @@ from typing import (
     get_type_hints,
 )
 
+from arpeggio import EOF, ParserPython, PTNodeVisitor, visit_parse_tree
+from modelicalang import v3_4
+
 if TYPE_CHECKING:
     from typing import _SpecialForm
 
-    from typing_extensions import TypeGuard
+    from typing_extensions import TypeGuard, Self
+    from arpeggio import _ParsingExpressionLike
 
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
@@ -32,6 +37,58 @@ from .protocol import PathLike
 _Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
 _Defined = Union[record, enumeration, Tuple[Any, ...]]
 _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
+
+
+def parse(typ: Any, s: str) -> Any:
+    root_type = _get_type(typ)
+    root_ndim = _get_ndim(typ)
+    with _Syntax:
+        parser = _Syntax.get_parser(
+            root_type=root_type,  # type: ignore
+            root_ndim=root_ndim,
+        )
+        visitor = _Visistor.get_visitor(
+            root_type=root_type,  # type: ignore
+            root_ndim=root_ndim,
+        )
+        return visit_parse_tree(parser.parse(s), visitor)
+
+
+@dataclass
+class _Syntax(v3_4.Syntax):
+    root_type: _StringableType
+    root_ndim: int
+
+    @classmethod
+    @lru_cache
+    def get_parser(
+        cls, root_type: _StringableType, root_ndim: int
+    ) -> ParserPython:
+        return ParserPython(cls(root_type, root_ndim).root)
+
+    def root(self) -> _ParsingExpressionLike:
+        return EOF
+
+
+class _Visistor(PTNodeVisitor):
+    root_type: _StringableType
+    root_ndim: int
+
+    def __init__(
+        self,
+        *args: Any,
+        root_type: _StringableType,
+        root_ndim: int,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        self.root_type = root_type
+        self.root_ndim = root_ndim
+
+    @classmethod
+    @lru_cache
+    def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
+        return cls(root_type=root_type, root_ndim=root_ndim)
 
 
 def _iter_all_types(
