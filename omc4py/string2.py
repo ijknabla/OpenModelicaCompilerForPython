@@ -19,6 +19,7 @@ from typing import (
     get_args,
     get_origin,
     get_type_hints,
+    overload,
 )
 
 from arpeggio import EOF, ParserPython, PTNodeVisitor, visit_parse_tree
@@ -89,6 +90,56 @@ class _Visistor(PTNodeVisitor):
     @lru_cache
     def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
         return cls(root_type=root_type, root_ndim=root_ndim)
+
+
+@overload
+def _to_rule_name(_type: _StringableType, /) -> str:
+    ...
+
+
+@overload
+def _to_rule_name(_type: _StringableType, /, *, ndim: int) -> str:
+    ...
+
+
+@overload
+def _to_rule_name(_type: _StringableType, /, *, attribute: str) -> str:
+    ...
+
+
+def _to_rule_name(
+    _type: _StringableType,
+    /,
+    *,
+    ndim: int | None = None,
+    attribute: str | None = None,
+) -> str:
+    if _is_primitive(_type) or _type is None:
+        stem = {
+            float: "real",
+            int: "integer",
+            bool: "boolean",
+            str: "STRING",
+            TypeName: "typename",
+            VariableName: "variablename",
+            Component: "component",
+            None: "none",
+        }[_type]
+    elif _is_defined(_type):
+        stem = f"_{_type.__module__}.{_type.__name__}".lower().replace(
+            ".", "__"
+        )
+    else:
+        raise TypeError(_type)
+
+    parts: list[str] = [stem]
+
+    if ndim is not None and 0 < ndim:
+        parts.append(f"{ndim}D")
+    if attribute is not None:
+        parts.append(attribute)
+
+    return "__".join(parts)
 
 
 def _iter_all_types(
