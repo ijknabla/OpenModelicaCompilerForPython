@@ -373,6 +373,7 @@ end Record;
             """,
             Record(real=0.0, integer=0, boolean=False, string=""),
         ),
+        (Enumeration, "Enumeration.a", Enumeration.a),
     ],
 )
 def test_parse(annotation: Any, s: str, value: Any) -> None:
