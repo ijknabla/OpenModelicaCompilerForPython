@@ -25,6 +25,7 @@ from typing import (
 
 from arpeggio import (
     EOF,
+    Optional,
     ParserPython,
     PTNodeVisitor,
     RegExMatch,
@@ -115,11 +116,25 @@ class _Syntax(v3_4.Syntax):
     def none(cls) -> _ParsingExpressionLike:
         return ""
 
+    @classmethod
+    def real(cls) -> _ParsingExpressionLike:
+        return Optional(cls.SIGN), cls.UNSIGNED_NUMBER
+
+    @classmethod
+    def integer(cls) -> _ParsingExpressionLike:
+        return Optional(cls.SIGN), cls.UNSIGNED_INTEGER
+
+    @classmethod
+    def SIGN(cls) -> _ParsingExpressionLike:
+        return RegExMatch(r"[+-]")
+
 
 if TYPE_CHECKING:
 
     class _Children(Sequence[Any]):
-        ...
+        SIGN: Literal["+", "-"]
+        UNSIGNED_INTEGER: list[str]
+        UNSIGNED_NUMBER: list[str]
 
 
 class _Visistor(PTNodeVisitor):
@@ -160,6 +175,20 @@ class _Visistor(PTNodeVisitor):
 
     def visit_none__1D(self, _1: Never, children: _Children) -> list[None]:
         return [None] * (len(children) + 1)
+
+    def visit_real(self, _: Never, children: _Children) -> float:
+        (value,) = map(float, children.UNSIGNED_NUMBER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
+
+    def visit_integer(self, _: Never, children: _Children) -> int:
+        (value,) = map(int, children.UNSIGNED_INTEGER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
 
 
 @overload
