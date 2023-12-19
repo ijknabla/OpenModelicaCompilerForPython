@@ -11,6 +11,7 @@ from typing import (
     ClassVar,
     DefaultDict,
     Literal,
+    Set,
     Tuple,
     Type,
     Union,
@@ -36,7 +37,7 @@ _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
 def _iter_all_types(
     _type: _StringableType, ndim: int
 ) -> Generator[tuple[_StringableType, int], None, None]:
-    result = DefaultDict[_StringableType, set[int]](set)
+    result = DefaultDict[_StringableType, Set[int]](set)
     queue = [(_type, ndim)]
     while queue:
         t, n = queue.pop(0)
