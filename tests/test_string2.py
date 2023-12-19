@@ -361,6 +361,18 @@ def test_type_and_ndim(test_case: TestCase) -> None:
                 )
             ],
         ),
+        (
+            Record,
+            """
+record Record
+  Real=0.0;
+  Integer=0;
+  boolean=false;
+  string="";
+end Record;
+            """,
+            Record(real=0.0, integer=0, boolean=False, string=""),
+        ),
     ],
 )
 def test_parse(annotation: Any, s: str, value: Any) -> None:
