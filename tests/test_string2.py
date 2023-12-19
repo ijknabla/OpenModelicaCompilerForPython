@@ -29,6 +29,7 @@ from omc4py.string2 import (
     _is_sequence,
     _is_union,
     _StringableType,
+    parse,
 )
 
 
@@ -314,3 +315,13 @@ def test_type_and_ndim(test_case: TestCase) -> None:
     x = test_case
     assert _get_type(x.annotation) is x.type
     assert _get_ndim(x.annotation) == x.ndim
+
+
+@pytest.mark.parametrize(
+    "annotation," "s," "value,",
+    [
+        (None, "", None),
+    ],
+)
+def test_parse(annotation: Any, s: str, value: Any) -> None:
+    assert parse(annotation, s) == value
