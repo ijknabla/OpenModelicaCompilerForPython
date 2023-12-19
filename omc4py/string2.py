@@ -101,6 +101,10 @@ class _Syntax(v3_4.Syntax):
                     _runtime_method(self, _to_rule_name(t, attribute=attr))(
                         partial(self.record_attr_rule, attr, tt, nn)
                     )
+            elif t is not None and issubclass(t, enumeration):
+                _runtime_method(self, method)(
+                    partial(self.enumeration_rule, t)
+                )
 
     @classmethod
     @lru_cache
@@ -150,6 +154,15 @@ class _Syntax(v3_4.Syntax):
             "=",
             getattr(self, _to_rule_name(_type, ndim=_ndim)),
             ";",
+        )
+
+    def enumeration_rule(
+        self, enumeration_type: type[enumeration]
+    ) -> _ParsingExpressionLike:
+        return (
+            StrMatch(f"{enumeration_type.__omc_class__}"),
+            ".",
+            [e.name for e in enumeration_type],
         )
 
     # Dialects
@@ -254,6 +267,10 @@ class _Visistor(PTNodeVisitor):
                     _runtime_method(
                         self, f"visit_{_to_rule_name(t, attribute=attr)}"
                     )(partial(self._visit_record_attr, attribute=attr))
+            elif t is not None and issubclass(t, enumeration):
+                _runtime_method(self, method)(
+                    partial(self._visit_enumeration, enumeration_type=t)
+                )
 
     @classmethod
     @lru_cache
@@ -273,6 +290,15 @@ class _Visistor(PTNodeVisitor):
     ) -> dict[str, Any]:
         _, value = children
         return {attribute: value}
+
+    def _visit_enumeration(
+        self,
+        _: Never,
+        children: _Children,
+        *,
+        enumeration_type: type[enumeration],
+    ) -> enumeration:
+        return enumeration_type[children[-1]]
 
     def visit_none(self, _1: Never, _2: Never) -> None:
         return
