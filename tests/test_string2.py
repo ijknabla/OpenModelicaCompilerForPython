@@ -337,6 +337,8 @@ def test_type_and_ndim(test_case: TestCase) -> None:
         (str, '""', ""),
         (typing.List[str], '{"a", "b"}', ["a", "b"]),
         (typing.List[typing.List[str]], '{{"a"}, {"b"}}', [["a"], ["b"]]),
+        (TypeName, ".A.$A", TypeName(".A.$A")),
+        (VariableName, "a", VariableName("a")),
     ],
 )
 def test_parse(annotation: Any, s: str, value: Any) -> None:
