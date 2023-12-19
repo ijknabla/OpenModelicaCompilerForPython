@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import types
+from collections import ChainMap
 from collections.abc import Callable, Coroutine, Generator, Sequence
 from contextlib import suppress
 from dataclasses import dataclass
@@ -30,7 +31,9 @@ from arpeggio import (
     ParserPython,
     PTNodeVisitor,
     RegExMatch,
+    StrMatch,
     Terminal,
+    UnorderedGroup,
     ZeroOrMore,
     visit_parse_tree,
 )
@@ -84,10 +87,20 @@ class _Syntax(v3_4.Syntax):
 
     def __post_init__(self) -> None:
         for t, n in _iter_all_types(self.root_type, self.root_ndim):
+            method = _to_rule_name(t, ndim=n)
+            if hasattr(self, method):
+                continue
+
             if 0 < n:
-                _runtime_method(self, _to_rule_name(t, ndim=n))(
+                _runtime_method(self, method)(
                     partial(self.sequence_rule, t, n)
                 )
+            elif t is not None and issubclass(t, record):
+                _runtime_method(self, method)(partial(self.record_rule, t))
+                for attr, (tt, nn) in _iter_attribute_types(t):
+                    _runtime_method(self, _to_rule_name(t, attribute=attr))(
+                        partial(self.record_attr_rule, attr, tt, nn)
+                    )
 
     @classmethod
     @lru_cache
@@ -111,6 +124,32 @@ class _Syntax(v3_4.Syntax):
                 getattr(self, _to_rule_name(_type, ndim=_ndim - 1)), sep=","
             ),
             "}",
+        )
+
+    def record_rule(self, record_type: type[record]) -> _ParsingExpressionLike:
+        name = StrMatch(f"{record_type.__omc_class__}")
+        return (
+            self.RECORD,
+            name,
+            UnorderedGroup(
+                *(
+                    getattr(self, _to_rule_name(record_type, attribute=attr))
+                    for attr, _ in _iter_attribute_types(record_type)
+                )
+            ),
+            self.END,
+            name,
+            ";",
+        )
+
+    def record_attr_rule(
+        self, _attribute: str, _type: _StringableType, _ndim: int
+    ) -> _ParsingExpressionLike:
+        return (
+            RegExMatch(f"_*{_attribute}_*", ignore_case=True),
+            "=",
+            getattr(self, _to_rule_name(_type, ndim=_ndim)),
+            ";",
         )
 
     # Dialects
@@ -201,14 +240,20 @@ class _Visistor(PTNodeVisitor):
         self.root_ndim = root_ndim
 
         for t, n in _iter_all_types(root_type, root_ndim):
-            visit_method = f"visit_{_to_rule_name(t, ndim=n)}"
-            if hasattr(self, visit_method):
+            method = f"visit_{_to_rule_name(t, ndim=n)}"
+            if hasattr(self, method):
                 continue
 
             if 0 < n:
-                _runtime_method(self, visit_method)(
-                    partial(self._visit_sequence)
+                _runtime_method(self, method)(partial(self._visit_sequence))
+            elif t is not None and issubclass(t, record):
+                _runtime_method(self, method)(
+                    partial(self._visit_record, record_type=t)
                 )
+                for attr, _ in _iter_attribute_types(t):
+                    _runtime_method(
+                        self, f"visit_{_to_rule_name(t, attribute=attr)}"
+                    )(partial(self._visit_record_attr, attribute=attr))
 
     @classmethod
     @lru_cache
@@ -217,6 +262,17 @@ class _Visistor(PTNodeVisitor):
 
     def _visit_sequence(self, _: Never, children: _Children) -> list[Any]:
         return list(children[::2])
+
+    def _visit_record(
+        self, _: Never, children: _Children, *, record_type: type[record]
+    ) -> record:
+        return record_type(**ChainMap(*children[1:-1]))
+
+    def _visit_record_attr(
+        self, _: Never, children: _Children, *, attribute: str
+    ) -> dict[str, Any]:
+        _, value = children
+        return {attribute: value}
 
     def visit_none(self, _1: Never, _2: Never) -> None:
         return
