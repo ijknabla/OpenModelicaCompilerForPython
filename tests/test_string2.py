@@ -6,6 +6,7 @@ import types
 import typing
 from collections.abc import Generator
 from contextlib import suppress
+from dataclasses import dataclass
 from typing import Any, Literal, NamedTuple, Union
 
 import pytest
@@ -31,7 +32,8 @@ from omc4py.string2 import (
 )
 
 
-class TestCase(NamedTuple):
+@dataclass(frozen=True)
+class TestCase:
     annotation: Any
     type: _StringableType
     ndim: int = 0
