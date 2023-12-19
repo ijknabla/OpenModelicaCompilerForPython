@@ -6,7 +6,8 @@ import types
 import typing
 from collections.abc import Generator
 from contextlib import suppress
-from typing import Any, Literal, NamedTuple, Union
+from dataclasses import dataclass
+from typing import Any, Literal, Union
 
 import pytest
 
@@ -31,7 +32,31 @@ from omc4py.string2 import (
 )
 
 
-class TestCase(NamedTuple):
+class NamedTuple(typing.NamedTuple):
+    real: float
+    integer: int
+    boolean: bool
+    string: str
+
+
+@dataclass
+class Record(record):
+    __omc_class__ = TypeName("Record")
+    real: float
+    integer: int
+    boolean: bool
+    string: str
+
+
+class Enumeration(enumeration):
+    __omc_class__ = TypeName("Enumeration")
+    a = 1
+    b = 2
+    c = 3
+
+
+@dataclass(frozen=True)
+class TestCase:
     annotation: Any
     type: _StringableType
     ndim: int = 0
@@ -172,29 +197,23 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
         )
 
     # NamedTuple
-    class _NamedTuple(NamedTuple):
-        real: float
-        integer: int
-        boolean: bool
-        string: str
-
     yield TestCase(
-        _NamedTuple,
-        type=_NamedTuple,
+        NamedTuple,
+        type=NamedTuple,
         is_named_tuple=True,
         is_defined=True,
     )
 
     # record, enumeration
     yield TestCase(
-        record,
-        type=record,
+        Record,
+        type=Record,
         is_defined=True,
     )
 
     yield TestCase(
-        enumeration,
-        type=enumeration,
+        Enumeration,
+        type=Enumeration,
         is_defined=True,
     )
 
