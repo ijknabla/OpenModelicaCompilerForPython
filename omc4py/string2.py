@@ -29,6 +29,7 @@ from arpeggio import (
     ParserPython,
     PTNodeVisitor,
     RegExMatch,
+    Terminal,
     ZeroOrMore,
     visit_parse_tree,
 )
@@ -37,6 +38,7 @@ from modelicalang import v3_4
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
 from .protocol import PathLike
+from .string import unquote_modelica_string
 
 if TYPE_CHECKING:
     from typing import _SpecialForm
@@ -128,6 +130,10 @@ class _Syntax(v3_4.Syntax):
     def SIGN(cls) -> _ParsingExpressionLike:
         return RegExMatch(r"[+-]")
 
+    @classmethod
+    def boolean(cls) -> _ParsingExpressionLike:
+        return [cls.TRUE, cls.FALSE]
+
 
 if TYPE_CHECKING:
 
@@ -189,6 +195,15 @@ class _Visistor(PTNodeVisitor):
             value = -value
 
         return value
+
+    def visit_boolean(self, node: Terminal, _: Never) -> bool:
+        return {
+            "true": True,
+            "false": False,
+        }[node.value]
+
+    def visit_STRING(self, node: Terminal, _: Never) -> str:
+        return unquote_modelica_string(node.value)
 
 
 @overload
