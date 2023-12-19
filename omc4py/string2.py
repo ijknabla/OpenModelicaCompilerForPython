@@ -1,10 +1,10 @@
 from __future__ import annotations
 
 import types
-from collections.abc import Coroutine, Generator, Sequence
+from collections.abc import Callable, Coroutine, Generator, Sequence
 from contextlib import suppress
 from dataclasses import dataclass
-from functools import lru_cache
+from functools import lru_cache, partial
 from itertools import chain
 from typing import (
     TYPE_CHECKING,
@@ -15,6 +15,7 @@ from typing import (
     Set,
     Tuple,
     Type,
+    TypeVar,
     Union,
     get_args,
     get_origin,
@@ -22,18 +23,29 @@ from typing import (
     overload,
 )
 
-from arpeggio import EOF, ParserPython, PTNodeVisitor, visit_parse_tree
+from arpeggio import (
+    EOF,
+    ParserPython,
+    PTNodeVisitor,
+    RegExMatch,
+    ZeroOrMore,
+    visit_parse_tree,
+)
 from modelicalang import v3_4
-
-if TYPE_CHECKING:
-    from typing import _SpecialForm
-
-    from typing_extensions import TypeGuard, Self
-    from arpeggio import _ParsingExpressionLike
 
 from .modelica import enumeration, record
 from .openmodelica import Component, TypeName, VariableName
 from .protocol import PathLike
+
+if TYPE_CHECKING:
+    from typing import _SpecialForm
+
+    from arpeggio import _ParsingExpressionLike
+    from typing_extensions import Never, ParamSpec, Self, TypeGuard
+
+    T = TypeVar("T")
+    P = ParamSpec("P")
+
 
 _Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
 _Defined = Union[record, enumeration, Tuple[Any, ...]]
@@ -60,6 +72,13 @@ class _Syntax(v3_4.Syntax):
     root_type: _StringableType
     root_ndim: int
 
+    def __post_init__(self) -> None:
+        for t, n in _iter_all_types(self.root_type, self.root_ndim):
+            if 0 < n:
+                _runtime_method(self, _to_rule_name(t, ndim=n))(
+                    partial(self.sequence_rule, t, n)
+                )
+
     @classmethod
     @lru_cache
     def get_parser(
@@ -68,7 +87,39 @@ class _Syntax(v3_4.Syntax):
         return ParserPython(cls(root_type, root_ndim).root)
 
     def root(self) -> _ParsingExpressionLike:
-        return EOF
+        return (
+            getattr(self, _to_rule_name(self.root_type, ndim=self.root_ndim)),
+            EOF,
+        )
+
+    def sequence_rule(
+        self, _type: _StringableType, _ndim: int
+    ) -> _ParsingExpressionLike:
+        return (
+            "{",
+            ZeroOrMore(
+                getattr(self, _to_rule_name(_type, ndim=_ndim - 1)), sep=","
+            ),
+            "}",
+        )
+
+    # Dialects
+
+    @classmethod
+    def IDENT(cls) -> _ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+    # Primitives
+
+    @classmethod
+    def none(cls) -> _ParsingExpressionLike:
+        return ""
+
+
+if TYPE_CHECKING:
+
+    class _Children(Sequence[Any]):
+        ...
 
 
 class _Visistor(PTNodeVisitor):
@@ -86,10 +137,29 @@ class _Visistor(PTNodeVisitor):
         self.root_type = root_type
         self.root_ndim = root_ndim
 
+        for t, n in _iter_all_types(root_type, root_ndim):
+            visit_method = f"visit_{_to_rule_name(t, ndim=n)}"
+            if hasattr(self, visit_method):
+                continue
+
+            if 0 < n:
+                _runtime_method(self, visit_method)(
+                    partial(self._visit_sequence)
+                )
+
     @classmethod
     @lru_cache
     def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
         return cls(root_type=root_type, root_ndim=root_ndim)
+
+    def _visit_sequence(self, _: Never, children: _Children) -> list[Any]:
+        return list(children[::2])
+
+    def visit_none(self, _1: Never, _2: Never) -> None:
+        return
+
+    def visit_none__1D(self, _1: Never, children: _Children) -> list[None]:
+        return [None] * (len(children) + 1)
 
 
 @overload
@@ -140,6 +210,17 @@ def _to_rule_name(
         parts.append(attribute)
 
     return "__".join(parts)
+
+
+def _runtime_method(
+    self: Any, name: str
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
+    def decorator(f: Callable[P, T]) -> Callable[P, T]:
+        f.__name__ = name
+        setattr(self, name, f)
+        return f
+
+    return decorator
 
 
 def _iter_all_types(
