@@ -39,6 +39,22 @@ class NamedTuple(typing.NamedTuple):
     string: str
 
 
+@dataclass
+class Record(record):
+    __omc_class__ = TypeName("Record")
+    real: float
+    integer: int
+    boolean: bool
+    string: str
+
+
+class Enumeration(enumeration):
+    __omc_class__ = TypeName("Enumeration")
+    a = 1
+    b = 2
+    c = 3
+
+
 @dataclass(frozen=True)
 class TestCase:
     annotation: Any
@@ -190,14 +206,14 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
 
     # record, enumeration
     yield TestCase(
-        record,
-        type=record,
+        Record,
+        type=Record,
         is_defined=True,
     )
 
     yield TestCase(
-        enumeration,
-        type=enumeration,
+        Enumeration,
+        type=Enumeration,
         is_defined=True,
     )
 
