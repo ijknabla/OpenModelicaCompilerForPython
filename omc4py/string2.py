@@ -105,6 +105,10 @@ class _Syntax(v3_4.Syntax):
                 _runtime_method(self, method)(
                     partial(self.enumeration_rule, t)
                 )
+            elif t is not None and _is_named_tuple(t):
+                _runtime_method(self, method)(
+                    partial(self.named_tuple_rule, t)
+                )
 
     @classmethod
     @lru_cache
@@ -163,6 +167,21 @@ class _Syntax(v3_4.Syntax):
             StrMatch(f"{enumeration_type.__omc_class__}"),
             ".",
             [e.name for e in enumeration_type],
+        )
+
+    def named_tuple_rule(
+        self, named_tuple_type: type[tuple[Any, ...]]
+    ) -> _ParsingExpressionLike:
+        elements = [
+            getattr(self, _to_rule_name(t, ndim=n))
+            for _, (t, n) in _iter_attribute_types(named_tuple_type)
+        ]
+
+        return (
+            "(",
+            *chain.from_iterable((element, ",") for element in elements[:-1]),
+            elements[-1],
+            ")",
         )
 
     # Dialects
@@ -271,6 +290,10 @@ class _Visistor(PTNodeVisitor):
                 _runtime_method(self, method)(
                     partial(self._visit_enumeration, enumeration_type=t)
                 )
+            elif t is not None and _is_named_tuple(t):
+                _runtime_method(self, method)(
+                    partial(self._visit_named_tuple, named_tuple_type=t)
+                )
 
     @classmethod
     @lru_cache
@@ -299,6 +322,15 @@ class _Visistor(PTNodeVisitor):
         enumeration_type: type[enumeration],
     ) -> enumeration:
         return enumeration_type[children[-1]]
+
+    def _visit_named_tuple(
+        self,
+        _: Never,
+        children: _Children,
+        *,
+        named_tuple_type: type[enumeration],
+    ) -> enumeration:
+        return named_tuple_type(*children)
 
     def visit_none(self, _1: Never, _2: Never) -> None:
         return
