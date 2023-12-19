@@ -327,6 +327,16 @@ def test_type_and_ndim(test_case: TestCase) -> None:
         (int, "0", 0),
         (typing.List[int], "{0, 1}", [0, 1]),
         (typing.List[typing.List[int]], "{{0}, {1}}", [[0], [1]]),
+        (bool, "false", False),
+        (typing.List[bool], "{false, true}", [False, True]),
+        (
+            typing.List[typing.List[bool]],
+            "{{false}, {true}}",
+            [[False], [True]],
+        ),
+        (str, '""', ""),
+        (typing.List[str], '{"a", "b"}', ["a", "b"]),
+        (typing.List[typing.List[str]], '{{"a"}, {"b"}}', [["a"], ["b"]]),
     ],
 )
 def test_parse(annotation: Any, s: str, value: Any) -> None:
