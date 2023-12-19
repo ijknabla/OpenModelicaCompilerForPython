@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import types
-from collections.abc import Coroutine, Generator, Sequence
+from collections import ChainMap
+from collections.abc import Callable, Coroutine, Generator, Sequence
 from contextlib import suppress
-from functools import lru_cache
+from dataclasses import dataclass
+from functools import lru_cache, partial
 from itertools import chain
 from typing import (
     TYPE_CHECKING,
@@ -11,32 +13,444 @@ from typing import (
     ClassVar,
     DefaultDict,
     Literal,
+    Set,
     Tuple,
     Type,
+    TypeVar,
     Union,
     get_args,
     get_origin,
     get_type_hints,
+    overload,
 )
+
+from arpeggio import (
+    EOF,
+    NonTerminal,
+    Optional,
+    ParserPython,
+    PTNodeVisitor,
+    RegExMatch,
+    StrMatch,
+    Terminal,
+    UnorderedGroup,
+    ZeroOrMore,
+    visit_parse_tree,
+)
+from modelicalang import v3_4
+
+from .modelica import enumeration, record
+from .openmodelica import (
+    Component,
+    TypeName,
+    VariableName,
+    _BaseTypeName,
+    _BaseVariableName,
+)
+from .protocol import PathLike
+from .string import unquote_modelica_string
 
 if TYPE_CHECKING:
     from typing import _SpecialForm
 
-    from typing_extensions import TypeGuard
+    from arpeggio import _ParsingExpressionLike
+    from typing_extensions import Never, ParamSpec, Self, TypeGuard
 
-from .modelica import enumeration, record
-from .openmodelica import Component, TypeName, VariableName
-from .protocol import PathLike
+    T = TypeVar("T")
+    P = ParamSpec("P")
+
 
 _Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
 _Defined = Union[record, enumeration, Tuple[Any, ...]]
 _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
 
 
+def parse(typ: Any, s: str) -> Any:
+    root_type = _get_type(typ)
+    root_ndim = _get_ndim(typ)
+    with _Syntax:
+        parser = _Syntax.get_parser(
+            root_type=root_type,  # type: ignore
+            root_ndim=root_ndim,
+        )
+        visitor = _Visistor.get_visitor(
+            root_type=root_type,  # type: ignore
+            root_ndim=root_ndim,
+        )
+        return visit_parse_tree(parser.parse(s), visitor)
+
+
+@dataclass
+class _Syntax(v3_4.Syntax):
+    root_type: _StringableType
+    root_ndim: int
+
+    def __post_init__(self) -> None:
+        for t, n in _iter_all_types(self.root_type, self.root_ndim):
+            method = _to_rule_name(t, ndim=n)
+            if hasattr(self, method):
+                continue
+
+            if 0 < n:
+                _runtime_method(self, method)(
+                    partial(self.sequence_rule, t, n)
+                )
+            elif t is not None and issubclass(t, record):
+                _runtime_method(self, method)(partial(self.record_rule, t))
+                for attr, (tt, nn) in _iter_attribute_types(t):
+                    _runtime_method(self, _to_rule_name(t, attribute=attr))(
+                        partial(self.record_attr_rule, attr, tt, nn)
+                    )
+            elif t is not None and issubclass(t, enumeration):
+                _runtime_method(self, method)(
+                    partial(self.enumeration_rule, t)
+                )
+            elif t is not None and _is_named_tuple(t):
+                _runtime_method(self, method)(
+                    partial(self.named_tuple_rule, t)
+                )
+
+    @classmethod
+    @lru_cache
+    def get_parser(
+        cls, root_type: _StringableType, root_ndim: int
+    ) -> ParserPython:
+        return ParserPython(cls(root_type, root_ndim).root)
+
+    def root(self) -> _ParsingExpressionLike:
+        return (
+            getattr(self, _to_rule_name(self.root_type, ndim=self.root_ndim)),
+            EOF,
+        )
+
+    def sequence_rule(
+        self, _type: _StringableType, _ndim: int
+    ) -> _ParsingExpressionLike:
+        return (
+            "{",
+            ZeroOrMore(
+                getattr(self, _to_rule_name(_type, ndim=_ndim - 1)), sep=","
+            ),
+            "}",
+        )
+
+    def record_rule(self, record_type: type[record]) -> _ParsingExpressionLike:
+        name = StrMatch(f"{record_type.__omc_class__}")
+        return (
+            self.RECORD,
+            name,
+            UnorderedGroup(
+                *(
+                    getattr(self, _to_rule_name(record_type, attribute=attr))
+                    for attr, _ in _iter_attribute_types(record_type)
+                )
+            ),
+            self.END,
+            name,
+            ";",
+        )
+
+    def record_attr_rule(
+        self, _attribute: str, _type: _StringableType, _ndim: int
+    ) -> _ParsingExpressionLike:
+        return (
+            RegExMatch(f"_*{_attribute}_*", ignore_case=True),
+            "=",
+            getattr(self, _to_rule_name(_type, ndim=_ndim)),
+            ";",
+        )
+
+    def enumeration_rule(
+        self, enumeration_type: type[enumeration]
+    ) -> _ParsingExpressionLike:
+        return (
+            StrMatch(f"{enumeration_type.__omc_class__}"),
+            ".",
+            [e.name for e in enumeration_type],
+        )
+
+    def named_tuple_rule(
+        self, named_tuple_type: type[tuple[Any, ...]]
+    ) -> _ParsingExpressionLike:
+        elements = [
+            getattr(self, _to_rule_name(t, ndim=n))
+            for _, (t, n) in _iter_attribute_types(named_tuple_type)
+        ]
+
+        return (
+            "(",
+            *chain.from_iterable((element, ",") for element in elements[:-1]),
+            elements[-1],
+            ")",
+        )
+
+    # Dialects
+
+    @classmethod
+    def IDENT(cls) -> _ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+    # Primitives
+
+    @classmethod
+    def none(cls) -> _ParsingExpressionLike:
+        return ""
+
+    @classmethod
+    def real(cls) -> _ParsingExpressionLike:
+        return Optional(cls.SIGN), cls.UNSIGNED_NUMBER
+
+    @classmethod
+    def integer(cls) -> _ParsingExpressionLike:
+        return Optional(cls.SIGN), cls.UNSIGNED_INTEGER
+
+    @classmethod
+    def SIGN(cls) -> _ParsingExpressionLike:
+        return RegExMatch(r"[+-]")
+
+    @classmethod
+    def boolean(cls) -> _ParsingExpressionLike:
+        return [cls.TRUE, cls.FALSE]
+
+    @classmethod
+    def typename(cls) -> _ParsingExpressionLike:
+        return cls.type_specifier
+
+    @classmethod
+    def variablename(cls) -> _ParsingExpressionLike:
+        return cls.IDENT
+
+    @classmethod
+    def component(cls) -> _ParsingExpressionLike:
+        return (
+            "{",
+            (
+                *(cls.typename, ","),  # className
+                *(cls.variablename, ","),  # name
+                *(cls.STRING, ","),  # comment
+                *(cls.STRING, ","),  # protected
+                *(cls.boolean, ","),  # isFinal
+                *(cls.boolean, ","),  # isFlow
+                *(cls.boolean, ","),  # isStream
+                *(cls.boolean, ","),  # isReplaceable
+                *(cls.STRING, ","),  # variability
+                *(cls.STRING, ","),  # innerOuter
+                *(cls.STRING, ","),  # inputOutput
+                cls.subscript_list,  # dimensions
+            ),
+            "}",
+        )
+
+    @classmethod
+    def subscript_list(cls) -> _ParsingExpressionLike:
+        return "{", ZeroOrMore(cls.subscript, sep=","), "}"
+
+
+if TYPE_CHECKING:
+
+    class _Children(Sequence[Any]):
+        IDENT: list[str]
+        SIGN: Literal["+", "-"]
+        UNSIGNED_INTEGER: list[str]
+        UNSIGNED_NUMBER: list[str]
+        name: list[list[str]]
+
+
+class _Visistor(PTNodeVisitor):
+    root_type: _StringableType
+    root_ndim: int
+
+    def __init__(
+        self,
+        *args: Any,
+        root_type: _StringableType,
+        root_ndim: int,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        self.root_type = root_type
+        self.root_ndim = root_ndim
+
+        for t, n in _iter_all_types(root_type, root_ndim):
+            method = f"visit_{_to_rule_name(t, ndim=n)}"
+            if hasattr(self, method):
+                continue
+
+            if 0 < n:
+                _runtime_method(self, method)(partial(self._visit_sequence))
+            elif t is not None and issubclass(t, record):
+                _runtime_method(self, method)(
+                    partial(self._visit_record, record_type=t)
+                )
+                for attr, _ in _iter_attribute_types(t):
+                    _runtime_method(
+                        self, f"visit_{_to_rule_name(t, attribute=attr)}"
+                    )(partial(self._visit_record_attr, attribute=attr))
+            elif t is not None and issubclass(t, enumeration):
+                _runtime_method(self, method)(
+                    partial(self._visit_enumeration, enumeration_type=t)
+                )
+            elif t is not None and _is_named_tuple(t):
+                _runtime_method(self, method)(
+                    partial(self._visit_named_tuple, named_tuple_type=t)
+                )
+
+    @classmethod
+    @lru_cache
+    def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
+        return cls(root_type=root_type, root_ndim=root_ndim)
+
+    def _visit_sequence(self, _: Never, children: _Children) -> list[Any]:
+        return list(children[::2])
+
+    def _visit_record(
+        self, _: Never, children: _Children, *, record_type: type[record]
+    ) -> record:
+        return record_type(**ChainMap(*children[1:-1]))
+
+    def _visit_record_attr(
+        self, _: Never, children: _Children, *, attribute: str
+    ) -> dict[str, Any]:
+        _, value = children
+        return {attribute: value}
+
+    def _visit_enumeration(
+        self,
+        _: Never,
+        children: _Children,
+        *,
+        enumeration_type: type[enumeration],
+    ) -> enumeration:
+        return enumeration_type[children[-1]]
+
+    def _visit_named_tuple(
+        self,
+        _: Never,
+        children: _Children,
+        *,
+        named_tuple_type: type[enumeration],
+    ) -> enumeration:
+        return named_tuple_type(*children)
+
+    def visit_none(self, _1: Never, _2: Never) -> None:
+        return
+
+    def visit_none__1D(self, _1: Never, children: _Children) -> list[None]:
+        return [None] * (len(children) + 1)
+
+    def visit_real(self, _: Never, children: _Children) -> float:
+        (value,) = map(float, children.UNSIGNED_NUMBER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
+
+    def visit_integer(self, _: Never, children: _Children) -> int:
+        (value,) = map(int, children.UNSIGNED_INTEGER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
+
+    def visit_boolean(self, node: Terminal, _: Never) -> bool:
+        return {
+            "true": True,
+            "false": False,
+        }[node.value]
+
+    def visit_STRING(self, node: Terminal, _: Never) -> str:
+        return unquote_modelica_string(node.value)
+
+    def visit_typename(
+        self, node: NonTerminal, children: _Children
+    ) -> TypeName:
+        parts = tuple(ident for name in children.name for ident in name)
+        if isinstance(node[0], Terminal) and node[0].value == ".":
+            parts = (".",) + parts
+
+        return _BaseTypeName.__new__(TypeName, parts)
+
+    def visit_name(self, _: Never, children: _Children) -> list[str]:
+        return children.IDENT
+
+    def visit_variablename(
+        self, _: Never, children: _Children
+    ) -> VariableName:
+        (identifier,) = children
+        return _BaseVariableName.__new__(VariableName, identifier)
+
+    def visit_component(self, _: Never, children: _Children) -> Component:
+        return Component(*children)
+
+    def visit_subscript_list(self, node: NonTerminal, _: Never) -> list[str]:
+        return [n.flat_str() for n in node[1::2]]  # type: ignore
+
+
+@overload
+def _to_rule_name(_type: _StringableType, /) -> str:
+    ...
+
+
+@overload
+def _to_rule_name(_type: _StringableType, /, *, ndim: int) -> str:
+    ...
+
+
+@overload
+def _to_rule_name(_type: _StringableType, /, *, attribute: str) -> str:
+    ...
+
+
+def _to_rule_name(
+    _type: _StringableType,
+    /,
+    *,
+    ndim: int | None = None,
+    attribute: str | None = None,
+) -> str:
+    if _is_primitive(_type) or _type is None:
+        stem = {
+            float: "real",
+            int: "integer",
+            bool: "boolean",
+            str: "STRING",
+            TypeName: "typename",
+            VariableName: "variablename",
+            Component: "component",
+            None: "none",
+        }[_type]
+    elif _is_defined(_type):
+        stem = f"_{_type.__module__}.{_type.__name__}".lower().replace(
+            ".", "__"
+        )
+    else:
+        raise TypeError(_type)
+
+    parts: list[str] = [stem]
+
+    if ndim is not None and 0 < ndim:
+        parts.append(f"{ndim}D")
+    if attribute is not None:
+        parts.append(attribute)
+
+    return "__".join(parts)
+
+
+def _runtime_method(
+    self: Any, name: str
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
+    def decorator(f: Callable[P, T]) -> Callable[P, T]:
+        f.__name__ = name
+        setattr(self, name, f)
+        return f
+
+    return decorator
+
+
 def _iter_all_types(
     _type: _StringableType, ndim: int
 ) -> Generator[tuple[_StringableType, int], None, None]:
-    result = DefaultDict[_StringableType, set[int]](set)
+    result = DefaultDict[_StringableType, Set[int]](set)
     queue = [(_type, ndim)]
     while queue:
         t, n = queue.pop(0)

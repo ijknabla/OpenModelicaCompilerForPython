@@ -29,6 +29,7 @@ from omc4py.string2 import (
     _is_sequence,
     _is_union,
     _StringableType,
+    parse,
 )
 
 
@@ -314,3 +315,71 @@ def test_type_and_ndim(test_case: TestCase) -> None:
     x = test_case
     assert _get_type(x.annotation) is x.type
     assert _get_ndim(x.annotation) == x.ndim
+
+
+@pytest.mark.parametrize(
+    "annotation," "s," "value,",
+    [
+        (None, "", None),
+        (float, "0.0", 0.0),
+        (typing.List[float], "{0.0, 1.0}", [0.0, 1.0]),
+        (typing.List[typing.List[float]], "{{0.0}, {1.0}}", [[0.0], [1.0]]),
+        (int, "0", 0),
+        (typing.List[int], "{0, 1}", [0, 1]),
+        (typing.List[typing.List[int]], "{{0}, {1}}", [[0], [1]]),
+        (bool, "false", False),
+        (typing.List[bool], "{false, true}", [False, True]),
+        (
+            typing.List[typing.List[bool]],
+            "{{false}, {true}}",
+            [[False], [True]],
+        ),
+        (str, '""', ""),
+        (typing.List[str], '{"a", "b"}', ["a", "b"]),
+        (typing.List[typing.List[str]], '{{"a"}, {"b"}}', [["a"], ["b"]]),
+        (TypeName, ".A.$A", TypeName(".A.$A")),
+        (VariableName, "a", VariableName("a")),
+        (
+            typing.List[Component],
+            """
+{{.A,a,"","public",false,false,false,false,"unspecified","none","unspecified",{:,:}}}
+            """,
+            [
+                Component(
+                    className=TypeName(".A"),
+                    name=VariableName("a"),
+                    comment="",
+                    protected="public",
+                    isFinal=False,
+                    isFlow=False,
+                    isStream=False,
+                    isReplaceable=False,
+                    variability="unspecified",
+                    innerOuter="none",
+                    inputOutput="unspecified",
+                    dimensions=[":", ":"],
+                )
+            ],
+        ),
+        (
+            Record,
+            """
+record Record
+  Real=0.0;
+  Integer=0;
+  boolean=false;
+  string="";
+end Record;
+            """,
+            Record(real=0.0, integer=0, boolean=False, string=""),
+        ),
+        (Enumeration, "Enumeration.a", Enumeration.a),
+        (
+            NamedTuple,
+            '(0.0, 0, false, "")',
+            NamedTuple(real=0.0, integer=0, boolean=False, string=""),
+        ),
+    ],
+)
+def test_parse(annotation: Any, s: str, value: Any) -> None:
+    assert parse(annotation, s) == value

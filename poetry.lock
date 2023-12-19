@@ -943,7 +943,7 @@ telegram = ["requests"]
 
 [[package]]
 name = "types-arpeggio"
-version = "0.2.0.0a0.dev3"
+version = "0.2.0.0a0.dev4"
 description = ""
 optional = false
 python-versions = "^3.7"
@@ -953,8 +953,8 @@ develop = false
 [package.source]
 type = "git"
 url = "https://github.com/ijknabla/types-arpeggio.git"
-reference = "0.2.0.0a0.dev3"
-resolved_reference = "e18fdec81103f981379c1bd987b48e87cc952160"
+reference = "0.2.0.0a0.dev4"
+resolved_reference = "4d066b261d7f77edd32957f27de8fc68ed8ddc9b"
 
 [[package]]
 name = "types-pyyaml"
@@ -1018,4 +1018,4 @@ testing = ["big-O", "jaraco.functools", "jaraco.itertools", "more-itertools", "p
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.8"
-content-hash = "3134f7733649e4917f2778e713ae5e4a2677e3669a6763cf4864e02e5280e2ed"
+content-hash = "ad54b302e1727a3cb81dcf1682c43a75acfd0a57c9238d650949cbcb5b0c2d6f"
