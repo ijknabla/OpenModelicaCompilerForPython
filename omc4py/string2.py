@@ -25,6 +25,7 @@ from typing import (
 
 from arpeggio import (
     EOF,
+    NonTerminal,
     Optional,
     ParserPython,
     PTNodeVisitor,
@@ -36,7 +37,13 @@ from arpeggio import (
 from modelicalang import v3_4
 
 from .modelica import enumeration, record
-from .openmodelica import Component, TypeName, VariableName
+from .openmodelica import (
+    Component,
+    TypeName,
+    VariableName,
+    _BaseTypeName,
+    _BaseVariableName,
+)
 from .protocol import PathLike
 from .string import unquote_modelica_string
 
@@ -134,13 +141,23 @@ class _Syntax(v3_4.Syntax):
     def boolean(cls) -> _ParsingExpressionLike:
         return [cls.TRUE, cls.FALSE]
 
+    @classmethod
+    def typename(cls) -> _ParsingExpressionLike:
+        return cls.type_specifier
+
+    @classmethod
+    def variablename(cls) -> _ParsingExpressionLike:
+        return cls.IDENT
+
 
 if TYPE_CHECKING:
 
     class _Children(Sequence[Any]):
+        IDENT: list[str]
         SIGN: Literal["+", "-"]
         UNSIGNED_INTEGER: list[str]
         UNSIGNED_NUMBER: list[str]
+        name: list[list[str]]
 
 
 class _Visistor(PTNodeVisitor):
@@ -204,6 +221,24 @@ class _Visistor(PTNodeVisitor):
 
     def visit_STRING(self, node: Terminal, _: Never) -> str:
         return unquote_modelica_string(node.value)
+
+    def visit_typename(
+        self, node: NonTerminal, children: _Children
+    ) -> TypeName:
+        parts = tuple(ident for name in children.name for ident in name)
+        if isinstance(node[0], Terminal) and node[0].value == ".":
+            parts = (".",) + parts
+
+        return _BaseTypeName.__new__(TypeName, parts)
+
+    def visit_name(self, _: Never, children: _Children) -> list[str]:
+        return children.IDENT
+
+    def visit_variablename(
+        self, _: Never, children: _Children
+    ) -> VariableName:
+        (identifier,) = children
+        return _BaseVariableName.__new__(VariableName, identifier)
 
 
 @overload
