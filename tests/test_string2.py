@@ -339,6 +339,28 @@ def test_type_and_ndim(test_case: TestCase) -> None:
         (typing.List[typing.List[str]], '{{"a"}, {"b"}}', [["a"], ["b"]]),
         (TypeName, ".A.$A", TypeName(".A.$A")),
         (VariableName, "a", VariableName("a")),
+        (
+            typing.List[Component],
+            """
+{{.A,a,"","public",false,false,false,false,"unspecified","none","unspecified",{:,:}}}
+            """,
+            [
+                Component(
+                    className=TypeName(".A"),
+                    name=VariableName("a"),
+                    comment="",
+                    protected="public",
+                    isFinal=False,
+                    isFlow=False,
+                    isStream=False,
+                    isReplaceable=False,
+                    variability="unspecified",
+                    innerOuter="none",
+                    inputOutput="unspecified",
+                    dimensions=[":", ":"],
+                )
+            ],
+        ),
     ],
 )
 def test_parse(annotation: Any, s: str, value: Any) -> None:
