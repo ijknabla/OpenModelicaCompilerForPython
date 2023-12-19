@@ -321,6 +321,12 @@ def test_type_and_ndim(test_case: TestCase) -> None:
     "annotation," "s," "value,",
     [
         (None, "", None),
+        (float, "0.0", 0.0),
+        (typing.List[float], "{0.0, 1.0}", [0.0, 1.0]),
+        (typing.List[typing.List[float]], "{{0.0}, {1.0}}", [[0.0], [1.0]]),
+        (int, "0", 0),
+        (typing.List[int], "{0, 1}", [0, 1]),
+        (typing.List[typing.List[int]], "{{0}, {1}}", [[0], [1]]),
     ],
 )
 def test_parse(annotation: Any, s: str, value: Any) -> None:
