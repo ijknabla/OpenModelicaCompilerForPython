@@ -7,7 +7,7 @@ import typing
 from collections.abc import Generator
 from contextlib import suppress
 from dataclasses import dataclass
-from typing import Any, Literal, NamedTuple, Union
+from typing import Any, Literal, Union
 
 import pytest
 
@@ -30,6 +30,13 @@ from omc4py.string2 import (
     _is_union,
     _StringableType,
 )
+
+
+class NamedTuple(typing.NamedTuple):
+    real: float
+    integer: int
+    boolean: bool
+    string: str
 
 
 @dataclass(frozen=True)
@@ -174,15 +181,9 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
         )
 
     # NamedTuple
-    class _NamedTuple(NamedTuple):
-        real: float
-        integer: int
-        boolean: bool
-        string: str
-
     yield TestCase(
-        _NamedTuple,
-        type=_NamedTuple,
+        NamedTuple,
+        type=NamedTuple,
         is_named_tuple=True,
         is_defined=True,
     )
