@@ -30,6 +30,7 @@ from omc4py.string2 import (
     _is_union,
     _StringableType,
     parse,
+    unparse
 )
 
 
@@ -383,3 +384,4 @@ end Record;
 )
 def test_parse(annotation: Any, s: str, value: Any) -> None:
     assert parse(annotation, s) == value
+    assert parse(annotation, unparse(annotation, value)) == value
