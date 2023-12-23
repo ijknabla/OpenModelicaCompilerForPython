@@ -32,6 +32,12 @@ from omc4py.string2 import (
     parse,
     unparse,
 )
+from omc4py.v_1_22.OpenModelica.Scripting import (
+    ErrorKind,
+    ErrorLevel,
+    ErrorMessage,
+    SourceInfo,
+)
 
 
 class NamedTuple(typing.NamedTuple):
@@ -379,6 +385,44 @@ end Record;
             NamedTuple,
             '(0.0, 0, false, "")',
             NamedTuple(real=0.0, integer=0, boolean=False, string=""),
+        ),
+        (
+            typing.List[ErrorMessage],
+            """
+{
+  record OpenModelica.Scripting.ErrorMessage
+    info =
+      record OpenModelica.Scripting.SourceInfo
+        filename = "",
+        readonly = false,
+        lineStart = 0,
+        columnStart = 0,
+        lineEnd = 0,
+        columnEnd = 0
+      end OpenModelica.Scripting.SourceInfo;,
+    message = "",
+    kind = .OpenModelica.Scripting.ErrorKind.syntax,
+    level = .OpenModelica.Scripting.ErrorLevel.internal,
+    id = 0
+  end OpenModelica.Scripting.ErrorMessage;
+}
+            """,
+            [
+                ErrorMessage(
+                    info=SourceInfo(
+                        fileName="",
+                        readonly=False,
+                        lineStart=0,
+                        columnStart=0,
+                        lineEnd=0,
+                        columnEnd=0,
+                    ),
+                    message="",
+                    kind=ErrorKind.syntax,
+                    level=ErrorLevel.internal,
+                    id=0,
+                )
+            ],
         ),
     ],
 )
