@@ -534,7 +534,7 @@ class FunctionFactory(HasTypeName):
                         case "OpenModelica", "Scripting", name:
                             funcname = name
                         case _:
-                            funcname = f"{self.typename.as_absolute()}"
+                            funcname = f"{self.typename}"
 
                     decorator_list = [
                         ast.Call(
