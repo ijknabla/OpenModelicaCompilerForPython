@@ -29,7 +29,7 @@ async def threadData(
     ...
 
 
-@external(".OpenModelica.threadData")
+@external("OpenModelica.threadData")
 def threadData(
     self: Union[
         SupportsInteractiveProperty[Synchronous],

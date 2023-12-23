@@ -50,7 +50,7 @@ async def stat(
     ...
 
 
-@external(".OpenModelica.Scripting.Internal.stat")
+@external("OpenModelica.Scripting.Internal.stat")
 def stat(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
