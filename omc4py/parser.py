@@ -227,7 +227,7 @@ def _cast_enumeration(val: Any, typ: type[enumeration], hint: type[_T]) -> _T:
         return typing_cast(_T, typ(val))
     elif isinstance(val, str):
         typename = TypeName(val).as_absolute()
-        if typename.parent == typ.__omc_class__:
+        if typename.parent == typ.__omc_class__.as_absolute():
             name = f"{typename.last_identifier}"
         else:
             name = val
