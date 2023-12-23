@@ -29,7 +29,7 @@ async def threadData(
     ...
 
 
-@external(".OpenModelica.threadData")
+@external("OpenModelica.threadData")
 def threadData(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -53,11 +53,11 @@ class ThreadData(record):
         record ThreadData
         end ThreadData;"""
 
-    __omc_class__ = TypeName(".OpenModelica.threadData.ThreadData")
+    __omc_class__ = TypeName("OpenModelica.threadData.ThreadData")
 
 
 class Internal(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Internal")
+    __omc_class__ = TypeName("OpenModelica.Internal")
     ClockConstructor = internal.ClockConstructor
     intervalInferred = internal.intervalInferred
     delay2 = internal.delay2
@@ -77,7 +77,7 @@ class Internal(package[T_Calling]):
 
 
 class Scripting(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting")
+    __omc_class__ = TypeName("OpenModelica.Scripting")
     CheckSettingsResult = scripting.CheckSettingsResult
 
     @property
@@ -380,7 +380,7 @@ class Scripting(package[T_Calling]):
 
 
 class UsersGuide(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.UsersGuide")
+    __omc_class__ = TypeName("OpenModelica.UsersGuide")
 
     @property
     def ReleaseNotes(self) -> usersGuide.ReleaseNotes[T_Calling]:

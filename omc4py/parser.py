@@ -227,7 +227,7 @@ def _cast_enumeration(val: Any, typ: type[enumeration], hint: type[_T]) -> _T:
         return typing_cast(_T, typ(val))
     elif isinstance(val, str):
         typename = TypeName(val).as_absolute()
-        if typename.parent == typ.__omc_class__:
+        if typename.parent == typ.__omc_class__.as_absolute():
             name = f"{typename.last_identifier}"
         else:
             name = val
@@ -243,8 +243,8 @@ def _cast_record(val: Any, typ: type[record], hint: type[_T]) -> _T:
     elif isinstance(val, Mapping):
         type_hints = get_type_hints(typ)
 
-        # Patch for bug at `.OpenModelica.Scripting.getMessagesStringInternal`
-        if typ.__omc_class__ == TypeName(".OpenModelica.Scripting.SourceInfo"):
+        # Patch for bug at `OpenModelica.Scripting.getMessagesStringInternal`
+        if typ.__omc_class__ == TypeName("OpenModelica.Scripting.SourceInfo"):
             if "fileName" in type_hints and "filename" in val:
                 val = {
                     k if k != "filename" else "fileName": v

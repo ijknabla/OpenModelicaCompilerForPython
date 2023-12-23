@@ -8,7 +8,7 @@ from . import Annotations as annotations
 
 
 class Annotations(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.AutoCompletion.Annotations")
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations")
     Documentation = annotations.Documentation
     experiment = annotations.experiment
     Dialog = annotations.Dialog

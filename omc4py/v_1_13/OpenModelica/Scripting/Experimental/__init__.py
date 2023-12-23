@@ -28,7 +28,7 @@ async def relocateFunctions(
     ...
 
 
-@external(".OpenModelica.Scripting.Experimental.relocateFunctions")
+@external("OpenModelica.Scripting.Experimental.relocateFunctions")
 def relocateFunctions(
     self: Union[
         SupportsInteractiveProperty[Synchronous],

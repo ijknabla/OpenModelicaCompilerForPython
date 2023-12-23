@@ -42,7 +42,7 @@ class CheckSettingsResult(record):
             preferredView = "text");
         end CheckSettingsResult;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.CheckSettingsResult")
+    __omc_class__ = TypeName("OpenModelica.Scripting.CheckSettingsResult")
     OPENMODELICAHOME: str
     OPENMODELICALIBRARY: str
     OMC_PATH: str
@@ -64,7 +64,7 @@ class CheckSettingsResult(record):
 
 
 class Internal(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting.Internal")
+    __omc_class__ = TypeName("OpenModelica.Scripting.Internal")
 
     @property
     def Time(self) -> internal.Time[T_Calling]:
@@ -2897,7 +2897,7 @@ class SourceInfo(record):
             preferredView = "text");
         end SourceInfo;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.SourceInfo")
+    __omc_class__ = TypeName("OpenModelica.Scripting.SourceInfo")
     fileName: str
     readonly: bool
     lineStart: int
@@ -2913,7 +2913,7 @@ class ErrorKind(enumeration):
         type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ErrorKind")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ErrorKind")
     syntax = 1
     "syntax errors"
     grammar = 2
@@ -2934,7 +2934,7 @@ class ErrorLevel(enumeration):
 
         type ErrorLevel = enumeration(notification, warning, error);"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ErrorLevel")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ErrorLevel")
     notification = 1
     warning = 2
     error = 3
@@ -2955,7 +2955,7 @@ class ErrorMessage(record):
             preferredView = "text");
         end ErrorMessage;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ErrorMessage")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ErrorMessage")
     info: SourceInfo
     message: str
     kind: ErrorKind
@@ -4578,7 +4578,7 @@ class ExportKind(enumeration):
         type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ExportKind")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ExportKind")
     Absyn = 1
     "Normal Absyn"
     SCode = 2
@@ -4692,7 +4692,7 @@ class DiffFormat(enumeration):
         type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.DiffFormat")
+    __omc_class__ = TypeName("OpenModelica.Scripting.DiffFormat")
     plain = 1
     "no deletions, no markup"
     color = 2
@@ -5002,7 +5002,7 @@ class LinearSystemSolver(enumeration):
 
         type LinearSystemSolver = enumeration(dgesv, lpsolve55);"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.LinearSystemSolver")
+    __omc_class__ = TypeName("OpenModelica.Scripting.LinearSystemSolver")
     dgesv = 1
     lpsolve55 = 2
 
@@ -5071,7 +5071,7 @@ class StandardStream(enumeration):
 
         type StandardStream = enumeration(stdin, stdout, stderr);"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.StandardStream")
+    __omc_class__ = TypeName("OpenModelica.Scripting.StandardStream")
     stdin = 1
     stdout = 2
     stderr = 3
@@ -5483,7 +5483,7 @@ class SimulationResult(record):
         end SimulationResult;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.Scripting.simulate.SimulationResult"
+        "OpenModelica.Scripting.simulate.SimulationResult"
     )
     resultFile: str
     simulationOptions: str
@@ -9544,7 +9544,7 @@ class Component(record):
         end Component;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.Scripting.getComponentsTest.Component"
+        "OpenModelica.Scripting.getComponentsTest.Component"
     )
     className: str
     name: str
@@ -10352,7 +10352,7 @@ class GC_PROFSTATS(record):
           Integer reclaimed_bytes_before_gc;
         end GC_PROFSTATS;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.GC_PROFSTATS")
+    __omc_class__ = TypeName("OpenModelica.Scripting.GC_PROFSTATS")
     heapsize_full: int
     free_bytes_full: int
     unmapped_bytes: int
@@ -10748,7 +10748,7 @@ class oms_system(enumeration):
         type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.oms_system")
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_system")
     oms_system_none = 1
     oms_system_tlm = 2
     oms_system_wc = 3
@@ -10762,7 +10762,7 @@ class oms_causality(enumeration):
         type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.oms_causality")
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_causality")
     oms_causality_input = 1
     oms_causality_output = 2
     oms_causality_parameter = 3
@@ -10777,7 +10777,7 @@ class oms_signal_type(enumeration):
         type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.oms_signal_type")
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_signal_type")
     oms_signal_type_real = 1
     oms_signal_type_integer = 2
     oms_signal_type_boolean = 3
@@ -10793,7 +10793,7 @@ class oms_solver(enumeration):
         type oms_solver = enumeration(oms_solver_none, oms_solver_sc_min, oms_solver_sc_explicit_euler, oms_solver_sc_cvode, oms_solver_sc_max, oms_solver_wc_min, oms_solver_wc_ma, oms_solver_wc_mav, oms_solver_wc_assc, oms_solver_wc_mav2, oms_solver_wc_max);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.oms_solver")
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_solver")
     oms_solver_none = 1
     oms_solver_sc_min = 2
     oms_solver_sc_explicit_euler = 3
@@ -10814,7 +10814,7 @@ class oms_tlm_domain(enumeration):
         type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.oms_tlm_domain")
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_domain")
     oms_tlm_domain_input = 1
     oms_tlm_domain_output = 2
     oms_tlm_domain_mechanical = 3
@@ -10830,7 +10830,7 @@ class oms_tlm_interpolation(enumeration):
         type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.oms_tlm_interpolation")
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_interpolation")
     oms_tlm_no_interpolation = 1
     oms_tlm_coarse_grained = 2
     oms_tlm_fine_grained = 3
@@ -13805,7 +13805,7 @@ def oms_getVersion(
 
 
 class Experimental(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting.Experimental")
+    __omc_class__ = TypeName("OpenModelica.Scripting.Experimental")
     relocateFunctions = experimental.relocateFunctions
     toJulia = experimental.toJulia
     interactiveDumpAbsynToJL = experimental.interactiveDumpAbsynToJL

@@ -297,7 +297,7 @@ class PackageFactory(HasTypeName):
                 value=ast.Call(
                     func=ast.Name(id="TypeName", ctx=ast.Load()),
                     args=[
-                        ast.Constant(value=f"{self.typename.as_absolute()}")
+                        ast.Constant(value=f"{self.typename}")
                     ],
                     keywords=[],
                 ),
@@ -407,7 +407,7 @@ class RecordFactory(HasTypeName):
             targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
             value=ast.Call(
                 func=ast.Name(id="TypeName", ctx=ast.Load()),
-                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                args=[ast.Constant(value=f"{self.typename}")],
                 keywords=[],
             ),
             lineno=None,
@@ -534,7 +534,7 @@ class FunctionFactory(HasTypeName):
                         case "OpenModelica", "Scripting", name:
                             funcname = name
                         case _:
-                            funcname = f"{self.typename.as_absolute()}"
+                            funcname = f"{self.typename}"
 
                     decorator_list = [
                         ast.Call(
@@ -677,7 +677,7 @@ class EnumerationFactory(HasTypeName):
             targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
             value=ast.Call(
                 func=ast.Name(id="TypeName", ctx=ast.Load()),
-                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                args=[ast.Constant(value=f"{self.typename}")],
                 keywords=[],
             ),
             lineno=None,
