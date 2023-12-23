@@ -30,7 +30,7 @@ from omc4py.string2 import (
     _is_union,
     _StringableType,
     parse,
-    unparse
+    unparse,
 )
 
 
@@ -374,7 +374,7 @@ end Record;
             """,
             Record(real=0.0, integer=0, boolean=False, string=""),
         ),
-        (Enumeration, "Enumeration.a", Enumeration.a),
+        (Enumeration, ".Enumeration.a", Enumeration.a),
         (
             NamedTuple,
             '(0.0, 0, false, "")',

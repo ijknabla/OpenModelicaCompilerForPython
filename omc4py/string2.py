@@ -184,11 +184,13 @@ def _unparse_enumeration(
 ) -> str:
     assert n <= 0
     if isinstance(obj, Enum):
-        return f"{t.__omc_class__}.{obj.name}"
+        name = obj.name
     elif isinstance(obj, int):
-        return f"{t.__omc_class__}.{t(obj).name}"
+        name = t(obj).name
     else:
-        return f"{t.__omc_class__}.{obj!s}"
+        name = str(obj)
+
+    return f"{t.__omc_class__.as_absolute()}.{name}"
 
 
 def _unparse_primitive(
@@ -312,8 +314,7 @@ class _Syntax(v3_4.Syntax):
         self, enumeration_type: type[enumeration]
     ) -> _ParsingExpressionLike:
         return (
-            StrMatch(f"{enumeration_type.__omc_class__}"),
-            ".",
+            f"{enumeration_type.__omc_class__.as_absolute()}.",
             [e.name for e in enumeration_type],
         )
 
