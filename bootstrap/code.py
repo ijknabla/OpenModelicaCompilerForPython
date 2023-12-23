@@ -296,9 +296,7 @@ class PackageFactory(HasTypeName):
                 targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
                 value=ast.Call(
                     func=ast.Name(id="TypeName", ctx=ast.Load()),
-                    args=[
-                        ast.Constant(value=f"{self.typename}")
-                    ],
+                    args=[ast.Constant(value=f"{self.typename}")],
                     keywords=[],
                 ),
                 lineno=None,
