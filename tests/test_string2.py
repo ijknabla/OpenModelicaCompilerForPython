@@ -64,7 +64,7 @@ class Enumeration(enumeration):
 
 
 @dataclass(frozen=True)
-class TestCase:
+class Example:
     annotation: Any
     type: _StringableType
     ndim: int = 0
@@ -80,76 +80,76 @@ class TestCase:
     is_coroutine: bool = False
 
 
-def _iter_test_cases() -> Generator[TestCase, None, None]:
+def _iter_examples() -> Generator[Example, None, None]:
     # NoneType
-    yield TestCase(
+    yield Example(
         annotation=None,
         type=None,
         is_none=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=type(None),
         type=None,
         is_none=True,
     )
     with suppress(AttributeError):
-        yield TestCase(
+        yield Example(
             annotation=types.NoneType,
             type=None,
             is_none=True,
         )
 
     # Literal
-    yield TestCase(
+    yield Example(
         annotation=Literal["a"],
         type=str,
         is_literal=True,
     )
 
-    yield TestCase(
+    yield Example(
         annotation=Literal["a", "b"],
         type=str,
         is_literal=True,
     )
 
     # Union
-    yield TestCase(
+    yield Example(
         annotation=Union[int, None],
         type=int,
         is_union=True,
     )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=int | None,
             type=int,
             is_union=True,
         )
 
     # PathLike
-    yield TestCase(
+    yield Example(
         annotation=omc4py.protocol.PathLike,
         type=str,
         is_path_like=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=omc4py.protocol.PathLike[str],
         type=str,
         is_path_like=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=os.PathLike,
         type=str,
         is_path_like=True,
     )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=os.PathLike[str],
             type=str,
             is_path_like=True,
         )
 
     # Component
-    yield TestCase(
+    yield Example(
         annotation=Component,
         type=Component,
         is_component=True,
@@ -157,55 +157,55 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
     )
 
     # float, int
-    yield TestCase(
+    yield Example(
         annotation=float,
         type=float,
         is_primitive=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=int,
         type=int,
         is_primitive=True,
     )
 
     # TypeName
-    yield TestCase(
+    yield Example(
         annotation=TypeName,
         type=TypeName,
         is_primitive=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=Union[TypeName, str],
         type=TypeName,
         is_union=True,
     )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=TypeName | str,
             type=TypeName,
             is_union=True,
         )
 
     # VariableName
-    yield TestCase(
+    yield Example(
         annotation=VariableName,
         type=VariableName,
         is_primitive=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=Union[VariableName, str],
         type=VariableName,
         is_union=True,
     )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=VariableName | str,
             type=VariableName,
             is_union=True,
         )
 
     # NamedTuple
-    yield TestCase(
+    yield Example(
         NamedTuple,
         type=NamedTuple,
         is_named_tuple=True,
@@ -213,64 +213,64 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
     )
 
     # record, enumeration
-    yield TestCase(
+    yield Example(
         Record,
         type=Record,
         is_defined=True,
     )
 
-    yield TestCase(
+    yield Example(
         Enumeration,
         type=Enumeration,
         is_defined=True,
     )
 
     # Sequence
-    yield TestCase(
+    yield Example(
         annotation=typing.List[int],
         type=int,
         ndim=1,
         is_sequence=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=typing.List[typing.List[int]],
         type=int,
         ndim=2,
         is_sequence=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=typing.Sequence[int],
         type=int,
         ndim=1,
         is_sequence=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=typing.Sequence[typing.Sequence[int]],
         type=int,
         ndim=2,
         is_sequence=True,
     )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=list[int],
             type=int,
             ndim=1,
             is_sequence=True,
         )
-        yield TestCase(
+        yield Example(
             annotation=list[list[int]],
             type=int,
             ndim=2,
             is_sequence=True,
         )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=collections.abc.Sequence[int],
             type=int,
             ndim=1,
             is_sequence=True,
         )
-        yield TestCase(
+        yield Example(
             annotation=collections.abc.Sequence[collections.abc.Sequence[int]],
             type=int,
             ndim=2,
@@ -278,33 +278,33 @@ def _iter_test_cases() -> Generator[TestCase, None, None]:
         )
 
     # Coroutine
-    yield TestCase(
+    yield Example(
         annotation=typing.Coroutine[None, None, int],
         type=int,
         is_coroutine=True,
     )
-    yield TestCase(
+    yield Example(
         annotation=Union[int, typing.Coroutine[None, None, int]],
         type=int,
         is_union=True,
     )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=collections.abc.Coroutine[None, None, int],
             type=int,
             is_coroutine=True,
         )
     with suppress(TypeError):
-        yield TestCase(
+        yield Example(
             annotation=int | collections.abc.Coroutine[None, None, int],
             type=int,
             is_union=True,
         )
 
 
-@pytest.mark.parametrize("test_case", _iter_test_cases())
-def test_annotation_checker(test_case: TestCase) -> None:
-    x = test_case
+@pytest.mark.parametrize("example", _iter_examples())
+def test_annotation_checker(example: Example) -> None:
+    x = example
     assert _is_none(x.annotation) == x.is_none
     assert _is_literal(x.annotation) == x.is_literal
     assert _is_union(x.annotation) == x.is_union
@@ -317,9 +317,9 @@ def test_annotation_checker(test_case: TestCase) -> None:
     assert _is_coroutine(x.annotation) == x.is_coroutine
 
 
-@pytest.mark.parametrize("test_case", _iter_test_cases())
-def test_type_and_ndim(test_case: TestCase) -> None:
-    x = test_case
+@pytest.mark.parametrize("example", _iter_examples())
+def test_type_and_ndim(example: Example) -> None:
+    x = example
     assert _get_type(x.annotation) is x.type
     assert _get_ndim(x.annotation) == x.ndim
 

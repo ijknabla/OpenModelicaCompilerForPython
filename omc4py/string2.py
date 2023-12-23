@@ -190,7 +190,7 @@ def _unparse_enumeration(
     else:
         name = str(obj)
 
-    return f"{t.__omc_class__.as_absolute()}.{name}"
+    return f"{t.__omc_class__}.{name}"
 
 
 def _unparse_primitive(
@@ -314,7 +314,8 @@ class _Syntax(v3_4.Syntax):
         self, enumeration_type: type[enumeration]
     ) -> _ParsingExpressionLike:
         return (
-            f"{enumeration_type.__omc_class__.as_absolute()}.",
+            Optional("."),
+            f"{enumeration_type.__omc_class__}.",
             [e.name for e in enumeration_type],
         )
 
