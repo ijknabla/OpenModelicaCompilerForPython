@@ -11,7 +11,6 @@ from typing import (
     ClassVar,
     TypeVar,
     Union,
-    cast,
     get_args,
     get_origin,
     get_type_hints,
@@ -85,8 +84,7 @@ def _call(
     *args: P.args,
     **kwargs: P.kwargs,
 ) -> ReturnType[T]:
-    from . import parser
-    from .string2 import unparse
+    from .string2 import parse, unparse
 
     signature = inspect.signature(f)
     type_hints = get_type_hints(f)
@@ -112,9 +110,7 @@ def _call(
                 yield f"{name}={literal}"
 
     return fmap(
-        lambda x: parser.parse(
-            cast("type[T]", _extract_return_type(type_hints["return"])), x
-        ),
+        lambda x: parse(type_hints["return"], x),
         self.__omc_interactive__.evaluate(
             f"{funcname}({','.join(_iter_arguments())})"
         ),
