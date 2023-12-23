@@ -30,7 +30,13 @@ from omc4py.string2 import (
     _is_union,
     _StringableType,
     parse,
-    unparse
+    unparse,
+)
+from omc4py.v_1_22.OpenModelica.Scripting import (
+    ErrorKind,
+    ErrorLevel,
+    ErrorMessage,
+    SourceInfo,
 )
 
 
@@ -366,19 +372,57 @@ def test_type_and_ndim(test_case: TestCase) -> None:
             Record,
             """
 record Record
-  Real=0.0;
-  Integer=0;
-  boolean=false;
-  string="";
+  Real=0.0,
+  Integer=0,
+  boolean=false,
+  string=""
 end Record;
             """,
             Record(real=0.0, integer=0, boolean=False, string=""),
         ),
-        (Enumeration, "Enumeration.a", Enumeration.a),
+        (Enumeration, ".Enumeration.a", Enumeration.a),
         (
             NamedTuple,
             '(0.0, 0, false, "")',
             NamedTuple(real=0.0, integer=0, boolean=False, string=""),
+        ),
+        (
+            typing.List[ErrorMessage],
+            """
+{
+  record OpenModelica.Scripting.ErrorMessage
+    info =
+      record OpenModelica.Scripting.SourceInfo
+        filename = "",
+        readonly = false,
+        lineStart = 0,
+        columnStart = 0,
+        lineEnd = 0,
+        columnEnd = 0
+      end OpenModelica.Scripting.SourceInfo;,
+    message = "",
+    kind = .OpenModelica.Scripting.ErrorKind.syntax,
+    level = .OpenModelica.Scripting.ErrorLevel.internal,
+    id = 0
+  end OpenModelica.Scripting.ErrorMessage;
+}
+            """,
+            [
+                ErrorMessage(
+                    info=SourceInfo(
+                        fileName="",
+                        readonly=False,
+                        lineStart=0,
+                        columnStart=0,
+                        lineEnd=0,
+                        columnEnd=0,
+                    ),
+                    message="",
+                    kind=ErrorKind.syntax,
+                    level=ErrorLevel.internal,
+                    id=0,
+                )
+            ],
         ),
     ],
 )
