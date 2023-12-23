@@ -170,12 +170,12 @@ def _unparse_record(
                     tt, nn, attrs + (f".{attr}",), getattr(obj, attr)
                 )
 
-            yield f"{attr}={value};"
+            yield f"{attr}={value}"
 
     return (
         f"record {t.__omc_class__} "
-        + "".join(items())
-        + f"end {t.__omc_class__};"
+        + ",".join(items())
+        + f" end {t.__omc_class__};"
     )
 
 
@@ -293,7 +293,8 @@ class _Syntax(v3_4.Syntax):
                 *(
                     getattr(self, _to_rule_name(record_type, attribute=attr))
                     for attr, _ in _iter_attribute_types(record_type)
-                )
+                ),
+                sep=",",
             ),
             self.END,
             name,
@@ -307,7 +308,6 @@ class _Syntax(v3_4.Syntax):
             RegExMatch(f"_*{_attribute}_*", ignore_case=True),
             "=",
             getattr(self, _to_rule_name(_type, ndim=_ndim)),
-            ";",
         )
 
     def enumeration_rule(
@@ -455,7 +455,11 @@ class _Visistor(PTNodeVisitor):
     def _visit_record(
         self, _: Never, children: _Children, *, record_type: type[record]
     ) -> record:
-        return record_type(**ChainMap(*children[1:-1]))
+        return record_type(
+            **ChainMap(
+                *(child for child in children if isinstance(child, dict))
+            )
+        )
 
     def _visit_record_attr(
         self, _: Never, children: _Children, *, attribute: str
