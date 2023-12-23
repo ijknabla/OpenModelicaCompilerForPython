@@ -243,8 +243,8 @@ def _cast_record(val: Any, typ: type[record], hint: type[_T]) -> _T:
     elif isinstance(val, Mapping):
         type_hints = get_type_hints(typ)
 
-        # Patch for bug at `.OpenModelica.Scripting.getMessagesStringInternal`
-        if typ.__omc_class__ == TypeName(".OpenModelica.Scripting.SourceInfo"):
+        # Patch for bug at `OpenModelica.Scripting.getMessagesStringInternal`
+        if typ.__omc_class__ == TypeName("OpenModelica.Scripting.SourceInfo"):
             if "fileName" in type_hints and "filename" in val:
                 val = {
                     k if k != "filename" else "fileName": v
