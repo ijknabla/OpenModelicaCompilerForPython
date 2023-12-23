@@ -83,7 +83,7 @@ async def empty(self: SupportsInteractiveProperty[Asynchronous]) -> None:
     ...
 
 
-@external(".empty")
+@external("empty")
 def empty(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -104,7 +104,7 @@ AsyncEmptySession = GenericEmptySession[Asynchronous]
 
 
 class Enum(enumeration):
-    __omc_class__ = TypeName(".one.Enum")
+    __omc_class__ = TypeName("one.Enum")
 
     One = 1
 
@@ -127,7 +127,7 @@ async def one(self: SupportsInteractiveProperty[Asynchronous]) -> One:
     ...
 
 
-@external(".one")
+@external("one")
 def one(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -148,7 +148,7 @@ AsyncOneSession = GenericOneSession[Asynchronous]
 
 
 class Nested(package[T_Calling]):
-    __omc_class__ = TypeName(".Nested")
+    __omc_class__ = TypeName("Nested")
 
     level = nested.level
 

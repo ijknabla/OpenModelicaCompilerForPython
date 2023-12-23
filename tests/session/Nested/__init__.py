@@ -24,7 +24,7 @@ async def level(self: SupportsInteractiveProperty[Asynchronous]) -> int:
     ...
 
 
-@external(".Nested.level")
+@external("Nested.level")
 def level(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -35,7 +35,7 @@ def level(
 
 
 class Nested(package[T_Calling]):
-    __omc_class__ = TypeName(".Nested.Nested")
+    __omc_class__ = TypeName("Nested.Nested")
 
     level = nested.level
 
