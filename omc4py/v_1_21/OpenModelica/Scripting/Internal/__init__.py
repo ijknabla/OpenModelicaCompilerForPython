@@ -15,7 +15,7 @@ from . import Time as time
 
 
 class Time(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting.Internal.Time")
+    __omc_class__ = TypeName("OpenModelica.Scripting.Internal.Time")
     readableTime = time.readableTime
     timerTick = time.timerTick
     timerTock = time.timerTock
@@ -29,7 +29,7 @@ class FileType(enumeration):
         type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.Internal.FileType")
+    __omc_class__ = TypeName("OpenModelica.Scripting.Internal.FileType")
     NoFile = 1
     RegularFile = 2
     Directory = 3

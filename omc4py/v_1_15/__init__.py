@@ -11,7 +11,7 @@ from . import OpenModelica as openModelica
 
 
 class OpenModelica(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica")
+    __omc_class__ = TypeName("OpenModelica")
     threadData = openModelica.threadData
     ThreadData = openModelica.ThreadData
 

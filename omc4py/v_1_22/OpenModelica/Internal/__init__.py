@@ -382,6 +382,6 @@ def realRem(
 
 
 class Architecture(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Internal.Architecture")
+    __omc_class__ = TypeName("OpenModelica.Internal.Architecture")
     numBits = architecture.numBits
     integerMax = architecture.integerMax

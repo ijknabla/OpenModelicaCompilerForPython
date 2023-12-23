@@ -6,4 +6,4 @@ from omc4py.protocol import T_Calling
 
 
 class ReleaseNotes(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.UsersGuide.ReleaseNotes")
+    __omc_class__ = TypeName("OpenModelica.UsersGuide.ReleaseNotes")

@@ -54,11 +54,11 @@ class ThreadData(record):
         record ThreadData
         end ThreadData;"""
 
-    __omc_class__ = TypeName(".OpenModelica.threadData.ThreadData")
+    __omc_class__ = TypeName("OpenModelica.threadData.ThreadData")
 
 
 class Internal(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Internal")
+    __omc_class__ = TypeName("OpenModelica.Internal")
     ClockConstructor = internal.ClockConstructor
     delay2 = internal.delay2
     delay3 = internal.delay3
@@ -77,7 +77,7 @@ class Internal(package[T_Calling]):
 
 
 class Scripting(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting")
+    __omc_class__ = TypeName("OpenModelica.Scripting")
     CheckSettingsResult = scripting.CheckSettingsResult
 
     @property
@@ -497,7 +497,7 @@ class Scripting(package[T_Calling]):
 
 
 class UsersGuide(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.UsersGuide")
+    __omc_class__ = TypeName("OpenModelica.UsersGuide")
 
     @property
     def ReleaseNotes(self) -> usersGuide.ReleaseNotes[T_Calling]:
@@ -505,7 +505,7 @@ class UsersGuide(package[T_Calling]):
 
 
 class AutoCompletion(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.AutoCompletion")
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion")
 
     @property
     def Annotations(self) -> autoCompletion.Annotations[T_Calling]:
