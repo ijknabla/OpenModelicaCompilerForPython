@@ -5,6 +5,7 @@ from itertools import zip_longest
 import pytest
 
 from omc4py import Session, TypeName, VariableName
+from omc4py.exception import OMCRuntimeError
 from omc4py.openmodelica import Component
 from tests import OpenSession
 
@@ -289,3 +290,11 @@ def _check_components(components: list[Component]) -> None:
         assert component.innerOuter == "none"
         assert component.inputOutput == "unspecified"
         assert component.dimensions == dimensions
+
+
+@pytest.mark.asyncio
+async def test_runtime_error(session: Session) -> None:
+    s = session.asynchronous
+    assert (await s.getClassRestriction("OpenModelica")) == "package"
+    with pytest.raises(OMCRuntimeError):
+        await s.getClassRestriction("OpenModelica.$Code")
