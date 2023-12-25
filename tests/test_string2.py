@@ -374,8 +374,20 @@ def test_type_and_ndim(example: Example) -> None:
 record Record
   Real=0.0,
   Integer=0,
+  Boolean=false,
+  String=""
+end Record;
+            """,
+            Record(real=0.0, integer=0, boolean=False, string=""),
+        ),
+        (
+            Record,
+            """
+record Record
+  string="",
   boolean=false,
-  string=""
+  integer=0,
+  real=0.0
 end Record;
             """,
             Record(real=0.0, integer=0, boolean=False, string=""),
