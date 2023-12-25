@@ -10,14 +10,14 @@ import pytest
 from omc4py import TypeName, VariableName
 from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
-from omc4py.parser import cast, parse
+from omc4py.string2 import parse, unparse
 from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
     SourceInfo,
 )
 
 
 class OneTwo(enumeration):
-    __omc_class__ = TypeName(".OneTwo")
+    __omc_class__ = TypeName("OneTwo")
 
     One = 1
     Two = 2
@@ -25,14 +25,14 @@ class OneTwo(enumeration):
 
 @dataclass
 class RecordA(record):
-    __omc_class__ = TypeName(".RecordA")
+    __omc_class__ = TypeName("A")
 
     a: int
 
 
 @dataclass
 class RecordAB(record):
-    __omc_class__ = TypeName(".RecordAB")
+    __omc_class__ = TypeName("AB")
 
     a: int
     b: int
@@ -40,7 +40,7 @@ class RecordAB(record):
 
 @dataclass
 class ScalarRecord(record):
-    __omc_class__ = TypeName(".ScalarRecord")
+    __omc_class__ = TypeName("ScalarRecord")
 
     real: float
     integer: int
@@ -53,7 +53,7 @@ class ScalarRecord(record):
 
 @dataclass
 class SequenceRecord(record):
-    __omc_class__ = TypeName(".SequenceRecord")
+    __omc_class__ = TypeName("SequenceRecord")
 
     real: Sequence[float]
     integer: Sequence[int]
@@ -170,7 +170,7 @@ def _iter_enumeration_values(
     ],
 )
 def test_cast(typ: Any, val: Any, expected: Any) -> None:
-    assert cast(typ, val) == expected
+    assert parse(typ, unparse(typ, val)) == expected
 
 
 @pytest.mark.parametrize(
