@@ -17,7 +17,7 @@ from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
 
 
 class OneTwo(enumeration):
-    __omc_class__ = TypeName(".OneTwo")
+    __omc_class__ = TypeName("OneTwo")
 
     One = 1
     Two = 2
@@ -25,14 +25,14 @@ class OneTwo(enumeration):
 
 @dataclass
 class RecordA(record):
-    __omc_class__ = TypeName(".RecordA")
+    __omc_class__ = TypeName("A")
 
     a: int
 
 
 @dataclass
 class RecordAB(record):
-    __omc_class__ = TypeName(".RecordAB")
+    __omc_class__ = TypeName("AB")
 
     a: int
     b: int
@@ -40,7 +40,7 @@ class RecordAB(record):
 
 @dataclass
 class ScalarRecord(record):
-    __omc_class__ = TypeName(".ScalarRecord")
+    __omc_class__ = TypeName("ScalarRecord")
 
     real: float
     integer: int
@@ -53,7 +53,7 @@ class ScalarRecord(record):
 
 @dataclass
 class SequenceRecord(record):
-    __omc_class__ = TypeName(".SequenceRecord")
+    __omc_class__ = TypeName("SequenceRecord")
 
     real: Sequence[float]
     integer: Sequence[int]
