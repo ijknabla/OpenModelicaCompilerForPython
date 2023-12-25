@@ -10,7 +10,7 @@ import pytest
 from omc4py import TypeName, VariableName
 from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
-from omc4py.parser import cast, parse
+from omc4py.string2 import parse, unparse
 from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
     SourceInfo,
 )
@@ -170,7 +170,7 @@ def _iter_enumeration_values(
     ],
 )
 def test_cast(typ: Any, val: Any, expected: Any) -> None:
-    assert cast(typ, val) == expected
+    assert parse(typ, unparse(typ, val)) == expected
 
 
 @pytest.mark.parametrize(
