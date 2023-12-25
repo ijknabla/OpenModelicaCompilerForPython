@@ -296,10 +296,10 @@ class _Syntax(v3_4.Syntax):
             self.RECORD,
             name,
             UnorderedGroup(
-                *(
+                [
                     getattr(self, _to_rule_name(record_type, attribute=attr))
                     for attr, _ in _iter_attribute_types(record_type)
-                ),
+                ],
                 sep=",",
             ),
             self.END,
