@@ -14,8 +14,6 @@ from typing import (
     Union,
 )
 
-from .string import to_omc_literal
-
 if TYPE_CHECKING:
     from typing_extensions import Self
 
@@ -81,8 +79,6 @@ class _BaseVariableName:
         else:
             return f"{type(self).__name__}({self.__identifier!r})"
 
-    __to_omc_literal__ = __str__
-
 
 class VariableName(_BaseVariableName):
     def __new__(cls, obj: VariableNameLike | None = None) -> Self:
@@ -97,7 +93,7 @@ class VariableName(_BaseVariableName):
         if isinstance(obj, str):
             identifier = obj
         elif isinstance(obj, TypeName):
-            identifier = to_omc_literal(obj)
+            identifier = str(obj)
         else:
             raise TypeError(
                 "obj must be TypeName, VariableName or str, "
@@ -175,8 +171,6 @@ class _BaseTypeName:
             return self.parts[0] + ".".join(self.parts[1:])
         else:
             return ".".join(self.parts)
-
-    __to_omc_literal__ = __str__
 
 
 class TypeName(_BaseTypeName):

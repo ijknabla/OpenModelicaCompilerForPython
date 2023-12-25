@@ -3,21 +3,11 @@ from __future__ import annotations
 __all__ = (
     "escape_py_string",
     "unescape_modelica_string",
-    "to_omc_literal",
 )
 
 
-from collections.abc import Iterable, Sequence
-from contextlib import suppress
-from functools import lru_cache, reduce
-from typing import TYPE_CHECKING, Any
-
-from omc4py.protocol import PathLike
-
-from .protocol import SupportsToOMCLiteral
-
-if TYPE_CHECKING:
-    from builtins import _ClassInfo
+from collections.abc import Iterable
+from functools import reduce
 
 modelica_char_escape_map = {
     "\\": r"\\",
@@ -60,31 +50,6 @@ def unquote_modelica_string(modelica_string: str) -> str:
             f"modelica_string must ends with '\"' got {modelica_string!r}"
         )
     return unescape_modelica_string(modelica_string[1:-1])
-
-
-def to_omc_literal(obj: Any) -> str:
-    if isinstance(obj, SupportsToOMCLiteral):
-        return obj.__to_omc_literal__()
-    elif isinstance(obj, bool):
-        return "true" if obj else "false"
-    elif isinstance(obj, PathLike):
-        return to_omc_literal(obj.__fspath__())
-    elif isinstance(obj, str):
-        return '"' + escape_py_string(obj) + '"'
-    elif isinstance(obj, _sequence_types()):
-        return "{" + ", ".join(map(to_omc_literal, obj)) + "}"
-    else:
-        return str(obj)
-
-
-@lru_cache(1)
-def _sequence_types() -> _ClassInfo:
-    result = [Sequence]
-    with suppress(ImportError):
-        import numpy  # type: ignore
-
-        result.append(numpy.ndarray)
-    return tuple(result)
 
 
 def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:

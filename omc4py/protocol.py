@@ -38,12 +38,6 @@ class SupportsClose(Protocol):
         ...
 
 
-@runtime_checkable
-class SupportsToOMCLiteral(Protocol):
-    def __to_omc_literal__(self) -> str:
-        ...
-
-
 class Calling(enum.Enum):
     synchronous = enum.auto()
     asynchronous = enum.auto()
