@@ -410,6 +410,7 @@ if TYPE_CHECKING:
         UNSIGNED_INTEGER: list[str]
         UNSIGNED_NUMBER: list[str]
         name: list[list[str]]
+        subscript: list[str]
 
 
 class _Visistor(PTNodeVisitor):
@@ -542,8 +543,11 @@ class _Visistor(PTNodeVisitor):
     def visit_component(self, _: Never, children: _Children) -> Component:
         return Component(*children)
 
-    def visit_subscript_list(self, node: NonTerminal, _: Never) -> list[str]:
-        return [n.flat_str() for n in node[1::2]]  # type: ignore
+    def visit_subscript_list(self, _: Never, children: _Children) -> list[str]:
+        return list(children.subscript)
+
+    def visit_subscript(self, node: Terminal | NonTerminal, _: Never) -> str:
+        return node.flat_str()
 
 
 @overload
