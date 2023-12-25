@@ -27,6 +27,7 @@ from typing import (
 
 from arpeggio import (
     EOF,
+    NoMatch,
     NonTerminal,
     Optional,
     ParserPython,
@@ -41,6 +42,7 @@ from arpeggio import (
 from exceptiongroup import ExceptionGroup
 from modelicalang import v3_4
 
+from .exception import OMCRuntimeError
 from .modelica import enumeration, record
 from .openmodelica import (
     Component,
@@ -223,11 +225,15 @@ def parse(typ: Any, s: str) -> Any:
             root_type=root_type,  # type: ignore
             root_ndim=root_ndim,
         )
-        visitor = _Visistor.get_visitor(
-            root_type=root_type,  # type: ignore
-            root_ndim=root_ndim,
-        )
-        return visit_parse_tree(parser.parse(s), visitor)
+    visitor = _Visistor.get_visitor(
+        root_type=root_type,  # type: ignore
+        root_ndim=root_ndim,
+    )
+    try:
+        parse_tree = parser.parse(s)
+    except NoMatch:
+        raise OMCRuntimeError(s) from None
+    return visit_parse_tree(parse_tree, visitor)
 
 
 @dataclass
