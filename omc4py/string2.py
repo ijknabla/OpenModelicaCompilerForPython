@@ -641,8 +641,24 @@ def _iter_attribute_types(
 
 def _get_type(obj: Any) -> _StringableType:
     types = set(_iter_types(obj))
-    if types > {str}:
+    if any(
+        issubclass(
+            t,
+            (enumeration, TypeName, VariableName),
+        )
+        for t in types
+        if t is not None
+    ):
         types -= {str}
+    if any(
+        issubclass(
+            t,
+            enumeration,
+        )
+        for t in types
+        if t is not None
+    ):
+        types -= {int}
     if types > {None}:
         types -= {None}
 
