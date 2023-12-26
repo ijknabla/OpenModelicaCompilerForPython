@@ -328,28 +328,6 @@ def test_type_and_ndim(example: Example) -> None:
     "annotation," "s," "value,",
     [
         (
-            typing.List[Component],
-            """
-{{.A,a,"","public",false,false,false,false,"unspecified","none","unspecified",{:,:}}}
-            """,
-            [
-                Component(
-                    className=TypeName(".A"),
-                    name=VariableName("a"),
-                    comment="",
-                    protected="public",
-                    isFinal=False,
-                    isFlow=False,
-                    isStream=False,
-                    isReplaceable=False,
-                    variability="unspecified",
-                    innerOuter="none",
-                    inputOutput="unspecified",
-                    dimensions=[":", ":"],
-                )
-            ],
-        ),
-        (
             Record,
             """
 record Record

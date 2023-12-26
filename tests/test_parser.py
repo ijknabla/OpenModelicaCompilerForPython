@@ -244,6 +244,28 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
         (List[Component], "{}", []),
         (
             List[Component],
+            """
+{{.A,a,"","public",false,false,false,false,"unspecified","none","unspecified",{:,:}}}
+            """,
+            [
+                Component(
+                    className=TypeName(".A"),
+                    name=VariableName("a"),
+                    comment="",
+                    protected="public",
+                    isFinal=False,
+                    isFlow=False,
+                    isStream=False,
+                    isReplaceable=False,
+                    variability="unspecified",
+                    innerOuter="none",
+                    inputOutput="unspecified",
+                    dimensions=[":", ":"],
+                )
+            ],
+        ),
+        (
+            List[Component],
             """\
 {
     {
