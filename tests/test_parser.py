@@ -34,14 +34,6 @@ class SingleRecord(record):
 
 
 @dataclass
-class RecordAB(record):
-    __omc_class__ = TypeName("AB")
-
-    a: int
-    b: int
-
-
-@dataclass
 class ScalarRecord(record):
     __omc_class__ = TypeName("ScalarRecord")
 
