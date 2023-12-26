@@ -31,6 +31,7 @@ from typing import (
     get_type_hints,
     overload,
 )
+from warnings import warn
 
 from arpeggio import (
     EOF,
@@ -49,7 +50,7 @@ from arpeggio import (
 from exceptiongroup import ExceptionGroup
 from modelicalang import v3_4
 
-from .exception import OMCRuntimeError
+from .exception import OMCRuntimeError, OMCWarning
 from .modelica import enumeration, record
 from .openmodelica import (
     Component,
@@ -237,7 +238,8 @@ def parse(typ: Any, s: str) -> Any:
     )
     try:
         parse_tree = parser.parse(s)
-    except NoMatch:
+    except NoMatch as no_match:
+        warn(OMCWarning(f"{no_match}"))
         raise OMCRuntimeError(s) from None
     return visit_parse_tree(parse_tree, visitor)
 
