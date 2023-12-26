@@ -27,7 +27,7 @@ from arpeggio import (
 )
 from modelicalang import ParsingExpressionLike, v3_4
 
-from .string import unquote_modelica_string
+from .string2 import _unquote_modelica_string
 
 if TYPE_CHECKING:
     from typing_extensions import Never
@@ -266,7 +266,7 @@ class Visitor(PTNodeVisitor):
         return node.flat_str()
 
     def visit_STRING(self, node: Terminal, _: Never) -> str:
-        return unquote_modelica_string(node.flat_str())
+        return _unquote_modelica_string(node.flat_str())
 
     def visit_real(self, node: NonTerminal, _: Never) -> str:
         return node.flat_str()

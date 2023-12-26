@@ -2,11 +2,18 @@ from __future__ import annotations
 
 import types
 from collections import ChainMap
-from collections.abc import Callable, Coroutine, Generator, Mapping, Sequence
+from collections.abc import (
+    Callable,
+    Coroutine,
+    Generator,
+    Iterable,
+    Mapping,
+    Sequence,
+)
 from contextlib import suppress
 from dataclasses import dataclass
 from enum import Enum
-from functools import lru_cache, partial
+from functools import lru_cache, partial, reduce
 from itertools import chain
 from typing import (
     TYPE_CHECKING,
@@ -52,7 +59,6 @@ from .openmodelica import (
     _BaseVariableName,
 )
 from .protocol import PathLike
-from .string import quote_py_string, unquote_modelica_string
 
 if TYPE_CHECKING:
     from typing import _SpecialForm
@@ -210,7 +216,7 @@ def _unparse_primitive(
     if issubclass(t, str):
         if isinstance(obj, PathLike):
             obj = obj.__fspath__()
-        return quote_py_string(str(obj))
+        return _quote_py_string(str(obj))
     elif issubclass(t, bool):
         return "true" if obj else "false"
     else:
@@ -520,7 +526,7 @@ class _Visistor(PTNodeVisitor):
         }[node.value]
 
     def visit_STRING(self, node: Terminal, _: Never) -> str:
-        return unquote_modelica_string(node.value)
+        return _unquote_modelica_string(node.value)
 
     def visit_typename(
         self, node: NonTerminal, children: _Children
@@ -795,3 +801,50 @@ def _issubclass(
             obj, tuple(c for c in class_ if isinstance(c, type))
         )
     return False
+
+
+_MODELICA_CHAR_ESCAPE_MAP = {
+    "\\": r"\\",
+    "'": r"\'",
+    '"': r"\"",
+    "\a": r"\a",
+    "\b": r"\b",
+    "\f": r"\f",
+    "\n": r"\n",
+    "\t": r"\t",
+    "\v": r"\v",
+}
+
+
+def _escape_py_string(py_string: str) -> str:
+    return _replace_all(py_string, _MODELICA_CHAR_ESCAPE_MAP.items())
+
+
+def _unescape_modelica_string(modelica_string: str) -> str:
+    return _replace_all(
+        modelica_string,
+        [
+            (escaped, orignal)
+            for orignal, escaped in _MODELICA_CHAR_ESCAPE_MAP.items()
+        ],
+    )
+
+
+def _quote_py_string(py_string: str) -> str:
+    return '"' + _escape_py_string(py_string) + '"'
+
+
+def _unquote_modelica_string(modelica_string: str) -> str:
+    if not modelica_string.startswith('"'):
+        raise ValueError(
+            f"modelica_string must starts with '\"' got {modelica_string!r}"
+        )
+    if not modelica_string.endswith('"'):
+        raise ValueError(
+            f"modelica_string must ends with '\"' got {modelica_string!r}"
+        )
+    return _unescape_modelica_string(modelica_string[1:-1])
+
+
+def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:
+    return reduce(lambda x, y: x.replace(y[0], y[1]), old_and_new, s)
