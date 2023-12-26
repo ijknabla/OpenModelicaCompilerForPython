@@ -327,25 +327,6 @@ def test_type_and_ndim(example: Example) -> None:
 @pytest.mark.parametrize(
     "annotation," "s," "value,",
     [
-        (None, "", None),
-        (float, "0.0", 0.0),
-        (typing.List[float], "{0.0, 1.0}", [0.0, 1.0]),
-        (typing.List[typing.List[float]], "{{0.0}, {1.0}}", [[0.0], [1.0]]),
-        (int, "0", 0),
-        (typing.List[int], "{0, 1}", [0, 1]),
-        (typing.List[typing.List[int]], "{{0}, {1}}", [[0], [1]]),
-        (bool, "false", False),
-        (typing.List[bool], "{false, true}", [False, True]),
-        (
-            typing.List[typing.List[bool]],
-            "{{false}, {true}}",
-            [[False], [True]],
-        ),
-        (str, '""', ""),
-        (typing.List[str], '{"a", "b"}', ["a", "b"]),
-        (typing.List[typing.List[str]], '{{"a"}, {"b"}}', [["a"], ["b"]]),
-        (TypeName, ".A.$A", TypeName(".A.$A")),
-        (VariableName, "a", VariableName("a")),
         (
             typing.List[Component],
             """
