@@ -115,9 +115,9 @@ def _iter_namelike_values(
 def _iter_enumeration_values(
     enum: type[enumeration],
 ) -> Iterable[tuple[Any, enumeration | int | str, enumeration]]:
-    literal: Any = Literal[
+    literal: Any = Literal.__getitem__(
         tuple(e.value for e in enum) + tuple(e.name for e in enum)
-    ]
+    )
 
     e: enumeration
     for e, val_type, use_union in product(
