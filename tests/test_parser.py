@@ -24,8 +24,8 @@ class OneTwo(enumeration):
 
 
 @dataclass
-class RecordA(record):
-    __omc_class__ = TypeName("A")
+class SingleRecord(record):
+    __omc_class__ = TypeName("SingleRecord")
 
     a: int
 
@@ -379,7 +379,11 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
                 ),
             ],
         ),
-        (RecordA, "record A a = 0 end A;", RecordA(**{"a": 0})),
+        (
+            SingleRecord,
+            "record SingleRecord a = 0 end SingleRecord;",
+            SingleRecord(a=0),
+        ),
         (
             RecordAB,
             "record AB a = 0, b = 1 end AB;",
