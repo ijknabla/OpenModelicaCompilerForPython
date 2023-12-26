@@ -533,3 +533,4 @@ end OpenModelica.Scripting.SourceInfo;
 )
 def test_parse(typ: Any, literal: str, expected: Any) -> None:
     assert parse(typ, literal) == expected
+    assert parse(typ, unparse(typ, expected)) == expected
