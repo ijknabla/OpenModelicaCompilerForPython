@@ -12,6 +12,9 @@ from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
 from omc4py.string2 import parse, unparse
 from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
+    ErrorKind,
+    ErrorLevel,
+    ErrorMessage,
     SourceInfo,
 )
 
@@ -605,6 +608,44 @@ end OpenModelica.Scripting.SourceInfo;
                 lineEnd=3,
                 columnEnd=4,
             ),
+        ),
+        (
+            List[ErrorMessage],
+            """
+{
+  record OpenModelica.Scripting.ErrorMessage
+    info =
+      record OpenModelica.Scripting.SourceInfo
+        filename = "",
+        readonly = false,
+        lineStart = 0,
+        columnStart = 0,
+        lineEnd = 0,
+        columnEnd = 0
+      end OpenModelica.Scripting.SourceInfo;,
+    message = "",
+    kind = .OpenModelica.Scripting.ErrorKind.syntax,
+    level = .OpenModelica.Scripting.ErrorLevel.internal,
+    id = 0
+  end OpenModelica.Scripting.ErrorMessage;
+}
+            """,
+            [
+                ErrorMessage(
+                    info=SourceInfo(
+                        fileName="",
+                        readonly=False,
+                        lineStart=0,
+                        columnStart=0,
+                        lineEnd=0,
+                        columnEnd=0,
+                    ),
+                    message="",
+                    kind=ErrorKind.syntax,
+                    level=ErrorLevel.internal,
+                    id=0,
+                )
+            ],
         ),
     ],
 )
