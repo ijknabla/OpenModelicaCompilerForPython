@@ -169,7 +169,7 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
 
 
 @pytest.mark.parametrize(
-    "typ, literal, expected",
+    "annotation," "literal," "expected,",
     [
         (None, "", None),
         (type(None), "", None),
@@ -641,6 +641,6 @@ end OpenModelica.Scripting.SourceInfo;
         ),
     ],
 )
-def test_parse(typ: Any, literal: str, expected: Any) -> None:
-    assert parse(typ, literal) == expected
-    assert parse(typ, unparse(typ, expected)) == expected
+def test_parse(annotation: Any, literal: str, expected: Any) -> None:
+    assert parse(annotation, literal) == expected
+    assert parse(annotation, unparse(annotation, expected)) == expected
