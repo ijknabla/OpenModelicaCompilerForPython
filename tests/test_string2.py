@@ -328,36 +328,6 @@ def test_type_and_ndim(example: Example) -> None:
     "annotation," "s," "value,",
     [
         (
-            Record,
-            """
-record Record
-  Real=0.0,
-  Integer=0,
-  Boolean=false,
-  String=""
-end Record;
-            """,
-            Record(real=0.0, integer=0, boolean=False, string=""),
-        ),
-        (
-            Record,
-            """
-record Record
-  string="",
-  boolean=false,
-  integer=0,
-  real=0.0
-end Record;
-            """,
-            Record(real=0.0, integer=0, boolean=False, string=""),
-        ),
-        (Enumeration, ".Enumeration.a", Enumeration.a),
-        (
-            NamedTuple,
-            '(0.0, 0, false, "")',
-            NamedTuple(real=0.0, integer=0, boolean=False, string=""),
-        ),
-        (
             typing.List[ErrorMessage],
             """
 {

@@ -385,9 +385,50 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
             SingleRecord(a=0),
         ),
         (
-            RecordAB,
-            "record AB a = 0, b = 1 end AB;",
-            RecordAB(**{"a": 0, "b": 1}),
+            ScalarRecord,
+            """
+record ScalarRecord
+  real=1.0,
+  integer=1,
+  boolean=true,
+  string="one",
+  variable=one,
+  type_=One,
+  enumeration_=OneTwo.One
+end ScalarRecord;
+            """,
+            ScalarRecord(
+                real=1.0,
+                integer=1,
+                boolean=True,
+                string="one",
+                variable=VariableName("one"),
+                type_=TypeName("One"),
+                enumeration_=OneTwo.One,
+            ),
+        ),
+        (
+            ScalarRecord,  # Check reversed order
+            """
+record ScalarRecord
+  enumeration_=OneTwo.One,
+  type_=One,
+  variable=one,
+  string="one",
+  boolean=true,
+  integer=1,
+  real=1.0
+end ScalarRecord;
+            """,
+            ScalarRecord(
+                real=1.0,
+                integer=1,
+                boolean=True,
+                string="one",
+                variable=VariableName("one"),
+                type_=TypeName("One"),
+                enumeration_=OneTwo.One,
+            ),
         ),
         (TwoInt, "(0, 1)", (0, 1)),
         (
@@ -397,8 +438,7 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
 (
     1,1,true,"1",One,One,OneTwo.One,
     record ScalarRecord
-        real=1,integer=1,boolean=true,string="1",
-        variable=One,type_=One,enumeration_=OneTwo.One
+        real=1,integer=1,boolean=true,string="1",variable=One,type_=One,enumeration_=OneTwo.One
     end ScalarRecord;
 )
                 """
