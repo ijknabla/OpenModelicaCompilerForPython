@@ -512,7 +512,7 @@ end OpenModelica.Scripting.SourceInfo;
             SourceInfo,
             """\
 record OpenModelica.Scripting.SourceInfo
-    fileName = "fileName",
+    fileName="fileName",
     readonly=false,
     lineStart=1,
     columnStart=2,
