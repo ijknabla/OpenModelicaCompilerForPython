@@ -84,7 +84,7 @@ def _call(
     *args: P.args,
     **kwargs: P.kwargs,
 ) -> ReturnType[T]:
-    from .string2 import parse, unparse
+    from .parser import parse, unparse
 
     signature = inspect.signature(f)
     type_hints = get_type_hints(f)
