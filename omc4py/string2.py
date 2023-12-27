@@ -87,8 +87,10 @@ class OMCSyntax(v3_4.Syntax):
 
 
 def is_variablename(variablename: str) -> bool:
-    with _Syntax:
-        parser = _Syntax.get_parser(root_type=VariableName, root_ndim=0)
+    with _ParametrizedSyntax:
+        parser = _ParametrizedSyntax.get_parser(
+            root_type=VariableName, root_ndim=0
+        )
 
     with suppress(NoMatch):
         parser.parse(variablename)
@@ -100,12 +102,12 @@ def is_variablename(variablename: str) -> bool:
 def parse(typ: Any, s: str) -> Any:
     root_type = _get_type(typ)
     root_ndim = _get_ndim(typ)
-    with _Syntax:
-        parser = _Syntax.get_parser(
+    with _ParametrizedSyntax:
+        parser = _ParametrizedSyntax.get_parser(
             root_type=root_type,  # type: ignore
             root_ndim=root_ndim,
         )
-    visitor = _Visistor.get_visitor(
+    visitor = _ParametrizedVisistor.get_visitor(
         root_type=root_type,  # type: ignore
         root_ndim=root_ndim,
     )
@@ -129,7 +131,7 @@ def unparse(typ: Any, obj: Any) -> str:
 
 
 @dataclass
-class _Syntax(OMCSyntax):
+class _ParametrizedSyntax(OMCSyntax):
     root_type: _StringableType
     root_ndim: int
 
@@ -299,7 +301,7 @@ if TYPE_CHECKING:
         subscript: list[str]
 
 
-class _Visistor(PTNodeVisitor):
+class _ParametrizedVisistor(PTNodeVisitor):
     root_type: _StringableType
     root_ndim: int
 
