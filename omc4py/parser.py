@@ -14,7 +14,6 @@ from typing import (
 
 from arpeggio import (
     EOF,
-    NoMatch,
     NonTerminal,
     OneOrMore,
     Optional,
@@ -33,29 +32,11 @@ if TYPE_CHECKING:
     from typing_extensions import Never
 
 
-def is_variablename(variablename: str) -> bool:
-    parser = _get_variablename_parser()
-    try:
-        parser.parse(variablename)
-        return True
-    except NoMatch:
-        return False
-
-
 def split_typename_parts(typename: str) -> tuple[str, ...]:
     return visit_parse_tree(  # type: ignore
         _get_typename_parser().parse(typename),
         TypeNameSplitVisitor(),
     )
-
-
-@lru_cache(1)
-def _get_variablename_parser() -> ParserPython:
-    def root() -> ParsingExpressionLike:
-        return Syntax.variablename, EOF
-
-    with Syntax:
-        return ParserPython(root)
 
 
 @lru_cache(1)
