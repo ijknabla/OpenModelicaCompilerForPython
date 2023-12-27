@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from functools import lru_cache
 from typing import (
     TYPE_CHECKING,
     Any,
@@ -13,16 +12,13 @@ from typing import (
 )
 
 from arpeggio import (
-    EOF,
     NonTerminal,
     OneOrMore,
     Optional,
-    ParserPython,
     PTNodeVisitor,
     RegExMatch,
     Terminal,
     ZeroOrMore,
-    visit_parse_tree,
 )
 from modelicalang import ParsingExpressionLike, v3_4
 
@@ -30,22 +26,6 @@ from .string2 import _unquote_modelica_string
 
 if TYPE_CHECKING:
     from typing_extensions import Never
-
-
-def split_typename_parts(typename: str) -> tuple[str, ...]:
-    return visit_parse_tree(  # type: ignore
-        _get_typename_parser().parse(typename),
-        TypeNameSplitVisitor(),
-    )
-
-
-@lru_cache(1)
-def _get_typename_parser() -> ParserPython:
-    def root() -> ParsingExpressionLike:
-        return Syntax.typename, EOF
-
-    with Syntax:
-        return ParserPython(root)
 
 
 class Syntax(v3_4.Syntax):
@@ -321,14 +301,3 @@ class Visitor(PTNodeVisitor):
 
     def visit_record_array(self, _: Never, children: Children) -> AnyPrimary:
         return children.record_primary
-
-
-class TypeNameSplitVisitor(PTNodeVisitor):
-    def visit_DOT(self, node: Terminal, _: Never) -> str:
-        return node.flat_str()
-
-    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
-
-    def visit_typename(self, _: Never, children: Children) -> tuple[str, ...]:
-        return tuple(children.DOT + children.variablename)
