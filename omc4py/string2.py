@@ -78,6 +78,17 @@ _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
 # region Public
 
 
+def is_variablename(variablename: str) -> bool:
+    with _Syntax:
+        parser = _Syntax.get_parser(root_type=VariableName, root_ndim=0)
+
+    with suppress(NoMatch):
+        parser.parse(variablename)
+        return True
+
+    return False
+
+
 def parse(typ: Any, s: str) -> Any:
     root_type = _get_type(typ)
     root_ndim = _get_ndim(typ)
