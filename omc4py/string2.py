@@ -637,6 +637,9 @@ def _unparse_primitive(
 # endregion
 
 
+# region _StringableType
+
+
 def _iter_all_types(
     _type: _StringableType, ndim: int
 ) -> Generator[tuple[_StringableType, int], None, None]:
@@ -823,6 +826,10 @@ def _issubclass(
     return False
 
 
+# endregion
+
+# region Char conversions between Python and Modelica
+
 _MODELICA_CHAR_ESCAPE_MAP = {
     "\\": r"\\",
     "'": r"\'",
@@ -869,5 +876,7 @@ def _unquote_modelica_string(modelica_string: str) -> str:
 def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:
     return reduce(lambda x, y: x.replace(y[0], y[1]), old_and_new, s)
 
+
+# endregion
 
 # endregion
