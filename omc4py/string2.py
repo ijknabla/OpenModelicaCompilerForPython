@@ -75,9 +75,34 @@ _Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
 _Defined = Union[record, enumeration, Tuple[Any, ...]]
 _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
 
+# region Public
+
+
+def parse(typ: Any, s: str) -> Any:
+    root_type = _get_type(typ)
+    root_ndim = _get_ndim(typ)
+    with _Syntax:
+        parser = _Syntax.get_parser(
+            root_type=root_type,  # type: ignore
+            root_ndim=root_ndim,
+        )
+    visitor = _Visistor.get_visitor(
+        root_type=root_type,  # type: ignore
+        root_ndim=root_ndim,
+    )
+    try:
+        parse_tree = parser.parse(s)
+    except NoMatch as no_match:
+        warn(OMCWarning(f"{no_match}"))
+        raise OMCRuntimeError(s) from None
+    return visit_parse_tree(parse_tree, visitor)
+
 
 def unparse(typ: Any, obj: Any) -> str:
     return _unparse(_get_type(typ), _get_ndim(typ), (), obj)
+
+
+# endregion
 
 
 def _unparse(
@@ -221,26 +246,6 @@ def _unparse_primitive(
         return "true" if obj else "false"
     else:
         return str(obj)
-
-
-def parse(typ: Any, s: str) -> Any:
-    root_type = _get_type(typ)
-    root_ndim = _get_ndim(typ)
-    with _Syntax:
-        parser = _Syntax.get_parser(
-            root_type=root_type,  # type: ignore
-            root_ndim=root_ndim,
-        )
-    visitor = _Visistor.get_visitor(
-        root_type=root_type,  # type: ignore
-        root_ndim=root_ndim,
-    )
-    try:
-        parse_tree = parser.parse(s)
-    except NoMatch as no_match:
-        warn(OMCWarning(f"{no_match}"))
-        raise OMCRuntimeError(s) from None
-    return visit_parse_tree(parse_tree, visitor)
 
 
 class OMCSyntax(v3_4.Syntax):
