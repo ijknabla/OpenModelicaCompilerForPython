@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 - `OpenModelica.Scripting.CheckSettingsResult`
     - Rename `SENDDATALIBS` => `RTLIBS`
+- Fixed a mistake where `OMCRuntimeError` inherited `OMCError`.
 
 ## [0.3.0a4] - 2023-11-22
 
