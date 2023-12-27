@@ -82,7 +82,7 @@ class _BaseVariableName:
 
 class VariableName(_BaseVariableName):
     def __new__(cls, obj: VariableNameLike | None = None) -> Self:
-        from .parser import is_variablename
+        from .string2 import is_variablename
 
         if obj is None:
             return _BaseVariableName.__new__(cls)
