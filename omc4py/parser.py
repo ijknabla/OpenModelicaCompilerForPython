@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import re
 import types
 from collections import ChainMap
 from collections.abc import (
@@ -50,7 +51,7 @@ from arpeggio import (
 from exceptiongroup import ExceptionGroup
 from modelicalang import v3_4
 
-from .exception import OMCRuntimeError, OMCWarning
+from .exception import OMCError, OMCRuntimeError, OMCWarning
 from .modelica import enumeration, record
 from .openmodelica import (
     Component,
@@ -183,6 +184,8 @@ def parse(typ: Any, s: str) -> Any:
         root_type=root_type,  # type: ignore
         root_ndim=root_ndim,
     )
+    if re.search(r"^Error($| occurred )", s) is not None:
+        raise OMCError(s)
     try:
         parse_tree = parser.parse(s)
     except NoMatch as no_match:
