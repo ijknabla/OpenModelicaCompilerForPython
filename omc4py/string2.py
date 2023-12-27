@@ -119,6 +119,18 @@ def parse(typ: Any, s: str) -> Any:
     return visit_parse_tree(parse_tree, visitor)
 
 
+def split_typename_parts(typename: str) -> tuple[str, ...]:
+    with _ParametrizedSyntax:
+        parser = _ParametrizedSyntax.get_parser(
+            root_type=TypeName, root_ndim=0
+        )
+
+    return visit_parse_tree(  # type: ignore
+        parser.parse(typename),
+        _TypeNameSplitVisitor(),
+    )
+
+
 def unparse(typ: Any, obj: Any) -> str:
     return _unparse(_get_type(typ), _get_ndim(typ), (), obj)
 
@@ -330,7 +342,7 @@ class _Visitor(PTNodeVisitor):
 
     def visit_typename(
         self, node: NonTerminal, children: _Children
-    ) -> TypeName:
+    ) -> TypeName | tuple[str, ...]:
         parts = tuple(ident for name in children.name for ident in name)
         if isinstance(node[0], Terminal) and node[0].value == ".":
             parts = (".",) + parts
@@ -499,6 +511,22 @@ def _runtime_method(
         return f
 
     return decorator
+
+
+# endregion
+
+# region split_typename_parts Implementation
+
+
+class _TypeNameSplitVisitor(_Visitor):
+    def visit_typename(
+        self, node: NonTerminal, children: _Children
+    ) -> TypeName | tuple[str, ...]:
+        parts = tuple(ident for name in children.name for ident in name)
+        if isinstance(node[0], Terminal) and node[0].value == ".":
+            parts = (".",) + parts
+
+        return parts
 
 
 # endregion
