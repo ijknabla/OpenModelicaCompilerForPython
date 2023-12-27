@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import importlib.resources
 import re
 from asyncio import create_subprocess_exec, create_task, gather
 from asyncio.subprocess import PIPE
@@ -26,7 +25,6 @@ from typing import (
 )
 
 from frozendict import frozendict
-from pkg_resources import resource_filename
 from pydantic import (
     BaseModel,
     PlainSerializer,
@@ -44,7 +42,7 @@ from omc4py import (
     open_session,
 )
 
-from ..util import QueueingIteration, ensure_cancel, ensure_terminate
+from ..util import QueueingIteration, ensure_cancel, ensure_terminate, get_root
 
 _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
@@ -333,9 +331,7 @@ async def create_interface_by_docker(
                     "export",
                     "--only=main,bootstrap",
                     "--without-hashes",
-                    cwd=stack.enter_context(
-                        importlib.resources.path("bootstrap", "..")
-                    ).resolve(),
+                    cwd=get_root(),
                     stdout=PIPE,
                 )
             )
@@ -382,7 +378,7 @@ async def _create_interface_by_docker(
     assert omc_version_match is not None
     omc_major, omc_minor = map(int, omc_version_match.groups())
 
-    omc4py_s = Path(resource_filename("bootstrap", "..")).resolve()
+    omc4py_s = get_root()
     omc4py_t = PurePosixPath("/omc4py")
     output_s = output_dir.resolve()
     output_t = PurePosixPath("/output") / f"v_{omc_major}_{omc_minor}.yaml"
