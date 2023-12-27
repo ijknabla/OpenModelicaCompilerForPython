@@ -1,8 +1,3 @@
-# `omc4py.session.bootstrap.profile.abc.AbstractProfile`
-
-Is it needed to change AbstractProfile.find_element from static-method to method?
-
-
 # Parsing `getClassNames` takes to long time
 
 ```python3
