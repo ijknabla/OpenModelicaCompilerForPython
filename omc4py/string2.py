@@ -78,6 +78,14 @@ _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
 # region Public
 
 
+class OMCSyntax(v3_4.Syntax):
+    # Dialects
+
+    @classmethod
+    def IDENT(cls) -> _ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+
 def is_variablename(variablename: str) -> bool:
     with _Syntax:
         parser = _Syntax.get_parser(root_type=VariableName, root_ndim=0)
@@ -118,14 +126,6 @@ def unparse(typ: Any, obj: Any) -> str:
 # region Internal
 
 # region parse Implementation
-
-
-class OMCSyntax(v3_4.Syntax):
-    # Dialects
-
-    @classmethod
-    def IDENT(cls) -> _ParsingExpressionLike:
-        return [super().IDENT(), RegExMatch(r"\$\w*")]
 
 
 @dataclass
