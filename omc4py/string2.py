@@ -301,91 +301,9 @@ if TYPE_CHECKING:
         subscript: list[str]
 
 
-class _ParametrizedVisistor(PTNodeVisitor):
-    root_type: _StringableType
-    root_ndim: int
-
-    def __init__(
-        self,
-        *args: Any,
-        root_type: _StringableType,
-        root_ndim: int,
-        **kwargs: Any,
-    ) -> None:
-        super().__init__(*args, **kwargs)
-        self.root_type = root_type
-        self.root_ndim = root_ndim
-
-        for t, n in _iter_all_types(root_type, root_ndim):
-            method = f"visit_{_to_rule_name(t, ndim=n)}"
-            if hasattr(self, method):
-                continue
-
-            if 0 < n:
-                _runtime_method(self, method)(partial(self._visit_sequence))
-            elif t is not None and issubclass(t, record):
-                _runtime_method(self, method)(
-                    partial(self._visit_record, record_type=t)
-                )
-                for attr, _ in _iter_attribute_types(t):
-                    _runtime_method(
-                        self, f"visit_{_to_rule_name(t, attribute=attr)}"
-                    )(partial(self._visit_record_attr, attribute=attr))
-            elif t is not None and issubclass(t, enumeration):
-                _runtime_method(self, method)(
-                    partial(self._visit_enumeration, enumeration_type=t)
-                )
-            elif t is not None and _is_named_tuple(t):
-                _runtime_method(self, method)(
-                    partial(self._visit_named_tuple, named_tuple_type=t)
-                )
-
-    @classmethod
-    @lru_cache
-    def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
-        return cls(root_type=root_type, root_ndim=root_ndim)
-
-    def _visit_sequence(self, _: Never, children: _Children) -> list[Any]:
-        return list(children[::2])
-
-    def _visit_record(
-        self, _: Never, children: _Children, *, record_type: type[record]
-    ) -> record:
-        return record_type(
-            **ChainMap(
-                *(child for child in children if isinstance(child, dict))
-            )
-        )
-
-    def _visit_record_attr(
-        self, _: Never, children: _Children, *, attribute: str
-    ) -> dict[str, Any]:
-        _, value = children
-        return {attribute: value}
-
-    def _visit_enumeration(
-        self,
-        _: Never,
-        children: _Children,
-        *,
-        enumeration_type: type[enumeration],
-    ) -> enumeration:
-        return enumeration_type[children[-1]]
-
-    def _visit_named_tuple(
-        self,
-        _: Never,
-        children: _Children,
-        *,
-        named_tuple_type: type[enumeration],
-    ) -> enumeration:
-        return named_tuple_type(*children)
-
+class _Visitor(PTNodeVisitor):
     def visit_none(self, _1: Never, _2: Never) -> None:
         return
-
-    def visit_none__1D(self, _1: Never, children: _Children) -> list[None]:
-        return [None] * (len(children) + 1)
 
     def visit_real(self, _: Never, children: _Children) -> float:
         (value,) = map(float, children.UNSIGNED_NUMBER)
@@ -436,6 +354,90 @@ class _ParametrizedVisistor(PTNodeVisitor):
 
     def visit_subscript(self, node: Terminal | NonTerminal, _: Never) -> str:
         return node.flat_str()
+
+
+class _ParametrizedVisistor(_Visitor):
+    root_type: _StringableType
+    root_ndim: int
+
+    def __init__(
+        self,
+        *args: Any,
+        root_type: _StringableType,
+        root_ndim: int,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        self.root_type = root_type
+        self.root_ndim = root_ndim
+
+        for t, n in _iter_all_types(root_type, root_ndim):
+            method = f"visit_{_to_rule_name(t, ndim=n)}"
+            if hasattr(self, method):
+                continue
+
+            if 0 < n:
+                _runtime_method(self, method)(partial(self._visit_sequence))
+            elif t is not None and issubclass(t, record):
+                _runtime_method(self, method)(
+                    partial(self._visit_record, record_type=t)
+                )
+                for attr, _ in _iter_attribute_types(t):
+                    _runtime_method(
+                        self, f"visit_{_to_rule_name(t, attribute=attr)}"
+                    )(partial(self._visit_record_attr, attribute=attr))
+            elif t is not None and issubclass(t, enumeration):
+                _runtime_method(self, method)(
+                    partial(self._visit_enumeration, enumeration_type=t)
+                )
+            elif t is not None and _is_named_tuple(t):
+                _runtime_method(self, method)(
+                    partial(self._visit_named_tuple, named_tuple_type=t)
+                )
+
+    @classmethod
+    @lru_cache
+    def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
+        return cls(root_type=root_type, root_ndim=root_ndim)
+
+    def _visit_sequence(self, _: Never, children: _Children) -> list[Any]:
+        return list(children[::2])
+
+    def visit_none__1D(self, _1: Never, children: _Children) -> list[None]:
+        return [None] * (len(children) + 1)
+
+    def _visit_record(
+        self, _: Never, children: _Children, *, record_type: type[record]
+    ) -> record:
+        return record_type(
+            **ChainMap(
+                *(child for child in children if isinstance(child, dict))
+            )
+        )
+
+    def _visit_record_attr(
+        self, _: Never, children: _Children, *, attribute: str
+    ) -> dict[str, Any]:
+        _, value = children
+        return {attribute: value}
+
+    def _visit_enumeration(
+        self,
+        _: Never,
+        children: _Children,
+        *,
+        enumeration_type: type[enumeration],
+    ) -> enumeration:
+        return enumeration_type[children[-1]]
+
+    def _visit_named_tuple(
+        self,
+        _: Never,
+        children: _Children,
+        *,
+        named_tuple_type: type[enumeration],
+    ) -> enumeration:
+        return named_tuple_type(*children)
 
 
 @overload
