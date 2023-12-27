@@ -78,12 +78,84 @@ _StringableType = Union[Type[Union[_Primitive, _Defined]], None]
 # region Public
 
 
-class OMCSyntax(v3_4.Syntax):
+class Syntax(v3_4.Syntax):
     # Dialects
 
     @classmethod
     def IDENT(cls) -> _ParsingExpressionLike:
         return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+
+class Visitor(PTNodeVisitor):
+    def visit_none(self, node: Never, children: Never, /) -> None:
+        return
+
+    def visit_real(self, node: Never, children: _Children, /) -> float:
+        (value,) = map(float, children.UNSIGNED_NUMBER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
+
+    def visit_integer(self, node: Never, children: _Children, /) -> int:
+        (value,) = map(int, children.UNSIGNED_INTEGER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
+
+    def visit_boolean(self, node: Terminal, children: Never, /) -> bool:
+        return {
+            "true": True,
+            "false": False,
+        }[node.value]
+
+    def visit_STRING(self, node: Terminal, children: Never, /) -> str:
+        return _unquote_modelica_string(node.value)
+
+    def visit_typename(
+        self, node: NonTerminal, children: _Children, /
+    ) -> TypeName | tuple[str, ...]:
+        parts = tuple(ident for name in children.name for ident in name)
+        if isinstance(node[0], Terminal) and node[0].value == ".":
+            parts = (".",) + parts
+
+        return _BaseTypeName.__new__(TypeName, parts)
+
+    def visit_name(self, node: Never, children: _Children, /) -> list[str]:
+        return children.IDENT
+
+    def visit_variablename(
+        self, node: Never, children: _Children, /
+    ) -> VariableName:
+        (identifier,) = children
+        return _BaseVariableName.__new__(VariableName, identifier)
+
+    def visit_component(
+        self, node: Never, children: _Children, /
+    ) -> Component:
+        return Component(*children)
+
+    def visit_subscript_list(
+        self, node: Never, children: _Children, /
+    ) -> list[str]:
+        return list(children.subscript)
+
+    def visit_subscript(
+        self, node: Terminal | NonTerminal, children: Never, /
+    ) -> str:
+        return node.flat_str()
+
+
+if TYPE_CHECKING:
+
+    class _Children(Sequence[Any]):
+        IDENT: list[str]
+        SIGN: Literal["+", "-"]
+        UNSIGNED_INTEGER: list[str]
+        UNSIGNED_NUMBER: list[str]
+        name: list[list[str]]
+        subscript: list[str]
 
 
 def is_variablename(variablename: str) -> bool:
@@ -143,7 +215,7 @@ def unparse(typ: Any, obj: Any) -> str:
 
 
 @dataclass
-class _ParametrizedSyntax(OMCSyntax):
+class _ParametrizedSyntax(Syntax):
     root_type: _StringableType
     root_ndim: int
 
@@ -302,73 +374,7 @@ class _ParametrizedSyntax(OMCSyntax):
         return "{", ZeroOrMore(cls.subscript, sep=","), "}"
 
 
-if TYPE_CHECKING:
-
-    class _Children(Sequence[Any]):
-        IDENT: list[str]
-        SIGN: Literal["+", "-"]
-        UNSIGNED_INTEGER: list[str]
-        UNSIGNED_NUMBER: list[str]
-        name: list[list[str]]
-        subscript: list[str]
-
-
-class _Visitor(PTNodeVisitor):
-    def visit_none(self, _1: Never, _2: Never) -> None:
-        return
-
-    def visit_real(self, _: Never, children: _Children) -> float:
-        (value,) = map(float, children.UNSIGNED_NUMBER)
-        if "-" in children.SIGN:
-            value = -value
-
-        return value
-
-    def visit_integer(self, _: Never, children: _Children) -> int:
-        (value,) = map(int, children.UNSIGNED_INTEGER)
-        if "-" in children.SIGN:
-            value = -value
-
-        return value
-
-    def visit_boolean(self, node: Terminal, _: Never) -> bool:
-        return {
-            "true": True,
-            "false": False,
-        }[node.value]
-
-    def visit_STRING(self, node: Terminal, _: Never) -> str:
-        return _unquote_modelica_string(node.value)
-
-    def visit_typename(
-        self, node: NonTerminal, children: _Children
-    ) -> TypeName | tuple[str, ...]:
-        parts = tuple(ident for name in children.name for ident in name)
-        if isinstance(node[0], Terminal) and node[0].value == ".":
-            parts = (".",) + parts
-
-        return _BaseTypeName.__new__(TypeName, parts)
-
-    def visit_name(self, _: Never, children: _Children) -> list[str]:
-        return children.IDENT
-
-    def visit_variablename(
-        self, _: Never, children: _Children
-    ) -> VariableName:
-        (identifier,) = children
-        return _BaseVariableName.__new__(VariableName, identifier)
-
-    def visit_component(self, _: Never, children: _Children) -> Component:
-        return Component(*children)
-
-    def visit_subscript_list(self, _: Never, children: _Children) -> list[str]:
-        return list(children.subscript)
-
-    def visit_subscript(self, node: Terminal | NonTerminal, _: Never) -> str:
-        return node.flat_str()
-
-
-class _ParametrizedVisistor(_Visitor):
+class _ParametrizedVisistor(Visitor):
     root_type: _StringableType
     root_ndim: int
 
@@ -412,14 +418,18 @@ class _ParametrizedVisistor(_Visitor):
     def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
         return cls(root_type=root_type, root_ndim=root_ndim)
 
-    def _visit_sequence(self, _: Never, children: _Children) -> list[Any]:
+    def _visit_sequence(
+        self, node: Never, children: _Children, /
+    ) -> list[Any]:
         return list(children[::2])
 
-    def visit_none__1D(self, _1: Never, children: _Children) -> list[None]:
+    def visit_none__1D(
+        self, node: Never, children: _Children, /
+    ) -> list[None]:
         return [None] * (len(children) + 1)
 
     def _visit_record(
-        self, _: Never, children: _Children, *, record_type: type[record]
+        self, node: Never, children: _Children, /, *, record_type: type[record]
     ) -> record:
         return record_type(
             **ChainMap(
@@ -428,15 +438,16 @@ class _ParametrizedVisistor(_Visitor):
         )
 
     def _visit_record_attr(
-        self, _: Never, children: _Children, *, attribute: str
+        self, node: Never, children: _Children, /, *, attribute: str
     ) -> dict[str, Any]:
         _, value = children
         return {attribute: value}
 
     def _visit_enumeration(
         self,
-        _: Never,
+        node: Never,
         children: _Children,
+        /,
         *,
         enumeration_type: type[enumeration],
     ) -> enumeration:
@@ -444,8 +455,9 @@ class _ParametrizedVisistor(_Visitor):
 
     def _visit_named_tuple(
         self,
-        _: Never,
+        node: Never,
         children: _Children,
+        /,
         *,
         named_tuple_type: type[enumeration],
     ) -> enumeration:
@@ -518,9 +530,9 @@ def _runtime_method(
 # region split_typename_parts Implementation
 
 
-class _TypeNameSplitVisitor(_Visitor):
+class _TypeNameSplitVisitor(Visitor):
     def visit_typename(
-        self, node: NonTerminal, children: _Children
+        self, node: NonTerminal, children: _Children, /
     ) -> TypeName | tuple[str, ...]:
         parts = tuple(ident for name in children.name for ident in name)
         if isinstance(node[0], Terminal) and node[0].value == ".":
