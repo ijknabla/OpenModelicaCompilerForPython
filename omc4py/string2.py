@@ -244,8 +244,16 @@ def parse(typ: Any, s: str) -> Any:
     return visit_parse_tree(parse_tree, visitor)
 
 
+class OMCSyntax(v3_4.Syntax):
+    # Dialects
+
+    @classmethod
+    def IDENT(cls) -> _ParsingExpressionLike:
+        return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+
 @dataclass
-class _Syntax(v3_4.Syntax):
+class _Syntax(OMCSyntax):
     root_type: _StringableType
     root_ndim: int
 
@@ -347,12 +355,6 @@ class _Syntax(v3_4.Syntax):
             elements[-1],
             ")",
         )
-
-    # Dialects
-
-    @classmethod
-    def IDENT(cls) -> _ParsingExpressionLike:
-        return [super().IDENT(), RegExMatch(r"\$\w*")]
 
     # Primitives
 
