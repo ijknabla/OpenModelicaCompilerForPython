@@ -104,148 +104,9 @@ def unparse(typ: Any, obj: Any) -> str:
 
 # endregion
 
+# region Internal
 
-def _unparse(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
-) -> str:
-    try:
-        if 0 < n:
-            return _unparse_sequence(t, n, attrs, obj)
-        elif obj is None:
-            return ""
-        elif t is None:
-            return str(obj)
-        elif issubclass(t, Component):
-            return _unparse_component(t, n, attrs, obj)
-        elif issubclass(t, tuple):
-            return _unparse_tuple(t, n, attrs, obj)
-        elif issubclass(t, record):
-            return _unparse_record(t, n, attrs, obj)
-        elif issubclass(t, enumeration):
-            return _unparse_enumeration(t, n, attrs, obj)
-        else:
-            return _unparse_primitive(t, n, attrs, obj)
-    except ExceptionGroup:
-        raise
-    except Exception as e:
-        if not attrs:
-            unparse_error = UnparseError("Can't unparse obj, obj={obj!r}")
-        else:
-            unparse_error = UnparseError(
-                "Can't unparse "
-                f"obj{''.join(attrs)}, obj{''.join(attrs[-1])}={obj}"
-            )
-        raise ExceptionGroup("Unparse failed", [unparse_error, e])
-
-
-class UnparseError(ValueError):
-    ...
-
-
-def _unparse_sequence(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
-) -> str:
-    assert 0 < n
-    return (
-        "{"
-        + ",".join(
-            _unparse(t, n - 1, attrs + (f"[{i}]",), obj[i])
-            for i in range(len(obj))
-        )
-        + "}"
-    )
-
-
-def _unparse_component(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
-) -> str:
-    assert n <= 0
-    return (
-        "{"
-        + ",".join(
-            _unparse(
-                tt if attr != "dimensions" else None,
-                nn,
-                attrs + (f".{attr}",),
-                getattr(obj, attr),
-            )
-            for attr, (tt, nn) in _iter_attribute_types(t)
-        )
-        + "}"
-    )
-
-
-def _unparse_tuple(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
-) -> str:
-    assert n <= 0
-    return (
-        "("
-        + ",".join(
-            _unparse(tt, nn, attrs + (f"[{i}]",), obj[i])
-            for i, (_, (tt, nn)) in enumerate(_iter_attribute_types(t))
-        )
-        + ")"
-    )
-
-
-def _unparse_record(
-    t: type[record], n: int, attrs: tuple[str, ...], obj: Any
-) -> str:
-    assert n <= 0
-
-    def items() -> Generator[str, None, None]:
-        for attr, (tt, nn) in _iter_attribute_types(t):
-            if isinstance(obj, Mapping):
-                value = _unparse(tt, nn, attrs + (f"[{attr}!r]",), obj[attr])
-            else:
-                value = _unparse(
-                    tt, nn, attrs + (f".{attr}",), getattr(obj, attr)
-                )
-
-            yield f"{attr}={value}"
-
-    return (
-        f"record {t.__omc_class__} "
-        + ",".join(items())
-        + f" end {t.__omc_class__};"
-    )
-
-
-def _unparse_enumeration(
-    t: type[enumeration], n: int, attrs: tuple[str, ...], obj: Any
-) -> str:
-    assert n <= 0
-    if isinstance(obj, Enum):
-        name = obj.name
-    elif isinstance(obj, int):
-        name = t(obj).name
-    else:
-        name = str(obj)
-
-    return f"{t.__omc_class__}.{name}"
-
-
-def _unparse_primitive(
-    t: type[float]
-    | type[int]
-    | type[bool]
-    | type[str]
-    | type[TypeName]
-    | type[VariableName],
-    n: int,
-    attrs: tuple[str, ...],
-    obj: Any,
-) -> str:
-    assert n <= 0
-    if issubclass(t, str):
-        if isinstance(obj, PathLike):
-            obj = obj.__fspath__()
-        return _quote_py_string(str(obj))
-    elif issubclass(t, bool):
-        return "true" if obj else "false"
-    else:
-        return str(obj)
+# region parse Implementation
 
 
 class OMCSyntax(v3_4.Syntax):
@@ -625,6 +486,157 @@ def _runtime_method(
     return decorator
 
 
+# endregion
+
+# region unparse Implementation
+
+
+def _unparse(
+    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    try:
+        if 0 < n:
+            return _unparse_sequence(t, n, attrs, obj)
+        elif obj is None:
+            return ""
+        elif t is None:
+            return str(obj)
+        elif issubclass(t, Component):
+            return _unparse_component(t, n, attrs, obj)
+        elif issubclass(t, tuple):
+            return _unparse_tuple(t, n, attrs, obj)
+        elif issubclass(t, record):
+            return _unparse_record(t, n, attrs, obj)
+        elif issubclass(t, enumeration):
+            return _unparse_enumeration(t, n, attrs, obj)
+        else:
+            return _unparse_primitive(t, n, attrs, obj)
+    except ExceptionGroup:
+        raise
+    except Exception as e:
+        if not attrs:
+            unparse_error = UnparseError("Can't unparse obj, obj={obj!r}")
+        else:
+            unparse_error = UnparseError(
+                "Can't unparse "
+                f"obj{''.join(attrs)}, obj{''.join(attrs[-1])}={obj}"
+            )
+        raise ExceptionGroup("Unparse failed", [unparse_error, e])
+
+
+class UnparseError(ValueError):
+    ...
+
+
+def _unparse_sequence(
+    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert 0 < n
+    return (
+        "{"
+        + ",".join(
+            _unparse(t, n - 1, attrs + (f"[{i}]",), obj[i])
+            for i in range(len(obj))
+        )
+        + "}"
+    )
+
+
+def _unparse_component(
+    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+    return (
+        "{"
+        + ",".join(
+            _unparse(
+                tt if attr != "dimensions" else None,
+                nn,
+                attrs + (f".{attr}",),
+                getattr(obj, attr),
+            )
+            for attr, (tt, nn) in _iter_attribute_types(t)
+        )
+        + "}"
+    )
+
+
+def _unparse_tuple(
+    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+    return (
+        "("
+        + ",".join(
+            _unparse(tt, nn, attrs + (f"[{i}]",), obj[i])
+            for i, (_, (tt, nn)) in enumerate(_iter_attribute_types(t))
+        )
+        + ")"
+    )
+
+
+def _unparse_record(
+    t: type[record], n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+
+    def items() -> Generator[str, None, None]:
+        for attr, (tt, nn) in _iter_attribute_types(t):
+            if isinstance(obj, Mapping):
+                value = _unparse(tt, nn, attrs + (f"[{attr}!r]",), obj[attr])
+            else:
+                value = _unparse(
+                    tt, nn, attrs + (f".{attr}",), getattr(obj, attr)
+                )
+
+            yield f"{attr}={value}"
+
+    return (
+        f"record {t.__omc_class__} "
+        + ",".join(items())
+        + f" end {t.__omc_class__};"
+    )
+
+
+def _unparse_enumeration(
+    t: type[enumeration], n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+    if isinstance(obj, Enum):
+        name = obj.name
+    elif isinstance(obj, int):
+        name = t(obj).name
+    else:
+        name = str(obj)
+
+    return f"{t.__omc_class__}.{name}"
+
+
+def _unparse_primitive(
+    t: type[float]
+    | type[int]
+    | type[bool]
+    | type[str]
+    | type[TypeName]
+    | type[VariableName],
+    n: int,
+    attrs: tuple[str, ...],
+    obj: Any,
+) -> str:
+    assert n <= 0
+    if issubclass(t, str):
+        if isinstance(obj, PathLike):
+            obj = obj.__fspath__()
+        return _quote_py_string(str(obj))
+    elif issubclass(t, bool):
+        return "true" if obj else "false"
+    else:
+        return str(obj)
+
+
+# endregion
+
+
 def _iter_all_types(
     _type: _StringableType, ndim: int
 ) -> Generator[tuple[_StringableType, int], None, None]:
@@ -856,3 +868,6 @@ def _unquote_modelica_string(modelica_string: str) -> str:
 
 def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:
     return reduce(lambda x, y: x.replace(y[0], y[1]), old_and_new, s)
+
+
+# endregion
