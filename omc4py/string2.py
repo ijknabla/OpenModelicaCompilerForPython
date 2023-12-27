@@ -103,7 +103,6 @@ def _unparse(
     except ExceptionGroup:
         raise
     except Exception as e:
-        print(attrs)
         if not attrs:
             unparse_error = UnparseError("Can't unparse obj, obj={obj!r}")
         else:
