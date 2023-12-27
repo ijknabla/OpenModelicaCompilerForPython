@@ -16,7 +16,7 @@ import omc4py.protocol
 from omc4py import TypeName, VariableName
 from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
-from omc4py.string2 import (
+from omc4py.parser import (
     _get_ndim,
     _get_type,
     _is_component,

@@ -82,7 +82,7 @@ class _BaseVariableName:
 
 class VariableName(_BaseVariableName):
     def __new__(cls, obj: VariableNameLike | None = None) -> Self:
-        from .string2 import is_variablename
+        from .parser import is_variablename
 
         if obj is None:
             return _BaseVariableName.__new__(cls)
@@ -193,7 +193,7 @@ class TypeName(_BaseTypeName):
 
     @staticmethod
     def __split_part(part: TypeNameLike) -> Iterator[str]:
-        from .string2 import split_typename_parts
+        from .parser import split_typename_parts
 
         if isinstance(part, TypeName):
             yield from part.parts

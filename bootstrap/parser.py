@@ -22,7 +22,7 @@ from arpeggio import (
 from modelicalang import ParsingExpressionLike
 from typing_extensions import Never, Protocol
 
-from omc4py import string2 as original
+from omc4py import parser as original
 
 from .interface import VariableNameString
 
