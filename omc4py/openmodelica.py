@@ -193,7 +193,7 @@ class TypeName(_BaseTypeName):
 
     @staticmethod
     def __split_part(part: TypeNameLike) -> Iterator[str]:
-        from .parser import split_typename_parts
+        from .string2 import split_typename_parts
 
         if isinstance(part, TypeName):
             yield from part.parts
