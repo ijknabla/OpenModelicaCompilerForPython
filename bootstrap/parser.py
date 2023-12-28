@@ -106,6 +106,9 @@ class Children(Protocol):
 
 
 class EnumeratorVisitor(original.Visitor):
+    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
+        return node.flat_str()
+
     def visit_string_comment(
         self,
         _: Never,
@@ -151,6 +154,9 @@ class EnumeratorVisitor(original.Visitor):
 
 
 class OptionalVisitor(original.Visitor):
+    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
+        return node.flat_str()
+
     def visit_modification(self, node: NonTerminal, _: Never) -> Token | None:
         for child in node:
             if isinstance(child, Terminal) and child.flat_str() in {"=", ":="}:
