@@ -13,7 +13,14 @@ from asyncio.subprocess import Process
 from collections.abc import AsyncGenerator, AsyncIterator
 from contextlib import AsyncExitStack, asynccontextmanager, suppress
 from dataclasses import dataclass, field
-from typing import Generic, TypeVar
+from functools import lru_cache
+from pathlib import Path
+from typing import TYPE_CHECKING, Generic, TypeVar
+
+if TYPE_CHECKING:
+    from importlib.resources import as_file, files
+else:
+    from importlib_resources import as_file, files
 
 _T = TypeVar("_T")
 
@@ -74,3 +81,9 @@ async def ensure_terminate(
         if process.returncode is None:
             process.terminate()
         await process.wait()
+
+
+@lru_cache
+def get_root() -> Path:
+    with as_file(files(__name__)) as child0:
+        return child0.parents[0].resolve()
