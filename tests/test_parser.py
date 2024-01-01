@@ -171,7 +171,7 @@ def _iter_examples() -> Generator[Example, None, None]:
             is_union=True,
         )
     yield Example(
-        annotation=Union[collections.abc.Sequence[int], None],
+        annotation=Union[typing.Sequence[int], None],
         type=int,
         ndim=1,
         is_union=True,
