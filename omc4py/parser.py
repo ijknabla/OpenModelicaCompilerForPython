@@ -769,13 +769,7 @@ def _iter_types(obj: Any) -> Generator[_StringableType, None, None]:
 
 
 def _get_ndim(obj: Any) -> int:
-    ndims = set(_iter_ndims(obj, ndim=0))
-
-    if len(ndims) == 1:
-        (ndim,) = ndims
-        return ndim
-
-    raise TypeError(f"Dimensions are ambigious or undefinable. got {ndims}")
+    return max(_iter_ndims(obj, ndim=0), default=0)
 
 
 def _iter_ndims(obj: Any, ndim: int) -> Generator[int, None, None]:
