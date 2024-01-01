@@ -43,7 +43,7 @@ If `omc4py.open_session` cannot find omc, such as if you have not added OpenMode
 import omc4py
 
 with omc4py.open_session(
-    "C:/OpenModelica1.13.0-64bit/bin/omc.exe"
+    "C:/Program Files/OpenModelica1.22.0-64bit/bin/omc.exe"
 ) as session:
     print(session.getVersion())
 ```
@@ -55,14 +55,14 @@ import omc4py
 
 with \
     omc4py.open_session(
-        "C:/OpenModelica1.13.0-64bit/bin/omc.exe"
-    ) as session_13, \
+        "C:/Program Files/OpenModelica1.22.0-64bit/bin/omc.exe"
+    ) as session_1_22, \
     omc4py.open_session(
-        "C:/Program Files/OpenModelica1.14.0-64bit/bin/omc.exe"
-    ) as session_14:
+        "C:/Program Files/OpenModelica1.21.0-64bit/bin/omc.exe"
+    ) as session_1_21:
 
-    print("v1.13.0:", session_13.getVersion())
-    print("v1.14.0:", session_14.getVersion())
+    print("v1.22.0:", session_1_22.getVersion())
+    print("v1.21.0:", session_1_21.getVersion())
 ```
 
 As shown above, __it is recommended to ensure that session is closed by calling `omc4py.open_session()` via with-statement__.
@@ -157,7 +157,7 @@ with omc4py.open_session() as session:
 import omc4py
 
 with omc4py.open_session() as session:
-    assert(session.loadModel("Modelica", ["3.2.3"]))  # load MSL 3.2.3
+    assert(session.loadModel("Modelica", ["4.0.0"]))  # load MSL 4.0.0
 ```
 
 #### `getClassNames`
@@ -192,7 +192,7 @@ Returns array of component (variable, parameter, constant, ...etc) profiles
 import omc4py
 
 with omc4py.open_session() as session:
-    assert(session.loadModel("Modelica", ["3.2.3"]))
+    assert(session.loadModel("Modelica", ["4.0.0"]))
     for component in session.getComponents("Modelica.Constants"):
         print(
             f"{component.className.last_identifier!s:<20}"

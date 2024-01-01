@@ -72,7 +72,7 @@ def test_readme(
             else "None",
             s,
         ),
-        lambda s: re.sub(r'"3.2.3"', f'"{modelica_version}"', s),
+        lambda s: re.sub(re.escape('"4.0.0"'), f'"{modelica_version}"', s),
     ]
 
     replaced = reduce(lambda s, f: f(s), fs, source)
