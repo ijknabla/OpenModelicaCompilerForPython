@@ -68,15 +68,16 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          python${{ matrix.python }} -m pip install -U pip
-          python${{ matrix.python }} -m pip install \
+          ln -s /usr/local/bin/python${{ matrix.python }} /usr/local/bin/python
+          python -m pip install -U pip
+          python -m pip install \
             ./ importlib-resources pytest pytest-asyncio
       - name: Check version
         run: |
           omc --version
-          python${{ matrix.python }} --version
-          python${{ matrix.python }} -m pytest --version
+          python --version
+          python -m pytest --version
       - name: Test python code
         run: |
-          sudo -u user python${{ matrix.python }} .github/pretest.py
-          sudo -u user python${{ matrix.python }} -m pytest -v
+          sudo -u user python .github/pretest.py
+          sudo -u user python -m pytest -v
