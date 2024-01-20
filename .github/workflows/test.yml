@@ -69,9 +69,9 @@ jobs:
       - name: Install dependencies
         run: |
           ln -s /usr/local/bin/python${{ matrix.python }} /usr/local/bin/python
-          python -m pip install -U pip
-          python -m pip install \
-            ./ importlib-resources pytest pytest-asyncio
+          python -m pip install -U pip poetry
+          python -m pip install ./
+          python -m poetry export --only=test | python -m pip install -r /dev/stdin
       - name: Check version
         run: |
           omc --version
