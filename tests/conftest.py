@@ -56,6 +56,11 @@ def session(
 
 
 @pytest.fixture
+def modelica_version(_session: Session) -> str:
+    return _session.getVersion("Modelica")
+
+
+@pytest.fixture
 def open_session(
     _function_coverage: Never,
 ) -> Generator[OpenSession, None, None]:
