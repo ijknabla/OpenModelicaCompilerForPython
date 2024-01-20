@@ -155,8 +155,19 @@ with open_session() as session:
         """,
     ],
 )
-def test_readme(source: str) -> None:
-    for f in [_unquote, _replace_omc_to_none, _remove_prompt]:
+def test_readme(
+    modelica_version: str,
+    source: str,
+) -> None:
+    def _replace_modelica_version(s: str, /) -> str:
+        return s.replace('"3.2.3"', f'"{modelica_version}"')
+
+    for f in [
+        _unquote,
+        _replace_omc_to_none,
+        _remove_prompt,
+        _replace_modelica_version,
+    ]:
         source = f(source)
 
     exec(source, {"exit": lambda: None})
