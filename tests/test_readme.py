@@ -1,7 +1,18 @@
+from __future__ import annotations
+
 import re
+from collections.abc import Generator
 from pathlib import Path
 
+import importlib_resources as resources
 import pytest
+
+
+def _iter_readme_lines() -> Generator[str, None, None]:
+    with resources.files("tests").joinpath("../README.md").open(
+        "r", encoding="utf-8"
+    ) as f:
+        yield from f
 
 
 @pytest.mark.parametrize(
