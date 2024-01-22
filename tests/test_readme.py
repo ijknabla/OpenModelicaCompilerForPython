@@ -51,8 +51,8 @@ def test_readme(
         return s.replace('"3.2.3"', f'"{modelica_version}"')
 
     for f in [
-        _replace_omc_to_none,
         _remove_prompt,
+        _replace_omc_to_none,
         _replace_modelica_version,
     ]:
         source = f(source)
