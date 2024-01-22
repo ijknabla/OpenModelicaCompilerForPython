@@ -3,7 +3,7 @@ from __future__ import annotations
 import logging
 import re
 from collections.abc import Callable, Generator, Iterable
-from functools import partial, reduce
+from functools import reduce
 from pathlib import Path
 
 import importlib_resources as resources
@@ -52,7 +52,7 @@ def test_readme(
     fs = [
         _remove_prompt,
         _replace_omc_to_none,
-        partial(_replace_modelica_version, modelica_version),
+        lambda s: re.sub(r'"3.2.3"', f'"{modelica_version}"', s),
     ]
 
     exec(reduce(lambda s, f: f(s), fs, source), {"exit": lambda: None})
@@ -89,7 +89,3 @@ def _replace_omc_to_none(s: str, /) -> str:
     else:
         pattern = "(" + "|".join(map(re.escape, sorted(missing_omc_exe))) + ")"
         return re.sub("|".join(q + pattern + q for q in ['"', "'"]), "None", s)
-
-
-def _replace_modelica_version(modelica_version: str, s: str) -> str:
-    return s.replace('"3.2.3"', f'"{modelica_version}"')
