@@ -43,33 +43,20 @@ For Windows, it will work if omc.exe exists in the default installation.
 OpenModelica v1.22.1 (64-bit)
 ```
 
-## Quick tour
+## Usage
 
-### Setup
+### `omc4py.open_session()`
 
-~~Make sure that OpenModelica is installed on your system.~~
+`omc4py.open_session()` returns session object which interfaces to omc.
 
-```bash
-$ omc --version
-```
-
-~~OpenModelica official page [https://openmodelica.org/](https://openmodelica.org/)~~
-
-~~Install OpenModelicaCompiler with pip.~~
-
-```bash
-$ python3 -m pip install OpenModelicaCompiler
-```
-
-~~`omc4py` is acutual package name.~~ `omc4py.open_session()` will return session object which interfaces to omc.
-
-```python3
-#!/usr/bin/env python3
+```python
 import omc4py
 
 with omc4py.open_session() as session:
     print(session.getVersion())
 ```
+
+- - -
 
 ### More usage about `open_session(...)`
 
