@@ -7,6 +7,18 @@ OpenModelica compiler (omc) interface for Python
 
 [See CHANGELOG.md](./CHANGELOG.md)
 
+## Installation
+
+```bash
+$ python3 -m pip install OpenModelicaCompiler
+```
+
+`omc4py` is acutual package name.
+
+```python
+import omc4py
+```
+
 ## Quick tour
 
 ### Setup
@@ -19,13 +31,13 @@ $ omc --version
 
 OpenModelica official page [https://openmodelica.org/](https://openmodelica.org/)
 
-Install OpenModelicaCompiler with pip.
+~~Install OpenModelicaCompiler with pip.~~
 
 ```bash
 $ python3 -m pip install OpenModelicaCompiler
 ```
 
-`omc4py` is acutual package name. `omc4py.open_session()` will return session object which interfaces to omc.
+~~`omc4py` is acutual package name.~~ `omc4py.open_session()` will return session object which interfaces to omc.
 
 ```python3
 #!/usr/bin/env python3
