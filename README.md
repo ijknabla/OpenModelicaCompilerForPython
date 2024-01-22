@@ -19,17 +19,41 @@ $ python3 -m pip install OpenModelicaCompiler
 import omc4py
 ```
 
+### Prerequisites
+
+Follow the link
+
+| Platform | Link |
+| :------- | :--- |
+| Windows  | [https://openmodelica.org/download/download-windows/](https://openmodelica.org/download/download-windows/) |
+| Linux    | [https://openmodelica.org/download/download-linux/](https://openmodelica.org/download/download-linux/) |
+| Mac      | [https://openmodelica.org/download/download-mac/](https://openmodelica.org/download/download-mac/) |
+
+And ensure `omc` command installed.
+
+```
+$ omc --version
+OpenModelica 1.22.1
+```
+
+For Windows, it will work if omc.exe exists in the default installation.
+
+```
+"C:\Program Files\OpenModelica1.22.1-64bit\bin\omc.exe" --version
+OpenModelica v1.22.1 (64-bit)
+```
+
 ## Quick tour
 
 ### Setup
 
-Make sure that OpenModelica is installed on your system.
+~~Make sure that OpenModelica is installed on your system.~~
 
 ```bash
 $ omc --version
 ```
 
-OpenModelica official page [https://openmodelica.org/](https://openmodelica.org/)
+~~OpenModelica official page [https://openmodelica.org/](https://openmodelica.org/)~~
 
 ~~Install OpenModelicaCompiler with pip.~~
 
