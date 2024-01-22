@@ -56,37 +56,35 @@ with omc4py.open_session() as session:
     print(session.getVersion())
 ```
 
-- - -
+If `omc4py.open_session` cannot find omc, a valid omc command or executable path can be specified.
 
-### More usage about `open_session(...)`
-
-If `omc4py.open_session` cannot find omc, such as if you have not added OpenModelica to your _PATH_ environment variable, you can specify a valid omc command name or omc executable path by `str`.
-
-```python3
+```python
 import omc4py
 
 with omc4py.open_session(
-    "C:/Program Files/OpenModelica1.22.0-64bit/bin/omc.exe"
+    "C:/Program Files/OpenModelica1.22.1-64bit/bin/omc.exe"
 ) as session:
     print(session.getVersion())
 ```
 
 It is also possible to open multiple sessions with different versions of omc at the same time by explicitly specifying omc.
 
-```python3
+```python
 import omc4py
 
 with \
     omc4py.open_session(
-        "C:/Program Files/OpenModelica1.22.0-64bit/bin/omc.exe"
+        "C:/Program Files/OpenModelica1.22.1-64bit/bin/omc.exe"
     ) as session_1_22, \
     omc4py.open_session(
         "C:/Program Files/OpenModelica1.21.0-64bit/bin/omc.exe"
     ) as session_1_21:
 
-    print("v1.22.0:", session_1_22.getVersion())
+    print("v1.22.1:", session_1_22.getVersion())
     print("v1.21.0:", session_1_21.getVersion())
 ```
+
+- - -
 
 As shown above, __it is recommended to ensure that session is closed by calling `omc4py.open_session()` via with-statement__.
 
