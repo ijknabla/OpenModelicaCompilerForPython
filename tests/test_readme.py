@@ -48,9 +48,19 @@ def test_readme(
 ) -> None:
     logger.info(f"'''\n{source}'''")
 
+    prompt = r"(?P<prompt>(>>>|\.\.\.) ?)"
+    line = r"(?P<line>.*\n)"
+
     fs: list[Callable[[str], str]]
     fs = [
-        _remove_prompt,
+        lambda s: s
+        if re.search(rf"^{prompt}", source, re.MULTILINE) is None
+        else re.sub(
+            rf"{prompt}?{line}",
+            lambda m: ("# " if m.group("prompt") is None else "")
+            + f'{m.group("line")}',
+            s,
+        ),
         lambda s: re.sub(
             r'"(?P<path>C:/(Program Files/)?'
             r'OpenModelica\d+\.\d+\.\d+-64bit/bin/omc.exe")',
@@ -62,17 +72,7 @@ def test_readme(
         lambda s: re.sub(r'"3.2.3"', f'"{modelica_version}"', s),
     ]
 
-    exec(reduce(lambda s, f: f(s), fs, source), {"exit": lambda: None})
-
-
-def _remove_prompt(s: str, /) -> str:
-    lines = list(
-        map(
-            lambda m: m.group("line"),
-            re.finditer(r"^(>>>|\.\.\.) (?P<line>.*\n)", s, re.MULTILINE),
-        )
-    )
-    if not lines:
-        return s
-    else:
-        return "".join(lines)
+    replaced = reduce(lambda s, f: f(s), fs, source)
+    if replaced != source:
+        logger.info(f"=> '''\n{replaced}'''")
+    exec(replaced, {"exit": lambda: None})
