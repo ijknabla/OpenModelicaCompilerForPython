@@ -50,6 +50,10 @@ def test_readme(
 
     prompt = r"(?P<prompt>(>>>|\.\.\.) ?)"
     line = r"(?P<line>.*\n)"
+    exe = (
+        r"(?P<exe>C:/(Program Files/)?"
+        r"OpenModelica\d+\.\d+\.\d+\-64bit/bin/omc\.exe)"
+    )
 
     fs: list[Callable[[str], str]]
     fs = [
@@ -62,10 +66,9 @@ def test_readme(
             s,
         ),
         lambda s: re.sub(
-            r'"(?P<path>C:/(Program Files/)?'
-            r'OpenModelica\d+\.\d+\.\d+-64bit/bin/omc.exe")',
+            f'"{exe}"',
             lambda m: m.group(0)
-            if Path(str(m.group("path"))).exists()
+            if Path(str(m.group("exe"))).exists()
             else "None",
             s,
         ),
