@@ -51,7 +51,14 @@ def test_readme(
     fs: list[Callable[[str], str]]
     fs = [
         _remove_prompt,
-        _replace_omc_to_none,
+        lambda s: re.sub(
+            r'"(?P<path>C:/(Program Files/)?'
+            r'OpenModelica\d+\.\d+\.\d+-64bit/bin/omc.exe")',
+            lambda m: m.group(0)
+            if Path(str(m.group("path"))).exists()
+            else "None",
+            s,
+        ),
         lambda s: re.sub(r'"3.2.3"', f'"{modelica_version}"', s),
     ]
 
@@ -69,23 +76,3 @@ def _remove_prompt(s: str, /) -> str:
         return s
     else:
         return "".join(lines)
-
-
-def _replace_omc_to_none(s: str, /) -> str:
-    missing_omc_exe = set(
-        s
-        for s in map(
-            lambda m: m.group(0),
-            re.finditer(
-                r"C:/(Program Files/)?"
-                r"OpenModelica\d+\.\d+\.\d+-64bit/bin/omc.exe",
-                s,
-            ),
-        )
-        if not Path(s).exists()
-    )
-    if not missing_omc_exe:
-        return s
-    else:
-        pattern = "(" + "|".join(map(re.escape, sorted(missing_omc_exe))) + ")"
-        return re.sub("|".join(q + pattern + q for q in ['"', "'"]), "None", s)
