@@ -51,7 +51,6 @@ def test_readme(
         return s.replace('"3.2.3"', f'"{modelica_version}"')
 
     for f in [
-        _unquote,
         _replace_omc_to_none,
         _remove_prompt,
         _replace_modelica_version,
@@ -59,10 +58,6 @@ def test_readme(
         source = f(source)
 
     exec(source, {"exit": lambda: None})
-
-
-def _unquote(s: str, /) -> str:
-    return re.sub(r"(^\s+```python3?|```\s+$)", "", s)
 
 
 def _replace_omc_to_none(s: str, /) -> str:
