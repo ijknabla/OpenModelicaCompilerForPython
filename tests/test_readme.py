@@ -2,7 +2,8 @@ from __future__ import annotations
 
 import logging
 import re
-from collections.abc import Generator, Iterable
+from collections.abc import Callable, Generator, Iterable
+from functools import partial, reduce
 from pathlib import Path
 
 import importlib_resources as resources
@@ -47,17 +48,27 @@ def test_readme(
 ) -> None:
     logger.info(f"'''\n{source}'''")
 
-    def _replace_modelica_version(s: str, /) -> str:
-        return s.replace('"3.2.3"', f'"{modelica_version}"')
-
-    for f in [
+    fs: list[Callable[[str], str]]
+    fs = [
         _remove_prompt,
         _replace_omc_to_none,
-        _replace_modelica_version,
-    ]:
-        source = f(source)
+        partial(_replace_modelica_version, modelica_version),
+    ]
 
-    exec(source, {"exit": lambda: None})
+    exec(reduce(lambda s, f: f(s), fs, source), {"exit": lambda: None})
+
+
+def _remove_prompt(s: str, /) -> str:
+    lines = list(
+        map(
+            lambda m: m.group("line"),
+            re.finditer(r"^(>>>|\.\.\.) (?P<line>.*\n)", s, re.MULTILINE),
+        )
+    )
+    if not lines:
+        return s
+    else:
+        return "".join(lines)
 
 
 def _replace_omc_to_none(s: str, /) -> str:
@@ -80,14 +91,5 @@ def _replace_omc_to_none(s: str, /) -> str:
         return re.sub("|".join(q + pattern + q for q in ['"', "'"]), "None", s)
 
 
-def _remove_prompt(s: str, /) -> str:
-    lines = list(
-        map(
-            lambda m: m.group("line"),
-            re.finditer(r"^(>>>|\.\.\.) (?P<line>.*\n)", s, re.MULTILINE),
-        )
-    )
-    if not lines:
-        return s
-    else:
-        return "".join(lines)
+def _replace_modelica_version(modelica_version: str, s: str) -> str:
+    return s.replace('"3.2.3"', f'"{modelica_version}"')
