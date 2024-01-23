@@ -74,7 +74,7 @@ if TYPE_CHECKING:
 
 _Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
 _Defined = Union[record, enumeration, Tuple[Any, ...]]
-_StringableType = Union[Type[Union[_Primitive, _Defined]], None]
+_ScalarType = Union[Type[Union[_Primitive, _Defined]], None]
 
 # region Public
 
@@ -219,7 +219,7 @@ def unparse(typ: Any, obj: Any) -> str:
 
 @dataclass
 class _ParametrizedSyntax(Syntax):
-    root_type: _StringableType
+    root_type: _ScalarType
     root_ndim: int
 
     def __post_init__(self) -> None:
@@ -250,7 +250,7 @@ class _ParametrizedSyntax(Syntax):
     @classmethod
     @lru_cache
     def get_parser(
-        cls, root_type: _StringableType, root_ndim: int
+        cls, root_type: _ScalarType, root_ndim: int
     ) -> ParserPython:
         return ParserPython(cls(root_type, root_ndim).root)
 
@@ -261,7 +261,7 @@ class _ParametrizedSyntax(Syntax):
         )
 
     def sequence_rule(
-        self, _type: _StringableType, _ndim: int
+        self, _type: _ScalarType, _ndim: int
     ) -> _ParsingExpressionLike:
         return (
             "{",
@@ -289,7 +289,7 @@ class _ParametrizedSyntax(Syntax):
         )
 
     def record_attr_rule(
-        self, _attribute: str, _type: _StringableType, _ndim: int
+        self, _attribute: str, _type: _ScalarType, _ndim: int
     ) -> _ParsingExpressionLike:
         return (
             RegExMatch(f"_*{_attribute}_*", ignore_case=True),
@@ -378,13 +378,13 @@ class _ParametrizedSyntax(Syntax):
 
 
 class _ParametrizedVisistor(Visitor):
-    root_type: _StringableType
+    root_type: _ScalarType
     root_ndim: int
 
     def __init__(
         self,
         *args: Any,
-        root_type: _StringableType,
+        root_type: _ScalarType,
         root_ndim: int,
         **kwargs: Any,
     ) -> None:
@@ -418,7 +418,7 @@ class _ParametrizedVisistor(Visitor):
 
     @classmethod
     @lru_cache
-    def get_visitor(cls, root_type: _StringableType, root_ndim: int) -> Self:
+    def get_visitor(cls, root_type: _ScalarType, root_ndim: int) -> Self:
         return cls(root_type=root_type, root_ndim=root_ndim)
 
     def _visit_sequence(
@@ -468,22 +468,22 @@ class _ParametrizedVisistor(Visitor):
 
 
 @overload
-def _to_rule_name(_type: _StringableType, /) -> str:
+def _to_rule_name(_type: _ScalarType, /) -> str:
     ...
 
 
 @overload
-def _to_rule_name(_type: _StringableType, /, *, ndim: int) -> str:
+def _to_rule_name(_type: _ScalarType, /, *, ndim: int) -> str:
     ...
 
 
 @overload
-def _to_rule_name(_type: _StringableType, /, *, attribute: str) -> str:
+def _to_rule_name(_type: _ScalarType, /, *, attribute: str) -> str:
     ...
 
 
 def _to_rule_name(
-    _type: _StringableType,
+    _type: _ScalarType,
     /,
     *,
     ndim: int | None = None,
@@ -549,9 +549,7 @@ class _TypeNameSplitVisitor(Visitor):
 # region unparse Implementation
 
 
-def _unparse(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
-) -> str:
+def _unparse(t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any) -> str:
     try:
         if 0 < n:
             return _unparse_sequence(t, n, attrs, obj)
@@ -587,7 +585,7 @@ class UnparseError(ValueError):
 
 
 def _unparse_sequence(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
+    t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any
 ) -> str:
     assert 0 < n
     return (
@@ -601,7 +599,7 @@ def _unparse_sequence(
 
 
 def _unparse_component(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
+    t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any
 ) -> str:
     assert n <= 0
     return (
@@ -620,7 +618,7 @@ def _unparse_component(
 
 
 def _unparse_tuple(
-    t: _StringableType, n: int, attrs: tuple[str, ...], obj: Any
+    t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any
 ) -> str:
     assert n <= 0
     return (
@@ -699,9 +697,9 @@ def _unparse_primitive(
 
 
 def _iter_all_types(
-    _type: _StringableType, ndim: int
-) -> Generator[tuple[_StringableType, int], None, None]:
-    result = DefaultDict[_StringableType, Set[int]](set)
+    _type: _ScalarType, ndim: int
+) -> Generator[tuple[_ScalarType, int], None, None]:
+    result = DefaultDict[_ScalarType, Set[int]](set)
     queue = [(_type, ndim)]
     while queue:
         t, n = queue.pop(0)
@@ -716,8 +714,8 @@ def _iter_all_types(
 
 
 def _iter_attribute_types(
-    typ: _StringableType,
-) -> Generator[tuple[str, tuple[_StringableType, int]], None, None]:
+    typ: _ScalarType,
+) -> Generator[tuple[str, tuple[_ScalarType, int]], None, None]:
     if typ is None or _issubclass(typ, (TypeName, VariableName)):
         return
     for k, v in get_type_hints(typ).items():
@@ -726,7 +724,7 @@ def _iter_attribute_types(
         yield k, (_get_type(v), _get_ndim(v))
 
 
-def _get_type(obj: Any) -> _StringableType:
+def _get_type(obj: Any) -> _ScalarType:
     types = set(_iter_types(obj))
     if any(
         issubclass(
@@ -756,7 +754,7 @@ def _get_type(obj: Any) -> _StringableType:
     raise TypeError(f"Types are ambigious or undefinable. got {types}")
 
 
-def _iter_types(obj: Any) -> Generator[_StringableType, None, None]:
+def _iter_types(obj: Any) -> Generator[_ScalarType, None, None]:
     for unpacked in _unpack(obj):
         if _is_none(unpacked):
             yield None
