@@ -45,38 +45,97 @@ OpenModelica v1.22.1 (64-bit)
 
 ## Usage
 
-### `omc4py.open_session()`
+### Open session
 
 `omc4py.open_session()` returns session object which interfaces to omc.
 
 ```python
-import omc4py
+from omc4py import open_session
 
-with omc4py.open_session() as session:
+with open_session() as session:
     print(session.getVersion())
 ```
 
 If `omc4py.open_session` cannot find omc, a valid omc command or executable path can be specified.
 
 ```python
-import omc4py
+from omc4py import open_session
 
-with omc4py.open_session(
+with open_session(
     "C:/Program Files/OpenModelica1.22.1-64bit/bin/omc.exe"
 ) as session:
     print(session.getVersion())
 ```
 
+### Call OpenModelica Scripting API via session
+
+The OpenModelica Scripting API is available from the methods of session object.
+
+See [UserGuide for OpenModelica Scripting API](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
+
+OpenModelica classes and Python classes are converted to each other.
+For example, the following OpenModelica function can be used from the following Python methods.
+
+```modelica
+// Modelica declaration
+
+// Returns the version of the Modelica compiler.
+function getVersion
+  input TypeName cl = $Code(OpenModelica);
+  output String version;
+end getVersion;
+```
+
+```python
+# Python interface
+from typing import Union
+from omc4py import TypeName
+
+class Session:
+    def getVersion(self, cl: Union[TypeName, str, None] = None) -> str:
+        """
+        Returns the version of the Modelica compiler.
+        """
+        ...
+```
+
+## Class conversion between OpenModelica and Python
+
+| OpenModelica | input (argument) | output (return) | description |
+| :- | :- | :- | :- |
+| `Real` | `float` | `float` |
+| `Integer` | `int` | `int` |
+| `Boolean x;` | `bool` | `bool` |
+| `String x;` | `str` | `str` |
+| `TypeName` | `omc4py.TypeName \| str` | `omc4py.TypeName` |
+| `VariableName` | `omc4py.VariableName \| str` | `omc4py.VariableName` |
+| `VariableNames` | `Sequence[omc4py.VariableName \| str]` | `list[omc4py.VariableName \| str]` |
+| `type T = enumeration(a, b, c);` | `T \| Literal["a", "b", "c"]` | `T` |
+| `record T ...` | `T` | `T` | `T` is dataclass |
+| `T[:]` | `Sequence[T]` | `list[T]` |
+| `T[:,:]` | `Sequence[Sequence[T]]` | `list[list[T]]` |
+| `T x = ${default};` | `x: T \| None = None` | N/A |
+| `function f` returns Multiple outputs | N/A | `class F(NamedTuple): ...` returned | NamedTuple name is the capitalized name of the function |
+
+#### async feature
+
+The session class has a counterpart asynchronous session class.
+session object and asynchronous session object can be cross-referenced by the synchronous and asynchrnous attributes.
+
+![diagram](https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKhEIImkLWXEBIxEpCzJgEPIK2Ykp4lEAChFooyjje9908KJKSGTGJoOP2t458WWfKPnmGpGqjM5wu6gGKYWw4BLeuHakXAAEhWoNLqj1QL4tEeSKlDIW8430000)
+
+- - -
+
 It is also possible to open multiple sessions with different versions of omc at the same time by explicitly specifying omc.
 
 ```python
-import omc4py
+from omc4py import open_session
 
 with \
-    omc4py.open_session(
+    open_session(
         "C:/Program Files/OpenModelica1.22.1-64bit/bin/omc.exe"
     ) as session_1_22, \
-    omc4py.open_session(
+    open_session(
         "C:/Program Files/OpenModelica1.21.0-64bit/bin/omc.exe"
     ) as session_1_21:
 
@@ -91,7 +150,7 @@ As shown above, __it is recommended to ensure that session is closed by calling 
 However, sometimes you want to use session interactively, like OMShell. `omc4py` closes all unclosed sessions when exiting the python interpreter.
 
 ```python3
->>> from omc4py import *
+>>> from omc4py import open_session
 >>> session = open_session()
 >>> session.loadString("""
 ... package A
@@ -112,7 +171,7 @@ True
 Besides, session object has `__close__` method to explicitly close session.
 
 ```python3
->>> from omc4py import *
+>>> from omc4py import open_session
 >>> session = open_session()
 >>> session.__close__()
 >>>
@@ -121,9 +180,9 @@ Besides, session object has `__close__` method to explicitly close session.
 
 ### About session API
 
-All session methods are _OpenModelica.Scripting.*_ functions. The names and types of arguments and return values are the same as the original modelica function, and session internally converts between the python class and the modelica class.
+~~All session methods are _OpenModelica.Scripting.*_ functions. The names and types of arguments and return values are the same as the original modelica function, and session internally converts between the python class and the modelica class.~~
 
-If you want to know more about each session method, you can display it with the `help ()` function.
+~~If you want to know more about each session method, you can display it with the `help ()` function.~~
 
 - [UserGuide for OpenModelica Scripting API (latest)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/latest/scripting_api.html)
 - [UserGuide for OpenModelica Scripting API (v1.21)](https://www.openmodelica.org/doc/OpenModelicaUsersGuide/1.21/scripting_api.html)
