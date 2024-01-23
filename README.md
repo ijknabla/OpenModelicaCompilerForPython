@@ -99,7 +99,7 @@ class Session:
         ...
 ```
 
-## Class conversion between OpenModelica and Python
+#### Class conversion between OpenModelica and Python
 
 | OpenModelica | input (argument) | output (return) | description |
 | :- | :- | :- | :- |
@@ -117,7 +117,67 @@ class Session:
 | `T x = ${default};` | `x: T \| None = None` | N/A |
 | `function f` returns Multiple outputs | N/A | `class F(NamedTuple): ...` returned | NamedTuple name is the capitalized name of the function |
 
-#### async feature
+
+#### Exception handling
+
+<!--
+@startuml
+namespace omc4py.exception {
+    OMCException <-- OMCNotification
+    OMCException <-- OMCWarning
+    OMCException <-- OMCError
+    OMCException <-- OMCRuntimeError
+}
+
+Exception <-- omc4py.exception.OMCException
+
+Exception <-ri- Warning
+Warning <-- omc4py.exception.OMCNotification
+Warning <-- omc4py.exception.OMCWarning
+
+Exception <-ri- RuntimeError
+RuntimeError <-- omc4py.exception.OMCRuntimeError
+@enduml
+-->
+![class diagram of omc4py.exception](http://www.plantuml.com/plantuml/svg/SoWkIImgAStDuSfBp4qjBaXCJbN8pqqsAQZKIwr8JYqeoSpFKwZcKW02VrzdLxYGZQukIC0lloGpBJCv4II6Kr5uOb5UPbuwJddNegBy8fooGQLv9PcvgH15jLnSA0emtAg7R0Igug9CNGMOKw0qTYFG_4LGCLGUqpOKfoDpS1g5eiCXDIy563C0)
+
+- `OMCNotification`, `OMCWarning`, `OMCError` are raised from _omc_
+- `OMCRuntimeError` is raised from `omc4py` python implementation (not from _omc_)
+
+We are not sure about whole OpenModelica's exception handling policy.
+Through `omc4py` project, We found that there are 4 situation for expection caused by function calls.
+
+omc behavior
+
+1. Function returns "\n" instead of valid value (no exception info)
+1. Function returns formatted error messages (contains sourceInfo, level, kind, message) instead of valid value
+1. Function returns unformatted error message (typically, startswith "* Error") instead of valid value
+1. Function returns valid value and set exception messages internally
+
+`omc4py` behavior
+
+1) function returns `None` instead of valid result (no exception will be sent)
+1) function send `OMCNotification` or `OMCWarning`, or raise `OMCError`
+1) function raise `OMCRuntimeError` with the message returned by the omc
+1) function returns valid value. You can check exceptions explicitly by `session.__check__()`
+
+Normally, 4th case seems to be _notification_ or _warning_. If you want to be sure to check for exceptions, call `session.__check__()` before exit doubtful context.
+
+```python
+from omc4py import open_session
+
+def doubtful_task(session):
+    # session.doubtful_API1(...)
+    # session.doubtful_API2(...)
+    # session.doubtful_API3(...)
+    session.__check__()
+
+with open_session() as session:
+    doubtful_task(session)
+```
+
+
+#### Asyncio feature
 
 The session class has a counterpart asynchronous session class.
 If `asyncio=True` is specified in open_session, an asynchronous session object can be opened.
@@ -146,6 +206,10 @@ with open_session() as session:
 
     # Asynchronous calling
     await async_session.getVersion()
+```
+
+```python
+from omc4py import open_session
 
 with open_session(asyncio=True) as async_session:
     # This session is asynchronous
@@ -314,64 +378,4 @@ with omc4py.open_session() as session:
             f"{component.name!s:<15}"
             f"{component.comment!r}"
         )
-```
-
-- - -
-
-#### Exception handling
-
-<!--
-@startuml
-namespace omc4py.exception {
-    OMCException <-- OMCNotification
-    OMCException <-- OMCWarning
-    OMCException <-- OMCError
-    OMCException <-- OMCRuntimeError
-}
-
-Exception <-- omc4py.exception.OMCException
-
-Exception <-ri- Warning
-Warning <-- omc4py.exception.OMCNotification
-Warning <-- omc4py.exception.OMCWarning
-
-Exception <-ri- RuntimeError
-RuntimeError <-- omc4py.exception.OMCRuntimeError
-@enduml
--->
-![class diagram of omc4py.exception](http://www.plantuml.com/plantuml/svg/SoWkIImgAStDuSfBp4qjBaXCJbN8pqqsAQZKIwr8JYqeoSpFKwZcKW02VrzdLxYGZQukIC0lloGpBJCv4II6Kr5uOb5UPbuwJddNegBy8fooGQLv9PcvgH15jLnSA0emtAg7R0Igug9CNGMOKw0qTYFG_4LGCLGUqpOKfoDpS1g5eiCXDIy563C0)
-
-- `OMCNotification`, `OMCWarning`, `OMCError` are raised from _omc_
-- `OMCRuntimeError` is raised from `omc4py` python implementation (not from _omc_)
-
-We are not sure about whole OpenModelica's exception handling policy.
-Through `omc4py` project, We found that there are 4 situation for expection caused by function calls.
-
-omc behavior
-
-1. Function returns "\n" instead of valid value (no exception info)
-1. Function returns formatted error messages (contains sourceInfo, level, kind, message) instead of valid value
-1. Function returns unformatted error message (typically, startswith "* Error") instead of valid value
-1. Function returns valid value and set exception messages internally
-
-`omc4py` behavior
-
-1) function returns `None` instead of valid result (no exception will be sent)
-1) function send `OMCNotification` or `OMCWarning`, or raise `OMCError`
-1) function raise `OMCRuntimeError` with the message returned by the omc
-1) function returns valid value. You can check exceptions explicitly by `session.__check__()`
-
-Normally, 4th case seems to be _notification_ or _warning_. If you want to be sure to check for exceptions, call `session.__check__()` before exit doubtful context.
-
-```python3
-from omc4py import open_session
-
-def doubtful_task(session):
-    # session.doubtful_API1(...)
-    # session.doubtful_API2(...)
-    # session.doubtful_API3(...)
-    session.__check__()
-
-with open_session() as session:
-    doubtful_task(session)
 ```
