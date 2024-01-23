@@ -120,6 +120,15 @@ class Session:
 #### async feature
 
 The session class has a counterpart asynchronous session class.
+If `asyncio=True` is specified in open_session, an asynchronous session object can be opened.
+
+```python
+from omc4py import open_session
+
+with open_session(asyncio=True) as session:
+    await session.getVersion()
+```
+
 session object and asynchronous session object can be cross-referenced by the synchronous and asynchrnous attributes.
 
 ![diagram](https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKhEIImkLWXEBIxEpCzJgEPIK2Ykp4lEAChFooyjje9908KJKSGTGJoOP2t458WWfKPnmGpGqjM5wu6gGKYWw4BLeuHakXAAEhWoNLqj1QL4tEeSKlDIW8430000)
