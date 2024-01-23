@@ -1,18 +1,16 @@
 from __future__ import annotations
 
-from collections.abc import Coroutine
 from contextlib import closing
-from typing import TYPE_CHECKING, Any, List, Union, overload
+from typing import TYPE_CHECKING, Any, Coroutine, List, Union, overload
 from warnings import warn
 
 from exceptiongroup import ExceptionGroup
 
 from .algorithm import fmap
 from .exception import OMCError, OMCWarning
+from .modelica import external
 from .openmodelica import Component, TypeName
-from .parser import cast, parse
 from .protocol import Asynchronous, HasInteractive, Synchronous, T_Calling
-from .string import to_omc_literal
 
 if TYPE_CHECKING:
     from typing_extensions import Self
@@ -36,15 +34,19 @@ class BasicSession(HasInteractive[T_Calling]):
 
     @property
     def synchronous(self) -> BasicSession[Synchronous]:
-        return type(self)(
-            self.__omc_interactive__.synchronous,  # type: ignore
-        )
+        if TYPE_CHECKING:
+            cls = BasicSession[Synchronous]
+        else:
+            cls = type(self)
+        return cls(self.__omc_interactive__.synchronous)
 
     @property
     def asynchronous(self) -> BasicSession[Asynchronous]:
-        return type(self)(
-            self.__omc_interactive__.asynchronous,  # type: ignore
-        )
+        if TYPE_CHECKING:
+            cls = BasicSession[Asynchronous]
+        else:
+            cls = type(self)
+        return cls(self.__omc_interactive__.asynchronous)
 
     @overload
     def getComponents(
@@ -60,16 +62,12 @@ class BasicSession(HasInteractive[T_Calling]):
     ) -> List[Component]:
         ...
 
+    @external("getComponents")
     def getComponents(
-        self: BasicSession[Synchronous] | BasicSession[Asynchronous],
+        self: Union[BasicSession[Synchronous], BasicSession[Asynchronous]],
         name: Union[TypeName, str],
-    ) -> List[Component] | Coroutine[None, None, List[Component]]:
-        return fmap(
-            lambda x: parse(List[Component], x),
-            self.__omc_interactive__.evaluate(
-                f"getComponents({to_omc_literal(cast(TypeName, name))})"
-            ),
-        )
+    ) -> Union[List[Component], Coroutine[None, None, List[Component]]]:
+        return ...  # type: ignore
 
     @overload
     def getMessagesStringInternal(

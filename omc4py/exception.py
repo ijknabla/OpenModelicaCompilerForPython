@@ -46,7 +46,7 @@ class OMCError(
 
 
 class OMCRuntimeError(
-    OMCError,
+    OMCException,
     RuntimeError,
 ):
     ...

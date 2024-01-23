@@ -33,32 +33,29 @@ __license__ = """
  */
 """
 
-__version__ = "0.3.0a0"
+__version__ = "0.3.0"
 
 __all__ = (
+    "AsyncSession",
+    "GenericSession",
+    "Session",
     "TypeName",
     "VariableName",
-    "__license__",
-    "__version__",
     "open_session",
 )
 import re
 from os import PathLike
-from typing import TYPE_CHECKING, Any
-from typing import Literal
-from typing import Literal as L
-from typing import Tuple
-from typing import Tuple as T
-from typing import Union, overload
+from typing import TYPE_CHECKING, Any, Literal, Tuple, Union, overload
 
 from .exception import OMCRuntimeError
 from .interactive import Interactive
 from .openmodelica import TypeName, VariableName
 from .protocol import (
     Asynchronous,
+    Calling,
     SupportsInteractive,
     Synchronous,
-    synchronous,
+    T_Calling,
 )
 from .session import BasicSession
 
@@ -76,7 +73,38 @@ if TYPE_CHECKING:
         v_1_22,
     )
 
-    Command = Union[str, PathLike[str]]
+    GenericSession = Union[
+        v_1_22.GenericSession[T_Calling],  # NOTE: update to latest
+        v_1_21.GenericSession[T_Calling],
+        v_1_20.GenericSession[T_Calling],
+        v_1_19.GenericSession[T_Calling],
+        v_1_18.GenericSession[T_Calling],
+        v_1_17.GenericSession[T_Calling],
+        v_1_16.GenericSession[T_Calling],
+        v_1_15.GenericSession[T_Calling],
+        v_1_14.GenericSession[T_Calling],
+        v_1_13.GenericSession[T_Calling],
+    ]
+
+    _1_24 = tuple[Literal[1], Literal[24]]
+    _1_23 = tuple[Literal[1], Literal[23]]
+
+    _1_22 = tuple[Literal[1], Literal[22]]  # NOTE: update to latest
+    _1_21 = tuple[Literal[1], Literal[21]]
+    _1_20 = tuple[Literal[1], Literal[20]]
+    _1_19 = tuple[Literal[1], Literal[19]]
+    _1_18 = tuple[Literal[1], Literal[18]]
+    _1_17 = tuple[Literal[1], Literal[17]]
+    _1_16 = tuple[Literal[1], Literal[16]]
+    _1_15 = tuple[Literal[1], Literal[15]]
+    _1_14 = tuple[Literal[1], Literal[14]]
+    _1_13 = tuple[Literal[1], Literal[13]]
+
+else:
+    GenericSession = BasicSession
+
+Session = GenericSession[Synchronous]
+AsyncSession = GenericSession[Asynchronous]
 
 
 def _select_session_type(
@@ -129,9 +157,9 @@ def _select_session_type(
 # Latest
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
+    version: _1_22 | _1_23 | _1_24,
     asyncio: Literal[False] = False,
 ) -> v_1_22.Session:
     ...
@@ -139,20 +167,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[22]] | T[L[1], L[23]] | T[L[1], L[24]] | None = None,
+    version: _1_22 | _1_23 | _1_24,
     asyncio: Literal[True],
 ) -> v_1_22.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_22 | _1_23 | _1_24,
+) -> v_1_22.GenericSession[T_Calling]:
     ...
 
 
 # v1.21
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[21]],
+    version: _1_21,
     asyncio: Literal[False] = False,
 ) -> v_1_21.Session:
     ...
@@ -160,20 +197,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[21]],
+    version: _1_21,
     asyncio: Literal[True],
 ) -> v_1_21.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_21,
+) -> v_1_21.GenericSession[T_Calling]:
     ...
 
 
 # v1.20
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[20]],
+    version: _1_20,
     asyncio: Literal[False] = False,
 ) -> v_1_20.Session:
     ...
@@ -181,20 +227,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[20]],
+    version: _1_20,
     asyncio: Literal[True],
 ) -> v_1_20.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_20,
+) -> v_1_20.GenericSession[T_Calling]:
     ...
 
 
 # v1.19
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[19]],
+    version: _1_19,
     asyncio: Literal[False] = False,
 ) -> v_1_19.Session:
     ...
@@ -202,20 +257,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[19]],
+    version: _1_19,
     asyncio: Literal[True],
 ) -> v_1_19.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_19,
+) -> v_1_19.GenericSession[T_Calling]:
     ...
 
 
 # v1.18
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[18]],
+    version: _1_18,
     asyncio: Literal[False] = False,
 ) -> v_1_18.Session:
     ...
@@ -223,20 +287,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[18]],
+    version: _1_18,
     asyncio: Literal[True],
 ) -> v_1_18.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_18,
+) -> v_1_18.GenericSession[T_Calling]:
     ...
 
 
 # v1.17
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[17]],
+    version: _1_17,
     asyncio: Literal[False] = False,
 ) -> v_1_17.Session:
     ...
@@ -244,20 +317,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[17]],
+    version: _1_17,
     asyncio: Literal[True],
 ) -> v_1_17.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_17,
+) -> v_1_17.GenericSession[T_Calling]:
     ...
 
 
 # v1.16
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[16]],
+    version: _1_16,
     asyncio: Literal[False] = False,
 ) -> v_1_16.Session:
     ...
@@ -265,20 +347,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[16]],
+    version: _1_16,
     asyncio: Literal[True],
 ) -> v_1_16.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_16,
+) -> v_1_16.GenericSession[T_Calling]:
     ...
 
 
 # v1.15
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[15]],
+    version: _1_15,
     asyncio: Literal[False] = False,
 ) -> v_1_15.Session:
     ...
@@ -286,20 +377,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[15]],
+    version: _1_15,
     asyncio: Literal[True],
 ) -> v_1_15.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_15,
+) -> v_1_15.GenericSession[T_Calling]:
     ...
 
 
 # v1.14
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[14]],
+    version: _1_14,
     asyncio: Literal[False] = False,
 ) -> v_1_14.Session:
     ...
@@ -307,20 +407,29 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[14]],
+    version: _1_14,
     asyncio: Literal[True],
 ) -> v_1_14.AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_14,
+) -> v_1_14.GenericSession[T_Calling]:
     ...
 
 
 # v1.13
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[13]],
+    version: _1_13,
     asyncio: Literal[False] = False,
 ) -> v_1_13.Session:
     ...
@@ -328,34 +437,82 @@ def open_session(
 
 @overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: str | PathLike[str] | None = None,
     *,
-    version: T[L[1], L[13]],
+    version: _1_13,
     asyncio: Literal[True],
 ) -> v_1_13.AsyncSession:
     ...
 
 
+@overload
 def open_session(
-    omc_command: Command | None = None,
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_13,
+) -> v_1_13.GenericSession[T_Calling]:
+    ...
+
+
+# Default
+@overload
+def open_session(
+    omc: str | PathLike[str] | None = None,
+    *,
+    version: None = None,
+    asyncio: Literal[False] = False,
+) -> Session:
+    ...
+
+
+@overload
+def open_session(
+    omc: str | PathLike[str] | None = None,
+    *,
+    version: None = None,
+    asyncio: Literal[True],
+) -> AsyncSession:
+    ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: None = None,
+) -> GenericSession[T_Calling]:
+    ...
+
+
+def open_session(
+    omc: str | PathLike[str] | SupportsInteractive[T_Calling] | None = None,
     *,
     version: Tuple[int, int] | None = None,
     asyncio: bool = False,
 ) -> Any:
-    interactive = Interactive.open(omc_command, synchronous)
+    interactive: SupportsInteractive[Synchronous] | SupportsInteractive[
+        Asynchronous
+    ]
+    if isinstance(omc, SupportsInteractive):
+        interactive = omc
+    elif not asyncio:
+        interactive = Interactive.open(omc, Calling.synchronous)
+    else:
+        interactive = Interactive.open(omc, Calling.asynchronous)
 
     try:
         session_type, async_session_type = _select_session_type(
-            _get_version(interactive)
+            _get_version(interactive.synchronous)
         )
     except Exception:
-        interactive.close()
+        if interactive is not omc:
+            interactive.close()
         raise
 
-    if asyncio:
-        return async_session_type(interactive.asynchronous)
-    else:
+    if interactive.calling is Calling.synchronous:
         return session_type(interactive)
+    else:
+        return async_session_type(interactive)
 
 
 def _get_version(

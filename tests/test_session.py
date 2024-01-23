@@ -4,28 +4,19 @@ from itertools import zip_longest
 
 import pytest
 
-from omc4py import TypeName, VariableName, open_session
+from omc4py import Session, TypeName, VariableName
+from omc4py.exception import OMCError
 from omc4py.openmodelica import Component
-from omc4py.v_1_22 import AsyncSession, Session  # NOTE: update to latest
-
-from .session import (
-    AsyncEmptySession,
-    AsyncNestedSession,
-    AsyncOneSession,
-    Enum,
-    One,
-)
+from tests import OpenSession
 
 
-@pytest.mark.dependency()
-def test_open_session() -> None:
-    with open_session() as session:
-        assert session is not None
-        session.check()
+def test_open_session(open_session: OpenSession) -> None:
+    session = open_session()
+    assert session is not None
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
-def test_loadString(session: Session) -> None:
+def test_loadString(open_session: OpenSession) -> None:
+    session = open_session()
     assert session.loadString("type MyEnumeration = enumeration(e, n, u, m);")
     assert session.isType("MyEnumeration")
     assert session.isEnumeration("MyEnumeration")
@@ -37,8 +28,8 @@ def test_loadString(session: Session) -> None:
     assert session.isFunction("MyFunction")
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
-def test_getClassNames(session: Session) -> None:
+def test_getClassNames(open_session: OpenSession) -> None:
+    session = open_session()
     assert session.loadString(
         """
 package Test_getClassNames
@@ -106,8 +97,8 @@ type B = enumeration(b);
     ]
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
-def test_getComponents(session: Session) -> None:
+def test_getComponents(open_session: OpenSession) -> None:
+    session = open_session()
     assert session.loadString(
         """
 class Test_getComponents
@@ -226,7 +217,6 @@ end Test_getComponents;
             assert component.dimensions == []
 
 
-@pytest.mark.dependency(depends=["test_open_session"])
 def test_OpenModelica(session: Session) -> None:
     assert session.isPackage("OpenModelica")
 
@@ -258,11 +248,11 @@ def test_get_components(
 )
 @pytest.mark.parametrize("use_typename", [False, True])
 async def test_async_get_components(
-    async_session: AsyncSession,
+    session: Session,
     name: TypeName | str,
     use_typename: bool,
 ) -> None:
-    s = async_session
+    s = session.asynchronous
     if use_typename:
         name = TypeName(name)
     _check_components(await s.getComponents(name))
@@ -303,25 +293,8 @@ def _check_components(components: list[Component]) -> None:
 
 
 @pytest.mark.asyncio
-async def test_empty_session(empty_session: AsyncEmptySession) -> None:
-    s = empty_session
-    await s.empty()
-
-
-@pytest.mark.asyncio
-async def test_one(one_session: AsyncOneSession) -> None:
-    s = one_session
-    result = await s.one()
-    assert isinstance(result, One)
-    assert result == (1.0, 1, True, "1", Enum.One)
-    assert result == One(
-        real=1.0, integer=1, boolean=True, string="1", enum=Enum.One
-    )
-
-
-@pytest.mark.asyncio
-async def test_nested(nested_session: AsyncNestedSession) -> None:
-    s = nested_session
-    assert 1 == await s.Nested.level()
-    assert 2 == await s.Nested.Nested.level()
-    assert 3 == await s.Nested.Nested.Nested.level()
+async def test_omc_error(session: Session) -> None:
+    s = session.asynchronous
+    assert (await s.getClassRestriction("OpenModelica")) == "package"
+    with pytest.raises(OMCError):
+        await s.getClassRestriction("OpenModelica.$Code")

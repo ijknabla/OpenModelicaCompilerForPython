@@ -1,413 +1,363 @@
 from __future__ import annotations
 
-import enum
-import sys
-from collections.abc import Callable, Mapping, Sequence
-from functools import lru_cache, wraps
-from itertools import chain, islice
+import re
+import types
+from collections import ChainMap
+from collections.abc import (
+    Callable,
+    Coroutine,
+    Generator,
+    Iterable,
+    Mapping,
+    Sequence,
+)
+from contextlib import suppress
+from dataclasses import dataclass
+from enum import Enum
+from functools import lru_cache, partial, reduce
+from itertools import chain
 from typing import (
     TYPE_CHECKING,
     Any,
-    Iterable,
-    List,
+    ClassVar,
+    DefaultDict,
     Literal,
-    Protocol,
+    Set,
     Tuple,
+    Type,
     TypeVar,
     Union,
+    get_args,
+    get_origin,
+    get_type_hints,
+    overload,
 )
-from typing import cast as typing_cast
-from typing import get_args, get_origin, get_type_hints
+from warnings import warn
 
 from arpeggio import (
     EOF,
     NoMatch,
     NonTerminal,
-    OneOrMore,
     Optional,
     ParserPython,
     PTNodeVisitor,
     RegExMatch,
+    StrMatch,
     Terminal,
+    UnorderedGroup,
     ZeroOrMore,
     visit_parse_tree,
 )
-from modelicalang import ParsingExpressionLike, v3_4
-from typing_extensions import Annotated
+from exceptiongroup import ExceptionGroup
+from modelicalang import v3_4
 
-from .exception import OMCRuntimeError
+from .exception import OMCError, OMCRuntimeError, OMCWarning
 from .modelica import enumeration, record
-from .openmodelica import Component, TypeName, VariableName
-from .string import unquote_modelica_string
-
-if TYPE_CHECKING:
-    import typing
-    from builtins import _ClassInfo
-
-    import typing_extensions
-    from typing_extensions import Concatenate, Never, ParamSpec, TypeGuard
-
-_SpecialForm = Union["typing._SpecialForm", "typing_extensions._SpecialForm"]
-
-
-_T = TypeVar("_T")
-_T_return = TypeVar("_T_return")
-
-if TYPE_CHECKING:
-    _P = ParamSpec("_P")
-else:
-    _P = ...
-
-_Scalar = Union[
-    float,
-    int,
-    bool,
-    str,
-    VariableName,
-    TypeName,
+from .openmodelica import (
     Component,
-    enumeration,
-    record,
-]
+    TypeName,
+    VariableName,
+    _BaseTypeName,
+    _BaseVariableName,
+)
+from .protocol import PathLike
 
+if TYPE_CHECKING:
+    from typing import _SpecialForm
 
-def is_variablename(variablename: str) -> bool:
-    parser = _get_variablename_parser()
-    try:
-        parser.parse(variablename)
-        return True
-    except NoMatch:
-        return False
+    from arpeggio import _ParsingExpressionLike
+    from typing_extensions import Never, ParamSpec, Self, TypeGuard
 
+    T = TypeVar("T")
+    P = ParamSpec("P")
 
-def split_typename_parts(typename: str) -> tuple[str, ...]:
-    return visit_parse_tree(  # type: ignore
-        _get_typename_parser().parse(typename),
-        TypeNameSplitVisitor(),
-    )
 
+_Primitive = Union[float, int, bool, str, TypeName, VariableName, Component]
+_Defined = Union[record, enumeration, Tuple[Any, ...]]
+_ScalarType = Union[Type[Union[_Primitive, _Defined]], None]
 
-def parse(typ: type[_T], literal: str) -> _T:
-    parser = _get_parser(
-        *map(_Token.from_value_type, _get_types(typ, keep_component=True))
-    )
-    try:
-        parse_tree = parser.parse(literal)
-    except NoMatch:
-        raise OMCRuntimeError(literal) from None
-    return cast(typ, visit_parse_tree(parse_tree, Visitor()))
-
-
-def cast(typ: type[_T], val: Any) -> _T:
-    cast_type = _get_cast_type(typ)
-    if _issubclass(cast_type, tuple):
-        return _cast_tuple(val, cast_type, typ)  # type: ignore
-    elif _is_enumeration_type(cast_type):
-        return _cast_enumeration(val, cast_type, typ)
-    elif _is_record_type(cast_type):
-        return _cast_record(val, cast_type, typ)
-    else:
-        return _cast_value(val, cast_type, typ)
-
-
-class _Token(enum.Enum):
-    real = enum.auto()
-    integer = enum.auto()
-    boolean = enum.auto()
-    string = enum.auto()
-    variablename = enum.auto()
-    typename = enum.auto()
-    component = enum.auto()
-    record = enum.auto()
-
-    @property
-    def primary(self) -> ParsingExpressionLike:
-        return getattr(Syntax, f"{self.name}_primary")  # type: ignore
-
-    @classmethod
-    def from_value_type(
-        cls, value_type: type[_Scalar] | type[Component]
-    ) -> _Token:
-        if issubclass(value_type, float):
-            return cls.real
-        elif not issubclass(value_type, bool) and issubclass(value_type, int):
-            return cls.integer
-        elif issubclass(value_type, bool):
-            return cls.boolean
-        elif issubclass(value_type, str):
-            return cls.string
-        elif issubclass(value_type, VariableName):
-            return cls.variablename
-        elif issubclass(value_type, (TypeName, enumeration)):
-            return cls.typename
-        elif issubclass(value_type, Component):
-            return cls.component
-        elif issubclass(value_type, record):
-            return cls.record
-
-        raise NotImplementedError(value_type)
-
-
-@lru_cache(1)
-def _get_variablename_parser() -> ParserPython:
-    def root() -> ParsingExpressionLike:
-        return Syntax.variablename, EOF
-
-    with Syntax:
-        return ParserPython(root)
-
-
-@lru_cache(1)
-def _get_typename_parser() -> ParserPython:
-    def root() -> ParsingExpressionLike:
-        return Syntax.typename, EOF
-
-    with Syntax:
-        return ParserPython(root)
-
-
-@lru_cache(None)
-def _get_parser(*tokens: _Token) -> ParserPython:
-    def root() -> ParsingExpressionLike:
-        if len(tokens) < 2:
-            L = R = []
-        else:
-            L, R = ["("], [")"]
-
-        return (*L, primary_list, *R, EOF)
-
-    def primary_list() -> ParsingExpressionLike:
-        primaries = (token.primary for token in tokens)
-        return (
-            *islice(primaries, 1),
-            *chain.from_iterable([",", primary] for primary in primaries),
-        )
-
-    with Syntax:
-        return ParserPython(root)
-
-
-def _vectorize(
-    f: Callable[Concatenate[_T, _P], _T_return]
-) -> Callable[Concatenate[_T, _P], _T_return]:
-    @wraps(f)
-    def wrapped(_: _T, *args: _P.args, **kwargs: _P.kwargs) -> Any:
-        val = _
-        if isinstance(val, Sequence) and not isinstance(
-            val, (str, bytes, tuple)
-        ):
-            return [wrapped(i, *args, **kwargs) for i in val]
-        else:
-            return f(val, *args, **kwargs)  # type: ignore
-
-    return wrapped  # type: ignore
-
-
-@_vectorize
-def _cast_tuple(val: Any, typ: type[tuple[Any, ...]], hint: type[_T]) -> _T:
-    def items() -> Iterable[Any]:
-        for item, item_typ in zip(val, _get_types(typ, keep_component=False)):
-            yield cast(item_typ, item)
-
-    return typing_cast(_T, typ(*items()))
-
-
-@_vectorize
-def _cast_enumeration(val: Any, typ: type[enumeration], hint: type[_T]) -> _T:
-    if isinstance(val, typ):
-        return typing_cast(_T, val)
-    elif isinstance(val, int):
-        return typing_cast(_T, typ(val))
-    elif isinstance(val, str):
-        typename = TypeName(val).as_absolute()
-        if typename.parent == typ.__omc_class__:
-            name = f"{typename.last_identifier}"
-        else:
-            name = val
-        return typing_cast(_T, typ[name])
-
-    raise TypeError(val)
-
-
-@_vectorize
-def _cast_record(val: Any, typ: type[record], hint: type[_T]) -> _T:
-    if isinstance(val, typ):
-        return typing_cast(_T, val)
-    elif isinstance(val, Mapping):
-        type_hints = get_type_hints(typ)
-
-        # Patch for bug at `.OpenModelica.Scripting.getMessagesStringInternal`
-        if typ.__omc_class__ == TypeName(".OpenModelica.Scripting.SourceInfo"):
-            if "fileName" in type_hints and "filename" in val:
-                val = {
-                    k if k != "filename" else "fileName": v
-                    for k, v in val.items()
-                }
-
-        return typing_cast(
-            _T, typ(**{k: cast(type_hints[k], v) for k, v in val.items()})
-        )
-
-    raise TypeError(val)
-
-
-@_vectorize
-def _cast_value(val: Any, typ: Any, hint: type[_T]) -> _T:
-    if not isinstance(val, typ):
-        val = typ(val)
-
-    return typing_cast(_T, val)
-
-
-def _get_types(typ: Any, *, keep_component: bool) -> tuple[type[_Scalar], ...]:
-    if _is_none(typ):
-        return ()
-    elif _issubclass(typ, Component) and keep_component:
-        return (typ,)
-    elif _issubclass(typ, tuple):
-        return tuple(map(_get_type, get_type_hints(typ).values()))
-    else:
-        return (_get_type(typ),)
-
-
-def _get_type(typ: Any) -> type[_Scalar]:
-    if _isorigin(typ, Annotated):
-        arg, *_ = get_args(typ)
-        return _get_type(arg)
-    elif _issubclass(get_origin(typ), Sequence):
-        (arg,) = get_args(typ)
-        return _get_type(arg)
-    elif _is_union(typ):
-        return _select_type(map(_get_type, get_args(typ)))
-    elif get_origin(typ) is Literal:
-        return _select_type(map(type, get_args(typ)))
-    elif _issubclass(typ, get_args(_Scalar)):
-        return typ  # type: ignore
-    else:
-        raise NotImplementedError(typ)
-
-
-def _get_cast_type(typ: Any) -> type[None | _Scalar | tuple[Any, ...]]:
-    if _is_none(typ):
-        return type(None)
-    elif _isorigin(typ, Annotated):
-        arg, *_ = get_args(typ)
-        return _get_cast_type(arg)
-    elif _issubclass(typ, tuple):
-        return typ  # type: ignore
-    elif _issubclass(get_origin(typ), Sequence):
-        (arg,) = get_args(typ)
-        return _get_cast_type(arg)
-    elif _is_union(typ):
-        return _select_type(map(_get_cast_type, get_args(typ)))
-    elif _isorigin(typ, Literal):
-        return _select_type(map(_get_cast_type, map(type, get_args(typ))))
-    elif _issubclass(typ, get_args(_Scalar)):
-        return typ  # type: ignore
-    else:
-        raise NotImplementedError(typ)
-
-
-def _is_union(typ: Any) -> bool:
-    if _isorigin(typ, Union):
-        return True
-    if sys.version_info >= (3, 10):
-        from types import UnionType
-
-        if isinstance(typ, UnionType):
-            return True
-
-    return False
-
-
-def _select_type(typs: Iterable[type[Any]]) -> type[Any]:
-    return max(typs, key=_priority)
-
-
-def _priority(typ: type[_Scalar]) -> int:
-    if _is_none(typ):
-        return 0
-    for i, base in reversed(
-        list(
-            enumerate(
-                [float, int, str, VariableName, TypeName, enumeration, record],
-                start=1,
-            )
-        )
-    ):
-        if _issubclass(typ, base):
-            return i
-
-    raise NotImplementedError(typ)
-
-
-def _is_none(
-    typ: Any,
-) -> TypeGuard[type[None] | None]:
-    return typ is None or _issubclass(typ, type(None))
-
-
-def _is_enumeration_type(
-    typ: Any,
-) -> TypeGuard[type[enumeration]]:
-    return isinstance(typ, type) and issubclass(typ, enumeration)
-
-
-def _is_record_type(
-    typ: Any,
-) -> TypeGuard[type[record]]:
-    return isinstance(typ, type) and issubclass(typ, record)
-
-
-def _issubclass(__cls: Any, __class_or_tuple: _ClassInfo) -> bool:
-    return isinstance(__cls, type) and issubclass(__cls, __class_or_tuple)
-
-
-def _isorigin(__cls: Any, __special_form: _SpecialForm) -> bool:
-    return get_origin(__cls) is __special_form
+# region Public
 
 
 class Syntax(v3_4.Syntax):
     # Dialects
 
     @classmethod
-    def IDENT(cls) -> ParsingExpressionLike:
+    def IDENT(cls) -> _ParsingExpressionLike:
         return [super().IDENT(), RegExMatch(r"\$\w*")]
+
+
+class Visitor(PTNodeVisitor):
+    def visit_none(self, node: Never, children: Never, /) -> None:
+        return
+
+    def visit_real(self, node: Never, children: _Children, /) -> float:
+        (value,) = map(float, children.UNSIGNED_NUMBER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
+
+    def visit_integer(self, node: Never, children: _Children, /) -> int:
+        (value,) = map(int, children.UNSIGNED_INTEGER)
+        if "-" in children.SIGN:
+            value = -value
+
+        return value
+
+    def visit_boolean(self, node: Terminal, children: Never, /) -> bool:
+        return {
+            "true": True,
+            "false": False,
+        }[node.value]
+
+    def visit_STRING(self, node: Terminal, children: Never, /) -> str:
+        return _unquote_modelica_string(node.value)
+
+    def visit_typename(
+        self, node: NonTerminal, children: _Children, /
+    ) -> TypeName | tuple[str, ...]:
+        parts = tuple(ident for name in children.name for ident in name)
+        if isinstance(node[0], Terminal) and node[0].value == ".":
+            parts = (".",) + parts
+
+        return _BaseTypeName.__new__(TypeName, parts)
+
+    def visit_name(self, node: Never, children: _Children, /) -> list[str]:
+        return children.IDENT
+
+    def visit_variablename(
+        self, node: Never, children: _Children, /
+    ) -> VariableName:
+        (identifier,) = children
+        return _BaseVariableName.__new__(VariableName, identifier)
+
+    def visit_component(
+        self, node: Never, children: _Children, /
+    ) -> Component:
+        return Component(*children)
+
+    def visit_subscript_list(
+        self, node: Never, children: _Children, /
+    ) -> list[str]:
+        return list(children.subscript)
+
+    def visit_subscript(
+        self, node: Terminal | NonTerminal, children: Never, /
+    ) -> str:
+        return node.flat_str()
+
+
+if TYPE_CHECKING:
+
+    class _Children(Sequence[Any]):
+        IDENT: list[str]
+        SIGN: Literal["+", "-"]
+        UNSIGNED_INTEGER: list[str]
+        UNSIGNED_NUMBER: list[str]
+        name: list[list[str]]
+        subscript: list[str]
+
+
+def is_variablename(variablename: str) -> bool:
+    with _ParametrizedSyntax:
+        parser = _ParametrizedSyntax.get_parser(
+            root_type=VariableName, root_ndim=0
+        )
+
+    with suppress(NoMatch):
+        parser.parse(variablename)
+        return True
+
+    return False
+
+
+def parse(typ: Any, s: str) -> Any:
+    root_type = _get_type(typ)
+    root_ndim = _get_ndim(typ)
+    with _ParametrizedSyntax:
+        parser = _ParametrizedSyntax.get_parser(
+            root_type=root_type,  # type: ignore
+            root_ndim=root_ndim,
+        )
+    visitor = _ParametrizedVisistor.get_visitor(
+        root_type=root_type,  # type: ignore
+        root_ndim=root_ndim,
+    )
+    if re.search(r"^Error($| occurred )", s) is not None:
+        raise OMCError(s)
+    try:
+        parse_tree = parser.parse(s)
+    except NoMatch as no_match:
+        warn(OMCWarning(f"{no_match}"))
+        raise OMCRuntimeError(s) from None
+    return visit_parse_tree(parse_tree, visitor)
+
+
+def split_typename_parts(typename: str) -> tuple[str, ...]:
+    with _ParametrizedSyntax:
+        parser = _ParametrizedSyntax.get_parser(
+            root_type=TypeName, root_ndim=0
+        )
+
+    return visit_parse_tree(  # type: ignore
+        parser.parse(typename),
+        _TypeNameSplitVisitor(),
+    )
+
+
+def unparse(typ: Any, obj: Any) -> str:
+    return _unparse(_get_type(typ), _get_ndim(typ), (), obj)
+
+
+# endregion
+
+# region Internal
+
+# region parse Implementation
+
+
+@dataclass
+class _ParametrizedSyntax(Syntax):
+    root_type: _ScalarType
+    root_ndim: int
+
+    def __post_init__(self) -> None:
+        for t, n in _iter_all_types(self.root_type, self.root_ndim):
+            method = _to_rule_name(t, ndim=n)
+            if hasattr(self, method):
+                continue
+
+            if 0 < n:
+                _runtime_method(self, method)(
+                    partial(self.sequence_rule, t, n)
+                )
+            elif t is not None and issubclass(t, record):
+                _runtime_method(self, method)(partial(self.record_rule, t))
+                for attr, (tt, nn) in _iter_attribute_types(t):
+                    _runtime_method(self, _to_rule_name(t, attribute=attr))(
+                        partial(self.record_attr_rule, attr, tt, nn)
+                    )
+            elif t is not None and issubclass(t, enumeration):
+                _runtime_method(self, method)(
+                    partial(self.enumeration_rule, t)
+                )
+            elif t is not None and _is_named_tuple(t):
+                _runtime_method(self, method)(
+                    partial(self.named_tuple_rule, t)
+                )
+
+    @classmethod
+    @lru_cache
+    def get_parser(
+        cls, root_type: _ScalarType, root_ndim: int
+    ) -> ParserPython:
+        return ParserPython(cls(root_type, root_ndim).root)
+
+    def root(self) -> _ParsingExpressionLike:
+        return (
+            getattr(self, _to_rule_name(self.root_type, ndim=self.root_ndim)),
+            EOF,
+        )
+
+    def sequence_rule(
+        self, _type: _ScalarType, _ndim: int
+    ) -> _ParsingExpressionLike:
+        return (
+            "{",
+            ZeroOrMore(
+                getattr(self, _to_rule_name(_type, ndim=_ndim - 1)), sep=","
+            ),
+            "}",
+        )
+
+    def record_rule(self, record_type: type[record]) -> _ParsingExpressionLike:
+        name = StrMatch(f"{record_type.__omc_class__}")
+        return (
+            self.RECORD,
+            name,
+            UnorderedGroup(
+                [
+                    getattr(self, _to_rule_name(record_type, attribute=attr))
+                    for attr, _ in _iter_attribute_types(record_type)
+                ],
+                sep=",",
+            ),
+            self.END,
+            name,
+            ";",
+        )
+
+    def record_attr_rule(
+        self, _attribute: str, _type: _ScalarType, _ndim: int
+    ) -> _ParsingExpressionLike:
+        return (
+            RegExMatch(f"_*{_attribute}_*", ignore_case=True),
+            "=",
+            getattr(self, _to_rule_name(_type, ndim=_ndim)),
+        )
+
+    def enumeration_rule(
+        self, enumeration_type: type[enumeration]
+    ) -> _ParsingExpressionLike:
+        return (
+            Optional("."),
+            f"{enumeration_type.__omc_class__}.",
+            [e.name for e in enumeration_type],
+        )
+
+    def named_tuple_rule(
+        self, named_tuple_type: type[tuple[Any, ...]]
+    ) -> _ParsingExpressionLike:
+        elements = [
+            getattr(self, _to_rule_name(t, ndim=n))
+            for _, (t, n) in _iter_attribute_types(named_tuple_type)
+        ]
+
+        return (
+            "(",
+            *chain.from_iterable((element, ",") for element in elements[:-1]),
+            elements[-1],
+            ")",
+        )
 
     # Primitives
 
     @classmethod
-    def real(cls) -> ParsingExpressionLike:
+    def none(cls) -> _ParsingExpressionLike:
+        return ""
+
+    @classmethod
+    def real(cls) -> _ParsingExpressionLike:
         return Optional(cls.SIGN), cls.UNSIGNED_NUMBER
 
     @classmethod
-    def integer(cls) -> ParsingExpressionLike:
+    def integer(cls) -> _ParsingExpressionLike:
         return Optional(cls.SIGN), cls.UNSIGNED_INTEGER
 
     @classmethod
-    def boolean(cls) -> ParsingExpressionLike:
+    def SIGN(cls) -> _ParsingExpressionLike:
+        return RegExMatch(r"[+-]")
+
+    @classmethod
+    def boolean(cls) -> _ParsingExpressionLike:
         return [cls.TRUE, cls.FALSE]
 
     @classmethod
-    def variablename(cls) -> ParsingExpressionLike:
-        return [
-            RegExMatch(
-                "[A-Z_a-z][0-9A-Z_a-z]*|'([\\ !\\#-\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)([\\ -\\&\\(-\\[\\]-_a-\\~]|\\\\'|\\\\\"|\\\\\\?|\\\\\\\\|\\\\a|\\\\b|\\\\f|\\\\n|\\\\r|\\\\t|\\\\v)*'"  # noqa: E501
-            ),
-            RegExMatch(r"\$\w*"),
-        ]
+    def typename(cls) -> _ParsingExpressionLike:
+        return cls.type_specifier
 
     @classmethod
-    def typename(cls) -> ParsingExpressionLike:
-        return Optional(cls.DOT), OneOrMore(cls.variablename, sep=".")
+    def variablename(cls) -> _ParsingExpressionLike:
+        return cls.IDENT
 
     @classmethod
-    def component(cls) -> ParsingExpressionLike:
+    def component(cls) -> _ParsingExpressionLike:
         return (
             "{",
             (
                 *(cls.typename, ","),  # className
-                *(cls.IDENT, ","),  # name
+                *(cls.variablename, ","),  # name
                 *(cls.STRING, ","),  # comment
                 *(cls.STRING, ","),  # protected
                 *(cls.boolean, ","),  # isFinal
@@ -423,231 +373,560 @@ class Syntax(v3_4.Syntax):
         )
 
     @classmethod
-    def subscript_list(cls) -> ParsingExpressionLike:
+    def subscript_list(cls) -> _ParsingExpressionLike:
         return "{", ZeroOrMore(cls.subscript, sep=","), "}"
 
+
+class _ParametrizedVisistor(Visitor):
+    root_type: _ScalarType
+    root_ndim: int
+
+    def __init__(
+        self,
+        *args: Any,
+        root_type: _ScalarType,
+        root_ndim: int,
+        **kwargs: Any,
+    ) -> None:
+        super().__init__(*args, **kwargs)
+        self.root_type = root_type
+        self.root_ndim = root_ndim
+
+        for t, n in _iter_all_types(root_type, root_ndim):
+            method = f"visit_{_to_rule_name(t, ndim=n)}"
+            if hasattr(self, method):
+                continue
+
+            if 0 < n:
+                _runtime_method(self, method)(partial(self._visit_sequence))
+            elif t is not None and issubclass(t, record):
+                _runtime_method(self, method)(
+                    partial(self._visit_record, record_type=t)
+                )
+                for attr, _ in _iter_attribute_types(t):
+                    _runtime_method(
+                        self, f"visit_{_to_rule_name(t, attribute=attr)}"
+                    )(partial(self._visit_record_attr, attribute=attr))
+            elif t is not None and issubclass(t, enumeration):
+                _runtime_method(self, method)(
+                    partial(self._visit_enumeration, enumeration_type=t)
+                )
+            elif t is not None and _is_named_tuple(t):
+                _runtime_method(self, method)(
+                    partial(self._visit_named_tuple, named_tuple_type=t)
+                )
+
     @classmethod
-    def record(cls) -> ParsingExpressionLike:
-        return (
-            cls.RECORD,
-            cls.type_specifier,
-            ZeroOrMore(cls.record_element, sep=","),
-            cls.END,
-            cls.type_specifier,
-            ";",
+    @lru_cache
+    def get_visitor(cls, root_type: _ScalarType, root_ndim: int) -> Self:
+        return cls(root_type=root_type, root_ndim=root_ndim)
+
+    def _visit_sequence(
+        self, node: Never, children: _Children, /
+    ) -> list[Any]:
+        return list(children[::2])
+
+    def visit_none__1D(
+        self, node: Never, children: _Children, /
+    ) -> list[None]:
+        return [None] * (len(children) + 1)
+
+    def _visit_record(
+        self, node: Never, children: _Children, /, *, record_type: type[record]
+    ) -> record:
+        return record_type(
+            **ChainMap(
+                *(child for child in children if isinstance(child, dict))
+            )
         )
 
-    @classmethod
-    def record_element(cls) -> ParsingExpressionLike:
-        return cls.IDENT, "=", cls.record_expression
+    def _visit_record_attr(
+        self, node: Never, children: _Children, /, *, attribute: str
+    ) -> dict[str, Any]:
+        _, value = children
+        return {attribute: value}
 
-    @classmethod
-    def record_expression(cls) -> ParsingExpressionLike:
-        return [
-            cls.record_primary,
-            cls.real_primary,
-            cls.boolean_primary,
-            cls.string_primary,
-            cls.typename_primary,
-        ]
+    def _visit_enumeration(
+        self,
+        node: Never,
+        children: _Children,
+        /,
+        *,
+        enumeration_type: type[enumeration],
+    ) -> enumeration:
+        return enumeration_type[children[-1]]
 
-    # Additional rules
-
-    @classmethod
-    def DOT(cls) -> ParsingExpressionLike:
-        return "."
-
-    @classmethod
-    def SIGN(cls) -> ParsingExpressionLike:
-        return RegExMatch(r"[+-]")
-
-    # Primary & Array
-
-    @classmethod
-    def real_primary(cls) -> ParsingExpressionLike:
-        return [cls.real, cls.real_array]
-
-    @classmethod
-    def real_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.real_primary, sep=","), "}"
-
-    @classmethod
-    def integer_primary(cls) -> ParsingExpressionLike:
-        return [cls.integer, cls.integer_array]
-
-    @classmethod
-    def integer_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.integer_primary, sep=","), "}"
-
-    @classmethod
-    def boolean_primary(cls) -> ParsingExpressionLike:
-        return [cls.boolean, cls.boolean_array]
-
-    @classmethod
-    def boolean_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.boolean_primary, sep=","), "}"
-
-    @classmethod
-    def string_primary(cls) -> ParsingExpressionLike:
-        return [cls.STRING, cls.string_array]
-
-    @classmethod
-    def string_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.string_primary, sep=","), "}"
-
-    @classmethod
-    def variablename_primary(cls) -> ParsingExpressionLike:
-        return [cls.variablename, cls.variablename_array]
-
-    @classmethod
-    def variablename_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.variablename_primary, sep=","), "}"
-
-    @classmethod
-    def typename_primary(cls) -> ParsingExpressionLike:
-        return [cls.typename, cls.typename_array]
-
-    @classmethod
-    def typename_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.typename_primary, sep=","), "}"
-
-    @classmethod
-    def component_primary(cls) -> ParsingExpressionLike:
-        return [cls.component, cls.component_array]
-
-    @classmethod
-    def component_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.component_primary, sep=","), "}"
-
-    @classmethod
-    def record_primary(cls) -> ParsingExpressionLike:
-        return [cls.record, cls.record_array]
-
-    @classmethod
-    def record_array(cls) -> ParsingExpressionLike:
-        return "{", ZeroOrMore(cls.record_primary, sep=","), "}"
+    def _visit_named_tuple(
+        self,
+        node: Never,
+        children: _Children,
+        /,
+        *,
+        named_tuple_type: type[enumeration],
+    ) -> enumeration:
+        return named_tuple_type(*children)
 
 
-if TYPE_CHECKING:
-    AnyPrimary = Union[List[Any], List[List[Any]]]
-    BooleanPrimary = Union[List[bool], List[List[bool]]]
-    StringPrimary = Union[List[str], List[List[str]]]
-    TuplePrimary = Union[Tuple[Any, ...], List[List[Tuple[Any, ...]]]]
-
-    class Children(Protocol, Iterable[Any]):
-        DOT: List[str]
-        IDENT: List[str]
-        real_primary: StringPrimary
-        integer_primary: StringPrimary
-        boolean_primary: BooleanPrimary
-        string_primary: StringPrimary
-        variablename: List[str]
-        variablename_primary: StringPrimary
-        typename_primary: StringPrimary
-        component_primary: TuplePrimary
-        record_primary: AnyPrimary
-        record_element: List[tuple[str, Any]]
-        record_expression: List[Any]
-        subscript: List[str]
+@overload
+def _to_rule_name(_type: _ScalarType, /) -> str:
+    ...
 
 
-class Visitor(PTNodeVisitor):
-    def visit_primary_list(
-        self, _: Never, children: Any
-    ) -> None | Any | tuple[Any, ...]:
-        if len(children) == 0:
-            return None
-        elif len(children) == 1:
-            return children[0]
+@overload
+def _to_rule_name(_type: _ScalarType, /, *, ndim: int) -> str:
+    ...
+
+
+@overload
+def _to_rule_name(_type: _ScalarType, /, *, attribute: str) -> str:
+    ...
+
+
+def _to_rule_name(
+    _type: _ScalarType,
+    /,
+    *,
+    ndim: int | None = None,
+    attribute: str | None = None,
+) -> str:
+    if _is_primitive(_type) or _type is None:
+        stem = {
+            float: "real",
+            int: "integer",
+            bool: "boolean",
+            str: "STRING",
+            TypeName: "typename",
+            VariableName: "variablename",
+            Component: "component",
+            None: "none",
+        }[_type]
+    elif _is_defined(_type):
+        stem = f"_{_type.__module__}.{_type.__name__}".lower().replace(
+            ".", "__"
+        )
+    else:
+        raise TypeError(_type)
+
+    parts: list[str] = [stem]
+
+    if ndim is not None and 0 < ndim:
+        parts.append(f"{ndim}D")
+    if attribute is not None:
+        parts.append(attribute)
+
+    return "__".join(parts)
+
+
+def _runtime_method(
+    self: Any, name: str
+) -> Callable[[Callable[P, T]], Callable[P, T]]:
+    def decorator(f: Callable[P, T]) -> Callable[P, T]:
+        f.__name__ = name
+        setattr(self, name, f)
+        return f
+
+    return decorator
+
+
+# endregion
+
+# region split_typename_parts Implementation
+
+
+class _TypeNameSplitVisitor(Visitor):
+    def visit_typename(
+        self, node: NonTerminal, children: _Children, /
+    ) -> TypeName | tuple[str, ...]:
+        parts = tuple(ident for name in children.name for ident in name)
+        if isinstance(node[0], Terminal) and node[0].value == ".":
+            parts = (".",) + parts
+
+        return parts
+
+
+# endregion
+
+# region unparse Implementation
+
+
+def _unparse(t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any) -> str:
+    try:
+        if 0 < n:
+            return _unparse_sequence(t, n, attrs, obj)
+        elif obj is None:
+            return ""
+        elif t is None:
+            return str(obj)
+        elif issubclass(t, Component):
+            return _unparse_component(t, n, attrs, obj)
+        elif issubclass(t, tuple):
+            return _unparse_tuple(t, n, attrs, obj)
+        elif issubclass(t, record):
+            return _unparse_record(t, n, attrs, obj)
+        elif issubclass(t, enumeration):
+            return _unparse_enumeration(t, n, attrs, obj)
         else:
-            return tuple(children)
+            return _unparse_primitive(t, n, attrs, obj)
+    except ExceptionGroup:
+        raise
+    except Exception as e:
+        if not attrs:
+            unparse_error = UnparseError("Can't unparse obj, obj={obj!r}")
+        else:
+            unparse_error = UnparseError(
+                "Can't unparse "
+                f"obj{''.join(attrs)}, obj{''.join(attrs[-1])}={obj}"
+            )
+        raise ExceptionGroup("Unparse failed", [unparse_error, e])
 
-    def visit_IDENT(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
 
-    def visit_STRING(self, node: Terminal, _: Never) -> str:
-        return unquote_modelica_string(node.flat_str())
+class UnparseError(ValueError):
+    ...
 
-    def visit_real(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
 
-    def visit_real_array(self, _: Never, children: Children) -> StringPrimary:
-        return children.real_primary
+def _unparse_sequence(
+    t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert 0 < n
+    return (
+        "{"
+        + ",".join(
+            _unparse(t, n - 1, attrs + (f"[{i}]",), obj[i])
+            for i in range(len(obj))
+        )
+        + "}"
+    )
 
-    def visit_integer(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
 
-    def visit_integer_array(
-        self, _: Never, children: Children
-    ) -> StringPrimary:
-        return children.integer_primary
+def _unparse_component(
+    t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+    return (
+        "{"
+        + ",".join(
+            _unparse(
+                tt if attr != "dimensions" else None,
+                nn,
+                attrs + (f".{attr}",),
+                getattr(obj, attr),
+            )
+            for attr, (tt, nn) in _iter_attribute_types(t)
+        )
+        + "}"
+    )
 
-    def visit_TRUE(self, *_: Never) -> Literal[True]:
+
+def _unparse_tuple(
+    t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+    return (
+        "("
+        + ",".join(
+            _unparse(tt, nn, attrs + (f"[{i}]",), obj[i])
+            for i, (_, (tt, nn)) in enumerate(_iter_attribute_types(t))
+        )
+        + ")"
+    )
+
+
+def _unparse_record(
+    t: type[record], n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+
+    def items() -> Generator[str, None, None]:
+        for attr, (tt, nn) in _iter_attribute_types(t):
+            if isinstance(obj, Mapping):
+                value = _unparse(tt, nn, attrs + (f"[{attr}!r]",), obj[attr])
+            else:
+                value = _unparse(
+                    tt, nn, attrs + (f".{attr}",), getattr(obj, attr)
+                )
+
+            yield f"{attr}={value}"
+
+    return (
+        f"record {t.__omc_class__} "
+        + ",".join(items())
+        + f" end {t.__omc_class__};"
+    )
+
+
+def _unparse_enumeration(
+    t: type[enumeration], n: int, attrs: tuple[str, ...], obj: Any
+) -> str:
+    assert n <= 0
+    if isinstance(obj, Enum):
+        name = obj.name
+    elif isinstance(obj, int):
+        name = t(obj).name
+    else:
+        name = str(obj)
+
+    return f"{t.__omc_class__}.{name}"
+
+
+def _unparse_primitive(
+    t: type[float]
+    | type[int]
+    | type[bool]
+    | type[str]
+    | type[TypeName]
+    | type[VariableName],
+    n: int,
+    attrs: tuple[str, ...],
+    obj: Any,
+) -> str:
+    assert n <= 0
+    if issubclass(t, str):
+        if isinstance(obj, PathLike):
+            obj = obj.__fspath__()
+        return _quote_py_string(str(obj))
+    elif issubclass(t, bool):
+        return "true" if obj else "false"
+    else:
+        return str(obj)
+
+
+# endregion
+
+
+# region _StringableType
+
+
+def _iter_all_types(
+    _type: _ScalarType, ndim: int
+) -> Generator[tuple[_ScalarType, int], None, None]:
+    result = DefaultDict[_ScalarType, Set[int]](set)
+    queue = [(_type, ndim)]
+    while queue:
+        t, n = queue.pop(0)
+        if t not in result:
+            for _, (tt, nn) in _iter_attribute_types(t):
+                queue.append((tt, nn))
+        result[t].add(n)
+
+    for k, vs in result.items():
+        for v in range(max(vs) + 1):
+            yield k, v
+
+
+def _iter_attribute_types(
+    typ: _ScalarType,
+) -> Generator[tuple[str, tuple[_ScalarType, int]], None, None]:
+    if typ is None or _issubclass(typ, (TypeName, VariableName)):
+        return
+    for k, v in get_type_hints(typ).items():
+        if _issubclass(get_origin(v), (ClassVar,)):
+            continue
+        yield k, (_get_type(v), _get_ndim(v))
+
+
+def _get_type(obj: Any) -> _ScalarType:
+    types = set(_iter_types(obj))
+    if any(
+        issubclass(
+            t,
+            (enumeration, TypeName, VariableName),
+        )
+        for t in types
+        if t is not None
+    ):
+        types -= {str}
+    if any(
+        issubclass(
+            t,
+            enumeration,
+        )
+        for t in types
+        if t is not None
+    ):
+        types -= {int}
+    if types > {None}:
+        types -= {None}
+
+    if len(types) == 1:
+        (typ,) = types
+        return typ
+
+    raise TypeError(f"Types are ambigious or undefinable. got {types}")
+
+
+def _iter_types(obj: Any) -> Generator[_ScalarType, None, None]:
+    for unpacked in _unpack(obj):
+        if _is_none(unpacked):
+            yield None
+        elif _is_path_like(unpacked):
+            yield str
+        elif _is_primitive(unpacked) or _is_defined(unpacked):
+            yield unpacked
+        elif _is_sequence(unpacked):
+            yield from _iter_types(get_args(unpacked)[0])
+
+
+def _get_ndim(obj: Any) -> int:
+    return max(_iter_ndims(obj, ndim=0), default=0)
+
+
+def _iter_ndims(obj: Any, ndim: int) -> Generator[int, None, None]:
+    for unpacked in _unpack(obj):
+        if _is_sequence(unpacked):
+            yield from _iter_ndims(get_args(unpacked)[0], ndim=ndim + 1)
+        else:
+            yield ndim
+
+
+def _unpack(obj: Any) -> Generator[Any, None, None]:
+    """
+    Unpack Literal, Union and Coroutine
+
+    match:
+        case Literal[*args]:
+            for arg in args:
+                yield from _unpack(typ(arg))
+        case Union[*args]:
+            for arg in args:
+                yield from _unpack(arg)
+        case Coroutine[Any, Any, T]:
+            yield from _unpack(T)
+        case T:
+            yield T
+    """
+    if _is_literal(obj):
+        yield from chain.from_iterable(
+            _unpack(type(arg)) for arg in get_args(obj)
+        )
+    elif _is_union(obj):
+        yield from chain.from_iterable(_unpack(arg) for arg in get_args(obj))
+    elif _is_coroutine(obj):
+        yield from _unpack(get_args(obj)[2])
+    else:
+        yield obj
+
+
+def _is_none(obj: Any) -> TypeGuard[None | type[None]]:
+    return obj is None or _issubclass(obj, (type(None),))
+
+
+def _is_literal(obj: Any) -> bool:
+    return _issubclass(get_origin(obj), (Literal,))
+
+
+def _is_union(obj: Any) -> bool:
+    try:
+        return _issubclass(get_origin(obj), (Union, types.UnionType))
+    except AttributeError:
+        return _issubclass(get_origin(obj), (Union,))
+
+
+def _is_path_like(obj: Any) -> TypeGuard[type[PathLike[Any]]]:
+    return _issubclass(get_origin(obj), (PathLike,)) or _issubclass(
+        obj, (PathLike,)
+    )
+
+
+def _is_component(obj: Any) -> TypeGuard[type[Component]]:
+    return _issubclass(obj, (Component,))
+
+
+def _is_primitive(obj: Any) -> TypeGuard[type[_Primitive]]:
+    return _issubclass(obj, _primitive_types())
+
+
+@lru_cache
+def _primitive_types() -> tuple[type[_Primitive], ...]:
+    return tuple(get_args(_Primitive))
+
+
+def _is_named_tuple(obj: Any) -> TypeGuard[type[tuple[Any, ...]]]:
+    return (
+        _issubclass(obj, (tuple,))
+        and bool(get_type_hints(obj))
+        and not _issubclass(obj, (Component,))
+    )
+
+
+def _is_defined(obj: Any) -> TypeGuard[type[_Defined]]:
+    return _issubclass(obj, (record, enumeration)) or _is_named_tuple(obj)
+
+
+def _is_sequence(obj: Any) -> TypeGuard[type[Sequence[Any]]]:
+    return (
+        _issubclass(get_origin(obj), (Sequence,))
+        and not _is_component(obj)
+        and not _is_named_tuple(obj)
+    )
+
+
+def _is_coroutine(obj: Any) -> TypeGuard[type[Coroutine[Any, Any, Any]]]:
+    return _issubclass(get_origin(obj), (Coroutine,))
+
+
+def _issubclass(
+    obj: Any, class_: tuple[type[Any] | _SpecialForm, ...], /
+) -> bool:
+    if obj in class_:
         return True
-
-    def visit_FALSE(self, *_: Never) -> Literal[False]:
-        return False
-
-    def visit_boolean_array(
-        self, _: Never, children: Children
-    ) -> BooleanPrimary:
-        return children.boolean_primary
-
-    def visit_string_array(
-        self, _: Never, children: Children
-    ) -> StringPrimary:
-        return children.string_primary
-
-    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
-
-    def visit_variablename_array(
-        self, _: Never, children: Children
-    ) -> StringPrimary:
-        return children.variablename_primary
-
-    def visit_typename(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
-
-    def visit_typename_array(
-        self, _: Never, children: Children
-    ) -> StringPrimary:
-        return children.typename_primary
-
-    def visit_subscript(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
-
-    def visit_subscript_list(self, _: Never, children: Children) -> List[str]:
-        return children.subscript
-
-    def visit_component(self, _: Never, children: Children) -> tuple[Any, ...]:
-        return tuple(children)
-
-    def visit_component_array(
-        self, _: Never, children: Children
-    ) -> TuplePrimary:
-        return children.component_primary
-
-    def visit_record_element(
-        self, _: Never, children: Children
-    ) -> tuple[str, Any]:
-        (key,) = children.IDENT
-        (value,) = children.record_expression
-        return key, value
-
-    def visit_record(self, _: Never, children: Children) -> dict[str, Any]:
-        return dict(children.record_element)
-
-    def visit_record_array(self, _: Never, children: Children) -> AnyPrimary:
-        return children.record_primary
+    with suppress(TypeError):
+        return isinstance(obj, type) and issubclass(
+            obj, tuple(c for c in class_ if isinstance(c, type))
+        )
+    return False
 
 
-class TypeNameSplitVisitor(PTNodeVisitor):
-    def visit_DOT(self, node: Terminal, _: Never) -> str:
-        return node.flat_str()
+# endregion
 
-    def visit_variablename(self, node: NonTerminal, _: Never) -> str:
-        return node.flat_str()
+# region Char conversions between Python and Modelica
 
-    def visit_typename(self, _: Never, children: Children) -> tuple[str, ...]:
-        return tuple(children.DOT + children.variablename)
+_MODELICA_CHAR_ESCAPE_MAP = {
+    "\\": r"\\",
+    "'": r"\'",
+    '"': r"\"",
+    "\a": r"\a",
+    "\b": r"\b",
+    "\f": r"\f",
+    "\n": r"\n",
+    "\t": r"\t",
+    "\v": r"\v",
+}
+
+
+def _escape_py_string(py_string: str) -> str:
+    return _replace_all(py_string, _MODELICA_CHAR_ESCAPE_MAP.items())
+
+
+def _unescape_modelica_string(modelica_string: str) -> str:
+    return _replace_all(
+        modelica_string,
+        [
+            (escaped, orignal)
+            for orignal, escaped in _MODELICA_CHAR_ESCAPE_MAP.items()
+        ],
+    )
+
+
+def _quote_py_string(py_string: str) -> str:
+    return '"' + _escape_py_string(py_string) + '"'
+
+
+def _unquote_modelica_string(modelica_string: str) -> str:
+    if not modelica_string.startswith('"'):
+        raise ValueError(
+            f"modelica_string must starts with '\"' got {modelica_string!r}"
+        )
+    if not modelica_string.endswith('"'):
+        raise ValueError(
+            f"modelica_string must ends with '\"' got {modelica_string!r}"
+        )
+    return _unescape_modelica_string(modelica_string[1:-1])
+
+
+def _replace_all(s: str, old_and_new: Iterable[tuple[str, str]]) -> str:
+    return reduce(lambda x, y: x.replace(y[0], y[1]), old_and_new, s)
+
+
+# endregion
+
+# endregion

@@ -4,6 +4,8 @@ import enum
 from collections.abc import Hashable
 from dataclasses import InitVar, dataclass, field
 from typing import (
+    TYPE_CHECKING,
+    Any,
     Generic,
     Literal,
     Protocol,
@@ -12,16 +14,27 @@ from typing import (
     runtime_checkable,
 )
 
+if TYPE_CHECKING:
+    from typing_extensions import Self
+
+AnyStr = TypeVar("AnyStr", str, bytes, covariant=True)
+
+
+@runtime_checkable
+class PathLike(Protocol[AnyStr]):
+    def __fspath__(self) -> AnyStr:
+        ...
+
 
 @runtime_checkable
 class SupportsClose(Protocol):
     def close(self) -> None:
         ...
 
+    def __enter__(self) -> Self:
+        ...
 
-@runtime_checkable
-class SupportsToOMCLiteral(Protocol):
-    def __to_omc_literal__(self) -> str:
+    def __exit__(self, *exc_info: Any) -> None:
         ...
 
 
@@ -46,6 +59,18 @@ T_Calling = TypeVar(
 
 @runtime_checkable
 class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
+    @property
+    def calling(self) -> T_Calling:
+        ...
+
+    @property
+    def synchronous(self) -> SupportsInteractive[Synchronous]:
+        ...
+
+    @property
+    def asynchronous(self) -> SupportsInteractive[Asynchronous]:
+        ...
+
     @overload
     def evaluate(
         self: SupportsInteractive[Synchronous], expression: str

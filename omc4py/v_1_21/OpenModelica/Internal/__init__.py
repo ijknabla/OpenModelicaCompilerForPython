@@ -26,7 +26,7 @@ async def ClockConstructor(
     ...
 
 
-@external(".OpenModelica.Internal.ClockConstructor")
+@external("OpenModelica.Internal.ClockConstructor")
 def ClockConstructor(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -54,7 +54,7 @@ async def delay2(
     ...
 
 
-@external(".OpenModelica.Internal.delay2")
+@external("OpenModelica.Internal.delay2")
 def delay2(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -94,7 +94,7 @@ async def delay3(
     ...
 
 
-@external(".OpenModelica.Internal.delay3")
+@external("OpenModelica.Internal.delay3")
 def delay3(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -127,7 +127,7 @@ async def intAbs(
     ...
 
 
-@external(".OpenModelica.Internal.intAbs")
+@external("OpenModelica.Internal.intAbs")
 def intAbs(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -157,7 +157,7 @@ async def realAbs(
     ...
 
 
-@external(".OpenModelica.Internal.realAbs")
+@external("OpenModelica.Internal.realAbs")
 def realAbs(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -189,7 +189,7 @@ async def intDiv(
     ...
 
 
-@external(".OpenModelica.Internal.intDiv")
+@external("OpenModelica.Internal.intDiv")
 def intDiv(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -223,7 +223,7 @@ async def realDiv(
     ...
 
 
-@external(".OpenModelica.Internal.realDiv")
+@external("OpenModelica.Internal.realDiv")
 def realDiv(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -257,7 +257,7 @@ async def intMod(
     ...
 
 
-@external(".OpenModelica.Internal.intMod")
+@external("OpenModelica.Internal.intMod")
 def intMod(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -291,7 +291,7 @@ async def realMod(
     ...
 
 
-@external(".OpenModelica.Internal.realMod")
+@external("OpenModelica.Internal.realMod")
 def realMod(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -325,7 +325,7 @@ async def intRem(
     ...
 
 
-@external(".OpenModelica.Internal.intRem")
+@external("OpenModelica.Internal.intRem")
 def intRem(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -359,7 +359,7 @@ async def realRem(
     ...
 
 
-@external(".OpenModelica.Internal.realRem")
+@external("OpenModelica.Internal.realRem")
 def realRem(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -380,6 +380,6 @@ def realRem(
 
 
 class Architecture(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Internal.Architecture")
+    __omc_class__ = TypeName("OpenModelica.Internal.Architecture")
     numBits = architecture.numBits
     integerMax = architecture.integerMax

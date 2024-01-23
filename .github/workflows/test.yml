@@ -16,72 +16,68 @@ jobs:
     strategy:
       matrix:
         include:
-          - omc-version: omc1.14
-            python-version: py3.8
-            os: buster
-          - omc-version: omc1.14
-            python-version: py3.10
-            os: buster
-          - omc-version: omc1.16
-            python-version: py3.8
-            os: buster
-          - omc-version: omc1.16
-            python-version: py3.10
-            os: buster
-          - omc-version: omc1.17
-            python-version: py3.8
-            os: buster
-          - omc-version: omc1.17
-            python-version: py3.10
-            os: buster
-          - omc-version: omc1.18
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.18
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.19
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.19
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.20
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.20
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.21
-            python-version: py3.8
-            os: bullseye
-          - omc-version: omc1.21
-            python-version: py3.10
-            os: bullseye
-          - omc-version: omc1.22
-            python-version: py3.8
-            os: bookworm
-          - omc-version: omc1.22
-            python-version: py3.10
-            os: bookworm
+          # NOTE: update to latest
+          - openmodelica: "1.22.1"
+            python: "3.12"
+          - openmodelica: "1.22.1"
+            python: "3.11"
+          - openmodelica: "1.22.1"
+            python: "3.10"
+          - openmodelica: "1.22.1"
+            python: "3.9"
+          - openmodelica: "1.22.1"
+            python: "3.8"
+
+          - openmodelica: "1.21.0"
+            python: "3.12"
+          - openmodelica: "1.21.0"
+            python: "3.8"
+          - openmodelica: "1.20.0"
+            python: "3.12"
+          - openmodelica: "1.20.0"
+            python: "3.8"
+          - openmodelica: "1.19.2"
+            python: "3.12"
+          - openmodelica: "1.19.2"
+            python: "3.8"
+          - openmodelica: "1.18.0"
+            python: "3.12"
+          - openmodelica: "1.18.0"
+            python: "3.8"
+          - openmodelica: "1.17.0"
+            python: "3.12"
+          - openmodelica: "1.17.0"
+            python: "3.8"
+          - openmodelica: "1.16.2"
+            python: "3.12"
+          - openmodelica: "1.16.2"
+            python: "3.8"
+          - openmodelica: "1.14.2"
+            python: "3.12"
+          - openmodelica: "1.14.2"
+            python: "3.8"
+          - openmodelica: "1.13.2"
+            python: "3.12"
+          - openmodelica: "1.13.2"
+            python: "3.8"
 
     container:
-      image: ijknabla/openmodelica-python3:${{ matrix.omc-version }}-${{ matrix.python-version }}-${{ matrix.os }}
+      image: ijknabla/openmodelica:v${{ matrix.openmodelica }}-python${{ matrix.python }}
 
     steps:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: |
-          curl -sSL https://install.python-poetry.org | sudo -u user python - --version=1.5.1
-          alias poetry='sudo -u user /home/user/.local/bin/poetry'
-          poetry install --only=main,test
+          ln -s /usr/local/bin/python${{ matrix.python }} /usr/local/bin/python
+          python -m pip install -U pip poetry
+          python -m pip install ./
+          python -m poetry export --only=test | python -m pip install -r /dev/stdin
       - name: Check version
         run: |
-          alias poetry='sudo -u user /home/user/.local/bin/poetry'
-          poetry run omc --version
-          poetry run python --version
-          poetry run pytest --version
+          omc --version
+          python --version
+          python -m pytest --version
       - name: Test python code
         run: |
-          alias poetry='sudo -u user /home/user/.local/bin/poetry'
-          poetry run pytest -v
+          sudo -u user python .github/pretest.py
+          sudo -u user python -m pytest -v

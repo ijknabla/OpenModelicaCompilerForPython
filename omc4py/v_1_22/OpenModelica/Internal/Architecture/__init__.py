@@ -20,7 +20,7 @@ async def numBits(self: SupportsInteractiveProperty[Asynchronous]) -> int:
     ...
 
 
-@external(".OpenModelica.Internal.Architecture.numBits")
+@external("OpenModelica.Internal.Architecture.numBits")
 def numBits(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -46,7 +46,7 @@ async def integerMax(self: SupportsInteractiveProperty[Asynchronous]) -> int:
     ...
 
 
-@external(".OpenModelica.Internal.Architecture.integerMax")
+@external("OpenModelica.Internal.Architecture.integerMax")
 def integerMax(
     self: Union[
         SupportsInteractiveProperty[Synchronous],

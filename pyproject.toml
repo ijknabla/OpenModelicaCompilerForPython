@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "OpenModelicaCompiler"
-version = "0.3.0a4"
+version = "0"
 description = "OpenModelica compiler (omc) interface for Python"
 repository = "https://github.com/ijknabla/OpenModelicaCompilerForPython"
 authors = ["ijknabla <ijknabla@gmail.com>"]
@@ -34,6 +34,7 @@ pyyaml = "^6.0.1"
 tqdm = "^4.66.1"
 pydantic = "^2.4.2"
 frozendict = "^2.3.8"
+importlib-resources = ">=5.10"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.10.1"
@@ -42,17 +43,20 @@ isort = "^5.12.0"
 [tool.poetry.group.lint.dependencies]
 mypy = "^1.6.1"
 pyproject-flake8 = "^5.0.4"
-types-arpeggio = {git = "https://github.com/ijknabla/types-arpeggio.git", rev = "0.2.0.0a0.dev3"}
+types-arpeggio = {git = "https://github.com/ijknabla/types-arpeggio.git", rev = "0.2.0.0a0.dev4"}
 types-pyyaml = "^6.0.12.12"
 types-setuptools = "^68.2.0.0"
 types-tqdm = "^4.66.0.2"
 
 [tool.poetry.group.test.dependencies]
 pytest = "^7.2"
-pytest-asyncio = "^0.20"
+pytest-asyncio = "^0.23.2"
 pytest-cov = "^4.0.0"
-pytest-dependency = "^0.5.1"
 typing-extensions = ">=4.1.0"
+importlib-resources = "^6.1.1"
+
+[tool.poetry-version-plugin]
+source = "init"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
@@ -75,16 +79,9 @@ exclude = ".venv"
 
 # Allow too-long line in auto-generated modules
 per-file-ignores = """
-    omc4py/enumeration.py:E501,
-    omc4py/v_*_*/*.py:E501,
+    omc4py/v_*_*/:E501,
 """
 
 [tool.isort]
 profile = "black"
 line_length = 79
-
-[[tool.mypy.overrides]]
-module = [
-    "numpy",
-]
-ignore_missing_imports = true

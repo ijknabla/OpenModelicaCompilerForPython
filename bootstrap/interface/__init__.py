@@ -25,7 +25,6 @@ from typing import (
 )
 
 from frozendict import frozendict
-from pkg_resources import resource_filename
 from pydantic import (
     BaseModel,
     PlainSerializer,
@@ -35,10 +34,15 @@ from pydantic import (
 )
 from typing_extensions import Annotated, NotRequired, Self, TypedDict
 
-from omc4py import TypeName, VariableName, exception, open_session
-from omc4py.v_1_22 import AsyncSession  # NOTE: update to latest
+from omc4py import (
+    AsyncSession,
+    TypeName,
+    VariableName,
+    exception,
+    open_session,
+)
 
-from ..util import QueueingIteration, ensure_cancel, ensure_terminate
+from ..util import QueueingIteration, ensure_cancel, ensure_terminate, get_root
 
 _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
@@ -271,7 +275,10 @@ class InterfaceRoot(RootModel[Interface]):
 async def create_interface(n: int, exe: str | None) -> InterfaceRoot:
     async with AsyncExitStack() as stack:
         sessions = [
-            stack.enter_context(open_session(exe, asyncio=True))
+            cast(
+                AsyncSession,
+                stack.enter_context(open_session(exe, asyncio=True)),
+            )
             for _ in range(n)
         ]
 
@@ -316,21 +323,26 @@ async def create_interface_by_docker(
     output_dir: Path,
     pip_cache_dir: Path | None,
 ) -> None:
-    async with ensure_terminate(
-        await create_subprocess_exec(
-            "poetry",
-            "export",
-            "--only=main,bootstrap",
-            "--without-hashes",
-            cwd=Path(__file__).parent,
-            stdout=PIPE,
+    async with AsyncExitStack() as stack:
+        process = await stack.enter_async_context(
+            ensure_terminate(
+                await create_subprocess_exec(
+                    "poetry",
+                    "export",
+                    "--only=main,bootstrap",
+                    "--without-hashes",
+                    cwd=get_root(),
+                    stdout=PIPE,
+                )
+            )
         )
-    ) as process:
         requirements: list[str] = []
         assert process.stdout is not None
         async for line in process.stdout:
+            if line.startswith(b"poetry-version-plugin:"):
+                continue
             requirement, *_ = line.split(b";")
-            requirements.append(requirement.decode("utf-8").strip())
+            requirements.append(requirement.strip().decode("utf-8"))
 
     await gather(
         *(
@@ -349,16 +361,10 @@ async def _create_interface_by_docker(
     pip_cache_dir: Path | None,
     requirements: Iterable[str],
 ) -> None:
-    py_version_match = re.search(
-        r"(\d+)\.(\d+)\.\d+",
-        await _docker_run(
-            image,
-            [],
-            ["python", "--version"],
-            pipe=True,
-        ),
-    )
+    py_version_match = re.search(r"python\d+\.\d+", image)
     assert py_version_match is not None
+
+    PYTHON = py_version_match.group(0)
 
     omc_version_match = re.search(
         r"(\d+)\.(\d+)\.\d+",
@@ -372,7 +378,7 @@ async def _create_interface_by_docker(
     assert omc_version_match is not None
     omc_major, omc_minor = map(int, omc_version_match.groups())
 
-    omc4py_s = Path(resource_filename("bootstrap", "..")).resolve()
+    omc4py_s = get_root()
     omc4py_t = PurePosixPath("/omc4py")
     output_s = output_dir.resolve()
     output_t = PurePosixPath("/output") / f"v_{omc_major}_{omc_minor}.yaml"
@@ -382,9 +388,8 @@ async def _create_interface_by_docker(
         f"type=bind,source={omc4py_s},target={omc4py_t}",
         "--mount",
         f"type=bind,source={output_s},target={output_t.parent}",
+        "--user=1000:1000",
     ]
-
-    PYTHON = "sudo -u user python"
 
     if pip_cache_dir is not None:
         pip_cache_s = pip_cache_dir.resolve()
@@ -396,7 +401,7 @@ async def _create_interface_by_docker(
                 f"type=bind,source={pip_cache_s},target={pip_cache_t}",
             ]
         )
-        PYTHON = f"sudo -u user env PIP_CACHE_DIR={pip_cache_t} python"
+        PYTHON = f"env PIP_CACHE_DIR={pip_cache_t} {PYTHON}"
 
     await _docker_run(
         image,

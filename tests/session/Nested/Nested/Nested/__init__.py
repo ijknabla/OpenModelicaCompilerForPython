@@ -20,7 +20,7 @@ async def level(self: SupportsInteractiveProperty[Asynchronous]) -> int:
     ...
 
 
-@external(".Nested.Nested.Nested.level")
+@external("Nested.Nested.Nested.level")
 def level(
     self: Union[
         SupportsInteractiveProperty[Synchronous],

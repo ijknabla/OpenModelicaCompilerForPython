@@ -9,26 +9,23 @@ import tempfile
 import uuid
 from asyncio import Lock
 from collections.abc import Coroutine, Generator
-from contextlib import ExitStack, contextmanager, suppress
-from dataclasses import dataclass, field
+from contextlib import ExitStack, closing, contextmanager, suppress
+from dataclasses import dataclass, replace
 from glob import glob
 from os import PathLike
 from pathlib import Path
 from subprocess import DEVNULL, PIPE, Popen
-from typing import TYPE_CHECKING, AnyStr, Generic, overload
+from typing import TYPE_CHECKING, Any, AnyStr, Generic, NewType, overload
+from weakref import WeakKeyDictionary
 
 import zmq.asyncio
 
-from .protocol import (
-    Asynchronous,
-    Synchronous,
-    T_Calling,
-    asynchronous,
-    synchronous,
-)
+from .protocol import Asynchronous, Calling, Synchronous, T_Calling
 
 if TYPE_CHECKING:
     from typing_extensions import Self
+
+Port = NewType("Port", str)
 
 logger = logging.getLogger(__name__)
 
@@ -36,26 +33,24 @@ logger = logging.getLogger(__name__)
 @dataclass(frozen=True)
 class Interactive(Generic[T_Calling]):
     _exit_stack: ExitStack
-    _dual_interactive: _DualInteractive
+    _resource: _Resource
     calling: T_Calling
 
     @classmethod
     def open(
         cls,
-        omc_command: str | PathLike[str] | None,
+        omc: str | PathLike[str] | None,
         calling: T_Calling,
     ) -> Self:
-        omc_command = _resolve_omc(
-            "omc" if omc_command is None else omc_command
-        )
-
         exit_stack = ExitStack()
         atexit.register(exit_stack.close)
 
         try:
+            resource = exit_stack.enter_context(_Resource.open(omc))
+
             return cls(
                 exit_stack,
-                exit_stack.enter_context(_DualInteractive.open(omc_command)),
+                resource,
                 calling,
             )
 
@@ -63,26 +58,30 @@ class Interactive(Generic[T_Calling]):
             exit_stack.close()
             raise
 
+    def __enter__(self) -> Self:
+        return closing(self).__enter__()
+
+    def __exit__(self, *exc_info: Any) -> None:
+        return closing(self).__exit__(*exc_info)
+
     def close(self) -> None:
         self._exit_stack.close()
 
     @property
-    def synchronous(
-        self: Interactive[Asynchronous],
-    ) -> Interactive[Synchronous]:
-        return Interactive(
-            _exit_stack=self._exit_stack,
-            _dual_interactive=self._dual_interactive,
-            calling=synchronous,
-        )
+    def synchronous(self) -> Interactive[Synchronous]:
+        if TYPE_CHECKING:
+            synchronous: Interactive[Synchronous]
+        else:
+            synchronous = self
+        return replace(synchronous, calling=Calling.synchronous)
 
     @property
     def asynchronous(self) -> Interactive[Asynchronous]:
-        return Interactive(
-            _exit_stack=self._exit_stack,
-            _dual_interactive=self._dual_interactive,
-            calling=asynchronous,
-        )
+        if TYPE_CHECKING:
+            asynchronous: Interactive[Asynchronous]
+        else:
+            asynchronous = self
+        return replace(asynchronous, calling=Calling.asynchronous)
 
     @overload
     def evaluate(
@@ -99,114 +98,91 @@ class Interactive(Generic[T_Calling]):
         ...
 
     def evaluate(self, expression: str) -> str | Coroutine[None, None, str]:
-        if self.calling is asynchronous:
-            return self._dual_interactive.asynchronous_evaluate(expression)
+        if self.calling is Calling.synchronous:
+            return self.__synchronous_evaluate(expression)
         else:
-            return self._dual_interactive.synchronous_evaluate(expression)
+            return self.__asynchronous_evaluate(expression)
+
+    def __synchronous_evaluate(self, expression: str) -> str:
+        process = self._resource.process
+        socket = self._resource.sockets.synchronous
+        logger.debug(f"(pid={process.pid}) >>> {expression}")
+        socket.send_string(expression)
+        result = socket.recv_string()
+        logger.debug(f"(pid={process.pid}) {result}")
+        return result
+
+    async def __asynchronous_evaluate(self, expression: str) -> str:
+        process = self._resource.process
+        socket = self._resource.sockets.asynchronous
+        async with self._resource.lock:
+            logger.debug(f"(pid={process.pid}) >>> {expression}")
+            await socket.send_string(expression)
+            result = await socket.recv_string()
+            logger.debug(f"(pid={process.pid}) {result}")
+        return result
+
+
+_resource_locks: WeakKeyDictionary[_Resource, Lock] = WeakKeyDictionary()
 
 
 @dataclass(frozen=True)
-class _DualInteractive:
-    synchronous: zmq.Socket
-    asynchronous: zmq.asyncio.Socket
+class _Resource:
     process: Popen[str]
-    lock: Lock = field(default_factory=Lock)
+    sockets: _Sockets
 
     @classmethod
     @contextmanager
-    def open(cls, omc: Path) -> Generator[Self, None, None]:
+    def open(
+        cls,
+        omc: str | PathLike[str] | None,
+    ) -> Generator[Self, None, None]:
         with ExitStack() as stack:
-            enter = stack.enter_context
+            suffix = str(uuid.uuid4())
 
-            process, port = enter(_create_omc_interactive(omc))
+            command = [
+                _resolve_omc(omc),
+                "--interactive=zmq",
+                "--locale=C",
+                f"-z={suffix}",
+            ]
 
-            yield cls(
-                *enter(cls.__open_socket(process=process, port=port)),
-                process,
-                Lock(),
+            process = Popen(
+                command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8"
             )
+            header = f"(pid={process.pid})"
+            logger.info(f"{header} Start omc :: {' '.join(command)}")
 
-    @staticmethod
-    @contextmanager
-    def __open_socket(
-        process: Popen[str], port: str
-    ) -> Generator[tuple[zmq.Socket, zmq.asyncio.Socket], None, None]:
-        try:
-            with ExitStack() as stack:
-                enter = stack.enter_context
-                synchronous = enter(zmq.Context().socket(zmq.REQ))
-                synchronous.connect(port)
-                asynchronous = enter(zmq.asyncio.Context().socket(zmq.REQ))
-                asynchronous.connect(port)
+            stack.callback(lambda: logger.info(f"{header} Stop omc"))
+            stack.enter_context(_terminating(process))
 
-                logger.info(
-                    f"(pid={process.pid}) Connect zmq sokcet via {port}"
-                )
-                yield synchronous, asynchronous
-        finally:
-            logger.info(f"(pid={process.pid}) Close zmq sokcet")
+            assert process.stdout is not None
+            first_line = process.stdout.readline()
+            logger.debug(f"{header} >>> {first_line}")
 
-    def synchronous_evaluate(self, expression: str) -> str:
-        socket = self.synchronous
-        logger.debug(f"(pid={self.process.pid}) >>> {expression}")
-        socket.send_string(expression)
-        result = socket.recv_string()
-        logger.debug(f"(pid={self.process.pid}) {result}")
-        return result
+            with _unlinking(
+                _find_openmodelica_zmq_port_filepath(suffix)
+            ) as port_filepath:
+                logger.info(f"{header} Find zmq port file at {port_filepath}")
+                port = Port(port_filepath.read_text())
+            logger.info(f"{header} Remove zmq port file at {port_filepath}")
 
-    async def asynchronous_evaluate(self, expression: str) -> str:
-        socket = self.asynchronous
-        async with self.lock:
-            logger.debug(f"(pid={self.process.pid}) >>> {expression}")
-            await socket.send_string(expression)
-            result = await socket.recv_string()
-            logger.debug(f"(pid={self.process.pid}) {result}")
-        return result
+            sockets = stack.enter_context(_Sockets.open(port))
+            logger.info(f"{header} Connect zmq sokcet via {port}")
+            stack.callback(lambda: logger.info(f"{header} Close zmq sokcet"))
 
+            yield cls(process=process, sockets=sockets)
 
-@contextmanager
-def _create_omc_interactive(
-    omc: Path,
-) -> Generator[tuple[Popen[str], str], None, None]:
-    with ExitStack() as stack:
-        suffix = str(uuid.uuid4())
-
-        command = [
-            omc.__fspath__(),
-            "--interactive=zmq",
-            "--locale=C",
-            f"-z={suffix}",
-        ]
-
-        stack.callback(lambda: logger.info(f"(pid={process.pid}) Stop omc"))
-        process: Popen[str] = stack.enter_context(
-            _terminating(
-                Popen(command, stdout=PIPE, stderr=DEVNULL, encoding="utf-8")
-            )
-        )
-        assert process.stdout is not None
-        logger.info(f"(pid={process.pid}) Start omc :: {' '.join(command)}")
-
-        first_line = process.stdout.readline()
-        logger.debug(f"(pid={process.pid}) >>> {first_line}")
-
-        with _unlinking(
-            _find_openmodelica_zmq_port_filepath(suffix)
-        ) as port_filepath:
-            logger.info(
-                f"(pid={process.pid}) Find zmq port file at {port_filepath}"
-            )
-            port = port_filepath.read_text()
-        logger.info(
-            f"(pid={process.pid}) Remove zmq port file at {port_filepath}"
-        )
-
-        yield process, port
+    @property
+    def lock(self) -> Lock:
+        if self not in _resource_locks:
+            _resource_locks[self] = Lock()
+        return _resource_locks[self]
 
 
 def _resolve_omc(
     omc: str | PathLike[str] | None,
-) -> Path:
+) -> str:
     if isinstance(omc, PathLike):
         omc = omc.__fspath__()
     elif omc is None:
@@ -222,7 +198,7 @@ def _resolve_omc(
 
     if resolved is None:
         raise FileNotFoundError(f"Can't find executable of {omc}")
-    return Path(resolved)
+    return resolved
 
 
 def _search_openmodelica_version(s: str | None) -> tuple[int, int, int]:
@@ -263,6 +239,22 @@ def _find_openmodelica_zmq_port_filepath(suffix: str | None) -> Path:
         )
 
     return candidates[0]
+
+
+@dataclass(frozen=True)
+class _Sockets:
+    synchronous: zmq.Socket
+    asynchronous: zmq.asyncio.Socket
+
+    @classmethod
+    @contextmanager
+    def open(cls, port: Port) -> Generator[Self, None, None]:
+        synchronous = zmq.Context().socket(zmq.REQ)
+        asynchronous = zmq.asyncio.Context().socket(zmq.REQ)
+        with synchronous, asynchronous:
+            synchronous.connect(port)
+            asynchronous.connect(port)
+            yield cls(synchronous=synchronous, asynchronous=asynchronous)
 
 
 @contextmanager

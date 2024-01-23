@@ -1,46 +1,63 @@
 from __future__ import annotations
 
-from collections.abc import Iterable
+import collections.abc
+import os
+import types
+import typing
+from collections.abc import Generator, Iterable
+from contextlib import suppress
 from dataclasses import dataclass
 from itertools import product
 from typing import Any, List, Literal, NamedTuple, Sequence, TypeVar, Union
 
 import pytest
 
+import omc4py.protocol
 from omc4py import TypeName, VariableName
 from omc4py.modelica import enumeration, record
 from omc4py.openmodelica import Component
-from omc4py.parser import cast, parse
+from omc4py.parser import (
+    _get_ndim,
+    _get_type,
+    _is_component,
+    _is_coroutine,
+    _is_defined,
+    _is_literal,
+    _is_named_tuple,
+    _is_none,
+    _is_path_like,
+    _is_primitive,
+    _is_sequence,
+    _is_union,
+    _ScalarType,
+    parse,
+    unparse,
+)
 from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
+    ErrorKind,
+    ErrorLevel,
+    ErrorMessage,
     SourceInfo,
 )
 
 
 class OneTwo(enumeration):
-    __omc_class__ = TypeName(".OneTwo")
+    __omc_class__ = TypeName("OneTwo")
 
     One = 1
     Two = 2
 
 
 @dataclass
-class RecordA(record):
-    __omc_class__ = TypeName(".RecordA")
+class SingleRecord(record):
+    __omc_class__ = TypeName("SingleRecord")
 
     a: int
-
-
-@dataclass
-class RecordAB(record):
-    __omc_class__ = TypeName(".RecordAB")
-
-    a: int
-    b: int
 
 
 @dataclass
 class ScalarRecord(record):
-    __omc_class__ = TypeName(".ScalarRecord")
+    __omc_class__ = TypeName("ScalarRecord")
 
     real: float
     integer: int
@@ -53,7 +70,7 @@ class ScalarRecord(record):
 
 @dataclass
 class SequenceRecord(record):
-    __omc_class__ = TypeName(".SequenceRecord")
+    __omc_class__ = TypeName("SequenceRecord")
 
     real: Sequence[float]
     integer: Sequence[int]
@@ -92,6 +109,273 @@ class ListNamedTuple(NamedTuple):
     record_: List[SequenceRecord]
 
 
+@dataclass(frozen=True)
+class Example:
+    annotation: Any
+    type: _ScalarType
+    ndim: int = 0
+    is_none: bool = False
+    is_literal: bool = False
+    is_union: bool = False
+    is_path_like: bool = False
+    is_component: bool = False
+    is_primitive: bool = False
+    is_named_tuple: bool = False
+    is_defined: bool = False
+    is_sequence: bool = False
+    is_coroutine: bool = False
+
+
+def _iter_examples() -> Generator[Example, None, None]:
+    # NoneType
+    yield Example(
+        annotation=None,
+        type=None,
+        is_none=True,
+    )
+    yield Example(
+        annotation=type(None),
+        type=None,
+        is_none=True,
+    )
+    with suppress(AttributeError):
+        yield Example(
+            annotation=types.NoneType,
+            type=None,
+            is_none=True,
+        )
+
+    # Literal
+    yield Example(
+        annotation=Literal["a"],
+        type=str,
+        is_literal=True,
+    )
+
+    yield Example(
+        annotation=Literal["a", "b"],
+        type=str,
+        is_literal=True,
+    )
+
+    # Union
+    yield Example(
+        annotation=Union[int, None],
+        type=int,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield Example(
+            annotation=int | None,
+            type=int,
+            is_union=True,
+        )
+    yield Example(
+        annotation=Union[typing.Sequence[int], None],
+        type=int,
+        ndim=1,
+        is_union=True,
+    )
+
+    # PathLike
+    yield Example(
+        annotation=omc4py.protocol.PathLike,
+        type=str,
+        is_path_like=True,
+    )
+    yield Example(
+        annotation=omc4py.protocol.PathLike[str],
+        type=str,
+        is_path_like=True,
+    )
+    yield Example(
+        annotation=os.PathLike,
+        type=str,
+        is_path_like=True,
+    )
+    with suppress(TypeError):
+        yield Example(
+            annotation=os.PathLike[str],
+            type=str,
+            is_path_like=True,
+        )
+
+    # Component
+    yield Example(
+        annotation=Component,
+        type=Component,
+        is_component=True,
+        is_primitive=True,
+    )
+
+    # float, int
+    yield Example(
+        annotation=float,
+        type=float,
+        is_primitive=True,
+    )
+    yield Example(
+        annotation=int,
+        type=int,
+        is_primitive=True,
+    )
+
+    # TypeName
+    yield Example(
+        annotation=TypeName,
+        type=TypeName,
+        is_primitive=True,
+    )
+    yield Example(
+        annotation=Union[TypeName, str],
+        type=TypeName,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield Example(
+            annotation=TypeName | str,
+            type=TypeName,
+            is_union=True,
+        )
+
+    # VariableName
+    yield Example(
+        annotation=VariableName,
+        type=VariableName,
+        is_primitive=True,
+    )
+    yield Example(
+        annotation=Union[VariableName, str],
+        type=VariableName,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield Example(
+            annotation=VariableName | str,
+            type=VariableName,
+            is_union=True,
+        )
+
+    # NamedTuple
+    yield Example(
+        ScalarNamedTuple,
+        type=ScalarNamedTuple,
+        is_named_tuple=True,
+        is_defined=True,
+    )
+
+    # record, enumeration
+    yield Example(
+        ScalarRecord,
+        type=ScalarRecord,
+        is_defined=True,
+    )
+
+    yield Example(
+        OneTwo,
+        type=OneTwo,
+        is_defined=True,
+    )
+
+    # Sequence
+    yield Example(
+        annotation=typing.List[int],
+        type=int,
+        ndim=1,
+        is_sequence=True,
+    )
+    yield Example(
+        annotation=typing.List[typing.List[int]],
+        type=int,
+        ndim=2,
+        is_sequence=True,
+    )
+    yield Example(
+        annotation=typing.Sequence[int],
+        type=int,
+        ndim=1,
+        is_sequence=True,
+    )
+    yield Example(
+        annotation=typing.Sequence[typing.Sequence[int]],
+        type=int,
+        ndim=2,
+        is_sequence=True,
+    )
+    with suppress(TypeError):
+        yield Example(
+            annotation=list[int],
+            type=int,
+            ndim=1,
+            is_sequence=True,
+        )
+        yield Example(
+            annotation=list[list[int]],
+            type=int,
+            ndim=2,
+            is_sequence=True,
+        )
+    with suppress(TypeError):
+        yield Example(
+            annotation=collections.abc.Sequence[int],
+            type=int,
+            ndim=1,
+            is_sequence=True,
+        )
+        yield Example(
+            annotation=collections.abc.Sequence[collections.abc.Sequence[int]],
+            type=int,
+            ndim=2,
+            is_sequence=True,
+        )
+
+    # Coroutine
+    yield Example(
+        annotation=typing.Coroutine[None, None, int],
+        type=int,
+        is_coroutine=True,
+    )
+    yield Example(
+        annotation=Union[int, typing.Coroutine[None, None, int]],
+        type=int,
+        is_union=True,
+    )
+    with suppress(TypeError):
+        yield Example(
+            annotation=collections.abc.Coroutine[None, None, int],
+            type=int,
+            is_coroutine=True,
+        )
+    with suppress(TypeError):
+        yield Example(
+            annotation=int | collections.abc.Coroutine[None, None, int],
+            type=int,
+            is_union=True,
+        )
+
+
+@pytest.mark.parametrize("example", _iter_examples())
+def test_annotation_checker(example: Example) -> None:
+    x = example
+    assert _is_none(x.annotation) == x.is_none
+    assert _is_literal(x.annotation) == x.is_literal
+    assert _is_union(x.annotation) == x.is_union
+    assert _is_path_like(x.annotation) == x.is_path_like
+    assert _is_component(x.annotation) == x.is_component
+    assert _is_primitive(x.annotation) == x.is_primitive
+    assert _is_named_tuple(x.annotation) == x.is_named_tuple
+    assert _is_defined(x.annotation) == x.is_defined
+    assert _is_sequence(x.annotation) == x.is_sequence
+    assert _is_coroutine(x.annotation) == x.is_coroutine
+
+
+@pytest.mark.parametrize("example", _iter_examples())
+def test_type_and_ndim(example: Example) -> None:
+    x = example
+    assert _get_type(x.annotation) is x.type
+    assert _get_ndim(x.annotation) == x.ndim
+
+
 _T_name = TypeVar("_T_name", VariableName, TypeName)
 
 
@@ -120,9 +404,9 @@ def _iter_namelike_values(
 def _iter_enumeration_values(
     enum: type[enumeration],
 ) -> Iterable[tuple[Any, enumeration | int | str, enumeration]]:
-    literal: Any = Literal[
+    literal: Any = Literal.__getitem__(
         tuple(e.value for e in enum) + tuple(e.name for e in enum)
-    ]
+    )
 
     e: enumeration
     for e, val_type, use_union in product(
@@ -170,14 +454,15 @@ def _iter_enumeration_values(
     ],
 )
 def test_cast(typ: Any, val: Any, expected: Any) -> None:
-    assert cast(typ, val) == expected
+    assert parse(typ, unparse(typ, val)) == expected
 
 
 @pytest.mark.parametrize(
-    "typ, literal, expected",
+    "annotation," "literal," "expected,",
     [
         (None, "", None),
         (type(None), "", None),
+        (float, "0.0", 0.0),
         (float, "1", 1),
         (float, "+1.0", +1.0),
         (float, "-1.0", -1.0),
@@ -189,8 +474,11 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
         (float, "4.4e-1", 0.44),
         (List[float], "{}", []),
         (List[float], "{1}", [1]),
+        (List[float], "{0.0, 1.0}", [0.0, 1.0]),
         (List[List[float]], "{{}}", [[]]),
         (List[List[float]], "{{1}}", [[1]]),
+        (List[List[float]], "{{0.0}, {1.0}}", [[0.0], [1.0]]),
+        (int, "0", 0),
         (int, "1", 1),
         (int, "+1", +1),
         (int, "-1", -1),
@@ -201,23 +489,29 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
         (List[int], "{0, 1}", [0, 1]),
         (List[List[int]], "{{}}", [[]]),
         (List[List[int]], "{{1}}", [[1]]),
+        (List[List[int]], "{{0}, {1}}", [[0], [1]]),
         (List[List[int]], "{{0, 1}, {2, 3}}", [[0, 1], [2, 3]]),
         (bool, "true", True),
         (bool, "false", False),
         (List[bool], "{}", []),
         (List[bool], "{true}", [True]),
         (List[bool], "{false}", [False]),
+        (List[bool], "{false, true}", [False, True]),
         (List[List[bool]], "{{}}", [[]]),
         (List[List[bool]], "{{true}}", [[True]]),
         (List[List[bool]], "{{false}}", [[False]]),
+        (List[List[bool]], "{{false}, {true}}", [[False], [True]]),
         (str, '""', ""),
         (str, '"a"', "a"),
         (str, '"text"', "text"),
         (List[str], "{}", []),
         (List[str], '{"a"}', ["a"]),
+        (List[str], '{"a", "b"}', ["a", "b"]),
         (List[List[str]], "{{}}", [[]]),
         (List[List[str]], '{{"a"}}', [["a"]]),
+        (List[List[str]], '{{"a"}, {"b"}}', [["a"], ["b"]]),
         (VariableName, "$", VariableName("$")),
+        (VariableName, "a", VariableName("a")),
         (VariableName, "x", VariableName("x")),
         (List[VariableName], "{}", []),
         (List[VariableName], "{x}", [VariableName("x")]),
@@ -225,12 +519,35 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
         (List[List[VariableName]], "{{x}}", [[VariableName("x")]]),
         (TypeName, "$", TypeName("$")),
         (TypeName, ".x.$", TypeName(".x.$")),
+        (TypeName, ".A.$A", TypeName(".A.$A")),
         (TypeName, "A.$a", TypeName("A.$a")),
         (List[TypeName], "{}", []),
         (List[TypeName], "{x.y}", [TypeName("x.y")]),
         (List[List[TypeName]], "{{}}", [[]]),
         (List[List[TypeName]], "{{.x.y}}", [[TypeName(".x.y")]]),
         (List[Component], "{}", []),
+        (
+            List[Component],
+            """
+{{.A,a,"","public",false,false,false,false,"unspecified","none","unspecified",{:,:}}}
+            """,
+            [
+                Component(
+                    className=TypeName(".A"),
+                    name=VariableName("a"),
+                    comment="",
+                    protected="public",
+                    isFinal=False,
+                    isFlow=False,
+                    isStream=False,
+                    isReplaceable=False,
+                    variability="unspecified",
+                    innerOuter="none",
+                    inputOutput="unspecified",
+                    dimensions=[":", ":"],
+                )
+            ],
+        ),
         (
             List[Component],
             """\
@@ -346,11 +663,56 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
                 ),
             ],
         ),
-        (RecordA, "record A a = 0 end A;", RecordA(**{"a": 0})),
         (
-            RecordAB,
-            "record AB a = 0, b = 1 end AB;",
-            RecordAB(**{"a": 0, "b": 1}),
+            SingleRecord,
+            "record SingleRecord a = 0 end SingleRecord;",
+            SingleRecord(a=0),
+        ),
+        (
+            ScalarRecord,
+            """
+record ScalarRecord
+  real=1.0,
+  integer=1,
+  boolean=true,
+  string="one",
+  variable=one,
+  type_=One,
+  enumeration_=OneTwo.One
+end ScalarRecord;
+            """,
+            ScalarRecord(
+                real=1.0,
+                integer=1,
+                boolean=True,
+                string="one",
+                variable=VariableName("one"),
+                type_=TypeName("One"),
+                enumeration_=OneTwo.One,
+            ),
+        ),
+        (
+            ScalarRecord,  # Check reversed order
+            """
+record ScalarRecord
+  enumeration_=OneTwo.One,
+  type_=One,
+  variable=one,
+  string="one",
+  boolean=true,
+  integer=1,
+  real=1.0
+end ScalarRecord;
+            """,
+            ScalarRecord(
+                real=1.0,
+                integer=1,
+                boolean=True,
+                string="one",
+                variable=VariableName("one"),
+                type_=TypeName("One"),
+                enumeration_=OneTwo.One,
+            ),
         ),
         (TwoInt, "(0, 1)", (0, 1)),
         (
@@ -360,8 +722,7 @@ def test_cast(typ: Any, val: Any, expected: Any) -> None:
 (
     1,1,true,"1",One,One,OneTwo.One,
     record ScalarRecord
-        real=1,integer=1,boolean=true,string="1",
-        variable=One,type_=One,enumeration_=OneTwo.One
+        real=1,integer=1,boolean=true,string="1",variable=One,type_=One,enumeration_=OneTwo.One
     end ScalarRecord;
 )
                 """
@@ -512,7 +873,7 @@ end OpenModelica.Scripting.SourceInfo;
             SourceInfo,
             """\
 record OpenModelica.Scripting.SourceInfo
-    fileName = "fileName",
+    fileName="fileName",
     readonly=false,
     lineStart=1,
     columnStart=2,
@@ -529,7 +890,46 @@ end OpenModelica.Scripting.SourceInfo;
                 columnEnd=4,
             ),
         ),
+        (
+            List[ErrorMessage],
+            """
+{
+  record OpenModelica.Scripting.ErrorMessage
+    info =
+      record OpenModelica.Scripting.SourceInfo
+        filename = "",
+        readonly = false,
+        lineStart = 0,
+        columnStart = 0,
+        lineEnd = 0,
+        columnEnd = 0
+      end OpenModelica.Scripting.SourceInfo;,
+    message = "",
+    kind = .OpenModelica.Scripting.ErrorKind.syntax,
+    level = .OpenModelica.Scripting.ErrorLevel.internal,
+    id = 0
+  end OpenModelica.Scripting.ErrorMessage;
+}
+            """,
+            [
+                ErrorMessage(
+                    info=SourceInfo(
+                        fileName="",
+                        readonly=False,
+                        lineStart=0,
+                        columnStart=0,
+                        lineEnd=0,
+                        columnEnd=0,
+                    ),
+                    message="",
+                    kind=ErrorKind.syntax,
+                    level=ErrorLevel.internal,
+                    id=0,
+                )
+            ],
+        ),
     ],
 )
-def test_parse(typ: Any, literal: str, expected: Any) -> None:
-    assert parse(typ, literal) == expected
+def test_parse(annotation: Any, literal: str, expected: Any) -> None:
+    assert parse(annotation, literal) == expected
+    assert parse(annotation, unparse(annotation, expected)) == expected

@@ -8,7 +8,7 @@ from . import Time as time
 
 
 class Time(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting.Internal.Time")
+    __omc_class__ = TypeName("OpenModelica.Scripting.Internal.Time")
     readableTime = time.readableTime
     timerTick = time.timerTick
     timerTock = time.timerTock

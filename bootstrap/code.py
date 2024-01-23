@@ -13,7 +13,7 @@ import enum
 import os
 import re
 from asyncio import create_subprocess_exec, gather
-from collections.abc import Generator
+from collections.abc import Generator, Iterable
 from contextlib import AsyncExitStack
 from dataclasses import dataclass, field
 from itertools import chain
@@ -36,6 +36,7 @@ from .interface import (
     Interface,
     PackageEntity,
     RecordEntity,
+    Version,
 )
 from .parser import get_enumerators, get_optionals
 from .util import ensure_terminate
@@ -45,6 +46,7 @@ async def save_code(
     directory: Path,
     interface: Interface,
 ) -> None:
+    interface = patch(interface)
     await gather(
         *(
             _save_code(
@@ -176,6 +178,7 @@ class PackageFactory(HasTypeName):
             )
         )
         if self.is_root:
+            imports.add(ImportFrom(module="typing", name="TYPE_CHECKING"))
             imports.update(
                 ImportFrom(module="omc4py.protocol", name=typevar)
                 for typevar in ["Asynchronous", "Synchronous"]
@@ -225,6 +228,51 @@ class PackageFactory(HasTypeName):
 
     @property
     def _class_def(self) -> ast.ClassDef:
+        body = list[ast.stmt]()
+        if self.is_root:
+            body.append(
+                ast.If(
+                    test=ast.Name(id="TYPE_CHECKING", ctx=ast.Load()),
+                    body=[
+                        ast.FunctionDef(
+                            name=name,
+                            args=ast.arguments(
+                                posonlyargs=[],
+                                args=[ast.arg(arg="self")],
+                                kwonlyargs=[],
+                                kw_defaults=[],
+                                defaults=[],
+                            ),
+                            body=[
+                                ast.Expr(
+                                    value=ast.Name(
+                                        id="__RETURN_TYPE_IGNORE__",
+                                        ctx=ast.Load(),
+                                    )
+                                )
+                            ],
+                            decorator_list=[
+                                ast.Name(id="property", ctx=ast.Load())
+                            ],
+                            returns=ast.Subscript(
+                                value=ast.Name(
+                                    id="GenericSession", ctx=ast.Load()
+                                ),
+                                slice=ast.Name(
+                                    id=name.capitalize(), ctx=ast.Load()
+                                ),
+                                ctx=ast.Load(),
+                            ),
+                            lineno=None,
+                        )
+                        for name in ["synchronous", "asynchronous"]
+                    ],
+                    orelse=[],
+                )
+            )
+
+        body += self._iter_class_def_body()
+
         return ast.ClassDef(
             name=self.name,
             bases=[
@@ -238,7 +286,7 @@ class PackageFactory(HasTypeName):
                 )
             ],
             keywords=[],
-            body=[*self._iter_class_def_body()],
+            body=body,
             decorator_list=[],
         )
 
@@ -248,9 +296,7 @@ class PackageFactory(HasTypeName):
                 targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
                 value=ast.Call(
                     func=ast.Name(id="TypeName", ctx=ast.Load()),
-                    args=[
-                        ast.Constant(value=f"{self.typename.as_absolute()}")
-                    ],
+                    args=[ast.Constant(value=f"{self.typename}")],
                     keywords=[],
                 ),
                 lineno=None,
@@ -359,7 +405,7 @@ class RecordFactory(HasTypeName):
             targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
             value=ast.Call(
                 func=ast.Name(id="TypeName", ctx=ast.Load()),
-                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                args=[ast.Constant(value=f"{self.typename}")],
                 keywords=[],
             ),
             lineno=None,
@@ -486,7 +532,7 @@ class FunctionFactory(HasTypeName):
                         case "OpenModelica", "Scripting", name:
                             funcname = name
                         case _:
-                            funcname = f"{self.typename.as_absolute()}"
+                            funcname = f"{self.typename}"
 
                     decorator_list = [
                         ast.Call(
@@ -629,7 +675,7 @@ class EnumerationFactory(HasTypeName):
             targets=[ast.Name(id="__omc_class__", ctx=ast.Store())],
             value=ast.Call(
                 func=ast.Name(id="TypeName", ctx=ast.Load()),
-                args=[ast.Constant(value=f"{self.typename.as_absolute()}")],
+                args=[ast.Constant(value=f"{self.typename}")],
                 keywords=[],
             ),
             lineno=None,
@@ -989,3 +1035,45 @@ def _avoid_keyword(s: str) -> str:
     while iskeyword(s):
         s = f"{s}_"
     return s
+
+
+# Patches
+
+EntitiesItems = Iterable[tuple[TypeName, Entity]]
+
+
+def patch(interface: Interface) -> Interface:
+    return {
+        version: dict(_patch(version, entities.items()))
+        for version, entities in interface.items()
+    }
+
+
+def _patch(version: Version, entities: EntitiesItems) -> EntitiesItems:
+    yield from _patch_check_settings(version, entities)
+
+
+def _patch_check_settings(
+    version: Version, entities: EntitiesItems
+) -> EntitiesItems:
+    for typename, entity in entities:
+        if typename == TypeName(
+            "OpenModelica.Scripting.CheckSettingsResult"
+        ) and isinstance(entity, RecordEntity):
+            REMOVED = VariableName("SENDDATALIBS")
+            ADDED = VariableName("RTLIBS")
+
+            code = re.sub(
+                rf"(\s+)(.*?){REMOVED}(.*)",
+                (rf"\1// \2{REMOVED}\3" rf"\1   \2{ADDED}\3"),
+                entity.code,
+            )
+            components = {
+                {REMOVED: ADDED}.get(k, k): v
+                for k, v in entity.components.items()
+            }
+            yield typename, entity.model_copy(
+                update={"code": code, "components": components}
+            )
+        else:
+            yield typename, entity

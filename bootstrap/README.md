@@ -6,15 +6,16 @@
 ```
 python -m bootstrap interface-docker \
   -n 4 \
-  -i ijknabla/openmodelica-python3 \
-  omc1.14-py3.8-buster \
-  omc1.16-py3.8-buster \
-  omc1.17-py3.8-buster \
-  omc1.18-py3.8-bullseye \
-  omc1.19-py3.8-bullseye \
-  omc1.20-py3.8-bullseye \
-  omc1.21-py3.8-bullseye \
-  omc1.22-py3.8-bookworm \
+  -i ijknabla/openmodelica \
+  v1.13.2-python3.8 \
+  v1.14.2-python3.8 \
+  v1.16.2-python3.8 \
+  v1.17.0-python3.8 \
+  v1.18.0-python3.8 \
+  v1.19.2-python3.8 \
+  v1.20.0-python3.8 \
+  v1.21.0-python3.8 \
+  v1.22.0-python3.8 \
   -o bootstrap/interface/ \
   --pip-cache-dir ~/.cache/pip
 ```

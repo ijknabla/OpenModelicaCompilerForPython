@@ -28,7 +28,7 @@ async def relocateFunctions(
     ...
 
 
-@external(".OpenModelica.Scripting.Experimental.relocateFunctions")
+@external("OpenModelica.Scripting.Experimental.relocateFunctions")
 def relocateFunctions(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -58,7 +58,7 @@ async def toJulia(self: SupportsInteractiveProperty[Asynchronous]) -> str:
     ...
 
 
-@external(".OpenModelica.Scripting.Experimental.toJulia")
+@external("OpenModelica.Scripting.Experimental.toJulia")
 def toJulia(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -88,7 +88,7 @@ async def interactiveDumpAbsynToJL(
     ...
 
 
-@external(".OpenModelica.Scripting.Experimental.interactiveDumpAbsynToJL")
+@external("OpenModelica.Scripting.Experimental.interactiveDumpAbsynToJL")
 def interactiveDumpAbsynToJL(
     self: Union[
         SupportsInteractiveProperty[Synchronous],

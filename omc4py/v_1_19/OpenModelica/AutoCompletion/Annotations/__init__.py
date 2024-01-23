@@ -18,7 +18,7 @@ class Documentation(record):
         end Documentation;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.Documentation"
+        "OpenModelica.AutoCompletion.Annotations.Documentation"
     )
     info: str
     revisions: str
@@ -37,7 +37,7 @@ class experiment(record):
         end experiment;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.experiment"
+        "OpenModelica.AutoCompletion.Annotations.experiment"
     )
     StartTime: Union[float, None]
     StopTime: Union[float, None]
@@ -62,7 +62,7 @@ class Dialog(record):
           parameter Boolean connectorSizing = false;
         end Dialog;"""
 
-    __omc_class__ = TypeName(".OpenModelica.AutoCompletion.Annotations.Dialog")
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.Dialog")
     tab: Union[str, None]
     group: Union[str, None]
     enable: Union[bool, None]
@@ -85,7 +85,7 @@ class Selector(record):
         end Selector;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.Selector"
+        "OpenModelica.AutoCompletion.Annotations.Selector"
     )
     filter: Union[str, None]
     caption: Union[str, None]
@@ -99,7 +99,7 @@ class uses(record):
         record uses "A list of dependent classes."
         end uses;"""
 
-    __omc_class__ = TypeName(".OpenModelica.AutoCompletion.Annotations.uses")
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.uses")
 
 
 class Access(enumeration):
@@ -109,7 +109,7 @@ class Access(enumeration):
         type Access = enumeration(hide, icon, documentation, diagram, nonPackageText, nonPackageDuplicate, packageText, packageDuplicate);
     """
 
-    __omc_class__ = TypeName(".OpenModelica.AutoCompletion.Annotations.Access")
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.Access")
     hide = 1
     icon = 2
     documentation = 3
@@ -136,7 +136,7 @@ class Protection(record):
         end Protection;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.Protection"
+        "OpenModelica.AutoCompletion.Annotations.Protection"
     )
     access: Access
     features: Union[List[str], None]
@@ -154,7 +154,7 @@ class Authorization(record):
         end Authorization;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.Authorization"
+        "OpenModelica.AutoCompletion.Annotations.Authorization"
     )
     licensor: Union[str, None]
     libraryKey: str
@@ -175,9 +175,7 @@ class License(record):
           String operations[:] = fill("", 0) "Library usage conditions";
         end License;"""
 
-    __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.License"
-    )
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.License")
     licensee: Union[str, None]
     id: List[str]
     features: Union[List[str], None]
@@ -194,9 +192,7 @@ class inverse(record):
         record inverse
         end inverse;"""
 
-    __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.inverse"
-    )
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.inverse")
 
 
 @dataclass(frozen=True)
@@ -209,9 +205,7 @@ class choices(record):
           String choice[:] = fill("", 0) "the choices as an array of strings";
         end choices;"""
 
-    __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.choices"
-    )
+    __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.choices")
     checkBox: Union[bool, None]
     choice: Union[List[str], None]
 
@@ -228,7 +222,7 @@ class derivative(record):
         end derivative;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.derivative"
+        "OpenModelica.AutoCompletion.Annotations.derivative"
     )
     order: Union[int, None]
     noDerivative: str
@@ -244,7 +238,7 @@ class _OpenModelica_commandLineOptions(record):
         end __OpenModelica_commandLineOptions;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.__OpenModelica_commandLineOptions"
+        "OpenModelica.AutoCompletion.Annotations.__OpenModelica_commandLineOptions"
     )
 
 
@@ -257,5 +251,5 @@ class _OpenModelica_simulationFlags(record):
         end __OpenModelica_simulationFlags;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.AutoCompletion.Annotations.__OpenModelica_simulationFlags"
+        "OpenModelica.AutoCompletion.Annotations.__OpenModelica_simulationFlags"
     )

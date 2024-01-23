@@ -34,14 +34,15 @@ class CheckSettingsResult(record):
           Boolean OMC_FOUND;
           String MODELICAUSERCFLAGS, WORKING_DIRECTORY;
           Boolean CREATE_FILE_WORKS, REMOVE_FILE_WORKS;
-          String OS, SYSTEM_INFO, SENDDATALIBS, C_COMPILER, C_COMPILER_VERSION;
+          // String OS, SYSTEM_INFO, SENDDATALIBS, C_COMPILER, C_COMPILER_VERSION;
+             String OS, SYSTEM_INFO, RTLIBS, C_COMPILER, C_COMPILER_VERSION;
           Boolean C_COMPILER_RESPONDING, HAVE_CORBA;
           String CONFIGURE_CMDLINE;
           annotation(
             preferredView = "text");
         end CheckSettingsResult;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.CheckSettingsResult")
+    __omc_class__ = TypeName("OpenModelica.Scripting.CheckSettingsResult")
     OPENMODELICAHOME: str
     OPENMODELICALIBRARY: str
     OMC_PATH: str
@@ -54,7 +55,7 @@ class CheckSettingsResult(record):
     REMOVE_FILE_WORKS: bool
     OS: str
     SYSTEM_INFO: str
-    SENDDATALIBS: str
+    RTLIBS: str
     C_COMPILER: str
     C_COMPILER_VERSION: str
     C_COMPILER_RESPONDING: bool
@@ -63,7 +64,7 @@ class CheckSettingsResult(record):
 
 
 class Internal(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting.Internal")
+    __omc_class__ = TypeName("OpenModelica.Scripting.Internal")
 
     @property
     def Time(self) -> internal.Time[T_Calling]:
@@ -2766,7 +2767,7 @@ class SourceInfo(record):
             preferredView = "text");
         end SourceInfo;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.SourceInfo")
+    __omc_class__ = TypeName("OpenModelica.Scripting.SourceInfo")
     fileName: str
     readonly: bool
     lineStart: int
@@ -2782,7 +2783,7 @@ class ErrorKind(enumeration):
         type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ErrorKind")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ErrorKind")
     syntax = 1
     "syntax errors"
     grammar = 2
@@ -2803,7 +2804,7 @@ class ErrorLevel(enumeration):
 
         type ErrorLevel = enumeration(notification, warning, error);"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ErrorLevel")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ErrorLevel")
     notification = 1
     warning = 2
     error = 3
@@ -2824,7 +2825,7 @@ class ErrorMessage(record):
             preferredView = "text");
         end ErrorMessage;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ErrorMessage")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ErrorMessage")
     info: SourceInfo
     message: str
     kind: ErrorKind
@@ -4447,7 +4448,7 @@ class ExportKind(enumeration):
         type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.ExportKind")
+    __omc_class__ = TypeName("OpenModelica.Scripting.ExportKind")
     Absyn = 1
     "Normal Absyn"
     SCode = 2
@@ -4557,7 +4558,7 @@ class DiffFormat(enumeration):
         type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");
     """
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.DiffFormat")
+    __omc_class__ = TypeName("OpenModelica.Scripting.DiffFormat")
     plain = 1
     "no deletions, no markup"
     color = 2
@@ -4867,7 +4868,7 @@ class LinearSystemSolver(enumeration):
 
         type LinearSystemSolver = enumeration(dgesv, lpsolve55);"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.LinearSystemSolver")
+    __omc_class__ = TypeName("OpenModelica.Scripting.LinearSystemSolver")
     dgesv = 1
     lpsolve55 = 2
 
@@ -4936,7 +4937,7 @@ class StandardStream(enumeration):
 
         type StandardStream = enumeration(stdin, stdout, stderr);"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.StandardStream")
+    __omc_class__ = TypeName("OpenModelica.Scripting.StandardStream")
     stdin = 1
     stdout = 2
     stderr = 3
@@ -5352,7 +5353,7 @@ class SimulationResult(record):
         end SimulationResult;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.Scripting.simulate.SimulationResult"
+        "OpenModelica.Scripting.simulate.SimulationResult"
     )
     resultFile: str
     simulationOptions: str
@@ -9313,7 +9314,7 @@ class Component(record):
         end Component;"""
 
     __omc_class__ = TypeName(
-        ".OpenModelica.Scripting.getComponentsTest.Component"
+        "OpenModelica.Scripting.getComponentsTest.Component"
     )
     className: str
     name: str
@@ -10121,7 +10122,7 @@ class GC_PROFSTATS(record):
           Integer reclaimed_bytes_before_gc;
         end GC_PROFSTATS;"""
 
-    __omc_class__ = TypeName(".OpenModelica.Scripting.GC_PROFSTATS")
+    __omc_class__ = TypeName("OpenModelica.Scripting.GC_PROFSTATS")
     heapsize_full: int
     free_bytes_full: int
     unmapped_bytes: int
@@ -10511,5 +10512,5 @@ def generateScriptingAPI(
 
 
 class Experimental(package[T_Calling]):
-    __omc_class__ = TypeName(".OpenModelica.Scripting.Experimental")
+    __omc_class__ = TypeName("OpenModelica.Scripting.Experimental")
     relocateFunctions = experimental.relocateFunctions

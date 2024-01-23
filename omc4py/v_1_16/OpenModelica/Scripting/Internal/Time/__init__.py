@@ -24,7 +24,7 @@ async def readableTime(
     ...
 
 
-@external(".OpenModelica.Scripting.Internal.Time.readableTime")
+@external("OpenModelica.Scripting.Internal.Time.readableTime")
 def readableTime(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -56,7 +56,7 @@ async def timerTick(
     ...
 
 
-@external(".OpenModelica.Scripting.Internal.Time.timerTick")
+@external("OpenModelica.Scripting.Internal.Time.timerTick")
 def timerTick(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -86,7 +86,7 @@ async def timerTock(
     ...
 
 
-@external(".OpenModelica.Scripting.Internal.Time.timerTock")
+@external("OpenModelica.Scripting.Internal.Time.timerTock")
 def timerTock(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
@@ -118,7 +118,7 @@ async def timerClear(
     ...
 
 
-@external(".OpenModelica.Scripting.Internal.Time.timerClear")
+@external("OpenModelica.Scripting.Internal.Time.timerClear")
 def timerClear(
     self: Union[
         SupportsInteractiveProperty[Synchronous],

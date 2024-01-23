@@ -11,7 +11,6 @@ from typing import (
     ClassVar,
     TypeVar,
     Union,
-    cast,
     get_args,
     get_origin,
     get_type_hints,
@@ -29,7 +28,6 @@ from .protocol import (
     Synchronous,
     T_Calling,
 )
-from .string import to_omc_literal
 
 
 class package(HasInteractive[T_Calling]):
@@ -86,7 +84,7 @@ def _call(
     *args: P.args,
     **kwargs: P.kwargs,
 ) -> ReturnType[T]:
-    from . import parser
+    from .parser import parse, unparse
 
     signature = inspect.signature(f)
     type_hints = get_type_hints(f)
@@ -104,7 +102,7 @@ def _call(
             if value is None:
                 continue
             name = rename.get(key, key)
-            literal = to_omc_literal(parser.cast(type_hints[key], value))
+            literal = unparse(type_hints[key], value)
 
             if len(positional) == 1 and key in positional:
                 yield f"{literal}"
@@ -112,9 +110,7 @@ def _call(
                 yield f"{name}={literal}"
 
     return fmap(
-        lambda x: parser.parse(
-            cast("type[T]", _extract_return_type(type_hints["return"])), x
-        ),
+        lambda x: parse(type_hints["return"], x),
         self.__omc_interactive__.evaluate(
             f"{funcname}({','.join(_iter_arguments())})"
         ),
