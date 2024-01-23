@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2024-01-23
+
 ### Fixed
 
 - `OpenModelica.Scripting.CheckSettingsResult`
@@ -140,7 +142,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - __This version cannot be installed with setup.py__ because the packages required to run are not listed correctly.
 
-[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a4...HEAD
+[Unreleased]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a4...v0.3.0
 [0.3.0a4]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a3...v0.3.0a4
 [0.3.0a3]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a2...v0.3.0a3
 [0.3.0a2]: https://github.com/ijknabla/OpenModelicaCompilerForPython/compare/v0.3.0a1...v0.3.0a2
