@@ -4,7 +4,9 @@ import logging
 import re
 from collections.abc import Callable, Generator, Iterable
 from functools import reduce
+from itertools import chain
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import importlib_resources as resources
 import pytest
@@ -38,11 +40,12 @@ def _split_code_block(
             yield _iter_code_block()
 
 
+@pytest.mark.asyncio
 @pytest.mark.parametrize(
     "source,",
     map("".join, _split_code_block(_iter_readme_lines())),
 )
-def test_readme(
+async def test_readme(
     modelica_version: str,
     source: str,
 ) -> None:
@@ -62,7 +65,7 @@ def test_readme(
         else re.sub(
             rf"{prompt}?{line}",
             lambda m: ("# " if m.group("prompt") is None else "")
-            + f'{m.group("line")}',
+            + f'{m.group("line")!s}',
             s,
         ),
         lambda s: re.sub(
@@ -73,9 +76,28 @@ def test_readme(
             s,
         ),
         lambda s: re.sub(re.escape('"4.0.0"'), f'"{modelica_version}"', s),
+        lambda s: "".join(
+            chain(
+                "async def main() -> None:\n",
+                chain.from_iterable(
+                    f"    {line}" for line in s.splitlines(keepends=True)
+                ),
+            )
+        ),
     ]
 
     replaced = reduce(lambda s, f: f(s), fs, source)
     if replaced != source:
         logger.info(f"=> '''\n{replaced}'''")
-    exec(replaced, {"exit": lambda: None})
+
+    if TYPE_CHECKING:
+
+        async def main() -> None:
+            ...
+
+    else:
+        _namespace = {"exit": lambda: None}
+        exec(replaced, _namespace)
+        main = _namespace["main"]
+
+    await main()
