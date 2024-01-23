@@ -17,15 +17,15 @@ jobs:
       matrix:
         include:
           # NOTE: update to latest
-          - openmodelica: "1.22.0"
+          - openmodelica: "1.22.1"
             python: "3.12"
-          - openmodelica: "1.22.0"
+          - openmodelica: "1.22.1"
             python: "3.11"
-          - openmodelica: "1.22.0"
+          - openmodelica: "1.22.1"
             python: "3.10"
-          - openmodelica: "1.22.0"
+          - openmodelica: "1.22.1"
             python: "3.9"
-          - openmodelica: "1.22.0"
+          - openmodelica: "1.22.1"
             python: "3.8"
 
           - openmodelica: "1.21.0"
