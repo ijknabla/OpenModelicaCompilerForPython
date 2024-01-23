@@ -29,7 +29,7 @@ from omc4py.parser import (
     _is_primitive,
     _is_sequence,
     _is_union,
-    _StringableType,
+    _ScalarType,
     parse,
     unparse,
 )
@@ -112,7 +112,7 @@ class ListNamedTuple(NamedTuple):
 @dataclass(frozen=True)
 class Example:
     annotation: Any
-    type: _StringableType
+    type: _ScalarType
     ndim: int = 0
     is_none: bool = False
     is_literal: bool = False
