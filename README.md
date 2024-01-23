@@ -223,7 +223,9 @@ with open_session(asyncio=True) as async_session:
     session.getVersion()
 ```
 
-- - -
+## Tips
+
+### Multiple session
 
 It is also possible to open multiple sessions with different versions of omc at the same time by explicitly specifying omc.
 
@@ -242,13 +244,13 @@ with \
     print("v1.21.0:", session_1_21.getVersion())
 ```
 
-- - -
+### omc4py as interactive shell
 
 As shown above, __it is recommended to ensure that session is closed by calling `omc4py.open_session()` via with-statement__.
 
 However, sometimes you want to use session interactively, like OMShell. `omc4py` closes all unclosed sessions when exiting the python interpreter.
 
-```python3
+```python
 >>> from omc4py import open_session
 >>> session = open_session()
 >>> session.loadString("""
@@ -269,15 +271,13 @@ True
 
 Besides, session object has `__close__` method to explicitly close session.
 
-```python3
+```python
 >>> from omc4py import open_session
 >>> session = open_session()
 >>> session.__close__()
 >>>
 >>> exit()
 ```
-
-## Tips
 
 ### About session API
 
@@ -298,7 +298,7 @@ Besides, session object has `__close__` method to explicitly close session.
 
 They are available from absolute reference
 
-```python3
+```python
 # Example for "timerTick" and "timerTock"
 # in "OpenModelica.Scripting.Internal.Time"
 from omc4py import open_session
@@ -323,14 +323,14 @@ Let me introduce typical API functions!
 
 Load library and returns True if success. You can specify versions by second argument
 
-```python3
+```python
 import omc4py
 
 with omc4py.open_session() as session:
     assert(session.loadModel("Modelica"))  # load MSL
 ```
 
-```python3
+```python
 import omc4py
 
 with omc4py.open_session() as session:
@@ -341,7 +341,7 @@ with omc4py.open_session() as session:
 
 Returns array of class names in the given class
 
-```python3
+```python
 import omc4py
 
 with omc4py.open_session() as session:
