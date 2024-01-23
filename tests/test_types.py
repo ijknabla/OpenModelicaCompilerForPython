@@ -18,6 +18,7 @@ def test_session_types() -> None:
             v_1_20,
             v_1_21,
             v_1_22,
+            v_1_23,
         )
 
         a: Session
@@ -42,6 +43,8 @@ def test_session_types() -> None:
         b_21: v_1_21.AsyncSession
         a_22: v_1_22.Session
         b_22: v_1_22.AsyncSession
+        a_23: v_1_23.Session
+        b_23: v_1_23.AsyncSession
 
         a_13 = open_session(version=(1, 13))
         a_13 = open_session(version=(1, 13), asyncio=False)  # noqa: F841
@@ -82,12 +85,16 @@ def test_session_types() -> None:
         a_22 = open_session(version=(1, 22))
         a_22 = open_session(version=(1, 22), asyncio=False)  # noqa: F841
         b_22 = open_session(version=(1, 22), asyncio=True)  # noqa: F841
-        a_22 = open_session(version=(1, 23))
-        a_22 = open_session(version=(1, 23), asyncio=False)  # noqa: F841
-        b_22 = open_session(version=(1, 23), asyncio=True)  # noqa: F841
-        a_22 = open_session(version=(1, 24))
-        a_22 = open_session(version=(1, 24), asyncio=False)  # noqa: F841
-        b_22 = open_session(version=(1, 24), asyncio=True)  # noqa: F841
+
+        a_23 = open_session(version=(1, 23))
+        a_23 = open_session(version=(1, 23), asyncio=False)  # noqa: F841
+        b_23 = open_session(version=(1, 23), asyncio=True)  # noqa: F841
+        a_23 = open_session(version=(1, 24))
+        a_23 = open_session(version=(1, 24), asyncio=False)  # noqa: F841
+        b_23 = open_session(version=(1, 24), asyncio=True)  # noqa: F841
+        a_23 = open_session(version=(1, 25))
+        a_23 = open_session(version=(1, 25), asyncio=False)  # noqa: F841
+        b_23 = open_session(version=(1, 25), asyncio=True)  # noqa: F841
 
         a = open_session()
         a = open_session(asyncio=False)  # noqa: F841
