@@ -133,6 +133,32 @@ session object and asynchronous session object can be cross-referenced by the sy
 
 ![diagram](https://www.plantuml.com/plantuml/svg/SoWkIImgAStDuKhEIImkLWXEBIxEpCzJgEPIK2Ykp4lEAChFooyjje9908KJKSGTGJoOP2t458WWfKPnmGpGqjM5wu6gGKYWw4BLeuHakXAAEhWoNLqj1QL4tEeSKlDIW8430000)
 
+```python
+from omc4py import open_session
+
+with open_session() as session:
+    # This session is synchronous
+    # Synchronous calling
+    session.getVersion()
+
+    # Get asynchronous session by attribute
+    async_session = session.asynchronous
+
+    # Asynchronous calling
+    await async_session.getVersion()
+
+with open_session(asyncio=True) as async_session:
+    # This session is asynchronous
+    # Asynchronous calling
+    await async_session.getVersion()
+
+    # Get synchronous session by attribute
+    session = async_session.synchronous
+
+    # Synchronous calling
+    session.getVersion()
+```
+
 - - -
 
 It is also possible to open multiple sessions with different versions of omc at the same time by explicitly specifying omc.
