@@ -5,6 +5,7 @@ from typing import Coroutine, Sequence, Union, overload
 from omc4py.modelica import external
 from omc4py.protocol import (
     Asynchronous,
+    PathLike,
     SupportsInteractiveProperty,
     Synchronous,
 )
@@ -13,7 +14,7 @@ from omc4py.protocol import (
 @overload
 def relocateFunctions(
     self: SupportsInteractiveProperty[Synchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     names: Sequence[Sequence[str]],
 ) -> bool:
     ...
@@ -22,7 +23,7 @@ def relocateFunctions(
 @overload
 async def relocateFunctions(
     self: SupportsInteractiveProperty[Asynchronous],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     names: Sequence[Sequence[str]],
 ) -> bool:
     ...
@@ -34,7 +35,7 @@ def relocateFunctions(
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
     ],
-    fileName: str,
+    fileName: Union[PathLike[str], str],
     names: Sequence[Sequence[str]],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
