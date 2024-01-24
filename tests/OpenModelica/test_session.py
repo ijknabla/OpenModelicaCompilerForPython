@@ -1,12 +1,13 @@
 from __future__ import annotations
 
-from contextlib import ExitStack
+import sys
+from asyncio import gather
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
 import pytest
 
-from omc4py import AsyncSession, Session, TypeName
+from omc4py import Session, TypeName
 from omc4py.exception import OMCError
 from tests import OpenSession
 
@@ -19,45 +20,71 @@ async def test_check_settings(session: Session) -> None:
 
 
 @pytest.mark.asyncio
-async def test_load_file(open_session: OpenSession) -> None:
+async def test_load_file(
+    open_session: OpenSession, paths: list[tuple[TypeName, Path]]
+) -> None:
     s = open_session().asynchronous
 
-    assert await get_class_names(s) == set()
+    class_names: set[TypeName] = set()
 
-    with ExitStack() as stack:
-        A_mo = Path(stack.enter_context(TemporaryDirectory())) / "A.mo"
-        A_mo.write_text("model A end A;")
-        assert await s.loadFile(f"{A_mo}")
-
-    assert await get_class_names(s) == {"A"}
+    assert set(await s.getClassNames()) == class_names
+    for name, path in paths:
+        class_names.add(name)
+        assert await s.loadFile(fileName=path)
+        assert set(await s.getClassNames()) == class_names
 
 
 @pytest.mark.asyncio
-async def test_load_files(open_session: OpenSession) -> None:
+async def test_load_files(
+    open_session: OpenSession, paths: list[tuple[TypeName, Path]]
+) -> None:
     s = open_session().asynchronous
 
-    assert await get_class_names(s) == set()
+    class_names: set[TypeName] = set()
 
-    with ExitStack() as stack:
-        mos: list[str] = []
-        for name in "ABC":
-            mo = Path(stack.enter_context(TemporaryDirectory())) / "{name}.mo"
-            mo.write_text(f"model {name} end {name};")
-            mos.append(f"{mo}")
-        assert await s.loadFiles(mos)
+    assert set(await s.getClassNames()) == class_names
 
-    assert await get_class_names(s) == {"A", "B", "C"}
+    name: tuple[TypeName, ...]
+    path: tuple[Path, ...]
+    name, path = zip(*paths)
+
+    class_names.update(name)
+    assert await s.loadFiles(fileNames=path)
+
+    assert set(await s.getClassNames()) == class_names
 
 
 @pytest.mark.asyncio
-async def test_load_string(open_session: OpenSession) -> None:
+async def test_reload_class(open_session: OpenSession) -> None:
+    """
+    omc4py/v_1_22/OpenModelica/Scripting/__init__.py:323
+    """
+    session = open_session().asynchronous
+
+    assert not await session.reloadClass("Modelica")
+    with pytest.raises(OMCError):
+        await session.__check__()
+
+    assert await session.loadModel("Modelica")
+    assert await session.reloadClass("Modelica")
+
+
+@pytest.mark.asyncio
+async def test_load_string(
+    open_session: OpenSession, strings: list[tuple[TypeName, str]]
+) -> None:
+    """
+    omc4py/v_1_22/OpenModelica/Scripting/__init__.py:365
+    """
     s = open_session().asynchronous
 
-    assert await get_class_names(s) == set()
+    class_names: set[TypeName] = set()
 
-    assert await s.loadString("model A end A;")
-
-    assert await get_class_names(s) == {"A"}
+    assert set(await s.getClassNames()) == class_names
+    for name, string in strings:
+        class_names.add(name)
+        assert await s.loadString(data=string)
+        assert set(await s.getClassNames()) == class_names
 
 
 # # TOOD: EncryptedPackage features
@@ -69,18 +96,29 @@ async def test_load_string(open_session: OpenSession) -> None:
 
 
 @pytest.mark.asyncio
-async def test_reload_model(open_session: OpenSession) -> None:
-    session = open_session().asynchronous
+async def test_directory_exists(session: Session) -> None:
+    """
+    omc4py/v_1_22/OpenModelica/Scripting/__init__.py:2516
+    """
+    s = session.asynchronous
 
-    assert not await session.reloadClass("Modelica")
-    with pytest.raises(OMCError):
-        await session.__check__()
+    with TemporaryDirectory() as temp:
+        paths = [Path(temp, name) for name in "ABCD"]
 
-    assert await session.loadModel("Modelica")
-    assert await session.reloadClass("Modelica")
+        async def check() -> None:
+            if sys.version_info < (3, 10):
+                omc = [await s.directoryExists(dirName=path) for path in paths]
+            else:
+                omc = await gather(
+                    *(s.directoryExists(dirName=path) for path in paths)
+                )
 
+            py = [path.exists() for path in paths]
 
-async def get_class_names(
-    session: AsyncSession, class_: TypeName | str | None = None
-) -> set[str]:
-    return set(map(str, await session.getClassNames(class_)))
+            assert omc == py
+
+        await check()
+
+        for path in paths:
+            path.mkdir()
+            await check()

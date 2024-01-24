@@ -730,7 +730,7 @@ class TypeKind(enum.Enum):
     integer = enum.auto()
     boolean = enum.auto()
     string = enum.auto()
-    # path = enum.auto()
+    path = enum.auto()
     typename = enum.auto()
     variablename = enum.auto()
 
@@ -745,6 +745,10 @@ class TypeKind(enum.Enum):
         #     r"(file|header|dir|directory|(?<!modelica)path)(name|names)?$",
         #     re.IGNORECASE,
         # )
+        path_pattern = re.compile(
+            r"(dir(ectory)?|file|path)(\d|Names?)?$",
+            re.IGNORECASE,
+        )
         match f"{typename}", entity:
             case "Real", None:
                 return TypeKind.real
@@ -753,11 +757,10 @@ class TypeKind(enum.Enum):
             case "Boolean", None:
                 return TypeKind.boolean
             case "String", None:
-                return TypeKind.string
-                # if path_pattern.search(f"{variablename}") is None:
-                #     return TypeKind.string
-                # else:
-                #     return TypeKind.path
+                if path_pattern.search(f"{variablename}"):
+                    return TypeKind.path
+                else:
+                    return TypeKind.string
             case (
                 "OpenModelica.$Code.TypeName" | "OpenModelica.$Code.TypeNames"
             ), None:
@@ -778,9 +781,9 @@ class BuiltinTypeHint:
 
     def iter_imports(self) -> Generator[ImportFrom, None, None]:
         match self.kind, self.input_output:
-            # case (TypeKind.path, "input"):
-            #     yield ImportFrom(module="typing", name="Union")
-            #     yield ImportFrom(module="omc4py.protocol", name="PathLike")
+            case (TypeKind.path, "input"):
+                yield ImportFrom(module="typing", name="Union")
+                yield ImportFrom(module="omc4py.protocol", name="PathLike")
             case (TypeKind.typename, _):
                 yield ImportFrom(module="omc4py.openmodelica", name="TypeName")
                 if self.input_output == "input":
@@ -803,24 +806,28 @@ class BuiltinTypeHint:
                 return ast.Name(id="bool", ctx=ast.Load())
             case (
                 (TypeKind.string, _)
-                # | (
-                #     TypeKind.path,
-                #     "output" | "unspecified",
-                # )
+                | (
+                    TypeKind.path,
+                    "output" | "unspecified",
+                )
             ):
                 return ast.Name(id="str", ctx=ast.Load())
-            # case (TypeKind.path, "input"):
-            #     return ast.Subscript(
-            #         value=ast.Name(id="Union", ctx=ast.Load()),
-            #         slice=ast.Tuple(
-            #             elts=[
-            #                 ast.Name(id="PathLike", ctx=ast.Load()),
-            #                 ast.Name(id="str", ctx=ast.Load()),
-            #             ],
-            #             ctx=ast.Load(),
-            #         ),
-            #         ctx=ast.Load(),
-            #     )
+            case (TypeKind.path, "input"):
+                return ast.Subscript(
+                    value=ast.Name(id="Union", ctx=ast.Load()),
+                    slice=ast.Tuple(
+                        elts=[
+                            ast.Subscript(
+                                value=ast.Name(id="PathLike", ctx=ast.Load()),
+                                slice=ast.Name(id="str", ctx=ast.Load()),
+                                ctx=ast.Load(),
+                            ),
+                            ast.Name(id="str", ctx=ast.Load()),
+                        ],
+                        ctx=ast.Load(),
+                    ),
+                    ctx=ast.Load(),
+                )
             case (TypeKind.typename, "input"):
                 return ast.Subscript(
                     value=ast.Name(id="Union", ctx=ast.Load()),

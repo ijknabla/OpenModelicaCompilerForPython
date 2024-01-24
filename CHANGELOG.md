@@ -11,6 +11,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - `omc4py.v_1_23` Support of _OpenModelica 1.23.x_
 
+### Changed
+- Accept `PathLike` for argument
+    - `*dir`
+    - `*dirName`
+    - `*directory`
+    - `*file`
+    - `*file[0-9]`
+    - `*fileName`
+    - `*fileNames`
+    - `*path`
+
 ## [0.3.0] - 2024-01-23
 
 ### Fixed
