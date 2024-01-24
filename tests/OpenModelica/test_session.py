@@ -52,14 +52,18 @@ async def test_load_files(
 
 
 @pytest.mark.asyncio
-async def test_load_string(open_session: OpenSession) -> None:
+async def test_load_string(
+    open_session: OpenSession, strings: list[tuple[TypeName, str]]
+) -> None:
     s = open_session().asynchronous
 
-    assert await get_class_names(s) == set()
+    class_names: set[TypeName] = set()
 
-    assert await s.loadString("model A end A;")
-
-    assert await get_class_names(s) == {"A"}
+    assert set(await s.getClassNames()) == class_names
+    for name, string in strings:
+        class_names.add(name)
+        assert await s.loadString(data=string)
+        assert set(await s.getClassNames()) == class_names
 
 
 # # TOOD: EncryptedPackage features
