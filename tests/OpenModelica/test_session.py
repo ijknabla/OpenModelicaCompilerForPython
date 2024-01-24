@@ -1,8 +1,6 @@
 from __future__ import annotations
 
-from contextlib import ExitStack
 from pathlib import Path
-from tempfile import TemporaryDirectory
 
 import pytest
 
@@ -34,20 +32,23 @@ async def test_load_file(
 
 
 @pytest.mark.asyncio
-async def test_load_files(open_session: OpenSession) -> None:
+async def test_load_files(
+    open_session: OpenSession, paths: list[tuple[TypeName, Path]]
+) -> None:
     s = open_session().asynchronous
 
-    assert await get_class_names(s) == set()
+    class_names: set[TypeName] = set()
 
-    with ExitStack() as stack:
-        mos: list[str] = []
-        for name in "ABC":
-            mo = Path(stack.enter_context(TemporaryDirectory())) / "{name}.mo"
-            mo.write_text(f"model {name} end {name};")
-            mos.append(f"{mo}")
-        assert await s.loadFiles(mos)
+    assert set(await s.getClassNames()) == class_names
 
-    assert await get_class_names(s) == {"A", "B", "C"}
+    name: tuple[TypeName, ...]
+    path: tuple[Path, ...]
+    name, path = zip(*paths)
+
+    class_names.update(name)
+    assert await s.loadFiles(fileNames=path)
+
+    assert set(await s.getClassNames()) == class_names
 
 
 @pytest.mark.asyncio
