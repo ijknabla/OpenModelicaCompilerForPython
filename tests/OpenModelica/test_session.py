@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from omc4py import AsyncSession, Session, TypeName
+from omc4py import Session, TypeName
 from omc4py.exception import OMCError
 from tests import OpenSession
 
@@ -52,9 +52,27 @@ async def test_load_files(
 
 
 @pytest.mark.asyncio
+async def test_reload_class(open_session: OpenSession) -> None:
+    """
+    omc4py/v_1_22/OpenModelica/Scripting/__init__.py:323
+    """
+    session = open_session().asynchronous
+
+    assert not await session.reloadClass("Modelica")
+    with pytest.raises(OMCError):
+        await session.__check__()
+
+    assert await session.loadModel("Modelica")
+    assert await session.reloadClass("Modelica")
+
+
+@pytest.mark.asyncio
 async def test_load_string(
     open_session: OpenSession, strings: list[tuple[TypeName, str]]
 ) -> None:
+    """
+    omc4py/v_1_22/OpenModelica/Scripting/__init__.py:365
+    """
     s = open_session().asynchronous
 
     class_names: set[TypeName] = set()
@@ -72,21 +90,3 @@ async def test_load_string(
 # - parseEncryptedPackage
 # - loadEncryptedPackage
 # - buildEncryptedPackage
-
-
-@pytest.mark.asyncio
-async def test_reload_class(open_session: OpenSession) -> None:
-    session = open_session().asynchronous
-
-    assert not await session.reloadClass("Modelica")
-    with pytest.raises(OMCError):
-        await session.__check__()
-
-    assert await session.loadModel("Modelica")
-    assert await session.reloadClass("Modelica")
-
-
-async def get_class_names(
-    session: AsyncSession, class_: TypeName | str | None = None
-) -> set[str]:
-    return set(map(str, await session.getClassNames(class_)))
