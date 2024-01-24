@@ -19,17 +19,18 @@ async def test_check_settings(session: Session) -> None:
 
 
 @pytest.mark.asyncio
-async def test_load_file(open_session: OpenSession) -> None:
+async def test_load_file(
+    open_session: OpenSession, paths: list[tuple[TypeName, Path]]
+) -> None:
     s = open_session().asynchronous
 
-    assert await get_class_names(s) == set()
+    class_names: set[TypeName] = set()
 
-    with ExitStack() as stack:
-        A_mo = Path(stack.enter_context(TemporaryDirectory())) / "A.mo"
-        A_mo.write_text("model A end A;")
-        assert await s.loadFile(f"{A_mo}")
-
-    assert await get_class_names(s) == {"A"}
+    assert set(await s.getClassNames()) == class_names
+    for name, path in paths:
+        class_names.add(name)
+        assert await s.loadFile(fileName=path)
+        assert set(await s.getClassNames()) == class_names
 
 
 @pytest.mark.asyncio
