@@ -1,6 +1,8 @@
 from __future__ import annotations
 
+from asyncio import gather
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import pytest
 
@@ -90,3 +92,27 @@ async def test_load_string(
 # - parseEncryptedPackage
 # - loadEncryptedPackage
 # - buildEncryptedPackage
+
+
+@pytest.mark.asyncio
+async def test_directory_exists(session: Session) -> None:
+    """
+    omc4py/v_1_22/OpenModelica/Scripting/__init__.py:2516
+    """
+    s = session.asynchronous
+
+    with TemporaryDirectory() as temp:
+        paths = [Path(temp, name) for name in "ABCD"]
+
+        async def check() -> None:
+            assert (
+                await gather(
+                    *(s.directoryExists(dirName=path) for path in paths)
+                )
+            ) == [path.exists() for path in paths]
+
+        await check()
+
+        for path in paths:
+            path.mkdir()
+            await check()
