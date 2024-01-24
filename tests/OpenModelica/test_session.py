@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import sys
 from asyncio import gather
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -105,11 +106,16 @@ async def test_directory_exists(session: Session) -> None:
         paths = [Path(temp, name) for name in "ABCD"]
 
         async def check() -> None:
-            assert (
-                await gather(
+            if sys.version_info < (3, 10):
+                omc = [await s.directoryExists(dirName=path) for path in paths]
+            else:
+                omc = await gather(
                     *(s.directoryExists(dirName=path) for path in paths)
                 )
-            ) == [path.exists() for path in paths]
+
+            py = [path.exists() for path in paths]
+
+            assert omc == py
 
         await check()
 
