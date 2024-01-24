@@ -746,7 +746,7 @@ class TypeKind(enum.Enum):
         #     re.IGNORECASE,
         # )
         path_pattern = re.compile(
-            r"^$",
+            r"(dir(ectory)?|file|path)(\d|Names?)?$",
             re.IGNORECASE,
         )
         match f"{typename}", entity:
