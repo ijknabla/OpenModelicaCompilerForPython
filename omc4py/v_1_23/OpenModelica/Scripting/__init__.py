@@ -111,6 +111,8 @@ def loadFile(
     fileName: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -121,6 +123,8 @@ async def loadFile(
     fileName: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -134,6 +138,8 @@ def loadFile(
     fileName: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
     uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -142,6 +148,8 @@ def loadFile(
           input String fileName;
           input String encoding = "UTF-8";
           input Boolean uses = true;
+          input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+          input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output Boolean success;
         end loadFile;"""
     return ...  # type: ignore
@@ -153,6 +161,9 @@ def loadFiles(
     fileNames: Sequence[Union[PathLike[str], str]],
     encoding: Union[str, None] = None,
     numThreads: Union[int, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -163,6 +174,9 @@ async def loadFiles(
     fileNames: Sequence[Union[PathLike[str], str]],
     encoding: Union[str, None] = None,
     numThreads: Union[int, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -176,6 +190,9 @@ def loadFiles(
     fileNames: Sequence[Union[PathLike[str], str]],
     encoding: Union[str, None] = None,
     numThreads: Union[int, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -184,8 +201,49 @@ def loadFiles(
           input String[:] fileNames;
           input String encoding = "UTF-8";
           input Integer numThreads = OpenModelica.Scripting.numProcessors();
+          input Boolean uses = true;
+          input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+          input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output Boolean success;
         end loadFiles;"""
+    return ...  # type: ignore
+
+
+@overload
+def parseEncryptedPackage(
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
+    workdir: Union[PathLike[str], str, None] = None,
+) -> List[TypeName]:
+    ...
+
+
+@overload
+async def parseEncryptedPackage(
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
+    workdir: Union[PathLike[str], str, None] = None,
+) -> List[TypeName]:
+    ...
+
+
+@external("parseEncryptedPackage")
+def parseEncryptedPackage(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    fileName: Union[PathLike[str], str],
+    workdir: Union[PathLike[str], str, None] = None,
+) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
+    """
+    .. code-block:: modelica
+
+        function parseEncryptedPackage
+          input String fileName;
+          input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
+          output TypeName names[:];
+        end parseEncryptedPackage;"""
     return ...  # type: ignore
 
 
@@ -194,6 +252,10 @@ def loadEncryptedPackage(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
     workdir: Union[PathLike[str], str, None] = None,
+    skipUnzip: Union[bool, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -203,6 +265,10 @@ async def loadEncryptedPackage(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
     workdir: Union[PathLike[str], str, None] = None,
+    skipUnzip: Union[bool, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -215,6 +281,10 @@ def loadEncryptedPackage(
     ],
     fileName: Union[PathLike[str], str],
     workdir: Union[PathLike[str], str, None] = None,
+    skipUnzip: Union[bool, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -222,6 +292,10 @@ def loadEncryptedPackage(
         function loadEncryptedPackage
           input String fileName;
           input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
+          input Boolean skipUnzip = false "Skips the unzip of .mol if true. In that case we expect the files are already extracted e.g., because of parseEncryptedPackage() call.";
+          input Boolean uses = true;
+          input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+          input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output Boolean success;
         end loadEncryptedPackage;"""
     return ...  # type: ignore
@@ -304,7 +378,7 @@ def loadString(
         function loadString
           input String data;
           input String filename = "<interactive>";
-          input String encoding = "UTF-8";
+          input String encoding = "UTF-8" "Deprecated as *ALL* strings are now UTF-8 encoded";
           input Boolean merge = false "if merge is true the parsed AST is merged with the existing AST, default to false which means that is replaced, not merged";
           output Boolean success;
         end loadString;"""
@@ -430,6 +504,9 @@ def loadFileInteractive(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> List[TypeName]:
     ...
 
@@ -439,6 +516,9 @@ async def loadFileInteractive(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> List[TypeName]:
     ...
 
@@ -451,6 +531,9 @@ def loadFileInteractive(
     ],
     filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
+    uses: Union[bool, None] = None,
+    notify: Union[bool, None] = None,
+    requireExactVersion: Union[bool, None] = None,
 ) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
     """
     .. code-block:: modelica
@@ -458,6 +541,9 @@ def loadFileInteractive(
         function loadFileInteractive
           input String filename;
           input String encoding = "UTF-8";
+          input Boolean uses = true;
+          input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
+          input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output TypeName names[:];
         end loadFileInteractive;"""
     return ...  # type: ignore
@@ -720,6 +806,40 @@ def generateHeader(
           input String fileName;
           output Boolean success;
         end generateHeader;"""
+    return ...  # type: ignore
+
+
+@overload
+def generateJuliaHeader(
+    self: SupportsInteractiveProperty[Synchronous],
+    fileName: Union[PathLike[str], str],
+) -> bool:
+    ...
+
+
+@overload
+async def generateJuliaHeader(
+    self: SupportsInteractiveProperty[Asynchronous],
+    fileName: Union[PathLike[str], str],
+) -> bool:
+    ...
+
+
+@external("generateJuliaHeader")
+def generateJuliaHeader(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    fileName: Union[PathLike[str], str],
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function generateJuliaHeader
+          input String fileName;
+          output Boolean success;
+        end generateJuliaHeader;"""
     return ...  # type: ignore
 
 
@@ -1602,6 +1722,36 @@ def getModelicaPath(
 
 
 @overload
+def getHomeDirectoryPath(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> str:
+    ...
+
+
+@overload
+async def getHomeDirectoryPath(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> str:
+    ...
+
+
+@external("getHomeDirectoryPath")
+def getHomeDirectoryPath(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function getHomeDirectoryPath
+          output String homeDirectoryPath;
+        end getHomeDirectoryPath;"""
+    return ...  # type: ignore
+
+
+@overload
 def setCompilerFlags(
     self: SupportsInteractiveProperty[Synchronous], compilerFlags: str
 ) -> bool:
@@ -1630,6 +1780,66 @@ def setCompilerFlags(
           input String compilerFlags;
           output Boolean success;
         end setCompilerFlags;"""
+    return ...  # type: ignore
+
+
+@overload
+def enableNewInstantiation(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> bool:
+    ...
+
+
+@overload
+async def enableNewInstantiation(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> bool:
+    ...
+
+
+@external("enableNewInstantiation")
+def enableNewInstantiation(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function enableNewInstantiation
+          output Boolean success;
+        end enableNewInstantiation;"""
+    return ...  # type: ignore
+
+
+@overload
+def disableNewInstantiation(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> bool:
+    ...
+
+
+@overload
+async def disableNewInstantiation(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> bool:
+    ...
+
+
+@external("disableNewInstantiation")
+def disableNewInstantiation(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function disableNewInstantiation
+          output Boolean success;
+        end disableNewInstantiation;"""
     return ...  # type: ignore
 
 
@@ -2833,12 +3043,14 @@ class ErrorLevel(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorLevel = enumeration(notification, warning, error);"""
+        type ErrorLevel = enumeration(internal, notification, warning, error);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorLevel")
-    notification = 1
-    warning = 2
-    error = 3
+    internal = 1
+    notification = 2
+    warning = 3
+    error = 4
 
 
 @dataclass(frozen=True)
@@ -3803,82 +4015,6 @@ def instantiateModel(
 
 
 @overload
-def buildOpenTURNSInterface(
-    self: SupportsInteractiveProperty[Synchronous],
-    className: Union[TypeName, str],
-    pythonTemplateFile: Union[PathLike[str], str],
-    showFlatModelica: Union[bool, None] = None,
-) -> str:
-    ...
-
-
-@overload
-async def buildOpenTURNSInterface(
-    self: SupportsInteractiveProperty[Asynchronous],
-    className: Union[TypeName, str],
-    pythonTemplateFile: Union[PathLike[str], str],
-    showFlatModelica: Union[bool, None] = None,
-) -> str:
-    ...
-
-
-@external("buildOpenTURNSInterface")
-def buildOpenTURNSInterface(
-    self: Union[
-        SupportsInteractiveProperty[Synchronous],
-        SupportsInteractiveProperty[Asynchronous],
-    ],
-    className: Union[TypeName, str],
-    pythonTemplateFile: Union[PathLike[str], str],
-    showFlatModelica: Union[bool, None] = None,
-) -> Union[str, Coroutine[None, None, str]]:
-    """
-    .. code-block:: modelica
-
-        function buildOpenTURNSInterface
-          input TypeName className;
-          input String pythonTemplateFile;
-          input Boolean showFlatModelica = false;
-          output String outPythonScript;
-        end buildOpenTURNSInterface;"""
-    return ...  # type: ignore
-
-
-@overload
-def runOpenTURNSPythonScript(
-    self: SupportsInteractiveProperty[Synchronous],
-    pythonScriptFile: Union[PathLike[str], str],
-) -> str:
-    ...
-
-
-@overload
-async def runOpenTURNSPythonScript(
-    self: SupportsInteractiveProperty[Asynchronous],
-    pythonScriptFile: Union[PathLike[str], str],
-) -> str:
-    ...
-
-
-@external("runOpenTURNSPythonScript")
-def runOpenTURNSPythonScript(
-    self: Union[
-        SupportsInteractiveProperty[Synchronous],
-        SupportsInteractiveProperty[Asynchronous],
-    ],
-    pythonScriptFile: Union[PathLike[str], str],
-) -> Union[str, Coroutine[None, None, str]]:
-    """
-    .. code-block:: modelica
-
-        function runOpenTURNSPythonScript
-          input String pythonScriptFile;
-          output String logOutputFile;
-        end runOpenTURNSPythonScript;"""
-    return ...  # type: ignore
-
-
-@overload
 def generateCode(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
@@ -4041,6 +4177,7 @@ def saveTotalModel(
     className: Union[TypeName, str],
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
+    obfuscate: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -4052,6 +4189,7 @@ async def saveTotalModel(
     className: Union[TypeName, str],
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
+    obfuscate: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -4066,6 +4204,7 @@ def saveTotalModel(
     className: Union[TypeName, str],
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
+    obfuscate: Union[bool, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -4075,8 +4214,59 @@ def saveTotalModel(
           input TypeName className;
           input Boolean stripAnnotations = false;
           input Boolean stripComments = false;
+          input Boolean obfuscate = false;
           output Boolean success;
         end saveTotalModel;"""
+    return ...  # type: ignore
+
+
+@overload
+def saveTotalModelDebug(
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
+    className: Union[TypeName, str],
+    stripAnnotations: Union[bool, None] = None,
+    stripComments: Union[bool, None] = None,
+    obfuscate: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@overload
+async def saveTotalModelDebug(
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
+    className: Union[TypeName, str],
+    stripAnnotations: Union[bool, None] = None,
+    stripComments: Union[bool, None] = None,
+    obfuscate: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@external("saveTotalModelDebug")
+def saveTotalModelDebug(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    filename: Union[PathLike[str], str],
+    className: Union[TypeName, str],
+    stripAnnotations: Union[bool, None] = None,
+    stripComments: Union[bool, None] = None,
+    obfuscate: Union[bool, None] = None,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function saveTotalModelDebug
+          input String filename;
+          input TypeName className;
+          input Boolean stripAnnotations = false;
+          input Boolean stripComments = false;
+          input Boolean obfuscate = false;
+          output Boolean success;
+        end saveTotalModelDebug;"""
     return ...  # type: ignore
 
 
@@ -4180,7 +4370,7 @@ def dumpXMLDAE(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     translationLevel: Union[str, None] = None,
-    addOriginalIncidenceMatrix: Union[bool, None] = None,
+    addOriginalAdjacencyMatrix: Union[bool, None] = None,
     addSolvingInfo: Union[bool, None] = None,
     addMathMLCode: Union[bool, None] = None,
     dumpResiduals: Union[bool, None] = None,
@@ -4195,7 +4385,7 @@ async def dumpXMLDAE(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     translationLevel: Union[str, None] = None,
-    addOriginalIncidenceMatrix: Union[bool, None] = None,
+    addOriginalAdjacencyMatrix: Union[bool, None] = None,
     addSolvingInfo: Union[bool, None] = None,
     addMathMLCode: Union[bool, None] = None,
     dumpResiduals: Union[bool, None] = None,
@@ -4213,7 +4403,7 @@ def dumpXMLDAE(
     ],
     className: Union[TypeName, str],
     translationLevel: Union[str, None] = None,
-    addOriginalIncidenceMatrix: Union[bool, None] = None,
+    addOriginalAdjacencyMatrix: Union[bool, None] = None,
     addSolvingInfo: Union[bool, None] = None,
     addMathMLCode: Union[bool, None] = None,
     dumpResiduals: Union[bool, None] = None,
@@ -4226,7 +4416,7 @@ def dumpXMLDAE(
         function dumpXMLDAE
           input TypeName className;
           input String translationLevel = "flat" "flat, optimiser, backEnd, or stateSpace";
-          input Boolean addOriginalIncidenceMatrix = false;
+          input Boolean addOriginalAdjacencyMatrix = false;
           input Boolean addSolvingInfo = false;
           input Boolean addMathMLCode = false;
           input Boolean dumpResiduals = false;
@@ -4564,6 +4754,7 @@ def list(
 def listFile(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
+    nestedClasses: Union[bool, None] = None,
 ) -> str:
     ...
 
@@ -4572,6 +4763,7 @@ def listFile(
 async def listFile(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
+    nestedClasses: Union[bool, None] = None,
 ) -> str:
     ...
 
@@ -4583,12 +4775,14 @@ def listFile(
         SupportsInteractiveProperty[Asynchronous],
     ],
     class_: Union[TypeName, str],
+    nestedClasses: Union[bool, None] = None,
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
 
         function listFile
           input TypeName class_;
+          input Boolean nestedClasses = true;
           output String contents;
         end listFile;"""
     return ...  # type: ignore
@@ -4618,6 +4812,7 @@ def diffModelicaFileListings(
     diffFormat: Union[
         DiffFormat, Literal["plain", "color", "xml"], None
     ] = None,
+    failOnSemanticsChange: Union[bool, None] = None,
 ) -> str:
     ...
 
@@ -4630,6 +4825,7 @@ async def diffModelicaFileListings(
     diffFormat: Union[
         DiffFormat, Literal["plain", "color", "xml"], None
     ] = None,
+    failOnSemanticsChange: Union[bool, None] = None,
 ) -> str:
     ...
 
@@ -4645,6 +4841,7 @@ def diffModelicaFileListings(
     diffFormat: Union[
         DiffFormat, Literal["plain", "color", "xml"], None
     ] = None,
+    failOnSemanticsChange: Union[bool, None] = None,
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -4652,6 +4849,7 @@ def diffModelicaFileListings(
         function diffModelicaFileListings
           input String before, after;
           input DiffFormat diffFormat = DiffFormat.color;
+          input Boolean failOnSemanticsChange = false "Defaults to returning after instead of hard fail";
           output String result;
         end diffModelicaFileListings;"""
     return ...  # type: ignore
@@ -4905,17 +5103,6 @@ def getLoadedLibraries(
     return ...  # type: ignore
 
 
-class LinearSystemSolver(enumeration):
-    """
-    .. code-block:: modelica
-
-        type LinearSystemSolver = enumeration(dgesv, lpsolve55);"""
-
-    __omc_class__ = TypeName("OpenModelica.Scripting.LinearSystemSolver")
-    dgesv = 1
-    lpsolve55 = 2
-
-
 class Solvelinearsystem(NamedTuple):
     X: List[float]
     info: int
@@ -4926,10 +5113,6 @@ def solveLinearSystem(
     self: SupportsInteractiveProperty[Synchronous],
     A: Sequence[Sequence[float]],
     B: Sequence[float],
-    solver: Union[
-        LinearSystemSolver, Literal["dgesv", "lpsolve55"], None
-    ] = None,
-    isInt: Union[Sequence[int], None] = None,
 ) -> Solvelinearsystem:
     ...
 
@@ -4939,10 +5122,6 @@ async def solveLinearSystem(
     self: SupportsInteractiveProperty[Asynchronous],
     A: Sequence[Sequence[float]],
     B: Sequence[float],
-    solver: Union[
-        LinearSystemSolver, Literal["dgesv", "lpsolve55"], None
-    ] = None,
-    isInt: Union[Sequence[int], None] = None,
 ) -> Solvelinearsystem:
     ...
 
@@ -4955,10 +5134,6 @@ def solveLinearSystem(
     ],
     A: Sequence[Sequence[float]],
     B: Sequence[float],
-    solver: Union[
-        LinearSystemSolver, Literal["dgesv", "lpsolve55"], None
-    ] = None,
-    isInt: Union[Sequence[int], None] = None,
 ) -> Union[Solvelinearsystem, Coroutine[None, None, Solvelinearsystem]]:
     """
     .. code-block:: modelica
@@ -4966,8 +5141,6 @@ def solveLinearSystem(
         function solveLinearSystem
           input Real[size(B, 1), size(B, 1)] A;
           input Real[:] B;
-          input LinearSystemSolver solver = LinearSystemSolver.dgesv;
-          input Integer[:] isInt = {-1} "list of indices that are integers";
           output Real[size(B, 1)] X;
           output Integer info;
         end solveLinearSystem;"""
@@ -5034,6 +5207,7 @@ def importFMU(
     debugLogging: Union[bool, None] = None,
     generateInputConnectors: Union[bool, None] = None,
     generateOutputConnectors: Union[bool, None] = None,
+    modelName: Union[TypeName, str, None] = None,
 ) -> str:
     ...
 
@@ -5048,6 +5222,7 @@ async def importFMU(
     debugLogging: Union[bool, None] = None,
     generateInputConnectors: Union[bool, None] = None,
     generateOutputConnectors: Union[bool, None] = None,
+    modelName: Union[TypeName, str, None] = None,
 ) -> str:
     ...
 
@@ -5065,6 +5240,7 @@ def importFMU(
     debugLogging: Union[bool, None] = None,
     generateInputConnectors: Union[bool, None] = None,
     generateOutputConnectors: Union[bool, None] = None,
+    modelName: Union[TypeName, str, None] = None,
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -5077,6 +5253,7 @@ def importFMU(
           input Boolean debugLogging = false "When true the FMU's debug output is printed.";
           input Boolean generateInputConnectors = true "When true creates the input connector pins.";
           input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
+          input TypeName modelName = $Code(Default) "Name of the generated model. If default then the name is auto generated using FMU information.";
           output String generatedFileName "Returns the full path of the generated file.";
         end importFMU;"""
     return ...  # type: ignore
@@ -5237,23 +5414,23 @@ def buildModelFMU(
           input String version = "2.0" "FMU version, 1.0 or 2.0.";
           input String fmuType = "me" "FMU type, me (model exchange), cs (co-simulation), me_cs (both model exchange and co-simulation)";
           input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"className\\"";
-          input String platforms[:] = {"static"} "The list of platforms to generate code for. \\"dynamic\\"=current platform, dynamically link the runtime. \\"static\\"=current platform, statically link everything. Else, use a host triple, e.g. \\"x86_64-linux-gnu\\" or \\"x86_64-w64-mingw32\\"";
-          input Boolean includeResources = false "include Modelica based resources via loadResource or not";
+          input String platforms[:] = {"static"} "The list of platforms to generate code for.
+                                                    \\"dynamic\\"=current platform, dynamically link the runtime.
+                                                    \\"static\\"=current platform, statically link everything.
+                                                    \\"<cpu>-<vendor>-<os>\\", host tripple, e.g. \\"x86_64-linux-gnu\\" or \\"x86_64-w64-mingw32\\".
+                                                    \\"<cpu>-<vendor>-<os> docker run <image>\\" host tripple with Docker image, e.g. \\"x86_64-linux-gnu docker run --pull=never multiarch/crossbuild\\"";
+          input Boolean includeResources = false "Depreacted and no effect";
           output String generatedFileName "Returns the full path of the generated FMU.";
         end buildModelFMU;"""
     return ...  # type: ignore
-
-
-class Buildencryptedpackage(NamedTuple):
-    success: bool
-    commandOutput: str
 
 
 @overload
 def buildEncryptedPackage(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> Buildencryptedpackage:
+    encrypt: Union[bool, None] = None,
+) -> bool:
     ...
 
 
@@ -5261,7 +5438,8 @@ def buildEncryptedPackage(
 async def buildEncryptedPackage(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> Buildencryptedpackage:
+    encrypt: Union[bool, None] = None,
+) -> bool:
     ...
 
 
@@ -5272,16 +5450,15 @@ def buildEncryptedPackage(
         SupportsInteractiveProperty[Asynchronous],
     ],
     className: Union[TypeName, str],
-) -> Union[
-    Buildencryptedpackage, Coroutine[None, None, Buildencryptedpackage]
-]:
+    encrypt: Union[bool, None] = None,
+) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
 
         function buildEncryptedPackage
           input TypeName className "the class that should encrypted";
+          input Boolean encrypt = true;
           output Boolean success;
-          output String commandOutput "Output of the packagetool executable";
         end buildEncryptedPackage;"""
     return ...  # type: ignore
 
@@ -5292,7 +5469,7 @@ def simulate(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
@@ -5311,7 +5488,7 @@ async def simulate(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
@@ -5333,7 +5510,7 @@ def simulate(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
@@ -5350,13 +5527,13 @@ def simulate(
           input TypeName className "the class that should simulated";
           input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
           input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-          input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+          input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
           input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
           input String method = "<default>" "integration method used for simulation. <default> = dassl";
           input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
           input String options = "<default>" "options. <default> = \\"\\"";
           input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-          input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+          input String variableFilter = ".*" "Only variables fully matching the regexp are stored in the result file. <default> = \\".*\\"";
           input String cflags = "<default>" "cflags. <default> = \\"\\"";
           input String simflags = "<default>" "simflags. <default> = \\"\\"";
           output SimulationResult simulationResults;
@@ -5416,7 +5593,7 @@ def buildModel(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
@@ -5435,7 +5612,7 @@ async def buildModel(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
@@ -5457,7 +5634,7 @@ def buildModel(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
@@ -5474,13 +5651,13 @@ def buildModel(
           input TypeName className "the class that should be built";
           input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
           input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-          input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+          input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
           input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
           input String method = "<default>" "integration method used for simulation. <default> = dassl";
           input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"\\"";
           input String options = "<default>" "options. <default> = \\"\\"";
           input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-          input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+          input String variableFilter = ".*" "Only variables fully matching the regexp are stored in the result file. <default> = \\".*\\"";
           input String cflags = "<default>" "cflags. <default> = \\"\\"";
           input String simflags = "<default>" "simflags. <default> = \\"\\"";
           output String[2] buildModelResults;
@@ -5558,7 +5735,7 @@ def buildLabel(
           input String fileNamePrefix = "" "fileNamePrefix. <default> = \\"\\"";
           input String options = "" "options. <default> = \\"\\"";
           input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-          input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+          input String variableFilter = ".*" "Only variables fully matching the regexp are stored in the result file. <default> = \\".*\\"";
           input String cflags = "" "cflags. <default> = \\"\\"";
           input String simflags = "" "simflags. <default> = \\"\\"";
           output String[2] buildModelResults;
@@ -5639,7 +5816,7 @@ def reduceTerms(
           input String fileNamePrefix = "" "fileNamePrefix. <default> = \\"\\"";
           input String options = "" "options. <default> = \\"\\"";
           input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-          input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+          input String variableFilter = ".*" "Only variables fully matching the regexp are stored in the result file. <default> = \\".*\\"";
           input String cflags = "" "cflags. <default> = \\"\\"";
           input String simflags = "" "simflags. <default> = \\"\\"";
           input String labelstoCancel = "";
@@ -5802,7 +5979,7 @@ def linearize(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     stepSize: Union[float, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
@@ -5824,7 +6001,7 @@ async def linearize(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     stepSize: Union[float, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
@@ -5849,7 +6026,7 @@ def linearize(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     stepSize: Union[float, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
@@ -5869,7 +6046,7 @@ def linearize(
           input TypeName className "the class that should simulated";
           input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
           input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-          input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+          input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
           input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
           input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
           input String method = "<default>" "integration method used for simulation. <default> = dassl";
@@ -5878,7 +6055,7 @@ def linearize(
           input Boolean noClean = false "noClean. <default> = false";
           input String options = "<default>" "options. <default> = \\"\\"";
           input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-          input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+          input String variableFilter = ".*" "Only variables fully matching the regexp are stored in the result file. <default> = \\".*\\"";
           input String cflags = "<default>" "cflags. <default> = \\"\\"";
           input String simflags = "<default>" "simflags. <default> = \\"\\"";
           output String linearizationResult;
@@ -5892,7 +6069,7 @@ def optimize(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     stepSize: Union[float, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
@@ -5914,7 +6091,7 @@ async def optimize(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     stepSize: Union[float, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
@@ -5939,7 +6116,7 @@ def optimize(
     className: Union[TypeName, str],
     startTime: Union[float, None] = None,
     stopTime: Union[float, None] = None,
-    numberOfIntervals: Union[float, None] = None,
+    numberOfIntervals: Union[int, None] = None,
     stepSize: Union[float, None] = None,
     tolerance: Union[float, None] = None,
     method: Union[str, None] = None,
@@ -5959,7 +6136,7 @@ def optimize(
           input TypeName className "the class that should simulated";
           input Real startTime = "<default>" "the start time of the simulation. <default> = 0.0";
           input Real stopTime = 1.0 "the stop time of the simulation. <default> = 1.0";
-          input Real numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
+          input Integer numberOfIntervals = 500 "number of intervals in the result file. <default> = 500";
           input Real stepSize = 0.002 "step size that is used for the result file. <default> = 0.002";
           input Real tolerance = 1e-6 "tolerance used by the integration method. <default> = 1e-6";
           input String method = DAE.SCONST("optimization") "optimize a modelica/optimica model.";
@@ -5968,7 +6145,7 @@ def optimize(
           input Boolean noClean = false "noClean. <default> = false";
           input String options = "<default>" "options. <default> = \\"\\"";
           input String outputFormat = "mat" "Format for the result file. <default> = \\"mat\\"";
-          input String variableFilter = ".*" "Filter for variables that should store in result file. <default> = \\".*\\"";
+          input String variableFilter = ".*" "Only variables fully matching the regexp are stored in the result file. <default> = \\".*\\"";
           input String cflags = "<default>" "cflags. <default> = \\"\\"";
           input String simflags = "<default>" "simflags. <default> = \\"\\"";
           output String optimizationResults;
@@ -6247,6 +6424,56 @@ def getPackages(
 
 
 @overload
+def getAllSubtypeOf(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    parentClass: Union[TypeName, str, None] = None,
+    qualified: Union[bool, None] = None,
+    includePartial: Union[bool, None] = None,
+    sort: Union[bool, None] = None,
+) -> List[TypeName]:
+    ...
+
+
+@overload
+async def getAllSubtypeOf(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    parentClass: Union[TypeName, str, None] = None,
+    qualified: Union[bool, None] = None,
+    includePartial: Union[bool, None] = None,
+    sort: Union[bool, None] = None,
+) -> List[TypeName]:
+    ...
+
+
+@external("getAllSubtypeOf")
+def getAllSubtypeOf(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    parentClass: Union[TypeName, str, None] = None,
+    qualified: Union[bool, None] = None,
+    includePartial: Union[bool, None] = None,
+    sort: Union[bool, None] = None,
+) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
+    """
+    .. code-block:: modelica
+
+        function getAllSubtypeOf
+          input TypeName className;
+          input TypeName parentClass = $Code(AllLoadedClasses);
+          input Boolean qualified = false;
+          input Boolean includePartial = false;
+          input Boolean sort = false;
+          output TypeName classNames[:];
+        end getAllSubtypeOf;"""
+    return ...  # type: ignore
+
+
+@overload
 def basePlotFunction(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str, None] = None,
@@ -6407,7 +6634,7 @@ def plot(
           input Boolean externalWindow = false "Opens the plot in a new plot window";
           input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
           input String title = "" "This text will be used as the diagram title.";
-          input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+          input String grid = "simple" "Sets the grid for the plot i.e simple, detailed, none.";
           input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
           input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
           input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
@@ -6501,7 +6728,7 @@ def plotAll(
           input Boolean externalWindow = false "Opens the plot in a new plot window";
           input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
           input String title = "" "This text will be used as the diagram title.";
-          input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+          input String grid = "simple" "Sets the grid for the plot i.e simple, detailed, none.";
           input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
           input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
           input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
@@ -6603,10 +6830,10 @@ def plotParametric(
           input Boolean externalWindow = false "Opens the plot in a new plot window";
           input String fileName = "<default>" "The filename containing the variables. <default> will read the last simulation result";
           input String title = "" "This text will be used as the diagram title.";
-          input String grid = "detailed" "Sets the grid for the plot i.e simple, detailed, none.";
+          input String grid = "simple" "Sets the grid for the plot i.e simple, detailed, none.";
           input Boolean logX = false "Determines whether or not the horizontal axis is logarithmically scaled.";
           input Boolean logY = false "Determines whether or not the vertical axis is logarithmically scaled.";
-          input String xLabel = "time" "This text will be used as the horizontal label in the diagram.";
+          input String xLabel = "" "This text will be used as the horizontal label in the diagram.";
           input String yLabel = "" "This text will be used as the vertical label in the diagram.";
           input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
           input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
@@ -6747,6 +6974,7 @@ def filterSimulationResults(
     vars: Sequence[str],
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
+    hintReadAllVars: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -6759,6 +6987,7 @@ async def filterSimulationResults(
     vars: Sequence[str],
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
+    hintReadAllVars: Union[bool, None] = None,
 ) -> bool:
     ...
 
@@ -6774,6 +7003,7 @@ def filterSimulationResults(
     vars: Sequence[str],
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
+    hintReadAllVars: Union[bool, None] = None,
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -6784,6 +7014,7 @@ def filterSimulationResults(
           input String[:] vars;
           input Integer numberOfIntervals = 0 "0=Do not resample";
           input Boolean removeDescription = false;
+          input Boolean hintReadAllVars = true;
           output Boolean success;
         end filterSimulationResults;"""
     return ...  # type: ignore
@@ -7348,38 +7579,6 @@ def getComponentModifierValues(
 
 
 @overload
-def getInstantiatedParametersAndValues(
-    self: SupportsInteractiveProperty[Synchronous], cls: Union[TypeName, str]
-) -> List[str]:
-    ...
-
-
-@overload
-async def getInstantiatedParametersAndValues(
-    self: SupportsInteractiveProperty[Asynchronous], cls: Union[TypeName, str]
-) -> List[str]:
-    ...
-
-
-@external("getInstantiatedParametersAndValues")
-def getInstantiatedParametersAndValues(
-    self: Union[
-        SupportsInteractiveProperty[Synchronous],
-        SupportsInteractiveProperty[Asynchronous],
-    ],
-    cls: Union[TypeName, str],
-) -> Union[List[str], Coroutine[None, None, List[str]]]:
-    """
-    .. code-block:: modelica
-
-        function getInstantiatedParametersAndValues
-          input TypeName cls;
-          output String[:] values;
-        end getInstantiatedParametersAndValues;"""
-    return ...  # type: ignore
-
-
-@overload
 def removeComponentModifiers(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
@@ -7422,6 +7621,252 @@ def removeComponentModifiers(
 
 
 @overload
+def getElementModifierNames(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    elementName: str,
+) -> List[str]:
+    ...
+
+
+@overload
+async def getElementModifierNames(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    elementName: str,
+) -> List[str]:
+    ...
+
+
+@external("getElementModifierNames")
+def getElementModifierNames(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    elementName: str,
+) -> Union[List[str], Coroutine[None, None, List[str]]]:
+    """
+    .. code-block:: modelica
+
+        function getElementModifierNames
+          input TypeName className;
+          input String elementName;
+          output String[:] modifiers;
+        end getElementModifierNames;"""
+    return ...  # type: ignore
+
+
+@overload
+def setComponentModifierValue(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> None:
+    ...
+
+
+@overload
+async def setComponentModifierValue(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> None:
+    ...
+
+
+@external("setComponentModifierValue")
+def setComponentModifierValue(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[None, Coroutine[None, None, None]]:
+    ...
+
+
+@overload
+def getElementModifierValue(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    modifier: Union[TypeName, str],
+) -> str:
+    ...
+
+
+@overload
+async def getElementModifierValue(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    modifier: Union[TypeName, str],
+) -> str:
+    ...
+
+
+@external("getElementModifierValue")
+def getElementModifierValue(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    modifier: Union[TypeName, str],
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function getElementModifierValue
+          input TypeName className;
+          input TypeName modifier;
+          output String value;
+        end getElementModifierValue;"""
+    return ...  # type: ignore
+
+
+@overload
+def getElementModifierValues(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    modifier: Union[TypeName, str],
+) -> str:
+    ...
+
+
+@overload
+async def getElementModifierValues(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    modifier: Union[TypeName, str],
+) -> str:
+    ...
+
+
+@external("getElementModifierValues")
+def getElementModifierValues(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    modifier: Union[TypeName, str],
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function getElementModifierValues
+          input TypeName className;
+          input TypeName modifier;
+          output String value;
+        end getElementModifierValues;"""
+    return ...  # type: ignore
+
+
+@overload
+def removeElementModifiers(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    componentName: str,
+    keepRedeclares: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@overload
+async def removeElementModifiers(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    componentName: str,
+    keepRedeclares: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@external("removeElementModifiers")
+def removeElementModifiers(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    componentName: str,
+    keepRedeclares: Union[bool, None] = None,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function removeElementModifiers
+          input TypeName className;
+          input String componentName;
+          input Boolean keepRedeclares = false;
+          output Boolean success;
+        end removeElementModifiers;"""
+    return ...  # type: ignore
+
+
+@overload
+def getElementAnnotation(
+    self: SupportsInteractiveProperty[Synchronous],
+    elementName: Union[TypeName, str],
+) -> str:
+    ...
+
+
+@overload
+async def getElementAnnotation(
+    self: SupportsInteractiveProperty[Asynchronous],
+    elementName: Union[TypeName, str],
+) -> str:
+    ...
+
+
+@external("getElementAnnotation")
+def getElementAnnotation(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    elementName: Union[TypeName, str],
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function getElementAnnotation
+          input TypeName elementName;
+          output String annotationString;
+        end getElementAnnotation;"""
+    return ...  # type: ignore
+
+
+@overload
+def getInstantiatedParametersAndValues(
+    self: SupportsInteractiveProperty[Synchronous], cls: Union[TypeName, str]
+) -> List[str]:
+    ...
+
+
+@overload
+async def getInstantiatedParametersAndValues(
+    self: SupportsInteractiveProperty[Asynchronous], cls: Union[TypeName, str]
+) -> List[str]:
+    ...
+
+
+@external("getInstantiatedParametersAndValues")
+def getInstantiatedParametersAndValues(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cls: Union[TypeName, str],
+) -> Union[List[str], Coroutine[None, None, List[str]]]:
+    """
+    .. code-block:: modelica
+
+        function getInstantiatedParametersAndValues
+          input TypeName cls;
+          output String[:] values;
+        end getInstantiatedParametersAndValues;"""
+    return ...  # type: ignore
+
+
+@overload
 def removeExtendsModifiers(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
@@ -7460,6 +7905,102 @@ def removeExtendsModifiers(
           input Boolean keepRedeclares = false;
           output Boolean success;
         end removeExtendsModifiers;"""
+    return ...  # type: ignore
+
+
+@overload
+def updateConnectionAnnotation(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    from_: str,
+    to: str,
+    annotate: str,
+) -> bool:
+    ...
+
+
+@overload
+async def updateConnectionAnnotation(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    from_: str,
+    to: str,
+    annotate: str,
+) -> bool:
+    ...
+
+
+@external("updateConnectionAnnotation")
+def updateConnectionAnnotation(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    from_: str,
+    to: str,
+    annotate: str,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function updateConnectionAnnotation
+          input TypeName className;
+          input String from;
+          input String to;
+          input String annotate;
+          output Boolean result;
+        end updateConnectionAnnotation;"""
+    return ...  # type: ignore
+
+
+@overload
+def updateConnectionNames(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    from_: str,
+    to: str,
+    fromNew: str,
+    toNew: str,
+) -> bool:
+    ...
+
+
+@overload
+async def updateConnectionNames(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    from_: str,
+    to: str,
+    fromNew: str,
+    toNew: str,
+) -> bool:
+    ...
+
+
+@external("updateConnectionNames")
+def updateConnectionNames(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    from_: str,
+    to: str,
+    fromNew: str,
+    toNew: str,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function updateConnectionNames
+          input TypeName className;
+          input String from;
+          input String to;
+          input String fromNew;
+          input String toNew;
+          output Boolean result;
+        end updateConnectionNames;"""
     return ...  # type: ignore
 
 
@@ -7532,6 +8073,40 @@ def getNthConnection(
           input Integer index;
           output String[:] result;
         end getNthConnection;"""
+    return ...  # type: ignore
+
+
+@overload
+def getConnectionList(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+) -> List[List[str]]:
+    ...
+
+
+@overload
+async def getConnectionList(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+) -> List[List[str]]:
+    ...
+
+
+@external("getConnectionList")
+def getConnectionList(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+) -> Union[List[List[str]], Coroutine[None, None, List[List[str]]]]:
+    """
+    .. code-block:: modelica
+
+        function getConnectionList
+          input TypeName className;
+          output String[:, :] result;
+        end getConnectionList;"""
     return ...  # type: ignore
 
 
@@ -8218,6 +8793,84 @@ def getImportCount(
 
 
 @overload
+def getMMfileTotalDependencies(
+    self: SupportsInteractiveProperty[Synchronous],
+    in_package_name: str,
+    public_imports_dir: Union[PathLike[str], str],
+) -> List[str]:
+    ...
+
+
+@overload
+async def getMMfileTotalDependencies(
+    self: SupportsInteractiveProperty[Asynchronous],
+    in_package_name: str,
+    public_imports_dir: Union[PathLike[str], str],
+) -> List[str]:
+    ...
+
+
+@external("getMMfileTotalDependencies")
+def getMMfileTotalDependencies(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    in_package_name: str,
+    public_imports_dir: Union[PathLike[str], str],
+) -> Union[List[str], Coroutine[None, None, List[str]]]:
+    """
+    .. code-block:: modelica
+
+        function getMMfileTotalDependencies
+          input String in_package_name;
+          input String public_imports_dir;
+          output String[:] total_pub_imports;
+        end getMMfileTotalDependencies;"""
+    return ...  # type: ignore
+
+
+class Getimportednames(NamedTuple):
+    out_public: List[str]
+    out_protected: List[str]
+
+
+@overload
+def getImportedNames(
+    self: SupportsInteractiveProperty[Synchronous],
+    class_: Union[TypeName, str],
+) -> Getimportednames:
+    ...
+
+
+@overload
+async def getImportedNames(
+    self: SupportsInteractiveProperty[Asynchronous],
+    class_: Union[TypeName, str],
+) -> Getimportednames:
+    ...
+
+
+@external("getImportedNames")
+def getImportedNames(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    class_: Union[TypeName, str],
+) -> Union[Getimportednames, Coroutine[None, None, Getimportednames]]:
+    """
+    .. code-block:: modelica
+
+        function getImportedNames
+          input TypeName class_;
+          output String[:] out_public;
+          output String[:] out_protected;
+        end getImportedNames;"""
+    return ...  # type: ignore
+
+
+@overload
 def getNthImport(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
@@ -8894,6 +9547,74 @@ def isPartial(
 
 
 @overload
+def isReplaceable(
+    self: SupportsInteractiveProperty[Synchronous],
+    element: Union[TypeName, str],
+) -> bool:
+    ...
+
+
+@overload
+async def isReplaceable(
+    self: SupportsInteractiveProperty[Asynchronous],
+    element: Union[TypeName, str],
+) -> bool:
+    ...
+
+
+@external("isReplaceable")
+def isReplaceable(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    element: Union[TypeName, str],
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function isReplaceable
+          input TypeName element;
+          output Boolean b;
+        end isReplaceable;"""
+    return ...  # type: ignore
+
+
+@overload
+def isRedeclare(
+    self: SupportsInteractiveProperty[Synchronous],
+    element: Union[TypeName, str],
+) -> bool:
+    ...
+
+
+@overload
+async def isRedeclare(
+    self: SupportsInteractiveProperty[Asynchronous],
+    element: Union[TypeName, str],
+) -> bool:
+    ...
+
+
+@external("isRedeclare")
+def isRedeclare(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    element: Union[TypeName, str],
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function isRedeclare
+          input TypeName element;
+          output Boolean b;
+        end isRedeclare;"""
+    return ...  # type: ignore
+
+
+@overload
 def isModel(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
 ) -> bool:
@@ -9329,19 +10050,18 @@ def getComponentsTest(
           output Component[:] components;
 
           record Component
-            String className;
-            // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
-            String name;
-            String comment;
-            Boolean isProtected;
-            Boolean isFinal;
-            Boolean isFlow;
-            Boolean isStream;
-            Boolean isReplaceable;
+            String className "the type of the component";
+            String name "the name of the component";
+            String comment "the comment of the component";
+            Boolean isProtected "true if component is protected";
+            Boolean isFinal "true if component is final";
+            Boolean isFlow "true if component is flow";
+            Boolean isStream "true if component is stream";
+            Boolean isReplaceable "true if component is replaceable";
             String variability "'constant', 'parameter', 'discrete', ''";
             String innerOuter "'inner', 'outer', ''";
             String inputOutput "'input', 'output', ''";
-            String dimensions[:];
+            String dimensions[:] "array with the dimensions of the component";
           end Component;
         end getComponentsTest;"""
     return ...  # type: ignore
@@ -9353,19 +10073,18 @@ class Component(record):
     .. code-block:: modelica
 
         record Component
-          String className;
-          // when building record the constructor. Records are allowed to contain only components of basic types, arrays of basic types or other records.
-          String name;
-          String comment;
-          Boolean isProtected;
-          Boolean isFinal;
-          Boolean isFlow;
-          Boolean isStream;
-          Boolean isReplaceable;
+          String className "the type of the component";
+          String name "the name of the component";
+          String comment "the comment of the component";
+          Boolean isProtected "true if component is protected";
+          Boolean isFinal "true if component is final";
+          Boolean isFlow "true if component is flow";
+          Boolean isStream "true if component is stream";
+          Boolean isReplaceable "true if component is replaceable";
           String variability "'constant', 'parameter', 'discrete', ''";
           String innerOuter "'inner', 'outer', ''";
           String inputOutput "'input', 'output', ''";
-          String dimensions[:];
+          String dimensions[:] "array with the dimensions of the component";
         end Component;"""
 
     __omc_class__ = TypeName(
@@ -9780,6 +10499,258 @@ def getAvailableLibraries(
 
 
 @overload
+def getAvailableLibraryVersions(
+    self: SupportsInteractiveProperty[Synchronous],
+    libraryName: Union[TypeName, str],
+) -> List[str]:
+    ...
+
+
+@overload
+async def getAvailableLibraryVersions(
+    self: SupportsInteractiveProperty[Asynchronous],
+    libraryName: Union[TypeName, str],
+) -> List[str]:
+    ...
+
+
+@external("getAvailableLibraryVersions")
+def getAvailableLibraryVersions(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    libraryName: Union[TypeName, str],
+) -> Union[List[str], Coroutine[None, None, List[str]]]:
+    """
+    .. code-block:: modelica
+
+        function getAvailableLibraryVersions
+          input TypeName libraryName;
+          output String[:] librariesAndVersions;
+        end getAvailableLibraryVersions;"""
+    return ...  # type: ignore
+
+
+@overload
+def installPackage(
+    self: SupportsInteractiveProperty[Synchronous],
+    pkg: Union[TypeName, str],
+    version: Union[str, None] = None,
+    exactMatch: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@overload
+async def installPackage(
+    self: SupportsInteractiveProperty[Asynchronous],
+    pkg: Union[TypeName, str],
+    version: Union[str, None] = None,
+    exactMatch: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@external("installPackage")
+def installPackage(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    pkg: Union[TypeName, str],
+    version: Union[str, None] = None,
+    exactMatch: Union[bool, None] = None,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function installPackage
+          input TypeName pkg;
+          input String version = "";
+          input Boolean exactMatch = false;
+          output Boolean result;
+        end installPackage;"""
+    return ...  # type: ignore
+
+
+@overload
+def updatePackageIndex(self: SupportsInteractiveProperty[Synchronous]) -> bool:
+    ...
+
+
+@overload
+async def updatePackageIndex(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> bool:
+    ...
+
+
+@external("updatePackageIndex")
+def updatePackageIndex(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function updatePackageIndex
+          output Boolean result;
+        end updatePackageIndex;"""
+    return ...  # type: ignore
+
+
+@overload
+def upgradeInstalledPackages(
+    self: SupportsInteractiveProperty[Synchronous],
+    installNewestVersions: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@overload
+async def upgradeInstalledPackages(
+    self: SupportsInteractiveProperty[Asynchronous],
+    installNewestVersions: Union[bool, None] = None,
+) -> bool:
+    ...
+
+
+@external("upgradeInstalledPackages")
+def upgradeInstalledPackages(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    installNewestVersions: Union[bool, None] = None,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function upgradeInstalledPackages
+          input Boolean installNewestVersions = true;
+          output Boolean result;
+        end upgradeInstalledPackages;"""
+    return ...  # type: ignore
+
+
+@overload
+def getAvailablePackageVersions(
+    self: SupportsInteractiveProperty[Synchronous],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> List[str]:
+    ...
+
+
+@overload
+async def getAvailablePackageVersions(
+    self: SupportsInteractiveProperty[Asynchronous],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> List[str]:
+    ...
+
+
+@external("getAvailablePackageVersions")
+def getAvailablePackageVersions(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> Union[List[str], Coroutine[None, None, List[str]]]:
+    """
+    .. code-block:: modelica
+
+        function getAvailablePackageVersions
+          input TypeName pkg;
+          input String version;
+          output String[:] withoutConversion;
+        end getAvailablePackageVersions;"""
+    return ...  # type: ignore
+
+
+@overload
+def getAvailablePackageConversionsTo(
+    self: SupportsInteractiveProperty[Synchronous],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> List[str]:
+    ...
+
+
+@overload
+async def getAvailablePackageConversionsTo(
+    self: SupportsInteractiveProperty[Asynchronous],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> List[str]:
+    ...
+
+
+@external("getAvailablePackageConversionsTo")
+def getAvailablePackageConversionsTo(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> Union[List[str], Coroutine[None, None, List[str]]]:
+    """
+    .. code-block:: modelica
+
+        function getAvailablePackageConversionsTo
+          input TypeName pkg;
+          input String version;
+          output String[:] convertsTo;
+        end getAvailablePackageConversionsTo;"""
+    return ...  # type: ignore
+
+
+@overload
+def getAvailablePackageConversionsFrom(
+    self: SupportsInteractiveProperty[Synchronous],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> List[str]:
+    ...
+
+
+@overload
+async def getAvailablePackageConversionsFrom(
+    self: SupportsInteractiveProperty[Asynchronous],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> List[str]:
+    ...
+
+
+@external("getAvailablePackageConversionsFrom")
+def getAvailablePackageConversionsFrom(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    pkg: Union[TypeName, str],
+    version: str,
+) -> Union[List[str], Coroutine[None, None, List[str]]]:
+    """
+    .. code-block:: modelica
+
+        function getAvailablePackageConversionsFrom
+          input TypeName pkg;
+          input String version;
+          output String[:] convertsTo;
+        end getAvailablePackageConversionsFrom;"""
+    return ...  # type: ignore
+
+
+@overload
 def getUses(
     self: SupportsInteractiveProperty[Synchronous], pack: Union[TypeName, str]
 ) -> List[List[str]]:
@@ -9808,6 +10779,47 @@ def getUses(
           input TypeName pack;
           output String[:, :] uses;
         end getUses;"""
+    return ...  # type: ignore
+
+
+class Getconversionsfromversions(NamedTuple):
+    withoutConversion: List[str]
+    withConversion: List[str]
+
+
+@overload
+def getConversionsFromVersions(
+    self: SupportsInteractiveProperty[Synchronous], pack: Union[TypeName, str]
+) -> Getconversionsfromversions:
+    ...
+
+
+@overload
+async def getConversionsFromVersions(
+    self: SupportsInteractiveProperty[Asynchronous], pack: Union[TypeName, str]
+) -> Getconversionsfromversions:
+    ...
+
+
+@external("getConversionsFromVersions")
+def getConversionsFromVersions(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    pack: Union[TypeName, str],
+) -> Union[
+    Getconversionsfromversions,
+    Coroutine[None, None, Getconversionsfromversions],
+]:
+    """
+    .. code-block:: modelica
+
+        function getConversionsFromVersions
+          input TypeName pack;
+          output String[:] withoutConversion;
+          output String[:] withConversion;
+        end getConversionsFromVersions;"""
     return ...  # type: ignore
 
 
@@ -10309,6 +11321,10 @@ class Getclassinformation(NamedTuple):
     preferredView: str
     state: bool
     access: str
+    versionDate: str
+    versionBuild: str
+    dateModified: str
+    revisionId: str
 
 
 @overload
@@ -10350,6 +11366,10 @@ def getClassInformation(
           output String preferredView;
           output Boolean state;
           output String access;
+          output String versionDate;
+          output String versionBuild;
+          output String dateModified;
+          output String revisionId;
         end getClassInformation;"""
     return ...  # type: ignore
 
@@ -10566,6 +11586,3479 @@ def generateScriptingAPI(
     return ...  # type: ignore
 
 
+@overload
+def runConversionScript(
+    self: SupportsInteractiveProperty[Synchronous],
+    packageToConvert: Union[TypeName, str],
+    scriptFile: Union[PathLike[str], str],
+) -> bool:
+    ...
+
+
+@overload
+async def runConversionScript(
+    self: SupportsInteractiveProperty[Asynchronous],
+    packageToConvert: Union[TypeName, str],
+    scriptFile: Union[PathLike[str], str],
+) -> bool:
+    ...
+
+
+@external("runConversionScript")
+def runConversionScript(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    packageToConvert: Union[TypeName, str],
+    scriptFile: Union[PathLike[str], str],
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function runConversionScript
+          input TypeName packageToConvert;
+          input String scriptFile;
+          output Boolean success;
+        end runConversionScript;"""
+    return ...  # type: ignore
+
+
+@overload
+def convertPackageToLibrary(
+    self: SupportsInteractiveProperty[Synchronous],
+    packageToConvert: Union[TypeName, str],
+    library: Union[TypeName, str],
+    libraryVersion: str,
+) -> bool:
+    ...
+
+
+@overload
+async def convertPackageToLibrary(
+    self: SupportsInteractiveProperty[Asynchronous],
+    packageToConvert: Union[TypeName, str],
+    library: Union[TypeName, str],
+    libraryVersion: str,
+) -> bool:
+    ...
+
+
+@external("convertPackageToLibrary")
+def convertPackageToLibrary(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    packageToConvert: Union[TypeName, str],
+    library: Union[TypeName, str],
+    libraryVersion: str,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function convertPackageToLibrary
+          input TypeName packageToConvert;
+          input TypeName library;
+          input String libraryVersion;
+          output Boolean success;
+        end convertPackageToLibrary;"""
+    return ...  # type: ignore
+
+
+@overload
+def getModelInstance(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    modifier: Union[str, None] = None,
+    prettyPrint: Union[bool, None] = None,
+) -> str:
+    ...
+
+
+@overload
+async def getModelInstance(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    modifier: Union[str, None] = None,
+    prettyPrint: Union[bool, None] = None,
+) -> str:
+    ...
+
+
+@external("getModelInstance")
+def getModelInstance(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    modifier: Union[str, None] = None,
+    prettyPrint: Union[bool, None] = None,
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function getModelInstance
+          input TypeName className;
+          input String modifier = "";
+          input Boolean prettyPrint = false;
+          output String result;
+        end getModelInstance;"""
+    return ...  # type: ignore
+
+
+@overload
+def getModelInstanceIcon(
+    self: SupportsInteractiveProperty[Synchronous],
+    className: Union[TypeName, str],
+    prettyPrint: Union[bool, None] = None,
+) -> str:
+    ...
+
+
+@overload
+async def getModelInstanceIcon(
+    self: SupportsInteractiveProperty[Asynchronous],
+    className: Union[TypeName, str],
+    prettyPrint: Union[bool, None] = None,
+) -> str:
+    ...
+
+
+@external("getModelInstanceIcon")
+def getModelInstanceIcon(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    className: Union[TypeName, str],
+    prettyPrint: Union[bool, None] = None,
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function getModelInstanceIcon
+          input TypeName className;
+          input Boolean prettyPrint = false;
+          output String result;
+        end getModelInstanceIcon;"""
+    return ...  # type: ignore
+
+
+@overload
+def modifierToJSON(
+    self: SupportsInteractiveProperty[Synchronous],
+    modifier: str,
+    prettyPrint: Union[bool, None] = None,
+) -> str:
+    ...
+
+
+@overload
+async def modifierToJSON(
+    self: SupportsInteractiveProperty[Asynchronous],
+    modifier: str,
+    prettyPrint: Union[bool, None] = None,
+) -> str:
+    ...
+
+
+@external("modifierToJSON")
+def modifierToJSON(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    modifier: str,
+    prettyPrint: Union[bool, None] = None,
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function modifierToJSON
+          input String modifier;
+          input Boolean prettyPrint = false;
+          output String json;
+        end modifierToJSON;"""
+    return ...  # type: ignore
+
+
+@overload
+def storeAST(self: SupportsInteractiveProperty[Synchronous]) -> int:
+    ...
+
+
+@overload
+async def storeAST(self: SupportsInteractiveProperty[Asynchronous]) -> int:
+    ...
+
+
+@external("storeAST")
+def storeAST(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function storeAST
+          output Integer id;
+        end storeAST;"""
+    return ...  # type: ignore
+
+
+@overload
+def restoreAST(
+    self: SupportsInteractiveProperty[Synchronous], id: int
+) -> bool:
+    ...
+
+
+@overload
+async def restoreAST(
+    self: SupportsInteractiveProperty[Asynchronous], id: int
+) -> bool:
+    ...
+
+
+@external("restoreAST")
+def restoreAST(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    id: int,
+) -> Union[bool, Coroutine[None, None, bool]]:
+    """
+    .. code-block:: modelica
+
+        function restoreAST
+          input Integer id;
+          output Boolean success;
+        end restoreAST;"""
+    return ...  # type: ignore
+
+
+@overload
+def qualifyPath(
+    self: SupportsInteractiveProperty[Synchronous],
+    classPath: Union[TypeName, str],
+    path: Union[TypeName, str],
+) -> TypeName:
+    ...
+
+
+@overload
+async def qualifyPath(
+    self: SupportsInteractiveProperty[Asynchronous],
+    classPath: Union[TypeName, str],
+    path: Union[TypeName, str],
+) -> TypeName:
+    ...
+
+
+@external("qualifyPath")
+def qualifyPath(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    classPath: Union[TypeName, str],
+    path: Union[TypeName, str],
+) -> Union[TypeName, Coroutine[None, None, TypeName]]:
+    """
+    .. code-block:: modelica
+
+        function qualifyPath
+          input TypeName classPath;
+          input TypeName path;
+          output TypeName qualifiedPath;
+        end qualifyPath;"""
+    return ...  # type: ignore
+
+
+class oms_system(enumeration):
+    """
+    .. code-block:: modelica
+
+        type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);
+    """
+
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_system")
+    oms_system_none = 1
+    oms_system_tlm = 2
+    oms_system_wc = 3
+    oms_system_sc = 4
+
+
+class oms_causality(enumeration):
+    """
+    .. code-block:: modelica
+
+        type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);
+    """
+
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_causality")
+    oms_causality_input = 1
+    oms_causality_output = 2
+    oms_causality_parameter = 3
+    oms_causality_bidir = 4
+    oms_causality_undefined = 5
+
+
+class oms_signal_type(enumeration):
+    """
+    .. code-block:: modelica
+
+        type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);
+    """
+
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_signal_type")
+    oms_signal_type_real = 1
+    oms_signal_type_integer = 2
+    oms_signal_type_boolean = 3
+    oms_signal_type_string = 4
+    oms_signal_type_enum = 5
+    oms_signal_type_bus = 6
+
+
+class oms_solver(enumeration):
+    """
+    .. code-block:: modelica
+
+        type oms_solver = enumeration(oms_solver_none, oms_solver_sc_min, oms_solver_sc_explicit_euler, oms_solver_sc_cvode, oms_solver_sc_max, oms_solver_wc_min, oms_solver_wc_ma, oms_solver_wc_mav, oms_solver_wc_assc, oms_solver_wc_mav2, oms_solver_wc_max)///< default
+        ///< Fixed stepsize (default)
+        ///< Adaptive stepsize
+        ///< Adaptive stepsize by @farkasrebus
+        ///< Adaptive stepsize (double-step)
+        ;"""
+
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_solver")
+    oms_solver_none = 1
+    oms_solver_sc_min = 2
+    oms_solver_sc_explicit_euler = 3
+    oms_solver_sc_cvode = 4
+    oms_solver_sc_max = 5
+    oms_solver_wc_min = 6
+    oms_solver_wc_ma = 7
+    oms_solver_wc_mav = 8
+    oms_solver_wc_assc = 9
+    oms_solver_wc_mav2 = 10
+    oms_solver_wc_max = 11
+
+
+class oms_tlm_domain(enumeration):
+    """
+    .. code-block:: modelica
+
+        type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);
+    """
+
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_domain")
+    oms_tlm_domain_input = 1
+    oms_tlm_domain_output = 2
+    oms_tlm_domain_mechanical = 3
+    oms_tlm_domain_rotational = 4
+    oms_tlm_domain_hydraulic = 5
+    oms_tlm_domain_electric = 6
+
+
+class oms_tlm_interpolation(enumeration):
+    """
+    .. code-block:: modelica
+
+        type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);
+    """
+
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_interpolation")
+    oms_tlm_no_interpolation = 1
+    oms_tlm_coarse_grained = 2
+    oms_tlm_fine_grained = 3
+
+
+class oms_fault_type(enumeration):
+    """
+    .. code-block:: modelica
+
+        type oms_fault_type = enumeration(oms_fault_type_bias, oms_fault_type_gain, oms_fault_type_const)///< y = y.$original + faultValue
+        ///< y = y.$original * faultValue
+        ///< y = faultValue
+        ;"""
+
+    __omc_class__ = TypeName("OpenModelica.Scripting.oms_fault_type")
+    oms_fault_type_bias = 1
+    oms_fault_type_gain = 2
+    oms_fault_type_const = 3
+
+
+@overload
+def loadOMSimulator(self: SupportsInteractiveProperty[Synchronous]) -> int:
+    ...
+
+
+@overload
+async def loadOMSimulator(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> int:
+    ...
+
+
+@external("loadOMSimulator")
+def loadOMSimulator(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function loadOMSimulator
+          output Integer status;
+        end loadOMSimulator;"""
+    return ...  # type: ignore
+
+
+@overload
+def unloadOMSimulator(self: SupportsInteractiveProperty[Synchronous]) -> int:
+    ...
+
+
+@overload
+async def unloadOMSimulator(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> int:
+    ...
+
+
+@external("unloadOMSimulator")
+def unloadOMSimulator(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function unloadOMSimulator
+          output Integer status;
+        end unloadOMSimulator;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addBus(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_addBus(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_addBus")
+def oms_addBus(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addBus
+          input String cref;
+          output Integer status;
+        end oms_addBus;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addConnection(
+    self: SupportsInteractiveProperty[Synchronous], crefA: str, crefB: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_addConnection(
+    self: SupportsInteractiveProperty[Asynchronous], crefA: str, crefB: str
+) -> int:
+    ...
+
+
+@external("oms_addConnection")
+def oms_addConnection(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    crefA: str,
+    crefB: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addConnection
+          input String crefA;
+          input String crefB;
+          output Integer status;
+        end oms_addConnection;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addConnector(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    causality: Union[
+        oms_causality,
+        Literal[
+            "oms_causality_input",
+            "oms_causality_output",
+            "oms_causality_parameter",
+            "oms_causality_bidir",
+            "oms_causality_undefined",
+        ],
+    ],
+    type_: Union[
+        oms_signal_type,
+        Literal[
+            "oms_signal_type_real",
+            "oms_signal_type_integer",
+            "oms_signal_type_boolean",
+            "oms_signal_type_string",
+            "oms_signal_type_enum",
+            "oms_signal_type_bus",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@overload
+async def oms_addConnector(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    causality: Union[
+        oms_causality,
+        Literal[
+            "oms_causality_input",
+            "oms_causality_output",
+            "oms_causality_parameter",
+            "oms_causality_bidir",
+            "oms_causality_undefined",
+        ],
+    ],
+    type_: Union[
+        oms_signal_type,
+        Literal[
+            "oms_signal_type_real",
+            "oms_signal_type_integer",
+            "oms_signal_type_boolean",
+            "oms_signal_type_string",
+            "oms_signal_type_enum",
+            "oms_signal_type_bus",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@external("oms_addConnector")
+def oms_addConnector(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    causality: Union[
+        oms_causality,
+        Literal[
+            "oms_causality_input",
+            "oms_causality_output",
+            "oms_causality_parameter",
+            "oms_causality_bidir",
+            "oms_causality_undefined",
+        ],
+    ],
+    type_: Union[
+        oms_signal_type,
+        Literal[
+            "oms_signal_type_real",
+            "oms_signal_type_integer",
+            "oms_signal_type_boolean",
+            "oms_signal_type_string",
+            "oms_signal_type_enum",
+            "oms_signal_type_bus",
+        ],
+    ],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addConnector
+          input String cref;
+          input oms_causality causality;
+          input oms_signal_type type_;
+          output Integer status;
+        end oms_addConnector;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addConnectorToBus(
+    self: SupportsInteractiveProperty[Synchronous],
+    busCref: str,
+    connectorCref: str,
+) -> int:
+    ...
+
+
+@overload
+async def oms_addConnectorToBus(
+    self: SupportsInteractiveProperty[Asynchronous],
+    busCref: str,
+    connectorCref: str,
+) -> int:
+    ...
+
+
+@external("oms_addConnectorToBus")
+def oms_addConnectorToBus(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    busCref: str,
+    connectorCref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addConnectorToBus
+          input String busCref;
+          input String connectorCref;
+          output Integer status;
+        end oms_addConnectorToBus;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addConnectorToTLMBus(
+    self: SupportsInteractiveProperty[Synchronous],
+    busCref: str,
+    connectorCref: str,
+    type_: str,
+) -> int:
+    ...
+
+
+@overload
+async def oms_addConnectorToTLMBus(
+    self: SupportsInteractiveProperty[Asynchronous],
+    busCref: str,
+    connectorCref: str,
+    type_: str,
+) -> int:
+    ...
+
+
+@external("oms_addConnectorToTLMBus")
+def oms_addConnectorToTLMBus(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    busCref: str,
+    connectorCref: str,
+    type_: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addConnectorToTLMBus
+          input String busCref;
+          input String connectorCref;
+          input String type_;
+          output Integer status;
+        end oms_addConnectorToTLMBus;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addDynamicValueIndicator(
+    self: SupportsInteractiveProperty[Synchronous],
+    signal: str,
+    lower: str,
+    upper: str,
+    stepSize: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_addDynamicValueIndicator(
+    self: SupportsInteractiveProperty[Asynchronous],
+    signal: str,
+    lower: str,
+    upper: str,
+    stepSize: float,
+) -> int:
+    ...
+
+
+@external("oms_addDynamicValueIndicator")
+def oms_addDynamicValueIndicator(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    signal: str,
+    lower: str,
+    upper: str,
+    stepSize: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addDynamicValueIndicator
+          input String signal;
+          input String lower;
+          input String upper;
+          input Real stepSize;
+          output Integer status;
+        end oms_addDynamicValueIndicator;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addEventIndicator(
+    self: SupportsInteractiveProperty[Synchronous], signal: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_addEventIndicator(
+    self: SupportsInteractiveProperty[Asynchronous], signal: str
+) -> int:
+    ...
+
+
+@external("oms_addEventIndicator")
+def oms_addEventIndicator(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    signal: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addEventIndicator
+          input String signal;
+          output Integer status;
+        end oms_addEventIndicator;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addExternalModel(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    path: Union[PathLike[str], str],
+    startscript: str,
+) -> int:
+    ...
+
+
+@overload
+async def oms_addExternalModel(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    path: Union[PathLike[str], str],
+    startscript: str,
+) -> int:
+    ...
+
+
+@external("oms_addExternalModel")
+def oms_addExternalModel(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    path: Union[PathLike[str], str],
+    startscript: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addExternalModel
+          input String cref;
+          input String path;
+          input String startscript;
+          output Integer status;
+        end oms_addExternalModel;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addSignalsToResults(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, regex: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_addSignalsToResults(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, regex: str
+) -> int:
+    ...
+
+
+@external("oms_addSignalsToResults")
+def oms_addSignalsToResults(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    regex: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addSignalsToResults
+          input String cref;
+          input String regex;
+          output Integer status;
+        end oms_addSignalsToResults;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addStaticValueIndicator(
+    self: SupportsInteractiveProperty[Synchronous],
+    signal: str,
+    lower: float,
+    upper: float,
+    stepSize: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_addStaticValueIndicator(
+    self: SupportsInteractiveProperty[Asynchronous],
+    signal: str,
+    lower: float,
+    upper: float,
+    stepSize: float,
+) -> int:
+    ...
+
+
+@external("oms_addStaticValueIndicator")
+def oms_addStaticValueIndicator(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    signal: str,
+    lower: float,
+    upper: float,
+    stepSize: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addStaticValueIndicator
+          input String signal;
+          input Real lower;
+          input Real upper;
+          input Real stepSize;
+          output Integer status;
+        end oms_addStaticValueIndicator;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addSubModel(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    fmuPath: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@overload
+async def oms_addSubModel(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    fmuPath: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@external("oms_addSubModel")
+def oms_addSubModel(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    fmuPath: Union[PathLike[str], str],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addSubModel
+          input String cref;
+          input String fmuPath;
+          output Integer status;
+        end oms_addSubModel;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addSystem(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    type_: Union[
+        oms_system,
+        Literal[
+            "oms_system_none",
+            "oms_system_tlm",
+            "oms_system_wc",
+            "oms_system_sc",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@overload
+async def oms_addSystem(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    type_: Union[
+        oms_system,
+        Literal[
+            "oms_system_none",
+            "oms_system_tlm",
+            "oms_system_wc",
+            "oms_system_sc",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@external("oms_addSystem")
+def oms_addSystem(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    type_: Union[
+        oms_system,
+        Literal[
+            "oms_system_none",
+            "oms_system_tlm",
+            "oms_system_wc",
+            "oms_system_sc",
+        ],
+    ],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addSystem
+          input String cref;
+          input oms_system type_;
+          output Integer status;
+        end oms_addSystem;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addTimeIndicator(
+    self: SupportsInteractiveProperty[Synchronous], signal: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_addTimeIndicator(
+    self: SupportsInteractiveProperty[Asynchronous], signal: str
+) -> int:
+    ...
+
+
+@external("oms_addTimeIndicator")
+def oms_addTimeIndicator(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    signal: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addTimeIndicator
+          input String signal;
+          output Integer status;
+        end oms_addTimeIndicator;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addTLMBus(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    domain: Union[
+        oms_tlm_domain,
+        Literal[
+            "oms_tlm_domain_input",
+            "oms_tlm_domain_output",
+            "oms_tlm_domain_mechanical",
+            "oms_tlm_domain_rotational",
+            "oms_tlm_domain_hydraulic",
+            "oms_tlm_domain_electric",
+        ],
+    ],
+    dimensions: int,
+    interpolation: Union[
+        oms_tlm_interpolation,
+        Literal[
+            "oms_tlm_no_interpolation",
+            "oms_tlm_coarse_grained",
+            "oms_tlm_fine_grained",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@overload
+async def oms_addTLMBus(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    domain: Union[
+        oms_tlm_domain,
+        Literal[
+            "oms_tlm_domain_input",
+            "oms_tlm_domain_output",
+            "oms_tlm_domain_mechanical",
+            "oms_tlm_domain_rotational",
+            "oms_tlm_domain_hydraulic",
+            "oms_tlm_domain_electric",
+        ],
+    ],
+    dimensions: int,
+    interpolation: Union[
+        oms_tlm_interpolation,
+        Literal[
+            "oms_tlm_no_interpolation",
+            "oms_tlm_coarse_grained",
+            "oms_tlm_fine_grained",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@external("oms_addTLMBus")
+def oms_addTLMBus(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    domain: Union[
+        oms_tlm_domain,
+        Literal[
+            "oms_tlm_domain_input",
+            "oms_tlm_domain_output",
+            "oms_tlm_domain_mechanical",
+            "oms_tlm_domain_rotational",
+            "oms_tlm_domain_hydraulic",
+            "oms_tlm_domain_electric",
+        ],
+    ],
+    dimensions: int,
+    interpolation: Union[
+        oms_tlm_interpolation,
+        Literal[
+            "oms_tlm_no_interpolation",
+            "oms_tlm_coarse_grained",
+            "oms_tlm_fine_grained",
+        ],
+    ],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addTLMBus
+          input String cref;
+          input oms_tlm_domain domain;
+          input Integer dimensions;
+          input oms_tlm_interpolation interpolation;
+          output Integer status;
+        end oms_addTLMBus;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_addTLMConnection(
+    self: SupportsInteractiveProperty[Synchronous],
+    crefA: str,
+    crefB: str,
+    delay: float,
+    alpha: float,
+    linearimpedance: float,
+    angularimpedance: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_addTLMConnection(
+    self: SupportsInteractiveProperty[Asynchronous],
+    crefA: str,
+    crefB: str,
+    delay: float,
+    alpha: float,
+    linearimpedance: float,
+    angularimpedance: float,
+) -> int:
+    ...
+
+
+@external("oms_addTLMConnection")
+def oms_addTLMConnection(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    crefA: str,
+    crefB: str,
+    delay: float,
+    alpha: float,
+    linearimpedance: float,
+    angularimpedance: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_addTLMConnection
+          input String crefA;
+          input String crefB;
+          input Real delay;
+          input Real alpha;
+          input Real linearimpedance;
+          input Real angularimpedance;
+          output Integer status;
+        end oms_addTLMConnection;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_compareSimulationResults(
+    self: SupportsInteractiveProperty[Synchronous],
+    filenameA: str,
+    filenameB: str,
+    var: str,
+    relTol: float,
+    absTol: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_compareSimulationResults(
+    self: SupportsInteractiveProperty[Asynchronous],
+    filenameA: str,
+    filenameB: str,
+    var: str,
+    relTol: float,
+    absTol: float,
+) -> int:
+    ...
+
+
+@external("oms_compareSimulationResults")
+def oms_compareSimulationResults(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    filenameA: str,
+    filenameB: str,
+    var: str,
+    relTol: float,
+    absTol: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_compareSimulationResults
+          input String filenameA;
+          input String filenameB;
+          input String var;
+          input Real relTol;
+          input Real absTol;
+          output Integer status;
+        end oms_compareSimulationResults;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_copySystem(
+    self: SupportsInteractiveProperty[Synchronous], source: str, target: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_copySystem(
+    self: SupportsInteractiveProperty[Asynchronous], source: str, target: str
+) -> int:
+    ...
+
+
+@external("oms_copySystem")
+def oms_copySystem(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    source: str,
+    target: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_copySystem
+          input String source;
+          input String target;
+          output Integer status;
+        end oms_copySystem;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_delete(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_delete(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_delete")
+def oms_delete(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_delete
+          input String cref;
+          output Integer status;
+        end oms_delete;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_deleteConnection(
+    self: SupportsInteractiveProperty[Synchronous], crefA: str, crefB: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_deleteConnection(
+    self: SupportsInteractiveProperty[Asynchronous], crefA: str, crefB: str
+) -> int:
+    ...
+
+
+@external("oms_deleteConnection")
+def oms_deleteConnection(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    crefA: str,
+    crefB: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_deleteConnection
+          input String crefA;
+          input String crefB;
+          output Integer status;
+        end oms_deleteConnection;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_deleteConnectorFromBus(
+    self: SupportsInteractiveProperty[Synchronous],
+    busCref: str,
+    connectorCref: str,
+) -> int:
+    ...
+
+
+@overload
+async def oms_deleteConnectorFromBus(
+    self: SupportsInteractiveProperty[Asynchronous],
+    busCref: str,
+    connectorCref: str,
+) -> int:
+    ...
+
+
+@external("oms_deleteConnectorFromBus")
+def oms_deleteConnectorFromBus(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    busCref: str,
+    connectorCref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_deleteConnectorFromBus
+          input String busCref;
+          input String connectorCref;
+          output Integer status;
+        end oms_deleteConnectorFromBus;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_deleteConnectorFromTLMBus(
+    self: SupportsInteractiveProperty[Synchronous],
+    busCref: str,
+    connectorCref: str,
+) -> int:
+    ...
+
+
+@overload
+async def oms_deleteConnectorFromTLMBus(
+    self: SupportsInteractiveProperty[Asynchronous],
+    busCref: str,
+    connectorCref: str,
+) -> int:
+    ...
+
+
+@external("oms_deleteConnectorFromTLMBus")
+def oms_deleteConnectorFromTLMBus(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    busCref: str,
+    connectorCref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_deleteConnectorFromTLMBus
+          input String busCref;
+          input String connectorCref;
+          output Integer status;
+        end oms_deleteConnectorFromTLMBus;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_export(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    filename: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@overload
+async def oms_export(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    filename: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@external("oms_export")
+def oms_export(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    filename: Union[PathLike[str], str],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_export
+          input String cref;
+          input String filename;
+          output Integer status;
+        end oms_export;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_exportDependencyGraphs(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    initialization: str,
+    event: str,
+    simulation: str,
+) -> int:
+    ...
+
+
+@overload
+async def oms_exportDependencyGraphs(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    initialization: str,
+    event: str,
+    simulation: str,
+) -> int:
+    ...
+
+
+@external("oms_exportDependencyGraphs")
+def oms_exportDependencyGraphs(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    initialization: str,
+    event: str,
+    simulation: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_exportDependencyGraphs
+          input String cref;
+          input String initialization;
+          input String event;
+          input String simulation;
+          output Integer status;
+        end oms_exportDependencyGraphs;"""
+    return ...  # type: ignore
+
+
+class Oms_exportsnapshot(NamedTuple):
+    contents: str
+    status: int
+
+
+@overload
+def oms_exportSnapshot(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_exportsnapshot:
+    ...
+
+
+@overload
+async def oms_exportSnapshot(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_exportsnapshot:
+    ...
+
+
+@external("oms_exportSnapshot")
+def oms_exportSnapshot(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_exportsnapshot, Coroutine[None, None, Oms_exportsnapshot]]:
+    """
+    .. code-block:: modelica
+
+        function oms_exportSnapshot
+          input String cref;
+          output String contents;
+          output Integer status;
+        end oms_exportSnapshot;"""
+    return ...  # type: ignore
+
+
+class Oms_extractfmikind(NamedTuple):
+    kind: int
+    status: int
+
+
+@overload
+def oms_extractFMIKind(
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
+) -> Oms_extractfmikind:
+    ...
+
+
+@overload
+async def oms_extractFMIKind(
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
+) -> Oms_extractfmikind:
+    ...
+
+
+@external("oms_extractFMIKind")
+def oms_extractFMIKind(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    filename: Union[PathLike[str], str],
+) -> Union[Oms_extractfmikind, Coroutine[None, None, Oms_extractfmikind]]:
+    """
+    .. code-block:: modelica
+
+        function oms_extractFMIKind
+          input String filename;
+          output Integer kind;
+          output Integer status;
+        end oms_extractFMIKind;"""
+    return ...  # type: ignore
+
+
+class Oms_getboolean(NamedTuple):
+    value: bool
+    status: int
+
+
+@overload
+def oms_getBoolean(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getboolean:
+    ...
+
+
+@overload
+async def oms_getBoolean(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getboolean:
+    ...
+
+
+@external("oms_getBoolean")
+def oms_getBoolean(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getboolean, Coroutine[None, None, Oms_getboolean]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getBoolean
+          input String cref;
+          output Boolean value;
+          output Integer status;
+        end oms_getBoolean;"""
+    return ...  # type: ignore
+
+
+class Oms_getfixedstepsize(NamedTuple):
+    stepSize: float
+    status: int
+
+
+@overload
+def oms_getFixedStepSize(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getfixedstepsize:
+    ...
+
+
+@overload
+async def oms_getFixedStepSize(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getfixedstepsize:
+    ...
+
+
+@external("oms_getFixedStepSize")
+def oms_getFixedStepSize(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getfixedstepsize, Coroutine[None, None, Oms_getfixedstepsize]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getFixedStepSize
+          input String cref;
+          output Real stepSize;
+          output Integer status;
+        end oms_getFixedStepSize;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_getInteger(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, value: int
+) -> int:
+    ...
+
+
+@overload
+async def oms_getInteger(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, value: int
+) -> int:
+    ...
+
+
+@external("oms_getInteger")
+def oms_getInteger(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    value: int,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getInteger
+          input String cref;
+          input Integer value;
+          output Integer status;
+        end oms_getInteger;"""
+    return ...  # type: ignore
+
+
+class Oms_getmodelstate(NamedTuple):
+    modelState: int
+    status: int
+
+
+@overload
+def oms_getModelState(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getmodelstate:
+    ...
+
+
+@overload
+async def oms_getModelState(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getmodelstate:
+    ...
+
+
+@external("oms_getModelState")
+def oms_getModelState(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getmodelstate, Coroutine[None, None, Oms_getmodelstate]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getModelState
+          input String cref;
+          output Integer modelState;
+          output Integer status;
+        end oms_getModelState;"""
+    return ...  # type: ignore
+
+
+class Oms_getreal(NamedTuple):
+    value: float
+    status: int
+
+
+@overload
+def oms_getReal(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getreal:
+    ...
+
+
+@overload
+async def oms_getReal(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getreal:
+    ...
+
+
+@external("oms_getReal")
+def oms_getReal(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getreal, Coroutine[None, None, Oms_getreal]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getReal
+          input String cref;
+          output Real value;
+          output Integer status;
+        end oms_getReal;"""
+    return ...  # type: ignore
+
+
+class Oms_getsolver(NamedTuple):
+    solver: int
+    status: int
+
+
+@overload
+def oms_getSolver(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getsolver:
+    ...
+
+
+@overload
+async def oms_getSolver(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getsolver:
+    ...
+
+
+@external("oms_getSolver")
+def oms_getSolver(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getsolver, Coroutine[None, None, Oms_getsolver]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getSolver
+          input String cref;
+          output Integer solver;
+          output Integer status;
+        end oms_getSolver;"""
+    return ...  # type: ignore
+
+
+class Oms_getstarttime(NamedTuple):
+    startTime: float
+    status: int
+
+
+@overload
+def oms_getStartTime(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getstarttime:
+    ...
+
+
+@overload
+async def oms_getStartTime(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getstarttime:
+    ...
+
+
+@external("oms_getStartTime")
+def oms_getStartTime(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getstarttime, Coroutine[None, None, Oms_getstarttime]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getStartTime
+          input String cref;
+          output Real startTime;
+          output Integer status;
+        end oms_getStartTime;"""
+    return ...  # type: ignore
+
+
+class Oms_getstoptime(NamedTuple):
+    stopTime: float
+    status: int
+
+
+@overload
+def oms_getStopTime(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getstoptime:
+    ...
+
+
+@overload
+async def oms_getStopTime(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getstoptime:
+    ...
+
+
+@external("oms_getStopTime")
+def oms_getStopTime(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getstoptime, Coroutine[None, None, Oms_getstoptime]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getStopTime
+          input String cref;
+          output Real stopTime;
+          output Integer status;
+        end oms_getStopTime;"""
+    return ...  # type: ignore
+
+
+class Oms_getsubmodelpath(NamedTuple):
+    path: str
+    status: int
+
+
+@overload
+def oms_getSubModelPath(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getsubmodelpath:
+    ...
+
+
+@overload
+async def oms_getSubModelPath(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getsubmodelpath:
+    ...
+
+
+@external("oms_getSubModelPath")
+def oms_getSubModelPath(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getsubmodelpath, Coroutine[None, None, Oms_getsubmodelpath]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getSubModelPath
+          input String cref;
+          output String path;
+          output Integer status;
+        end oms_getSubModelPath;"""
+    return ...  # type: ignore
+
+
+class Oms_getsystemtype(NamedTuple):
+    type_: int
+    status: int
+
+
+@overload
+def oms_getSystemType(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getsystemtype:
+    ...
+
+
+@overload
+async def oms_getSystemType(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getsystemtype:
+    ...
+
+
+@external("oms_getSystemType")
+def oms_getSystemType(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_getsystemtype, Coroutine[None, None, Oms_getsystemtype]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getSystemType
+          input String cref;
+          output Integer type_;
+          output Integer status;
+        end oms_getSystemType;"""
+    return ...  # type: ignore
+
+
+class Oms_gettolerance(NamedTuple):
+    absoluteTolerance: float
+    relativeTolerance: float
+    status: int
+
+
+@overload
+def oms_getTolerance(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_gettolerance:
+    ...
+
+
+@overload
+async def oms_getTolerance(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_gettolerance:
+    ...
+
+
+@external("oms_getTolerance")
+def oms_getTolerance(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_gettolerance, Coroutine[None, None, Oms_gettolerance]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getTolerance
+          input String cref;
+          output Real absoluteTolerance;
+          output Real relativeTolerance;
+          output Integer status;
+        end oms_getTolerance;"""
+    return ...  # type: ignore
+
+
+class Oms_getvariablestepsize(NamedTuple):
+    initialStepSize: float
+    minimumStepSize: float
+    maximumStepSize: float
+    status: int
+
+
+@overload
+def oms_getVariableStepSize(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_getvariablestepsize:
+    ...
+
+
+@overload
+async def oms_getVariableStepSize(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_getvariablestepsize:
+    ...
+
+
+@external("oms_getVariableStepSize")
+def oms_getVariableStepSize(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[
+    Oms_getvariablestepsize, Coroutine[None, None, Oms_getvariablestepsize]
+]:
+    """
+    .. code-block:: modelica
+
+        function oms_getVariableStepSize
+          input String cref;
+          output Real initialStepSize;
+          output Real minimumStepSize;
+          output Real maximumStepSize;
+          output Integer status;
+        end oms_getVariableStepSize;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_faultInjection(
+    self: SupportsInteractiveProperty[Synchronous],
+    signal: str,
+    faultType: Union[
+        oms_fault_type,
+        Literal[
+            "oms_fault_type_bias",
+            "oms_fault_type_gain",
+            "oms_fault_type_const",
+        ],
+    ],
+    faultValue: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_faultInjection(
+    self: SupportsInteractiveProperty[Asynchronous],
+    signal: str,
+    faultType: Union[
+        oms_fault_type,
+        Literal[
+            "oms_fault_type_bias",
+            "oms_fault_type_gain",
+            "oms_fault_type_const",
+        ],
+    ],
+    faultValue: float,
+) -> int:
+    ...
+
+
+@external("oms_faultInjection")
+def oms_faultInjection(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    signal: str,
+    faultType: Union[
+        oms_fault_type,
+        Literal[
+            "oms_fault_type_bias",
+            "oms_fault_type_gain",
+            "oms_fault_type_const",
+        ],
+    ],
+    faultValue: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_faultInjection
+          input String signal;
+          input oms_fault_type faultType;
+          input Real faultValue;
+          output Integer status;
+        end oms_faultInjection;"""
+    return ...  # type: ignore
+
+
+class Oms_importfile(NamedTuple):
+    cref: str
+    status: int
+
+
+@overload
+def oms_importFile(
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
+) -> Oms_importfile:
+    ...
+
+
+@overload
+async def oms_importFile(
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
+) -> Oms_importfile:
+    ...
+
+
+@external("oms_importFile")
+def oms_importFile(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    filename: Union[PathLike[str], str],
+) -> Union[Oms_importfile, Coroutine[None, None, Oms_importfile]]:
+    """
+    .. code-block:: modelica
+
+        function oms_importFile
+          input String filename;
+          output String cref;
+          output Integer status;
+        end oms_importFile;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_importSnapshot(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, snapshot: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_importSnapshot(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, snapshot: str
+) -> int:
+    ...
+
+
+@external("oms_importSnapshot")
+def oms_importSnapshot(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    snapshot: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_importSnapshot
+          input String cref;
+          input String snapshot;
+          output Integer status;
+        end oms_importSnapshot;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_initialize(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_initialize(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_initialize")
+def oms_initialize(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_initialize
+          input String cref;
+          output Integer status;
+        end oms_initialize;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_instantiate(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_instantiate(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_instantiate")
+def oms_instantiate(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_instantiate
+          input String cref;
+          output Integer status;
+        end oms_instantiate;"""
+    return ...  # type: ignore
+
+
+class Oms_list(NamedTuple):
+    contents: str
+    status: int
+
+
+@overload
+def oms_list(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_list:
+    ...
+
+
+@overload
+async def oms_list(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_list:
+    ...
+
+
+@external("oms_list")
+def oms_list(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[Oms_list, Coroutine[None, None, Oms_list]]:
+    """
+    .. code-block:: modelica
+
+        function oms_list
+          input String cref;
+          output String contents;
+          output Integer status;
+        end oms_list;"""
+    return ...  # type: ignore
+
+
+class Oms_listunconnectedconnectors(NamedTuple):
+    contents: str
+    status: int
+
+
+@overload
+def oms_listUnconnectedConnectors(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> Oms_listunconnectedconnectors:
+    ...
+
+
+@overload
+async def oms_listUnconnectedConnectors(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> Oms_listunconnectedconnectors:
+    ...
+
+
+@external("oms_listUnconnectedConnectors")
+def oms_listUnconnectedConnectors(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[
+    Oms_listunconnectedconnectors,
+    Coroutine[None, None, Oms_listunconnectedconnectors],
+]:
+    """
+    .. code-block:: modelica
+
+        function oms_listUnconnectedConnectors
+          input String cref;
+          output String contents;
+          output Integer status;
+        end oms_listUnconnectedConnectors;"""
+    return ...  # type: ignore
+
+
+class Oms_loadsnapshot(NamedTuple):
+    newCref: str
+    status: int
+
+
+@overload
+def oms_loadSnapshot(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, snapshot: str
+) -> Oms_loadsnapshot:
+    ...
+
+
+@overload
+async def oms_loadSnapshot(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, snapshot: str
+) -> Oms_loadsnapshot:
+    ...
+
+
+@external("oms_loadSnapshot")
+def oms_loadSnapshot(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    snapshot: str,
+) -> Union[Oms_loadsnapshot, Coroutine[None, None, Oms_loadsnapshot]]:
+    """
+    .. code-block:: modelica
+
+        function oms_loadSnapshot
+          input String cref;
+          input String snapshot;
+          output String newCref;
+          output Integer status;
+        end oms_loadSnapshot;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_newModel(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_newModel(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_newModel")
+def oms_newModel(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_newModel
+          input String cref;
+          output Integer status;
+        end oms_newModel;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_removeSignalsFromResults(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, regex: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_removeSignalsFromResults(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, regex: str
+) -> int:
+    ...
+
+
+@external("oms_removeSignalsFromResults")
+def oms_removeSignalsFromResults(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    regex: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_removeSignalsFromResults
+          input String cref;
+          input String regex;
+          output Integer status;
+        end oms_removeSignalsFromResults;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_rename(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, newCref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_rename(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, newCref: str
+) -> int:
+    ...
+
+
+@external("oms_rename")
+def oms_rename(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    newCref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_rename
+          input String cref;
+          input String newCref;
+          output Integer status;
+        end oms_rename;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_reset(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_reset(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_reset")
+def oms_reset(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_reset
+          input String cref;
+          output Integer status;
+        end oms_reset;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_RunFile(
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@overload
+async def oms_RunFile(
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@external("oms_RunFile")
+def oms_RunFile(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    filename: Union[PathLike[str], str],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_RunFile
+          input String filename;
+          output Integer status;
+        end oms_RunFile;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setBoolean(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, value: bool
+) -> int:
+    ...
+
+
+@overload
+async def oms_setBoolean(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, value: bool
+) -> int:
+    ...
+
+
+@external("oms_setBoolean")
+def oms_setBoolean(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    value: bool,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setBoolean
+          input String cref;
+          input Boolean value;
+          output Integer status;
+        end oms_setBoolean;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setCommandLineOption(
+    self: SupportsInteractiveProperty[Synchronous], cmd: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_setCommandLineOption(
+    self: SupportsInteractiveProperty[Asynchronous], cmd: str
+) -> int:
+    ...
+
+
+@external("oms_setCommandLineOption")
+def oms_setCommandLineOption(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cmd: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setCommandLineOption
+          input String cmd;
+          output Integer status;
+        end oms_setCommandLineOption;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setFixedStepSize(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, stepSize: float
+) -> int:
+    ...
+
+
+@overload
+async def oms_setFixedStepSize(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, stepSize: float
+) -> int:
+    ...
+
+
+@external("oms_setFixedStepSize")
+def oms_setFixedStepSize(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    stepSize: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setFixedStepSize
+          input String cref;
+          input Real stepSize;
+          output Integer status;
+        end oms_setFixedStepSize;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setInteger(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, value: int
+) -> int:
+    ...
+
+
+@overload
+async def oms_setInteger(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, value: int
+) -> int:
+    ...
+
+
+@external("oms_setInteger")
+def oms_setInteger(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    value: int,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setInteger
+          input String cref;
+          input Integer value;
+          output Integer status;
+        end oms_setInteger;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setLogFile(
+    self: SupportsInteractiveProperty[Synchronous],
+    filename: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@overload
+async def oms_setLogFile(
+    self: SupportsInteractiveProperty[Asynchronous],
+    filename: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@external("oms_setLogFile")
+def oms_setLogFile(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    filename: Union[PathLike[str], str],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setLogFile
+          input String filename;
+          output Integer status;
+        end oms_setLogFile;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setLoggingInterval(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    loggingInterval: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_setLoggingInterval(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    loggingInterval: float,
+) -> int:
+    ...
+
+
+@external("oms_setLoggingInterval")
+def oms_setLoggingInterval(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    loggingInterval: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setLoggingInterval
+          input String cref;
+          input Real loggingInterval;
+          output Integer status;
+        end oms_setLoggingInterval;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setLoggingLevel(
+    self: SupportsInteractiveProperty[Synchronous], logLevel: int
+) -> int:
+    ...
+
+
+@overload
+async def oms_setLoggingLevel(
+    self: SupportsInteractiveProperty[Asynchronous], logLevel: int
+) -> int:
+    ...
+
+
+@external("oms_setLoggingLevel")
+def oms_setLoggingLevel(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    logLevel: int,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setLoggingLevel
+          input Integer logLevel;
+          output Integer status;
+        end oms_setLoggingLevel;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setReal(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, value: float
+) -> int:
+    ...
+
+
+@overload
+async def oms_setReal(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, value: float
+) -> int:
+    ...
+
+
+@external("oms_setReal")
+def oms_setReal(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    value: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setReal
+          input String cref;
+          input Real value;
+          output Integer status;
+        end oms_setReal;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setRealInputDerivative(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, value: float
+) -> int:
+    ...
+
+
+@overload
+async def oms_setRealInputDerivative(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, value: float
+) -> int:
+    ...
+
+
+@external("oms_setRealInputDerivative")
+def oms_setRealInputDerivative(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    value: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setRealInputDerivative
+          input String cref;
+          input Real value;
+          output Integer status;
+        end oms_setRealInputDerivative;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setResultFile(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    filename: Union[PathLike[str], str],
+    bufferSize: int,
+) -> int:
+    ...
+
+
+@overload
+async def oms_setResultFile(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    filename: Union[PathLike[str], str],
+    bufferSize: int,
+) -> int:
+    ...
+
+
+@external("oms_setResultFile")
+def oms_setResultFile(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    filename: Union[PathLike[str], str],
+    bufferSize: int,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setResultFile
+          input String cref;
+          input String filename;
+          input Integer bufferSize;
+          output Integer status;
+        end oms_setResultFile;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setSignalFilter(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, regex: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_setSignalFilter(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, regex: str
+) -> int:
+    ...
+
+
+@external("oms_setSignalFilter")
+def oms_setSignalFilter(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    regex: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setSignalFilter
+          input String cref;
+          input String regex;
+          output Integer status;
+        end oms_setSignalFilter;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setSolver(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    solver: Union[
+        oms_solver,
+        Literal[
+            "oms_solver_none",
+            "oms_solver_sc_min",
+            "oms_solver_sc_explicit_euler",
+            "oms_solver_sc_cvode",
+            "oms_solver_sc_max",
+            "oms_solver_wc_min",
+            "oms_solver_wc_ma",
+            "oms_solver_wc_mav",
+            "oms_solver_wc_assc",
+            "oms_solver_wc_mav2",
+            "oms_solver_wc_max",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@overload
+async def oms_setSolver(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    solver: Union[
+        oms_solver,
+        Literal[
+            "oms_solver_none",
+            "oms_solver_sc_min",
+            "oms_solver_sc_explicit_euler",
+            "oms_solver_sc_cvode",
+            "oms_solver_sc_max",
+            "oms_solver_wc_min",
+            "oms_solver_wc_ma",
+            "oms_solver_wc_mav",
+            "oms_solver_wc_assc",
+            "oms_solver_wc_mav2",
+            "oms_solver_wc_max",
+        ],
+    ],
+) -> int:
+    ...
+
+
+@external("oms_setSolver")
+def oms_setSolver(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    solver: Union[
+        oms_solver,
+        Literal[
+            "oms_solver_none",
+            "oms_solver_sc_min",
+            "oms_solver_sc_explicit_euler",
+            "oms_solver_sc_cvode",
+            "oms_solver_sc_max",
+            "oms_solver_wc_min",
+            "oms_solver_wc_ma",
+            "oms_solver_wc_mav",
+            "oms_solver_wc_assc",
+            "oms_solver_wc_mav2",
+            "oms_solver_wc_max",
+        ],
+    ],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setSolver
+          input String cref;
+          input oms_solver solver;
+          output Integer status;
+        end oms_setSolver;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setStartTime(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, startTime: float
+) -> int:
+    ...
+
+
+@overload
+async def oms_setStartTime(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    startTime: float,
+) -> int:
+    ...
+
+
+@external("oms_setStartTime")
+def oms_setStartTime(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    startTime: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setStartTime
+          input String cref;
+          input Real startTime;
+          output Integer status;
+        end oms_setStartTime;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setStopTime(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, stopTime: float
+) -> int:
+    ...
+
+
+@overload
+async def oms_setStopTime(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, stopTime: float
+) -> int:
+    ...
+
+
+@external("oms_setStopTime")
+def oms_setStopTime(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    stopTime: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setStopTime
+          input String cref;
+          input Real stopTime;
+          output Integer status;
+        end oms_setStopTime;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setTempDirectory(
+    self: SupportsInteractiveProperty[Synchronous],
+    newTempDir: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@overload
+async def oms_setTempDirectory(
+    self: SupportsInteractiveProperty[Asynchronous],
+    newTempDir: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@external("oms_setTempDirectory")
+def oms_setTempDirectory(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    newTempDir: Union[PathLike[str], str],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setTempDirectory
+          input String newTempDir;
+          output Integer status;
+        end oms_setTempDirectory;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setTLMPositionAndOrientation(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    x1: float,
+    x2: float,
+    x3: float,
+    A11: float,
+    A12: float,
+    A13: float,
+    A21: float,
+    A22: float,
+    A23: float,
+    A31: float,
+    A32: float,
+    A33: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_setTLMPositionAndOrientation(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    x1: float,
+    x2: float,
+    x3: float,
+    A11: float,
+    A12: float,
+    A13: float,
+    A21: float,
+    A22: float,
+    A23: float,
+    A31: float,
+    A32: float,
+    A33: float,
+) -> int:
+    ...
+
+
+@external("oms_setTLMPositionAndOrientation")
+def oms_setTLMPositionAndOrientation(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    x1: float,
+    x2: float,
+    x3: float,
+    A11: float,
+    A12: float,
+    A13: float,
+    A21: float,
+    A22: float,
+    A23: float,
+    A31: float,
+    A32: float,
+    A33: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setTLMPositionAndOrientation
+          input String cref;
+          input Real x1;
+          input Real x2;
+          input Real x3;
+          input Real A11;
+          input Real A12;
+          input Real A13;
+          input Real A21;
+          input Real A22;
+          input Real A23;
+          input Real A31;
+          input Real A32;
+          input Real A33;
+          output Integer status;
+        end oms_setTLMPositionAndOrientation;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setTLMSocketData(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    address: str,
+    managerPort: int,
+    monitorPort: int,
+) -> int:
+    ...
+
+
+@overload
+async def oms_setTLMSocketData(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    address: str,
+    managerPort: int,
+    monitorPort: int,
+) -> int:
+    ...
+
+
+@external("oms_setTLMSocketData")
+def oms_setTLMSocketData(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    address: str,
+    managerPort: int,
+    monitorPort: int,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setTLMSocketData
+          input String cref;
+          input String address;
+          input Integer managerPort;
+          input Integer monitorPort;
+          output Integer status;
+        end oms_setTLMSocketData;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setTolerance(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    absoluteTolerance: float,
+    relativeTolerance: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_setTolerance(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    absoluteTolerance: float,
+    relativeTolerance: float,
+) -> int:
+    ...
+
+
+@external("oms_setTolerance")
+def oms_setTolerance(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    absoluteTolerance: float,
+    relativeTolerance: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setTolerance
+          input String cref;
+          input Real absoluteTolerance;
+          input Real relativeTolerance;
+          output Integer status;
+        end oms_setTolerance;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setVariableStepSize(
+    self: SupportsInteractiveProperty[Synchronous],
+    cref: str,
+    initialStepSize: float,
+    minimumStepSize: float,
+    maximumStepSize: float,
+) -> int:
+    ...
+
+
+@overload
+async def oms_setVariableStepSize(
+    self: SupportsInteractiveProperty[Asynchronous],
+    cref: str,
+    initialStepSize: float,
+    minimumStepSize: float,
+    maximumStepSize: float,
+) -> int:
+    ...
+
+
+@external("oms_setVariableStepSize")
+def oms_setVariableStepSize(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    initialStepSize: float,
+    minimumStepSize: float,
+    maximumStepSize: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setVariableStepSize
+          input String cref;
+          input Real initialStepSize;
+          input Real minimumStepSize;
+          input Real maximumStepSize;
+          output Integer status;
+        end oms_setVariableStepSize;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_setWorkingDirectory(
+    self: SupportsInteractiveProperty[Synchronous],
+    newWorkingDir: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@overload
+async def oms_setWorkingDirectory(
+    self: SupportsInteractiveProperty[Asynchronous],
+    newWorkingDir: Union[PathLike[str], str],
+) -> int:
+    ...
+
+
+@external("oms_setWorkingDirectory")
+def oms_setWorkingDirectory(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    newWorkingDir: Union[PathLike[str], str],
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_setWorkingDirectory
+          input String newWorkingDir;
+          output Integer status;
+        end oms_setWorkingDirectory;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_simulate(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_simulate(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_simulate")
+def oms_simulate(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_simulate
+          input String cref;
+          output Integer status;
+        end oms_simulate;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_stepUntil(
+    self: SupportsInteractiveProperty[Synchronous], cref: str, stopTime: float
+) -> int:
+    ...
+
+
+@overload
+async def oms_stepUntil(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str, stopTime: float
+) -> int:
+    ...
+
+
+@external("oms_stepUntil")
+def oms_stepUntil(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+    stopTime: float,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_stepUntil
+          input String cref;
+          input Real stopTime;
+          output Integer status;
+        end oms_stepUntil;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_terminate(
+    self: SupportsInteractiveProperty[Synchronous], cref: str
+) -> int:
+    ...
+
+
+@overload
+async def oms_terminate(
+    self: SupportsInteractiveProperty[Asynchronous], cref: str
+) -> int:
+    ...
+
+
+@external("oms_terminate")
+def oms_terminate(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ],
+    cref: str,
+) -> Union[int, Coroutine[None, None, int]]:
+    """
+    .. code-block:: modelica
+
+        function oms_terminate
+          input String cref;
+          output Integer status;
+        end oms_terminate;"""
+    return ...  # type: ignore
+
+
+@overload
+def oms_getVersion(self: SupportsInteractiveProperty[Synchronous]) -> str:
+    ...
+
+
+@overload
+async def oms_getVersion(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> str:
+    ...
+
+
+@external("oms_getVersion")
+def oms_getVersion(
+    self: Union[
+        SupportsInteractiveProperty[Synchronous],
+        SupportsInteractiveProperty[Asynchronous],
+    ]
+) -> Union[str, Coroutine[None, None, str]]:
+    """
+    .. code-block:: modelica
+
+        function oms_getVersion
+          output String version;
+        end oms_getVersion;"""
+    return ...  # type: ignore
+
+
 class Experimental(package[T_Calling]):
     __omc_class__ = TypeName("OpenModelica.Scripting.Experimental")
     relocateFunctions = experimental.relocateFunctions
+    toJulia = experimental.toJulia
+    interactiveDumpAbsynToJL = experimental.interactiveDumpAbsynToJL

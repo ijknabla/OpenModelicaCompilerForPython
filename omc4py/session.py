@@ -15,7 +15,7 @@ from .protocol import Asynchronous, HasInteractive, Synchronous, T_Calling
 if TYPE_CHECKING:
     from typing_extensions import Self
 
-    from .v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
+    from .v_1_23.OpenModelica.Scripting import (  # NOTE: update to latest
         ErrorMessage,
     )
 
