@@ -75,7 +75,7 @@ async def test_load_string(
 
 
 @pytest.mark.asyncio
-async def test_reload_model(open_session: OpenSession) -> None:
+async def test_reload_class(open_session: OpenSession) -> None:
     session = open_session().asynchronous
 
     assert not await session.reloadClass("Modelica")
