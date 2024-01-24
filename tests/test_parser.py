@@ -33,7 +33,7 @@ from omc4py.parser import (
     parse,
     unparse,
 )
-from omc4py.v_1_22.OpenModelica.Scripting import (  # NOTE: update to latest
+from omc4py.v_1_23.OpenModelica.Scripting import (  # NOTE: update to latest
     ErrorKind,
     ErrorLevel,
     ErrorMessage,
