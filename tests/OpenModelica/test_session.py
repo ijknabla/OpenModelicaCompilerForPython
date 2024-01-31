@@ -122,3 +122,27 @@ async def test_directory_exists(session: Session) -> None:
         for path in paths:
             path.mkdir()
             await check()
+
+
+@pytest.mark.asyncio
+async def test_simulate(
+    open_session: OpenSession
+) -> None:
+    """
+    omc4py/v_1_22/OpenModelica/Scripting/__init__.py:5505
+    """
+    s = open_session().asynchronous
+    with TemporaryDirectory() as directory:
+        assert await s.loadModel("Modelica")
+        await s.cd(directory)
+        result = await s.simulate("Modelica.Blocks.Examples.PID_Controller")
+        assert isinstance(result.resultFile, str)
+        assert isinstance(result.simulationOptions, str)
+        assert isinstance(result.messages, str)
+        assert isinstance(result.timeFrontend, float)
+        assert isinstance(result.timeBackend, float)
+        assert isinstance(result.timeSimCode, float)
+        assert isinstance(result.timeTemplates, float)
+        assert isinstance(result.timeCompile, float)
+        assert isinstance(result.timeSimulation, float)
+        assert isinstance(result.timeTotal, float)
