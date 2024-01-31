@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- Stop OMCRuntimeError for `OpenModelica.Scripting.simulate`
+
 ## [0.3.1] - 2024-01-24
 
 ### Added
