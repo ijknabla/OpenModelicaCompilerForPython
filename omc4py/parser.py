@@ -42,7 +42,6 @@ from arpeggio import (
     ParserPython,
     PTNodeVisitor,
     RegExMatch,
-    StrMatch,
     Terminal,
     UnorderedGroup,
     ZeroOrMore,
@@ -272,7 +271,9 @@ class _ParametrizedSyntax(Syntax):
         )
 
     def record_rule(self, record_type: type[record]) -> _ParsingExpressionLike:
-        name = StrMatch(f"{record_type.__omc_class__}")
+        parent = record_type.__omc_class__.parent
+        class_name = record_type.__omc_class__.last_identifier
+        name = RegExMatch(rf"({parent}\.)?{class_name}")
         return (
             self.RECORD,
             name,
