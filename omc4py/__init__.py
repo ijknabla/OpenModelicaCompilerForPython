@@ -33,7 +33,7 @@ __license__ = """
  */
 """
 
-__version__ = "0.3.1a0.dev0"
+__version__ = "0.3.1"
 
 __all__ = (
     "AsyncSession",
