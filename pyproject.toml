@@ -40,6 +40,7 @@ importlib-resources = ">=5.10"
 black = ">=23.10.1,<25.0.0"
 isort = "^5.12.0"
 pre-commit = "^3.5"
+ruff = "^0.3.7"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "^1.6.1"
