@@ -16,8 +16,7 @@ def relocateFunctions(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
     names: Sequence[Sequence[str]],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -25,8 +24,7 @@ async def relocateFunctions(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
     names: Sequence[Sequence[str]],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("OpenModelica.Scripting.Experimental.relocateFunctions")

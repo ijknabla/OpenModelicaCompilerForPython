@@ -39,15 +39,13 @@ class FileType(enumeration):
 @overload
 def stat(
     self: SupportsInteractiveProperty[Synchronous], name: str
-) -> FileType:
-    ...
+) -> FileType: ...
 
 
 @overload
 async def stat(
     self: SupportsInteractiveProperty[Asynchronous], name: str
-) -> FileType:
-    ...
+) -> FileType: ...
 
 
 @external("OpenModelica.Scripting.Internal.stat")

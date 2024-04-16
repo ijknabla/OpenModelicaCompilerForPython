@@ -87,15 +87,13 @@ class Interactive(Generic[T_Calling]):
     def evaluate(
         self: Interactive[Synchronous],
         expression: str,
-    ) -> str:
-        ...
+    ) -> str: ...
 
     @overload
     async def evaluate(
         self: Interactive[Asynchronous],
         expression: str,
-    ) -> str:
-        ...
+    ) -> str: ...
 
     def evaluate(self, expression: str) -> str | Coroutine[None, None, str]:
         if self.calling is Calling.synchronous:

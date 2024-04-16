@@ -13,15 +13,13 @@ from omc4py.protocol import (
 @overload
 def readableTime(
     self: SupportsInteractiveProperty[Synchronous], sec: float
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def readableTime(
     self: SupportsInteractiveProperty[Asynchronous], sec: float
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("OpenModelica.Scripting.Internal.Time.readableTime")
@@ -45,15 +43,13 @@ def readableTime(
 @overload
 def timerTick(
     self: SupportsInteractiveProperty[Synchronous], index: int
-) -> None:
-    ...
+) -> None: ...
 
 
 @overload
 async def timerTick(
     self: SupportsInteractiveProperty[Asynchronous], index: int
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("OpenModelica.Scripting.Internal.Time.timerTick")
@@ -75,15 +71,13 @@ def timerTick(
 @overload
 def timerTock(
     self: SupportsInteractiveProperty[Synchronous], index: int
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
 async def timerTock(
     self: SupportsInteractiveProperty[Asynchronous], index: int
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("OpenModelica.Scripting.Internal.Time.timerTock")
@@ -107,15 +101,13 @@ def timerTock(
 @overload
 def timerClear(
     self: SupportsInteractiveProperty[Synchronous], index: int
-) -> None:
-    ...
+) -> None: ...
 
 
 @overload
 async def timerClear(
     self: SupportsInteractiveProperty[Asynchronous], index: int
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("OpenModelica.Scripting.Internal.Time.timerClear")

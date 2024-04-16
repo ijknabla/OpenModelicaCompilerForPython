@@ -24,7 +24,7 @@ _T = TypeVar("_T")
 
 
 def run_decorator(
-    f: Callable[_P, Coroutine[Any, Any, _T]]
+    f: Callable[_P, Coroutine[Any, Any, _T]],
 ) -> Callable[_P, _T]:
     @wraps(f)
     def wrapped(*args: _P.args, **kwargs: _P.kwargs) -> _T:
@@ -34,8 +34,7 @@ def run_decorator(
 
 
 @click.group()
-def main() -> None:
-    ...
+def main() -> None: ...
 
 
 @main.command()
