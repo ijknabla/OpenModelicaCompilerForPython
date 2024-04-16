@@ -269,7 +269,7 @@ Interface = Mapping[AnnotatedVersion, Entities]
 
 
 class InterfaceRoot(RootModel[Interface]):
-    ...
+    pass
 
 
 async def create_interface(n: int, exe: str | None) -> InterfaceRoot:
@@ -428,8 +428,7 @@ async def _docker_run(
     docker_args: Iterable[str],
     args: Iterable[str],
     pipe: Literal[False],
-) -> None:
-    ...
+) -> None: ...
 
 
 @overload
@@ -438,8 +437,7 @@ async def _docker_run(
     docker_args: Iterable[str],
     args: Iterable[str],
     pipe: Literal[True],
-) -> str:
-    ...
+) -> str: ...
 
 
 async def _docker_run(

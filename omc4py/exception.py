@@ -20,7 +20,7 @@ def warn_always(
 class OMCException(
     Exception,
 ):
-    ...
+    pass
 
 
 @warn_always
@@ -28,7 +28,7 @@ class OMCNotification(
     OMCException,
     Warning,
 ):
-    ...
+    pass
 
 
 @warn_always
@@ -36,17 +36,17 @@ class OMCWarning(
     OMCException,
     Warning,
 ):
-    ...
+    pass
 
 
 class OMCError(
     OMCException,
 ):
-    ...
+    pass
 
 
 class OMCRuntimeError(
     OMCException,
     RuntimeError,
 ):
-    ...
+    pass
