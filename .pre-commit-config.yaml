@@ -26,11 +26,6 @@ repos:
         -   --fix
         language: system
         files: \.pyi?$
-    -   id: flake8
-        name: Check python code by flake8
-        entry: pflake8
-        language: system
-        files: \.pyi?$
     -   id: mypy
         name: Check python code by mypy
         entry: mypy
