@@ -37,9 +37,8 @@ frozendict = "^2.3.8"
 importlib-resources = ">=5.10"
 
 [tool.poetry.group.dev.dependencies]
-black = ">=23.10.1,<25.0.0"
-isort = "^5.12.0"
 pre-commit = "^3.5"
+ruff = "^0.3.7"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "^1.6.1"
@@ -63,9 +62,6 @@ source = "init"
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
-[tool.black]
-line-length = 79
-
 [tool.coverage.report]
 exclude_lines = [
     "^\\s*class \\w+\\(Protocol",
@@ -83,6 +79,15 @@ per-file-ignores = """
     omc4py/v_*_*/:E501,
 """
 
-[tool.isort]
-profile = "black"
-line_length = 79
+[tool.ruff]
+line-length = 79
+
+[tool.ruff.lint]
+select = [
+    "F",
+    "E",
+    "I",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"omc4py/v_*_*/" = ["E501"]

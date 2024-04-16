@@ -15,13 +15,11 @@ from . import Nested as nested
 
 
 @overload
-def level(self: SupportsInteractiveProperty[Synchronous]) -> int:
-    ...
+def level(self: SupportsInteractiveProperty[Synchronous]) -> int: ...
 
 
 @overload
-async def level(self: SupportsInteractiveProperty[Asynchronous]) -> int:
-    ...
+async def level(self: SupportsInteractiveProperty[Asynchronous]) -> int: ...
 
 
 @external("Nested.level")
@@ -29,7 +27,7 @@ def level(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     return ...  # type: ignore
 

@@ -16,8 +16,7 @@ def relocateFunctions(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
     names: Sequence[Sequence[str]],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -25,8 +24,7 @@ async def relocateFunctions(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
     names: Sequence[Sequence[str]],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("OpenModelica.Scripting.Experimental.relocateFunctions")
@@ -50,13 +48,11 @@ def relocateFunctions(
 
 
 @overload
-def toJulia(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def toJulia(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
-async def toJulia(self: SupportsInteractiveProperty[Asynchronous]) -> str:
-    ...
+async def toJulia(self: SupportsInteractiveProperty[Asynchronous]) -> str: ...
 
 
 @external("OpenModelica.Scripting.Experimental.toJulia")
@@ -64,7 +60,7 @@ def toJulia(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -78,15 +74,13 @@ def toJulia(
 @overload
 def interactiveDumpAbsynToJL(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def interactiveDumpAbsynToJL(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("OpenModelica.Scripting.Experimental.interactiveDumpAbsynToJL")
@@ -94,7 +88,7 @@ def interactiveDumpAbsynToJL(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica

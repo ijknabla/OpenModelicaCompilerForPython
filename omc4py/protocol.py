@@ -22,20 +22,16 @@ AnyStr = TypeVar("AnyStr", str, bytes, covariant=True)
 
 @runtime_checkable
 class PathLike(Protocol[AnyStr]):
-    def __fspath__(self) -> AnyStr:
-        ...
+    def __fspath__(self) -> AnyStr: ...
 
 
 @runtime_checkable
 class SupportsClose(Protocol):
-    def close(self) -> None:
-        ...
+    def close(self) -> None: ...
 
-    def __enter__(self) -> Self:
-        ...
+    def __enter__(self) -> Self: ...
 
-    def __exit__(self, *exc_info: Any) -> None:
-        ...
+    def __exit__(self, *exc_info: Any) -> None: ...
 
 
 class Calling(enum.Enum):
@@ -60,35 +56,29 @@ T_Calling = TypeVar(
 @runtime_checkable
 class SupportsInteractive(SupportsClose, Hashable, Protocol[T_Calling]):
     @property
-    def calling(self) -> T_Calling:
-        ...
+    def calling(self) -> T_Calling: ...
 
     @property
-    def synchronous(self) -> SupportsInteractive[Synchronous]:
-        ...
+    def synchronous(self) -> SupportsInteractive[Synchronous]: ...
 
     @property
-    def asynchronous(self) -> SupportsInteractive[Asynchronous]:
-        ...
+    def asynchronous(self) -> SupportsInteractive[Asynchronous]: ...
 
     @overload
     def evaluate(
         self: SupportsInteractive[Synchronous], expression: str
-    ) -> str:
-        ...
+    ) -> str: ...
 
     @overload
     async def evaluate(
         self: SupportsInteractive[Asynchronous], expression: str
-    ) -> str:
-        ...
+    ) -> str: ...
 
 
 @runtime_checkable
 class SupportsInteractiveProperty(Protocol[T_Calling]):
     @property
-    def __omc_interactive__(self) -> SupportsInteractive[T_Calling]:
-        ...
+    def __omc_interactive__(self) -> SupportsInteractive[T_Calling]: ...
 
 
 @dataclass(frozen=True)

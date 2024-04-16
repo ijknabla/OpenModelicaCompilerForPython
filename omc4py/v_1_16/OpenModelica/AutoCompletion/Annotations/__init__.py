@@ -106,8 +106,7 @@ class Access(enumeration):
     """
     .. code-block:: modelica
 
-        type Access = enumeration(hide, icon, documentation, diagram, nonPackageText, nonPackageDuplicate, packageText, packageDuplicate);
-    """
+        type Access = enumeration(hide, icon, documentation, diagram, nonPackageText, nonPackageDuplicate, packageText, packageDuplicate);"""
 
     __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.Access")
     hide = 1

@@ -155,19 +155,23 @@ class PackageFactory(HasTypeName):
     @staticmethod
     async def _lint_python_code(path: Path) -> None:
         async with AsyncExitStack() as stack:
-            isort = await stack.enter_async_context(
+            ruff_check = await stack.enter_async_context(
                 ensure_terminate(
-                    await create_subprocess_exec("isort", f"{path}")
+                    await create_subprocess_exec(
+                        "ruff", "check", "--fix", "-v", f"{path}"
+                    )
                 )
             )
-            await isort.wait()
+            await ruff_check.wait()
 
-            black = await stack.enter_async_context(
+            ruff_format = await stack.enter_async_context(
                 ensure_terminate(
-                    await create_subprocess_exec("black", f"{path}")
+                    await create_subprocess_exec(
+                        "ruff", "format", "-v", f"{path}"
+                    )
                 )
             )
-            await black.wait()
+            await ruff_format.wait()
 
     def _iter_module_imports(self) -> Generator[ImportFrom, None, None]:
         yield ImportFrom(module="__future__", name="annotations", asname="_")
@@ -762,13 +766,20 @@ class TypeKind(enum.Enum):
                 else:
                     return TypeKind.string
             case (
-                "OpenModelica.$Code.TypeName" | "OpenModelica.$Code.TypeNames"
-            ), None:
+                (
+                    "OpenModelica.$Code.TypeName"
+                    | "OpenModelica.$Code.TypeNames"
+                ),
+                None,
+            ):
                 return TypeKind.typename
             case (
-                "OpenModelica.$Code.VariableName"
-                | "OpenModelica.$Code.VariableNames"
-            ), None:
+                (
+                    "OpenModelica.$Code.VariableName"
+                    | "OpenModelica.$Code.VariableNames"
+                ),
+                None,
+            ):
                 return TypeKind.variablename
 
         raise ValueError(typename, entity)
@@ -808,7 +819,8 @@ class BuiltinTypeHint:
                 (TypeKind.string, _)
                 | (
                     TypeKind.path,
-                    "output" | "unspecified",
+                    "output"
+                    | "unspecified",
                 )
             ):
                 return ast.Name(id="str", ctx=ast.Load())
@@ -963,10 +975,13 @@ class Component:
             }:
                 ndim += 1
 
-            yield variablename, cls(
-                type_hint=type_hint,
-                ndim=ndim,
-                is_optional=variablename in optionals,
+            yield (
+                variablename,
+                cls(
+                    type_hint=type_hint,
+                    ndim=ndim,
+                    is_optional=variablename in optionals,
+                ),
             )
 
     @property
@@ -1079,8 +1094,11 @@ def _patch_check_settings(
                 {REMOVED: ADDED}.get(k, k): v
                 for k, v in entity.components.items()
             }
-            yield typename, entity.model_copy(
-                update={"code": code, "components": components}
+            yield (
+                typename,
+                entity.model_copy(
+                    update={"code": code, "components": components}
+                ),
             )
         else:
             yield typename, entity

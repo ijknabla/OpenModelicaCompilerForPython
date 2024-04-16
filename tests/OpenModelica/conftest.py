@@ -19,7 +19,7 @@ def strings() -> list[tuple[TypeName, str]]:
 
 @pytest.fixture
 def paths(
-    strings: list[tuple[TypeName, str]]
+    strings: list[tuple[TypeName, str]],
 ) -> Generator[list[tuple[TypeName, Path]], None, None]:
     with TemporaryDirectory() as _directory:
         directory = Path(_directory)

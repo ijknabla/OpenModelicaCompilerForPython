@@ -138,7 +138,7 @@ class _Component(TypedDict):
 
 @PlainValidator
 def _components_validator(
-    components: Mapping[Any, Any]
+    components: Mapping[Any, Any],
 ) -> frozendict[VariableName, Component]:
     return frozendict(
         (VariableName(k), Component.model_validate(v))
@@ -269,7 +269,7 @@ Interface = Mapping[AnnotatedVersion, Entities]
 
 
 class InterfaceRoot(RootModel[Interface]):
-    ...
+    pass
 
 
 async def create_interface(n: int, exe: str | None) -> InterfaceRoot:
@@ -428,8 +428,7 @@ async def _docker_run(
     docker_args: Iterable[str],
     args: Iterable[str],
     pipe: Literal[False],
-) -> None:
-    ...
+) -> None: ...
 
 
 @overload
@@ -438,8 +437,7 @@ async def _docker_run(
     docker_args: Iterable[str],
     args: Iterable[str],
     pipe: Literal[True],
-) -> str:
-    ...
+) -> str: ...
 
 
 async def _docker_run(
@@ -639,8 +637,11 @@ async def _iter_components(
     with suppress(exception.OMCError):
         for component_tuple in await session.getComponents(typename):
             if component_tuple.protected == "public":
-                yield component_tuple.name, Component(
-                    className=component_tuple.className,
-                    inputOutput=component_tuple.inputOutput,
-                    dimensions=tuple(component_tuple.dimensions),
+                yield (
+                    component_tuple.name,
+                    Component(
+                        className=component_tuple.className,
+                        inputOutput=component_tuple.inputOutput,
+                        dimensions=tuple(component_tuple.dimensions),
+                    ),
                 )
