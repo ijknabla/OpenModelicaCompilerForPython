@@ -72,10 +72,12 @@ if TYPE_CHECKING:
         v_1_21,
         v_1_22,
         v_1_23,
+        v_1_24,
     )
 
     GenericSession = Union[
-        v_1_23.GenericSession[T_Calling],  # NOTE: update to latest
+        v_1_24.GenericSession[T_Calling],  # NOTE: update to latest
+        v_1_23.GenericSession[T_Calling],
         v_1_22.GenericSession[T_Calling],
         v_1_21.GenericSession[T_Calling],
         v_1_20.GenericSession[T_Calling],
@@ -88,10 +90,11 @@ if TYPE_CHECKING:
         v_1_13.GenericSession[T_Calling],
     ]
 
+    _1_26 = tuple[Literal[1], Literal[26]]
     _1_25 = tuple[Literal[1], Literal[25]]
-    _1_24 = tuple[Literal[1], Literal[24]]
 
-    _1_23 = tuple[Literal[1], Literal[23]]  # NOTE: update to latest
+    _1_24 = tuple[Literal[1], Literal[24]]  # NOTE: update to latest
+    _1_23 = tuple[Literal[1], Literal[23]]
     _1_22 = tuple[Literal[1], Literal[22]]
     _1_21 = tuple[Literal[1], Literal[21]]
     _1_20 = tuple[Literal[1], Literal[20]]
@@ -113,9 +116,11 @@ AsyncSession = GenericSession[Asynchronous]
 def _select_session_type(
     version: Tuple[int, int],
 ) -> Tuple[type[BasicSession[Synchronous]], type[BasicSession[Asynchronous]]]:
-    if False:
-        pass
-    elif (1, 23) <= version:  # NOTE: update to latest
+    if (1, 24) <= version:  # NOTE: update to latest
+        from . import v_1_24
+
+        return v_1_24.Session, v_1_24.AsyncSession
+    elif (1, 23) <= version:
         from . import v_1_23
 
         return v_1_23.Session, v_1_23.AsyncSession
@@ -161,12 +166,39 @@ def _select_session_type(
         return v_1_13.Session, v_1_13.AsyncSession
 
 
-# v1.23  NOTE: update to latest
+# v1.24  NOTE: update to latest
 @overload
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: _1_23 | _1_24 | _1_25,
+    version: _1_24 | _1_25 | _1_26,
+    asyncio: Literal[False] = False,
+) -> v_1_24.Session: ...
+
+
+@overload
+def open_session(
+    omc: str | PathLike[str] | None = None,
+    *,
+    version: _1_24 | _1_25 | _1_26,
+    asyncio: Literal[True],
+) -> v_1_24.AsyncSession: ...
+
+
+@overload
+def open_session(
+    omc: SupportsInteractive[T_Calling],
+    *,
+    version: _1_24 | _1_25 | _1_26,
+) -> v_1_24.GenericSession[T_Calling]: ...
+
+
+# v1.23
+@overload
+def open_session(
+    omc: str | PathLike[str] | None = None,
+    *,
+    version: _1_23,
     asyncio: Literal[False] = False,
 ) -> v_1_23.Session: ...
 
@@ -175,7 +207,7 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | None = None,
     *,
-    version: _1_23 | _1_24 | _1_25,
+    version: _1_23,
     asyncio: Literal[True],
 ) -> v_1_23.AsyncSession: ...
 
@@ -184,7 +216,7 @@ def open_session(
 def open_session(
     omc: SupportsInteractive[T_Calling],
     *,
-    version: _1_23 | _1_24 | _1_25,
+    version: _1_23,
 ) -> v_1_23.GenericSession[T_Calling]: ...
 
 
