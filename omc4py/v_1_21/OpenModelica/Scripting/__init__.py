@@ -2869,8 +2869,7 @@ class ErrorKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");
-    """
+        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorKind")
     syntax = 1
@@ -2891,8 +2890,7 @@ class ErrorLevel(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorLevel = enumeration(internal, notification, warning, error);
-    """
+        type ErrorLevel = enumeration(internal, notification, warning, error);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorLevel")
     internal = 1
@@ -4425,8 +4423,7 @@ class ExportKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");
-    """
+        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ExportKind")
     Absyn = 1
@@ -4535,8 +4532,7 @@ class DiffFormat(enumeration):
     """
     .. code-block:: modelica
 
-        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");
-    """
+        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.DiffFormat")
     plain = 1
@@ -11133,8 +11129,7 @@ class oms_system(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);
-    """
+        type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_system")
     oms_system_none = 1
@@ -11147,8 +11142,7 @@ class oms_causality(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);
-    """
+        type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_causality")
     oms_causality_input = 1
@@ -11162,8 +11156,7 @@ class oms_signal_type(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);
-    """
+        type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_signal_type")
     oms_signal_type_real = 1
@@ -11203,8 +11196,7 @@ class oms_tlm_domain(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);
-    """
+        type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_domain")
     oms_tlm_domain_input = 1
@@ -11219,8 +11211,7 @@ class oms_tlm_interpolation(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);
-    """
+        type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_interpolation")
     oms_tlm_no_interpolation = 1

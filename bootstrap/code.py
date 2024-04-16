@@ -155,19 +155,23 @@ class PackageFactory(HasTypeName):
     @staticmethod
     async def _lint_python_code(path: Path) -> None:
         async with AsyncExitStack() as stack:
-            isort = await stack.enter_async_context(
+            ruff_check = await stack.enter_async_context(
                 ensure_terminate(
-                    await create_subprocess_exec("isort", f"{path}")
+                    await create_subprocess_exec(
+                        "ruff", "check", "--fix", "-v", f"{path}"
+                    )
                 )
             )
-            await isort.wait()
+            await ruff_check.wait()
 
-            black = await stack.enter_async_context(
+            ruff_format = await stack.enter_async_context(
                 ensure_terminate(
-                    await create_subprocess_exec("black", f"{path}")
+                    await create_subprocess_exec(
+                        "ruff", "format", "-v", f"{path}"
+                    )
                 )
             )
-            await black.wait()
+            await ruff_format.wait()
 
     def _iter_module_imports(self) -> Generator[ImportFrom, None, None]:
         yield ImportFrom(module="__future__", name="annotations", asname="_")

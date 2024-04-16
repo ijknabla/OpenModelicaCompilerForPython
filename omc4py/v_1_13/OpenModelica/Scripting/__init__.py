@@ -2669,8 +2669,7 @@ class ErrorKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");
-    """
+        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorKind")
     syntax = 1
@@ -4255,8 +4254,7 @@ class ExportKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");
-    """
+        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ExportKind")
     Absyn = 1
@@ -4361,8 +4359,7 @@ class DiffFormat(enumeration):
     """
     .. code-block:: modelica
 
-        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");
-    """
+        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.DiffFormat")
     plain = 1

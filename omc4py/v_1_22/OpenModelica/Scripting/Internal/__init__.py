@@ -26,8 +26,7 @@ class FileType(enumeration):
     """
     .. code-block:: modelica
 
-        type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);
-    """
+        type FileType = enumeration(NoFile, RegularFile, Directory, SpecialFile);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.Internal.FileType")
     NoFile = 1
