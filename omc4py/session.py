@@ -15,7 +15,7 @@ from .protocol import Asynchronous, HasInteractive, Synchronous, T_Calling
 if TYPE_CHECKING:
     from typing_extensions import Self
 
-    from .v_1_23.OpenModelica.Scripting import (  # NOTE: update to latest
+    from .v_1_24.OpenModelica.Scripting import (  # NOTE: update to latest
         ErrorMessage,
     )
 
@@ -52,15 +52,13 @@ class BasicSession(HasInteractive[T_Calling]):
     def getComponents(
         self: BasicSession[Synchronous],
         name: Union[TypeName, str],
-    ) -> List[Component]:
-        ...
+    ) -> List[Component]: ...
 
     @overload
     async def getComponents(
         self: BasicSession[Asynchronous],
         name: Union[TypeName, str],
-    ) -> List[Component]:
-        ...
+    ) -> List[Component]: ...
 
     @external("getComponents")
     def getComponents(
@@ -73,15 +71,13 @@ class BasicSession(HasInteractive[T_Calling]):
     def getMessagesStringInternal(
         self: BasicSession[Synchronous],
         unique: Union[bool, None] = None,
-    ) -> List[Any]:
-        ...
+    ) -> List[Any]: ...
 
     @overload
     async def getMessagesStringInternal(
         self: BasicSession[Asynchronous],
         unique: Union[bool, None] = None,
-    ) -> List[Any]:
-        ...
+    ) -> List[Any]: ...
 
     def getMessagesStringInternal(
         self: BasicSession[Asynchronous],
@@ -90,12 +86,10 @@ class BasicSession(HasInteractive[T_Calling]):
         raise NotImplementedError()
 
     @overload
-    def check(self: BasicSession[Synchronous]) -> None:
-        ...
+    def check(self: BasicSession[Synchronous]) -> None: ...
 
     @overload
-    async def check(self: BasicSession[Asynchronous]) -> None:
-        ...
+    async def check(self: BasicSession[Asynchronous]) -> None: ...
 
     def check(self) -> None | Coroutine[None, None, None]:
         return fmap(

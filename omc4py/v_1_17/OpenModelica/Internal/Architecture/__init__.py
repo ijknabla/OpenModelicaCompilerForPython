@@ -11,13 +11,11 @@ from omc4py.protocol import (
 
 
 @overload
-def numBits(self: SupportsInteractiveProperty[Synchronous]) -> int:
-    ...
+def numBits(self: SupportsInteractiveProperty[Synchronous]) -> int: ...
 
 
 @overload
-async def numBits(self: SupportsInteractiveProperty[Asynchronous]) -> int:
-    ...
+async def numBits(self: SupportsInteractiveProperty[Asynchronous]) -> int: ...
 
 
 @external("OpenModelica.Internal.Architecture.numBits")
@@ -25,7 +23,7 @@ def numBits(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -37,13 +35,13 @@ def numBits(
 
 
 @overload
-def integerMax(self: SupportsInteractiveProperty[Synchronous]) -> int:
-    ...
+def integerMax(self: SupportsInteractiveProperty[Synchronous]) -> int: ...
 
 
 @overload
-async def integerMax(self: SupportsInteractiveProperty[Asynchronous]) -> int:
-    ...
+async def integerMax(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> int: ...
 
 
 @external("OpenModelica.Internal.Architecture.integerMax")
@@ -51,7 +49,7 @@ def integerMax(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica

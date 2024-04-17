@@ -15,15 +15,15 @@ from . import Architecture as architecture
 
 
 @overload
-def ClockConstructor(self: SupportsInteractiveProperty[Synchronous]) -> None:
-    ...
+def ClockConstructor(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> None: ...
 
 
 @overload
 async def ClockConstructor(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("OpenModelica.Internal.ClockConstructor")
@@ -31,9 +31,8 @@ def ClockConstructor(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
-) -> Union[None, Coroutine[None, None, None]]:
-    ...
+    ],
+) -> Union[None, Coroutine[None, None, None]]: ...
 
 
 @overload
@@ -41,8 +40,7 @@ def delay2(
     self: SupportsInteractiveProperty[Synchronous],
     expr: float,
     delayTime: float,
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
@@ -50,8 +48,7 @@ async def delay2(
     self: SupportsInteractiveProperty[Asynchronous],
     expr: float,
     delayTime: float,
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("OpenModelica.Internal.delay2")
@@ -80,8 +77,7 @@ def delay3(
     expr: float,
     delayTime: float,
     delayMax: float,
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
@@ -90,8 +86,7 @@ async def delay3(
     expr: float,
     delayTime: float,
     delayMax: float,
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("OpenModelica.Internal.delay3")
@@ -116,15 +111,13 @@ def delay3(
 
 
 @overload
-def intAbs(self: SupportsInteractiveProperty[Synchronous], v: int) -> int:
-    ...
+def intAbs(self: SupportsInteractiveProperty[Synchronous], v: int) -> int: ...
 
 
 @overload
 async def intAbs(
     self: SupportsInteractiveProperty[Asynchronous], v: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("OpenModelica.Internal.intAbs")
@@ -146,15 +139,15 @@ def intAbs(
 
 
 @overload
-def realAbs(self: SupportsInteractiveProperty[Synchronous], v: float) -> float:
-    ...
+def realAbs(
+    self: SupportsInteractiveProperty[Synchronous], v: float
+) -> float: ...
 
 
 @overload
 async def realAbs(
     self: SupportsInteractiveProperty[Asynchronous], v: float
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("OpenModelica.Internal.realAbs")
@@ -178,15 +171,13 @@ def realAbs(
 @overload
 def intDiv(
     self: SupportsInteractiveProperty[Synchronous], x: int, y: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def intDiv(
     self: SupportsInteractiveProperty[Asynchronous], x: int, y: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("OpenModelica.Internal.intDiv")
@@ -212,15 +203,13 @@ def intDiv(
 @overload
 def realDiv(
     self: SupportsInteractiveProperty[Synchronous], x: float, y: float
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
 async def realDiv(
     self: SupportsInteractiveProperty[Asynchronous], x: float, y: float
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("OpenModelica.Internal.realDiv")
@@ -246,15 +235,13 @@ def realDiv(
 @overload
 def intMod(
     self: SupportsInteractiveProperty[Synchronous], x: int, y: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def intMod(
     self: SupportsInteractiveProperty[Asynchronous], x: int, y: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("OpenModelica.Internal.intMod")
@@ -280,15 +267,13 @@ def intMod(
 @overload
 def realMod(
     self: SupportsInteractiveProperty[Synchronous], x: float, y: float
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
 async def realMod(
     self: SupportsInteractiveProperty[Asynchronous], x: float, y: float
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("OpenModelica.Internal.realMod")
@@ -314,15 +299,13 @@ def realMod(
 @overload
 def intRem(
     self: SupportsInteractiveProperty[Synchronous], x: int, y: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def intRem(
     self: SupportsInteractiveProperty[Asynchronous], x: int, y: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("OpenModelica.Internal.intRem")
@@ -348,15 +331,13 @@ def intRem(
 @overload
 def realRem(
     self: SupportsInteractiveProperty[Synchronous], x: float, y: float
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
 async def realRem(
     self: SupportsInteractiveProperty[Asynchronous], x: float, y: float
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("OpenModelica.Internal.realRem")

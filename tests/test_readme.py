@@ -92,8 +92,7 @@ async def test_readme(
 
     if TYPE_CHECKING:
 
-        async def main() -> None:
-            ...
+        async def main() -> None: ...
 
     else:
         _namespace = {"exit": lambda: None}

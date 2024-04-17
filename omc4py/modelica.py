@@ -17,7 +17,7 @@ from typing import (
 )
 
 if TYPE_CHECKING:
-    from typing_extensions import ParamSpec, Concatenate
+    from typing_extensions import Concatenate, ParamSpec
 
 from .algorithm import fmap
 from .openmodelica import TypeName

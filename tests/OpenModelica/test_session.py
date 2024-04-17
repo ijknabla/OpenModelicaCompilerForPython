@@ -125,9 +125,7 @@ async def test_directory_exists(session: Session) -> None:
 
 
 @pytest.mark.asyncio
-async def test_simulate(
-    open_session: OpenSession
-) -> None:
+async def test_simulate(open_session: OpenSession) -> None:
     """
     omc4py/v_1_22/OpenModelica/Scripting/__init__.py:5505
     """

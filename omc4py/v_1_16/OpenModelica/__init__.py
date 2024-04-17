@@ -19,15 +19,15 @@ from . import UsersGuide as usersGuide
 
 
 @overload
-def threadData(self: SupportsInteractiveProperty[Synchronous]) -> ThreadData:
-    ...
+def threadData(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> ThreadData: ...
 
 
 @overload
 async def threadData(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> ThreadData:
-    ...
+) -> ThreadData: ...
 
 
 @external("OpenModelica.threadData")
@@ -35,7 +35,7 @@ def threadData(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[ThreadData, Coroutine[None, None, ThreadData]]:
     """
     .. code-block:: modelica

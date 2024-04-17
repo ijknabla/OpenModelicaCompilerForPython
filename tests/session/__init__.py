@@ -12,7 +12,7 @@ from omc4py.protocol import (
     T_Calling,
 )
 from omc4py.session import BasicSession
-from omc4py.v_1_23.OpenModelica.Scripting import (  # NOTE: update to latest
+from omc4py.v_1_24.OpenModelica.Scripting import (  # NOTE: update to latest
     ErrorMessage,
 )
 
@@ -23,16 +23,14 @@ from . import Nested as nested
 def loadFile(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def loadFile(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("loadFile")
@@ -50,16 +48,14 @@ def loadFile(
 def getMessagesStringInternal(
     self: SupportsInteractiveProperty[Synchronous],
     unique: Union[bool, None] = None,
-) -> List[ErrorMessage]:
-    ...
+) -> List[ErrorMessage]: ...
 
 
 @overload
 async def getMessagesStringInternal(
     self: SupportsInteractiveProperty[Asynchronous],
     unique: Union[bool, None] = None,
-) -> List[ErrorMessage]:
-    ...
+) -> List[ErrorMessage]: ...
 
 
 @external("getMessagesStringInternal")
@@ -74,13 +70,11 @@ def getMessagesStringInternal(
 
 
 @overload
-def empty(self: SupportsInteractiveProperty[Synchronous]) -> None:
-    ...
+def empty(self: SupportsInteractiveProperty[Synchronous]) -> None: ...
 
 
 @overload
-async def empty(self: SupportsInteractiveProperty[Asynchronous]) -> None:
-    ...
+async def empty(self: SupportsInteractiveProperty[Asynchronous]) -> None: ...
 
 
 @external("empty")
@@ -88,9 +82,8 @@ def empty(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
-) -> Union[None, Coroutine[None, None, None]]:
-    ...
+    ],
+) -> Union[None, Coroutine[None, None, None]]: ...
 
 
 class GenericEmptySession(BasicSession[T_Calling]):
@@ -118,13 +111,11 @@ class One(NamedTuple):
 
 
 @overload
-def one(self: SupportsInteractiveProperty[Synchronous]) -> One:
-    ...
+def one(self: SupportsInteractiveProperty[Synchronous]) -> One: ...
 
 
 @overload
-async def one(self: SupportsInteractiveProperty[Asynchronous]) -> One:
-    ...
+async def one(self: SupportsInteractiveProperty[Asynchronous]) -> One: ...
 
 
 @external("one")
@@ -132,7 +123,7 @@ def one(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[One, Coroutine[None, None, One]]:
     return ...  # type: ignore
 

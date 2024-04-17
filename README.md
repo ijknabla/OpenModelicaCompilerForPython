@@ -33,14 +33,14 @@ And ensure `omc` command installed.
 
 ```
 $ omc --version
-OpenModelica 1.22.1
+OpenModelica 1.22.3
 ```
 
 For Windows, it will work if omc.exe exists in the default installation.
 
 ```
-"C:\Program Files\OpenModelica1.22.1-64bit\bin\omc.exe" --version
-OpenModelica v1.22.1 (64-bit)
+"C:\Program Files\OpenModelica1.22.3-64bit\bin\omc.exe" --version
+OpenModelica v1.22.3 (64-bit)
 ```
 
 ## Usage
@@ -62,7 +62,7 @@ If `omc4py.open_session` cannot find omc, a valid omc command or executable path
 from omc4py import open_session
 
 with open_session(
-    "C:/Program Files/OpenModelica1.22.1-64bit/bin/omc.exe"
+    "C:/Program Files/OpenModelica1.22.3-64bit/bin/omc.exe"
 ) as session:
     print(session.getVersion())
 ```
@@ -234,13 +234,13 @@ from omc4py import open_session
 
 with \
     open_session(
-        "C:/Program Files/OpenModelica1.22.1-64bit/bin/omc.exe"
+        "C:/Program Files/OpenModelica1.22.3-64bit/bin/omc.exe"
     ) as session_1_22, \
     open_session(
         "C:/Program Files/OpenModelica1.21.0-64bit/bin/omc.exe"
     ) as session_1_21:
 
-    print("v1.22.1:", session_1_22.getVersion())
+    print("v1.22.3:", session_1_22.getVersion())
     print("v1.21.0:", session_1_21.getVersion())
 ```
 

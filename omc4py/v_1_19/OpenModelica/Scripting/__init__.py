@@ -78,15 +78,13 @@ class Internal(package[T_Calling]):
 @overload
 def checkSettings(
     self: SupportsInteractiveProperty[Synchronous],
-) -> CheckSettingsResult:
-    ...
+) -> CheckSettingsResult: ...
 
 
 @overload
 async def checkSettings(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> CheckSettingsResult:
-    ...
+) -> CheckSettingsResult: ...
 
 
 @external("checkSettings")
@@ -94,7 +92,7 @@ def checkSettings(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[CheckSettingsResult, Coroutine[None, None, CheckSettingsResult]]:
     """
     .. code-block:: modelica
@@ -113,8 +111,7 @@ def loadFile(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -125,8 +122,7 @@ async def loadFile(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("loadFile")
@@ -164,8 +160,7 @@ def loadFiles(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -177,8 +172,7 @@ async def loadFiles(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("loadFiles")
@@ -214,8 +208,7 @@ def parseEncryptedPackage(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
     workdir: Union[PathLike[str], str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -223,8 +216,7 @@ async def parseEncryptedPackage(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
     workdir: Union[PathLike[str], str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("parseEncryptedPackage")
@@ -256,8 +248,7 @@ def loadEncryptedPackage(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -269,8 +260,7 @@ async def loadEncryptedPackage(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("loadEncryptedPackage")
@@ -306,8 +296,7 @@ def reloadClass(
     self: SupportsInteractiveProperty[Synchronous],
     name: Union[TypeName, str],
     encoding: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -315,8 +304,7 @@ async def reloadClass(
     self: SupportsInteractiveProperty[Asynchronous],
     name: Union[TypeName, str],
     encoding: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("reloadClass")
@@ -346,8 +334,7 @@ def loadString(
     filename: Union[PathLike[str], str, None] = None,
     encoding: Union[str, None] = None,
     merge: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -357,8 +344,7 @@ async def loadString(
     filename: Union[PathLike[str], str, None] = None,
     encoding: Union[str, None] = None,
     merge: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("loadString")
@@ -390,8 +376,7 @@ def parseString(
     self: SupportsInteractiveProperty[Synchronous],
     data: str,
     filename: Union[PathLike[str], str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -399,8 +384,7 @@ async def parseString(
     self: SupportsInteractiveProperty[Asynchronous],
     data: str,
     filename: Union[PathLike[str], str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("parseString")
@@ -428,8 +412,7 @@ def parseFile(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -437,8 +420,7 @@ async def parseFile(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("parseFile")
@@ -466,8 +448,7 @@ def loadFileInteractiveQualified(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -475,8 +456,7 @@ async def loadFileInteractiveQualified(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
     encoding: Union[str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("loadFileInteractiveQualified")
@@ -507,8 +487,7 @@ def loadFileInteractive(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -519,8 +498,7 @@ async def loadFileInteractive(
     uses: Union[bool, None] = None,
     notify: Union[bool, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("loadFileInteractive")
@@ -554,8 +532,7 @@ def system(
     self: SupportsInteractiveProperty[Synchronous],
     callStr: str,
     outputFile: Union[PathLike[str], str, None] = None,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -563,8 +540,7 @@ async def system(
     self: SupportsInteractiveProperty[Asynchronous],
     callStr: str,
     outputFile: Union[PathLike[str], str, None] = None,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("system")
@@ -592,8 +568,7 @@ def system_parallel(
     self: SupportsInteractiveProperty[Synchronous],
     callStr: Sequence[str],
     numThreads: Union[int, None] = None,
-) -> List[int]:
-    ...
+) -> List[int]: ...
 
 
 @overload
@@ -601,8 +576,7 @@ async def system_parallel(
     self: SupportsInteractiveProperty[Asynchronous],
     callStr: Sequence[str],
     numThreads: Union[int, None] = None,
-) -> List[int]:
-    ...
+) -> List[int]: ...
 
 
 @external("system_parallel")
@@ -629,16 +603,14 @@ def system_parallel(
 def saveAll(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def saveAll(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("saveAll")
@@ -663,16 +635,14 @@ def saveAll(
 def help(
     self: SupportsInteractiveProperty[Synchronous],
     topic: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def help(
     self: SupportsInteractiveProperty[Asynchronous],
     topic: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("help")
@@ -694,13 +664,11 @@ def help(
 
 
 @overload
-def clear(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def clear(self: SupportsInteractiveProperty[Synchronous]) -> bool: ...
 
 
 @overload
-async def clear(self: SupportsInteractiveProperty[Asynchronous]) -> bool:
-    ...
+async def clear(self: SupportsInteractiveProperty[Asynchronous]) -> bool: ...
 
 
 @external("clear")
@@ -708,7 +676,7 @@ def clear(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -720,15 +688,13 @@ def clear(
 
 
 @overload
-def clearProgram(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def clearProgram(self: SupportsInteractiveProperty[Synchronous]) -> bool: ...
 
 
 @overload
 async def clearProgram(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("clearProgram")
@@ -736,7 +702,7 @@ def clearProgram(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -748,15 +714,13 @@ def clearProgram(
 
 
 @overload
-def clearVariables(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def clearVariables(self: SupportsInteractiveProperty[Synchronous]) -> bool: ...
 
 
 @overload
 async def clearVariables(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("clearVariables")
@@ -764,7 +728,7 @@ def clearVariables(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -779,16 +743,14 @@ def clearVariables(
 def generateHeader(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def generateHeader(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("generateHeader")
@@ -813,16 +775,14 @@ def generateHeader(
 def generateJuliaHeader(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def generateJuliaHeader(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("generateJuliaHeader")
@@ -848,8 +808,7 @@ def generateSeparateCode(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     cleanCache: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -857,8 +816,7 @@ async def generateSeparateCode(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     cleanCache: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("generateSeparateCode")
@@ -885,16 +843,14 @@ def generateSeparateCode(
 def generateSeparateCodeDependencies(
     self: SupportsInteractiveProperty[Synchronous],
     stampSuffix: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def generateSeparateCodeDependencies(
     self: SupportsInteractiveProperty[Asynchronous],
     stampSuffix: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("generateSeparateCodeDependencies")
@@ -921,8 +877,7 @@ def generateSeparateCodeDependenciesMakefile(
     filename: Union[PathLike[str], str],
     directory: Union[PathLike[str], str, None] = None,
     suffix: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -931,8 +886,7 @@ async def generateSeparateCodeDependenciesMakefile(
     filename: Union[PathLike[str], str],
     directory: Union[PathLike[str], str, None] = None,
     suffix: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("generateSeparateCodeDependenciesMakefile")
@@ -958,13 +912,13 @@ def generateSeparateCodeDependenciesMakefile(
 
 
 @overload
-def getLinker(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getLinker(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
-async def getLinker(self: SupportsInteractiveProperty[Asynchronous]) -> str:
-    ...
+async def getLinker(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> str: ...
 
 
 @external("getLinker")
@@ -972,7 +926,7 @@ def getLinker(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -986,15 +940,13 @@ def getLinker(
 @overload
 def setLinker(
     self: SupportsInteractiveProperty[Synchronous], linker: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setLinker(
     self: SupportsInteractiveProperty[Asynchronous], linker: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setLinker")
@@ -1016,15 +968,13 @@ def setLinker(
 
 
 @overload
-def getLinkerFlags(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getLinkerFlags(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
 async def getLinkerFlags(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getLinkerFlags")
@@ -1032,7 +982,7 @@ def getLinkerFlags(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1046,15 +996,13 @@ def getLinkerFlags(
 @overload
 def setLinkerFlags(
     self: SupportsInteractiveProperty[Synchronous], linkerFlags: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setLinkerFlags(
     self: SupportsInteractiveProperty[Asynchronous], linkerFlags: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setLinkerFlags")
@@ -1076,13 +1024,13 @@ def setLinkerFlags(
 
 
 @overload
-def getCompiler(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getCompiler(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
-async def getCompiler(self: SupportsInteractiveProperty[Asynchronous]) -> str:
-    ...
+async def getCompiler(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> str: ...
 
 
 @external("getCompiler")
@@ -1090,7 +1038,7 @@ def getCompiler(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1104,15 +1052,13 @@ def getCompiler(
 @overload
 def setCompiler(
     self: SupportsInteractiveProperty[Synchronous], compiler: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCompiler(
     self: SupportsInteractiveProperty[Asynchronous], compiler: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCompiler")
@@ -1136,15 +1082,13 @@ def setCompiler(
 @overload
 def setCFlags(
     self: SupportsInteractiveProperty[Synchronous], inString: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCFlags(
     self: SupportsInteractiveProperty[Asynchronous], inString: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCFlags")
@@ -1166,13 +1110,13 @@ def setCFlags(
 
 
 @overload
-def getCFlags(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getCFlags(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
-async def getCFlags(self: SupportsInteractiveProperty[Asynchronous]) -> str:
-    ...
+async def getCFlags(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> str: ...
 
 
 @external("getCFlags")
@@ -1180,7 +1124,7 @@ def getCFlags(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1192,15 +1136,13 @@ def getCFlags(
 
 
 @overload
-def getCXXCompiler(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getCXXCompiler(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
 async def getCXXCompiler(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getCXXCompiler")
@@ -1208,7 +1150,7 @@ def getCXXCompiler(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1222,15 +1164,13 @@ def getCXXCompiler(
 @overload
 def setCXXCompiler(
     self: SupportsInteractiveProperty[Synchronous], compiler: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCXXCompiler(
     self: SupportsInteractiveProperty[Asynchronous], compiler: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCXXCompiler")
@@ -1252,15 +1192,13 @@ def setCXXCompiler(
 
 
 @overload
-def verifyCompiler(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def verifyCompiler(self: SupportsInteractiveProperty[Synchronous]) -> bool: ...
 
 
 @overload
 async def verifyCompiler(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("verifyCompiler")
@@ -1268,7 +1206,7 @@ def verifyCompiler(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -1283,16 +1221,14 @@ def verifyCompiler(
 def setCompilerPath(
     self: SupportsInteractiveProperty[Synchronous],
     compilerPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCompilerPath(
     self: SupportsInteractiveProperty[Asynchronous],
     compilerPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCompilerPath")
@@ -1314,15 +1250,15 @@ def setCompilerPath(
 
 
 @overload
-def getCompileCommand(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getCompileCommand(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> str: ...
 
 
 @overload
 async def getCompileCommand(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getCompileCommand")
@@ -1330,7 +1266,7 @@ def getCompileCommand(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1344,15 +1280,13 @@ def getCompileCommand(
 @overload
 def setCompileCommand(
     self: SupportsInteractiveProperty[Synchronous], compileCommand: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCompileCommand(
     self: SupportsInteractiveProperty[Asynchronous], compileCommand: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCompileCommand")
@@ -1376,15 +1310,13 @@ def setCompileCommand(
 @overload
 def setPlotCommand(
     self: SupportsInteractiveProperty[Synchronous], plotCommand: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setPlotCommand(
     self: SupportsInteractiveProperty[Asynchronous], plotCommand: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setPlotCommand")
@@ -1406,13 +1338,13 @@ def setPlotCommand(
 
 
 @overload
-def getSettings(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getSettings(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
-async def getSettings(self: SupportsInteractiveProperty[Asynchronous]) -> str:
-    ...
+async def getSettings(
+    self: SupportsInteractiveProperty[Asynchronous],
+) -> str: ...
 
 
 @external("getSettings")
@@ -1420,7 +1352,7 @@ def getSettings(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1435,16 +1367,14 @@ def getSettings(
 def setTempDirectoryPath(
     self: SupportsInteractiveProperty[Synchronous],
     tempDirectoryPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setTempDirectoryPath(
     self: SupportsInteractiveProperty[Asynchronous],
     tempDirectoryPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setTempDirectoryPath")
@@ -1468,15 +1398,13 @@ def setTempDirectoryPath(
 @overload
 def getTempDirectoryPath(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getTempDirectoryPath(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getTempDirectoryPath")
@@ -1484,7 +1412,7 @@ def getTempDirectoryPath(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1498,15 +1426,13 @@ def getTempDirectoryPath(
 @overload
 def getEnvironmentVar(
     self: SupportsInteractiveProperty[Synchronous], var: str
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getEnvironmentVar(
     self: SupportsInteractiveProperty[Asynchronous], var: str
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getEnvironmentVar")
@@ -1530,15 +1456,13 @@ def getEnvironmentVar(
 @overload
 def setEnvironmentVar(
     self: SupportsInteractiveProperty[Synchronous], var: str, value: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setEnvironmentVar(
     self: SupportsInteractiveProperty[Asynchronous], var: str, value: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setEnvironmentVar")
@@ -1564,15 +1488,13 @@ def setEnvironmentVar(
 @overload
 def appendEnvironmentVar(
     self: SupportsInteractiveProperty[Synchronous], var: str, value: str
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def appendEnvironmentVar(
     self: SupportsInteractiveProperty[Asynchronous], var: str, value: str
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("appendEnvironmentVar")
@@ -1599,16 +1521,14 @@ def appendEnvironmentVar(
 def setInstallationDirectoryPath(
     self: SupportsInteractiveProperty[Synchronous],
     installationDirectoryPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setInstallationDirectoryPath(
     self: SupportsInteractiveProperty[Asynchronous],
     installationDirectoryPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setInstallationDirectoryPath")
@@ -1632,15 +1552,13 @@ def setInstallationDirectoryPath(
 @overload
 def getInstallationDirectoryPath(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getInstallationDirectoryPath(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getInstallationDirectoryPath")
@@ -1648,7 +1566,7 @@ def getInstallationDirectoryPath(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1663,16 +1581,14 @@ def getInstallationDirectoryPath(
 def setModelicaPath(
     self: SupportsInteractiveProperty[Synchronous],
     modelicaPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setModelicaPath(
     self: SupportsInteractiveProperty[Asynchronous],
     modelicaPath: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setModelicaPath")
@@ -1694,15 +1610,13 @@ def setModelicaPath(
 
 
 @overload
-def getModelicaPath(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getModelicaPath(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
 async def getModelicaPath(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getModelicaPath")
@@ -1710,7 +1624,7 @@ def getModelicaPath(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1724,15 +1638,13 @@ def getModelicaPath(
 @overload
 def getHomeDirectoryPath(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getHomeDirectoryPath(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getHomeDirectoryPath")
@@ -1740,7 +1652,7 @@ def getHomeDirectoryPath(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -1754,15 +1666,13 @@ def getHomeDirectoryPath(
 @overload
 def setCompilerFlags(
     self: SupportsInteractiveProperty[Synchronous], compilerFlags: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCompilerFlags(
     self: SupportsInteractiveProperty[Asynchronous], compilerFlags: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCompilerFlags")
@@ -1786,15 +1696,13 @@ def setCompilerFlags(
 @overload
 def enableNewInstantiation(
     self: SupportsInteractiveProperty[Synchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def enableNewInstantiation(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("enableNewInstantiation")
@@ -1802,7 +1710,7 @@ def enableNewInstantiation(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -1816,15 +1724,13 @@ def enableNewInstantiation(
 @overload
 def disableNewInstantiation(
     self: SupportsInteractiveProperty[Synchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def disableNewInstantiation(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("disableNewInstantiation")
@@ -1832,7 +1738,7 @@ def disableNewInstantiation(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -1846,15 +1752,13 @@ def disableNewInstantiation(
 @overload
 def setDebugFlags(
     self: SupportsInteractiveProperty[Synchronous], debugFlags: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setDebugFlags(
     self: SupportsInteractiveProperty[Asynchronous], debugFlags: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setDebugFlags")
@@ -1876,15 +1780,15 @@ def setDebugFlags(
 
 
 @overload
-def clearDebugFlags(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def clearDebugFlags(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> bool: ...
 
 
 @overload
 async def clearDebugFlags(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("clearDebugFlags")
@@ -1892,7 +1796,7 @@ def clearDebugFlags(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -1906,15 +1810,13 @@ def clearDebugFlags(
 @overload
 def setPreOptModules(
     self: SupportsInteractiveProperty[Synchronous], modules: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setPreOptModules(
     self: SupportsInteractiveProperty[Asynchronous], modules: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setPreOptModules")
@@ -1938,15 +1840,13 @@ def setPreOptModules(
 @overload
 def setCheapMatchingAlgorithm(
     self: SupportsInteractiveProperty[Synchronous], matchingAlgorithm: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCheapMatchingAlgorithm(
     self: SupportsInteractiveProperty[Asynchronous], matchingAlgorithm: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCheapMatchingAlgorithm")
@@ -1970,15 +1870,13 @@ def setCheapMatchingAlgorithm(
 @overload
 def getMatchingAlgorithm(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getMatchingAlgorithm(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getMatchingAlgorithm")
@@ -1986,7 +1884,7 @@ def getMatchingAlgorithm(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -2005,15 +1903,13 @@ class Getavailablematchingalgorithms(NamedTuple):
 @overload
 def getAvailableMatchingAlgorithms(
     self: SupportsInteractiveProperty[Synchronous],
-) -> Getavailablematchingalgorithms:
-    ...
+) -> Getavailablematchingalgorithms: ...
 
 
 @overload
 async def getAvailableMatchingAlgorithms(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> Getavailablematchingalgorithms:
-    ...
+) -> Getavailablematchingalgorithms: ...
 
 
 @external("getAvailableMatchingAlgorithms")
@@ -2021,7 +1917,7 @@ def getAvailableMatchingAlgorithms(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[
     Getavailablematchingalgorithms,
     Coroutine[None, None, Getavailablematchingalgorithms],
@@ -2039,15 +1935,13 @@ def getAvailableMatchingAlgorithms(
 @overload
 def setMatchingAlgorithm(
     self: SupportsInteractiveProperty[Synchronous], matchingAlgorithm: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setMatchingAlgorithm(
     self: SupportsInteractiveProperty[Asynchronous], matchingAlgorithm: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setMatchingAlgorithm")
@@ -2071,15 +1965,13 @@ def setMatchingAlgorithm(
 @overload
 def getIndexReductionMethod(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getIndexReductionMethod(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getIndexReductionMethod")
@@ -2087,7 +1979,7 @@ def getIndexReductionMethod(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -2106,15 +1998,13 @@ class Getavailableindexreductionmethods(NamedTuple):
 @overload
 def getAvailableIndexReductionMethods(
     self: SupportsInteractiveProperty[Synchronous],
-) -> Getavailableindexreductionmethods:
-    ...
+) -> Getavailableindexreductionmethods: ...
 
 
 @overload
 async def getAvailableIndexReductionMethods(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> Getavailableindexreductionmethods:
-    ...
+) -> Getavailableindexreductionmethods: ...
 
 
 @external("getAvailableIndexReductionMethods")
@@ -2122,7 +2012,7 @@ def getAvailableIndexReductionMethods(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[
     Getavailableindexreductionmethods,
     Coroutine[None, None, Getavailableindexreductionmethods],
@@ -2140,15 +2030,13 @@ def getAvailableIndexReductionMethods(
 @overload
 def setIndexReductionMethod(
     self: SupportsInteractiveProperty[Synchronous], method: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setIndexReductionMethod(
     self: SupportsInteractiveProperty[Asynchronous], method: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setIndexReductionMethod")
@@ -2172,15 +2060,13 @@ def setIndexReductionMethod(
 @overload
 def setPostOptModules(
     self: SupportsInteractiveProperty[Synchronous], modules: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setPostOptModules(
     self: SupportsInteractiveProperty[Asynchronous], modules: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setPostOptModules")
@@ -2202,15 +2088,15 @@ def setPostOptModules(
 
 
 @overload
-def getTearingMethod(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getTearingMethod(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> str: ...
 
 
 @overload
 async def getTearingMethod(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getTearingMethod")
@@ -2218,7 +2104,7 @@ def getTearingMethod(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -2237,15 +2123,13 @@ class Getavailabletearingmethods(NamedTuple):
 @overload
 def getAvailableTearingMethods(
     self: SupportsInteractiveProperty[Synchronous],
-) -> Getavailabletearingmethods:
-    ...
+) -> Getavailabletearingmethods: ...
 
 
 @overload
 async def getAvailableTearingMethods(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> Getavailabletearingmethods:
-    ...
+) -> Getavailabletearingmethods: ...
 
 
 @external("getAvailableTearingMethods")
@@ -2253,7 +2137,7 @@ def getAvailableTearingMethods(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[
     Getavailabletearingmethods,
     Coroutine[None, None, Getavailabletearingmethods],
@@ -2271,15 +2155,13 @@ def getAvailableTearingMethods(
 @overload
 def setTearingMethod(
     self: SupportsInteractiveProperty[Synchronous], tearingMethod: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setTearingMethod(
     self: SupportsInteractiveProperty[Asynchronous], tearingMethod: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setTearingMethod")
@@ -2303,15 +2185,13 @@ def setTearingMethod(
 @overload
 def setCommandLineOptions(
     self: SupportsInteractiveProperty[Synchronous], option: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setCommandLineOptions(
     self: SupportsInteractiveProperty[Asynchronous], option: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setCommandLineOptions")
@@ -2335,15 +2215,13 @@ def setCommandLineOptions(
 @overload
 def getCommandLineOptions(
     self: SupportsInteractiveProperty[Synchronous],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getCommandLineOptions(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getCommandLineOptions")
@@ -2351,7 +2229,7 @@ def getCommandLineOptions(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[List[str], Coroutine[None, None, List[str]]]:
     """
     .. code-block:: modelica
@@ -2371,15 +2249,13 @@ class Getconfigflagvalidoptions(NamedTuple):
 @overload
 def getConfigFlagValidOptions(
     self: SupportsInteractiveProperty[Synchronous], flag: str
-) -> Getconfigflagvalidoptions:
-    ...
+) -> Getconfigflagvalidoptions: ...
 
 
 @overload
 async def getConfigFlagValidOptions(
     self: SupportsInteractiveProperty[Asynchronous], flag: str
-) -> Getconfigflagvalidoptions:
-    ...
+) -> Getconfigflagvalidoptions: ...
 
 
 @external("getConfigFlagValidOptions")
@@ -2407,15 +2283,13 @@ def getConfigFlagValidOptions(
 @overload
 def clearCommandLineOptions(
     self: SupportsInteractiveProperty[Synchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def clearCommandLineOptions(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("clearCommandLineOptions")
@@ -2423,7 +2297,7 @@ def clearCommandLineOptions(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -2438,16 +2312,14 @@ def clearCommandLineOptions(
 def getVersion(
     self: SupportsInteractiveProperty[Synchronous],
     cl: Union[TypeName, str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getVersion(
     self: SupportsInteractiveProperty[Asynchronous],
     cl: Union[TypeName, str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getVersion")
@@ -2472,16 +2344,14 @@ def getVersion(
 def regularFileExists(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def regularFileExists(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("regularFileExists")
@@ -2506,16 +2376,14 @@ def regularFileExists(
 def directoryExists(
     self: SupportsInteractiveProperty[Synchronous],
     dirName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def directoryExists(
     self: SupportsInteractiveProperty[Asynchronous],
     dirName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("directoryExists")
@@ -2546,16 +2414,14 @@ class Stat(NamedTuple):
 def stat(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> Stat:
-    ...
+) -> Stat: ...
 
 
 @overload
 async def stat(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> Stat:
-    ...
+) -> Stat: ...
 
 
 @external("stat")
@@ -2582,16 +2448,14 @@ def stat(
 def readFile(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def readFile(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("readFile")
@@ -2618,8 +2482,7 @@ def writeFile(
     fileName: Union[PathLike[str], str],
     data: str,
     append: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -2628,8 +2491,7 @@ async def writeFile(
     fileName: Union[PathLike[str], str],
     data: str,
     append: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("writeFile")
@@ -2659,8 +2521,7 @@ def compareFilesAndMove(
     self: SupportsInteractiveProperty[Synchronous],
     newFile: Union[PathLike[str], str],
     oldFile: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -2668,8 +2529,7 @@ async def compareFilesAndMove(
     self: SupportsInteractiveProperty[Asynchronous],
     newFile: Union[PathLike[str], str],
     oldFile: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("compareFilesAndMove")
@@ -2697,8 +2557,7 @@ def compareFiles(
     self: SupportsInteractiveProperty[Synchronous],
     file1: Union[PathLike[str], str],
     file2: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -2706,8 +2565,7 @@ async def compareFiles(
     self: SupportsInteractiveProperty[Asynchronous],
     file1: Union[PathLike[str], str],
     file2: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("compareFiles")
@@ -2731,15 +2589,15 @@ def compareFiles(
 
 
 @overload
-def alarm(self: SupportsInteractiveProperty[Synchronous], seconds: int) -> int:
-    ...
+def alarm(
+    self: SupportsInteractiveProperty[Synchronous], seconds: int
+) -> int: ...
 
 
 @overload
 async def alarm(
     self: SupportsInteractiveProperty[Asynchronous], seconds: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("alarm")
@@ -2773,8 +2631,7 @@ def regex(
     maxMatches: Union[int, None] = None,
     extended: Union[bool, None] = None,
     caseInsensitive: Union[bool, None] = None,
-) -> Regex:
-    ...
+) -> Regex: ...
 
 
 @overload
@@ -2785,8 +2642,7 @@ async def regex(
     maxMatches: Union[int, None] = None,
     extended: Union[bool, None] = None,
     caseInsensitive: Union[bool, None] = None,
-) -> Regex:
-    ...
+) -> Regex: ...
 
 
 @external("regex")
@@ -2823,8 +2679,7 @@ def regexBool(
     re: str,
     extended: Union[bool, None] = None,
     caseInsensitive: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -2834,8 +2689,7 @@ async def regexBool(
     re: str,
     extended: Union[bool, None] = None,
     caseInsensitive: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("regexBool")
@@ -2866,16 +2720,14 @@ def regexBool(
 def testsuiteFriendlyName(
     self: SupportsInteractiveProperty[Synchronous],
     path: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def testsuiteFriendlyName(
     self: SupportsInteractiveProperty[Asynchronous],
     path: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("testsuiteFriendlyName")
@@ -2900,16 +2752,14 @@ def testsuiteFriendlyName(
 def readFileNoNumeric(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def readFileNoNumeric(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("readFileNoNumeric")
@@ -2934,16 +2784,14 @@ def readFileNoNumeric(
 def getErrorString(
     self: SupportsInteractiveProperty[Synchronous],
     warningsAsErrors: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getErrorString(
     self: SupportsInteractiveProperty[Asynchronous],
     warningsAsErrors: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getErrorString")
@@ -2965,15 +2813,15 @@ def getErrorString(
 
 
 @overload
-def getMessagesString(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getMessagesString(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> str: ...
 
 
 @overload
 async def getMessagesString(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getMessagesString")
@@ -2981,7 +2829,7 @@ def getMessagesString(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -3021,8 +2869,7 @@ class ErrorKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");
-    """
+        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorKind")
     syntax = 1
@@ -3043,8 +2890,7 @@ class ErrorLevel(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorLevel = enumeration(internal, notification, warning, error);
-    """
+        type ErrorLevel = enumeration(internal, notification, warning, error);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorLevel")
     internal = 1
@@ -3080,16 +2926,14 @@ class ErrorMessage(record):
 def getMessagesStringInternal(
     self: SupportsInteractiveProperty[Synchronous],
     unique: Union[bool, None] = None,
-) -> List[ErrorMessage]:
-    ...
+) -> List[ErrorMessage]: ...
 
 
 @overload
 async def getMessagesStringInternal(
     self: SupportsInteractiveProperty[Asynchronous],
     unique: Union[bool, None] = None,
-) -> List[ErrorMessage]:
-    ...
+) -> List[ErrorMessage]: ...
 
 
 @external("getMessagesStringInternal")
@@ -3119,15 +2963,13 @@ class Countmessages(NamedTuple):
 @overload
 def countMessages(
     self: SupportsInteractiveProperty[Synchronous],
-) -> Countmessages:
-    ...
+) -> Countmessages: ...
 
 
 @overload
 async def countMessages(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> Countmessages:
-    ...
+) -> Countmessages: ...
 
 
 @external("countMessages")
@@ -3135,7 +2977,7 @@ def countMessages(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[Countmessages, Coroutine[None, None, Countmessages]]:
     """
     .. code-block:: modelica
@@ -3149,15 +2991,13 @@ def countMessages(
 
 
 @overload
-def clearMessages(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def clearMessages(self: SupportsInteractiveProperty[Synchronous]) -> bool: ...
 
 
 @overload
 async def clearMessages(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("clearMessages")
@@ -3165,7 +3005,7 @@ def clearMessages(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -3180,16 +3020,14 @@ def clearMessages(
 def runScript(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def runScript(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("runScript")
@@ -3213,15 +3051,13 @@ def runScript(
 @overload
 def echo(
     self: SupportsInteractiveProperty[Synchronous], setEcho: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def echo(
     self: SupportsInteractiveProperty[Asynchronous], setEcho: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("echo")
@@ -3245,15 +3081,13 @@ def echo(
 @overload
 def getClassesInModelicaPath(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getClassesInModelicaPath(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getClassesInModelicaPath")
@@ -3261,7 +3095,7 @@ def getClassesInModelicaPath(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -3275,15 +3109,13 @@ def getClassesInModelicaPath(
 @overload
 def getAnnotationVersion(
     self: SupportsInteractiveProperty[Synchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getAnnotationVersion(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getAnnotationVersion")
@@ -3291,7 +3123,7 @@ def getAnnotationVersion(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -3305,15 +3137,13 @@ def getAnnotationVersion(
 @overload
 def setAnnotationVersion(
     self: SupportsInteractiveProperty[Synchronous], annotationVersion: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setAnnotationVersion(
     self: SupportsInteractiveProperty[Asynchronous], annotationVersion: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setAnnotationVersion")
@@ -3335,15 +3165,13 @@ def setAnnotationVersion(
 
 
 @overload
-def getNoSimplify(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def getNoSimplify(self: SupportsInteractiveProperty[Synchronous]) -> bool: ...
 
 
 @overload
 async def getNoSimplify(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("getNoSimplify")
@@ -3351,7 +3179,7 @@ def getNoSimplify(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -3365,15 +3193,13 @@ def getNoSimplify(
 @overload
 def setNoSimplify(
     self: SupportsInteractiveProperty[Synchronous], noSimplify: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setNoSimplify(
     self: SupportsInteractiveProperty[Asynchronous], noSimplify: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setNoSimplify")
@@ -3397,15 +3223,13 @@ def setNoSimplify(
 @overload
 def getVectorizationLimit(
     self: SupportsInteractiveProperty[Synchronous],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getVectorizationLimit(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getVectorizationLimit")
@@ -3413,7 +3237,7 @@ def getVectorizationLimit(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -3427,15 +3251,13 @@ def getVectorizationLimit(
 @overload
 def setVectorizationLimit(
     self: SupportsInteractiveProperty[Synchronous], vectorizationLimit: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setVectorizationLimit(
     self: SupportsInteractiveProperty[Asynchronous], vectorizationLimit: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setVectorizationLimit")
@@ -3459,15 +3281,13 @@ def setVectorizationLimit(
 @overload
 def getDefaultOpenCLDevice(
     self: SupportsInteractiveProperty[Synchronous],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getDefaultOpenCLDevice(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getDefaultOpenCLDevice")
@@ -3475,7 +3295,7 @@ def getDefaultOpenCLDevice(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -3489,15 +3309,13 @@ def getDefaultOpenCLDevice(
 @overload
 def setDefaultOpenCLDevice(
     self: SupportsInteractiveProperty[Synchronous], defdevid: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setDefaultOpenCLDevice(
     self: SupportsInteractiveProperty[Asynchronous], defdevid: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setDefaultOpenCLDevice")
@@ -3521,15 +3339,13 @@ def setDefaultOpenCLDevice(
 @overload
 def setShowAnnotations(
     self: SupportsInteractiveProperty[Synchronous], show: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setShowAnnotations(
     self: SupportsInteractiveProperty[Asynchronous], show: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setShowAnnotations")
@@ -3551,15 +3367,15 @@ def setShowAnnotations(
 
 
 @overload
-def getShowAnnotations(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def getShowAnnotations(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> bool: ...
 
 
 @overload
 async def getShowAnnotations(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("getShowAnnotations")
@@ -3567,7 +3383,7 @@ def getShowAnnotations(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -3581,15 +3397,13 @@ def getShowAnnotations(
 @overload
 def setOrderConnections(
     self: SupportsInteractiveProperty[Synchronous], orderConnections: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setOrderConnections(
     self: SupportsInteractiveProperty[Asynchronous], orderConnections: bool
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setOrderConnections")
@@ -3613,15 +3427,13 @@ def setOrderConnections(
 @overload
 def getOrderConnections(
     self: SupportsInteractiveProperty[Synchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def getOrderConnections(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("getOrderConnections")
@@ -3629,7 +3441,7 @@ def getOrderConnections(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -3643,15 +3455,13 @@ def getOrderConnections(
 @overload
 def setLanguageStandard(
     self: SupportsInteractiveProperty[Synchronous], inVersion: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def setLanguageStandard(
     self: SupportsInteractiveProperty[Asynchronous], inVersion: str
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setLanguageStandard")
@@ -3673,15 +3483,15 @@ def setLanguageStandard(
 
 
 @overload
-def getLanguageStandard(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def getLanguageStandard(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> str: ...
 
 
 @overload
 async def getLanguageStandard(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getLanguageStandard")
@@ -3689,7 +3499,7 @@ def getLanguageStandard(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica
@@ -3704,16 +3514,14 @@ def getLanguageStandard(
 def getAstAsCorbaString(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getAstAsCorbaString(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getAstAsCorbaString")
@@ -3738,16 +3546,14 @@ def getAstAsCorbaString(
 def cd(
     self: SupportsInteractiveProperty[Synchronous],
     newWorkingDirectory: Union[PathLike[str], str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def cd(
     self: SupportsInteractiveProperty[Asynchronous],
     newWorkingDirectory: Union[PathLike[str], str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("cd")
@@ -3772,16 +3578,14 @@ def cd(
 def mkdir(
     self: SupportsInteractiveProperty[Synchronous],
     newDirectory: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def mkdir(
     self: SupportsInteractiveProperty[Asynchronous],
     newDirectory: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("mkdir")
@@ -3807,8 +3611,7 @@ def copy(
     self: SupportsInteractiveProperty[Synchronous],
     source: str,
     destination: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -3816,8 +3619,7 @@ async def copy(
     self: SupportsInteractiveProperty[Asynchronous],
     source: str,
     destination: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("copy")
@@ -3844,16 +3646,14 @@ def copy(
 def remove(
     self: SupportsInteractiveProperty[Synchronous],
     path: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def remove(
     self: SupportsInteractiveProperty[Asynchronous],
     path: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("remove")
@@ -3878,16 +3678,14 @@ def remove(
 def checkModel(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def checkModel(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("checkModel")
@@ -3913,8 +3711,7 @@ def checkAllModelsRecursive(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     checkProtected: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -3922,8 +3719,7 @@ async def checkAllModelsRecursive(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     checkProtected: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("checkAllModelsRecursive")
@@ -3950,16 +3746,14 @@ def checkAllModelsRecursive(
 def typeOf(
     self: SupportsInteractiveProperty[Synchronous],
     variableName: Union[VariableName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def typeOf(
     self: SupportsInteractiveProperty[Asynchronous],
     variableName: Union[VariableName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("typeOf")
@@ -3984,16 +3778,14 @@ def typeOf(
 def instantiateModel(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def instantiateModel(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("instantiateModel")
@@ -4020,8 +3812,7 @@ def buildOpenTURNSInterface(
     className: Union[TypeName, str],
     pythonTemplateFile: Union[PathLike[str], str],
     showFlatModelica: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -4030,8 +3821,7 @@ async def buildOpenTURNSInterface(
     className: Union[TypeName, str],
     pythonTemplateFile: Union[PathLike[str], str],
     showFlatModelica: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("buildOpenTURNSInterface")
@@ -4060,16 +3850,14 @@ def buildOpenTURNSInterface(
 def runOpenTURNSPythonScript(
     self: SupportsInteractiveProperty[Synchronous],
     pythonScriptFile: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def runOpenTURNSPythonScript(
     self: SupportsInteractiveProperty[Asynchronous],
     pythonScriptFile: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("runOpenTURNSPythonScript")
@@ -4094,16 +3882,14 @@ def runOpenTURNSPythonScript(
 def generateCode(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def generateCode(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("generateCode")
@@ -4132,8 +3918,7 @@ def loadModel(
     notify: Union[bool, None] = None,
     languageStandard: Union[str, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -4144,8 +3929,7 @@ async def loadModel(
     notify: Union[bool, None] = None,
     languageStandard: Union[str, None] = None,
     requireExactVersion: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("loadModel")
@@ -4178,16 +3962,14 @@ def loadModel(
 def deleteFile(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def deleteFile(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("deleteFile")
@@ -4213,8 +3995,7 @@ def saveModel(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -4222,8 +4003,7 @@ async def saveModel(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("saveModel")
@@ -4254,8 +4034,7 @@ def saveTotalModel(
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
     obfuscate: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -4266,8 +4045,7 @@ async def saveTotalModel(
     stripAnnotations: Union[bool, None] = None,
     stripComments: Union[bool, None] = None,
     obfuscate: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("saveTotalModel")
@@ -4301,8 +4079,7 @@ def saveTotalModelDebug(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -4310,8 +4087,7 @@ async def saveTotalModelDebug(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("saveTotalModelDebug")
@@ -4338,16 +4114,14 @@ def saveTotalModelDebug(
 def save(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def save(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("save")
@@ -4369,15 +4143,13 @@ def save(
 
 
 @overload
-def saveTotalSCode(self: SupportsInteractiveProperty[Synchronous]) -> None:
-    ...
+def saveTotalSCode(self: SupportsInteractiveProperty[Synchronous]) -> None: ...
 
 
 @overload
 async def saveTotalSCode(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("saveTotalSCode")
@@ -4385,25 +4157,22 @@ def saveTotalSCode(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
-) -> Union[None, Coroutine[None, None, None]]:
-    ...
+    ],
+) -> Union[None, Coroutine[None, None, None]]: ...
 
 
 @overload
 def translateGraphics(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def translateGraphics(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("translateGraphics")
@@ -4440,8 +4209,7 @@ def dumpXMLDAE(
     dumpResiduals: Union[bool, None] = None,
     fileNamePrefix: Union[str, None] = None,
     rewriteRulesFile: Union[PathLike[str], str, None] = None,
-) -> Dumpxmldae:
-    ...
+) -> Dumpxmldae: ...
 
 
 @overload
@@ -4455,8 +4223,7 @@ async def dumpXMLDAE(
     dumpResiduals: Union[bool, None] = None,
     fileNamePrefix: Union[str, None] = None,
     rewriteRulesFile: Union[PathLike[str], str, None] = None,
-) -> Dumpxmldae:
-    ...
+) -> Dumpxmldae: ...
 
 
 @external("dumpXMLDAE")
@@ -4501,15 +4268,13 @@ class Convertunits(NamedTuple):
 @overload
 def convertUnits(
     self: SupportsInteractiveProperty[Synchronous], s1: str, s2: str
-) -> Convertunits:
-    ...
+) -> Convertunits: ...
 
 
 @overload
 async def convertUnits(
     self: SupportsInteractiveProperty[Asynchronous], s1: str, s2: str
-) -> Convertunits:
-    ...
+) -> Convertunits: ...
 
 
 @external("convertUnits")
@@ -4537,15 +4302,13 @@ def convertUnits(
 @overload
 def getDerivedUnits(
     self: SupportsInteractiveProperty[Synchronous], baseUnit: str
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getDerivedUnits(
     self: SupportsInteractiveProperty[Asynchronous], baseUnit: str
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getDerivedUnits")
@@ -4569,15 +4332,13 @@ def getDerivedUnits(
 @overload
 def listVariables(
     self: SupportsInteractiveProperty[Synchronous],
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
 async def listVariables(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("listVariables")
@@ -4585,7 +4346,7 @@ def listVariables(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[List[TypeName], Coroutine[None, None, List[TypeName]]]:
     """
     .. code-block:: modelica
@@ -4599,15 +4360,13 @@ def listVariables(
 @overload
 def strtok(
     self: SupportsInteractiveProperty[Synchronous], string: str, token: str
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def strtok(
     self: SupportsInteractiveProperty[Asynchronous], string: str, token: str
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("strtok")
@@ -4633,15 +4392,13 @@ def strtok(
 @overload
 def stringSplit(
     self: SupportsInteractiveProperty[Synchronous], string: str, token: str
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def stringSplit(
     self: SupportsInteractiveProperty[Asynchronous], string: str, token: str
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("stringSplit")
@@ -4670,8 +4427,7 @@ def stringReplace(
     str: str,
     source: str,
     target: str,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -4680,8 +4436,7 @@ async def stringReplace(
     str: str,
     source: str,
     target: str,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("stringReplace")
@@ -4709,15 +4464,13 @@ def stringReplace(
 @overload
 def escapeXML(
     self: SupportsInteractiveProperty[Synchronous], inStr: str
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def escapeXML(
     self: SupportsInteractiveProperty[Asynchronous], inStr: str
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("escapeXML")
@@ -4742,8 +4495,7 @@ class ExportKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");
-    """
+        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ExportKind")
     Absyn = 1
@@ -4767,8 +4519,7 @@ def list(
         Literal["Absyn", "SCode", "MetaModelicaInterface", "Internal"],
         None,
     ] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -4782,8 +4533,7 @@ async def list(
         Literal["Absyn", "SCode", "MetaModelicaInterface", "Internal"],
         None,
     ] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("list")
@@ -4819,8 +4569,7 @@ def listFile(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     nestedClasses: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -4828,8 +4577,7 @@ async def listFile(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     nestedClasses: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("listFile")
@@ -4856,8 +4604,7 @@ class DiffFormat(enumeration):
     """
     .. code-block:: modelica
 
-        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");
-    """
+        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.DiffFormat")
     plain = 1
@@ -4877,8 +4624,7 @@ def diffModelicaFileListings(
         DiffFormat, Literal["plain", "color", "xml"], None
     ] = None,
     failOnSemanticsChange: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -4890,8 +4636,7 @@ async def diffModelicaFileListings(
         DiffFormat, Literal["plain", "color", "xml"], None
     ] = None,
     failOnSemanticsChange: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("diffModelicaFileListings")
@@ -4928,8 +4673,7 @@ def exportToFigaro(
     options: str,
     processor: str,
     directory: Union[PathLike[str], str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -4941,8 +4685,7 @@ async def exportToFigaro(
     options: str,
     processor: str,
     directory: Union[PathLike[str], str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("exportToFigaro")
@@ -4976,15 +4719,13 @@ def exportToFigaro(
 @overload
 def inferBindings(
     self: SupportsInteractiveProperty[Synchronous], path: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def inferBindings(
     self: SupportsInteractiveProperty[Asynchronous], path: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("inferBindings")
@@ -5008,15 +4749,13 @@ def inferBindings(
 @overload
 def generateVerificationScenarios(
     self: SupportsInteractiveProperty[Synchronous], path: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def generateVerificationScenarios(
     self: SupportsInteractiveProperty[Asynchronous], path: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("generateVerificationScenarios")
@@ -5042,8 +4781,7 @@ def rewriteBlockCall(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     inDefs: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -5051,8 +4789,7 @@ async def rewriteBlockCall(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     inDefs: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("rewriteBlockCall")
@@ -5076,15 +4813,15 @@ def rewriteBlockCall(
 
 
 @overload
-def realpath(self: SupportsInteractiveProperty[Synchronous], name: str) -> str:
-    ...
+def realpath(
+    self: SupportsInteractiveProperty[Synchronous], name: str
+) -> str: ...
 
 
 @overload
 async def realpath(
     self: SupportsInteractiveProperty[Asynchronous], name: str
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("realpath")
@@ -5108,15 +4845,13 @@ def realpath(
 @overload
 def uriToFilename(
     self: SupportsInteractiveProperty[Synchronous], uri: str
-) -> Union[str, None]:
-    ...
+) -> Union[str, None]: ...
 
 
 @overload
 async def uriToFilename(
     self: SupportsInteractiveProperty[Asynchronous], uri: str
-) -> Union[str, None]:
-    ...
+) -> Union[str, None]: ...
 
 
 @external("uriToFilename")
@@ -5140,15 +4875,13 @@ def uriToFilename(
 @overload
 def getLoadedLibraries(
     self: SupportsInteractiveProperty[Synchronous],
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @overload
 async def getLoadedLibraries(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @external("getLoadedLibraries")
@@ -5156,7 +4889,7 @@ def getLoadedLibraries(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[List[List[str]], Coroutine[None, None, List[List[str]]]]:
     """
     .. code-block:: modelica
@@ -5192,8 +4925,7 @@ def solveLinearSystem(
         LinearSystemSolver, Literal["dgesv", "lpsolve55"], None
     ] = None,
     isInt: Union[Sequence[int], None] = None,
-) -> Solvelinearsystem:
-    ...
+) -> Solvelinearsystem: ...
 
 
 @overload
@@ -5205,8 +4937,7 @@ async def solveLinearSystem(
         LinearSystemSolver, Literal["dgesv", "lpsolve55"], None
     ] = None,
     isInt: Union[Sequence[int], None] = None,
-) -> Solvelinearsystem:
-    ...
+) -> Solvelinearsystem: ...
 
 
 @external("solveLinearSystem")
@@ -5253,8 +4984,7 @@ def reopenStandardStream(
     self: SupportsInteractiveProperty[Synchronous],
     _stream: Union[StandardStream, Literal["stdin", "stdout", "stderr"]],
     filename: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -5262,8 +4992,7 @@ async def reopenStandardStream(
     self: SupportsInteractiveProperty[Asynchronous],
     _stream: Union[StandardStream, Literal["stdin", "stdout", "stderr"]],
     filename: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("reopenStandardStream")
@@ -5296,8 +5025,7 @@ def importFMU(
     debugLogging: Union[bool, None] = None,
     generateInputConnectors: Union[bool, None] = None,
     generateOutputConnectors: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -5310,8 +5038,7 @@ async def importFMU(
     debugLogging: Union[bool, None] = None,
     generateInputConnectors: Union[bool, None] = None,
     generateOutputConnectors: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("importFMU")
@@ -5354,8 +5081,7 @@ def importFMUModelDescription(
     debugLogging: Union[bool, None] = None,
     generateInputConnectors: Union[bool, None] = None,
     generateOutputConnectors: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -5368,8 +5094,7 @@ async def importFMUModelDescription(
     debugLogging: Union[bool, None] = None,
     generateInputConnectors: Union[bool, None] = None,
     generateOutputConnectors: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("importFMUModelDescription")
@@ -5410,8 +5135,7 @@ def translateModelFMU(
     fmuType: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
     includeResources: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -5422,8 +5146,7 @@ async def translateModelFMU(
     fmuType: Union[str, None] = None,
     fileNamePrefix: Union[str, None] = None,
     includeResources: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("translateModelFMU")
@@ -5461,8 +5184,7 @@ def buildModelFMU(
     fileNamePrefix: Union[str, None] = None,
     platforms: Union[Sequence[str], None] = None,
     includeResources: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -5474,8 +5196,7 @@ async def buildModelFMU(
     fileNamePrefix: Union[str, None] = None,
     platforms: Union[Sequence[str], None] = None,
     includeResources: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("buildModelFMU")
@@ -5511,8 +5232,7 @@ def buildEncryptedPackage(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     encrypt: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -5520,8 +5240,7 @@ async def buildEncryptedPackage(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     encrypt: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("buildEncryptedPackage")
@@ -5559,8 +5278,7 @@ def simulate(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> SimulationResult:
-    ...
+) -> SimulationResult: ...
 
 
 @overload
@@ -5578,8 +5296,7 @@ async def simulate(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> SimulationResult:
-    ...
+) -> SimulationResult: ...
 
 
 @external("simulate")
@@ -5683,8 +5400,7 @@ def buildModel(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -5702,8 +5418,7 @@ async def buildModel(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("buildModel")
@@ -5761,8 +5476,7 @@ def buildLabel(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -5780,8 +5494,7 @@ async def buildLabel(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("buildLabel")
@@ -5840,8 +5553,7 @@ def reduceTerms(
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
     labelstoCancel: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -5860,8 +5572,7 @@ async def reduceTerms(
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
     labelstoCancel: Union[str, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("reduceTerms")
@@ -5911,8 +5622,7 @@ def moveClass(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     offset: int,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -5920,8 +5630,7 @@ async def moveClass(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     offset: int,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("moveClass")
@@ -5948,16 +5657,14 @@ def moveClass(
 def moveClassToTop(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def moveClassToTop(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("moveClassToTop")
@@ -5982,16 +5689,14 @@ def moveClassToTop(
 def moveClassToBottom(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def moveClassToBottom(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("moveClassToBottom")
@@ -6018,8 +5723,7 @@ def copyClass(
     className: Union[TypeName, str],
     newClassName: str,
     withIn: Union[TypeName, str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -6028,8 +5732,7 @@ async def copyClass(
     className: Union[TypeName, str],
     newClassName: str,
     withIn: Union[TypeName, str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("copyClass")
@@ -6072,8 +5775,7 @@ def linearize(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -6094,8 +5796,7 @@ async def linearize(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("linearize")
@@ -6162,8 +5863,7 @@ def optimize(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -6184,8 +5884,7 @@ async def optimize(
     variableFilter: Union[str, None] = None,
     cflags: Union[str, None] = None,
     simflags: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("optimize")
@@ -6238,16 +5937,14 @@ def optimize(
 def getSourceFile(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getSourceFile(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getSourceFile")
@@ -6273,8 +5970,7 @@ def setSourceFile(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     filename: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -6282,8 +5978,7 @@ async def setSourceFile(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     filename: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setSourceFile")
@@ -6310,16 +6005,14 @@ def setSourceFile(
 def isShortDefinition(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isShortDefinition(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isShortDefinition")
@@ -6345,8 +6038,7 @@ def setClassComment(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     filename: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -6354,8 +6046,7 @@ async def setClassComment(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     filename: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setClassComment")
@@ -6388,8 +6079,7 @@ def getClassNames(
     builtin: Union[bool, None] = None,
     showProtected: Union[bool, None] = None,
     includeConstants: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -6402,8 +6092,7 @@ async def getClassNames(
     builtin: Union[bool, None] = None,
     showProtected: Union[bool, None] = None,
     includeConstants: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("getClassNames")
@@ -6440,16 +6129,14 @@ def getClassNames(
 def getUsedClassNames(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
 async def getUsedClassNames(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("getUsedClassNames")
@@ -6474,16 +6161,14 @@ def getUsedClassNames(
 def getPackages(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
 async def getPackages(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("getPackages")
@@ -6512,8 +6197,7 @@ def getAllSubtypeOf(
     qualified: Union[bool, None] = None,
     includePartial: Union[bool, None] = None,
     sort: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -6524,8 +6208,7 @@ async def getAllSubtypeOf(
     qualified: Union[bool, None] = None,
     includePartial: Union[bool, None] = None,
     sort: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("getAllSubtypeOf")
@@ -6569,8 +6252,7 @@ def basePlotFunction(
     points: Union[bool, None] = None,
     xRange: Union[Sequence[float], None] = None,
     yRange: Union[Sequence[float], None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -6588,8 +6270,7 @@ async def basePlotFunction(
     points: Union[bool, None] = None,
     xRange: Union[Sequence[float], None] = None,
     yRange: Union[Sequence[float], None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("basePlotFunction")
@@ -6655,8 +6336,7 @@ def plot(
     footer: Union[str, None] = None,
     autoScale: Union[bool, None] = None,
     forceOMPlot: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -6679,8 +6359,7 @@ async def plot(
     footer: Union[str, None] = None,
     autoScale: Union[bool, None] = None,
     forceOMPlot: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("plot")
@@ -6752,8 +6431,7 @@ def plotAll(
     footer: Union[str, None] = None,
     autoScale: Union[bool, None] = None,
     forceOMPlot: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -6775,8 +6453,7 @@ async def plotAll(
     footer: Union[str, None] = None,
     autoScale: Union[bool, None] = None,
     forceOMPlot: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("plotAll")
@@ -6848,8 +6525,7 @@ def plotParametric(
     footer: Union[str, None] = None,
     autoScale: Union[bool, None] = None,
     forceOMPlot: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -6873,8 +6549,7 @@ async def plotParametric(
     footer: Union[str, None] = None,
     autoScale: Union[bool, None] = None,
     forceOMPlot: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("plotParametric")
@@ -6935,8 +6610,7 @@ def readSimulationResult(
     filename: Union[PathLike[str], str],
     variables: Sequence[Union[VariableName, str]],
     size: Union[int, None] = None,
-) -> List[List[float]]:
-    ...
+) -> List[List[float]]: ...
 
 
 @overload
@@ -6945,8 +6619,7 @@ async def readSimulationResult(
     filename: Union[PathLike[str], str],
     variables: Sequence[Union[VariableName, str]],
     size: Union[int, None] = None,
-) -> List[List[float]]:
-    ...
+) -> List[List[float]]: ...
 
 
 @external("readSimulationResult")
@@ -6975,16 +6648,14 @@ def readSimulationResult(
 def readSimulationResultSize(
     self: SupportsInteractiveProperty[Synchronous],
     fileName: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def readSimulationResultSize(
     self: SupportsInteractiveProperty[Asynchronous],
     fileName: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("readSimulationResultSize")
@@ -7011,8 +6682,7 @@ def readSimulationResultVars(
     fileName: Union[PathLike[str], str],
     readParameters: Union[bool, None] = None,
     openmodelicaStyle: Union[bool, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -7021,8 +6691,7 @@ async def readSimulationResultVars(
     fileName: Union[PathLike[str], str],
     readParameters: Union[bool, None] = None,
     openmodelicaStyle: Union[bool, None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("readSimulationResultVars")
@@ -7056,8 +6725,7 @@ def filterSimulationResults(
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
     hintReadAllVars: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -7069,8 +6737,7 @@ async def filterSimulationResults(
     numberOfIntervals: Union[int, None] = None,
     removeDescription: Union[bool, None] = None,
     hintReadAllVars: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("filterSimulationResults")
@@ -7110,8 +6777,7 @@ def compareSimulationResults(
     relTol: Union[float, None] = None,
     absTol: Union[float, None] = None,
     vars: Union[Sequence[str], None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -7123,8 +6789,7 @@ async def compareSimulationResults(
     relTol: Union[float, None] = None,
     absTol: Union[float, None] = None,
     vars: Union[Sequence[str], None] = None,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("compareSimulationResults")
@@ -7162,8 +6827,7 @@ def deltaSimulationResults(
     reffilename: Union[PathLike[str], str],
     method: str,
     vars: Union[Sequence[str], None] = None,
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
@@ -7173,8 +6837,7 @@ async def deltaSimulationResults(
     reffilename: Union[PathLike[str], str],
     method: str,
     vars: Union[Sequence[str], None] = None,
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("deltaSimulationResults")
@@ -7217,8 +6880,7 @@ def diffSimulationResults(
     rangeDelta: Union[float, None] = None,
     vars: Union[Sequence[str], None] = None,
     keepEqualResults: Union[bool, None] = None,
-) -> Diffsimulationresults:
-    ...
+) -> Diffsimulationresults: ...
 
 
 @overload
@@ -7232,8 +6894,7 @@ async def diffSimulationResults(
     rangeDelta: Union[float, None] = None,
     vars: Union[Sequence[str], None] = None,
     keepEqualResults: Union[bool, None] = None,
-) -> Diffsimulationresults:
-    ...
+) -> Diffsimulationresults: ...
 
 
 @external("diffSimulationResults")
@@ -7280,8 +6941,7 @@ def diffSimulationResultsHtml(
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
     rangeDelta: Union[float, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -7293,8 +6953,7 @@ async def diffSimulationResultsHtml(
     relTol: Union[float, None] = None,
     relTolDiffMinMax: Union[float, None] = None,
     rangeDelta: Union[float, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("diffSimulationResultsHtml")
@@ -7330,8 +6989,7 @@ def checkTaskGraph(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
     reffilename: Union[PathLike[str], str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -7339,8 +6997,7 @@ async def checkTaskGraph(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
     reffilename: Union[PathLike[str], str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("checkTaskGraph")
@@ -7368,8 +7025,7 @@ def checkCodeGraph(
     self: SupportsInteractiveProperty[Synchronous],
     graphfile: Union[PathLike[str], str],
     codefile: Union[PathLike[str], str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -7377,8 +7033,7 @@ async def checkCodeGraph(
     self: SupportsInteractiveProperty[Asynchronous],
     graphfile: Union[PathLike[str], str],
     codefile: Union[PathLike[str], str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("checkCodeGraph")
@@ -7407,8 +7062,7 @@ def val(
     var: Union[VariableName, str],
     timePoint: Union[float, None] = None,
     fileName: Union[PathLike[str], str, None] = None,
-) -> float:
-    ...
+) -> float: ...
 
 
 @overload
@@ -7417,8 +7071,7 @@ async def val(
     var: Union[VariableName, str],
     timePoint: Union[float, None] = None,
     fileName: Union[PathLike[str], str, None] = None,
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("val")
@@ -7446,15 +7099,13 @@ def val(
 @overload
 def closeSimulationResultFile(
     self: SupportsInteractiveProperty[Synchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def closeSimulationResultFile(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("closeSimulationResultFile")
@@ -7462,7 +7113,7 @@ def closeSimulationResultFile(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -7477,16 +7128,14 @@ def closeSimulationResultFile(
 def getParameterNames(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getParameterNames(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getParameterNames")
@@ -7512,8 +7161,7 @@ def getParameterValue(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     parameterName: str,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -7521,8 +7169,7 @@ async def getParameterValue(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     parameterName: str,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getParameterValue")
@@ -7550,8 +7197,7 @@ def getComponentModifierNames(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     componentName: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -7559,8 +7205,7 @@ async def getComponentModifierNames(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     componentName: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getComponentModifierNames")
@@ -7588,8 +7233,7 @@ def getComponentModifierValue(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -7597,8 +7241,7 @@ async def getComponentModifierValue(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getComponentModifierValue")
@@ -7626,8 +7269,7 @@ def getComponentModifierValues(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -7635,8 +7277,7 @@ async def getComponentModifierValues(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getComponentModifierValues")
@@ -7665,8 +7306,7 @@ def removeComponentModifiers(
     class_: Union[TypeName, str],
     componentName: str,
     keepRedeclares: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -7675,8 +7315,7 @@ async def removeComponentModifiers(
     class_: Union[TypeName, str],
     componentName: str,
     keepRedeclares: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("removeComponentModifiers")
@@ -7706,8 +7345,7 @@ def getElementModifierNames(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     elementName: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -7715,8 +7353,7 @@ async def getElementModifierNames(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     elementName: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getElementModifierNames")
@@ -7744,8 +7381,7 @@ def getElementModifierValue(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -7753,8 +7389,7 @@ async def getElementModifierValue(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getElementModifierValue")
@@ -7782,8 +7417,7 @@ def getElementModifierValues(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -7791,8 +7425,7 @@ async def getElementModifierValues(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     modifier: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getElementModifierValues")
@@ -7821,8 +7454,7 @@ def removeElementModifiers(
     className: Union[TypeName, str],
     componentName: str,
     keepRedeclares: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -7831,8 +7463,7 @@ async def removeElementModifiers(
     className: Union[TypeName, str],
     componentName: str,
     keepRedeclares: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("removeElementModifiers")
@@ -7860,15 +7491,13 @@ def removeElementModifiers(
 @overload
 def getInstantiatedParametersAndValues(
     self: SupportsInteractiveProperty[Synchronous], cls: Union[TypeName, str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getInstantiatedParametersAndValues(
     self: SupportsInteractiveProperty[Asynchronous], cls: Union[TypeName, str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getInstantiatedParametersAndValues")
@@ -7895,8 +7524,7 @@ def removeExtendsModifiers(
     className: Union[TypeName, str],
     baseClassName: Union[TypeName, str],
     keepRedeclares: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -7905,8 +7533,7 @@ async def removeExtendsModifiers(
     className: Union[TypeName, str],
     baseClassName: Union[TypeName, str],
     keepRedeclares: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("removeExtendsModifiers")
@@ -7938,8 +7565,7 @@ def updateConnectionAnnotation(
     from_: str,
     to: str,
     annotate: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -7949,8 +7575,7 @@ async def updateConnectionAnnotation(
     from_: str,
     to: str,
     annotate: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("updateConnectionAnnotation")
@@ -7985,8 +7610,7 @@ def updateConnectionNames(
     to: str,
     fromNew: str,
     toNew: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -7997,8 +7621,7 @@ async def updateConnectionNames(
     to: str,
     fromNew: str,
     toNew: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("updateConnectionNames")
@@ -8031,16 +7654,14 @@ def updateConnectionNames(
 def getConnectionCount(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getConnectionCount(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getConnectionCount")
@@ -8066,8 +7687,7 @@ def getNthConnection(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     index: int,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -8075,8 +7695,7 @@ async def getNthConnection(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     index: int,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getNthConnection")
@@ -8103,16 +7722,14 @@ def getNthConnection(
 def getAlgorithmCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getAlgorithmCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getAlgorithmCount")
@@ -8138,8 +7755,7 @@ def getNthAlgorithm(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8147,8 +7763,7 @@ async def getNthAlgorithm(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthAlgorithm")
@@ -8175,16 +7790,14 @@ def getNthAlgorithm(
 def getInitialAlgorithmCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getInitialAlgorithmCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getInitialAlgorithmCount")
@@ -8210,8 +7823,7 @@ def getNthInitialAlgorithm(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8219,8 +7831,7 @@ async def getNthInitialAlgorithm(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthInitialAlgorithm")
@@ -8247,16 +7858,14 @@ def getNthInitialAlgorithm(
 def getAlgorithmItemsCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getAlgorithmItemsCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getAlgorithmItemsCount")
@@ -8282,8 +7891,7 @@ def getNthAlgorithmItem(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8291,8 +7899,7 @@ async def getNthAlgorithmItem(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthAlgorithmItem")
@@ -8319,16 +7926,14 @@ def getNthAlgorithmItem(
 def getInitialAlgorithmItemsCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getInitialAlgorithmItemsCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getInitialAlgorithmItemsCount")
@@ -8354,8 +7959,7 @@ def getNthInitialAlgorithmItem(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8363,8 +7967,7 @@ async def getNthInitialAlgorithmItem(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthInitialAlgorithmItem")
@@ -8391,16 +7994,14 @@ def getNthInitialAlgorithmItem(
 def getEquationCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getEquationCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getEquationCount")
@@ -8426,8 +8027,7 @@ def getNthEquation(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8435,8 +8035,7 @@ async def getNthEquation(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthEquation")
@@ -8463,16 +8062,14 @@ def getNthEquation(
 def getInitialEquationCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getInitialEquationCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getInitialEquationCount")
@@ -8498,8 +8095,7 @@ def getNthInitialEquation(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8507,8 +8103,7 @@ async def getNthInitialEquation(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthInitialEquation")
@@ -8535,16 +8130,14 @@ def getNthInitialEquation(
 def getEquationItemsCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getEquationItemsCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getEquationItemsCount")
@@ -8570,8 +8163,7 @@ def getNthEquationItem(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8579,8 +8171,7 @@ async def getNthEquationItem(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthEquationItem")
@@ -8607,16 +8198,14 @@ def getNthEquationItem(
 def getInitialEquationItemsCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getInitialEquationItemsCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getInitialEquationItemsCount")
@@ -8642,8 +8231,7 @@ def getNthInitialEquationItem(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8651,8 +8239,7 @@ async def getNthInitialEquationItem(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthInitialEquationItem")
@@ -8679,16 +8266,14 @@ def getNthInitialEquationItem(
 def getAnnotationCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getAnnotationCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getAnnotationCount")
@@ -8714,8 +8299,7 @@ def getNthAnnotationString(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8723,8 +8307,7 @@ async def getNthAnnotationString(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getNthAnnotationString")
@@ -8751,16 +8334,14 @@ def getNthAnnotationString(
 def getImportCount(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def getImportCount(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("getImportCount")
@@ -8786,8 +8367,7 @@ def getMMfileTotalDependencies(
     self: SupportsInteractiveProperty[Synchronous],
     in_package_name: str,
     public_imports_dir: Union[PathLike[str], str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -8795,8 +8375,7 @@ async def getMMfileTotalDependencies(
     self: SupportsInteractiveProperty[Asynchronous],
     in_package_name: str,
     public_imports_dir: Union[PathLike[str], str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getMMfileTotalDependencies")
@@ -8828,16 +8407,14 @@ class Getimportednames(NamedTuple):
 def getImportedNames(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
-) -> Getimportednames:
-    ...
+) -> Getimportednames: ...
 
 
 @overload
 async def getImportedNames(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
-) -> Getimportednames:
-    ...
+) -> Getimportednames: ...
 
 
 @external("getImportedNames")
@@ -8864,8 +8441,7 @@ def getNthImport(
     self: SupportsInteractiveProperty[Synchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -8873,8 +8449,7 @@ async def getNthImport(
     self: SupportsInteractiveProperty[Asynchronous],
     class_: Union[TypeName, str],
     index: int,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getNthImport")
@@ -8903,8 +8478,7 @@ def iconv(
     string: str,
     from_: str,
     to: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -8913,8 +8487,7 @@ async def iconv(
     string: str,
     from_: str,
     to: Union[str, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("iconv")
@@ -8942,15 +8515,13 @@ def iconv(
 @overload
 def getDocumentationAnnotation(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getDocumentationAnnotation(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getDocumentationAnnotation")
@@ -8977,8 +8548,7 @@ def setDocumentationAnnotation(
     class_: Union[TypeName, str],
     info: Union[str, None] = None,
     revisions: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -8987,8 +8557,7 @@ async def setDocumentationAnnotation(
     class_: Union[TypeName, str],
     info: Union[str, None] = None,
     revisions: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("setDocumentationAnnotation")
@@ -9021,15 +8590,13 @@ class Gettimestamp(NamedTuple):
 @overload
 def getTimeStamp(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> Gettimestamp:
-    ...
+) -> Gettimestamp: ...
 
 
 @overload
 async def getTimeStamp(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> Gettimestamp:
-    ...
+) -> Gettimestamp: ...
 
 
 @external("getTimeStamp")
@@ -9054,15 +8621,13 @@ def getTimeStamp(
 @overload
 def stringTypeName(
     self: SupportsInteractiveProperty[Synchronous], str: str
-) -> TypeName:
-    ...
+) -> TypeName: ...
 
 
 @overload
 async def stringTypeName(
     self: SupportsInteractiveProperty[Asynchronous], str: str
-) -> TypeName:
-    ...
+) -> TypeName: ...
 
 
 @external("stringTypeName")
@@ -9086,15 +8651,13 @@ def stringTypeName(
 @overload
 def stringVariableName(
     self: SupportsInteractiveProperty[Synchronous], str: str
-) -> VariableName:
-    ...
+) -> VariableName: ...
 
 
 @overload
 async def stringVariableName(
     self: SupportsInteractiveProperty[Asynchronous], str: str
-) -> VariableName:
-    ...
+) -> VariableName: ...
 
 
 @external("stringVariableName")
@@ -9118,15 +8681,13 @@ def stringVariableName(
 @overload
 def typeNameString(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def typeNameString(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("typeNameString")
@@ -9150,15 +8711,13 @@ def typeNameString(
 @overload
 def typeNameStrings(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def typeNameStrings(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("typeNameStrings")
@@ -9182,15 +8741,13 @@ def typeNameStrings(
 @overload
 def getClassComment(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getClassComment(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getClassComment")
@@ -9215,16 +8772,14 @@ def getClassComment(
 def dirname(
     self: SupportsInteractiveProperty[Synchronous],
     path: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def dirname(
     self: SupportsInteractiveProperty[Asynchronous],
     path: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("dirname")
@@ -9249,16 +8804,14 @@ def dirname(
 def basename(
     self: SupportsInteractiveProperty[Synchronous],
     path: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def basename(
     self: SupportsInteractiveProperty[Asynchronous],
     path: Union[PathLike[str], str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("basename")
@@ -9282,15 +8835,13 @@ def basename(
 @overload
 def getClassRestriction(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getClassRestriction(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getClassRestriction")
@@ -9314,15 +8865,13 @@ def getClassRestriction(
 @overload
 def isType(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isType(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isType")
@@ -9346,15 +8895,13 @@ def isType(
 @overload
 def isPackage(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isPackage(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isPackage")
@@ -9378,15 +8925,13 @@ def isPackage(
 @overload
 def isClass(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isClass(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isClass")
@@ -9410,15 +8955,13 @@ def isClass(
 @overload
 def isRecord(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isRecord(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isRecord")
@@ -9442,15 +8985,13 @@ def isRecord(
 @overload
 def isBlock(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isBlock(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isBlock")
@@ -9474,15 +9015,13 @@ def isBlock(
 @overload
 def isFunction(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isFunction(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isFunction")
@@ -9506,15 +9045,13 @@ def isFunction(
 @overload
 def isPartial(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isPartial(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isPartial")
@@ -9538,15 +9075,13 @@ def isPartial(
 @overload
 def isModel(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isModel(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isModel")
@@ -9570,15 +9105,13 @@ def isModel(
 @overload
 def isConnector(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isConnector(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isConnector")
@@ -9602,15 +9135,13 @@ def isConnector(
 @overload
 def isOptimization(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isOptimization(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isOptimization")
@@ -9634,15 +9165,13 @@ def isOptimization(
 @overload
 def isEnumeration(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isEnumeration(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isEnumeration")
@@ -9666,15 +9195,13 @@ def isEnumeration(
 @overload
 def isOperator(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isOperator(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isOperator")
@@ -9698,15 +9225,13 @@ def isOperator(
 @overload
 def isOperatorRecord(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isOperatorRecord(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isOperatorRecord")
@@ -9730,15 +9255,13 @@ def isOperatorRecord(
 @overload
 def isOperatorFunction(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isOperatorFunction(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isOperatorFunction")
@@ -9764,8 +9287,7 @@ def isProtectedClass(
     self: SupportsInteractiveProperty[Synchronous],
     cl: Union[TypeName, str],
     c2: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -9773,8 +9295,7 @@ async def isProtectedClass(
     self: SupportsInteractiveProperty[Asynchronous],
     cl: Union[TypeName, str],
     c2: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isProtectedClass")
@@ -9800,15 +9321,13 @@ def isProtectedClass(
 @overload
 def getBuiltinType(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
 async def getBuiltinType(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getBuiltinType")
@@ -9836,8 +9355,7 @@ def setInitXmlStartValue(
     variableName: str,
     startValue: str,
     outputFile: Union[PathLike[str], str],
-) -> Union[bool, None]:
-    ...
+) -> Union[bool, None]: ...
 
 
 @overload
@@ -9847,8 +9365,7 @@ async def setInitXmlStartValue(
     variableName: str,
     startValue: str,
     outputFile: Union[PathLike[str], str],
-) -> Union[bool, None]:
-    ...
+) -> Union[bool, None]: ...
 
 
 @external("setInitXmlStartValue")
@@ -9879,16 +9396,14 @@ def setInitXmlStartValue(
 def ngspicetoModelica(
     self: SupportsInteractiveProperty[Synchronous],
     netlistfileName: Union[PathLike[str], str],
-) -> Union[bool, None]:
-    ...
+) -> Union[bool, None]: ...
 
 
 @overload
 async def ngspicetoModelica(
     self: SupportsInteractiveProperty[Asynchronous],
     netlistfileName: Union[PathLike[str], str],
-) -> Union[bool, None]:
-    ...
+) -> Union[bool, None]: ...
 
 
 @external("ngspicetoModelica")
@@ -9912,15 +9427,13 @@ def ngspicetoModelica(
 @overload
 def getInheritedClasses(
     self: SupportsInteractiveProperty[Synchronous], name: Union[TypeName, str]
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
 async def getInheritedClasses(
     self: SupportsInteractiveProperty[Asynchronous], name: Union[TypeName, str]
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("getInheritedClasses")
@@ -9944,15 +9457,13 @@ def getInheritedClasses(
 @overload
 def getComponentsTest(
     self: SupportsInteractiveProperty[Synchronous], name: Union[TypeName, str]
-) -> List[Component]:
-    ...
+) -> List[Component]: ...
 
 
 @overload
 async def getComponentsTest(
     self: SupportsInteractiveProperty[Asynchronous], name: Union[TypeName, str]
-) -> List[Component]:
-    ...
+) -> List[Component]: ...
 
 
 @external("getComponentsTest")
@@ -10028,15 +9539,13 @@ class Component(record):
 @overload
 def isExperiment(
     self: SupportsInteractiveProperty[Synchronous], name: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def isExperiment(
     self: SupportsInteractiveProperty[Asynchronous], name: Union[TypeName, str]
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("isExperiment")
@@ -10074,8 +9583,7 @@ def getSimulationOptions(
     defaultTolerance: Union[float, None] = None,
     defaultNumberOfIntervals: Union[int, None] = None,
     defaultInterval: Union[float, None] = None,
-) -> Getsimulationoptions:
-    ...
+) -> Getsimulationoptions: ...
 
 
 @overload
@@ -10087,8 +9595,7 @@ async def getSimulationOptions(
     defaultTolerance: Union[float, None] = None,
     defaultNumberOfIntervals: Union[int, None] = None,
     defaultInterval: Union[float, None] = None,
-) -> Getsimulationoptions:
-    ...
+) -> Getsimulationoptions: ...
 
 
 @external("getSimulationOptions")
@@ -10128,8 +9635,7 @@ def getAnnotationNamedModifiers(
     self: SupportsInteractiveProperty[Synchronous],
     name: Union[TypeName, str],
     vendorannotation: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -10137,8 +9643,7 @@ async def getAnnotationNamedModifiers(
     self: SupportsInteractiveProperty[Asynchronous],
     name: Union[TypeName, str],
     vendorannotation: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getAnnotationNamedModifiers")
@@ -10167,8 +9672,7 @@ def getAnnotationModifierValue(
     name: Union[TypeName, str],
     vendorannotation: str,
     modifiername: str,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -10177,8 +9681,7 @@ async def getAnnotationModifierValue(
     name: Union[TypeName, str],
     vendorannotation: str,
     modifiername: str,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getAnnotationModifierValue")
@@ -10208,8 +9711,7 @@ def classAnnotationExists(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     annotationName: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -10217,8 +9719,7 @@ async def classAnnotationExists(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     annotationName: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("classAnnotationExists")
@@ -10246,8 +9747,7 @@ def getBooleanClassAnnotation(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     annotationName: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -10255,8 +9755,7 @@ async def getBooleanClassAnnotation(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     annotationName: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("getBooleanClassAnnotation")
@@ -10284,8 +9783,7 @@ def extendsFrom(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     baseClassName: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -10293,8 +9791,7 @@ async def extendsFrom(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     baseClassName: Union[TypeName, str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("extendsFrom")
@@ -10321,16 +9818,14 @@ def extendsFrom(
 def loadModelica3D(
     self: SupportsInteractiveProperty[Synchronous],
     version: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def loadModelica3D(
     self: SupportsInteractiveProperty[Asynchronous],
     version: Union[str, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("loadModelica3D")
@@ -10356,8 +9851,7 @@ def searchClassNames(
     self: SupportsInteractiveProperty[Synchronous],
     searchText: str,
     findInText: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @overload
@@ -10365,8 +9859,7 @@ async def searchClassNames(
     self: SupportsInteractiveProperty[Asynchronous],
     searchText: str,
     findInText: Union[bool, None] = None,
-) -> List[TypeName]:
-    ...
+) -> List[TypeName]: ...
 
 
 @external("searchClassNames")
@@ -10392,15 +9885,13 @@ def searchClassNames(
 @overload
 def getAvailableLibraries(
     self: SupportsInteractiveProperty[Synchronous],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getAvailableLibraries(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getAvailableLibraries")
@@ -10408,7 +9899,7 @@ def getAvailableLibraries(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[List[str], Coroutine[None, None, List[str]]]:
     """
     .. code-block:: modelica
@@ -10423,16 +9914,14 @@ def getAvailableLibraries(
 def getAvailableLibraryVersions(
     self: SupportsInteractiveProperty[Synchronous],
     libraryName: Union[TypeName, str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getAvailableLibraryVersions(
     self: SupportsInteractiveProperty[Asynchronous],
     libraryName: Union[TypeName, str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getAvailableLibraryVersions")
@@ -10459,8 +9948,7 @@ def installPackage(
     pkg: Union[TypeName, str],
     version: Union[str, None] = None,
     exactMatch: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -10469,8 +9957,7 @@ async def installPackage(
     pkg: Union[TypeName, str],
     version: Union[str, None] = None,
     exactMatch: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("installPackage")
@@ -10496,15 +9983,15 @@ def installPackage(
 
 
 @overload
-def updatePackageIndex(self: SupportsInteractiveProperty[Synchronous]) -> bool:
-    ...
+def updatePackageIndex(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> bool: ...
 
 
 @overload
 async def updatePackageIndex(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("updatePackageIndex")
@@ -10512,7 +9999,7 @@ def updatePackageIndex(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[bool, Coroutine[None, None, bool]]:
     """
     .. code-block:: modelica
@@ -10527,16 +10014,14 @@ def updatePackageIndex(
 def upgradeInstalledPackages(
     self: SupportsInteractiveProperty[Synchronous],
     installNewestVersions: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def upgradeInstalledPackages(
     self: SupportsInteractiveProperty[Asynchronous],
     installNewestVersions: Union[bool, None] = None,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("upgradeInstalledPackages")
@@ -10562,8 +10047,7 @@ def getAvailablePackageVersions(
     self: SupportsInteractiveProperty[Synchronous],
     pkg: Union[TypeName, str],
     version: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -10571,8 +10055,7 @@ async def getAvailablePackageVersions(
     self: SupportsInteractiveProperty[Asynchronous],
     pkg: Union[TypeName, str],
     version: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getAvailablePackageVersions")
@@ -10600,8 +10083,7 @@ def getAvailablePackageConversionsTo(
     self: SupportsInteractiveProperty[Synchronous],
     pkg: Union[TypeName, str],
     version: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -10609,8 +10091,7 @@ async def getAvailablePackageConversionsTo(
     self: SupportsInteractiveProperty[Asynchronous],
     pkg: Union[TypeName, str],
     version: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getAvailablePackageConversionsTo")
@@ -10638,8 +10119,7 @@ def getAvailablePackageConversionsFrom(
     self: SupportsInteractiveProperty[Synchronous],
     pkg: Union[TypeName, str],
     version: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
@@ -10647,8 +10127,7 @@ async def getAvailablePackageConversionsFrom(
     self: SupportsInteractiveProperty[Asynchronous],
     pkg: Union[TypeName, str],
     version: str,
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getAvailablePackageConversionsFrom")
@@ -10674,15 +10153,13 @@ def getAvailablePackageConversionsFrom(
 @overload
 def getUses(
     self: SupportsInteractiveProperty[Synchronous], pack: Union[TypeName, str]
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @overload
 async def getUses(
     self: SupportsInteractiveProperty[Asynchronous], pack: Union[TypeName, str]
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @external("getUses")
@@ -10711,15 +10188,13 @@ class Getconversionsfromversions(NamedTuple):
 @overload
 def getConversionsFromVersions(
     self: SupportsInteractiveProperty[Synchronous], pack: Union[TypeName, str]
-) -> Getconversionsfromversions:
-    ...
+) -> Getconversionsfromversions: ...
 
 
 @overload
 async def getConversionsFromVersions(
     self: SupportsInteractiveProperty[Asynchronous], pack: Union[TypeName, str]
-) -> Getconversionsfromversions:
-    ...
+) -> Getconversionsfromversions: ...
 
 
 @external("getConversionsFromVersions")
@@ -10748,16 +10223,14 @@ def getConversionsFromVersions(
 def getDerivedClassModifierNames(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def getDerivedClassModifierNames(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("getDerivedClassModifierNames")
@@ -10783,8 +10256,7 @@ def getDerivedClassModifierValue(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     modifierName: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -10792,8 +10264,7 @@ async def getDerivedClassModifierValue(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     modifierName: Union[TypeName, str],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getDerivedClassModifierValue")
@@ -10822,8 +10293,7 @@ def generateEntryPoint(
     fileName: Union[PathLike[str], str],
     entryPoint: Union[TypeName, str],
     url: Union[str, None] = None,
-) -> None:
-    ...
+) -> None: ...
 
 
 @overload
@@ -10832,8 +10302,7 @@ async def generateEntryPoint(
     fileName: Union[PathLike[str], str],
     entryPoint: Union[TypeName, str],
     url: Union[str, None] = None,
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("generateEntryPoint")
@@ -10857,15 +10326,13 @@ def generateEntryPoint(
 
 
 @overload
-def numProcessors(self: SupportsInteractiveProperty[Synchronous]) -> int:
-    ...
+def numProcessors(self: SupportsInteractiveProperty[Synchronous]) -> int: ...
 
 
 @overload
 async def numProcessors(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("numProcessors")
@@ -10873,7 +10340,7 @@ def numProcessors(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -10890,8 +10357,7 @@ def runScriptParallel(
     scripts: Sequence[str],
     numThreads: Union[int, None] = None,
     useThreads: Union[bool, None] = None,
-) -> List[bool]:
-    ...
+) -> List[bool]: ...
 
 
 @overload
@@ -10900,8 +10366,7 @@ async def runScriptParallel(
     scripts: Sequence[str],
     numThreads: Union[int, None] = None,
     useThreads: Union[bool, None] = None,
-) -> List[bool]:
-    ...
+) -> List[bool]: ...
 
 
 @external("runScriptParallel")
@@ -10927,15 +10392,15 @@ def runScriptParallel(
 
 
 @overload
-def exit(self: SupportsInteractiveProperty[Synchronous], status: int) -> None:
-    ...
+def exit(
+    self: SupportsInteractiveProperty[Synchronous], status: int
+) -> None: ...
 
 
 @overload
 async def exit(
     self: SupportsInteractiveProperty[Asynchronous], status: int
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("exit")
@@ -10955,15 +10420,15 @@ def exit(
 
 
 @overload
-def threadWorkFailed(self: SupportsInteractiveProperty[Synchronous]) -> None:
-    ...
+def threadWorkFailed(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> None: ...
 
 
 @overload
 async def threadWorkFailed(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("threadWorkFailed")
@@ -10971,21 +10436,18 @@ def threadWorkFailed(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
-) -> Union[None, Coroutine[None, None, None]]:
-    ...
+    ],
+) -> Union[None, Coroutine[None, None, None]]: ...
 
 
 @overload
-def getMemorySize(self: SupportsInteractiveProperty[Synchronous]) -> float:
-    ...
+def getMemorySize(self: SupportsInteractiveProperty[Synchronous]) -> float: ...
 
 
 @overload
 async def getMemorySize(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> float:
-    ...
+) -> float: ...
 
 
 @external("getMemorySize")
@@ -10993,7 +10455,7 @@ def getMemorySize(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[float, Coroutine[None, None, float]]:
     """
     .. code-block:: modelica
@@ -11007,15 +10469,13 @@ def getMemorySize(
 @overload
 def GC_gcollect_and_unmap(
     self: SupportsInteractiveProperty[Synchronous],
-) -> None:
-    ...
+) -> None: ...
 
 
 @overload
 async def GC_gcollect_and_unmap(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> None:
-    ...
+) -> None: ...
 
 
 @external("GC_gcollect_and_unmap")
@@ -11023,23 +10483,20 @@ def GC_gcollect_and_unmap(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
-) -> Union[None, Coroutine[None, None, None]]:
-    ...
+    ],
+) -> Union[None, Coroutine[None, None, None]]: ...
 
 
 @overload
 def GC_expand_hp(
     self: SupportsInteractiveProperty[Synchronous], size: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def GC_expand_hp(
     self: SupportsInteractiveProperty[Asynchronous], size: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("GC_expand_hp")
@@ -11063,15 +10520,13 @@ def GC_expand_hp(
 @overload
 def GC_set_max_heap_size(
     self: SupportsInteractiveProperty[Synchronous], size: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
 async def GC_set_max_heap_size(
     self: SupportsInteractiveProperty[Asynchronous], size: int
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("GC_set_max_heap_size")
@@ -11126,15 +10581,13 @@ class GC_PROFSTATS(record):
 @overload
 def GC_get_prof_stats(
     self: SupportsInteractiveProperty[Synchronous],
-) -> GC_PROFSTATS:
-    ...
+) -> GC_PROFSTATS: ...
 
 
 @overload
 async def GC_get_prof_stats(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> GC_PROFSTATS:
-    ...
+) -> GC_PROFSTATS: ...
 
 
 @external("GC_get_prof_stats")
@@ -11142,7 +10595,7 @@ def GC_get_prof_stats(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[GC_PROFSTATS, Coroutine[None, None, GC_PROFSTATS]]:
     """
     .. code-block:: modelica
@@ -11158,8 +10611,7 @@ def checkInterfaceOfPackages(
     self: SupportsInteractiveProperty[Synchronous],
     cl: Union[TypeName, str],
     dependencyMatrix: Sequence[Sequence[str]],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -11167,8 +10619,7 @@ async def checkInterfaceOfPackages(
     self: SupportsInteractiveProperty[Asynchronous],
     cl: Union[TypeName, str],
     dependencyMatrix: Sequence[Sequence[str]],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("checkInterfaceOfPackages")
@@ -11194,15 +10645,13 @@ def checkInterfaceOfPackages(
 @overload
 def sortStrings(
     self: SupportsInteractiveProperty[Synchronous], arr: Sequence[str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @overload
 async def sortStrings(
     self: SupportsInteractiveProperty[Asynchronous], arr: Sequence[str]
-) -> List[str]:
-    ...
+) -> List[str]: ...
 
 
 @external("sortStrings")
@@ -11247,15 +10696,13 @@ class Getclassinformation(NamedTuple):
 @overload
 def getClassInformation(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> Getclassinformation:
-    ...
+) -> Getclassinformation: ...
 
 
 @overload
 async def getClassInformation(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> Getclassinformation:
-    ...
+) -> Getclassinformation: ...
 
 
 @external("getClassInformation")
@@ -11290,15 +10737,13 @@ def getClassInformation(
 @overload
 def getTransitions(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @overload
 async def getTransitions(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @external("getTransitions")
@@ -11330,8 +10775,7 @@ def deleteTransition(
     reset: bool,
     synchronize: bool,
     priority: int,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -11345,8 +10789,7 @@ async def deleteTransition(
     reset: bool,
     synchronize: bool,
     priority: int,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("deleteTransition")
@@ -11384,15 +10827,13 @@ def deleteTransition(
 @overload
 def getInitialStates(
     self: SupportsInteractiveProperty[Synchronous], cl: Union[TypeName, str]
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @overload
 async def getInitialStates(
     self: SupportsInteractiveProperty[Asynchronous], cl: Union[TypeName, str]
-) -> List[List[str]]:
-    ...
+) -> List[List[str]]: ...
 
 
 @external("getInitialStates")
@@ -11418,8 +10859,7 @@ def deleteInitialState(
     self: SupportsInteractiveProperty[Synchronous],
     cl: Union[TypeName, str],
     state: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -11427,8 +10867,7 @@ async def deleteInitialState(
     self: SupportsInteractiveProperty[Asynchronous],
     cl: Union[TypeName, str],
     state: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("deleteInitialState")
@@ -11463,8 +10902,7 @@ def generateScriptingAPI(
     self: SupportsInteractiveProperty[Synchronous],
     cl: Union[TypeName, str],
     name: str,
-) -> Generatescriptingapi:
-    ...
+) -> Generatescriptingapi: ...
 
 
 @overload
@@ -11472,8 +10910,7 @@ async def generateScriptingAPI(
     self: SupportsInteractiveProperty[Asynchronous],
     cl: Union[TypeName, str],
     name: str,
-) -> Generatescriptingapi:
-    ...
+) -> Generatescriptingapi: ...
 
 
 @external("generateScriptingAPI")
@@ -11504,8 +10941,7 @@ def runConversionScript(
     self: SupportsInteractiveProperty[Synchronous],
     packageToConvert: Union[TypeName, str],
     scriptFile: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -11513,8 +10949,7 @@ async def runConversionScript(
     self: SupportsInteractiveProperty[Asynchronous],
     packageToConvert: Union[TypeName, str],
     scriptFile: Union[PathLike[str], str],
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("runConversionScript")
@@ -11543,8 +10978,7 @@ def convertPackageToLibrary(
     packageToConvert: Union[TypeName, str],
     library: Union[TypeName, str],
     libraryVersion: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @overload
@@ -11553,8 +10987,7 @@ async def convertPackageToLibrary(
     packageToConvert: Union[TypeName, str],
     library: Union[TypeName, str],
     libraryVersion: str,
-) -> bool:
-    ...
+) -> bool: ...
 
 
 @external("convertPackageToLibrary")
@@ -11584,8 +11017,7 @@ def getModelInstance(
     self: SupportsInteractiveProperty[Synchronous],
     className: Union[TypeName, str],
     prettyPrint: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @overload
@@ -11593,8 +11025,7 @@ async def getModelInstance(
     self: SupportsInteractiveProperty[Asynchronous],
     className: Union[TypeName, str],
     prettyPrint: Union[bool, None] = None,
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("getModelInstance")
@@ -11621,8 +11052,7 @@ class oms_system(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);
-    """
+        type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_system")
     oms_system_none = 1
@@ -11635,8 +11065,7 @@ class oms_causality(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);
-    """
+        type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_causality")
     oms_causality_input = 1
@@ -11650,8 +11079,7 @@ class oms_signal_type(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);
-    """
+        type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_signal_type")
     oms_signal_type_real = 1
@@ -11666,8 +11094,7 @@ class oms_solver(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_solver = enumeration(oms_solver_none, oms_solver_sc_min, oms_solver_sc_explicit_euler, oms_solver_sc_cvode, oms_solver_sc_max, oms_solver_wc_min, oms_solver_wc_ma, oms_solver_wc_mav, oms_solver_wc_assc, oms_solver_wc_mav2, oms_solver_wc_max);
-    """
+        type oms_solver = enumeration(oms_solver_none, oms_solver_sc_min, oms_solver_sc_explicit_euler, oms_solver_sc_cvode, oms_solver_sc_max, oms_solver_wc_min, oms_solver_wc_ma, oms_solver_wc_mav, oms_solver_wc_assc, oms_solver_wc_mav2, oms_solver_wc_max);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_solver")
     oms_solver_none = 1
@@ -11687,8 +11114,7 @@ class oms_tlm_domain(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);
-    """
+        type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_domain")
     oms_tlm_domain_input = 1
@@ -11703,8 +11129,7 @@ class oms_tlm_interpolation(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);
-    """
+        type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_interpolation")
     oms_tlm_no_interpolation = 1
@@ -11716,8 +11141,7 @@ class oms_fault_type(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_fault_type = enumeration(oms_fault_type_bias, oms_fault_type_gain, oms_fault_type_const);
-    """
+        type oms_fault_type = enumeration(oms_fault_type_bias, oms_fault_type_gain, oms_fault_type_const);"""
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_fault_type")
     oms_fault_type_bias = 1
@@ -11726,15 +11150,13 @@ class oms_fault_type(enumeration):
 
 
 @overload
-def loadOMSimulator(self: SupportsInteractiveProperty[Synchronous]) -> int:
-    ...
+def loadOMSimulator(self: SupportsInteractiveProperty[Synchronous]) -> int: ...
 
 
 @overload
 async def loadOMSimulator(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("loadOMSimulator")
@@ -11742,7 +11164,7 @@ def loadOMSimulator(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -11754,15 +11176,15 @@ def loadOMSimulator(
 
 
 @overload
-def unloadOMSimulator(self: SupportsInteractiveProperty[Synchronous]) -> int:
-    ...
+def unloadOMSimulator(
+    self: SupportsInteractiveProperty[Synchronous],
+) -> int: ...
 
 
 @overload
 async def unloadOMSimulator(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("unloadOMSimulator")
@@ -11770,7 +11192,7 @@ def unloadOMSimulator(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[int, Coroutine[None, None, int]]:
     """
     .. code-block:: modelica
@@ -11784,15 +11206,13 @@ def unloadOMSimulator(
 @overload
 def oms_addBus(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_addBus(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addBus")
@@ -11816,15 +11236,13 @@ def oms_addBus(
 @overload
 def oms_addConnection(
     self: SupportsInteractiveProperty[Synchronous], crefA: str, crefB: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_addConnection(
     self: SupportsInteractiveProperty[Asynchronous], crefA: str, crefB: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addConnection")
@@ -11872,8 +11290,7 @@ def oms_addConnector(
             "oms_signal_type_bus",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -11901,8 +11318,7 @@ async def oms_addConnector(
             "oms_signal_type_bus",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addConnector")
@@ -11951,8 +11367,7 @@ def oms_addConnectorToBus(
     self: SupportsInteractiveProperty[Synchronous],
     busCref: str,
     connectorCref: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -11960,8 +11375,7 @@ async def oms_addConnectorToBus(
     self: SupportsInteractiveProperty[Asynchronous],
     busCref: str,
     connectorCref: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addConnectorToBus")
@@ -11990,8 +11404,7 @@ def oms_addConnectorToTLMBus(
     busCref: str,
     connectorCref: str,
     type_: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12000,8 +11413,7 @@ async def oms_addConnectorToTLMBus(
     busCref: str,
     connectorCref: str,
     type_: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addConnectorToTLMBus")
@@ -12033,8 +11445,7 @@ def oms_addDynamicValueIndicator(
     lower: str,
     upper: str,
     stepSize: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12044,8 +11455,7 @@ async def oms_addDynamicValueIndicator(
     lower: str,
     upper: str,
     stepSize: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addDynamicValueIndicator")
@@ -12075,15 +11485,13 @@ def oms_addDynamicValueIndicator(
 @overload
 def oms_addEventIndicator(
     self: SupportsInteractiveProperty[Synchronous], signal: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_addEventIndicator(
     self: SupportsInteractiveProperty[Asynchronous], signal: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addEventIndicator")
@@ -12110,8 +11518,7 @@ def oms_addExternalModel(
     cref: str,
     path: Union[PathLike[str], str],
     startscript: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12120,8 +11527,7 @@ async def oms_addExternalModel(
     cref: str,
     path: Union[PathLike[str], str],
     startscript: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addExternalModel")
@@ -12149,15 +11555,13 @@ def oms_addExternalModel(
 @overload
 def oms_addSignalsToResults(
     self: SupportsInteractiveProperty[Synchronous], cref: str, regex: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_addSignalsToResults(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, regex: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addSignalsToResults")
@@ -12187,8 +11591,7 @@ def oms_addStaticValueIndicator(
     lower: float,
     upper: float,
     stepSize: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12198,8 +11601,7 @@ async def oms_addStaticValueIndicator(
     lower: float,
     upper: float,
     stepSize: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addStaticValueIndicator")
@@ -12231,8 +11633,7 @@ def oms_addSubModel(
     self: SupportsInteractiveProperty[Synchronous],
     cref: str,
     fmuPath: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12240,8 +11641,7 @@ async def oms_addSubModel(
     self: SupportsInteractiveProperty[Asynchronous],
     cref: str,
     fmuPath: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addSubModel")
@@ -12277,8 +11677,7 @@ def oms_addSystem(
             "oms_system_sc",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12294,8 +11693,7 @@ async def oms_addSystem(
             "oms_system_sc",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addSystem")
@@ -12329,15 +11727,13 @@ def oms_addSystem(
 @overload
 def oms_addTimeIndicator(
     self: SupportsInteractiveProperty[Synchronous], signal: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_addTimeIndicator(
     self: SupportsInteractiveProperty[Asynchronous], signal: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addTimeIndicator")
@@ -12382,8 +11778,7 @@ def oms_addTLMBus(
             "oms_tlm_fine_grained",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12410,8 +11805,7 @@ async def oms_addTLMBus(
             "oms_tlm_fine_grained",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addTLMBus")
@@ -12464,8 +11858,7 @@ def oms_addTLMConnection(
     alpha: float,
     linearimpedance: float,
     angularimpedance: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12477,8 +11870,7 @@ async def oms_addTLMConnection(
     alpha: float,
     linearimpedance: float,
     angularimpedance: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_addTLMConnection")
@@ -12517,8 +11909,7 @@ def oms_compareSimulationResults(
     var: str,
     relTol: float,
     absTol: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12529,8 +11920,7 @@ async def oms_compareSimulationResults(
     var: str,
     relTol: float,
     absTol: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_compareSimulationResults")
@@ -12562,15 +11952,13 @@ def oms_compareSimulationResults(
 @overload
 def oms_copySystem(
     self: SupportsInteractiveProperty[Synchronous], source: str, target: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_copySystem(
     self: SupportsInteractiveProperty[Asynchronous], source: str, target: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_copySystem")
@@ -12596,15 +11984,13 @@ def oms_copySystem(
 @overload
 def oms_delete(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_delete(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_delete")
@@ -12628,15 +12014,13 @@ def oms_delete(
 @overload
 def oms_deleteConnection(
     self: SupportsInteractiveProperty[Synchronous], crefA: str, crefB: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_deleteConnection(
     self: SupportsInteractiveProperty[Asynchronous], crefA: str, crefB: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_deleteConnection")
@@ -12664,8 +12048,7 @@ def oms_deleteConnectorFromBus(
     self: SupportsInteractiveProperty[Synchronous],
     busCref: str,
     connectorCref: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12673,8 +12056,7 @@ async def oms_deleteConnectorFromBus(
     self: SupportsInteractiveProperty[Asynchronous],
     busCref: str,
     connectorCref: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_deleteConnectorFromBus")
@@ -12702,8 +12084,7 @@ def oms_deleteConnectorFromTLMBus(
     self: SupportsInteractiveProperty[Synchronous],
     busCref: str,
     connectorCref: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12711,8 +12092,7 @@ async def oms_deleteConnectorFromTLMBus(
     self: SupportsInteractiveProperty[Asynchronous],
     busCref: str,
     connectorCref: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_deleteConnectorFromTLMBus")
@@ -12740,8 +12120,7 @@ def oms_export(
     self: SupportsInteractiveProperty[Synchronous],
     cref: str,
     filename: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12749,8 +12128,7 @@ async def oms_export(
     self: SupportsInteractiveProperty[Asynchronous],
     cref: str,
     filename: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_export")
@@ -12780,8 +12158,7 @@ def oms_exportDependencyGraphs(
     initialization: str,
     event: str,
     simulation: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -12791,8 +12168,7 @@ async def oms_exportDependencyGraphs(
     initialization: str,
     event: str,
     simulation: str,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_exportDependencyGraphs")
@@ -12827,15 +12203,13 @@ class Oms_exportsnapshot(NamedTuple):
 @overload
 def oms_exportSnapshot(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_exportsnapshot:
-    ...
+) -> Oms_exportsnapshot: ...
 
 
 @overload
 async def oms_exportSnapshot(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_exportsnapshot:
-    ...
+) -> Oms_exportsnapshot: ...
 
 
 @external("oms_exportSnapshot")
@@ -12866,16 +12240,14 @@ class Oms_extractfmikind(NamedTuple):
 def oms_extractFMIKind(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
-) -> Oms_extractfmikind:
-    ...
+) -> Oms_extractfmikind: ...
 
 
 @overload
 async def oms_extractFMIKind(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
-) -> Oms_extractfmikind:
-    ...
+) -> Oms_extractfmikind: ...
 
 
 @external("oms_extractFMIKind")
@@ -12905,15 +12277,13 @@ class Oms_getboolean(NamedTuple):
 @overload
 def oms_getBoolean(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getboolean:
-    ...
+) -> Oms_getboolean: ...
 
 
 @overload
 async def oms_getBoolean(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getboolean:
-    ...
+) -> Oms_getboolean: ...
 
 
 @external("oms_getBoolean")
@@ -12943,15 +12313,13 @@ class Oms_getfixedstepsize(NamedTuple):
 @overload
 def oms_getFixedStepSize(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getfixedstepsize:
-    ...
+) -> Oms_getfixedstepsize: ...
 
 
 @overload
 async def oms_getFixedStepSize(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getfixedstepsize:
-    ...
+) -> Oms_getfixedstepsize: ...
 
 
 @external("oms_getFixedStepSize")
@@ -12976,15 +12344,13 @@ def oms_getFixedStepSize(
 @overload
 def oms_getInteger(
     self: SupportsInteractiveProperty[Synchronous], cref: str, value: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_getInteger(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, value: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_getInteger")
@@ -13015,15 +12381,13 @@ class Oms_getmodelstate(NamedTuple):
 @overload
 def oms_getModelState(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getmodelstate:
-    ...
+) -> Oms_getmodelstate: ...
 
 
 @overload
 async def oms_getModelState(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getmodelstate:
-    ...
+) -> Oms_getmodelstate: ...
 
 
 @external("oms_getModelState")
@@ -13053,15 +12417,13 @@ class Oms_getreal(NamedTuple):
 @overload
 def oms_getReal(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getreal:
-    ...
+) -> Oms_getreal: ...
 
 
 @overload
 async def oms_getReal(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getreal:
-    ...
+) -> Oms_getreal: ...
 
 
 @external("oms_getReal")
@@ -13091,15 +12453,13 @@ class Oms_getsolver(NamedTuple):
 @overload
 def oms_getSolver(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getsolver:
-    ...
+) -> Oms_getsolver: ...
 
 
 @overload
 async def oms_getSolver(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getsolver:
-    ...
+) -> Oms_getsolver: ...
 
 
 @external("oms_getSolver")
@@ -13129,15 +12489,13 @@ class Oms_getstarttime(NamedTuple):
 @overload
 def oms_getStartTime(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getstarttime:
-    ...
+) -> Oms_getstarttime: ...
 
 
 @overload
 async def oms_getStartTime(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getstarttime:
-    ...
+) -> Oms_getstarttime: ...
 
 
 @external("oms_getStartTime")
@@ -13167,15 +12525,13 @@ class Oms_getstoptime(NamedTuple):
 @overload
 def oms_getStopTime(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getstoptime:
-    ...
+) -> Oms_getstoptime: ...
 
 
 @overload
 async def oms_getStopTime(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getstoptime:
-    ...
+) -> Oms_getstoptime: ...
 
 
 @external("oms_getStopTime")
@@ -13205,15 +12561,13 @@ class Oms_getsubmodelpath(NamedTuple):
 @overload
 def oms_getSubModelPath(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getsubmodelpath:
-    ...
+) -> Oms_getsubmodelpath: ...
 
 
 @overload
 async def oms_getSubModelPath(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getsubmodelpath:
-    ...
+) -> Oms_getsubmodelpath: ...
 
 
 @external("oms_getSubModelPath")
@@ -13243,15 +12597,13 @@ class Oms_getsystemtype(NamedTuple):
 @overload
 def oms_getSystemType(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getsystemtype:
-    ...
+) -> Oms_getsystemtype: ...
 
 
 @overload
 async def oms_getSystemType(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getsystemtype:
-    ...
+) -> Oms_getsystemtype: ...
 
 
 @external("oms_getSystemType")
@@ -13282,15 +12634,13 @@ class Oms_gettolerance(NamedTuple):
 @overload
 def oms_getTolerance(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_gettolerance:
-    ...
+) -> Oms_gettolerance: ...
 
 
 @overload
 async def oms_getTolerance(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_gettolerance:
-    ...
+) -> Oms_gettolerance: ...
 
 
 @external("oms_getTolerance")
@@ -13323,15 +12673,13 @@ class Oms_getvariablestepsize(NamedTuple):
 @overload
 def oms_getVariableStepSize(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_getvariablestepsize:
-    ...
+) -> Oms_getvariablestepsize: ...
 
 
 @overload
 async def oms_getVariableStepSize(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_getvariablestepsize:
-    ...
+) -> Oms_getvariablestepsize: ...
 
 
 @external("oms_getVariableStepSize")
@@ -13370,8 +12718,7 @@ def oms_faultInjection(
         ],
     ],
     faultValue: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -13387,8 +12734,7 @@ async def oms_faultInjection(
         ],
     ],
     faultValue: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_faultInjection")
@@ -13429,16 +12775,14 @@ class Oms_importfile(NamedTuple):
 def oms_importFile(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
-) -> Oms_importfile:
-    ...
+) -> Oms_importfile: ...
 
 
 @overload
 async def oms_importFile(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
-) -> Oms_importfile:
-    ...
+) -> Oms_importfile: ...
 
 
 @external("oms_importFile")
@@ -13463,15 +12807,13 @@ def oms_importFile(
 @overload
 def oms_importSnapshot(
     self: SupportsInteractiveProperty[Synchronous], cref: str, snapshot: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_importSnapshot(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, snapshot: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_importSnapshot")
@@ -13497,15 +12839,13 @@ def oms_importSnapshot(
 @overload
 def oms_initialize(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_initialize(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_initialize")
@@ -13529,15 +12869,13 @@ def oms_initialize(
 @overload
 def oms_instantiate(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_instantiate(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_instantiate")
@@ -13566,15 +12904,13 @@ class Oms_list(NamedTuple):
 @overload
 def oms_list(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_list:
-    ...
+) -> Oms_list: ...
 
 
 @overload
 async def oms_list(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_list:
-    ...
+) -> Oms_list: ...
 
 
 @external("oms_list")
@@ -13604,15 +12940,13 @@ class Oms_listunconnectedconnectors(NamedTuple):
 @overload
 def oms_listUnconnectedConnectors(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> Oms_listunconnectedconnectors:
-    ...
+) -> Oms_listunconnectedconnectors: ...
 
 
 @overload
 async def oms_listUnconnectedConnectors(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> Oms_listunconnectedconnectors:
-    ...
+) -> Oms_listunconnectedconnectors: ...
 
 
 @external("oms_listUnconnectedConnectors")
@@ -13645,15 +12979,13 @@ class Oms_loadsnapshot(NamedTuple):
 @overload
 def oms_loadSnapshot(
     self: SupportsInteractiveProperty[Synchronous], cref: str, snapshot: str
-) -> Oms_loadsnapshot:
-    ...
+) -> Oms_loadsnapshot: ...
 
 
 @overload
 async def oms_loadSnapshot(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, snapshot: str
-) -> Oms_loadsnapshot:
-    ...
+) -> Oms_loadsnapshot: ...
 
 
 @external("oms_loadSnapshot")
@@ -13680,15 +13012,13 @@ def oms_loadSnapshot(
 @overload
 def oms_newModel(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_newModel(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_newModel")
@@ -13712,15 +13042,13 @@ def oms_newModel(
 @overload
 def oms_removeSignalsFromResults(
     self: SupportsInteractiveProperty[Synchronous], cref: str, regex: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_removeSignalsFromResults(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, regex: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_removeSignalsFromResults")
@@ -13746,15 +13074,13 @@ def oms_removeSignalsFromResults(
 @overload
 def oms_rename(
     self: SupportsInteractiveProperty[Synchronous], cref: str, newCref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_rename(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, newCref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_rename")
@@ -13780,15 +13106,13 @@ def oms_rename(
 @overload
 def oms_reset(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_reset(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_reset")
@@ -13813,16 +13137,14 @@ def oms_reset(
 def oms_RunFile(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_RunFile(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_RunFile")
@@ -13846,15 +13168,13 @@ def oms_RunFile(
 @overload
 def oms_setBoolean(
     self: SupportsInteractiveProperty[Synchronous], cref: str, value: bool
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setBoolean(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, value: bool
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setBoolean")
@@ -13880,15 +13200,13 @@ def oms_setBoolean(
 @overload
 def oms_setCommandLineOption(
     self: SupportsInteractiveProperty[Synchronous], cmd: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setCommandLineOption(
     self: SupportsInteractiveProperty[Asynchronous], cmd: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setCommandLineOption")
@@ -13912,15 +13230,13 @@ def oms_setCommandLineOption(
 @overload
 def oms_setFixedStepSize(
     self: SupportsInteractiveProperty[Synchronous], cref: str, stepSize: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setFixedStepSize(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, stepSize: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setFixedStepSize")
@@ -13946,15 +13262,13 @@ def oms_setFixedStepSize(
 @overload
 def oms_setInteger(
     self: SupportsInteractiveProperty[Synchronous], cref: str, value: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setInteger(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, value: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setInteger")
@@ -13981,16 +13295,14 @@ def oms_setInteger(
 def oms_setLogFile(
     self: SupportsInteractiveProperty[Synchronous],
     filename: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setLogFile(
     self: SupportsInteractiveProperty[Asynchronous],
     filename: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setLogFile")
@@ -14016,8 +13328,7 @@ def oms_setLoggingInterval(
     self: SupportsInteractiveProperty[Synchronous],
     cref: str,
     loggingInterval: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14025,8 +13336,7 @@ async def oms_setLoggingInterval(
     self: SupportsInteractiveProperty[Asynchronous],
     cref: str,
     loggingInterval: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setLoggingInterval")
@@ -14052,15 +13362,13 @@ def oms_setLoggingInterval(
 @overload
 def oms_setLoggingLevel(
     self: SupportsInteractiveProperty[Synchronous], logLevel: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setLoggingLevel(
     self: SupportsInteractiveProperty[Asynchronous], logLevel: int
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setLoggingLevel")
@@ -14084,15 +13392,13 @@ def oms_setLoggingLevel(
 @overload
 def oms_setReal(
     self: SupportsInteractiveProperty[Synchronous], cref: str, value: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setReal(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, value: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setReal")
@@ -14118,15 +13424,13 @@ def oms_setReal(
 @overload
 def oms_setRealInputDerivative(
     self: SupportsInteractiveProperty[Synchronous], cref: str, value: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setRealInputDerivative(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, value: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setRealInputDerivative")
@@ -14155,8 +13459,7 @@ def oms_setResultFile(
     cref: str,
     filename: Union[PathLike[str], str],
     bufferSize: int,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14165,8 +13468,7 @@ async def oms_setResultFile(
     cref: str,
     filename: Union[PathLike[str], str],
     bufferSize: int,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setResultFile")
@@ -14194,15 +13496,13 @@ def oms_setResultFile(
 @overload
 def oms_setSignalFilter(
     self: SupportsInteractiveProperty[Synchronous], cref: str, regex: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setSignalFilter(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, regex: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setSignalFilter")
@@ -14245,8 +13545,7 @@ def oms_setSolver(
             "oms_solver_wc_max",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14269,8 +13568,7 @@ async def oms_setSolver(
             "oms_solver_wc_max",
         ],
     ],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setSolver")
@@ -14311,8 +13609,7 @@ def oms_setSolver(
 @overload
 def oms_setStartTime(
     self: SupportsInteractiveProperty[Synchronous], cref: str, startTime: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14320,8 +13617,7 @@ async def oms_setStartTime(
     self: SupportsInteractiveProperty[Asynchronous],
     cref: str,
     startTime: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setStartTime")
@@ -14347,15 +13643,13 @@ def oms_setStartTime(
 @overload
 def oms_setStopTime(
     self: SupportsInteractiveProperty[Synchronous], cref: str, stopTime: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setStopTime(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, stopTime: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setStopTime")
@@ -14382,16 +13676,14 @@ def oms_setStopTime(
 def oms_setTempDirectory(
     self: SupportsInteractiveProperty[Synchronous],
     newTempDir: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setTempDirectory(
     self: SupportsInteractiveProperty[Asynchronous],
     newTempDir: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setTempDirectory")
@@ -14428,8 +13720,7 @@ def oms_setTLMPositionAndOrientation(
     A31: float,
     A32: float,
     A33: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14448,8 +13739,7 @@ async def oms_setTLMPositionAndOrientation(
     A31: float,
     A32: float,
     A33: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setTLMPositionAndOrientation")
@@ -14501,8 +13791,7 @@ def oms_setTLMSocketData(
     address: str,
     managerPort: int,
     monitorPort: int,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14512,8 +13801,7 @@ async def oms_setTLMSocketData(
     address: str,
     managerPort: int,
     monitorPort: int,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setTLMSocketData")
@@ -14546,8 +13834,7 @@ def oms_setTolerance(
     cref: str,
     absoluteTolerance: float,
     relativeTolerance: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14556,8 +13843,7 @@ async def oms_setTolerance(
     cref: str,
     absoluteTolerance: float,
     relativeTolerance: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setTolerance")
@@ -14589,8 +13875,7 @@ def oms_setVariableStepSize(
     initialStepSize: float,
     minimumStepSize: float,
     maximumStepSize: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
@@ -14600,8 +13885,7 @@ async def oms_setVariableStepSize(
     initialStepSize: float,
     minimumStepSize: float,
     maximumStepSize: float,
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setVariableStepSize")
@@ -14632,16 +13916,14 @@ def oms_setVariableStepSize(
 def oms_setWorkingDirectory(
     self: SupportsInteractiveProperty[Synchronous],
     newWorkingDir: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_setWorkingDirectory(
     self: SupportsInteractiveProperty[Asynchronous],
     newWorkingDir: Union[PathLike[str], str],
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_setWorkingDirectory")
@@ -14665,15 +13947,13 @@ def oms_setWorkingDirectory(
 @overload
 def oms_simulate(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_simulate(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_simulate")
@@ -14697,15 +13977,13 @@ def oms_simulate(
 @overload
 def oms_stepUntil(
     self: SupportsInteractiveProperty[Synchronous], cref: str, stopTime: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_stepUntil(
     self: SupportsInteractiveProperty[Asynchronous], cref: str, stopTime: float
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_stepUntil")
@@ -14731,15 +14009,13 @@ def oms_stepUntil(
 @overload
 def oms_terminate(
     self: SupportsInteractiveProperty[Synchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @overload
 async def oms_terminate(
     self: SupportsInteractiveProperty[Asynchronous], cref: str
-) -> int:
-    ...
+) -> int: ...
 
 
 @external("oms_terminate")
@@ -14761,15 +14037,13 @@ def oms_terminate(
 
 
 @overload
-def oms_getVersion(self: SupportsInteractiveProperty[Synchronous]) -> str:
-    ...
+def oms_getVersion(self: SupportsInteractiveProperty[Synchronous]) -> str: ...
 
 
 @overload
 async def oms_getVersion(
     self: SupportsInteractiveProperty[Asynchronous],
-) -> str:
-    ...
+) -> str: ...
 
 
 @external("oms_getVersion")
@@ -14777,7 +14051,7 @@ def oms_getVersion(
     self: Union[
         SupportsInteractiveProperty[Synchronous],
         SupportsInteractiveProperty[Asynchronous],
-    ]
+    ],
 ) -> Union[str, Coroutine[None, None, str]]:
     """
     .. code-block:: modelica

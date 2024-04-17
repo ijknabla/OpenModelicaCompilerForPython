@@ -469,18 +469,15 @@ class _ParametrizedVisistor(Visitor):
 
 
 @overload
-def _to_rule_name(_type: _ScalarType, /) -> str:
-    ...
+def _to_rule_name(_type: _ScalarType, /) -> str: ...
 
 
 @overload
-def _to_rule_name(_type: _ScalarType, /, *, ndim: int) -> str:
-    ...
+def _to_rule_name(_type: _ScalarType, /, *, ndim: int) -> str: ...
 
 
 @overload
-def _to_rule_name(_type: _ScalarType, /, *, attribute: str) -> str:
-    ...
+def _to_rule_name(_type: _ScalarType, /, *, attribute: str) -> str: ...
 
 
 def _to_rule_name(
@@ -582,7 +579,7 @@ def _unparse(t: _ScalarType, n: int, attrs: tuple[str, ...], obj: Any) -> str:
 
 
 class UnparseError(ValueError):
-    ...
+    pass
 
 
 def _unparse_sequence(
@@ -670,12 +667,14 @@ def _unparse_enumeration(
 
 
 def _unparse_primitive(
-    t: type[float]
-    | type[int]
-    | type[bool]
-    | type[str]
-    | type[TypeName]
-    | type[VariableName],
+    t: (
+        type[float]
+        | type[int]
+        | type[bool]
+        | type[str]
+        | type[TypeName]
+        | type[VariableName]
+    ),
     n: int,
     attrs: tuple[str, ...],
     obj: Any,
