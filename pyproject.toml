@@ -87,6 +87,7 @@ line-length = 79
 select = ["ALL"]
 ignore = [
     "D203", "D212",  # not compatible with other rules
+    "COM812",  # cause conflict with formatter
     "ANN101", "ANN102",  # not a problem in mypy
     # TODO: Apply more rules
     "ANN401",
@@ -95,7 +96,6 @@ ignore = [
     "B904",
     "BLE001",
     "C901",
-    "COM812",
     "D100",
     "D101",
     "D102",
