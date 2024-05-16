@@ -63,7 +63,7 @@ class BasicSession(HasInteractive[T_Calling]):
     @external("getComponents")
     def getComponents(
         self: Union[BasicSession[Synchronous], BasicSession[Asynchronous]],
-        name: Union[TypeName, str],
+        name: Union[TypeName, str],  # noqa: ARG002
     ) -> Union[List[Component], Coroutine[None, None, List[Component]]]:
         return ...  # type: ignore
 

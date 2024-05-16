@@ -68,7 +68,8 @@ def delay2(
           parameter input Real delayTime annotation(
             __OpenModelica_functionVariability = true);
           output Real value;
-        end delay2;"""
+        end delay2;
+    """
     return ...  # type: ignore
 
 
@@ -108,7 +109,8 @@ def delay3(
           parameter input Real delayMax annotation(
             __OpenModelica_functionVariability = true);
           output Real value;
-        end delay3;"""
+        end delay3;
+    """
     return ...  # type: ignore
 
 
@@ -136,7 +138,8 @@ def intAbs(
         function intAbs
           input Integer v;
           output Integer o;
-        end intAbs;"""
+        end intAbs;
+    """
     return ...  # type: ignore
 
 
@@ -166,7 +169,8 @@ def realAbs(
         function realAbs
           input Real v;
           output Real o;
-        end realAbs;"""
+        end realAbs;
+    """
     return ...  # type: ignore
 
 
@@ -198,7 +202,8 @@ def intDiv(
           input Integer x;
           input Integer y;
           output Integer z;
-        end intDiv;"""
+        end intDiv;
+    """
     return ...  # type: ignore
 
 
@@ -230,7 +235,8 @@ def realDiv(
           input Real x;
           input Real y;
           output Real z;
-        end realDiv;"""
+        end realDiv;
+    """
     return ...  # type: ignore
 
 
@@ -262,7 +268,8 @@ def intMod(
           input Integer x;
           input Integer y;
           output Integer z;
-        end intMod;"""
+        end intMod;
+    """
     return ...  # type: ignore
 
 
@@ -294,7 +301,8 @@ def realMod(
           input Real x;
           input Real y;
           output Real z;
-        end realMod;"""
+        end realMod;
+    """
     return ...  # type: ignore
 
 
@@ -326,7 +334,8 @@ def intRem(
           input Integer x;
           input Integer y;
           output Integer z;
-        end intRem;"""
+        end intRem;
+    """
     return ...  # type: ignore
 
 
@@ -358,7 +367,8 @@ def realRem(
           input Real x;
           input Real y;
           output Real z;
-        end realRem;"""
+        end realRem;
+    """
     return ...  # type: ignore
 
 

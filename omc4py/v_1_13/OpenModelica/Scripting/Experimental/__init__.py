@@ -43,5 +43,6 @@ def relocateFunctions(
           input String fileName;
           input String names[:, 2];
           output Boolean success;
-        end relocateFunctions;"""
+        end relocateFunctions;
+    """
     return ...  # type: ignore

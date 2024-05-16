@@ -54,7 +54,7 @@ class _BaseVariableName:
     __identifier: str | None
 
     def __new__(cls, identifier: str | None = None) -> Self:
-        self = super(_BaseVariableName, cls).__new__(cls)
+        self = super().__new__(cls)
         self.__identifier = identifier
         return self
 
@@ -114,7 +114,7 @@ class _BaseTypeName:
     parts: tuple[str, ...]
 
     def __new__(cls, parts: tuple[str, ...] = ()) -> Self:
-        self = super(_BaseTypeName, cls).__new__(cls)
+        self = super().__new__(cls)
         self.parts = parts
         return self
 

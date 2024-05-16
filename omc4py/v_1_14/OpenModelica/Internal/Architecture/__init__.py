@@ -30,7 +30,8 @@ def numBits(
 
         function numBits
           output Integer numBit;
-        end numBits;"""
+        end numBits;
+    """
     return ...  # type: ignore
 
 
@@ -56,5 +57,6 @@ def integerMax(
 
         function integerMax
           output Integer max;
-        end integerMax;"""
+        end integerMax;
+    """
     return ...  # type: ignore

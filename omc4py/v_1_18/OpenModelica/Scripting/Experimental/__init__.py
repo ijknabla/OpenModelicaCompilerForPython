@@ -43,7 +43,8 @@ def relocateFunctions(
           input String fileName;
           input String names[:, 2];
           output Boolean success;
-        end relocateFunctions;"""
+        end relocateFunctions;
+    """
     return ...  # type: ignore
 
 
@@ -67,7 +68,8 @@ def toJulia(
 
         function toJulia
           output String res;
-        end toJulia;"""
+        end toJulia;
+    """
     return ...  # type: ignore
 
 
@@ -95,5 +97,6 @@ def interactiveDumpAbsynToJL(
 
         function interactiveDumpAbsynToJL
           output String res;
-        end interactiveDumpAbsynToJL;"""
+        end interactiveDumpAbsynToJL;
+    """
     return ...  # type: ignore

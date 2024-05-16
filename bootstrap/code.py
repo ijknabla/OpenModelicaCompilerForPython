@@ -1076,7 +1076,8 @@ def _patch(version: Version, entities: EntitiesItems) -> EntitiesItems:
 
 
 def _patch_check_settings(
-    version: Version, entities: EntitiesItems
+    version: Version,  # noqa: ARG001
+    entities: EntitiesItems,
 ) -> EntitiesItems:
     for typename, entity in entities:
         if typename == TypeName(
