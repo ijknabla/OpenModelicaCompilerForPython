@@ -36,7 +36,8 @@ def readableTime(
         function readableTime
           input Real sec;
           output String str;
-        end readableTime;"""
+        end readableTime;
+    """
     return ...  # type: ignore
 
 
@@ -65,7 +66,8 @@ def timerTick(
 
         function timerTick
           input Integer index;
-        end timerTick;"""
+        end timerTick;
+    """
 
 
 @overload
@@ -94,7 +96,8 @@ def timerTock(
         function timerTock
           input Integer index;
           output Real elapsed;
-        end timerTock;"""
+        end timerTock;
+    """
     return ...  # type: ignore
 
 
@@ -123,4 +126,5 @@ def timerClear(
 
         function timerClear
           input Integer index;
-        end timerClear;"""
+        end timerClear;
+    """

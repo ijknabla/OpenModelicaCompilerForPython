@@ -15,7 +15,8 @@ class Documentation(record):
         record Documentation "Defines the documentation."
           String info "The textual description of the class.";
           String revisions "A list of revisions and other annotations defined by a tool.";
-        end Documentation;"""
+        end Documentation;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.Documentation"
@@ -34,7 +35,8 @@ class experiment(record):
           Real StopTime(unit = "s") = 1 "Default stop time of simulation.";
           Real Interval(unit = "s", min = 0) = 0.002 "Resolution for the result grid.";
           Real Tolerance(min = 0) = 1e-6 "Default relative integration tolerance.";
-        end experiment;"""
+        end experiment;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.experiment"
@@ -60,7 +62,8 @@ class Dialog(record):
           parameter Selector saveSelector;
           parameter String groupImage = "";
           parameter Boolean connectorSizing = false;
-        end Dialog;"""
+        end Dialog;
+    """
 
     __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.Dialog")
     tab: Union[str, None]
@@ -82,7 +85,8 @@ class Selector(record):
         record Selector
           parameter String filter = "";
           parameter String caption = "";
-        end Selector;"""
+        end Selector;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.Selector"
@@ -97,7 +101,8 @@ class uses(record):
     .. code-block:: modelica
 
         record uses "A list of dependent classes."
-        end uses;"""
+        end uses;
+    """
 
     __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.uses")
 
@@ -106,7 +111,8 @@ class Access(enumeration):
     """
     .. code-block:: modelica
 
-        type Access = enumeration(hide, icon, documentation, diagram, nonPackageText, nonPackageDuplicate, packageText, packageDuplicate);"""
+        type Access = enumeration(hide, icon, documentation, diagram, nonPackageText, nonPackageDuplicate, packageText, packageDuplicate);
+    """
 
     __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.Access")
     hide = 1
@@ -132,7 +138,8 @@ class Protection(record):
             String libraryKey;
             String licenseFile = "" "Optional, default mapping if empty";
           end License;
-        end Protection;"""
+        end Protection;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.Protection"
@@ -150,7 +157,8 @@ class Authorization(record):
           String licensor = "" "Optional string to show information about the licensor";
           String libraryKey "Matching the key in the class. Must be encrypted and not visible";
           License license[:] "Definition of the license options and of the access rights";
-        end Authorization;"""
+        end Authorization;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.Authorization"
@@ -172,7 +180,8 @@ class License(record):
           String startDate = "" "Optional start date in UTCformat YYYY-MM-DD";
           String expirationDate = "" "Optional expiration date in UTCformat YYYY-MM-DD";
           String operations[:] = fill("", 0) "Library usage conditions";
-        end License;"""
+        end License;
+    """
 
     __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.License")
     licensee: Union[str, None]
@@ -189,7 +198,8 @@ class inverse(record):
     .. code-block:: modelica
 
         record inverse
-        end inverse;"""
+        end inverse;
+    """
 
     __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.inverse")
 
@@ -202,7 +212,8 @@ class choices(record):
         record choices "Defines a suitable redeclaration or modifications of the element."
           Boolean checkBox = true "Display a checkbox to input the values false or true in the graphical user interface.";
           // TODO: how to handle choice?
-        end choices;"""
+        end choices;
+    """
 
     __omc_class__ = TypeName("OpenModelica.AutoCompletion.Annotations.choices")
     checkBox: Union[bool, None]
@@ -217,7 +228,8 @@ class derivative(record):
           Integer order = 1;
           String noDerivative;
           String zeroDerivative;
-        end derivative;"""
+        end derivative;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.derivative"
@@ -233,7 +245,8 @@ class _OpenModelica_commandLineOptions(record):
     .. code-block:: modelica
 
         record __OpenModelica_commandLineOptions
-        end __OpenModelica_commandLineOptions;"""
+        end __OpenModelica_commandLineOptions;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.__OpenModelica_commandLineOptions"
@@ -246,7 +259,8 @@ class _OpenModelica_simulationFlags(record):
     .. code-block:: modelica
 
         record __OpenModelica_simulationFlags
-        end __OpenModelica_simulationFlags;"""
+        end __OpenModelica_simulationFlags;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.AutoCompletion.Annotations.__OpenModelica_simulationFlags"

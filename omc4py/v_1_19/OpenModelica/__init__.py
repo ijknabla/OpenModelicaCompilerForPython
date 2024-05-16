@@ -42,7 +42,8 @@ def threadData(
 
         function threadData
           output ThreadData threadData;
-        end threadData;"""
+        end threadData;
+    """
     return ...  # type: ignore
 
 
@@ -52,7 +53,8 @@ class ThreadData(record):
     .. code-block:: modelica
 
         record ThreadData
-        end ThreadData;"""
+        end ThreadData;
+    """
 
     __omc_class__ = TypeName("OpenModelica.threadData.ThreadData")
 

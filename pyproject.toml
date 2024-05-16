@@ -185,7 +185,6 @@ ignore = [
 "omc4py/v_*_*/" = [
     "A001", "A002", "PLR0913",  #  consistent with signature in OpenModelica
     "D208",  # breaks inline code in docstring
-    "D209",
     "D301",  # inevitable due to the `ast.unparse`
     "E501",  # consistent with documentation in OpenModelica
 ]

@@ -41,7 +41,8 @@ class CheckSettingsResult(record):
           String CONFIGURE_CMDLINE;
           annotation(
             preferredView = "text");
-        end CheckSettingsResult;"""
+        end CheckSettingsResult;
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.CheckSettingsResult")
     OPENMODELICAHOME: str
@@ -96,7 +97,8 @@ def checkSettings(
 
         function checkSettings
           output CheckSettingsResult result;
-        end checkSettings;"""
+        end checkSettings;
+    """
     return ...  # type: ignore
 
 
@@ -144,7 +146,8 @@ def loadFile(
           input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
           input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output Boolean success;
-        end loadFile;"""
+        end loadFile;
+    """
     return ...  # type: ignore
 
 
@@ -196,7 +199,8 @@ def loadFiles(
           input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
           input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output Boolean success;
-        end loadFiles;"""
+        end loadFiles;
+    """
     return ...  # type: ignore
 
 
@@ -232,7 +236,8 @@ def parseEncryptedPackage(
           input String fileName;
           input String workdir = "<default>" "The output directory for imported encrypted files. <default> will put the files to current working directory.";
           output TypeName names[:];
-        end parseEncryptedPackage;"""
+        end parseEncryptedPackage;
+    """
     return ...  # type: ignore
 
 
@@ -284,7 +289,8 @@ def loadEncryptedPackage(
           input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
           input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output Boolean success;
-        end loadEncryptedPackage;"""
+        end loadEncryptedPackage;
+    """
     return ...  # type: ignore
 
 
@@ -320,7 +326,8 @@ def reloadClass(
           input TypeName name;
           input String encoding = "UTF-8";
           output Boolean success;
-        end reloadClass;"""
+        end reloadClass;
+    """
     return ...  # type: ignore
 
 
@@ -364,7 +371,8 @@ def loadString(
           input String encoding = "UTF-8";
           input Boolean merge = false "if merge is true the parsed AST is merged with the existing AST, default to false which means that is replaced, not merged";
           output Boolean success;
-        end loadString;"""
+        end loadString;
+    """
     return ...  # type: ignore
 
 
@@ -400,7 +408,8 @@ def parseString(
           input String data;
           input String filename = "<interactive>";
           output TypeName names[:];
-        end parseString;"""
+        end parseString;
+    """
     return ...  # type: ignore
 
 
@@ -436,7 +445,8 @@ def parseFile(
           input String filename;
           input String encoding = "UTF-8";
           output TypeName names[:];
-        end parseFile;"""
+        end parseFile;
+    """
     return ...  # type: ignore
 
 
@@ -472,7 +482,8 @@ def loadFileInteractiveQualified(
           input String filename;
           input String encoding = "UTF-8";
           output TypeName names[:];
-        end loadFileInteractiveQualified;"""
+        end loadFileInteractiveQualified;
+    """
     return ...  # type: ignore
 
 
@@ -520,7 +531,8 @@ def loadFileInteractive(
           input Boolean notify = true "Give a notification of the libraries and versions that were loaded";
           input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output TypeName names[:];
-        end loadFileInteractive;"""
+        end loadFileInteractive;
+    """
     return ...  # type: ignore
 
 
@@ -556,7 +568,8 @@ def system(
           input String callStr "String to call: sh -c $callStr";
           input String outputFile = "" "The output is redirected to this file (unless already done by callStr)";
           output Integer retval "Return value of the system call; usually 0 on success";
-        end system;"""
+        end system;
+    """
     return ...  # type: ignore
 
 
@@ -592,7 +605,8 @@ def system_parallel(
           input String callStr[:] "String to call: sh -c $callStr";
           input Integer numThreads = numProcessors();
           output Integer retval[:] "Return value of the system call; usually 0 on success";
-        end system_parallel;"""
+        end system_parallel;
+    """
     return ...  # type: ignore
 
 
@@ -624,7 +638,8 @@ def saveAll(
         function saveAll
           input String fileName;
           output Boolean success;
-        end saveAll;"""
+        end saveAll;
+    """
     return ...  # type: ignore
 
 
@@ -656,7 +671,8 @@ def help(
         function help
           input String topic = "topics";
           output String helpText;
-        end help;"""
+        end help;
+    """
     return ...  # type: ignore
 
 
@@ -680,7 +696,8 @@ def clear(
 
         function clear
           output Boolean success;
-        end clear;"""
+        end clear;
+    """
     return ...  # type: ignore
 
 
@@ -706,7 +723,8 @@ def clearProgram(
 
         function clearProgram
           output Boolean success;
-        end clearProgram;"""
+        end clearProgram;
+    """
     return ...  # type: ignore
 
 
@@ -732,7 +750,8 @@ def clearVariables(
 
         function clearVariables
           output Boolean success;
-        end clearVariables;"""
+        end clearVariables;
+    """
     return ...  # type: ignore
 
 
@@ -764,7 +783,8 @@ def generateHeader(
         function generateHeader
           input String fileName;
           output Boolean success;
-        end generateHeader;"""
+        end generateHeader;
+    """
     return ...  # type: ignore
 
 
@@ -796,7 +816,8 @@ def generateJuliaHeader(
         function generateJuliaHeader
           input String fileName;
           output Boolean success;
-        end generateJuliaHeader;"""
+        end generateJuliaHeader;
+    """
     return ...  # type: ignore
 
 
@@ -832,7 +853,8 @@ def generateSeparateCode(
           input TypeName className;
           input Boolean cleanCache = false "If true, the cache is reset between each generated package. This conserves memory at the cost of speed.";
           output Boolean success;
-        end generateSeparateCode;"""
+        end generateSeparateCode;
+    """
     return ...  # type: ignore
 
 
@@ -864,7 +886,8 @@ def generateSeparateCodeDependencies(
         function generateSeparateCodeDependencies
           input String stampSuffix = ".c" "Suffix to add to dependencies (often .c.stamp)";
           output String[:] dependencies;
-        end generateSeparateCodeDependencies;"""
+        end generateSeparateCodeDependencies;
+    """
     return ...  # type: ignore
 
 
@@ -904,7 +927,8 @@ def generateSeparateCodeDependenciesMakefile(
           input String directory = "" "The relative path of the generated files";
           input String suffix = ".c" "Often .stamp since we do not update all the files";
           output Boolean success;
-        end generateSeparateCodeDependenciesMakefile;"""
+        end generateSeparateCodeDependenciesMakefile;
+    """
     return ...  # type: ignore
 
 
@@ -930,7 +954,8 @@ def getLinker(
 
         function getLinker
           output String linker;
-        end getLinker;"""
+        end getLinker;
+    """
     return ...  # type: ignore
 
 
@@ -960,7 +985,8 @@ def setLinker(
         function setLinker
           input String linker;
           output Boolean success;
-        end setLinker;"""
+        end setLinker;
+    """
     return ...  # type: ignore
 
 
@@ -986,7 +1012,8 @@ def getLinkerFlags(
 
         function getLinkerFlags
           output String linkerFlags;
-        end getLinkerFlags;"""
+        end getLinkerFlags;
+    """
     return ...  # type: ignore
 
 
@@ -1016,7 +1043,8 @@ def setLinkerFlags(
         function setLinkerFlags
           input String linkerFlags;
           output Boolean success;
-        end setLinkerFlags;"""
+        end setLinkerFlags;
+    """
     return ...  # type: ignore
 
 
@@ -1042,7 +1070,8 @@ def getCompiler(
 
         function getCompiler
           output String compiler;
-        end getCompiler;"""
+        end getCompiler;
+    """
     return ...  # type: ignore
 
 
@@ -1072,7 +1101,8 @@ def setCompiler(
         function setCompiler
           input String compiler;
           output Boolean success;
-        end setCompiler;"""
+        end setCompiler;
+    """
     return ...  # type: ignore
 
 
@@ -1102,7 +1132,8 @@ def setCFlags(
         function setCFlags
           input String inString;
           output Boolean success;
-        end setCFlags;"""
+        end setCFlags;
+    """
     return ...  # type: ignore
 
 
@@ -1128,7 +1159,8 @@ def getCFlags(
 
         function getCFlags
           output String outString;
-        end getCFlags;"""
+        end getCFlags;
+    """
     return ...  # type: ignore
 
 
@@ -1154,7 +1186,8 @@ def getCXXCompiler(
 
         function getCXXCompiler
           output String compiler;
-        end getCXXCompiler;"""
+        end getCXXCompiler;
+    """
     return ...  # type: ignore
 
 
@@ -1184,7 +1217,8 @@ def setCXXCompiler(
         function setCXXCompiler
           input String compiler;
           output Boolean success;
-        end setCXXCompiler;"""
+        end setCXXCompiler;
+    """
     return ...  # type: ignore
 
 
@@ -1210,7 +1244,8 @@ def verifyCompiler(
 
         function verifyCompiler
           output Boolean compilerWorks;
-        end verifyCompiler;"""
+        end verifyCompiler;
+    """
     return ...  # type: ignore
 
 
@@ -1242,7 +1277,8 @@ def setCompilerPath(
         function setCompilerPath
           input String compilerPath;
           output Boolean success;
-        end setCompilerPath;"""
+        end setCompilerPath;
+    """
     return ...  # type: ignore
 
 
@@ -1270,7 +1306,8 @@ def getCompileCommand(
 
         function getCompileCommand
           output String compileCommand;
-        end getCompileCommand;"""
+        end getCompileCommand;
+    """
     return ...  # type: ignore
 
 
@@ -1300,7 +1337,8 @@ def setCompileCommand(
         function setCompileCommand
           input String compileCommand;
           output Boolean success;
-        end setCompileCommand;"""
+        end setCompileCommand;
+    """
     return ...  # type: ignore
 
 
@@ -1330,7 +1368,8 @@ def setPlotCommand(
         function setPlotCommand
           input String plotCommand;
           output Boolean success;
-        end setPlotCommand;"""
+        end setPlotCommand;
+    """
     return ...  # type: ignore
 
 
@@ -1356,7 +1395,8 @@ def getSettings(
 
         function getSettings
           output String settings;
-        end getSettings;"""
+        end getSettings;
+    """
     return ...  # type: ignore
 
 
@@ -1388,7 +1428,8 @@ def setTempDirectoryPath(
         function setTempDirectoryPath
           input String tempDirectoryPath;
           output Boolean success;
-        end setTempDirectoryPath;"""
+        end setTempDirectoryPath;
+    """
     return ...  # type: ignore
 
 
@@ -1416,7 +1457,8 @@ def getTempDirectoryPath(
 
         function getTempDirectoryPath
           output String tempDirectoryPath;
-        end getTempDirectoryPath;"""
+        end getTempDirectoryPath;
+    """
     return ...  # type: ignore
 
 
@@ -1446,7 +1488,8 @@ def getEnvironmentVar(
         function getEnvironmentVar
           input String var;
           output String value "returns empty string on failure";
-        end getEnvironmentVar;"""
+        end getEnvironmentVar;
+    """
     return ...  # type: ignore
 
 
@@ -1478,7 +1521,8 @@ def setEnvironmentVar(
           input String var;
           input String value;
           output Boolean success;
-        end setEnvironmentVar;"""
+        end setEnvironmentVar;
+    """
     return ...  # type: ignore
 
 
@@ -1510,7 +1554,8 @@ def appendEnvironmentVar(
           input String var;
           input String value;
           output String result "returns \\"error\\" if the variable could not be appended";
-        end appendEnvironmentVar;"""
+        end appendEnvironmentVar;
+    """
     return ...  # type: ignore
 
 
@@ -1542,7 +1587,8 @@ def setInstallationDirectoryPath(
         function setInstallationDirectoryPath
           input String installationDirectoryPath;
           output Boolean success;
-        end setInstallationDirectoryPath;"""
+        end setInstallationDirectoryPath;
+    """
     return ...  # type: ignore
 
 
@@ -1570,7 +1616,8 @@ def getInstallationDirectoryPath(
 
         function getInstallationDirectoryPath
           output String installationDirectoryPath;
-        end getInstallationDirectoryPath;"""
+        end getInstallationDirectoryPath;
+    """
     return ...  # type: ignore
 
 
@@ -1602,7 +1649,8 @@ def setModelicaPath(
         function setModelicaPath
           input String modelicaPath;
           output Boolean success;
-        end setModelicaPath;"""
+        end setModelicaPath;
+    """
     return ...  # type: ignore
 
 
@@ -1628,7 +1676,8 @@ def getModelicaPath(
 
         function getModelicaPath
           output String modelicaPath;
-        end getModelicaPath;"""
+        end getModelicaPath;
+    """
     return ...  # type: ignore
 
 
@@ -1656,7 +1705,8 @@ def getHomeDirectoryPath(
 
         function getHomeDirectoryPath
           output String homeDirectoryPath;
-        end getHomeDirectoryPath;"""
+        end getHomeDirectoryPath;
+    """
     return ...  # type: ignore
 
 
@@ -1686,7 +1736,8 @@ def setCompilerFlags(
         function setCompilerFlags
           input String compilerFlags;
           output Boolean success;
-        end setCompilerFlags;"""
+        end setCompilerFlags;
+    """
     return ...  # type: ignore
 
 
@@ -1714,7 +1765,8 @@ def enableNewInstantiation(
 
         function enableNewInstantiation
           output Boolean success;
-        end enableNewInstantiation;"""
+        end enableNewInstantiation;
+    """
     return ...  # type: ignore
 
 
@@ -1742,7 +1794,8 @@ def disableNewInstantiation(
 
         function disableNewInstantiation
           output Boolean success;
-        end disableNewInstantiation;"""
+        end disableNewInstantiation;
+    """
     return ...  # type: ignore
 
 
@@ -1772,7 +1825,8 @@ def setDebugFlags(
         function setDebugFlags
           input String debugFlags;
           output Boolean success;
-        end setDebugFlags;"""
+        end setDebugFlags;
+    """
     return ...  # type: ignore
 
 
@@ -1800,7 +1854,8 @@ def clearDebugFlags(
 
         function clearDebugFlags
           output Boolean success;
-        end clearDebugFlags;"""
+        end clearDebugFlags;
+    """
     return ...  # type: ignore
 
 
@@ -1830,7 +1885,8 @@ def setPreOptModules(
         function setPreOptModules
           input String modules;
           output Boolean success;
-        end setPreOptModules;"""
+        end setPreOptModules;
+    """
     return ...  # type: ignore
 
 
@@ -1860,7 +1916,8 @@ def setCheapMatchingAlgorithm(
         function setCheapMatchingAlgorithm
           input Integer matchingAlgorithm;
           output Boolean success;
-        end setCheapMatchingAlgorithm;"""
+        end setCheapMatchingAlgorithm;
+    """
     return ...  # type: ignore
 
 
@@ -1888,7 +1945,8 @@ def getMatchingAlgorithm(
 
         function getMatchingAlgorithm
           output String selected;
-        end getMatchingAlgorithm;"""
+        end getMatchingAlgorithm;
+    """
     return ...  # type: ignore
 
 
@@ -1925,7 +1983,8 @@ def getAvailableMatchingAlgorithms(
         function getAvailableMatchingAlgorithms
           output String[:] allChoices;
           output String[:] allComments;
-        end getAvailableMatchingAlgorithms;"""
+        end getAvailableMatchingAlgorithms;
+    """
     return ...  # type: ignore
 
 
@@ -1955,7 +2014,8 @@ def setMatchingAlgorithm(
         function setMatchingAlgorithm
           input String matchingAlgorithm;
           output Boolean success;
-        end setMatchingAlgorithm;"""
+        end setMatchingAlgorithm;
+    """
     return ...  # type: ignore
 
 
@@ -1983,7 +2043,8 @@ def getIndexReductionMethod(
 
         function getIndexReductionMethod
           output String selected;
-        end getIndexReductionMethod;"""
+        end getIndexReductionMethod;
+    """
     return ...  # type: ignore
 
 
@@ -2020,7 +2081,8 @@ def getAvailableIndexReductionMethods(
         function getAvailableIndexReductionMethods
           output String[:] allChoices;
           output String[:] allComments;
-        end getAvailableIndexReductionMethods;"""
+        end getAvailableIndexReductionMethods;
+    """
     return ...  # type: ignore
 
 
@@ -2050,7 +2112,8 @@ def setIndexReductionMethod(
         function setIndexReductionMethod
           input String method;
           output Boolean success;
-        end setIndexReductionMethod;"""
+        end setIndexReductionMethod;
+    """
     return ...  # type: ignore
 
 
@@ -2080,7 +2143,8 @@ def setPostOptModules(
         function setPostOptModules
           input String modules;
           output Boolean success;
-        end setPostOptModules;"""
+        end setPostOptModules;
+    """
     return ...  # type: ignore
 
 
@@ -2108,7 +2172,8 @@ def getTearingMethod(
 
         function getTearingMethod
           output String selected;
-        end getTearingMethod;"""
+        end getTearingMethod;
+    """
     return ...  # type: ignore
 
 
@@ -2145,7 +2210,8 @@ def getAvailableTearingMethods(
         function getAvailableTearingMethods
           output String[:] allChoices;
           output String[:] allComments;
-        end getAvailableTearingMethods;"""
+        end getAvailableTearingMethods;
+    """
     return ...  # type: ignore
 
 
@@ -2175,7 +2241,8 @@ def setTearingMethod(
         function setTearingMethod
           input String tearingMethod;
           output Boolean success;
-        end setTearingMethod;"""
+        end setTearingMethod;
+    """
     return ...  # type: ignore
 
 
@@ -2205,7 +2272,8 @@ def setCommandLineOptions(
         function setCommandLineOptions
           input String option;
           output Boolean success;
-        end setCommandLineOptions;"""
+        end setCommandLineOptions;
+    """
     return ...  # type: ignore
 
 
@@ -2233,7 +2301,8 @@ def getCommandLineOptions(
 
         function getCommandLineOptions
           output String[:] flags;
-        end getCommandLineOptions;"""
+        end getCommandLineOptions;
+    """
     return ...  # type: ignore
 
 
@@ -2273,7 +2342,8 @@ def getConfigFlagValidOptions(
           output String validOptions[:];
           output String mainDescription;
           output String descriptions[:];
-        end getConfigFlagValidOptions;"""
+        end getConfigFlagValidOptions;
+    """
     return ...  # type: ignore
 
 
@@ -2301,7 +2371,8 @@ def clearCommandLineOptions(
 
         function clearCommandLineOptions
           output Boolean success;
-        end clearCommandLineOptions;"""
+        end clearCommandLineOptions;
+    """
     return ...  # type: ignore
 
 
@@ -2333,7 +2404,8 @@ def getVersion(
         function getVersion
           input TypeName cl = $Code(OpenModelica);
           output String version;
-        end getVersion;"""
+        end getVersion;
+    """
     return ...  # type: ignore
 
 
@@ -2365,7 +2437,8 @@ def regularFileExists(
         function regularFileExists
           input String fileName;
           output Boolean exists;
-        end regularFileExists;"""
+        end regularFileExists;
+    """
     return ...  # type: ignore
 
 
@@ -2397,7 +2470,8 @@ def directoryExists(
         function directoryExists
           input String dirName;
           output Boolean exists;
-        end directoryExists;"""
+        end directoryExists;
+    """
     return ...  # type: ignore
 
 
@@ -2437,7 +2511,8 @@ def stat(
           output Boolean success;
           output Real fileSize;
           output Real mtime;
-        end stat;"""
+        end stat;
+    """
     return ...  # type: ignore
 
 
@@ -2469,7 +2544,8 @@ def readFile(
         impure function readFile
           input String fileName;
           output String contents;
-        end readFile;"""
+        end readFile;
+    """
     return ...  # type: ignore
 
 
@@ -2509,7 +2585,8 @@ def writeFile(
           input String data;
           input Boolean append = false;
           output Boolean success;
-        end writeFile;"""
+        end writeFile;
+    """
     return ...  # type: ignore
 
 
@@ -2545,7 +2622,8 @@ def compareFilesAndMove(
           input String newFile;
           input String oldFile;
           output Boolean success;
-        end compareFilesAndMove;"""
+        end compareFilesAndMove;
+    """
     return ...  # type: ignore
 
 
@@ -2581,7 +2659,8 @@ def compareFiles(
           input String file1;
           input String file2;
           output Boolean isEqual;
-        end compareFiles;"""
+        end compareFiles;
+    """
     return ...  # type: ignore
 
 
@@ -2611,7 +2690,8 @@ def alarm(
         impure function alarm
           input Integer seconds;
           output Integer previousSeconds;
-        end alarm;"""
+        end alarm;
+    """
     return ...  # type: ignore
 
 
@@ -2665,7 +2745,8 @@ def regex(
           input Boolean caseInsensitive = false;
           output Integer numMatches "-1 is an error, 0 means no match, else returns a number 1..maxMatches";
           output String matchedSubstrings[maxMatches] "unmatched strings are returned as empty";
-        end regex;"""
+        end regex;
+    """
     return ...  # type: ignore
 
 
@@ -2709,7 +2790,8 @@ def regexBool(
           input Boolean extended = true "Use POSIX extended or regular syntax";
           input Boolean caseInsensitive = false;
           output Boolean matches;
-        end regexBool;"""
+        end regexBool;
+    """
     return ...  # type: ignore
 
 
@@ -2741,7 +2823,8 @@ def testsuiteFriendlyName(
         function testsuiteFriendlyName
           input String path;
           output String fixed;
-        end testsuiteFriendlyName;"""
+        end testsuiteFriendlyName;
+    """
     return ...  # type: ignore
 
 
@@ -2773,7 +2856,8 @@ def readFileNoNumeric(
         function readFileNoNumeric
           input String fileName;
           output String contents;
-        end readFileNoNumeric;"""
+        end readFileNoNumeric;
+    """
     return ...  # type: ignore
 
 
@@ -2805,7 +2889,8 @@ def getErrorString(
         impure function getErrorString
           input Boolean warningsAsErrors = false;
           output String errorString;
-        end getErrorString;"""
+        end getErrorString;
+    """
     return ...  # type: ignore
 
 
@@ -2833,7 +2918,8 @@ def getMessagesString(
 
         function getMessagesString
           output String messagesString;
-        end getMessagesString;"""
+        end getMessagesString;
+    """
     return ...  # type: ignore
 
 
@@ -2851,7 +2937,8 @@ class SourceInfo(record):
           Integer columnEnd;
           annotation(
             preferredView = "text");
-        end SourceInfo;"""
+        end SourceInfo;
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.SourceInfo")
     fileName: str
@@ -2866,7 +2953,8 @@ class ErrorKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");"""
+        type ErrorKind = enumeration(syntax "syntax errors", grammar "grammatical errors", translation "instantiation errors: up to flat modelica", symbolic "symbolic manipulation error, simcodegen, up to executable file", runtime "simulation/function runtime error", scripting "runtime scripting /interpretation error");
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorKind")
     syntax = 1
@@ -2887,7 +2975,8 @@ class ErrorLevel(enumeration):
     """
     .. code-block:: modelica
 
-        type ErrorLevel = enumeration(internal, notification, warning, error);"""
+        type ErrorLevel = enumeration(internal, notification, warning, error);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorLevel")
     internal = 1
@@ -2909,7 +2998,8 @@ class ErrorMessage(record):
           Integer id "Internal ID of the error (just ignore this)";
           annotation(
             preferredView = "text");
-        end ErrorMessage;"""
+        end ErrorMessage;
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ErrorMessage")
     info: SourceInfo
@@ -2947,7 +3037,8 @@ def getMessagesStringInternal(
         function getMessagesStringInternal
           input Boolean unique = true;
           output ErrorMessage[:] messagesString;
-        end getMessagesStringInternal;"""
+        end getMessagesStringInternal;
+    """
     return ...  # type: ignore
 
 
@@ -2983,7 +3074,8 @@ def countMessages(
           output Integer numMessages;
           output Integer numErrors;
           output Integer numWarnings;
-        end countMessages;"""
+        end countMessages;
+    """
     return ...  # type: ignore
 
 
@@ -3009,7 +3101,8 @@ def clearMessages(
 
         function clearMessages
           output Boolean success;
-        end clearMessages;"""
+        end clearMessages;
+    """
     return ...  # type: ignore
 
 
@@ -3041,7 +3134,8 @@ def runScript(
         impure function runScript
           input String fileName "*.mos";
           output String result;
-        end runScript;"""
+        end runScript;
+    """
     return ...  # type: ignore
 
 
@@ -3071,7 +3165,8 @@ def echo(
         function echo
           input Boolean setEcho;
           output Boolean newEcho;
-        end echo;"""
+        end echo;
+    """
     return ...  # type: ignore
 
 
@@ -3099,7 +3194,8 @@ def getClassesInModelicaPath(
 
         function getClassesInModelicaPath
           output String classesInModelicaPath;
-        end getClassesInModelicaPath;"""
+        end getClassesInModelicaPath;
+    """
     return ...  # type: ignore
 
 
@@ -3127,7 +3223,8 @@ def getAnnotationVersion(
 
         function getAnnotationVersion
           output String annotationVersion;
-        end getAnnotationVersion;"""
+        end getAnnotationVersion;
+    """
     return ...  # type: ignore
 
 
@@ -3157,7 +3254,8 @@ def setAnnotationVersion(
         function setAnnotationVersion
           input String annotationVersion;
           output Boolean success;
-        end setAnnotationVersion;"""
+        end setAnnotationVersion;
+    """
     return ...  # type: ignore
 
 
@@ -3183,7 +3281,8 @@ def getNoSimplify(
 
         function getNoSimplify
           output Boolean noSimplify;
-        end getNoSimplify;"""
+        end getNoSimplify;
+    """
     return ...  # type: ignore
 
 
@@ -3213,7 +3312,8 @@ def setNoSimplify(
         function setNoSimplify
           input Boolean noSimplify;
           output Boolean success;
-        end setNoSimplify;"""
+        end setNoSimplify;
+    """
     return ...  # type: ignore
 
 
@@ -3241,7 +3341,8 @@ def getVectorizationLimit(
 
         function getVectorizationLimit
           output Integer vectorizationLimit;
-        end getVectorizationLimit;"""
+        end getVectorizationLimit;
+    """
     return ...  # type: ignore
 
 
@@ -3271,7 +3372,8 @@ def setVectorizationLimit(
         function setVectorizationLimit
           input Integer vectorizationLimit;
           output Boolean success;
-        end setVectorizationLimit;"""
+        end setVectorizationLimit;
+    """
     return ...  # type: ignore
 
 
@@ -3299,7 +3401,8 @@ def getDefaultOpenCLDevice(
 
         function getDefaultOpenCLDevice
           output Integer defdevid;
-        end getDefaultOpenCLDevice;"""
+        end getDefaultOpenCLDevice;
+    """
     return ...  # type: ignore
 
 
@@ -3329,7 +3432,8 @@ def setDefaultOpenCLDevice(
         function setDefaultOpenCLDevice
           input Integer defdevid;
           output Boolean success;
-        end setDefaultOpenCLDevice;"""
+        end setDefaultOpenCLDevice;
+    """
     return ...  # type: ignore
 
 
@@ -3359,7 +3463,8 @@ def setShowAnnotations(
         function setShowAnnotations
           input Boolean show;
           output Boolean success;
-        end setShowAnnotations;"""
+        end setShowAnnotations;
+    """
     return ...  # type: ignore
 
 
@@ -3387,7 +3492,8 @@ def getShowAnnotations(
 
         function getShowAnnotations
           output Boolean show;
-        end getShowAnnotations;"""
+        end getShowAnnotations;
+    """
     return ...  # type: ignore
 
 
@@ -3417,7 +3523,8 @@ def setOrderConnections(
         function setOrderConnections
           input Boolean orderConnections;
           output Boolean success;
-        end setOrderConnections;"""
+        end setOrderConnections;
+    """
     return ...  # type: ignore
 
 
@@ -3445,7 +3552,8 @@ def getOrderConnections(
 
         function getOrderConnections
           output Boolean orderConnections;
-        end getOrderConnections;"""
+        end getOrderConnections;
+    """
     return ...  # type: ignore
 
 
@@ -3475,7 +3583,8 @@ def setLanguageStandard(
         function setLanguageStandard
           input String inVersion;
           output Boolean success;
-        end setLanguageStandard;"""
+        end setLanguageStandard;
+    """
     return ...  # type: ignore
 
 
@@ -3503,7 +3612,8 @@ def getLanguageStandard(
 
         function getLanguageStandard
           output String outVersion;
-        end getLanguageStandard;"""
+        end getLanguageStandard;
+    """
     return ...  # type: ignore
 
 
@@ -3535,7 +3645,8 @@ def getAstAsCorbaString(
         function getAstAsCorbaString
           input String fileName = "<interactive>";
           output String result "returns the string if fileName is interactive; else it returns ok or error depending on if writing the file succeeded";
-        end getAstAsCorbaString;"""
+        end getAstAsCorbaString;
+    """
     return ...  # type: ignore
 
 
@@ -3567,7 +3678,8 @@ def cd(
         function cd
           input String newWorkingDirectory = "";
           output String workingDirectory;
-        end cd;"""
+        end cd;
+    """
     return ...  # type: ignore
 
 
@@ -3599,7 +3711,8 @@ def mkdir(
         function mkdir
           input String newDirectory;
           output Boolean success;
-        end mkdir;"""
+        end mkdir;
+    """
     return ...  # type: ignore
 
 
@@ -3635,7 +3748,8 @@ def copy(
           input String source;
           input String destination;
           output Boolean success;
-        end copy;"""
+        end copy;
+    """
     return ...  # type: ignore
 
 
@@ -3667,7 +3781,8 @@ def remove(
         function remove
           input String path;
           output Boolean success "Returns true on success.";
-        end remove;"""
+        end remove;
+    """
     return ...  # type: ignore
 
 
@@ -3699,7 +3814,8 @@ def checkModel(
         function checkModel
           input TypeName className;
           output String result;
-        end checkModel;"""
+        end checkModel;
+    """
     return ...  # type: ignore
 
 
@@ -3735,7 +3851,8 @@ def checkAllModelsRecursive(
           input TypeName className;
           input Boolean checkProtected = false "Checks also protected classes if true";
           output String result;
-        end checkAllModelsRecursive;"""
+        end checkAllModelsRecursive;
+    """
     return ...  # type: ignore
 
 
@@ -3767,7 +3884,8 @@ def typeOf(
         function typeOf
           input VariableName variableName;
           output String result;
-        end typeOf;"""
+        end typeOf;
+    """
     return ...  # type: ignore
 
 
@@ -3799,7 +3917,8 @@ def instantiateModel(
         function instantiateModel
           input TypeName className;
           output String result;
-        end instantiateModel;"""
+        end instantiateModel;
+    """
     return ...  # type: ignore
 
 
@@ -3831,7 +3950,8 @@ def generateCode(
         function generateCode
           input TypeName className;
           output Boolean success;
-        end generateCode;"""
+        end generateCode;
+    """
     return ...  # type: ignore
 
 
@@ -3879,7 +3999,8 @@ def loadModel(
           input String languageStandard = "" "Override the set language standard. Parse with the given setting, but do not change it permanently.";
           input Boolean requireExactVersion = false "If the version is required to be exact, if there is a uses Modelica(version=\\"3.2\\"), Modelica 3.2.1 will not match it.";
           output Boolean success;
-        end loadModel;"""
+        end loadModel;
+    """
     return ...  # type: ignore
 
 
@@ -3911,7 +4032,8 @@ def deleteFile(
         function deleteFile
           input String fileName;
           output Boolean success;
-        end deleteFile;"""
+        end deleteFile;
+    """
     return ...  # type: ignore
 
 
@@ -3947,7 +4069,8 @@ def saveModel(
           input String fileName;
           input TypeName className;
           output Boolean success;
-        end saveModel;"""
+        end saveModel;
+    """
     return ...  # type: ignore
 
 
@@ -3995,7 +4118,8 @@ def saveTotalModel(
           input Boolean stripComments = false;
           input Boolean obfuscate = false;
           output Boolean success;
-        end saveTotalModel;"""
+        end saveTotalModel;
+    """
     return ...  # type: ignore
 
 
@@ -4031,7 +4155,8 @@ def saveTotalModelDebug(
           input String filename;
           input TypeName className;
           output Boolean success;
-        end saveTotalModelDebug;"""
+        end saveTotalModelDebug;
+    """
     return ...  # type: ignore
 
 
@@ -4063,7 +4188,8 @@ def save(
         function save
           input TypeName className;
           output Boolean success;
-        end save;"""
+        end save;
+    """
     return ...  # type: ignore
 
 
@@ -4114,7 +4240,8 @@ def translateGraphics(
         function translateGraphics
           input TypeName className;
           output String result;
-        end translateGraphics;"""
+        end translateGraphics;
+    """
     return ...  # type: ignore
 
 
@@ -4180,7 +4307,8 @@ def dumpXMLDAE(
           input String rewriteRulesFile = "" "the file from where the rewiteRules are read, default is empty which means no rewrite rules";
           output Boolean success "if the function succeeded true/false";
           output String xmlfileName "the Xml file";
-        end dumpXMLDAE;"""
+        end dumpXMLDAE;
+    """
     return ...  # type: ignore
 
 
@@ -4220,7 +4348,8 @@ def convertUnits(
           output Boolean unitsCompatible;
           output Real scaleFactor;
           output Real offset;
-        end convertUnits;"""
+        end convertUnits;
+    """
     return ...  # type: ignore
 
 
@@ -4250,7 +4379,8 @@ def getDerivedUnits(
         function getDerivedUnits
           input String baseUnit;
           output String[:] derivedUnits;
-        end getDerivedUnits;"""
+        end getDerivedUnits;
+    """
     return ...  # type: ignore
 
 
@@ -4278,7 +4408,8 @@ def listVariables(
 
         function listVariables
           output TypeName variables[:];
-        end listVariables;"""
+        end listVariables;
+    """
     return ...  # type: ignore
 
 
@@ -4310,7 +4441,8 @@ def strtok(
           input String string;
           input String token;
           output String[:] strings;
-        end strtok;"""
+        end strtok;
+    """
     return ...  # type: ignore
 
 
@@ -4342,7 +4474,8 @@ def stringSplit(
           input String string;
           input String token "single character only";
           output String[:] strings;
-        end stringSplit;"""
+        end stringSplit;
+    """
     return ...  # type: ignore
 
 
@@ -4382,7 +4515,8 @@ def stringReplace(
           input String source;
           input String target;
           output String res;
-        end stringReplace;"""
+        end stringReplace;
+    """
     return ...  # type: ignore
 
 
@@ -4412,7 +4546,8 @@ def escapeXML(
         function escapeXML
           input String inStr;
           output String outStr;
-        end escapeXML;"""
+        end escapeXML;
+    """
     return ...  # type: ignore
 
 
@@ -4420,7 +4555,8 @@ class ExportKind(enumeration):
     """
     .. code-block:: modelica
 
-        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");"""
+        type ExportKind = enumeration(Absyn "Normal Absyn", SCode "Normal SCode", MetaModelicaInterface "A restricted MetaModelica package interface (protected parts are stripped)", Internal "True unparsing of the Absyn");
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.ExportKind")
     Absyn = 1
@@ -4485,7 +4621,8 @@ def list(
           input Boolean shortOnly = false "only short class definitions";
           input ExportKind exportKind = ExportKind.Absyn;
           output String contents;
-        end list;"""
+        end list;
+    """
     return ...  # type: ignore
 
 
@@ -4521,7 +4658,8 @@ def listFile(
           input TypeName class_;
           input Boolean nestedClasses = true;
           output String contents;
-        end listFile;"""
+        end listFile;
+    """
     return ...  # type: ignore
 
 
@@ -4529,7 +4667,8 @@ class DiffFormat(enumeration):
     """
     .. code-block:: modelica
 
-        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");"""
+        type DiffFormat = enumeration(plain "no deletions, no markup", color "terminal escape sequences", xml "XML tags");
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.DiffFormat")
     plain = 1
@@ -4586,7 +4725,8 @@ def diffModelicaFileListings(
           input DiffFormat diffFormat = DiffFormat.color;
           input Boolean failOnSemanticsChange = false "Defaults to returning after instead of hard fail";
           output String result;
-        end diffModelicaFileListings;"""
+        end diffModelicaFileListings;
+    """
     return ...  # type: ignore
 
 
@@ -4638,7 +4778,8 @@ def exportToFigaro(
           input String options;
           input String processor;
           output Boolean success;
-        end exportToFigaro;"""
+        end exportToFigaro;
+    """
     return ...  # type: ignore
 
 
@@ -4668,7 +4809,8 @@ def inferBindings(
         function inferBindings
           input TypeName path;
           output Boolean success;
-        end inferBindings;"""
+        end inferBindings;
+    """
     return ...  # type: ignore
 
 
@@ -4698,7 +4840,8 @@ def generateVerificationScenarios(
         function generateVerificationScenarios
           input TypeName path;
           output Boolean success;
-        end generateVerificationScenarios;"""
+        end generateVerificationScenarios;
+    """
     return ...  # type: ignore
 
 
@@ -4734,7 +4877,8 @@ def rewriteBlockCall(
           input TypeName className;
           input TypeName inDefs;
           output Boolean success;
-        end rewriteBlockCall;"""
+        end rewriteBlockCall;
+    """
     return ...  # type: ignore
 
 
@@ -4764,7 +4908,8 @@ def realpath(
         function realpath
           input String name "Absolute or relative file or directory name";
           output String fullName "Full path of 'name'";
-        end realpath;"""
+        end realpath;
+    """
     return ...  # type: ignore
 
 
@@ -4794,7 +4939,8 @@ def uriToFilename(
         function uriToFilename
           input String uri;
           output String filename = "";
-        end uriToFilename;"""
+        end uriToFilename;
+    """
     return ...  # type: ignore
 
 
@@ -4822,7 +4968,8 @@ def getLoadedLibraries(
 
         function getLoadedLibraries
           output String[:, 2] libraries;
-        end getLoadedLibraries;"""
+        end getLoadedLibraries;
+    """
     return ...  # type: ignore
 
 
@@ -4864,7 +5011,8 @@ def solveLinearSystem(
           input Real[:] B;
           output Real[size(B, 1)] X;
           output Integer info;
-        end solveLinearSystem;"""
+        end solveLinearSystem;
+    """
     return ...  # type: ignore
 
 
@@ -4872,7 +5020,8 @@ class StandardStream(enumeration):
     """
     .. code-block:: modelica
 
-        type StandardStream = enumeration(stdin, stdout, stderr);"""
+        type StandardStream = enumeration(stdin, stdout, stderr);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.StandardStream")
     stdin = 1
@@ -4912,7 +5061,8 @@ def reopenStandardStream(
           input StandardStream _stream;
           input String filename;
           output Boolean success;
-        end reopenStandardStream;"""
+        end reopenStandardStream;
+    """
     return ...  # type: ignore
 
 
@@ -4968,7 +5118,8 @@ def importFMU(
           input Boolean generateInputConnectors = true "When true creates the input connector pins.";
           input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
           output String generatedFileName "Returns the full path of the generated file.";
-        end importFMU;"""
+        end importFMU;
+    """
     return ...  # type: ignore
 
 
@@ -5024,7 +5175,8 @@ def importFMUModelDescription(
           input Boolean generateInputConnectors = true "When true creates the input connector pins.";
           input Boolean generateOutputConnectors = true "When true creates the output connector pins.";
           output String generatedFileName "Returns the full path of the generated file.";
-        end importFMUModelDescription;"""
+        end importFMUModelDescription;
+    """
     return ...  # type: ignore
 
 
@@ -5072,7 +5224,8 @@ def translateModelFMU(
           input String fileNamePrefix = "<default>" "fileNamePrefix. <default> = \\"className\\"";
           input Boolean includeResources = false "include Modelica based resources via loadResource or not";
           output String generatedFileName "Returns the full path of the generated FMU.";
-        end translateModelFMU;"""
+        end translateModelFMU;
+    """
     return ...  # type: ignore
 
 
@@ -5124,7 +5277,8 @@ def buildModelFMU(
           input String platforms[:] = {"static"} "The list of platforms to generate code for. \\"dynamic\\"=current platform, dynamically link the runtime. \\"static\\"=current platform, statically link everything. Else, use a host triple, e.g. \\"x86_64-linux-gnu\\" or \\"x86_64-w64-mingw32\\"";
           input Boolean includeResources = false "include Modelica based resources via loadResource or not";
           output String generatedFileName "Returns the full path of the generated FMU.";
-        end buildModelFMU;"""
+        end buildModelFMU;
+    """
     return ...  # type: ignore
 
 
@@ -5160,7 +5314,8 @@ def buildEncryptedPackage(
           input TypeName className "the class that should encrypted";
           input Boolean encrypt = true;
           output Boolean success;
-        end buildEncryptedPackage;"""
+        end buildEncryptedPackage;
+    """
     return ...  # type: ignore
 
 
@@ -5249,7 +5404,8 @@ def simulate(
             Real timeSimulation;
             Real timeTotal;
           end SimulationResult;
-        end simulate;"""
+        end simulate;
+    """
     return ...  # type: ignore
 
 
@@ -5269,7 +5425,8 @@ class SimulationResult(record):
           Real timeCompile;
           Real timeSimulation;
           Real timeTotal;
-        end SimulationResult;"""
+        end SimulationResult;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.Scripting.simulate.SimulationResult"
@@ -5358,7 +5515,8 @@ def buildModel(
           input String cflags = "<default>" "cflags. <default> = \\"\\"";
           input String simflags = "<default>" "simflags. <default> = \\"\\"";
           output String[2] buildModelResults;
-        end buildModel;"""
+        end buildModel;
+    """
     return ...  # type: ignore
 
 
@@ -5434,7 +5592,8 @@ def buildLabel(
           input String cflags = "" "cflags. <default> = \\"\\"";
           input String simflags = "" "simflags. <default> = \\"\\"";
           output String[2] buildModelResults;
-        end buildLabel;"""
+        end buildLabel;
+    """
     return ...  # type: ignore
 
 
@@ -5514,7 +5673,8 @@ def reduceTerms(
           input String simflags = "" "simflags. <default> = \\"\\"";
           input String labelstoCancel = "";
           output String[2] buildModelResults;
-        end reduceTerms;"""
+        end reduceTerms;
+    """
     return ...  # type: ignore
 
 
@@ -5550,7 +5710,8 @@ def moveClass(
           input TypeName className "the class that should be moved";
           input Integer offset "Offset in the class list.";
           output Boolean result;
-        end moveClass;"""
+        end moveClass;
+    """
     return ...  # type: ignore
 
 
@@ -5582,7 +5743,8 @@ def moveClassToTop(
         function moveClassToTop
           input TypeName className;
           output Boolean result;
-        end moveClassToTop;"""
+        end moveClassToTop;
+    """
     return ...  # type: ignore
 
 
@@ -5614,7 +5776,8 @@ def moveClassToBottom(
         function moveClassToBottom
           input TypeName className;
           output Boolean result;
-        end moveClassToBottom;"""
+        end moveClassToBottom;
+    """
     return ...  # type: ignore
 
 
@@ -5654,7 +5817,8 @@ def copyClass(
           input String newClassName "the name for new class";
           input TypeName withIn = $Code(TopLevel) "the with in path for new class";
           output Boolean result;
-        end copyClass;"""
+        end copyClass;
+    """
     return ...  # type: ignore
 
 
@@ -5742,7 +5906,8 @@ def linearize(
           input String cflags = "<default>" "cflags. <default> = \\"\\"";
           input String simflags = "<default>" "simflags. <default> = \\"\\"";
           output String linearizationResult;
-        end linearize;"""
+        end linearize;
+    """
     return ...  # type: ignore
 
 
@@ -5830,7 +5995,8 @@ def optimize(
           input String cflags = "<default>" "cflags. <default> = \\"\\"";
           input String simflags = "<default>" "simflags. <default> = \\"\\"";
           output String optimizationResults;
-        end optimize;"""
+        end optimize;
+    """
     return ...  # type: ignore
 
 
@@ -5862,7 +6028,8 @@ def getSourceFile(
         function getSourceFile
           input TypeName class_;
           output String filename "empty on failure";
-        end getSourceFile;"""
+        end getSourceFile;
+    """
     return ...  # type: ignore
 
 
@@ -5898,7 +6065,8 @@ def setSourceFile(
           input TypeName class_;
           input String filename;
           output Boolean success;
-        end setSourceFile;"""
+        end setSourceFile;
+    """
     return ...  # type: ignore
 
 
@@ -5930,7 +6098,8 @@ def isShortDefinition(
         function isShortDefinition
           input TypeName class_;
           output Boolean isShortCls;
-        end isShortDefinition;"""
+        end isShortDefinition;
+    """
     return ...  # type: ignore
 
 
@@ -5966,7 +6135,8 @@ def setClassComment(
           input TypeName class_;
           input String filename;
           output Boolean success;
-        end setClassComment;"""
+        end setClassComment;
+    """
     return ...  # type: ignore
 
 
@@ -6022,7 +6192,8 @@ def getClassNames(
           input Boolean showProtected = false "List also protected classes if true";
           input Boolean includeConstants = false "List also constants in the class if true";
           output TypeName classNames[:];
-        end getClassNames;"""
+        end getClassNames;
+    """
     return ...  # type: ignore
 
 
@@ -6054,7 +6225,8 @@ def getUsedClassNames(
         function getUsedClassNames
           input TypeName className;
           output TypeName classNames[:];
-        end getUsedClassNames;"""
+        end getUsedClassNames;
+    """
     return ...  # type: ignore
 
 
@@ -6086,7 +6258,8 @@ def getPackages(
         function getPackages
           input TypeName class_ = $Code(AllLoadedClasses);
           output TypeName classNames[:];
-        end getPackages;"""
+        end getPackages;
+    """
     return ...  # type: ignore
 
 
@@ -6134,7 +6307,8 @@ def getAllSubtypeOf(
           input Boolean includePartial = false;
           input Boolean sort = false;
           output TypeName classNames[:];
-        end getAllSubtypeOf;"""
+        end getAllSubtypeOf;
+    """
     return ...  # type: ignore
 
 
@@ -6213,7 +6387,8 @@ def basePlotFunction(
           input Real xRange[2] = {0.0, 0.0} "Determines the horizontal interval that is visible in the diagram. {0,0} will select a suitable range.";
           input Real yRange[2] = {0.0, 0.0} "Determines the vertical interval that is visible in the diagram. {0,0} will select a suitable range.";
           output Boolean success "Returns true on success";
-        end basePlotFunction;"""
+        end basePlotFunction;
+    """
     return ...  # type: ignore
 
 
@@ -6309,7 +6484,8 @@ def plot(
           input Boolean autoScale = true "Use auto scale while plotting.";
           input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
           output Boolean success "Returns true on success";
-        end plot;"""
+        end plot;
+    """
     return ...  # type: ignore
 
 
@@ -6401,7 +6577,8 @@ def plotAll(
           input Boolean autoScale = true "Use auto scale while plotting.";
           input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
           output Boolean success "Returns true on success";
-        end plotAll;"""
+        end plotAll;
+    """
     return ...  # type: ignore
 
 
@@ -6501,7 +6678,8 @@ def plotParametric(
           input Boolean autoScale = true "Use auto scale while plotting.";
           input Boolean forceOMPlot = false "if true launches OMPlot and doesn't call callback function even if it is defined.";
           output Boolean success "Returns true on success";
-        end plotParametric;"""
+        end plotParametric;
+    """
     return ...  # type: ignore
 
 
@@ -6541,7 +6719,8 @@ def readSimulationResult(
           input VariableNames variables;
           input Integer size = 0 "0=read any size... If the size is not the same as the result-file, this function fails";
           output Real result[:, :];
-        end readSimulationResult;"""
+        end readSimulationResult;
+    """
     return ...  # type: ignore
 
 
@@ -6573,7 +6752,8 @@ def readSimulationResultSize(
         function readSimulationResultSize
           input String fileName;
           output Integer sz;
-        end readSimulationResultSize;"""
+        end readSimulationResultSize;
+    """
     return ...  # type: ignore
 
 
@@ -6613,7 +6793,8 @@ def readSimulationResultVars(
           input Boolean readParameters = true;
           input Boolean openmodelicaStyle = false;
           output String[:] vars;
-        end readSimulationResultVars;"""
+        end readSimulationResultVars;
+    """
     return ...  # type: ignore
 
 
@@ -6665,7 +6846,8 @@ def filterSimulationResults(
           input Boolean removeDescription = false;
           input Boolean hintReadAllVars = true;
           output Boolean success;
-        end filterSimulationResults;"""
+        end filterSimulationResults;
+    """
     return ...  # type: ignore
 
 
@@ -6717,7 +6899,8 @@ def compareSimulationResults(
           input Real absTol = 0.0001;
           input String[:] vars = fill("", 0);
           output String[:] result;
-        end compareSimulationResults;"""
+        end compareSimulationResults;
+    """
     return ...  # type: ignore
 
 
@@ -6761,7 +6944,8 @@ def deltaSimulationResults(
           input String method "method to compute then error. choose 1norm, 2norm, maxerr";
           input String[:] vars = fill("", 0);
           output Real result;
-        end deltaSimulationResults;"""
+        end deltaSimulationResults;
+    """
     return ...  # type: ignore
 
 
@@ -6829,7 +7013,8 @@ def diffSimulationResults(
           input Boolean keepEqualResults = false;
           output Boolean success;
           output String[:] failVars;
-        end diffSimulationResults;"""
+        end diffSimulationResults;
+    """
     return ...  # type: ignore
 
 
@@ -6881,7 +7066,8 @@ def diffSimulationResultsHtml(
           input Real relTolDiffMinMax = 1e-4 "y tolerance based on the difference between the maximum and minimum of the signal";
           input Real rangeDelta = 0.002 "x tolerance";
           output String html;
-        end diffSimulationResultsHtml;"""
+        end diffSimulationResultsHtml;
+    """
     return ...  # type: ignore
 
 
@@ -6917,7 +7103,8 @@ def checkTaskGraph(
           input String filename;
           input String reffilename;
           output String[:] result;
-        end checkTaskGraph;"""
+        end checkTaskGraph;
+    """
     return ...  # type: ignore
 
 
@@ -6953,7 +7140,8 @@ def checkCodeGraph(
           input String graphfile;
           input String codefile;
           output String[:] result;
-        end checkCodeGraph;"""
+        end checkCodeGraph;
+    """
     return ...  # type: ignore
 
 
@@ -6993,7 +7181,8 @@ def val(
           input Real timePoint = 0.0;
           input String fileName = "<default>" "The contents of the currentSimulationResult variable";
           output Real valAtTime;
-        end val;"""
+        end val;
+    """
     return ...  # type: ignore
 
 
@@ -7021,7 +7210,8 @@ def closeSimulationResultFile(
 
         function closeSimulationResultFile
           output Boolean success;
-        end closeSimulationResultFile;"""
+        end closeSimulationResultFile;
+    """
     return ...  # type: ignore
 
 
@@ -7053,7 +7243,8 @@ def getParameterNames(
         function getParameterNames
           input TypeName class_;
           output String[:] parameters;
-        end getParameterNames;"""
+        end getParameterNames;
+    """
     return ...  # type: ignore
 
 
@@ -7089,7 +7280,8 @@ def getParameterValue(
           input TypeName class_;
           input String parameterName;
           output String parameterValue;
-        end getParameterValue;"""
+        end getParameterValue;
+    """
     return ...  # type: ignore
 
 
@@ -7125,7 +7317,8 @@ def getComponentModifierNames(
           input TypeName class_;
           input String componentName;
           output String[:] modifiers;
-        end getComponentModifierNames;"""
+        end getComponentModifierNames;
+    """
     return ...  # type: ignore
 
 
@@ -7161,7 +7354,8 @@ def getComponentModifierValue(
           input TypeName class_;
           input TypeName modifier;
           output String value;
-        end getComponentModifierValue;"""
+        end getComponentModifierValue;
+    """
     return ...  # type: ignore
 
 
@@ -7197,7 +7391,8 @@ def getComponentModifierValues(
           input TypeName class_;
           input TypeName modifier;
           output String value;
-        end getComponentModifierValues;"""
+        end getComponentModifierValues;
+    """
     return ...  # type: ignore
 
 
@@ -7237,7 +7432,8 @@ def removeComponentModifiers(
           input String componentName;
           input Boolean keepRedeclares = false;
           output Boolean success;
-        end removeComponentModifiers;"""
+        end removeComponentModifiers;
+    """
     return ...  # type: ignore
 
 
@@ -7273,7 +7469,8 @@ def getElementModifierNames(
           input TypeName className;
           input String elementName;
           output String[:] modifiers;
-        end getElementModifierNames;"""
+        end getElementModifierNames;
+    """
     return ...  # type: ignore
 
 
@@ -7309,7 +7506,8 @@ def getElementModifierValue(
           input TypeName className;
           input TypeName modifier;
           output String value;
-        end getElementModifierValue;"""
+        end getElementModifierValue;
+    """
     return ...  # type: ignore
 
 
@@ -7345,7 +7543,8 @@ def getElementModifierValues(
           input TypeName className;
           input TypeName modifier;
           output String value;
-        end getElementModifierValues;"""
+        end getElementModifierValues;
+    """
     return ...  # type: ignore
 
 
@@ -7385,7 +7584,8 @@ def removeElementModifiers(
           input String componentName;
           input Boolean keepRedeclares = false;
           output Boolean success;
-        end removeElementModifiers;"""
+        end removeElementModifiers;
+    """
     return ...  # type: ignore
 
 
@@ -7415,7 +7615,8 @@ def getInstantiatedParametersAndValues(
         function getInstantiatedParametersAndValues
           input TypeName cls;
           output String[:] values;
-        end getInstantiatedParametersAndValues;"""
+        end getInstantiatedParametersAndValues;
+    """
     return ...  # type: ignore
 
 
@@ -7455,7 +7656,8 @@ def removeExtendsModifiers(
           input TypeName baseClassName;
           input Boolean keepRedeclares = false;
           output Boolean success;
-        end removeExtendsModifiers;"""
+        end removeExtendsModifiers;
+    """
     return ...  # type: ignore
 
 
@@ -7499,7 +7701,8 @@ def updateConnectionAnnotation(
           input String to;
           input String annotate;
           output Boolean result;
-        end updateConnectionAnnotation;"""
+        end updateConnectionAnnotation;
+    """
     return ...  # type: ignore
 
 
@@ -7547,7 +7750,8 @@ def updateConnectionNames(
           input String fromNew;
           input String toNew;
           output Boolean result;
-        end updateConnectionNames;"""
+        end updateConnectionNames;
+    """
     return ...  # type: ignore
 
 
@@ -7579,7 +7783,8 @@ def getConnectionCount(
         function getConnectionCount
           input TypeName className;
           output Integer count;
-        end getConnectionCount;"""
+        end getConnectionCount;
+    """
     return ...  # type: ignore
 
 
@@ -7615,7 +7820,8 @@ def getNthConnection(
           input TypeName className;
           input Integer index;
           output String[:] result;
-        end getNthConnection;"""
+        end getNthConnection;
+    """
     return ...  # type: ignore
 
 
@@ -7647,7 +7853,8 @@ def getAlgorithmCount(
         function getAlgorithmCount
           input TypeName class_;
           output Integer count;
-        end getAlgorithmCount;"""
+        end getAlgorithmCount;
+    """
     return ...  # type: ignore
 
 
@@ -7683,7 +7890,8 @@ def getNthAlgorithm(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthAlgorithm;"""
+        end getNthAlgorithm;
+    """
     return ...  # type: ignore
 
 
@@ -7715,7 +7923,8 @@ def getInitialAlgorithmCount(
         function getInitialAlgorithmCount
           input TypeName class_;
           output Integer count;
-        end getInitialAlgorithmCount;"""
+        end getInitialAlgorithmCount;
+    """
     return ...  # type: ignore
 
 
@@ -7751,7 +7960,8 @@ def getNthInitialAlgorithm(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthInitialAlgorithm;"""
+        end getNthInitialAlgorithm;
+    """
     return ...  # type: ignore
 
 
@@ -7783,7 +7993,8 @@ def getAlgorithmItemsCount(
         function getAlgorithmItemsCount
           input TypeName class_;
           output Integer count;
-        end getAlgorithmItemsCount;"""
+        end getAlgorithmItemsCount;
+    """
     return ...  # type: ignore
 
 
@@ -7819,7 +8030,8 @@ def getNthAlgorithmItem(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthAlgorithmItem;"""
+        end getNthAlgorithmItem;
+    """
     return ...  # type: ignore
 
 
@@ -7851,7 +8063,8 @@ def getInitialAlgorithmItemsCount(
         function getInitialAlgorithmItemsCount
           input TypeName class_;
           output Integer count;
-        end getInitialAlgorithmItemsCount;"""
+        end getInitialAlgorithmItemsCount;
+    """
     return ...  # type: ignore
 
 
@@ -7887,7 +8100,8 @@ def getNthInitialAlgorithmItem(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthInitialAlgorithmItem;"""
+        end getNthInitialAlgorithmItem;
+    """
     return ...  # type: ignore
 
 
@@ -7919,7 +8133,8 @@ def getEquationCount(
         function getEquationCount
           input TypeName class_;
           output Integer count;
-        end getEquationCount;"""
+        end getEquationCount;
+    """
     return ...  # type: ignore
 
 
@@ -7955,7 +8170,8 @@ def getNthEquation(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthEquation;"""
+        end getNthEquation;
+    """
     return ...  # type: ignore
 
 
@@ -7987,7 +8203,8 @@ def getInitialEquationCount(
         function getInitialEquationCount
           input TypeName class_;
           output Integer count;
-        end getInitialEquationCount;"""
+        end getInitialEquationCount;
+    """
     return ...  # type: ignore
 
 
@@ -8023,7 +8240,8 @@ def getNthInitialEquation(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthInitialEquation;"""
+        end getNthInitialEquation;
+    """
     return ...  # type: ignore
 
 
@@ -8055,7 +8273,8 @@ def getEquationItemsCount(
         function getEquationItemsCount
           input TypeName class_;
           output Integer count;
-        end getEquationItemsCount;"""
+        end getEquationItemsCount;
+    """
     return ...  # type: ignore
 
 
@@ -8091,7 +8310,8 @@ def getNthEquationItem(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthEquationItem;"""
+        end getNthEquationItem;
+    """
     return ...  # type: ignore
 
 
@@ -8123,7 +8343,8 @@ def getInitialEquationItemsCount(
         function getInitialEquationItemsCount
           input TypeName class_;
           output Integer count;
-        end getInitialEquationItemsCount;"""
+        end getInitialEquationItemsCount;
+    """
     return ...  # type: ignore
 
 
@@ -8159,7 +8380,8 @@ def getNthInitialEquationItem(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthInitialEquationItem;"""
+        end getNthInitialEquationItem;
+    """
     return ...  # type: ignore
 
 
@@ -8191,7 +8413,8 @@ def getAnnotationCount(
         function getAnnotationCount
           input TypeName class_;
           output Integer count;
-        end getAnnotationCount;"""
+        end getAnnotationCount;
+    """
     return ...  # type: ignore
 
 
@@ -8227,7 +8450,8 @@ def getNthAnnotationString(
           input TypeName class_;
           input Integer index;
           output String result;
-        end getNthAnnotationString;"""
+        end getNthAnnotationString;
+    """
     return ...  # type: ignore
 
 
@@ -8259,7 +8483,8 @@ def getImportCount(
         function getImportCount
           input TypeName class_;
           output Integer count;
-        end getImportCount;"""
+        end getImportCount;
+    """
     return ...  # type: ignore
 
 
@@ -8295,7 +8520,8 @@ def getMMfileTotalDependencies(
           input String in_package_name;
           input String public_imports_dir;
           output String[:] total_pub_imports;
-        end getMMfileTotalDependencies;"""
+        end getMMfileTotalDependencies;
+    """
     return ...  # type: ignore
 
 
@@ -8333,7 +8559,8 @@ def getImportedNames(
           input TypeName class_;
           output String[:] out_public;
           output String[:] out_protected;
-        end getImportedNames;"""
+        end getImportedNames;
+    """
     return ...  # type: ignore
 
 
@@ -8369,7 +8596,8 @@ def getNthImport(
           input TypeName class_;
           input Integer index;
           output String out[3] "{\\"Path\\",\\"Id\\",\\"Kind\\"}";
-        end getNthImport;"""
+        end getNthImport;
+    """
     return ...  # type: ignore
 
 
@@ -8409,7 +8637,8 @@ def iconv(
           input String from;
           input String to = "UTF-8";
           output String result;
-        end iconv;"""
+        end iconv;
+    """
     return ...  # type: ignore
 
 
@@ -8439,7 +8668,8 @@ def getDocumentationAnnotation(
         function getDocumentationAnnotation
           input TypeName cl;
           output String out[3] "{info,revision,infoHeader} TODO: Should be changed to have 2 outputs instead of an array of 2 Strings...";
-        end getDocumentationAnnotation;"""
+        end getDocumentationAnnotation;
+    """
     return ...  # type: ignore
 
 
@@ -8479,7 +8709,8 @@ def setDocumentationAnnotation(
           input String info = "";
           input String revisions = "";
           output Boolean bool;
-        end setDocumentationAnnotation;"""
+        end setDocumentationAnnotation;
+    """
     return ...  # type: ignore
 
 
@@ -8515,7 +8746,8 @@ def getTimeStamp(
           input TypeName cl;
           output Real timeStamp;
           output String timeStampAsString;
-        end getTimeStamp;"""
+        end getTimeStamp;
+    """
     return ...  # type: ignore
 
 
@@ -8545,7 +8777,8 @@ def stringTypeName(
         function stringTypeName
           input String str;
           output TypeName cl;
-        end stringTypeName;"""
+        end stringTypeName;
+    """
     return ...  # type: ignore
 
 
@@ -8575,7 +8808,8 @@ def stringVariableName(
         function stringVariableName
           input String str;
           output VariableName cl;
-        end stringVariableName;"""
+        end stringVariableName;
+    """
     return ...  # type: ignore
 
 
@@ -8605,7 +8839,8 @@ def typeNameString(
         function typeNameString
           input TypeName cl;
           output String out;
-        end typeNameString;"""
+        end typeNameString;
+    """
     return ...  # type: ignore
 
 
@@ -8635,7 +8870,8 @@ def typeNameStrings(
         function typeNameStrings
           input TypeName cl;
           output String out[:];
-        end typeNameStrings;"""
+        end typeNameStrings;
+    """
     return ...  # type: ignore
 
 
@@ -8665,7 +8901,8 @@ def getClassComment(
         function getClassComment
           input TypeName cl;
           output String comment;
-        end getClassComment;"""
+        end getClassComment;
+    """
     return ...  # type: ignore
 
 
@@ -8697,7 +8934,8 @@ def dirname(
         function dirname
           input String path;
           output String dirname;
-        end dirname;"""
+        end dirname;
+    """
     return ...  # type: ignore
 
 
@@ -8729,7 +8967,8 @@ def basename(
         function basename
           input String path;
           output String basename;
-        end basename;"""
+        end basename;
+    """
     return ...  # type: ignore
 
 
@@ -8759,7 +8998,8 @@ def getClassRestriction(
         function getClassRestriction
           input TypeName cl;
           output String restriction;
-        end getClassRestriction;"""
+        end getClassRestriction;
+    """
     return ...  # type: ignore
 
 
@@ -8789,7 +9029,8 @@ def isType(
         function isType
           input TypeName cl;
           output Boolean b;
-        end isType;"""
+        end isType;
+    """
     return ...  # type: ignore
 
 
@@ -8819,7 +9060,8 @@ def isPackage(
         function isPackage
           input TypeName cl;
           output Boolean b;
-        end isPackage;"""
+        end isPackage;
+    """
     return ...  # type: ignore
 
 
@@ -8849,7 +9091,8 @@ def isClass(
         function isClass
           input TypeName cl;
           output Boolean b;
-        end isClass;"""
+        end isClass;
+    """
     return ...  # type: ignore
 
 
@@ -8879,7 +9122,8 @@ def isRecord(
         function isRecord
           input TypeName cl;
           output Boolean b;
-        end isRecord;"""
+        end isRecord;
+    """
     return ...  # type: ignore
 
 
@@ -8909,7 +9153,8 @@ def isBlock(
         function isBlock
           input TypeName cl;
           output Boolean b;
-        end isBlock;"""
+        end isBlock;
+    """
     return ...  # type: ignore
 
 
@@ -8939,7 +9184,8 @@ def isFunction(
         function isFunction
           input TypeName cl;
           output Boolean b;
-        end isFunction;"""
+        end isFunction;
+    """
     return ...  # type: ignore
 
 
@@ -8969,7 +9215,8 @@ def isPartial(
         function isPartial
           input TypeName cl;
           output Boolean b;
-        end isPartial;"""
+        end isPartial;
+    """
     return ...  # type: ignore
 
 
@@ -8999,7 +9246,8 @@ def isModel(
         function isModel
           input TypeName cl;
           output Boolean b;
-        end isModel;"""
+        end isModel;
+    """
     return ...  # type: ignore
 
 
@@ -9029,7 +9277,8 @@ def isConnector(
         function isConnector
           input TypeName cl;
           output Boolean b;
-        end isConnector;"""
+        end isConnector;
+    """
     return ...  # type: ignore
 
 
@@ -9059,7 +9308,8 @@ def isOptimization(
         function isOptimization
           input TypeName cl;
           output Boolean b;
-        end isOptimization;"""
+        end isOptimization;
+    """
     return ...  # type: ignore
 
 
@@ -9089,7 +9339,8 @@ def isEnumeration(
         function isEnumeration
           input TypeName cl;
           output Boolean b;
-        end isEnumeration;"""
+        end isEnumeration;
+    """
     return ...  # type: ignore
 
 
@@ -9119,7 +9370,8 @@ def isOperator(
         function isOperator
           input TypeName cl;
           output Boolean b;
-        end isOperator;"""
+        end isOperator;
+    """
     return ...  # type: ignore
 
 
@@ -9149,7 +9401,8 @@ def isOperatorRecord(
         function isOperatorRecord
           input TypeName cl;
           output Boolean b;
-        end isOperatorRecord;"""
+        end isOperatorRecord;
+    """
     return ...  # type: ignore
 
 
@@ -9179,7 +9432,8 @@ def isOperatorFunction(
         function isOperatorFunction
           input TypeName cl;
           output Boolean b;
-        end isOperatorFunction;"""
+        end isOperatorFunction;
+    """
     return ...  # type: ignore
 
 
@@ -9215,7 +9469,8 @@ def isProtectedClass(
           input TypeName cl;
           input String c2;
           output Boolean b;
-        end isProtectedClass;"""
+        end isProtectedClass;
+    """
     return ...  # type: ignore
 
 
@@ -9245,7 +9500,8 @@ def getBuiltinType(
         function getBuiltinType
           input TypeName cl;
           output String name;
-        end getBuiltinType;"""
+        end getBuiltinType;
+    """
     return ...  # type: ignore
 
 
@@ -9289,7 +9545,8 @@ def setInitXmlStartValue(
           input String startValue;
           input String outputFile;
           output Boolean success = false;
-        end setInitXmlStartValue;"""
+        end setInitXmlStartValue;
+    """
     return ...  # type: ignore
 
 
@@ -9321,7 +9578,8 @@ def ngspicetoModelica(
         function ngspicetoModelica
           input String netlistfileName;
           output Boolean success = false;
-        end ngspicetoModelica;"""
+        end ngspicetoModelica;
+    """
     return ...  # type: ignore
 
 
@@ -9351,7 +9609,8 @@ def getInheritedClasses(
         function getInheritedClasses
           input TypeName name;
           output TypeName inheritedClasses[:];
-        end getInheritedClasses;"""
+        end getInheritedClasses;
+    """
     return ...  # type: ignore
 
 
@@ -9396,7 +9655,8 @@ def getComponentsTest(
             String inputOutput "'input', 'output', ''";
             String dimensions[:] "array with the dimensions of the component";
           end Component;
-        end getComponentsTest;"""
+        end getComponentsTest;
+    """
     return ...  # type: ignore
 
 
@@ -9418,7 +9678,8 @@ class Component(record):
           String innerOuter "'inner', 'outer', ''";
           String inputOutput "'input', 'output', ''";
           String dimensions[:] "array with the dimensions of the component";
-        end Component;"""
+        end Component;
+    """
 
     __omc_class__ = TypeName(
         "OpenModelica.Scripting.getComponentsTest.Component"
@@ -9463,7 +9724,8 @@ def isExperiment(
         function isExperiment
           input TypeName name;
           output Boolean res;
-        end isExperiment;"""
+        end isExperiment;
+    """
     return ...  # type: ignore
 
 
@@ -9527,7 +9789,8 @@ def getSimulationOptions(
           output Real tolerance;
           output Integer numberOfIntervals;
           output Real interval;
-        end getSimulationOptions;"""
+        end getSimulationOptions;
+    """
     return ...  # type: ignore
 
 
@@ -9563,7 +9826,8 @@ def getAnnotationNamedModifiers(
           input TypeName name;
           input String vendorannotation;
           output String[:] modifiernamelist;
-        end getAnnotationNamedModifiers;"""
+        end getAnnotationNamedModifiers;
+    """
     return ...  # type: ignore
 
 
@@ -9603,7 +9867,8 @@ def getAnnotationModifierValue(
           input String vendorannotation;
           input String modifiername;
           output String modifiernamevalue;
-        end getAnnotationModifierValue;"""
+        end getAnnotationModifierValue;
+    """
     return ...  # type: ignore
 
 
@@ -9639,7 +9904,8 @@ def classAnnotationExists(
           input TypeName className;
           input TypeName annotationName;
           output Boolean exists;
-        end classAnnotationExists;"""
+        end classAnnotationExists;
+    """
     return ...  # type: ignore
 
 
@@ -9675,7 +9941,8 @@ def getBooleanClassAnnotation(
           input TypeName className;
           input TypeName annotationName;
           output Boolean value;
-        end getBooleanClassAnnotation;"""
+        end getBooleanClassAnnotation;
+    """
     return ...  # type: ignore
 
 
@@ -9711,7 +9978,8 @@ def extendsFrom(
           input TypeName className;
           input TypeName baseClassName;
           output Boolean res;
-        end extendsFrom;"""
+        end extendsFrom;
+    """
     return ...  # type: ignore
 
 
@@ -9743,7 +10011,8 @@ def loadModelica3D(
         function loadModelica3D
           input String version = "3.2.1";
           output Boolean status;
-        end loadModelica3D;"""
+        end loadModelica3D;
+    """
     return ...  # type: ignore
 
 
@@ -9779,7 +10048,8 @@ def searchClassNames(
           input String searchText;
           input Boolean findInText = false;
           output TypeName classNames[:];
-        end searchClassNames;"""
+        end searchClassNames;
+    """
     return ...  # type: ignore
 
 
@@ -9807,7 +10077,8 @@ def getAvailableLibraries(
 
         function getAvailableLibraries
           output String[:] libraries;
-        end getAvailableLibraries;"""
+        end getAvailableLibraries;
+    """
     return ...  # type: ignore
 
 
@@ -9839,7 +10110,8 @@ def getAvailableLibraryVersions(
         function getAvailableLibraryVersions
           input TypeName libraryName;
           output String[:] librariesAndVersions;
-        end getAvailableLibraryVersions;"""
+        end getAvailableLibraryVersions;
+    """
     return ...  # type: ignore
 
 
@@ -9879,7 +10151,8 @@ def installPackage(
           input String version = "";
           input Boolean exactMatch = false;
           output Boolean result;
-        end installPackage;"""
+        end installPackage;
+    """
     return ...  # type: ignore
 
 
@@ -9907,7 +10180,8 @@ def updatePackageIndex(
 
         function updatePackageIndex
           output Boolean result;
-        end updatePackageIndex;"""
+        end updatePackageIndex;
+    """
     return ...  # type: ignore
 
 
@@ -9943,7 +10217,8 @@ def getAvailablePackageVersions(
           input TypeName pkg;
           input String version;
           output String[:] withoutConversion;
-        end getAvailablePackageVersions;"""
+        end getAvailablePackageVersions;
+    """
     return ...  # type: ignore
 
 
@@ -9979,7 +10254,8 @@ def getAvailablePackageConversionsTo(
           input TypeName pkg;
           input String version;
           output String[:] convertsTo;
-        end getAvailablePackageConversionsTo;"""
+        end getAvailablePackageConversionsTo;
+    """
     return ...  # type: ignore
 
 
@@ -10015,7 +10291,8 @@ def getAvailablePackageConversionsFrom(
           input TypeName pkg;
           input String version;
           output String[:] convertsTo;
-        end getAvailablePackageConversionsFrom;"""
+        end getAvailablePackageConversionsFrom;
+    """
     return ...  # type: ignore
 
 
@@ -10047,7 +10324,8 @@ def upgradeInstalledPackages(
         function upgradeInstalledPackages
           input Boolean installNewestVersions = true;
           output Boolean result;
-        end upgradeInstalledPackages;"""
+        end upgradeInstalledPackages;
+    """
     return ...  # type: ignore
 
 
@@ -10077,7 +10355,8 @@ def getUses(
         function getUses
           input TypeName pack;
           output String[:, :] uses;
-        end getUses;"""
+        end getUses;
+    """
     return ...  # type: ignore
 
 
@@ -10116,7 +10395,8 @@ def getConversionsFromVersions(
           input TypeName pack;
           output String[:] withoutConversion;
           output String[:] withConversion;
-        end getConversionsFromVersions;"""
+        end getConversionsFromVersions;
+    """
     return ...  # type: ignore
 
 
@@ -10148,7 +10428,8 @@ def getDerivedClassModifierNames(
         function getDerivedClassModifierNames
           input TypeName className;
           output String[:] modifierNames;
-        end getDerivedClassModifierNames;"""
+        end getDerivedClassModifierNames;
+    """
     return ...  # type: ignore
 
 
@@ -10184,7 +10465,8 @@ def getDerivedClassModifierValue(
           input TypeName className;
           input TypeName modifierName;
           output String modifierValue;
-        end getDerivedClassModifierValue;"""
+        end getDerivedClassModifierValue;
+    """
     return ...  # type: ignore
 
 
@@ -10223,7 +10505,8 @@ def generateEntryPoint(
           input String fileName;
           input TypeName entryPoint;
           input String url = "https://trac.openmodelica.org/OpenModelica/newticket";
-        end generateEntryPoint;"""
+        end generateEntryPoint;
+    """
 
 
 @overload
@@ -10248,7 +10531,8 @@ def numProcessors(
 
         function numProcessors
           output Integer result;
-        end numProcessors;"""
+        end numProcessors;
+    """
     return ...  # type: ignore
 
 
@@ -10288,7 +10572,8 @@ def runScriptParallel(
           input Integer numThreads = numProcessors();
           input Boolean useThreads = false;
           output Boolean results[:];
-        end runScriptParallel;"""
+        end runScriptParallel;
+    """
     return ...  # type: ignore
 
 
@@ -10317,7 +10602,8 @@ def exit(
 
         function exit
           input Integer status;
-        end exit;"""
+        end exit;
+    """
 
 
 @overload
@@ -10363,7 +10649,8 @@ def getMemorySize(
 
         function getMemorySize
           output Real memory(unit = "MiB");
-        end getMemorySize;"""
+        end getMemorySize;
+    """
     return ...  # type: ignore
 
 
@@ -10414,7 +10701,8 @@ def GC_expand_hp(
         function GC_expand_hp
           input Integer size;
           output Boolean success;
-        end GC_expand_hp;"""
+        end GC_expand_hp;
+    """
     return ...  # type: ignore
 
 
@@ -10444,7 +10732,8 @@ def GC_set_max_heap_size(
         function GC_set_max_heap_size
           input Integer size;
           output Boolean success;
-        end GC_set_max_heap_size;"""
+        end GC_set_max_heap_size;
+    """
     return ...  # type: ignore
 
 
@@ -10464,7 +10753,8 @@ class GC_PROFSTATS(record):
           Integer markers_m1;
           Integer bytes_reclaimed_since_gc;
           Integer reclaimed_bytes_before_gc;
-        end GC_PROFSTATS;"""
+        end GC_PROFSTATS;
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.GC_PROFSTATS")
     heapsize_full: int
@@ -10503,7 +10793,8 @@ def GC_get_prof_stats(
 
         function GC_get_prof_stats
           output GC_PROFSTATS gcStats;
-        end GC_get_prof_stats;"""
+        end GC_get_prof_stats;
+    """
     return ...  # type: ignore
 
 
@@ -10539,7 +10830,8 @@ def checkInterfaceOfPackages(
           input TypeName cl;
           input String dependencyMatrix[:, :];
           output Boolean success;
-        end checkInterfaceOfPackages;"""
+        end checkInterfaceOfPackages;
+    """
     return ...  # type: ignore
 
 
@@ -10569,7 +10861,8 @@ def sortStrings(
         function sortStrings
           input String arr[:];
           output String sorted[:];
-        end sortStrings;"""
+        end sortStrings;
+    """
     return ...  # type: ignore
 
 
@@ -10631,7 +10924,8 @@ def getClassInformation(
           output String preferredView;
           output Boolean state;
           output String access;
-        end getClassInformation;"""
+        end getClassInformation;
+    """
     return ...  # type: ignore
 
 
@@ -10661,7 +10955,8 @@ def getTransitions(
         function getTransitions
           input TypeName cl;
           output String[:, :] transitions;
-        end getTransitions;"""
+        end getTransitions;
+    """
     return ...  # type: ignore
 
 
@@ -10721,7 +11016,8 @@ def deleteTransition(
           input Boolean synchronize;
           input Integer priority;
           output Boolean bool;
-        end deleteTransition;"""
+        end deleteTransition;
+    """
     return ...  # type: ignore
 
 
@@ -10751,7 +11047,8 @@ def getInitialStates(
         function getInitialStates
           input TypeName cl;
           output String[:, :] initialStates;
-        end getInitialStates;"""
+        end getInitialStates;
+    """
     return ...  # type: ignore
 
 
@@ -10787,7 +11084,8 @@ def deleteInitialState(
           input TypeName cl;
           input String state;
           output Boolean bool;
-        end deleteInitialState;"""
+        end deleteInitialState;
+    """
     return ...  # type: ignore
 
 
@@ -10833,7 +11131,8 @@ def generateScriptingAPI(
           output String moFile;
           output String qtFile;
           output String qtHeader;
-        end generateScriptingAPI;"""
+        end generateScriptingAPI;
+    """
     return ...  # type: ignore
 
 
@@ -10869,7 +11168,8 @@ def runConversionScript(
           input TypeName packageToConvert;
           input String scriptFile;
           output Boolean success;
-        end runConversionScript;"""
+        end runConversionScript;
+    """
     return ...  # type: ignore
 
 
@@ -10909,7 +11209,8 @@ def convertPackageToLibrary(
           input TypeName library;
           input String libraryVersion;
           output Boolean success;
-        end convertPackageToLibrary;"""
+        end convertPackageToLibrary;
+    """
     return ...  # type: ignore
 
 
@@ -10945,7 +11246,8 @@ def getModelInstance(
           input TypeName className;
           input Boolean prettyPrint = false;
           output String result;
-        end getModelInstance;"""
+        end getModelInstance;
+    """
     return ...  # type: ignore
 
 
@@ -10969,7 +11271,8 @@ def storeAST(
 
         function storeAST
           output Integer id;
-        end storeAST;"""
+        end storeAST;
+    """
     return ...  # type: ignore
 
 
@@ -10999,7 +11302,8 @@ def restoreAST(
         function restoreAST
           input Integer id;
           output Boolean success;
-        end restoreAST;"""
+        end restoreAST;
+    """
     return ...  # type: ignore
 
 
@@ -11007,7 +11311,8 @@ class oms_system(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);"""
+        type oms_system = enumeration(oms_system_none, oms_system_tlm, oms_system_wc, oms_system_sc);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_system")
     oms_system_none = 1
@@ -11020,7 +11325,8 @@ class oms_causality(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);"""
+        type oms_causality = enumeration(oms_causality_input, oms_causality_output, oms_causality_parameter, oms_causality_bidir, oms_causality_undefined);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_causality")
     oms_causality_input = 1
@@ -11034,7 +11340,8 @@ class oms_signal_type(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);"""
+        type oms_signal_type = enumeration(oms_signal_type_real, oms_signal_type_integer, oms_signal_type_boolean, oms_signal_type_string, oms_signal_type_enum, oms_signal_type_bus);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_signal_type")
     oms_signal_type_real = 1
@@ -11049,7 +11356,8 @@ class oms_solver(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_solver = enumeration(oms_solver_none, oms_solver_sc_min, oms_solver_sc_explicit_euler, oms_solver_sc_cvode, oms_solver_sc_max, oms_solver_wc_min, oms_solver_wc_ma, oms_solver_wc_mav, oms_solver_wc_assc, oms_solver_wc_mav2, oms_solver_wc_max);"""
+        type oms_solver = enumeration(oms_solver_none, oms_solver_sc_min, oms_solver_sc_explicit_euler, oms_solver_sc_cvode, oms_solver_sc_max, oms_solver_wc_min, oms_solver_wc_ma, oms_solver_wc_mav, oms_solver_wc_assc, oms_solver_wc_mav2, oms_solver_wc_max);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_solver")
     oms_solver_none = 1
@@ -11069,7 +11377,8 @@ class oms_tlm_domain(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);"""
+        type oms_tlm_domain = enumeration(oms_tlm_domain_input, oms_tlm_domain_output, oms_tlm_domain_mechanical, oms_tlm_domain_rotational, oms_tlm_domain_hydraulic, oms_tlm_domain_electric);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_domain")
     oms_tlm_domain_input = 1
@@ -11084,7 +11393,8 @@ class oms_tlm_interpolation(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);"""
+        type oms_tlm_interpolation = enumeration(oms_tlm_no_interpolation, oms_tlm_coarse_grained, oms_tlm_fine_grained);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_tlm_interpolation")
     oms_tlm_no_interpolation = 1
@@ -11096,7 +11406,8 @@ class oms_fault_type(enumeration):
     """
     .. code-block:: modelica
 
-        type oms_fault_type = enumeration(oms_fault_type_bias, oms_fault_type_gain, oms_fault_type_const);"""
+        type oms_fault_type = enumeration(oms_fault_type_bias, oms_fault_type_gain, oms_fault_type_const);
+    """
 
     __omc_class__ = TypeName("OpenModelica.Scripting.oms_fault_type")
     oms_fault_type_bias = 1
@@ -11126,7 +11437,8 @@ def loadOMSimulator(
 
         function loadOMSimulator
           output Integer status;
-        end loadOMSimulator;"""
+        end loadOMSimulator;
+    """
     return ...  # type: ignore
 
 
@@ -11154,7 +11466,8 @@ def unloadOMSimulator(
 
         function unloadOMSimulator
           output Integer status;
-        end unloadOMSimulator;"""
+        end unloadOMSimulator;
+    """
     return ...  # type: ignore
 
 
@@ -11184,7 +11497,8 @@ def oms_addBus(
         function oms_addBus
           input String cref;
           output Integer status;
-        end oms_addBus;"""
+        end oms_addBus;
+    """
     return ...  # type: ignore
 
 
@@ -11216,7 +11530,8 @@ def oms_addConnection(
           input String crefA;
           input String crefB;
           output Integer status;
-        end oms_addConnection;"""
+        end oms_addConnection;
+    """
     return ...  # type: ignore
 
 
@@ -11313,7 +11628,8 @@ def oms_addConnector(
           input oms_causality causality;
           input oms_signal_type type_;
           output Integer status;
-        end oms_addConnector;"""
+        end oms_addConnector;
+    """
     return ...  # type: ignore
 
 
@@ -11349,7 +11665,8 @@ def oms_addConnectorToBus(
           input String busCref;
           input String connectorCref;
           output Integer status;
-        end oms_addConnectorToBus;"""
+        end oms_addConnectorToBus;
+    """
     return ...  # type: ignore
 
 
@@ -11389,7 +11706,8 @@ def oms_addConnectorToTLMBus(
           input String connectorCref;
           input String type_;
           output Integer status;
-        end oms_addConnectorToTLMBus;"""
+        end oms_addConnectorToTLMBus;
+    """
     return ...  # type: ignore
 
 
@@ -11433,7 +11751,8 @@ def oms_addDynamicValueIndicator(
           input String upper;
           input Real stepSize;
           output Integer status;
-        end oms_addDynamicValueIndicator;"""
+        end oms_addDynamicValueIndicator;
+    """
     return ...  # type: ignore
 
 
@@ -11463,7 +11782,8 @@ def oms_addEventIndicator(
         function oms_addEventIndicator
           input String signal;
           output Integer status;
-        end oms_addEventIndicator;"""
+        end oms_addEventIndicator;
+    """
     return ...  # type: ignore
 
 
@@ -11503,7 +11823,8 @@ def oms_addExternalModel(
           input String path;
           input String startscript;
           output Integer status;
-        end oms_addExternalModel;"""
+        end oms_addExternalModel;
+    """
     return ...  # type: ignore
 
 
@@ -11535,7 +11856,8 @@ def oms_addSignalsToResults(
           input String cref;
           input String regex;
           output Integer status;
-        end oms_addSignalsToResults;"""
+        end oms_addSignalsToResults;
+    """
     return ...  # type: ignore
 
 
@@ -11579,7 +11901,8 @@ def oms_addStaticValueIndicator(
           input Real upper;
           input Real stepSize;
           output Integer status;
-        end oms_addStaticValueIndicator;"""
+        end oms_addStaticValueIndicator;
+    """
     return ...  # type: ignore
 
 
@@ -11615,7 +11938,8 @@ def oms_addSubModel(
           input String cref;
           input String fmuPath;
           output Integer status;
-        end oms_addSubModel;"""
+        end oms_addSubModel;
+    """
     return ...  # type: ignore
 
 
@@ -11675,7 +11999,8 @@ def oms_addSystem(
           input String cref;
           input oms_system type_;
           output Integer status;
-        end oms_addSystem;"""
+        end oms_addSystem;
+    """
     return ...  # type: ignore
 
 
@@ -11705,7 +12030,8 @@ def oms_addTimeIndicator(
         function oms_addTimeIndicator
           input String signal;
           output Integer status;
-        end oms_addTimeIndicator;"""
+        end oms_addTimeIndicator;
+    """
     return ...  # type: ignore
 
 
@@ -11800,7 +12126,8 @@ def oms_addTLMBus(
           input Integer dimensions;
           input oms_tlm_interpolation interpolation;
           output Integer status;
-        end oms_addTLMBus;"""
+        end oms_addTLMBus;
+    """
     return ...  # type: ignore
 
 
@@ -11852,7 +12179,8 @@ def oms_addTLMConnection(
           input Real linearimpedance;
           input Real angularimpedance;
           output Integer status;
-        end oms_addTLMConnection;"""
+        end oms_addTLMConnection;
+    """
     return ...  # type: ignore
 
 
@@ -11900,7 +12228,8 @@ def oms_compareSimulationResults(
           input Real relTol;
           input Real absTol;
           output Integer status;
-        end oms_compareSimulationResults;"""
+        end oms_compareSimulationResults;
+    """
     return ...  # type: ignore
 
 
@@ -11932,7 +12261,8 @@ def oms_copySystem(
           input String source;
           input String target;
           output Integer status;
-        end oms_copySystem;"""
+        end oms_copySystem;
+    """
     return ...  # type: ignore
 
 
@@ -11962,7 +12292,8 @@ def oms_delete(
         function oms_delete
           input String cref;
           output Integer status;
-        end oms_delete;"""
+        end oms_delete;
+    """
     return ...  # type: ignore
 
 
@@ -11994,7 +12325,8 @@ def oms_deleteConnection(
           input String crefA;
           input String crefB;
           output Integer status;
-        end oms_deleteConnection;"""
+        end oms_deleteConnection;
+    """
     return ...  # type: ignore
 
 
@@ -12030,7 +12362,8 @@ def oms_deleteConnectorFromBus(
           input String busCref;
           input String connectorCref;
           output Integer status;
-        end oms_deleteConnectorFromBus;"""
+        end oms_deleteConnectorFromBus;
+    """
     return ...  # type: ignore
 
 
@@ -12066,7 +12399,8 @@ def oms_deleteConnectorFromTLMBus(
           input String busCref;
           input String connectorCref;
           output Integer status;
-        end oms_deleteConnectorFromTLMBus;"""
+        end oms_deleteConnectorFromTLMBus;
+    """
     return ...  # type: ignore
 
 
@@ -12102,7 +12436,8 @@ def oms_export(
           input String cref;
           input String filename;
           output Integer status;
-        end oms_export;"""
+        end oms_export;
+    """
     return ...  # type: ignore
 
 
@@ -12146,7 +12481,8 @@ def oms_exportDependencyGraphs(
           input String event;
           input String simulation;
           output Integer status;
-        end oms_exportDependencyGraphs;"""
+        end oms_exportDependencyGraphs;
+    """
     return ...  # type: ignore
 
 
@@ -12182,7 +12518,8 @@ def oms_exportSnapshot(
           input String cref;
           output String contents;
           output Integer status;
-        end oms_exportSnapshot;"""
+        end oms_exportSnapshot;
+    """
     return ...  # type: ignore
 
 
@@ -12220,7 +12557,8 @@ def oms_extractFMIKind(
           input String filename;
           output Integer kind;
           output Integer status;
-        end oms_extractFMIKind;"""
+        end oms_extractFMIKind;
+    """
     return ...  # type: ignore
 
 
@@ -12256,7 +12594,8 @@ def oms_getBoolean(
           input String cref;
           output Boolean value;
           output Integer status;
-        end oms_getBoolean;"""
+        end oms_getBoolean;
+    """
     return ...  # type: ignore
 
 
@@ -12292,7 +12631,8 @@ def oms_getFixedStepSize(
           input String cref;
           output Real stepSize;
           output Integer status;
-        end oms_getFixedStepSize;"""
+        end oms_getFixedStepSize;
+    """
     return ...  # type: ignore
 
 
@@ -12324,7 +12664,8 @@ def oms_getInteger(
           input String cref;
           input Integer value;
           output Integer status;
-        end oms_getInteger;"""
+        end oms_getInteger;
+    """
     return ...  # type: ignore
 
 
@@ -12360,7 +12701,8 @@ def oms_getModelState(
           input String cref;
           output Integer modelState;
           output Integer status;
-        end oms_getModelState;"""
+        end oms_getModelState;
+    """
     return ...  # type: ignore
 
 
@@ -12396,7 +12738,8 @@ def oms_getReal(
           input String cref;
           output Real value;
           output Integer status;
-        end oms_getReal;"""
+        end oms_getReal;
+    """
     return ...  # type: ignore
 
 
@@ -12432,7 +12775,8 @@ def oms_getSolver(
           input String cref;
           output Integer solver;
           output Integer status;
-        end oms_getSolver;"""
+        end oms_getSolver;
+    """
     return ...  # type: ignore
 
 
@@ -12468,7 +12812,8 @@ def oms_getStartTime(
           input String cref;
           output Real startTime;
           output Integer status;
-        end oms_getStartTime;"""
+        end oms_getStartTime;
+    """
     return ...  # type: ignore
 
 
@@ -12504,7 +12849,8 @@ def oms_getStopTime(
           input String cref;
           output Real stopTime;
           output Integer status;
-        end oms_getStopTime;"""
+        end oms_getStopTime;
+    """
     return ...  # type: ignore
 
 
@@ -12540,7 +12886,8 @@ def oms_getSubModelPath(
           input String cref;
           output String path;
           output Integer status;
-        end oms_getSubModelPath;"""
+        end oms_getSubModelPath;
+    """
     return ...  # type: ignore
 
 
@@ -12576,7 +12923,8 @@ def oms_getSystemType(
           input String cref;
           output Integer type_;
           output Integer status;
-        end oms_getSystemType;"""
+        end oms_getSystemType;
+    """
     return ...  # type: ignore
 
 
@@ -12614,7 +12962,8 @@ def oms_getTolerance(
           output Real absoluteTolerance;
           output Real relativeTolerance;
           output Integer status;
-        end oms_getTolerance;"""
+        end oms_getTolerance;
+    """
     return ...  # type: ignore
 
 
@@ -12656,7 +13005,8 @@ def oms_getVariableStepSize(
           output Real minimumStepSize;
           output Real maximumStepSize;
           output Integer status;
-        end oms_getVariableStepSize;"""
+        end oms_getVariableStepSize;
+    """
     return ...  # type: ignore
 
 
@@ -12717,7 +13067,8 @@ def oms_faultInjection(
           input oms_fault_type faultType;
           input Real faultValue;
           output Integer status;
-        end oms_faultInjection;"""
+        end oms_faultInjection;
+    """
     return ...  # type: ignore
 
 
@@ -12755,7 +13106,8 @@ def oms_importFile(
           input String filename;
           output String cref;
           output Integer status;
-        end oms_importFile;"""
+        end oms_importFile;
+    """
     return ...  # type: ignore
 
 
@@ -12787,7 +13139,8 @@ def oms_importSnapshot(
           input String cref;
           input String snapshot;
           output Integer status;
-        end oms_importSnapshot;"""
+        end oms_importSnapshot;
+    """
     return ...  # type: ignore
 
 
@@ -12817,7 +13170,8 @@ def oms_initialize(
         function oms_initialize
           input String cref;
           output Integer status;
-        end oms_initialize;"""
+        end oms_initialize;
+    """
     return ...  # type: ignore
 
 
@@ -12847,7 +13201,8 @@ def oms_instantiate(
         function oms_instantiate
           input String cref;
           output Integer status;
-        end oms_instantiate;"""
+        end oms_instantiate;
+    """
     return ...  # type: ignore
 
 
@@ -12883,7 +13238,8 @@ def oms_list(
           input String cref;
           output String contents;
           output Integer status;
-        end oms_list;"""
+        end oms_list;
+    """
     return ...  # type: ignore
 
 
@@ -12922,7 +13278,8 @@ def oms_listUnconnectedConnectors(
           input String cref;
           output String contents;
           output Integer status;
-        end oms_listUnconnectedConnectors;"""
+        end oms_listUnconnectedConnectors;
+    """
     return ...  # type: ignore
 
 
@@ -12960,7 +13317,8 @@ def oms_loadSnapshot(
           input String snapshot;
           output String newCref;
           output Integer status;
-        end oms_loadSnapshot;"""
+        end oms_loadSnapshot;
+    """
     return ...  # type: ignore
 
 
@@ -12990,7 +13348,8 @@ def oms_newModel(
         function oms_newModel
           input String cref;
           output Integer status;
-        end oms_newModel;"""
+        end oms_newModel;
+    """
     return ...  # type: ignore
 
 
@@ -13022,7 +13381,8 @@ def oms_removeSignalsFromResults(
           input String cref;
           input String regex;
           output Integer status;
-        end oms_removeSignalsFromResults;"""
+        end oms_removeSignalsFromResults;
+    """
     return ...  # type: ignore
 
 
@@ -13054,7 +13414,8 @@ def oms_rename(
           input String cref;
           input String newCref;
           output Integer status;
-        end oms_rename;"""
+        end oms_rename;
+    """
     return ...  # type: ignore
 
 
@@ -13084,7 +13445,8 @@ def oms_reset(
         function oms_reset
           input String cref;
           output Integer status;
-        end oms_reset;"""
+        end oms_reset;
+    """
     return ...  # type: ignore
 
 
@@ -13116,7 +13478,8 @@ def oms_RunFile(
         function oms_RunFile
           input String filename;
           output Integer status;
-        end oms_RunFile;"""
+        end oms_RunFile;
+    """
     return ...  # type: ignore
 
 
@@ -13148,7 +13511,8 @@ def oms_setBoolean(
           input String cref;
           input Boolean value;
           output Integer status;
-        end oms_setBoolean;"""
+        end oms_setBoolean;
+    """
     return ...  # type: ignore
 
 
@@ -13178,7 +13542,8 @@ def oms_setCommandLineOption(
         function oms_setCommandLineOption
           input String cmd;
           output Integer status;
-        end oms_setCommandLineOption;"""
+        end oms_setCommandLineOption;
+    """
     return ...  # type: ignore
 
 
@@ -13210,7 +13575,8 @@ def oms_setFixedStepSize(
           input String cref;
           input Real stepSize;
           output Integer status;
-        end oms_setFixedStepSize;"""
+        end oms_setFixedStepSize;
+    """
     return ...  # type: ignore
 
 
@@ -13242,7 +13608,8 @@ def oms_setInteger(
           input String cref;
           input Integer value;
           output Integer status;
-        end oms_setInteger;"""
+        end oms_setInteger;
+    """
     return ...  # type: ignore
 
 
@@ -13274,7 +13641,8 @@ def oms_setLogFile(
         function oms_setLogFile
           input String filename;
           output Integer status;
-        end oms_setLogFile;"""
+        end oms_setLogFile;
+    """
     return ...  # type: ignore
 
 
@@ -13310,7 +13678,8 @@ def oms_setLoggingInterval(
           input String cref;
           input Real loggingInterval;
           output Integer status;
-        end oms_setLoggingInterval;"""
+        end oms_setLoggingInterval;
+    """
     return ...  # type: ignore
 
 
@@ -13340,7 +13709,8 @@ def oms_setLoggingLevel(
         function oms_setLoggingLevel
           input Integer logLevel;
           output Integer status;
-        end oms_setLoggingLevel;"""
+        end oms_setLoggingLevel;
+    """
     return ...  # type: ignore
 
 
@@ -13372,7 +13742,8 @@ def oms_setReal(
           input String cref;
           input Real value;
           output Integer status;
-        end oms_setReal;"""
+        end oms_setReal;
+    """
     return ...  # type: ignore
 
 
@@ -13404,7 +13775,8 @@ def oms_setRealInputDerivative(
           input String cref;
           input Real value;
           output Integer status;
-        end oms_setRealInputDerivative;"""
+        end oms_setRealInputDerivative;
+    """
     return ...  # type: ignore
 
 
@@ -13444,7 +13816,8 @@ def oms_setResultFile(
           input String filename;
           input Integer bufferSize;
           output Integer status;
-        end oms_setResultFile;"""
+        end oms_setResultFile;
+    """
     return ...  # type: ignore
 
 
@@ -13476,7 +13849,8 @@ def oms_setSignalFilter(
           input String cref;
           input String regex;
           output Integer status;
-        end oms_setSignalFilter;"""
+        end oms_setSignalFilter;
+    """
     return ...  # type: ignore
 
 
@@ -13557,7 +13931,8 @@ def oms_setSolver(
           input String cref;
           input oms_solver solver;
           output Integer status;
-        end oms_setSolver;"""
+        end oms_setSolver;
+    """
     return ...  # type: ignore
 
 
@@ -13591,7 +13966,8 @@ def oms_setStartTime(
           input String cref;
           input Real startTime;
           output Integer status;
-        end oms_setStartTime;"""
+        end oms_setStartTime;
+    """
     return ...  # type: ignore
 
 
@@ -13623,7 +13999,8 @@ def oms_setStopTime(
           input String cref;
           input Real stopTime;
           output Integer status;
-        end oms_setStopTime;"""
+        end oms_setStopTime;
+    """
     return ...  # type: ignore
 
 
@@ -13655,7 +14032,8 @@ def oms_setTempDirectory(
         function oms_setTempDirectory
           input String newTempDir;
           output Integer status;
-        end oms_setTempDirectory;"""
+        end oms_setTempDirectory;
+    """
     return ...  # type: ignore
 
 
@@ -13735,7 +14113,8 @@ def oms_setTLMPositionAndOrientation(
           input Real A32;
           input Real A33;
           output Integer status;
-        end oms_setTLMPositionAndOrientation;"""
+        end oms_setTLMPositionAndOrientation;
+    """
     return ...  # type: ignore
 
 
@@ -13779,7 +14158,8 @@ def oms_setTLMSocketData(
           input Integer managerPort;
           input Integer monitorPort;
           output Integer status;
-        end oms_setTLMSocketData;"""
+        end oms_setTLMSocketData;
+    """
     return ...  # type: ignore
 
 
@@ -13819,7 +14199,8 @@ def oms_setTolerance(
           input Real absoluteTolerance;
           input Real relativeTolerance;
           output Integer status;
-        end oms_setTolerance;"""
+        end oms_setTolerance;
+    """
     return ...  # type: ignore
 
 
@@ -13863,7 +14244,8 @@ def oms_setVariableStepSize(
           input Real minimumStepSize;
           input Real maximumStepSize;
           output Integer status;
-        end oms_setVariableStepSize;"""
+        end oms_setVariableStepSize;
+    """
     return ...  # type: ignore
 
 
@@ -13895,7 +14277,8 @@ def oms_setWorkingDirectory(
         function oms_setWorkingDirectory
           input String newWorkingDir;
           output Integer status;
-        end oms_setWorkingDirectory;"""
+        end oms_setWorkingDirectory;
+    """
     return ...  # type: ignore
 
 
@@ -13925,7 +14308,8 @@ def oms_simulate(
         function oms_simulate
           input String cref;
           output Integer status;
-        end oms_simulate;"""
+        end oms_simulate;
+    """
     return ...  # type: ignore
 
 
@@ -13957,7 +14341,8 @@ def oms_stepUntil(
           input String cref;
           input Real stopTime;
           output Integer status;
-        end oms_stepUntil;"""
+        end oms_stepUntil;
+    """
     return ...  # type: ignore
 
 
@@ -13987,7 +14372,8 @@ def oms_terminate(
         function oms_terminate
           input String cref;
           output Integer status;
-        end oms_terminate;"""
+        end oms_terminate;
+    """
     return ...  # type: ignore
 
 
@@ -14013,7 +14399,8 @@ def oms_getVersion(
 
         function oms_getVersion
           output String version;
-        end oms_getVersion;"""
+        end oms_getVersion;
+    """
     return ...  # type: ignore
 
 
