@@ -653,7 +653,10 @@ def _unparse_record(
 
 
 def _unparse_enumeration(
-    t: type[enumeration], n: int, attrs: tuple[str, ...], obj: Any
+    t: type[enumeration],
+    n: int,
+    attrs: tuple[str, ...],  # noqa: ARG001
+    obj: Any,
 ) -> str:
     assert n <= 0
     if isinstance(obj, Enum):
@@ -676,7 +679,7 @@ def _unparse_primitive(
         | type[VariableName]
     ),
     n: int,
-    attrs: tuple[str, ...],
+    attrs: tuple[str, ...],  # noqa: ARG001
     obj: Any,
 ) -> str:
     assert n <= 0

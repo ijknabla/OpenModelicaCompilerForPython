@@ -90,7 +90,6 @@ ignore = [
     "ANN101", "ANN102",  # not a problem in mypy
     # TODO: Apply more rules
     "ANN401",
-    "ARG001",
     "ARG002",
     "ASYNC101",
     "B028",
@@ -185,4 +184,7 @@ ignore = [
     "D208",  # breaks inline code in docstring
     "D301",  # inevitable due to the `ast.unparse`
     "E501",  # consistent with documentation in OpenModelica
+]
+"tests/session/**" = [
+    "ARG001"  #  consistent with signature in OpenModelica
 ]
