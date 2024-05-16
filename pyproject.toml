@@ -181,7 +181,7 @@ ignore = [
 
 [tool.ruff.lint.per-file-ignores]
 "omc4py/v_*_*/" = [
-    "A001", "A002", "PLR0913",  #  consistent with signature in OpenModelica
+    "A001", "A002", "ARG001", "PLR0913",  #  consistent with signature in OpenModelica
     "D208",  # breaks inline code in docstring
     "D301",  # inevitable due to the `ast.unparse`
     "E501",  # consistent with documentation in OpenModelica
