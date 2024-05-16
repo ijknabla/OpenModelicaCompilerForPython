@@ -520,7 +520,8 @@ def open_session(
 def open_session(
     omc: str | PathLike[str] | SupportsInteractive[T_Calling] | None = None,
     *,
-    version: Tuple[int, int] | None = None,  # noqa: ARG001 (argument for type-hint)
+    # >  Argument for type-hint
+    version: Tuple[int, int] | None = None,  # noqa: ARG001
     asyncio: bool = False,
 ) -> Any:
     interactive: (
