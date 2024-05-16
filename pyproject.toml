@@ -103,8 +103,7 @@ ignore = [
     "D104",
     "D105",
     "D200",
-    "D400",
-    "D415",
+    "D400", "D415",  # TODO: reconsider docstring format
     "EM101",
     "EM102",
     "ERA001",
