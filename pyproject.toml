@@ -167,7 +167,6 @@ ignore = [
     "TD002",
     "TD003",
     "TD005",
-    "TID252",
     "TRY003",
     "UP006",  #  TODO: Enable when Python>=3.9 supported
     "UP007",  #  TODO: Enable when Python>=3.10 supported

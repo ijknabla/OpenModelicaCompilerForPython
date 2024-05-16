@@ -34,6 +34,12 @@ from pydantic import (
 )
 from typing_extensions import Annotated, NotRequired, Self, TypedDict
 
+from bootstrap.util import (
+    QueueingIteration,
+    ensure_cancel,
+    ensure_terminate,
+    get_root,
+)
 from omc4py import (
     AsyncSession,
     TypeName,
@@ -41,8 +47,6 @@ from omc4py import (
     exception,
     open_session,
 )
-
-from ..util import QueueingIteration, ensure_cancel, ensure_terminate, get_root
 
 _T = TypeVar("_T")
 _T_key = TypeVar("_T_key")
