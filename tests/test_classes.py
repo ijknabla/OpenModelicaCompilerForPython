@@ -133,7 +133,7 @@ def test_absolute_typename() -> None:
 NONDIGIT = set("ABCDEFGHIJKLMNOPQRSTUVWXYZ_abcdefghijklmnopqrstuvwxyz")
 DIGIT = set("0123456789")
 Q_CHAR = set(" !#$%&()*+,-./:;<=>?@[]^{|}~")
-S_ESCAPE = set(f"\\{c}" for c in "\"'?\\abfnrtv")
+S_ESCAPE = {f"\\{c}" for c in "\"'?\\abfnrtv"}
 
 
 def is_valid_identifer(s: str) -> bool:
