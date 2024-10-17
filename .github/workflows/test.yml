@@ -17,6 +17,8 @@ jobs:
       matrix:
         include:
           - openmodelica: "1.22.3"  # NOTE: update to latest
+            python: "3.13"
+          - openmodelica: "1.22.3"
             python: "3.12"
           - openmodelica: "1.22.3"
             python: "3.11"
@@ -28,15 +30,15 @@ jobs:
             python: "3.8"
 
           - openmodelica: "1.21.0"
-            python: "3.12"
+            python: "3.13"
           - openmodelica: "1.21.0"
             python: "3.8"
           - openmodelica: "1.20.0"
-            python: "3.12"
+            python: "3.13"
           - openmodelica: "1.20.0"
             python: "3.8"
           - openmodelica: "1.19.2"
-            python: "3.12"
+            python: "3.13"
           - openmodelica: "1.19.2"
             python: "3.8"
 
