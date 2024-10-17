@@ -16,17 +16,17 @@ jobs:
     strategy:
       matrix:
         include:
-          - openmodelica: "1.22.3"  # NOTE: update to latest
+          - openmodelica: "1.24.0"  # NOTE: update to latest
             python: "3.13"
-          - openmodelica: "1.22.3"
+          - openmodelica: "1.24.0"
             python: "3.12"
-          - openmodelica: "1.22.3"
+          - openmodelica: "1.24.0"
             python: "3.11"
-          - openmodelica: "1.22.3"
+          - openmodelica: "1.24.0"
             python: "3.10"
-          - openmodelica: "1.22.3"
+          - openmodelica: "1.24.0"
             python: "3.9"
-          - openmodelica: "1.22.3"
+          - openmodelica: "1.24.0"
             python: "3.8"
 
           - openmodelica: "1.21.0"
