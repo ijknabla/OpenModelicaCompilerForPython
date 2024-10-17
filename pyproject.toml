@@ -42,7 +42,7 @@ ruff = "^0.3.7"
 
 [tool.poetry.group.lint.dependencies]
 mypy = "^1.6.1"
-pyproject-flake8 = "^5.0.4"
+pyproject-flake8 = { version = "^7", python=">=3.8.1,<4.0" }
 types-arpeggio = {git = "https://github.com/ijknabla/types-arpeggio.git", rev = "0.2.0.0a0.dev4"}
 types-pyyaml = "^6.0.12.12"
 types-setuptools = "^68.2.0.0"
