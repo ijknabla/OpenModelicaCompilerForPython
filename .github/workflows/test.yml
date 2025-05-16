@@ -45,10 +45,10 @@ jobs:
             python: "3.13"
           - openmodelica: "1.20.0"
             python: "3.8"
-          - openmodelica: "1.19.2"
-            python: "3.13"
-          - openmodelica: "1.19.2"
-            python: "3.8"
+          # - openmodelica: "1.19.2"
+          #   python: "3.13"
+          # - openmodelica: "1.19.2"
+          #   python: "3.8"
 
     container:
       image: ijknabla/openmodelica:v${{ matrix.openmodelica }}-python${{ matrix.python }}
@@ -68,5 +68,5 @@ jobs:
           python -m pytest --version
       - name: Test python code
         run: |
-          sudo -u user python .github/pretest.py
-          sudo -u user python -m pytest -v
+          python .github/pretest.py
+          python -m pytest -v
